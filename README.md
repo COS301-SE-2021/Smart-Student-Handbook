@@ -130,7 +130,7 @@ I am currently a Computer Science Student at The University of Pretoria
   - Implemented update dependencies function
   - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
   
-  ### Luca Prenzler - (u18002112)
+### Luca Prenzler - (u18002112)
 
 #### Description
 
