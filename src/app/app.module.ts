@@ -11,6 +11,10 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { FolderPanelComponent } from './folder-panel/folder-panel.component';
 
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +28,8 @@ import { FolderPanelComponent } from './folder-panel/folder-panel.component';
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
+    MDBBootstrapModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [],
   bootstrap: [AppComponent]
