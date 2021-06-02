@@ -1,0 +1,32 @@
+.mat-accordion{
+  display: block;
+  transform-origin: top left;
+  transform: rotate(-90deg) translateX(-100vh); /* rotate and position it; translateX value corresponds to panel height */
+  width: 100vh; /* this will be the height of the accordion (inversed due to rotation) */
+}
+
+.mat-expansion-panel{
+  max-height: calc(100vw / 3); /* this will be the width of the panel (inversed due to rotation), 3 is panel amount */
+}
+
+.panel-content{
+  transform-origin: top left;
+  transform: rotate(90deg); /* rotate back */
+  margin-left: 100%; /* position it */
+  height: 100vw; /* real height of the content */
+  width: calc(100vw / 3 - 100px); /* real width of the content, 3 is panel amount */
+
+  p{
+    padding-top: 25px;
+  }
+}
+
+::ng-deep .mat-expanded .panel-header > .mat-expansion-indicator:after {
+  color: white;
+}
+
+.panelBackBtn{
+  position: absolute;
+  top: -17px;
+  right: -30px;
+}
