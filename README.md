@@ -47,7 +47,7 @@ to amount of other users using their notebook.
 # Git Structure
 
 <div style="margin-left: 4%">
-
+ 
 </div>
 
   
@@ -159,5 +159,7 @@ I am currently a Computer Science Student at The University of Pretoria
 <div style="margin-left: 4%">
 
 <!-- Our email and client email (Company and other info) -->
+  Team email: algorithmicaces@gmail.com
+  Client email: arne.schreuder@advance.io
 
 </div>
