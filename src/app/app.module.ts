@@ -9,7 +9,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
+  import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AngularFireModule } from '@angular/fire';

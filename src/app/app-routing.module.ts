@@ -6,17 +6,17 @@ import { LoginComponent } from './login/login.component';
 // import { notebookComponent } from '.notebook/notebook.component';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const redirectToLogin = () => redirectUnauthorizedTo(['']);
-
-const redirectToProfile = () => map(
-  user => user ? ['profile', (user as any).uid] : true
-);
-
-// const onlyAllowSelf = next => map(
-const onlyAllowSelf = (next: { params: { id: any; }; }) => map(
-  // tslint:disable-next-line: triple-equals
-  user => (!!user && next.params.id == (user as any).uid) || ['']
-);
+// const redirectToLogin = () => redirectUnauthorizedTo(['']);
+//
+// const redirectToProfile = () => map(
+//   user => user ? ['profile', (user as any).uid] : true
+// );
+//
+// // const onlyAllowSelf = next => map(
+// const onlyAllowSelf = (next: { params: { id: any; }; }) => map(
+//   // tslint:disable-next-line: triple-equals
+//   user => (!!user && next.params.id == (user as any).uid) || ['']
+// );
 
 const routes: Routes = [
   // {
