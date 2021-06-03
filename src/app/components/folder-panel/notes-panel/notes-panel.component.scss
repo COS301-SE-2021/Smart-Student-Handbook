@@ -7,10 +7,9 @@
   font-size: larger;
 }
 
-#closePanelBtn{
-    position: absolute;
-    top: 12px;
-    right: 0px;
+#closeNotePanelBtn{
+  position: relative;
+  margin-bottom: 20px;
 }
 
 #panel{
@@ -43,19 +42,31 @@
   background-size: cover;
 }
 
-#card{
+.card{
   width: 100%;
-  padding-bottom: 0;
-  // box-shadow: none !important;
+  padding-bottom: 5px;
+  box-shadow: none !important;
   transition: all .1s linear;
-  padding-bottom: -20px;
+  padding-left: 5px;
+  overflow: hidden;
+  margin-top: 15px !important;
 }
 
 #username{
   font-size: medium;
+  width: 100%;
+  display: block;
+  margin-top: -15px;
+  margin-bottom: 10px;
 }
 
 #subTitle{
+  font-size: small;
+  display: block;
+}
+
+#description{
+  font-weight: 400;
   font-size: small;
 }
 

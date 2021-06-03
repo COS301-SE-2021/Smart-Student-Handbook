@@ -2,15 +2,15 @@
   position: absolute;
   top: 12px;
   right: 0px;
-  transition: all .15s linear;
+  // transition: all .15s linear;
   z-index: 3;
   font-size: larger;
 }
 
 #closePanelBtn{
-    position: absolute;
-    top: 12px;
-    right: 0px;
+  position: absolute;
+  top: 4px;
+  left: 0px;
 }
 
 #panel{
@@ -43,12 +43,12 @@
   background-size: cover;
 }
 
-#card{
+.card{
   width: 100%;
-  padding-bottom: 0;
-  // box-shadow: none !important;
+  padding-bottom: 5px;
+  box-shadow: none !important;
   transition: all .1s linear;
-  padding-bottom: -20px;
+  margin-bottom: 5px;
 }
 
 #username{
@@ -56,6 +56,11 @@
 }
 
 #subTitle{
+  font-size: small;
+}
+
+#description{
+  font-weight: 400;
   font-size: small;
 }
 

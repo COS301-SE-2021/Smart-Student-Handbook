@@ -1,0 +1,56 @@
+.panel{
+  display: inline-block;
+  flex: 1 0 0%;
+  width: min-content;
+  // margin-left: -13%;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.col{
+  padding: 0px;
+}
+
+.sidePanel{
+  width: fit-content;
+  transition: all .5s linear;
+  // width: 16.6666666667%;
+}
+.panel{
+  display: inline-block;
+  flex: 1 0 0%;
+  width: min-content;
+  // margin-left: -13%;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.col{
+  padding: 0px;
+}
+
+.sidePanel.col{
+  width: fit-content !important;
+  transition: all .5s linear;
+  // width: 16.6666666667%;
+}
+
+::ng-deep .ck-toolbar__items {
+  flex-wrap: wrap !important;
+}
+
+#moreOptions{
+  margin-bottom: -10px;
+}
+
+#tabs{
+  margin-top: -20px;
+}
+
+.search{
+  font-size: medium;
+}
