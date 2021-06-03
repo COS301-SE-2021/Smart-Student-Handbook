@@ -85,7 +85,8 @@ to amount of other users using their notebook.
 
 <!-- Descriptions goes here -->
 
-<!-- * <a href="#"> Demo 1 </a>
+ * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
+  <!--
 * <a href="#"> Demo 2 </a>
 * <a href="#"> Demo 3 </a>
 * <a href="#"> Demo 4 </a> -->
@@ -119,16 +120,15 @@ I am currently a Computer Science Student at The University of Pretoria
 
 <details><summary>Profile Links</summary>
 
-- [GitHub Profile](https://github.com/Will-A897)
-- [CV](https://will-a897.github.io/online-cv/)
-- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+- [GitHub Profile](https://github.com/LouwC)
+- [LinkedIn](https://www.linkedin.com/in/aj-louw-claassens-2b296a19a/)
 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented update dependencies function
-  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+  - Implemented The firebase system and the register and login functionality
+  - Documentation on the SRS document.
  </details>
   
 ### Luca Prenzler - (u18002112)
@@ -140,35 +140,33 @@ I am currently a Computer Science Student at The University of Pretoria
 <details><summary>Profile Links</summary>
 
 - [GitHub Profile](https://github.com/Will-A897)
-- [CV](https://will-a897.github.io/online-cv/)
-- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+- [LinkedIn](https://www.linkedin.com/in/luca-prenzler-5aaa0920b/)
 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented update dependencies function
-  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+  - Implemented the readMe documentation
+  - Implemented  the SRS document
  </details>
 
 ### Arno Moller - (u19324058)
 
 #### Description
 
-I am currently a Computer Science Student at The University of Pretoria
+I am currently a Information and Knowledge Systems student at The University of Pretoria
 
 <details><summary>Profile Links</summary>
 
-- [GitHub Profile](https://github.com/Will-A897)
-- [CV](https://will-a897.github.io/online-cv/)
-- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+- [GitHub Profile](https://github.com/Arno-Moller)
+- [LinkedIn](https://www.linkedin.com/in/arno-m%C3%B6ller-a96a8920b/)
 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented update dependencies function
-  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+  - Implemented the angular Notebook view
+  - Implemented the SRS document
 </details>
 
 ### Theo Morkel -(u19002514)
@@ -180,35 +178,33 @@ I am currently a Computer Science Student at The University of Pretoria
 <details><summary>Profile Links</summary>
 
 - [GitHub Profile](https://github.com/Will-A897)
-- [CV](https://will-a897.github.io/online-cv/)
 - [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented update dependencies function
-  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+  - Implemented firebase functionality
+  - Implemented SRS documentation
   </details>
 
   ### Douglas van Reeuwyk -(u19049782)
 
 #### Description
 
-I am currently a Computer Science Student at The University of Pretoria
+I am currently a Information and Knowledge Systems student at The University of Pretoria
 
 <details><summary>Profile Links</summary>
 
-- [GitHub Profile](https://github.com/Will-A897)
-- [CV](https://will-a897.github.io/online-cv/)
-- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+- [GitHub Profile](https://github.com/Douglas6312)
+- [LinkedIn](https://www.linkedin.com/in/douglasvanreeuwyk/)
 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented update dependencies function
-  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+- Implemented the angular Notebook view
+- Implemented the SRS document
 
 
 </div>
@@ -217,8 +213,12 @@ I am currently a Computer Science Student at The University of Pretoria
 
 <div style="margin-left: 4%">
 
-<!-- Our email and client email (Company and other info) -->
-  Team email: algorithmicaces@gmail.com
-  Client email: arne.schreuder@advance.io
+  
+  <details><summary>Contact Us </summary>
+
+- [Team Email](algorithmicaces@gmail.com)
+- [ Client email](arne.schreuder@advance.io)
+
+</details>
 
 </div>
