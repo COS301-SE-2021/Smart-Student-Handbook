@@ -55,7 +55,8 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-<!-- * <a href="#">Software Requirements Specification </a>
+ <a href="">Software Requirements Specification </a>
+  <!-- *
 * <a href="#">Coding Standards </a>
 * <a href="#">Technical Installation Guide</a>
 * <a href="#">User Manual</a>
@@ -69,7 +70,9 @@ to amount of other users using their notebook.
 
 <!-- Description -->
 
-<!-- * <a href="https://github.com/COS301-SE-2021/GeoCode/projects">GitHub project boards:</a> Task allocations and progress tracking.
+<a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking.
+ <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+  <!-- * 
 * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
 * <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
 * <a href="https://discord.com/developers/docs/resources/webhooks">Github and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
@@ -93,7 +96,7 @@ to amount of other users using their notebook.
 
 </div>
 
-# Collaborators
+<!--# Collaborators
 
 <div style="margin-left: 4%">
 
@@ -146,7 +149,7 @@ I am currently a Computer Science Student at The University of Pretoria
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented the readMe documentation
+  - Implemented firebase functionality
   - Implemented  the SRS document
  </details>
 
@@ -165,7 +168,7 @@ I am currently a Information and Knowledge Systems student at The University of 
 
 <details><summary> What I did for Demo 1</summary>
   
-  - Implemented the angular Notebook view
+  - Implemented the angular frontend
   - Implemented the SRS document
 </details>
 
@@ -203,7 +206,7 @@ I am currently a Information and Knowledge Systems student at The University of 
 
 <details><summary> What I did for Demo 1</summary>
   
-- Implemented the angular Notebook view
+- Implemented the angular frontend
 - Implemented the SRS document
 
 
@@ -216,8 +219,8 @@ I am currently a Information and Knowledge Systems student at The University of 
   
   <details><summary>Contact Us </summary>
 
-- [Team Email](algorithmicaces@gmail.com)
-- [ Client email](arne.schreuder@advance.io)
+- Team Email:  algorithmicaces@gmail.com
+- Client email: arne.schreuder@advance.io
 
 </details>
 
