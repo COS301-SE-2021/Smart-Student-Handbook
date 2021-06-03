@@ -55,7 +55,7 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
- <a href="">Software Requirements Specification </a>
+ <a href="https://www.overleaf.com/read/gxhcgtvhrnjf">Software Requirements Specification </a>
   <!-- *
 * <a href="#">Coding Standards </a>
 * <a href="#">Technical Installation Guide</a>
