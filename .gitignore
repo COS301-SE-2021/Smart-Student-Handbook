@@ -110,6 +110,8 @@ output.json
 # compiled output
 dist/
 tmp/
+out-tsc/
+bazel-out/
 app/**/*.js
 app/**/*.js.map
 
@@ -119,6 +121,12 @@ bower_components/
 
 # IDEs and editors
 .idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # misc
 .sass-cache/
@@ -128,6 +136,7 @@ libpeerconnection.log/
 npm-debug.log
 testem.log
 typings/
+yarn-error.log
 
 # e2e
 e2e/*.js
@@ -135,6 +144,7 @@ e2e/*.map
 
 # System Files
 .DS_Store/
+Thumbs.db
 
 ### Eclipse ###
 .metadata
@@ -1032,6 +1042,7 @@ tags
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+.history/*
 
 ### WebStorm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

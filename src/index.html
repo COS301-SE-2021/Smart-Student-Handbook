@@ -9,8 +9,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/decoupled-document/ckeditor.js"></script>
 </head>
 <body class="mat-typography">
   <app-root></app-root>
 </body>
+
+<!-- <script>
+  DecoupledEditor
+      .create( document.querySelector( '#editor' ) )
+      .then( editor => {
+          const toolbarContainer = document.querySelector( '#toolbar-container' );
+
+          toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+      } )
+      .catch( error => {
+          console.error( error );
+      } );
+</script> -->
 </html>
