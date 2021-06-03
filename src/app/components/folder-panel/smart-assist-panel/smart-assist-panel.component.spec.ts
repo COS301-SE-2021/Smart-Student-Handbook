@@ -8,7 +8,8 @@ describe('SmartAssistPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SmartAssistPanelComponent ]
+      declarations: [ SmartAssistPanelComponent ],
+      imports: []
     })
     .compileComponents();
   });
