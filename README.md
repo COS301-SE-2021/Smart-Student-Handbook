@@ -69,9 +69,10 @@ to amount of other users using their notebook.
 <div style="margin-left: 4%">
 
 <!-- Description -->
+Project management tools used
 
 <a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking.
- <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+<a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
   <!-- * 
 * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
 * <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
@@ -142,7 +143,7 @@ I am currently a Computer Science Student at The University of Pretoria
 
 <details><summary>Profile Links</summary>
 
-- [GitHub Profile](https://github.com/Will-A897)
+- [GitHub Profile](https://github.com/LucaPrenzler)
 - [LinkedIn](https://www.linkedin.com/in/luca-prenzler-5aaa0920b/)
 
 </details>
@@ -180,8 +181,8 @@ I am currently a Computer Science Student at The University of Pretoria
 
 <details><summary>Profile Links</summary>
 
-- [GitHub Profile](https://github.com/Will-A897)
-- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+- [GitHub Profile](https://github.com/u19002514-Theo-Morkel)
+- [LinkedIn](https://www.linkedin.com/in/theo-morkel-197610206)
 
 </details>
 
