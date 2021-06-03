@@ -149,6 +149,7 @@ I am currently a Computer Science Student at The University of Pretoria
   
   - Implemented update dependencies function
   - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+ </details>
 
 ### Arno Moller - (u19324058)
 
@@ -168,9 +169,9 @@ I am currently a Computer Science Student at The University of Pretoria
   
   - Implemented update dependencies function
   - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
-  </details>
+</details>
 
-  ### Theo Morkel -(u19002514)
+### Theo Morkel -(u19002514)
 
 #### Description
 
