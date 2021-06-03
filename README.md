@@ -47,7 +47,7 @@ to amount of other users using their notebook.
 # Git Structure
 
 <div style="margin-left: 4%">
-
+ 
 </div>
 
   
@@ -109,9 +109,89 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-<!-- ## Group Members
+  ## Group Members
 
-### William Agar - Team Leader (u18052071)
+### Louw Claassens - Team Leader (u18000402)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Will-A897)
+- [CV](https://will-a897.github.io/online-cv/)
+- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented update dependencies function
+  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+ </details>
+  
+### Luca Prenzler - (u18002112)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Will-A897)
+- [CV](https://will-a897.github.io/online-cv/)
+- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented update dependencies function
+  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+ </details>
+
+### Arno Moller - (u19324058)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Will-A897)
+- [CV](https://will-a897.github.io/online-cv/)
+- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented update dependencies function
+  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+</details>
+
+### Theo Morkel -(u19002514)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Will-A897)
+- [CV](https://will-a897.github.io/online-cv/)
+- [LinkedIn](https://www.linkedin.com/in/william-agar-1b57521a7/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented update dependencies function
+  - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
+  </details>
+
+  ### Douglas van Reeuwyk -(u19049782)
 
 #### Description
 
@@ -130,27 +210,6 @@ I am currently a Computer Science Student at The University of Pretoria
   - Implemented update dependencies function
   - Implemented helper functions for above function (getSuccessorNodes, getPredecessorNodes, getDependencies, compareDates, addDays)
 
-</details>
-<details><summary> What I did for Demo 2</summary>
-  
-  - Implementation of progress dashboard
-  - Implementation of react web app framework/routing
-  
-</details>
-<details><summary> What I did for Demo 3</summary>
-  
-  - Caught up mobile app in terms of previous website functionality
-  - Implemented server side handling of notifications
-  - Implemented mobile client handling of notifications
-  
-</details>
-<details><summary> What I did for Demo 4</summary>
-  
-  - Implemented project dashboard
-  - Implemented search and filter 
-  - Implemented Gantt Chart
-  
-</details> -->
 
 </div>
 
@@ -159,5 +218,7 @@ I am currently a Computer Science Student at The University of Pretoria
 <div style="margin-left: 4%">
 
 <!-- Our email and client email (Company and other info) -->
+  Team email: algorithmicaces@gmail.com
+  Client email: arne.schreuder@advance.io
 
 </div>
