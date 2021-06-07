@@ -14,7 +14,6 @@ import {MatIconModule} from '@angular/material/icon';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
-import { LoginComponent } from './login/login.component';
 
 import { FormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -40,7 +39,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
   declarations: [
     AppComponent,
     FolderPanelComponent,
-    LoginComponent,
     NotebookComponent,
     SmartAssistPanelComponent,
     NotesPanelComponent
