@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "smartstudentnotebook": {
+      "hosting": {
+        "smart-student": [
+          "smartstudentnotebook"
+        ]
+      }
+    }
+  }
+}

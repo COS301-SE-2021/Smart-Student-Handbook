@@ -1,0 +1,68 @@
+<p>
+  <mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Smart Student</span>
+    <span class="spacer"></span>
+
+    <mat-form-field class="search">
+      <input matInput type="search" color="light" placeholder="Search">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+  </mat-toolbar>
+</p>
+
+<router-outlet></router-outlet>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="sidePanel">
+      <app-folder-panel></app-folder-panel>
+    </div>
+    <div class="sidePanel">
+      <app-notes-panel></app-notes-panel>
+    </div>
+    <div class="col" align="end">
+      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+        <mat-icon>share</mat-icon>
+      </button>
+      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+      <mat-tab-group [backgroundColor]="background" id="tabs">
+        <mat-tab *ngFor="let link of links" label="{{link}}">
+
+           <br>
+           <!-- <button mat-raised-button class="example-action-button" (click)="addLink()">
+            Add link
+          </button> -->
+        </mat-tab>
+      </mat-tab-group>
+
+      <div class="document-editor">
+        <div class="document-editor__toolbar"></div>
+        <div class="document-editor__editable-container">
+          <div class="document-editor__editable">
+          </div>
+        </div>
+      </div>
+
+      <!-- <ckeditor [(ngModel)]="editorData" [editor]="Editor"></ckeditor> -->
+
+      <!-- <div id="toolbar-container"></div>
+
+      <div id="editor">
+          <p>This is the initial editor content.</p>
+      </div> -->
+
+    </div>
+    <div class="sidePanel">
+      <app-smart-assist-panel></app-smart-assist-panel>
+    </div>
+  </div>
+</div>
+
+
+
