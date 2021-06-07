@@ -34,6 +34,7 @@ import { NotesPanelComponent } from './components/folder-panel/notes-panel/notes
 import {MatChipsModule} from '@angular/material/chips';
 import {MatCommonModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import {MatInputModule} from '@angular/material/input';
     MatChipsModule,
     MatCommonModule,
     MatInputModule,
+    CKEditorModule,
     MDBBootstrapModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig, 'angular-auth-firebase'),
     AngularFirestoreModule,

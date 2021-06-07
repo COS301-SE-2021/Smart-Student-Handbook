@@ -41,12 +41,21 @@
         </mat-tab>
       </mat-tab-group>
 
-      <div id="toolbar-container"></div>
+      <div class="document-editor">
+        <div class="document-editor__toolbar"></div>
+        <div class="document-editor__editable-container">
+          <div class="document-editor__editable">
+          </div>
+        </div>
+      </div>
 
-      <!-- This container will become the editable. -->
+      <!-- <ckeditor [(ngModel)]="editorData" [editor]="Editor"></ckeditor> -->
+
+      <!-- <div id="toolbar-container"></div>
+
       <div id="editor">
           <p>This is the initial editor content.</p>
-      </div>
+      </div> -->
 
     </div>
     <div class="sidePanel">
