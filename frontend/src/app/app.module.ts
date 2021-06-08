@@ -9,17 +9,11 @@ import { MatSliderModule } from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-  import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
+import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { AngularFireModule } from '@angular/fire';
-import { environment } from '../environments/environment';
-import { LoginComponent } from './login/login.component';
 
 import { FormsModule } from '@angular/forms';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
-import {AngularFirestoreModule} from "@angular/fire/firestore";
 import { NotebookComponent } from './notebook/notebook.component';
 
 import {MatTabsModule} from '@angular/material/tabs';
@@ -40,7 +34,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
   declarations: [
     AppComponent,
     FolderPanelComponent,
-    LoginComponent,
     NotebookComponent,
     SmartAssistPanelComponent,
     NotesPanelComponent
@@ -61,16 +54,13 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     MatListModule,
     MatGridListModule,
     MatToolbarModule,
-    AngularFireAuthModule,
     MatChipsModule,
     MatCommonModule,
     MatInputModule,
     CKEditorModule,
     MDBBootstrapModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'angular-auth-firebase'),
-    AngularFirestoreModule,
   ],
-  providers: [AngularFireAuthGuard, NotesPanelComponent],
+  providers: [NotesPanelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
