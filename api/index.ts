@@ -12,9 +12,8 @@
 //_________________Luca Implementation of the request and response objects___________________________________________
 //____________________________________________________________________________________________________________________
 
-// @ts-ignore
+
 import * as functions from 'firebase-functions';
-// @ts-ignore
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as cors from 'cors';
@@ -23,7 +22,14 @@ import { routesConfig } from './users/routeconfig';
 
 //These are all the import required should be in the index.ts file
 //This must be in the index.ts folder
-admin.initializeApp();
+
+
+
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: "https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app"
+});
+
 
 const app = express();
 app.use(bodyParser.json());
