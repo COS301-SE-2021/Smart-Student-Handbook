@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-// @ts-ignore
 import * as admin from 'firebase-admin'
 
 export async function isAuthenticated(req: Request, res: Response, next: Function) {
