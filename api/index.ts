@@ -18,7 +18,7 @@ import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
-import { routesConfig } from './users/routeconfig';
+import { routesConfig } from '../functions/src/users/routeconfig';
 
 //These are all the import required should be in the index.ts file
 //This must be in the index.ts folder
