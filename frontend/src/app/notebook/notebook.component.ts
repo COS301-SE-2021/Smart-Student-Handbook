@@ -9,6 +9,8 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 })
 export class NotebookComponent implements OnInit {
 
+  //this is a test commit
+
   editor = DecoupledEditor;
   toolbar: any = ['heading', '|', 'bold',
     'italic', 'fontSize', 'fontFamily', 'underline', 'strikethrough', 'alignment',
