@@ -26,14 +26,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - run: cd frontend
       - name: Download Dependencies
         run: npm ci
-
-      - name: Build the Node.js
-        run: npm build
 
       - name: Build the Angular App
         run: ng build
 
       - name: Run the Angular Test
-        run: ng test
+        run: ng test --watch=false --browsers=ChromeHeadless
