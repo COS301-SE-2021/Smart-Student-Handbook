@@ -5,7 +5,8 @@ import { AppModule } from './app.module';
 
 export async function createNestServer() {
   const app = await NestFactory.create(AppModule);
-  return await  app.init();
+  app.enableCors();
+  await app.listen(process.env.PORT || 5001);
 }
 
 createNestServer();
