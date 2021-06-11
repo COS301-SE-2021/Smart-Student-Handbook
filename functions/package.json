@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node lib/main",
     "lint": "eslint --ext .js,.ts . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "serve": "npm run build && firebase emulators:start --only functions"
   },
-  "main": "lib/index.js",
+  "main": "lib/main.js",
   "dependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
