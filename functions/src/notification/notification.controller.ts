@@ -1,9 +1,7 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
-import { Response } from 'express';
-
-import { EmailNotificationDto } from "./dto/emailNotification.dto"
+import { Controller, Post, Body } from '@nestjs/common';
+import { EmailNotificationResponseDto} from "./dto/emailNotificationResponse.dto";
+import { EmailNotificationRequestDto } from "./dto/emailNotificationRequest.dto"
 import { NotificationService } from "./notification.service";
-import { EmailInterface } from "./interfaces/email.interface";
 
 @Controller('notification')
 export class NotificationController {
@@ -11,9 +9,8 @@ export class NotificationController {
 	}
 
 	@Post()
-	sendEmailNotification(@Body() emailNotificationDto: EmailNotificationDto, @Res() res: Response) {
-
-		return res.send(this.notificationService.sendEmailNotification(emailNotificationDto));
+	async sendEmailNotification(@Body() emailNotificationDto: EmailNotificationRequestDto): Promise<EmailNotificationResponseDto> {
+		return await this.notificationService.sendEmailNotification(emailNotificationDto);
 	}
 
 }

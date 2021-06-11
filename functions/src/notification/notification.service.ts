@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EmailInterface } from "./interfaces/email.interface";
+import { EmailNotificationResponseDto} from "./dto/emailNotificationResponse.dto";
 
 import SMTPTransport = require("nodemailer/lib/smtp-transport");
 const nodemailer = require("nodemailer");
@@ -9,7 +10,7 @@ dotenv.config();
 @Injectable()
 export class NotificationService {
 
-	async sendEmailNotification(email: EmailInterface) {
+	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
 
 		let transporter = nodemailer.createTransport({
 			host: process.env.EMAIL_HOST,
@@ -31,18 +32,28 @@ export class NotificationService {
 			text: email.body
 		};
 
-
-		return  transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
-			if (err != null) {
+		return transporter.sendMail(mailOptions)
+			.then((info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
 				return {
-					success: false,
-					message: err.message
+					success: true,
+					message: info.messageId
 				};
-			}
-			return {
-				success: true,
-				message: info.messageId
-			};
-		});
+			});
+
+		// return transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
+		// 	if (err != null) {
+		// 		return {
+		// 			success: false,
+		// 			message: err.name + ": " + err.message
+		// 		};
+		//
+		// 	}
+		// 	console.log(info.messageId);
+		// 	return {
+		// 		success: true,
+		// 		message: info.messageId
+		// 	};
+		//
+		// });
 	}
 }
