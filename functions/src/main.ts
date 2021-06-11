@@ -2,10 +2,10 @@ import * as functions from 'firebase-functions';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-functions.logger.info('Hello logs!', { structuredData: true });
-export async function bootstrap() {
-  console.log('Hello');
+
+export async function createNestServer() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(5001);
+  return await  app.init();
 }
-bootstrap();
+
+createNestServer();

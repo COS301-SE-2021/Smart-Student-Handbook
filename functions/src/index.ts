@@ -1,8 +1,8 @@
 import * as functions from 'firebase-functions';
-import { bootstrap } from './main'
+import { createNestServer } from './main'
 
 functions.logger.info('Hello logs!', { structuredData: true });
-bootstrap();
+createNestServer()
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
