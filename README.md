@@ -1,73 +1,228 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+<h1 align="center" style="font-size: 300%;" > Smart Student Handbook </h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+<a href="https://www.advance.io/">
     <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+        <img  src="https://www.advance.io/wp-content/uploads/2020/02/advance-twitter-1.jpg" alt="Epi-Use logo">
+    </p>
+</a>
 
-## Description
+![GitHub contributors](https://img.shields.io/github/contributors/COS301-SE-2021/Smart-Student-Handbook?color=green&style=plastic)
+![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Smart-Student-Handbook)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/COS301-SE-2021/Smart-Student-Handbook)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/COS301-SE-2021/Smart-Student-Handbook)
+![GitHub all releases](https://img.shields.io/github/downloads/COS301-SE-2021/Smart-Student-Handbook/total?style=plastic)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+<h1> Table of Contents</h1>
 
-```bash
-$ npm install
-```
+<div style="margin-left: 4%">
 
-## Running the app
+- [Project Overview](#project-overview)
+- [Git Structure](#git-structure)
+- [Documentation](#documentation)
+- [Project Management](#project-management)
+- [Demo Video Links](#demo-video-links)
+- [Collaborators](#collaborators)
+- [Contributions](#contributions)
+- [Contact us](#contact-us)
 
-```bash
-# development
-$ npm run start
+</div>
 
-# watch mode
-$ npm run start:dev
+# Project Overview  
 
-# production mode
-$ npm run start:prod
-```
+<div style="margin-left: 4%">
 
-## Test
+The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students. The Smart Student application will allow users to create notebooks.
+Notebooks can be stored in different folders. Notebooks consist of different sections and sections can then be split up into pages allowing for organized note taking. Notes are written in
+markup, thus allowing for multiple customization options for users such as text formatting,
+adding bullet points, tables, images and much more. Once a notebook is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar notebooks.
+The user will then have the ability to merge, copy or clone these notebook to their notebook.
+Afterwards users will be able to rate either the entire notebook or snippets of the notebook.
+The application will work on a subscription based service where users will be paid according
+to amount of other users using their notebook.
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+</div>
 
-# test coverage
-$ npm run test:cov
-```
+# Git Structure
 
-## Support
+<div style="margin-left: 4%">
+ 
+</div>
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  
+# Documentation
 
-## Stay in touch
+<div style="margin-left: 4%">
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+ <a href="https://www.overleaf.com/read/gxhcgtvhrnjf">Software Requirements Specification </a>
+  <!-- *
+* <a href="#">Coding Standards </a>
+* <a href="#">Technical Installation Guide</a>
+* <a href="#">User Manual</a>
+* <a href="#">Testing Policy</a> -->
 
-## License
+</div>
 
-Nest is [MIT licensed](LICENSE).
+# Project Management
+
+<div style="margin-left: 4%">
+
+<!-- Description -->
+Project management tools used
+
+<a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking.
+<a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+  <!-- * 
+* <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+* <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
+* <a href="https://discord.com/developers/docs/resources/webhooks">Github and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
+* <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation. -->
+
+</div>
+
+
+
+# Demo Video Links
+
+<div style="margin-left: 4%">
+
+<!-- Descriptions goes here -->
+
+ * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
+  <!--
+* <a href="#"> Demo 2 </a>
+* <a href="#"> Demo 3 </a>
+* <a href="#"> Demo 4 </a> -->
+
+</div>
+
+<!--# Collaborators
+
+<div style="margin-left: 4%">
+
+<!-- The Development Team
+
+| [Steven Jordaan](https://sj-jordaan.github.io) | [Bradley Mapstone](https://bradez-of-map-n-stone.github.io/) | [Shaun Naude](https://shaunnaude.github.io/) | [Matthew Kershaw](https://mattyk-dev.github.io/) | [Daniel Nel](https://mdnel.tech/) |
+| :---: |:---:| :---:| :---:| :---:|
+| [![Steven Jordaan](https://avatars2.githubusercontent.com/u/50364770?s=400&u=fc71708e5f1b450bbc8895c133d9ac50ae5c3838&v=4&s=200)](https://sj-jordaan.github.io/)    | [![Bradley Mapstone](https://avatars1.githubusercontent.com/u/56454573?s=400&u=b3edd9887578d8a29dcb467cc296f3ac05d43d05&v=4&s=200)](https://bradez-of-map-n-stone.github.io/) | [![Shaun Naude](https://avatars1.githubusercontent.com/u/44646417?s=400&u=988e26f57a2785a279c93e992838db03382c7d7e&v=4&s=200)](https://shaunnaude.github.io/)  | [![Matthew Kershaw](https://avatars1.githubusercontent.com/u/54933104?s=400&v=4&s=200)](https://mattyk-dev.github.io/)  | [![Daniel Nel](https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200)](https://mdnel.tech/)  |
+| [Portfolio](https://sj-jordaan.github.io/) | [Portfolio](https://bradez-of-map-n-stone.github.io/) | [Portfolio](https://shaunnaude.github.io/) | [Portfolio](https://mattyk-dev.github.io/) | [Portfolio](https://mdnel.tech/) | -->
+
+</div>
+
+# Contributions
+
+<div style="margin-left: 4%">
+
+  ## Group Members
+
+### Louw Claassens - Team Leader (u18000402)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/LouwC)
+- [LinkedIn](https://www.linkedin.com/in/aj-louw-claassens-2b296a19a/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented The firebase system and the register and login functionality
+  - Documentation on the SRS document.
+ </details>
+  
+### Luca Prenzler - (u18002112)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/LucaPrenzler)
+- [LinkedIn](https://www.linkedin.com/in/luca-prenzler-5aaa0920b/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented firebase functionality
+  - Implemented  the SRS document
+ </details>
+
+### Arno Moller - (u19324058)
+
+#### Description
+
+I am currently a Information and Knowledge Systems student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Arno-Moller)
+- [LinkedIn](https://www.linkedin.com/in/arno-m%C3%B6ller-a96a8920b/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented the angular frontend
+  - Implemented the SRS document
+</details>
+
+### Theo Morkel -(u19002514)
+
+#### Description
+
+I am currently a Computer Science Student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/u19002514-Theo-Morkel)
+- [LinkedIn](https://www.linkedin.com/in/theo-morkel-197610206)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+  - Implemented firebase functionality
+  - Implemented SRS documentation
+  </details>
+
+  ### Douglas van Reeuwyk -(u19049782)
+
+#### Description
+
+I am currently a Information and Knowledge Systems student at The University of Pretoria
+
+<details><summary>Profile Links</summary>
+
+- [GitHub Profile](https://github.com/Douglas6312)
+- [LinkedIn](https://www.linkedin.com/in/douglasvanreeuwyk/)
+
+</details>
+
+<details><summary> What I did for Demo 1</summary>
+  
+- Implemented the angular frontend
+- Implemented the SRS document
+
+
+</div>
+
+# Contact us
+
+<div style="margin-left: 4%">
+
+  
+  <details><summary>Contact Us </summary>
+
+- Team Email:  algorithmicaces@gmail.com
+- Client email: arne.schreuder@advance.io
+
+</details>
+
+</div>
