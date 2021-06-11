@@ -1,4 +1,6 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Response } from 'express';
+
 import { EmailNotificationDto } from "./dto/emailNotification.dto"
 import { NotificationService } from "./notification.service";
 import { EmailInterface } from "./interfaces/email.interface";
@@ -9,8 +11,10 @@ export class NotificationController {
 	}
 
 	@Post()
-	async sendEmailNotification(@Body() emailNotificationDto: EmailNotificationDto): Promise<string>{
-		return this.notificationService.sendEmailNotification(emailNotificationDto);
+	sendEmailNotification(@Body() emailNotificationDto: EmailNotificationDto, @Res() res: Response) {
+
+		return res.send(this.notificationService.sendEmailNotification(emailNotificationDto));
 	}
+
 }
 

@@ -9,17 +9,18 @@ dotenv.config();
 @Injectable()
 export class NotificationService {
 
-	async sendEmailNotification(email: EmailInterface): Promise<string>{
+	async sendEmailNotification(email: EmailInterface) {
+
 		let transporter = nodemailer.createTransport({
 			host: process.env.EMAIL_HOST,
 			port: process.env.EMAIL_PORT,
-			auth:{
+			auth: {
 				user: process.env.EMAIL_USER,
 				pass: process.env.EMAIL_PASS
 			},
-			authMethod: "PLAIN",
+			authMethod: "PLAIN"
 
-			secure: true,
+			// secure: true,
 
 		});
 
@@ -30,8 +31,9 @@ export class NotificationService {
 			text: email.body
 		};
 
-		return transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
-			if (err != null){
+
+		return  transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo) => {
+			if (err != null) {
 				return {
 					success: false,
 					message: err.message
