@@ -1,0 +1,45 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Integrate Frontend
+
+on:
+#  push:
+#    branches: [ feature/** ]
+  pull_request:
+    branches: [ master, develop, feature/** ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    defaults:
+      run:
+        working-directory: frontend
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Setup Angular
+        run: npm install -g @angular/cli
+    
+      - name: Download Dependencies
+        run: npm ci
+
+      - name: Build the Angular App
+        run: ng build
+
+      - name: Run the Angular Test
+        run: ng test --watch=false --browsers=ChromeHeadless
