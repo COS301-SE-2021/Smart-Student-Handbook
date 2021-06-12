@@ -9,16 +9,11 @@ import { MatSliderModule } from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-  import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
+import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
 
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { AngularFireModule } from '@angular/fire';
-import { environment } from '../environments/environment';
 
 import { FormsModule } from '@angular/forms';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
-import {AngularFirestoreModule} from "@angular/fire/firestore";
 import { NotebookComponent } from './notebook/notebook.component';
 
 import {MatTabsModule} from '@angular/material/tabs';
@@ -34,6 +29,15 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatCommonModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { MessagingService } from './service/messaging.service';
+import { environment } from '../environments/environment';
+import { AsyncPipe } from '../../node_modules/@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -59,16 +63,17 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     MatListModule,
     MatGridListModule,
     MatToolbarModule,
-    AngularFireAuthModule,
     MatChipsModule,
     MatCommonModule,
     MatInputModule,
     CKEditorModule,
     MDBBootstrapModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'angular-auth-firebase'),
-    AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireMessagingModule,
+    AngularFireModule.initializeApp(environment.firebase),
   ],
-  providers: [AngularFireAuthGuard, NotesPanelComponent],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
