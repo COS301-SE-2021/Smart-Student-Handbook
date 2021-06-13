@@ -38,6 +38,12 @@ export class NotificationService {
 					success: true,
 					message: info.messageId
 				};
+			})
+			.catch(Err => {
+				return {
+					success: false,
+					message: "Something went wrong!"
+				};
 			});
 
 		// return transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
