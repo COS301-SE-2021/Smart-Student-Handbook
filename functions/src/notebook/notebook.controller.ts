@@ -26,16 +26,16 @@ export class NotebookController
 		return this.notebookService.createOrUpdateNotebook(notebookDto, null);
 	}
 
-	@Put(':id')
-	updateNotebook(@Body() notebookDto: NotebookDto, @Param('id') id): Promise<string>
+	@Put(':notebookId')
+	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId): Promise<string>
 	{
-		return this.notebookService.createOrUpdateNotebook(notebookDto, id);
+		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId);
 	}
 
-	@Delete(':id')
-	deleteNotebook(): string
+	@Delete(':notebookId')
+	deleteNotebook(@Param('notebookId') notebookId): Promise<string>
 	{
-		return "Delete not yet implemented";
+		return this.notebookService.deleteNotebook(notebookId);
 	}
 
 }

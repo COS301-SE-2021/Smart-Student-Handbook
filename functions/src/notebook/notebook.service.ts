@@ -77,7 +77,15 @@ export class NotebookService {
 	async createOrUpdateNotebook(notebookDto: NotebookDto, id: string): Promise<string>
 	{
 		let operationType: string = "Update";
-		let userId: string =  "zsm6CotjuAVMUynICGD5QCiQNGl2";
+		let userId: string;
+
+		firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+				userId = user.uid;
+			} else {
+				throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+			}
+		});
 
 		if(!id)
 		{
@@ -108,5 +116,17 @@ export class NotebookService {
 		{
 			throw new HttpException('Could not '+operationType, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	async deleteNotebook(notebookId: string): Promise<string>
+	{
+		console.log("Error removing document: " + notebookId);
+		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
+
+		}).catch((error) => {
+			console.error("Error removing document: ", error);
+		});
+
+		return "Notebook successfully delete";
 	}
 }
