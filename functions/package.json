@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "serve": "npm run build && firebase emulators:start --only functions"
+    "serve": "npm run build --watch && firebase emulators:start --only functions"
   },
   "main": "lib/main.js",
   "dependencies": {
@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "@types/nodemailer": "^6.4.2",
     "dotenv": "^10.0.0",
+    "firebase": "^8.6.7",
     "firebase-admin": "^9.9.0",
     "firebase-functions": "^3.14.1",
     "nodemailer": "^6.6.1",
