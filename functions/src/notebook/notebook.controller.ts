@@ -8,31 +8,31 @@ export class NotebookController
 {
 	constructor(private readonly notebookService: NotebookService) {}
 
-	@Get()
-	findNotebooks(): Promise<Notebook[]>
+	@Get("findAllUserNotebooks/:userId")
+	findAllUserNotebooks(@Param('userId') userId): Promise<Notebook[]>
 	{
-		return this.notebookService.findNotebooks();
+		return this.notebookService.findAllUserNotebooks(userId);
 	}
 
-	@Get(':notebookId')
-	findNotebook(@Param('notebookId') notebookId): Promise<Notebook>
+	@Get('findNotebookById/:notebookId')
+	findNotebookById(@Param('notebookId') notebookId): Promise<Notebook>
 	{
-		return this.notebookService.findNotebook(notebookId);
+		return this.notebookService.findNotebookById(notebookId);
 	}
 
-	@Post()
-	createNotebook(@Body() notebookDto: NotebookDto): Promise<string>
+	@Post("createNotebook/:userId")
+	createNotebook(@Body() notebookDto: NotebookDto, @Param('userId') userId: string): Promise<string>
 	{
-		return this.notebookService.createOrUpdateNotebook(notebookDto, null);
+		return this.notebookService.createOrUpdateNotebook(notebookDto, null, userId);
 	}
 
-	@Put(':notebookId')
-	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId): Promise<string>
+	@Put('updateNotebook/:notebookId/:userId')
+	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId, @Param('userId') userId: string): Promise<string>
 	{
-		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId);
+		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId, userId);
 	}
 
-	@Delete(':notebookId')
+	@Delete('deleteNotebook/:notebookId')
 	deleteNotebook(@Param('notebookId') notebookId): Promise<string>
 	{
 		return this.notebookService.deleteNotebook(notebookId);

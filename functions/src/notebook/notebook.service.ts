@@ -10,19 +10,10 @@ import { randomStringGenerator } from "@nestjs/common/utils/random-string-genera
 export class NotebookService {
 	//private readonly notebook: Notebook[] = [];
 
-	async findNotebooks(): Promise<Notebook[]>
+	async findAllUserNotebooks(userId: string): Promise<Notebook[]>
 	{
-		let uid: string;
-		firebase.auth().onAuthStateChanged((user) => {
-			if (user) {
-				uid = user.uid;
-			} else {
-				throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-			}
-		});
-
 		let notebooks = [];
-		const notebookRef = admin.firestore().collection("notebooks").where("userId", "==", uid);
+		const notebookRef = admin.firestore().collection("notebooks").where("userId", "==", userId);
 		const snapshot = await notebookRef.get();
 		snapshot.forEach(doc => {
 			let notebookTemp: Notebook =
@@ -48,7 +39,7 @@ export class NotebookService {
 		return notebooks;
 	}
 
-	async findNotebook(notebookId: string): Promise<Notebook>
+	async findNotebookById(notebookId: string): Promise<Notebook>
 	{
 		const notebookRef = admin.firestore().collection("notebooks").doc(notebookId);
 		const doc = await notebookRef.get();
@@ -74,22 +65,13 @@ export class NotebookService {
 		}
 	}
 
-	async createOrUpdateNotebook(notebookDto: NotebookDto, id: string): Promise<string>
+	async createOrUpdateNotebook(notebookDto: NotebookDto, notebookId: string, userId: string): Promise<string>
 	{
-		let operationType: string = "Update";
-		let userId: string;
+		let operationType: string = "update";
 
-		firebase.auth().onAuthStateChanged((user) => {
-			if (user) {
-				userId = user.uid;
-			} else {
-				throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-			}
-		});
-
-		if(!id)
+		if(!notebookId)
 		{
-			id = randomStringGenerator();
+			notebookId = randomStringGenerator();
 			operationType= "Create";
 		}
 
@@ -102,11 +84,11 @@ export class NotebookService {
 			surname: notebookDto["surname"],
 			private: notebookDto["private"],
 			username: notebookDto["username"],
-			notebookReference: id,
+			notebookReference: notebookId,
 			userId: userId,
 		}
 
-		const res = await admin.firestore().collection("notebooks").doc(id).set(notebook);
+		const res = await admin.firestore().collection("notebooks").doc(notebookId).set(notebook);
 
 		if (res)
 		{
@@ -120,11 +102,10 @@ export class NotebookService {
 
 	async deleteNotebook(notebookId: string): Promise<string>
 	{
-		console.log("Error removing document: " + notebookId);
 		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 
 		}).catch((error) => {
-			console.error("Error removing document: ", error);
+			throw new HttpException("Error removing document: "+error, HttpStatus.BAD_REQUEST);
 		});
 
 		return "Notebook successfully delete";
