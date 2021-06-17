@@ -3,6 +3,8 @@ import { EmailInterface } from "./interfaces/email.interface";
 import { EmailNotificationResponseDto} from "./dto/emailNotificationResponse.dto";
 
 import SMTPTransport = require("nodemailer/lib/smtp-transport");
+import SendmailTransport from "nodemailer/lib/sendmail-transport";
+import transport from "nodemailer/lib/smtp-transport";
 const nodemailer = require("nodemailer");
 const dotenv = require('dotenv');
 dotenv.config();
@@ -31,7 +33,7 @@ export class NotificationService {
 			subject: email.subject,
 			text: email.body
 		};
-
+		
 		return transporter.sendMail(mailOptions)
 			.then((info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
 				return {
@@ -45,21 +47,21 @@ export class NotificationService {
 					message: "Something went wrong!"
 				};
 			});
-
-		// return transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
-		// 	if (err != null) {
+		
+		
+		// return transporter.sendMail(mailOptions,((err, info): EmailNotificationResponseDto => {
+		// 	if(err == null){
 		// 		return {
 		// 			success: false,
-		// 			message: err.name + ": " + err.message
+		// 			message: "Something went wrong!"
 		// 		};
-		//
 		// 	}
-		// 	console.log(info.messageId);
-		// 	return {
-		// 		success: true,
-		// 		message: info.messageId
-		// 	};
-		//
-		// });
+		// 	else {
+		// 		return {
+		// 			success: true,
+		// 			message: info.messageId
+		// 		};
+		// 	}
+		// }))
 	}
 }
