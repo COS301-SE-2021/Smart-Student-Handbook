@@ -18,6 +18,7 @@ export class NotebookService {
 		snapshot.forEach(doc => {
 			let notebookTemp: Notebook =
 			{
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -47,6 +48,7 @@ export class NotebookService {
 		if (doc.exists)
 		{
 			return {
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -76,6 +78,7 @@ export class NotebookService {
 		}
 
 		const notebook: Notebook = {
+			title: notebookDto['title'],
 			author: notebookDto["author"],
 			course: notebookDto["course"],
 			description: notebookDto["description"],

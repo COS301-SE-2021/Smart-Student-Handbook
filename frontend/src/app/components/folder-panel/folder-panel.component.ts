@@ -42,11 +42,10 @@ export class FolderPanelComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit(): void {
-    this.dataSource.data = TREE_DATA;
 
     this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
       .subscribe(result => {
-        console.log(result);
+        // console.log(result);
 
         let children = [];
         for(let i = 0; i < result.length; i++){
@@ -57,7 +56,7 @@ export class FolderPanelComponent implements OnInit {
           name: 'Notebooks',
           children: children
         }]
-      })
+      });
   }
 
   openedCloseToggle(){
@@ -94,40 +93,12 @@ export class FolderPanelComponent implements OnInit {
 
 
 /**
- * Tree structure and data
+ * Tree structure
  */
  interface DirectoryNode {
   name: string;
   children?: DirectoryNode[];
 }
-
-const TREE_DATA: DirectoryNode[] = [
-  {
-    name: 'Year 2',
-    children: [
-      {name: 'COS 214'},
-      {name: 'COS 216'},
-      {name: 'IMY 210'},
-    ]
-  }, {
-    name: 'Year 3',
-    children: [
-      {
-        name: 'Semester 1',
-        children: [
-          {name: 'COS 301'},
-          {name: 'COS 332'},
-        ]
-      }, {
-        name: 'Semester 2',
-        children: [
-          {name: 'COS 326'},
-          {name: 'COS 314'},
-        ]
-      },
-    ]
-  },
-];
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
