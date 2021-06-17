@@ -9,5 +9,22 @@ export class UserController
 {
     constructor(private userService: UserService) {}
 
+    @Get("getUserDetails/:userId")
+    getUserDetails(@Param('userId') userId): Promise<UserResponseDto>
+    {
+        return null;
+    }
+
+    @Post("createUser")
+    createUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
+    {
+        return null;
+    }
+
+    @Post("updateUser")
+    updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
+    {
+        return null;
+    }
 
 }

@@ -9,12 +9,12 @@ import { randomStringGenerator } from "@nestjs/common/utils/random-string-genera
 @Injectable()
 export class UserService {
 
-    async getUserInfo(uid: string): Promise<UserResponseDto>
+    async getUserDetails(uid: string): Promise<UserResponseDto>
     {
         return null;
     }
 
-    async createUser(user: UserRequestDto, update: boolean = false): Promise<UserResponseDto>
+    async createAndUpdateUser(user: UserRequestDto, update: boolean = false): Promise<UserResponseDto>
     {
         if (update)
         {
