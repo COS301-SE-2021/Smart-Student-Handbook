@@ -16,6 +16,7 @@ const config: ServiceAccount = {
 
 export async function createNestServer() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   await app.listen(process.env.PORT || 5001);
   admin.initializeApp({
     credential: admin.credential.cert(config),

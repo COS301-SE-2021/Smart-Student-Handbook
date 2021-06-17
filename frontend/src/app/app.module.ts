@@ -40,6 +40,8 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -76,6 +78,7 @@ import { RegisterComponent } from './components/auth/register/register.component
     AngularFireAuthModule,
     AngularFireMessagingModule,
     AngularFireModule.initializeApp(environment.firebase),
+    HttpClientModule
   ],
   providers: [NotesPanelComponent, MessagingService, AsyncPipe],
   bootstrap: [AppComponent]

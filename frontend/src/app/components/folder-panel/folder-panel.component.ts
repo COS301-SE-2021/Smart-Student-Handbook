@@ -5,6 +5,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
+import {NotebookService} from "../../services/notebook.service";
 
 @Component({
   selector: 'app-folder-panel',
@@ -19,7 +20,7 @@ export class FolderPanelComponent implements OnInit {
 
 
   //-----------------  Code needed for the tree  ----------------------------------
-  private _transformer = (node: FoodNode, level: number) => {
+  private _transformer = (node: DirectoryNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
@@ -36,12 +37,27 @@ export class FolderPanelComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   //--------------------------------------------------------------------------------
 
-  constructor(private panel: NotesPanelComponent) { }
+  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService) { }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit(): void {
     this.dataSource.data = TREE_DATA;
+
+    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+      .subscribe(result => {
+        console.log(result);
+
+        let children = [];
+        for(let i = 0; i < result.length; i++){
+          children.push({name: result[i].course});
+        }
+
+        this.dataSource.data = [{
+          name: 'Notebooks',
+          children: children
+        }]
+      })
   }
 
   openedCloseToggle(){
@@ -80,12 +96,12 @@ export class FolderPanelComponent implements OnInit {
 /**
  * Tree structure and data
  */
- interface FoodNode {
+ interface DirectoryNode {
   name: string;
-  children?: FoodNode[];
+  children?: DirectoryNode[];
 }
 
-const TREE_DATA: FoodNode[] = [
+const TREE_DATA: DirectoryNode[] = [
   {
     name: 'Year 2',
     children: [

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
-import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import { ThemePalette } from '@angular/material/core';
+// import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+
+import EditorJS from '@editorjs/editorjs';
+import {NotebookService} from "../services/notebook.service";
+
+
 
 @Component({
   selector: 'app-notebook',
@@ -9,82 +14,65 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 })
 export class NotebookComponent implements OnInit {
 
-  editor = DecoupledEditor;
-  toolbar: any = ['heading', '|', 'bold',
-    'italic', 'fontSize', 'fontFamily', 'underline', 'strikethrough', 'alignment',
-    'highlight', 'numberedList', 'insertTable',
-    'bulletedList', '|', 'indent',
-    'outdent', 'undo', 'redo', 'exportPdf', 'exportWord', 'fontBackgroundColor',
-    'fontColor'];
+  // @ts-ignore
+  Header = require('@editorjs/header');
+  // @ts-ignore
+  LinkTool = require('@editorjs/link');
+  // @ts-ignore
+  RawTool = require('@editorjs/raw');
+  // @ts-ignore
+  SimpleImage = require('@editorjs/simple-image');
+  // @ts-ignore
+  Checklist = require('@editorjs/checklist');
+  // @ts-ignore
+  List = require('@editorjs/list');
+  // @ts-ignore
+  Embed = require('@editorjs/embed');
+  // @ts-ignore
+  Quote = require('@editorjs/quote');
 
-  heading = {
-    options: [
-      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-      { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-      { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-      { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-    ]
-  };
 
   public editorData = '<p>Hello, world!</p>';
-
-  public Editor = DecoupledEditor;
 
   links = ['First', 'Second', 'Third'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
-
-
   addLink() {
     this.links.push(`Link ${this.links.length + 1}`);
   }
 
-  constructor() { }
-
-  public onReady( editor: any ) {
-    // editor.ui.getEditableElement().parentElement.insertBefore(
-    //     editor.ui.view.toolbar.element,
-    //     editor.ui.getEditableElement()
-    // );
-
-    console.log(editor);
-  }
+  constructor(private notebookService: NotebookService) { }
 
   ngOnInit(): void {
 
-    DecoupledEditor.create(document.querySelector('.document-editor__editable'), {
-      fontSize: { options: [9, 11, 12, 13, 'default', 17, 19, 21] },
-      // toolbar: this.opciones,
-      // heading: this.heading,
-    }).then((editor:any)  => {
-      const toolbarContainer = document.querySelector('.document-editor__toolbar');
-
-      if(toolbarContainer)
-      toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-
-      this.Editor = editor;
-    }).catch((err: any) => {
-      console.error(err);
+    const editor = new EditorJS({
+      holder: 'editor',
+      tools: {
+        header: {
+          class: this.Header,
+          shortcut: 'CTRL+SHIFT+H'
+        },
+        // linkTool: {
+        //   class: this.LinkTool,
+        //   config: {
+        //     endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
+        //   }
+        // },
+        raw: this.RawTool,
+        image: this.SimpleImage,
+        checklist: {
+          class: this.Checklist,
+          inlineToolbar: true,
+        },
+        list: {
+          class: this.List,
+          inlineToolbar: true,
+        },
+        embed: this.Embed,
+        quote: this.Quote,
+      }
     });
-
-    // window.addEventListener('load', function () {
-
-    //   DecoupledEditor
-    //     .create( document.querySelector( '#editor' ) )
-    //     .then( (editor:any) => {
-    //         const toolbarContainer = document.getElementById( 'toolbar-container' );
-
-    //         if(toolbarContainer)
-    //         toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-    //     } )
-    //     .catch( (error: any) => {
-    //         console.error( error );
-    //     } );
-    // })
 
 
   }
