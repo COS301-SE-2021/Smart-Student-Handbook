@@ -11,7 +11,7 @@ export class User{
 }
 
 export class UserResponseDto {
-    success: boolean;
-    message: string;
-    userInfo?:User;
+    success?: boolean
+    message?: string
+    userInfo?:User
 }

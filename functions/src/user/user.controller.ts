@@ -10,21 +10,21 @@ export class UserController
     constructor(private userService: UserService) {}
 
     @Get("getUserDetails/:userId")
-    getUserDetails(@Param('userId') userId): Promise<UserResponseDto>
+    async getUserDetails(@Param('userId') userId): Promise<UserResponseDto>
     {
-        return null;
+        return await this.userService.getUserDetails(userId);
     }
 
     @Post("createUser")
-    createUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
+    async createUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
     {
-        return null;
+        return await this.userService.createAndUpdateUser(user);
     }
 
     @Post("updateUser")
-    updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
+    async updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto>
     {
-        return null;
+        return await this.userService.createAndUpdateUser(user,true);
     }
 
 }
