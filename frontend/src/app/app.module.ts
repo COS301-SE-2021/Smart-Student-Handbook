@@ -34,9 +34,11 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
-import { MessagingService } from './service/messaging.service';
+import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
     FolderPanelComponent,
     NotebookComponent,
     SmartAssistPanelComponent,
-    NotesPanelComponent
+    NotesPanelComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     FormsModule,
