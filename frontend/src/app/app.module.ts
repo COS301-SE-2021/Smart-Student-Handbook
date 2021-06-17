@@ -39,6 +39,7 @@ import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { RestPasswordComponent } from './components/auth/rest-password/rest-password.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { RegisterComponent } from './components/auth/register/register.component
     SmartAssistPanelComponent,
     NotesPanelComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    RestPasswordComponent
   ],
   imports: [
     FormsModule,
