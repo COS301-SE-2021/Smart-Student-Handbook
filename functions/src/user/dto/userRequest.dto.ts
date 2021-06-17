@@ -1,4 +1,4 @@
-export class User{
+export class UserRequestDto {
     readonly uid:string
     readonly name?:string
     readonly username:string
