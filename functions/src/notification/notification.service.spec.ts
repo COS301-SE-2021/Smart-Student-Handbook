@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { EmailNotificationRequestDto } from "./dto/emailNotificationRequest.dto"
 import { EmailNotificationResponseDto } from "./dto/emailNotificationResponse.dto"
-import transport from "nodemailer/lib/smtp-transport";
 
 
 
@@ -75,7 +74,7 @@ describe('NotificationService', () => {
 		
 		jest.mock('nodemailer', () => ({
 			creatTransport: jest.fn().mockReturnValue({
-				sendMail: jest.fn().mockRejectedValue(new Error("broken"))
+				sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
 			})
 		}));
 		
