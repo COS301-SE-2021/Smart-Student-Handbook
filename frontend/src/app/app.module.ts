@@ -38,6 +38,8 @@ import { MessagingService } from './service/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -72,6 +74,7 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
     AngularFireAuthModule,
     AngularFireMessagingModule,
     AngularFireModule.initializeApp(environment.firebase),
+    HttpClientModule
   ],
   providers: [NotesPanelComponent, MessagingService, AsyncPipe],
   bootstrap: [AppComponent]
