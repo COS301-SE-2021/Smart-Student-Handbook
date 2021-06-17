@@ -13,4 +13,9 @@ export class NotebookService {
 
     return this.httpClient.request<any>('get','http://localhost:5001/notebook/findAllUserNotebooks/' + userId);
   }
+
+  getNoteBookById(userId: string): Observable<any>{
+
+    return this.httpClient.request<any>('get','http://localhost:5001/notebook/findNotebookById/' + userId);
+  }
 }

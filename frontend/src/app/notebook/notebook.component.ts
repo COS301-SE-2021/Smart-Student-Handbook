@@ -74,6 +74,10 @@ export class NotebookComponent implements OnInit {
       }
     });
 
+    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
+      .subscribe(result => {
+        console.log(result);
+      })
 
   }
 
