@@ -43,8 +43,9 @@
   flex-wrap: wrap !important;
 }
 
-#moreOptions{
+.moreOptions{
   margin-bottom: -10px;
+  z-index: 5;
 }
 
 #tabs{

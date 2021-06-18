@@ -25,11 +25,17 @@
       <app-notes-panel></app-notes-panel>
     </div>
     <div class="col" align="end">
-      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+      <button mat-icon-button class="favorite-icon" class="moreOptions" >
         <mat-icon>share</mat-icon>
       </button>
-      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+      <!-- <button mat-icon-button class="favorite-icon" id="moreOptions" >
         <mat-icon>more_horiz</mat-icon>
+      </button> -->
+      <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="createNewNotebook()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="removeNotebook()">
+        <mat-icon>remove</mat-icon>
       </button>
       <mat-tab-group [backgroundColor]="background" id="tabs">
         <mat-tab *ngFor="let link of links" label="{{link}}">
