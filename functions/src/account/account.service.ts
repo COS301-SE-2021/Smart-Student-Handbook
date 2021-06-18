@@ -87,15 +87,17 @@ export class AccountService {
 
 	async signOut(): Promise<Response>
 	{
+		let test = {
+			message: "Successfully signedOut"
+		}
 		firebase.auth().signOut().then(() => {
-			// Sign-out successful.
+			test.message = "cool beans";
+			return Promise
 		}).catch((error) => {
 			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
 
-		return {
-			message: "Successfully signedOut"
-		};
+		return test;
 	}
 
 	async getCurrentUser(): Promise<Account>
@@ -111,10 +113,8 @@ export class AccountService {
 		};
 	}
 
-	async deleteUser(): Promise<Response>
+	async deleteUser(uid: string): Promise<Response>
 	{
-		let uid: string = firebase.auth().currentUser.uid;
-
 		admin.auth().deleteUser(uid).then(() => {
 			console.log('Successfully deleted user');
 		})
