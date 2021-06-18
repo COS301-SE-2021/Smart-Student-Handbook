@@ -1,7 +1,6 @@
 export class User{
     uid:string
     name?:string
-    username:string
     institution?:string
     department?:string
     program?:string

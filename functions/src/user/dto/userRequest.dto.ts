@@ -1,7 +1,6 @@
 export class UserRequestDto {
     readonly uid:string
     readonly name?:string
-    readonly username:string
     readonly institution?:string
     readonly department?:string
     readonly program?:string

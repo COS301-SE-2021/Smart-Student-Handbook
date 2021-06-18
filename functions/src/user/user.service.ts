@@ -19,7 +19,6 @@ export class UserService {
                 {
                     uid: uid,
                     name:doc.data()["name"],
-                    username:doc.data()["username"],
                     institution:doc.data()["institution"],
                     department:doc.data()["department"],
                     program:doc.data()["program"],
@@ -38,12 +37,6 @@ export class UserService {
 
     async createAndUpdateUser(user: UserRequestDto, update: boolean = false): Promise<UserResponseDto>
     {
-
-        if (update)
-        {
-            //checkIfUserNameExists
-        }
-
         const resp = await admin.firestore().collection("users").doc(randomStringGenerator()).set(user);
 
         if (resp)
