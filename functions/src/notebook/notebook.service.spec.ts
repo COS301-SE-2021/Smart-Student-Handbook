@@ -2,11 +2,8 @@ import {NotebookService} from "./notebook.service";
 
 import * as admin from "firebase-admin";
 
-
-
 import { Test, TestingModule } from '@nestjs/testing';
-import {mockCollection, mockWhere} from "firestore-jest-mock/mocks/firestore";
-import firebase from "firestore-jest-mock";
+import {mockCollection, mockGet, mockWhere} from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
 admin.initializeApp();
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
@@ -62,8 +59,27 @@ describe('NotebookService', () => {
     expect(service).toBeDefined();
   });
 
+ //Test for the findNoteBookByID function
+
+    describe('FindNoteBookByID',()=>{
+        describe('when an ID matches a notebook',()=>{
+            it('Return the notebook associated with the id',async()=>{
+
+                await service.findNotebookById('TestID');
+                expect(mockCollection).toHaveBeenCalledWith('notebooks');
+                expect(mockGet).toBeCalled();
+            })
+        })
+
+        describe('when an ID  does not match a notebook',()=>{
+            it('Throw and error',async()=>{
 
 
+                return expect(service.findNotebookById('TestID2')).rejects.toThrow(HttpException);
+            })
+        })
+
+    })
 
 
 
