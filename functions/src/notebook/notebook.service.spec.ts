@@ -3,7 +3,7 @@ import {NotebookService} from "./notebook.service";
 import * as admin from "firebase-admin";
 
 import { Test, TestingModule } from '@nestjs/testing';
-import {mockCollection, mockDoc, mockGet, mockSet, mockWhere} from "firestore-jest-mock/mocks/firestore";
+import {mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere} from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
 admin.initializeApp();
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
@@ -126,16 +126,25 @@ describe('NotebookService', () => {
 
 //Test to delete a notebook
     describe('FindAllUserNoteBooks',()=>{
-        describe('when a notebook matches a user id',()=>{
-            it('Return the notebooks of the user with the user ID',async()=>{
+        describe('when a notebook matches a notebookID',()=>{
+            it('Delete the notebook',async()=>{
 
-                await service.findAllUserNotebooks('UserIdTest');
+                await service.deleteNotebook('TestID');
                 expect(mockCollection).toHaveBeenCalledWith('notebooks');
-                expect(mockWhere).toHaveBeenCalledWith('userId', '==', 'UserIdTest');
+                expect(mockDelete).toHaveBeenCalled();
+            })
+        })
+
+        describe('when a notebook does not match a notebookID',()=>{
+            it('The notebook should not be deleted',async()=>{
+
+               //Todo: Implement Fail Case
+
             })
         })
 
     })
+
 
 
 });

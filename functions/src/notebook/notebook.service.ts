@@ -105,6 +105,7 @@ export class NotebookService {
 
 	async deleteNotebook(notebookId: string): Promise<string>
 	{
+		//Todo: Die error werk ook nie heeltemal nie
 		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 
 		}).catch((error) => {
