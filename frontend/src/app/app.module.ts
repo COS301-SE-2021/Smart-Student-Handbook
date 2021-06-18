@@ -33,7 +33,9 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
@@ -74,10 +76,12 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     CKEditorModule,
     MDBBootstrapModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase, 'smartStudentNotebook'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    // AngularFireStorageModule,
+    AngularFirestoreModule,
     HttpClientModule
   ],
   providers: [NotesPanelComponent, MessagingService, AsyncPipe],

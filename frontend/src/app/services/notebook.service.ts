@@ -14,8 +14,31 @@ export class NotebookService {
     return this.httpClient.request<any>('get','http://localhost:5001/notebook/findAllUserNotebooks/' + userId);
   }
 
-  getNoteBookById(userId: string): Observable<any>{
+  getNoteBookById(noteBookId: string): Observable<any>{
 
-    return this.httpClient.request<any>('get','http://localhost:5001/notebook/findNotebookById/' + userId);
+    return this.httpClient.request<any>('get','http://localhost:5001/notebook/findNotebookById/' + noteBookId);
   }
+
+  createNotebook(notebookDto: NotebookDto, userId: string){
+
+    return this.httpClient.request<any>('post','http://localhost:5001/notebook/createNotebook/' + userId, {
+      body: notebookDto
+    });
+  }
+
+  removeNotebook(noteBookId: string){
+
+    return this.httpClient.request<any>('delete','http://localhost:5001/notebook/deleteNotebook/' + noteBookId);
+  }
+}
+
+class NotebookDto {
+  readonly author?: string
+  readonly course?: string
+  readonly description?: string
+  readonly institution?: string
+  readonly name?: string
+  readonly surname?: string
+  readonly private?: boolean
+  readonly username?: string
 }

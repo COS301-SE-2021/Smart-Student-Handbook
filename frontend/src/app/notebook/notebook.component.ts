@@ -4,7 +4,12 @@ import { ThemePalette } from '@angular/material/core';
 
 import EditorJS from '@editorjs/editorjs';
 import {NotebookService} from "../services/notebook.service";
+import * as firebase from 'firebase';
+import "firebase/firestore";
 
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import * as FirebaseDatabase from "@angular/fire/database";
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({
@@ -46,6 +51,45 @@ export class NotebookComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // firebase.initializeApp(firebaseConfig);
+
+    let path: string = 'test';
+
+    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
+      .subscribe(result => {
+        console.log(result);
+        // path = result.notebookReference;
+      })
+
+
+
+    // const dbRefObject = firebase.database().ref("notebook/test");
+
+    // const userRef = this.db.object('notebooks');
+    // console.log(userRef);
+
+    // dbRefObject.on('value', snap =>
+    // {
+    //   if(snap.val() === null)
+    //   {
+    //     firebase.database().ref("notebook/test").set({
+    //       outputData:
+    //         {
+    //           blocks: [
+    //             {
+    //               "id" : "jTFbQOD8j3",
+    //               "type" : "header",
+    //               "data" : {
+    //                 "text" : "My Notebook 🚀",
+    //                 "level" : 2
+    //               }
+    //             }]
+    //         }
+    //     });
+    //   }
+    // });
+
+
     const editor = new EditorJS({
       holder: 'editor',
       tools: {
@@ -71,10 +115,57 @@ export class NotebookComponent implements OnInit {
         },
         embed: this.Embed,
         quote: this.Quote,
+      },
+      data:
+        {
+          blocks:[]
+        },
+      onChange: function() {
+        (function() {
+          editor.save().then((outputData) => {
+            console.log(outputData);
+            // firebase.database().ref("notebook/test" ).set({
+            //   outputData
+            // });
+          }).catch((error) => {
+            console.log('Saving failed: ', error)
+          });
+        }());
       }
-    });
+    })
 
-    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
+    // dbRefObject.on('value', snap =>
+    // {
+    //   console.log(snap.val());
+    //
+    //   editor.render(snap.val().outputData);
+    //
+    // });
+
+
+  }
+
+  createNewNotebook(){
+    let request = {
+      title: 'title 2',
+      author: 'author',
+      course: 'COS 301',
+      description: 'Test',
+      institution: 'Tuks',
+      name: 'Arno',
+      surname: 'Moller',
+      private: false,
+      username: 'username',
+    }
+
+    this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+      .subscribe(result => {
+        console.log(result);
+      })
+  }
+
+  removeNotebook(){
+    this.notebookService.removeNotebook('66d40c9b-74b3-4799-aae4-9d19bb868283')
       .subscribe(result => {
         console.log(result);
       })
