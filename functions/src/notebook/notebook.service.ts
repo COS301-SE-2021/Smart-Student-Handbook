@@ -35,7 +35,6 @@ export class NotebookService {
 		if(notebooks === []) {
 			throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 		}
-
 		return notebooks;
 	}
 
