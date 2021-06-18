@@ -124,7 +124,18 @@ describe('NotebookService', () => {
 
     })
 
+//Test to delete a notebook
+    describe('FindAllUserNoteBooks',()=>{
+        describe('when a notebook matches a user id',()=>{
+            it('Return the notebooks of the user with the user ID',async()=>{
 
+                await service.findAllUserNotebooks('UserIdTest');
+                expect(mockCollection).toHaveBeenCalledWith('notebooks');
+                expect(mockWhere).toHaveBeenCalledWith('userId', '==', 'UserIdTest');
+            })
+        })
+
+    })
 
 
 });
