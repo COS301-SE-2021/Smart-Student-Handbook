@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 import firebase  from "firebase/app";
 import {UserRequestDto} from "./dto/userRequest.dto";
 import {User, UserResponseDto} from "./dto/userResponse.dto";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 @Injectable()
 export class UserService {
@@ -43,7 +44,13 @@ export class UserService {
             //checkIfUserNameExists
         }
 
-        return {success: false, message: "An unexpected Error Occurred"};
+        const resp = await admin.firestore().collection("users").doc(randomStringGenerator()).set(user);
+
+        if (resp)
+            return {success: true, message: "User was successfully added"};
+        else
+            throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
+
     }
 
 }
