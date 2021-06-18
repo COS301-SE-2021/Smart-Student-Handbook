@@ -1,14 +1,17 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
+import { Response } from "./interfaces/response.interface";
+import { Account } from "./interfaces/account.interface";
 import firebase from 'firebase';
 require('firebase/auth');
 import * as admin from 'firebase-admin';
 
+
 @Injectable()
 export class AccountService {
 
-	async registerUser(registerDto: RegisterDto): Promise<string>
+	async registerUser(registerDto: RegisterDto): Promise<Response>
 	{
 		if(registerDto.password !== registerDto.passwordConfirm)
 		{
@@ -29,10 +32,13 @@ export class AccountService {
 		.catch((error) => {
 			throw new HttpException('Bad Request '+'Error creating new user:', error);
 		});
-		return "User is successfully registered!";
+
+		return {
+			message: "User is successfully registered!"
+		};
 	}
 
-	async updateUser(registerDto: RegisterDto): Promise<string>
+	async updateUser(registerDto: RegisterDto): Promise<Response>
 	{
 		let uid: string = firebase.auth().currentUser.uid;
 
@@ -57,10 +63,13 @@ export class AccountService {
 			console.log('Error updating user:', error);
 		});
 
-		return "User is successfully updated!";
+		return {
+			message: "User is successfully updated!"
+		};
+
 	}
 
-	async loginUser(loginDto: LoginDto): Promise<string>
+	async loginUser(loginDto: LoginDto): Promise<Response>
 	{
 		firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password).then((userCredential) => {
 			var user = userCredential.user.email;
@@ -70,10 +79,13 @@ export class AccountService {
 			var errorMessage = error.message;
 			throw new HttpException('Bad Request '+errorMessage, HttpStatus.BAD_REQUEST);
 		});
-		return "User is successfully logged in";
+
+		return {
+			message: "User is successfully logged in"
+		};
 	}
 
-	async signOut(): Promise<string>
+	async signOut(): Promise<Response>
 	{
 		firebase.auth().signOut().then(() => {
 			// Sign-out successful.
@@ -81,17 +93,25 @@ export class AccountService {
 			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
 
-		return "Successfully signedOut";
+		return {
+			message: "Successfully signedOut"
+		};
 	}
 
-	async getCurrentUser(): Promise<string>
+	async getCurrentUser(): Promise<Account>
 	{
 		const user = firebase.auth().currentUser;
 
-		return user.email;
+		return {
+			uid: user.uid,
+			email: user.email,
+			emailVerified: user.emailVerified,
+			phoneNumber: user.phoneNumber,
+			displayName: user.displayName
+		};
 	}
 
-	async deleteUser(): Promise<string>
+	async deleteUser(): Promise<Response>
 	{
 		let uid: string = firebase.auth().currentUser.uid;
 
@@ -102,7 +122,9 @@ export class AccountService {
 			console.log('Error deleting user:', error);
 		});
 
-		return "Successfully deleted user";
+		return {
+			message: "Successfully deleted user"
+		};
 	}
 
 
