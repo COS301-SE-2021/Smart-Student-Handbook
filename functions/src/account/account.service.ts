@@ -13,7 +13,7 @@ export class AccountService {
 
 	async registerUser(registerDto: RegisterDto): Promise<Response>
 	{
-		if(registerDto.password !== registerDto.passwordConfirm)
+		if(registerDto.password != registerDto.passwordConfirm)
 		{
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}

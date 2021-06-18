@@ -51,6 +51,21 @@ describe('AccountService', () => {
            });
       })
     })
+
+    describe('The user will enter their details incorrectly' , ()=>{
+      it('If all user details are entered incorrectly the user will not be registered' , async()=>{
+        registerDTO.RegisterDto= jest.fn(()=>[{
+          email: 'Test@gmail.com',
+          phoneNumber: '0721234567',
+          displayName: 'UserTestName',
+          password: 'TestWrPasswords',
+          passwordConfirm: 'TestPassword'
+        }]);
+
+        //Todo This should fail
+        //await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
+      })
+    })
   })
 
 });
