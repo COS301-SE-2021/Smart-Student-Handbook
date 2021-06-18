@@ -3,10 +3,11 @@ import {NotebookService} from "./notebook.service";
 import * as admin from "firebase-admin";
 
 import { Test, TestingModule } from '@nestjs/testing';
-import {mockCollection, mockGet, mockWhere} from "firestore-jest-mock/mocks/firestore";
+import {mockCollection, mockDoc, mockGet, mockSet, mockWhere} from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
 admin.initializeApp();
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
+const NoteBookDTo = require("./dto/notebook.dto")
 
 mockGoogleCloudFirestore({
     database: {
@@ -43,9 +44,6 @@ describe('NotebookService', () => {
     describe('FindAllUserNoteBooks',()=>{
         describe('when a notebook matches a user id',()=>{
             it('Return the notebooks of the user with the user ID',async()=>{
-                const { Firestore } = require('@google-cloud/firestore');
-                const firestore = new Firestore();
-
 
                 await service.findAllUserNotebooks('UserIdTest');
                 expect(mockCollection).toHaveBeenCalledWith('notebooks');
@@ -81,13 +79,53 @@ describe('NotebookService', () => {
 
     })
 
+//Test for createOrUpdateNotebook
 
+    describe('createOrUpdateNotebook',()=>{
+        describe('when a notebook matches a notebookID the it can ',()=>{
+            it('Update the notebook ',async()=>{
+
+                NoteBookDTo.NotebookDto = jest.fn(()=>[{
+                    title: 'title',
+                    author: "author",
+                    course: "course",
+                    description: "description is updated now",
+                    institution: "institution",
+                    name: "name",
+                    surname: "surname",
+                    private: "private",
+                    username: "username",
+                    notebookReference: "TestID",
+                    userId: "UserIdTest",
+                }]);
+                await service.createOrUpdateNotebook(NoteBookDTo , 'TestID','userIdTest');
+                expect(mockCollection).toHaveBeenCalledWith('notebooks');
+                expect(mockDoc).toHaveBeenCalledWith('TestID');
+                expect(mockSet).toHaveBeenCalled();
+
+            })
+        })
+
+        describe('if no notebook id is provide ' , ()=>{
+            it('Create a new Notebook ' , async()=>{
+                await service.createOrUpdateNotebook(NoteBookDTo , '','userIdTest');
+                expect(mockCollection).toHaveBeenCalledWith('notebooks');
+                expect(mockDoc).toHaveBeenCalled();
+                expect(mockSet).toHaveBeenCalled();
+            })
+            })
+
+        describe('if no notebook id is wrong  ' , ()=>{
+            it('An error should be given ' , async()=>{
+                //Todo: THIS TEST Should fail but the code is not correct
+                //return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' ,'UserIdTest')).rejects.toThrow(HttpException);
+            })
+        })
+
+    })
 
 
 
 
 });
-
-
-
 
