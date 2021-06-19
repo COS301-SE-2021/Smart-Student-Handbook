@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 const ACCOUNT_API = 'http://localhost:5001/account/';
 const httpOptions = {
@@ -13,7 +14,7 @@ export class AccountService {
 
   constructor(private http: HttpClient) { }
 
-  async registerUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Promise<any> {
+  registerUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Observable<any> {
     return this.http.post(ACCOUNT_API + 'registerUser', {
       email,
       phoneNumber,
@@ -23,7 +24,7 @@ export class AccountService {
     }, httpOptions);
   }
 
-  async loginUser(email: string, password: string): Promise<any>{
+   loginUser(email: string, password: string): Observable<any>{
     return this.http.post(ACCOUNT_API + 'loginUser', {
       email,
       password

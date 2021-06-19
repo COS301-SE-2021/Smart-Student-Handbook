@@ -39,8 +39,6 @@ import { ForgotPasswordComponent } from './components/account/forgot-password/fo
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
-import { HttpClientModule } from '@angular/common/http';
-
 
 @NgModule({
   declarations: [
