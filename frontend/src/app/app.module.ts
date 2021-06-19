@@ -20,6 +20,9 @@ import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
+//Angular Material
+import {MaterialModule} from './material/material/material.module';
+
 //Components
 import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
 import { NotebookComponent } from './notebook/notebook.component';
@@ -29,9 +32,9 @@ import { LoginComponent } from './components/account/login/login.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-
-//Angular Material
-import {MaterialModule} from './material/material/material.module';
+import { ConfirmComponent } from './components/modals/global/confirm/confirm.component';
+import { ErrorComponent } from './components/modals/global/error/error.component';
+//----------------------------------------------------------------------------------------------------------------------
 
 
 @NgModule({
@@ -44,7 +47,9 @@ import {MaterialModule} from './material/material/material.module';
     LoginComponent,
     RegisterComponent,
     RestPasswordComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ConfirmComponent,
+    ErrorComponent
   ],
   imports: [
     MaterialModule,
