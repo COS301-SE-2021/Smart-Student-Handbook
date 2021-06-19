@@ -155,6 +155,11 @@ export class NotebookService {
 		 * throw bad request exception
 		 */
 		return admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
+
+			//Remove notebook from realtime database
+			let notebookRef = firebase.database().ref('notebook/' + notebookId);
+			notebookRef.remove();
+
 			return {
 				message: "Notebook successfully delete"
 			};
