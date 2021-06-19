@@ -18,7 +18,7 @@ export class NotificationController {
 
   @Get()
   async sendPushNotification(){
-    await this.notificationService.sendPushNotification();
+    //await this.notificationService.sendPushNotification();
     return true;
   }
 }
