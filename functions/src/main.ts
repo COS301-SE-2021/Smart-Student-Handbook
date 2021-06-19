@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
 import firebase from "firebase/app";
+
 dotenv.config();
 
 export async function createNestServer() {
@@ -14,8 +15,7 @@ export async function createNestServer() {
   await app.listen(process.env.PORT || 5001);
   admin.initializeApp({
     credential: admin.credential.applicationDefault(),
-    databaseURL:
-      'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
   });
 
   var firebaseConfig = {
@@ -30,8 +30,6 @@ export async function createNestServer() {
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-
-  // console.log(config);
 }
 
 createNestServer()
