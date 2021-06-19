@@ -38,15 +38,13 @@ export class AccountController {
 	@Get("getCurrentUser")
 	getCurrentUser(): Promise<Account>
 	{
-		let uid: string = firebase.auth().currentUser.uid;
 		return this.accountService.getCurrentUser();
 	}
 
 	@Delete("deleteUser")
 	deleteUser(): Promise<Response>
 	{
-		let uid: string = firebase.auth().currentUser.uid;
-		return this.accountService.deleteUser(uid);
+		return this.accountService.deleteUser();
 	}
 
 }

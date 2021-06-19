@@ -11,14 +11,23 @@ import * as admin from 'firebase-admin';
 @Injectable()
 export class AccountService {
 
+	/**
+	 * Register a new user
+	 * @param registerDto
+	 */
 	async registerUser(registerDto: RegisterDto): Promise<Response>
 	{
+		//Check if user password and confirm passwords match before creating user
 		if(registerDto.password != registerDto.passwordConfirm)
 		{
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
 
-		admin.auth().createUser({
+		/**
+		 * Create user.
+		 * If successful return success message else throw Bad Request exception
+		 */
+		return admin.auth().createUser({
 			email: registerDto.email,
 			emailVerified: false,
 			phoneNumber: registerDto.phoneNumber,
@@ -27,27 +36,35 @@ export class AccountService {
 			disabled: false,
 		}).then((userRecord) => {
 			// See the UserRecord reference doc for the contents of userRecord.
-			console.log('Successfully created new user:', userRecord.uid);
+			return {
+				message: "User is successfully registered!"
+			};
 		})
 		.catch((error) => {
-			throw new HttpException('Bad Request '+'Error creating new user:', error);
+			throw new HttpException('Bad Request '+'Error creating new user:', HttpStatus.BAD_REQUEST);
 		});
-
-		return {
-			message: "User is successfully registered!"
-		};
 	}
 
+	/**
+	 * Update user.
+	 * If successful return success message else throw Bad Request exception
+	 */
 	async updateUser(registerDto: RegisterDto): Promise<Response>
 	{
-		let uid: string = firebase.auth().currentUser.uid;
+		let uid: string = "";
 
-		if(registerDto.password !== registerDto.passwordConfirm)
-		{
-			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
+		//Check if user is logged in
+		try{
+			uid = firebase.auth().currentUser.uid;
+		}
+		catch(error) {
+			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
 		}
 
-		admin.auth().updateUser(uid, {
+		/**
+		 * Try to update user. If successful return success message else throw error
+		 */
+		return admin.auth().updateUser(uid, {
 			email: registerDto.email,
 			emailVerified: false,
 			phoneNumber: registerDto.phoneNumber,
@@ -56,48 +73,36 @@ export class AccountService {
 			disabled: false,
 		}).then((userRecord) =>
 		{
-			// See the UserRecord reference doc for the contents of userRecord.
-			console.log('Successfully updated user', userRecord.toJSON());
+			return {
+				message: "User is successfully updated!"
+			};
 		})
 		.catch((error) => {
-			console.log('Error updating user:', error);
+			throw new HttpException('Error updating user: '+ error, HttpStatus.BAD_REQUEST);
 		});
-
-		return {
-			message: "User is successfully updated!"
-		};
-
 	}
 
 	async loginUser(loginDto: LoginDto): Promise<Response>
 	{
-		firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password).then((userCredential) => {
-			var user = userCredential.user.email;
+		return firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password).then((userCredential) => {
+			return {
+				message: "User is successfully logged in.",
+			};
 		})
 		.catch((error) => {
-			var errorCode = error.code;
-			var errorMessage = error.message;
-			throw new HttpException('Bad Request '+errorMessage, HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request '+error.message, HttpStatus.BAD_REQUEST);
 		});
-
-		return {
-			message: "User is successfully logged in"
-		};
 	}
 
 	async signOut(): Promise<Response>
 	{
-		let test = {
-			message: "Successfully signedOut"
-		}
-		firebase.auth().signOut().then(() => {
-			test.message = "cool beans";
-			return Promise
+		return firebase.auth().signOut().then(() => {
+			return {
+				message: "Successfully signed out."
+			}
 		}).catch((error) => {
 			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
-
-		return test;
 	}
 
 	async getCurrentUser(): Promise<Account>
@@ -113,18 +118,18 @@ export class AccountService {
 		};
 	}
 
-	async deleteUser(uid: string): Promise<Response>
+	async deleteUser(): Promise<Response>
 	{
-		admin.auth().deleteUser(uid).then(() => {
-			console.log('Successfully deleted user');
+		let uid: string = firebase.auth().currentUser.uid;
+
+		return admin.auth().deleteUser(uid).then(() => {
+			return {
+				message: "Successfully deleted user."
+			};
 		})
 		.catch((error) => {
-			console.log('Error deleting user:', error);
+			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
-
-		return {
-			message: "Successfully deleted user"
-		};
 	}
 
 
