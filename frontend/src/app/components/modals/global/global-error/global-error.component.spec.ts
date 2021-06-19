@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmComponent } from './confirm.component';
+import { GlobalErrorComponent } from './global-error.component';
 
-describe('ConfirmComponent', () => {
-  let component: ConfirmComponent;
-  let fixture: ComponentFixture<ConfirmComponent>;
+describe('GlobalErrorComponent', () => {
+  let component: GlobalErrorComponent;
+  let fixture: ComponentFixture<GlobalErrorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmComponent ]
+      declarations: [ GlobalErrorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmComponent);
+    fixture = TestBed.createComponent(GlobalErrorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

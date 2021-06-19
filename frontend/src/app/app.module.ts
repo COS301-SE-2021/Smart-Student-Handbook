@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 
 //Editor
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -32,9 +32,8 @@ import { LoginComponent } from './components/account/login/login.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-import { ConfirmComponent } from './components/modals/global/confirm/confirm.component';
-import { ErrorComponent } from './components/modals/global/error/error.component';
-//----------------------------------------------------------------------------------------------------------------------
+import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
+import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
 
 @NgModule({
@@ -48,12 +47,13 @@ import { ErrorComponent } from './components/modals/global/error/error.component
     RegisterComponent,
     RestPasswordComponent,
     ForgotPasswordComponent,
-    ConfirmComponent,
-    ErrorComponent
+    GlobalErrorComponent,
+    GlobalConfirmComponent,
   ],
   imports: [
     MaterialModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
