@@ -9,6 +9,7 @@ import firebase from "firebase";
 import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
 
 
 @Component({
@@ -81,6 +82,8 @@ export class NotebookComponent implements OnInit {
   background: ThemePalette = undefined;
   notebookID: string = '';
 
+  @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
+
   /**
    * Include the notebook service
    * @param notebookService
@@ -89,7 +92,12 @@ export class NotebookComponent implements OnInit {
               private router: ActivatedRoute, private _router: Router) { }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.initialFunction();
+  }
+
+  initialFunction(){
 
     //The path of the notebook to be loaded
     let path: string = 'test';//891bdd86-0828-49ea-9053-8d60f8fdf671
@@ -103,20 +111,18 @@ export class NotebookComponent implements OnInit {
     /**
      * Get the values from the realtime database and insert block if notebook is empty
      */
-    dbRefObject.once('value', snap =>
-    {
-      if(snap.val() === null)
-      {
+    dbRefObject.once('value', snap => {
+      if (snap.val() === null) {
         firebase.database().ref("notebook/" + path).set({
           outputData:
             {
               blocks: [
                 {
-                  "id" : "jTFbQOD8j3",
-                  "type" : "header",
-                  "data" : {
-                    "text" : "My Notebook 🚀",
-                    "level" : 2
+                  "id": "jTFbQOD8j3",
+                  "type": "header",
+                  "data": {
+                    "text": "My Notebook 🚀",
+                    "level": 2
                   }
                 }]
             }
@@ -196,15 +202,15 @@ export class NotebookComponent implements OnInit {
       },
       data:
         {
-          blocks:[]
+          blocks: []
         },
       autofocus: true,
 
       onChange: () => {
-        (function()  {
+        (function () {
           editor.save().then((outputData) => {
             // console.log(outputData);
-            firebase.database().ref("notebook/" + path ).set({
+            firebase.database().ref("notebook/" + path).set({
               outputData
             });
           }).catch((error) => {
@@ -219,9 +225,10 @@ export class NotebookComponent implements OnInit {
      * Get the id of the notebook from the url parameter
      */
     this.router.queryParams.subscribe(params => {
-      console.log(params);
-      if(params.id !== undefined){
-        this.notebookID = path = params.id;
+
+      if (params.id !== undefined) {
+
+          this.notebookID = path = params.id;
 
         /**
          * Get the specific notebook details with notebook id
@@ -235,61 +242,59 @@ export class NotebookComponent implements OnInit {
             /**
              * Get the values from the realtime database and insert block if notebook is empty
              */
-            dbRefObject.once('value', snap =>
-            {
-              if(snap.val() === null)
-              {
+            dbRefObject.once('value', snap => {
+              if (snap.val() === null) {
                 firebase.database().ref("notebook/" + path).set({
                   outputData:
                     {
                       blocks: [
                         {
-                          "id" : "jTFbQOD8j3",
-                          "type" : "header",
-                          "data" : {
-                            "text" : "My Notebook 🚀",
-                            "level" : 2
+                          "id": "jTFbQOD8j3",
+                          "type": "header",
+                          "data": {
+                            "text": "My Notebook 🚀",
+                            "level": 2
                           }
                         }]
                     }
                 });
               }
-            });
+            })
+              .then(() => {
+                /**
+                 * Render output on Editor
+                 */
+                dbRefObject.once('value', snap => {
 
+                  console.log(snap.val());
+                  editor.render(snap.val().outputData);
+                });
 
-            /**
-             * Render output on Editor
-             */
-            dbRefObject.once('value', snap =>
-            {
-              editor.render(snap.val().outputData);
-            });
-
-            //Change the path to which the editor should save data
-            editor.on('change', () => {
-              (function()  {
-                editor.save().then((outputData) => {
-                  // console.log(outputData);
-                  firebase.database().ref("notebook/" + path ).set({
-                    outputData
-                  });
-                }).catch((error) => {
-                  console.log('Saving failed: ', error)
-                })
-              }());
-            });
+                //Change the path to which the editor should save data
+                editor.on('change', () => {
+                  (function () {
+                    editor.save().then((outputData) => {
+                      // console.log(outputData);
+                      firebase.database().ref("notebook/" + path).set({
+                        outputData
+                      });
+                    }).catch((error) => {
+                      console.log('Saving failed: ', error)
+                    })
+                  }());
+                });
+              });
           })
 
       }
 
       //no id in the url
-      else{
+      else {
 
         /**
          * Render output on Editor
          */
-        dbRefObject.once('value', snap =>
-        {
+        dbRefObject.once('value', snap => {
           editor.render(snap.val().outputData);
         });
       }
@@ -346,7 +351,13 @@ export class NotebookComponent implements OnInit {
         this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
           .subscribe(result => {
             console.log(result);
-          });
+
+            this.folderPanelComponent.getUserNotebooks();
+            // this.folderPanelComponent.openTree();
+          },
+            error => {
+              this.folderPanelComponent.getUserNotebooks();
+            });
       }
     });
 
@@ -363,8 +374,14 @@ export class NotebookComponent implements OnInit {
         .subscribe(result => {
           console.log(result);
 
-          this._router.navigate(['notebook']);
-        })
+          this.folderPanelComponent.getUserNotebooks();
+        },
+          async error => {
+
+            await this._router.navigate(['notebook']);
+
+            this.folderPanelComponent.getUserNotebooks();
+         })
     }
 
 

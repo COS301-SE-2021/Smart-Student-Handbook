@@ -2,7 +2,7 @@ import { NotesPanelComponent } from './notes-panel/notes-panel.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {MatTree, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
@@ -15,6 +15,9 @@ import {Router} from "@angular/router";
   encapsulation: ViewEncapsulation.None
 })
 export class FolderPanelComponent implements OnInit {
+
+  // @ViewChild('tree') tree!: MatTree<any>;
+  open: boolean = false;
 
   panelOpenState = false;
   width = 68.3;
@@ -46,21 +49,40 @@ export class FolderPanelComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getUserNotebooks();
+
+  }
+
+  getUserNotebooks(){
+
     this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
       .subscribe(result => {
-        // console.log(result);
+        console.log(result);
 
         let children = [];
-        for(let i = 0; i < result.length; i++){
+        for (let i = 0; i < result.length; i++) {
           children.push({name: result[i].course, id: result[i].notebookReference});
         }
 
         this.dataSource.data = [{
           name: 'Notebooks',
-          id:'',
+          id: '',
           children: children
-        }]
+        }];
+
+        this.openTree();
+
       });
+  }
+
+  openTree(){
+
+    // if(this.open)
+      this.treeControl.expandAll();
+
+    // this.open = false;
+
+    // console.log(this.treeControl.dataNodes[0].);
   }
 
   openedCloseToggle(){

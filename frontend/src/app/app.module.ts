@@ -74,7 +74,7 @@ import { MatDialogRef } from "@angular/material/dialog";
     AngularFirestoreModule,
     HttpClientModule
   ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

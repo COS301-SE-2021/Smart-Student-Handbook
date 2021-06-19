@@ -12,8 +12,8 @@
           </button>
         </mat-card-header>
       </mat-card>
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;">
-        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="folderSelected(node.name)">
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;" #tree>
+        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="folderSelected(node.name)" >
           <button mat-icon-button (click)="openNotebook(node)">
             {{node.name}}
           </button>
