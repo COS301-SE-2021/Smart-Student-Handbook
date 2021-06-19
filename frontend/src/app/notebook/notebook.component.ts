@@ -81,6 +81,7 @@ export class NotebookComponent implements OnInit {
   activeLink = this.links[0];
   background: ThemePalette = undefined;
   notebookID: string = '';
+  _editor!: EditorJS;
 
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
 
@@ -100,40 +101,40 @@ export class NotebookComponent implements OnInit {
   initialFunction(){
 
     //The path of the notebook to be loaded
-    let path: string = 'test';//891bdd86-0828-49ea-9053-8d60f8fdf671
+    let path: string = '2aa5ca94-aed8-4a0a-8d54-c490086e5371';//891bdd86-0828-49ea-9053-8d60f8fdf671
 
     /**
      * Retrieve the notebook from realtime database
      */
-    let dbRefObject = firebase.database().ref("notebook/" + path);
+    // let dbRefObject = firebase.database().ref("notebook/" + path);
 
 
     /**
      * Get the values from the realtime database and insert block if notebook is empty
      */
-    dbRefObject.once('value', snap => {
-      if (snap.val() === null) {
-        firebase.database().ref("notebook/" + path).set({
-          outputData:
-            {
-              blocks: [
-                {
-                  "id": "jTFbQOD8j3",
-                  "type": "header",
-                  "data": {
-                    "text": "My Notebook 🚀",
-                    "level": 2
-                  }
-                }]
-            }
-        });
-      }
-    });
+    // dbRefObject.once('value', snap => {
+    //   if (snap.val() === null) {
+    //     firebase.database().ref("notebook/" + path).set({
+    //       outputData:
+    //         {
+    //           blocks: [
+    //             {
+    //               "id": "jTFbQOD8j3",
+    //               "type": "header",
+    //               "data": {
+    //                 "text": "My Notebook 🚀",
+    //                 "level": 2
+    //               }
+    //             }]
+    //         }
+    //     });
+    //   }
+    // });
 
     /**
      * Create the notebook with all the plugins
      */
-    const editor = new EditorJS({
+    let editor = new EditorJS({
       holder: 'editor',
       tools: {
         header: {
@@ -218,9 +219,11 @@ export class NotebookComponent implements OnInit {
           })
         }());
       }
-    })
+    });
 
+    this._editor = editor;
 
+    
     /**
      * Get the id of the notebook from the url parameter
      */
@@ -237,7 +240,7 @@ export class NotebookComponent implements OnInit {
           .subscribe(result => {
 
             //Change the path to the correct notebook's path
-            dbRefObject = firebase.database().ref("notebook/" + path);
+            let dbRefObject = firebase.database().ref("notebook/" + path);
 
             /**
              * Get the values from the realtime database and insert block if notebook is empty
@@ -266,7 +269,7 @@ export class NotebookComponent implements OnInit {
                  */
                 dbRefObject.once('value', snap => {
 
-                  console.log(snap.val());
+                  // console.log(snap.val());
                   editor.render(snap.val().outputData);
                 });
 
@@ -283,6 +286,10 @@ export class NotebookComponent implements OnInit {
                     })
                   }());
                 });
+
+                // dbRefObject.once('value', snap => {
+                //   editor.render(snap.val().outputData);
+                // });
               });
           })
 
@@ -294,9 +301,10 @@ export class NotebookComponent implements OnInit {
         /**
          * Render output on Editor
          */
-        dbRefObject.once('value', snap => {
-          editor.render(snap.val().outputData);
-        });
+        // dbRefObject.once('value', snap => {
+        //   editor.render(snap.val().outputData);
+        // });
+
       }
 
 
@@ -381,6 +389,9 @@ export class NotebookComponent implements OnInit {
             await this._router.navigate(['notebook']);
 
             this.folderPanelComponent.getUserNotebooks();
+
+            let editor = this._editor;
+            editor.clear();
          })
     }
 

@@ -4,7 +4,7 @@ import { Notebook } from './interfaces/notebook.interface';
 import { NotebookDto } from "./dto/notebook.dto";
 import firebase  from "firebase/app";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
-
+require('firebase/database');
 
 @Injectable()
 export class NotebookService {
@@ -108,6 +108,10 @@ export class NotebookService {
 		//Todo: Die error werk ook nie heeltemal nie
 		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 
+			let notebookRef = firebase.database().ref('notebook/' + notebookId);
+			notebookRef.remove();
+
+			console.log(notebookId);
 		}).catch((error) => {
 			throw new HttpException("Error removing document: "+error, HttpStatus.BAD_REQUEST);
 		});
