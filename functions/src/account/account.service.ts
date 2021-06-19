@@ -82,8 +82,12 @@ export class AccountService {
 		});
 	}
 
+	/**
+	 * Login user.
+	 */
 	async loginUser(loginDto: LoginDto): Promise<Response>
 	{
+		// Login user. If successful return success message else throw Bad Request exception
 		return firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password).then((userCredential) => {
 			return {
 				message: "User is successfully logged in.",
@@ -94,8 +98,12 @@ export class AccountService {
 		});
 	}
 
+	/**
+	 * SignOut user.
+	 */
 	async signOut(): Promise<Response>
 	{
+		// SignOut user. If successful return success message else throw Bad Request exception
 		return firebase.auth().signOut().then(() => {
 			return {
 				message: "Successfully signed out."
@@ -105,10 +113,21 @@ export class AccountService {
 		});
 	}
 
+	/**
+	 * GetCurrent user.
+	 */
 	async getCurrentUser(): Promise<Account>
 	{
-		const user = firebase.auth().currentUser;
+		// Check if there is a current user else throw an exception
+		let user;
+		try{
+			user = firebase.auth().currentUser;
+		}
+		catch(error) {
+			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
+		}
 
+		//Return user object
 		return {
 			uid: user.uid,
 			email: user.email,
@@ -118,10 +137,22 @@ export class AccountService {
 		};
 	}
 
+	/**
+	 * DeleteUser user.
+	 */
 	async deleteUser(): Promise<Response>
 	{
-		let uid: string = firebase.auth().currentUser.uid;
+		let uid: string = "";
 
+		// Check if there is a current user else throw an exception
+		try {
+			uid = firebase.auth().currentUser.uid;
+		}
+		catch(error) {
+			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
+		}
+
+		//Try to delete user else throw and exception if not possible
 		return admin.auth().deleteUser(uid).then(() => {
 			return {
 				message: "Successfully deleted user."
