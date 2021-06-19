@@ -3,10 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 const dotenv = require('dotenv');
 import * as admin from 'firebase-admin';
-import { ServiceAccount } from 'firebase-admin';
 import firebase from "firebase/app";
-
-dotenv.config();
 
 export async function createNestServer() {
 
