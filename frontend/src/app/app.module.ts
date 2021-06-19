@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 //Editor
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -53,6 +55,8 @@ import { GlobalConfirmComponent } from './components/modals/global/global-confir
   imports: [
     MaterialModule,
     FormsModule,
+    HttpClientModule,
+    RouterModule,
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
