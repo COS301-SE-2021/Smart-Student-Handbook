@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     //this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/notebook';
 
     this.form = this.fb.group({
-      username: ['', Validators.email],
+      email: ['', Validators.email],
       password: ['', Validators.required]
     });
   }
@@ -37,10 +37,10 @@ export class LoginComponent implements OnInit {
 
     if (this.form.valid)
     {
-        const username = this.form.get('username')?.value;
+        const email = this.form.get('email')?.value;
         const password = this.form.get('password')?.value;
 
-        this.accountService.login(username, password).then(data => {
+        this.accountService.loginUser(email, password).then(data => {
             //this.isLoginFailed = false;
             //this.isLoggedIn = true;
             this.router.navigateByUrl(`notebook`);
