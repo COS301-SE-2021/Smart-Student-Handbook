@@ -18,6 +18,7 @@ export class NotebookService {
 		snapshot.forEach(doc => {
 			let notebookTemp: Notebook =
 			{
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -46,6 +47,7 @@ export class NotebookService {
 		if (doc.exists)
 		{
 			return {
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -75,6 +77,7 @@ export class NotebookService {
 		}
 
 		const notebook: Notebook = {
+			title: notebookDto['title'],
 			author: notebookDto["author"],
 			course: notebookDto["course"],
 			description: notebookDto["description"],
@@ -88,7 +91,7 @@ export class NotebookService {
 		}
 
 		const res = await admin.firestore().collection("notebooks").doc(notebookId).set(notebook);
-
+        //Todo : Louw die gaan altyd sucsessfull wees want res gaan nooit nie bestaan nie ?
 		if (res)
 		{
 			return operationType + " was successful!";
@@ -101,6 +104,7 @@ export class NotebookService {
 
 	async deleteNotebook(notebookId: string): Promise<string>
 	{
+		//Todo: Die error werk ook nie heeltemal nie
 		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 
 		}).catch((error) => {

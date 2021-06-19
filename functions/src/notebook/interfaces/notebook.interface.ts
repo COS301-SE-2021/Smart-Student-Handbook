@@ -1,4 +1,5 @@
 export interface Notebook{
+	title: string
 	author?: string
 	course: string
 	description: string
