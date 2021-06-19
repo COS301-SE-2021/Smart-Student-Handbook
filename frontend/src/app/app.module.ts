@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 //Editor
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -37,8 +39,6 @@ import { ForgotPasswordComponent } from './components/account/forgot-password/fo
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
-import { HttpClientModule } from '@angular/common/http';
-
 
 @NgModule({
   declarations: [
@@ -57,6 +57,8 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     MaterialModule,
     FormsModule,
+    HttpClientModule,
+    RouterModule,
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
