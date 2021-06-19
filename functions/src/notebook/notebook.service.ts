@@ -11,11 +11,15 @@ import { randomStringGenerator } from "@nestjs/common/utils/random-string-genera
 @Injectable()
 export class NotebookService {
 
+	/**
+	 * Find all the notebooks of the currently logged in user
+	 */
 	async findAllUserNotebooks(): Promise<Notebook[]>
 	{
 		let userId: string = ""
 		let notebooks = [];
 
+		//Try to find logged in users id else throw and exception
 		try {
 			userId = firebase.auth().currentUser.uid;
 		}
@@ -24,6 +28,7 @@ export class NotebookService {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 
+		//Connect to firebase and retrieve all records with a matching uid
 		const notebookRef = admin.firestore().collection("notebooks").where("userId", "==", userId);
 		const snapshot = await notebookRef.get();
 		snapshot.forEach(doc => {
@@ -47,11 +52,16 @@ export class NotebookService {
 		return notebooks;
 	}
 
+	/**
+	 * Find notebook corresponding to the notebookId
+	 * @param notebookId
+	 */
 	async findNotebookById(notebookId: string): Promise<Notebook>
 	{
-		const notebookRef = admin.firestore().collection("notebooks").doc(notebookId);
-		const doc = await notebookRef.get();
+		//Connect to firebase and retrieve notebook with the provided notebookId
+		const doc = await admin.firestore().collection("notebooks").doc(notebookId).get();
 
+		//Return document if the document exists or else throw and exception
 		if (doc.exists)
 		{
 			return {
@@ -74,11 +84,18 @@ export class NotebookService {
 		}
 	}
 
+	/**
+	 * Create or Update a notebook
+	 * @param notebookDto
+	 * @param notebookId
+	 */
 	async createOrUpdateNotebook(notebookDto: NotebookDto, notebookId: string): Promise<Response>
 	{
+		//Assume the user wants to update the notebook
 		let userId: string = "";
 		let operationType: string = "Update";
 
+		//Try to find logged in users id else throw and exception
 		try {
 			userId= firebase.auth().currentUser.uid;
 		}
@@ -87,12 +104,17 @@ export class NotebookService {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 
+		//If the notebookId is null, we know the user wants to create a new notebook
 		if(!notebookId)
 		{
 			notebookId = randomStringGenerator();
 			operationType= "Create";
 		}
 
+		/**
+		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
+		 * If successful return success message else throw not found exception.
+		 */
 		try {
 			return await admin.firestore().collection("notebooks").doc(notebookId).set(
 				{
@@ -122,8 +144,16 @@ export class NotebookService {
 		}
 	}
 
+	/**
+	 * Delete notebook corresponding notebookId
+	 * @param notebookId
+	 */
 	async deleteNotebook(notebookId: string): Promise<Response>
 	{
+		/**
+		 * Connect to firebase and delete try to delete notebook. If successful return success message else
+		 * throw bad request exception
+		 */
 		return admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 			return {
 				message: "Notebook successfully delete"
