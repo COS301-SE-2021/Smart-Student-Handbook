@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
+import { MustMatch } from './must-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   public registerFailed = false;
+  submitted = false;
   //private returnUrl: string;
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
@@ -24,6 +26,8 @@ export class RegisterComponent implements OnInit {
       displayName: ['', Validators.required],
       password: ['', Validators.required],
       passwordConfirm: ['', Validators.required]
+    }, {
+      validator: MustMatch('password', 'passwordConfirm')
     });
   }
 
@@ -42,6 +46,7 @@ export class RegisterComponent implements OnInit {
   async onSubmit(): Promise<void>
   {
     this.registerFailed = false;
+    this.submitted = true;
 
     if (this.form.valid)
     {
@@ -63,6 +68,10 @@ export class RegisterComponent implements OnInit {
           //window.location.reload();
         }
       );
+    }
+    else
+    {
+      return;
     }
   }
 
