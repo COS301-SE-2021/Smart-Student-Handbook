@@ -37,9 +37,10 @@ import { AngularFireModule } from '@angular/fire';
 import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { RestPasswordComponent } from './components/auth/rest-password/rest-password.component';
+import { LoginComponent } from './components/account/login/login.component';
+import { RegisterComponent } from './components/account/register/register.component';
+import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
+import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { RestPasswordComponent } from './components/auth/rest-password/rest-pass
     NotesPanelComponent,
     LoginComponent,
     RegisterComponent,
-    RestPasswordComponent
+    RestPasswordComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     FormsModule,
