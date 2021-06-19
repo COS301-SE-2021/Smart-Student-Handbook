@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MessagingService } from './services/messaging.service';
-import * as firebase from "firebase";
+// import * as firebase from "firebase/database";
+import firebase from "firebase";
 import {environment} from "../environments/environment";
 
 @Component({
@@ -15,10 +16,10 @@ export class AppComponent {
 
   constructor(private messagingService: MessagingService) { }
   ngOnInit() {
+    // firebase.initializeApp(environment.firebase);
+
     this.messagingService.requestPermission();
     this.messagingService.receiveMessage();
     this.message = this.messagingService.currentMessage;
-
-    firebase.initializeApp(environment.firebase);
   }
 }
