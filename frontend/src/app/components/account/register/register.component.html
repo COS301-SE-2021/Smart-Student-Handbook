@@ -9,7 +9,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <h2>Register</h2>
       <mat-error *ngIf="registerFailed">
-        The email and password were not recognized
+        {{ errorMessage }}
       </mat-error>
 
       <mat-form-field class="full-width-input">
@@ -57,3 +57,6 @@
 
 </mat-card>
 
+<br/>
+<br/>
+<br/>

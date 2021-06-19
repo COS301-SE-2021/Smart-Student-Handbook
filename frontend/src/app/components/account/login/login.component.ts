@@ -11,7 +11,8 @@ import { AccountService } from '../../../services/account.service';
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  public loginFailed = false;
+  loginFailed = false;
+  errorMessage: string = "";
   //private returnUrl: string;
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
@@ -46,15 +47,12 @@ export class LoginComponent implements OnInit {
         const password = this.form.get('password')?.value;
 
         this.accountService.loginUser(email, password).then(data => {
-            //this.isLoginFailed = false;
-            //this.isLoggedIn = true;
+            this.loginFailed = true;
             this.router.navigateByUrl(`notebook`);
           },
           err => {
             this.loginFailed = true;
-            //this.errorMessage = err.error.message;
-            //this.isLoginFailed = true;
-            //window.location.reload();
+            this.errorMessage = "An Error has occurred: "+err.error.message;
           }
         );
     }

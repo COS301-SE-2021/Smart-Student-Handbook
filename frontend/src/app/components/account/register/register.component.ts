@@ -12,8 +12,9 @@ import { MustMatch } from './must-match.validator';
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
-  public registerFailed = false;
+  registerFailed = false;
   submitted = false;
+  errorMessage: string = "";
   //private returnUrl: string;
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
@@ -63,9 +64,7 @@ export class RegisterComponent implements OnInit {
         },
         err => {
           this.registerFailed = true;
-          //this.errorMessage = err.error.message;
-          //this.isLoginFailed = true;
-          //window.location.reload();
+          this.errorMessage = "An Error has occurred: "+err.error.message;
         }
       );
     }
