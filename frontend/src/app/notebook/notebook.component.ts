@@ -26,6 +26,8 @@ export class NotebookComponent implements OnInit {
   institution = '';
   private = false;
 
+  notebookTitle = 'New Notebook';
+
   /**
     Get all plugins for notebook
    */
@@ -223,7 +225,7 @@ export class NotebookComponent implements OnInit {
 
     this._editor = editor;
 
-    
+
     /**
      * Get the id of the notebook from the url parameter
      */
@@ -255,7 +257,7 @@ export class NotebookComponent implements OnInit {
                           "id": "jTFbQOD8j3",
                           "type": "header",
                           "data": {
-                            "text": "My Notebook 🚀",
+                            "text": this.notebookTitle+ " 🚀",
                             "level": 2
                           }
                         }]
@@ -355,10 +357,14 @@ export class NotebookComponent implements OnInit {
           username: 'userArno'
         }
 
-        //Call service and create notebook
+        this.notebookTitle = result.title;
+
+          //Call service and create notebook
         this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
           .subscribe(result => {
             console.log(result);
+
+            this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
 
             this.folderPanelComponent.getUserNotebooks();
             // this.folderPanelComponent.openTree();
@@ -382,11 +388,16 @@ export class NotebookComponent implements OnInit {
         .subscribe(result => {
           console.log(result);
 
-          this.folderPanelComponent.getUserNotebooks();
-        },
-          async error => {
+          this._router.navigate(['notebook']);
 
-            await this._router.navigate(['notebook']);
+          this.folderPanelComponent.getUserNotebooks();
+          let editor = this._editor;
+          editor.clear();
+
+        },
+          error => {
+
+            this._router.navigate(['notebook']);
 
             this.folderPanelComponent.getUserNotebooks();
 
