@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
-import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import { ThemePalette } from '@angular/material/core';
+
+import EditorJS from '@editorjs/editorjs';
+import {NotebookService} from "../services/notebook.service";
+
+import firebase from "firebase";
+import "firebase/firestore";
+
 
 @Component({
   selector: 'app-notebook',
@@ -9,83 +15,250 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 })
 export class NotebookComponent implements OnInit {
 
-  editor = DecoupledEditor;
-  toolbar: any = ['heading', '|', 'bold',
-    'italic', 'fontSize', 'fontFamily', 'underline', 'strikethrough', 'alignment',
-    'highlight', 'numberedList', 'insertTable',
-    'bulletedList', '|', 'indent',
-    'outdent', 'undo', 'redo', 'exportPdf', 'exportWord', 'fontBackgroundColor',
-    'fontColor'];
+  /**
+    Get all plugins for notebook
+   */
+  // @ts-ignore
+  Header = require('@editorjs/header');
+  // @ts-ignore
+  LinkTool = require('@editorjs/link');
+  // @ts-ignore
+  RawTool = require('@editorjs/raw');
+  // @ts-ignore
+  SimpleImage = require('@editorjs/simple-image');
+  // @ts-ignore
+  Checklist = require('@editorjs/checklist');
+  // @ts-ignore
+  List = require('@editorjs/list');
+  // @ts-ignore
+  Embed = require('@editorjs/embed');
+  // @ts-ignore
+  Quote = require('@editorjs/quote');
+  // @ts-ignore
+  NestedList = require('@editorjs/nested-list');
+  // @ts-ignore
+  Underline = require('@editorjs/underline');
+  // @ts-ignore
+  Table = require('@editorjs/table');
+  // @ts-ignore
+  Warning = require('@editorjs/warning');
+  // @ts-ignore
+  CodeTool = require('@editorjs/code');
+  // @ts-ignore
+  // Paragraph = require('@editorjs/paragraph');
+  // @ts-ignore
+  TextVariantTune = require('@editorjs/text-variant-tune');
+  // @ts-ignore
+  AttachesTool = require('@editorjs/attaches');
+  // @ts-ignore
+  Marker = require('@editorjs/marker');
+  // @ts-ignore
+  InlineCode = require('@editorjs/inline-code');
+  // @ts-ignore
+  Personality = require('@editorjs/personality');
+  // @ts-ignore
+  Delimiter = require('@editorjs/delimiter');
+  // @ts-ignore
+  Alert = require('editorjs-alert');
+  // @ts-ignore
+  Paragraph = require('editorjs-paragraph-with-alignment');
 
-  heading = {
-    options: [
-      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-      { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-      { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-      { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-    ]
-  };
 
-  public editorData = '<p>Hello, world!</p>';
-
-  public Editor = DecoupledEditor;
+  // public editorData = '<p>Hello, world!</p>';
 
   links = ['First', 'Second', 'Third'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
-
-
+  /**
+   * Add a new tab to the tabs bar
+   */
   addLink() {
     this.links.push(`Link ${this.links.length + 1}`);
   }
 
-  constructor() { }
+  /**
+   * Include the notebook service
+   * @param notebookService
+   */
+  constructor(private notebookService: NotebookService) { }
 
-  public onReady( editor: any ) {
-    // editor.ui.getEditableElement().parentElement.insertBefore(
-    //     editor.ui.view.toolbar.element,
-    //     editor.ui.getEditableElement()
-    // );
-
-    console.log(editor);
-  }
 
   ngOnInit(): void {
 
-    DecoupledEditor.create(document.querySelector('.document-editor__editable'), {
-      fontSize: { options: [9, 11, 12, 13, 'default', 17, 19, 21] },
-      // toolbar: this.opciones,
-      // heading: this.heading,
-    }).then((editor:any)  => {
-      const toolbarContainer = document.querySelector('.document-editor__toolbar');
+    //The path of the notebook to be loaded
+    let path: string = 'test';
 
-      if(toolbarContainer)
-      toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+    /**
+     * Get the specific notebook details with notebook id
+     */
+    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
+      .subscribe(result => {
+        console.log(result);
+        // path = result.notebookReference;
+      })
 
-      this.Editor = editor;
-    }).catch((err: any) => {
-      console.error(err);
+
+    /**
+     * Retrieve the notebook from realtime database
+     */
+    const dbRefObject = firebase.database().ref("notebook/" + path);
+
+    /**
+     * Get the values from the realtime database and insert block if notebook is empty
+     */
+    dbRefObject.once('value', snap =>
+    {
+      if(snap.val() === null)
+      {
+        firebase.database().ref("notebook/" + path).set({
+          outputData:
+            {
+              blocks: [
+                {
+                  "id" : "jTFbQOD8j3",
+                  "type" : "header",
+                  "data" : {
+                    "text" : "My Notebook 🚀",
+                    "level" : 2
+                  }
+                }]
+            }
+        });
+      }
     });
 
-    // window.addEventListener('load', function () {
+    /**
+     * Create the notebook with all the plugins
+     */
+    const editor = new EditorJS({
+      holder: 'editor',
+      tools: {
+        header: {
+          class: this.Header,
+          shortcut: 'CTRL+SHIFT+H'
+        },
+        linkTool: {
+          class: this.LinkTool,
+          // config: {
+          //   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
+          // }
+        },
+        raw: this.RawTool,
+        image: this.SimpleImage,
+        checklist: {
+          class: this.Checklist,
+          inlineToolbar: true,
+        },
+        list: {
+          class: this.NestedList,
+          inlineToolbar: true,
+        },
+        embed: this.Embed,
+        quote: this.Quote,
+        underline: this.Underline,
+        table: {
+          class: this.Table,
+        },
+        warning: {
+          class: this.Warning,
+          inlineToolbar: true,
+          shortcut: 'CTRL+SHIFT+W',
+          config: {
+            titlePlaceholder: 'Title',
+            messagePlaceholder: 'Message',
+          },
+        },
+        code: this.CodeTool,
+        paragraph: {
+          class: this.Paragraph,
+          inlineToolbar: true,
+        },
+        textVariant: this.TextVariantTune,
+        attaches: {
+          class: this.AttachesTool,
+          // config: {
+          //   endpoint: 'http://localhost:8008/uploadFile'
+          // }
+        },
+        Marker: {
+          class: this.Marker,
+          shortcut: 'CTRL+SHIFT+M',
+        },
+        inlineCode: {
+          class: this.InlineCode,
+          shortcut: 'CMD+SHIFT+M',
+        },
+        personality: {
+          class: this.Personality,
+          // config: {
+          //   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
+          // }
+        },
+        delimiter: this.Delimiter,
+        alert: this.Alert,
+      },
+      data:
+        {
+          blocks:[]
+        },
+      autofocus: true,
 
-    //   DecoupledEditor
-    //     .create( document.querySelector( '#editor' ) )
-    //     .then( (editor:any) => {
-    //         const toolbarContainer = document.getElementById( 'toolbar-container' );
+      onChange: () => {
+        (function() {
+          editor.save().then((outputData) => {
+            // console.log(outputData);
+            firebase.database().ref("notebook/" + path ).set({
+              outputData
+            });
+          }).catch((error) => {
+            console.log('Saving failed: ', error)
+          })
+        }());
+      }
+    })
 
-    //         if(toolbarContainer)
-    //         toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-    //     } )
-    //     .catch( (error: any) => {
-    //         console.error( error );
-    //     } );
-    // })
+    /**
+     * Render output on Editor
+     */
+    dbRefObject.once('value', snap =>
+    {
+      editor.render(snap.val().outputData);
+    });
 
+
+  }
+
+  /**
+   * Create a new notebook
+   */
+  createNewNotebook(){
+    let request = {
+      title: 'title 2',
+      author: 'author',
+      course: 'COS 301',
+      description: 'Test',
+      institution: 'Tuks',
+      name: 'Arno',
+      surname: 'Moller',
+      private: false,
+      username: 'username',
+    }
+
+    this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+      .subscribe(result => {
+        console.log(result);
+      })
+  }
+
+  /**
+   * Delete a notebook
+   */
+  removeNotebook(){
+    this.notebookService.removeNotebook('9c1b694e-24af-4844-b4ad-789068b4c3bc')
+      .subscribe(result => {
+        console.log(result);
+      })
 
   }
 

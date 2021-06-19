@@ -1,8 +1,9 @@
 export interface Notebook{
-	author?: string
+	title: string
+	author: string
 	course: string
 	description: string
-	institution?: string
+	institution: string
 	name: string
 	surname: string
 	private: boolean

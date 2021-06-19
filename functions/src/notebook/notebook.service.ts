@@ -2,22 +2,39 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import * as admin from "firebase-admin";
 import { Notebook } from './interfaces/notebook.interface';
 import { NotebookDto } from "./dto/notebook.dto";
-import firebase  from "firebase/app";
+import { Response } from "./interfaces/response.interface";
+import firebase from 'firebase';
+require('firebase/auth');
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 
 @Injectable()
 export class NotebookService {
-	//private readonly notebook: Notebook[] = [];
 
-	async findAllUserNotebooks(userId: string): Promise<Notebook[]>
+	/**
+	 * Find all the notebooks of the currently logged in user
+	 */
+	async findAllUserNotebooks(): Promise<Notebook[]>
 	{
+		let userId: string = ""
 		let notebooks = [];
+
+		//Try to find logged in users id else throw and exception
+		try {
+			userId = firebase.auth().currentUser.uid;
+		}
+		catch(error)
+		{
+			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+		}
+
+		//Connect to firebase and retrieve all records with a matching uid
 		const notebookRef = admin.firestore().collection("notebooks").where("userId", "==", userId);
 		const snapshot = await notebookRef.get();
 		snapshot.forEach(doc => {
 			let notebookTemp: Notebook =
 			{
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -32,20 +49,23 @@ export class NotebookService {
 			notebooks.push(notebookTemp);
 		});
 
-		if(notebooks === []) {
-			throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-		}
 		return notebooks;
 	}
 
+	/**
+	 * Find notebook corresponding to the notebookId
+	 * @param notebookId
+	 */
 	async findNotebookById(notebookId: string): Promise<Notebook>
 	{
-		const notebookRef = admin.firestore().collection("notebooks").doc(notebookId);
-		const doc = await notebookRef.get();
+		//Connect to firebase and retrieve notebook with the provided notebookId
+		const doc = await admin.firestore().collection("notebooks").doc(notebookId).get();
 
+		//Return document if the document exists or else throw and exception
 		if (doc.exists)
 		{
 			return {
+				title: doc.data()['title'],
 				author: doc.data()["author"],
 				course: doc.data()["course"],
 				description: doc.data()["description"],
@@ -64,49 +84,82 @@ export class NotebookService {
 		}
 	}
 
-	async createOrUpdateNotebook(notebookDto: NotebookDto, notebookId: string, userId: string): Promise<string>
+	/**
+	 * Create or Update a notebook
+	 * @param notebookDto
+	 * @param notebookId
+	 */
+	async createOrUpdateNotebook(notebookDto: NotebookDto, notebookId: string): Promise<Response>
 	{
-		let operationType: string = "update";
+		//Assume the user wants to update the notebook
+		let userId: string = "";
+		let operationType: string = "Update";
 
+		//Try to find logged in users id else throw and exception
+		try {
+			userId= firebase.auth().currentUser.uid;
+		}
+		catch(error)
+		{
+			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+		}
+
+		//If the notebookId is null, we know the user wants to create a new notebook
 		if(!notebookId)
 		{
 			notebookId = randomStringGenerator();
 			operationType= "Create";
 		}
 
-		const notebook: Notebook = {
-			author: notebookDto["author"],
-			course: notebookDto["course"],
-			description: notebookDto["description"],
-			institution: notebookDto["institution"],
-			name: notebookDto["name"],
-			surname: notebookDto["surname"],
-			private: notebookDto["private"],
-			username: notebookDto["username"],
-			notebookReference: notebookId,
-			userId: userId,
+		/**
+		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
+		 * If successful return success message else throw not found exception.
+		 */
+		try {
+			return await admin.firestore().collection("notebooks").doc(notebookId).set(
+				{
+					title: notebookDto['title'],
+					author: notebookDto["author"],
+					course: notebookDto["course"],
+					description: notebookDto["description"],
+					institution: notebookDto["institution"],
+					name: notebookDto["name"],
+					surname: notebookDto["surname"],
+					private: notebookDto["private"],
+					username: notebookDto["username"],
+					notebookReference: notebookId,
+					userId: userId,
+				}
+			).then(() => {
+				return {
+					message : operationType + " was successful!"
+				};
+			}).catch(() => {
+				throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+			});
 		}
-
-		const res = await admin.firestore().collection("notebooks").doc(notebookId).set(notebook);
-
-		if (res)
+		catch (error)
 		{
-			return operationType + " was successful!";
-		}
-		else
-		{
-			throw new HttpException('Could not '+operationType, HttpStatus.BAD_REQUEST);
+			throw new HttpException('Something went wrong. Operation could not be executed.', HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	async deleteNotebook(notebookId: string): Promise<string>
+	/**
+	 * Delete notebook corresponding notebookId
+	 * @param notebookId
+	 */
+	async deleteNotebook(notebookId: string): Promise<Response>
 	{
-		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
-
+		/**
+		 * Connect to firebase and delete try to delete notebook. If successful return success message else
+		 * throw bad request exception
+		 */
+		return admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
+			return {
+				message: "Notebook successfully delete"
+			};
 		}).catch((error) => {
 			throw new HttpException("Error removing document: "+error, HttpStatus.BAD_REQUEST);
 		});
-
-		return "Notebook successfully delete";
 	}
 }

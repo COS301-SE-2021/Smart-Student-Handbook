@@ -2,16 +2,17 @@ import {Controller, Get, Post, Put, Delete, Body, Param} from '@nestjs/common';
 import { NotebookDto } from "./dto/notebook.dto";
 import { Notebook } from "./interfaces/notebook.interface"
 import { NotebookService } from "./notebook.service";
+import { Response } from "./interfaces/response.interface"
 
 @Controller('notebook')
 export class NotebookController
 {
 	constructor(private readonly notebookService: NotebookService) {}
 
-	@Get("findAllUserNotebooks/:userId")
-	findAllUserNotebooks(@Param('userId') userId): Promise<Notebook[]>
+	@Get("findAllUserNotebooks")
+	findAllUserNotebooks(): Promise<Notebook[]>
 	{
-		return this.notebookService.findAllUserNotebooks(userId);
+		return this.notebookService.findAllUserNotebooks();
 	}
 
 	@Get('findNotebookById/:notebookId')
@@ -20,20 +21,20 @@ export class NotebookController
 		return this.notebookService.findNotebookById(notebookId);
 	}
 
-	@Post("createNotebook/:userId")
-	createNotebook(@Body() notebookDto: NotebookDto, @Param('userId') userId: string): Promise<string>
+	@Post("createNotebook")
+	createNotebook(@Body() notebookDto: NotebookDto): Promise<Response>
 	{
-		return this.notebookService.createOrUpdateNotebook(notebookDto, null, userId);
+		return this.notebookService.createOrUpdateNotebook(notebookDto, null);
 	}
 
-	@Put('updateNotebook/:notebookId/:userId')
-	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId, @Param('userId') userId: string): Promise<string>
+	@Put('updateNotebook/:notebookId')
+	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId): Promise<Response>
 	{
-		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId, userId);
+		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId);
 	}
 
 	@Delete('deleteNotebook/:notebookId')
-	deleteNotebook(@Param('notebookId') notebookId): Promise<string>
+	deleteNotebook(@Param('notebookId') notebookId): Promise<Response>
 	{
 		return this.notebookService.deleteNotebook(notebookId);
 	}
