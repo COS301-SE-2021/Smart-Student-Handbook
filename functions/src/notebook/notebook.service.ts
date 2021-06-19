@@ -92,7 +92,7 @@ export class NotebookService {
 		}
 
 		const res = await admin.firestore().collection("notebooks").doc(notebookId).set(notebook);
-
+        //Todo : Louw die gaan altyd sucsessfull wees want res gaan nooit nie bestaan nie ?
 		if (res)
 		{
 			return operationType + " was successful!";
@@ -105,6 +105,7 @@ export class NotebookService {
 
 	async deleteNotebook(notebookId: string): Promise<string>
 	{
+		//Todo: Die error werk ook nie heeltemal nie
 		admin.firestore().collection('notebooks').doc(notebookId).delete().then(() => {
 
 		}).catch((error) => {
