@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 
 import EditorJS from '@editorjs/editorjs';
@@ -6,6 +7,7 @@ import {NotebookService} from "../services/notebook.service";
 
 import firebase from "firebase";
 import "firebase/firestore";
+import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 
 
 @Component({
@@ -14,6 +16,13 @@ import "firebase/firestore";
   styleUrls: ['./notebook.component.scss']
 })
 export class NotebookComponent implements OnInit {
+
+  //Variables for add notebook popup dialog
+  title = '';
+  course = '';
+  description = '';
+  institution = '';
+  private = false;
 
   /**
     Get all plugins for notebook
@@ -81,7 +90,7 @@ export class NotebookComponent implements OnInit {
    * Include the notebook service
    * @param notebookService
    */
-  constructor(private notebookService: NotebookService) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
@@ -233,29 +242,53 @@ export class NotebookComponent implements OnInit {
    * Create a new notebook
    */
   createNewNotebook(){
-    let request = {
-      title: 'title 2',
-      author: 'author',
-      course: 'COS 301',
-      description: 'Test',
-      institution: 'Tuks',
-      name: 'Arno',
-      surname: 'Moller',
-      private: false,
-      username: 'username',
-    }
 
-    this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
-      .subscribe(result => {
-        console.log(result);
-      })
+    //Open dialog
+    const dialogRef = this.dialog.open(AddNotebookComponent, {
+      width: '50%',
+      data: {
+        title: this.title,
+        course: this.course,
+        description: this.description,
+        institution: this.institution,
+        private: this.private
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log(result);
+
+      if(result !== undefined){
+
+        //Create request object
+        let request = {
+          title: result.title,
+          author: 'Arno',
+          course: result.course,
+          description: result.description,
+          institution: result.institution,
+          name: 'Arno',
+          surname: 'Moller',
+          private: result.private,
+          username: 'userArno'
+        }
+
+        //Call service and create notebook
+        this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+          .subscribe(result => {
+            console.log(result);
+          });
+      }
+    });
+
   }
 
   /**
    * Delete a notebook
    */
   removeNotebook(){
-    this.notebookService.removeNotebook('9c1b694e-24af-4844-b4ad-789068b4c3bc')
+    this.notebookService.removeNotebook('73189a58-2302-4185-9821-1c700971a97b')
       .subscribe(result => {
         console.log(result);
       })

@@ -38,6 +38,8 @@ import { GlobalErrorComponent } from './components/modals/global/global-error/gl
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
+import { MatDialogRef } from "@angular/material/dialog";
 
 
 @NgModule({
@@ -53,6 +55,7 @@ import { HttpClientModule } from '@angular/common/http';
     ForgotPasswordComponent,
     GlobalErrorComponent,
     GlobalConfirmComponent,
+    AddNotebookComponent,
   ],
   imports: [
     MaterialModule,
