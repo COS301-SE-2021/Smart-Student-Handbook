@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 
@@ -8,6 +8,7 @@ import {NotebookService} from "../services/notebook.service";
 import firebase from "firebase";
 import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -75,43 +76,29 @@ export class NotebookComponent implements OnInit {
 
   // public editorData = '<p>Hello, world!</p>';
 
-  links = ['First', 'Second', 'Third'];
+  links = ['First'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
-
-  /**
-   * Add a new tab to the tabs bar
-   */
-  addLink() {
-    this.links.push(`Link ${this.links.length + 1}`);
-  }
+  notebookID: string = '';
 
   /**
    * Include the notebook service
    * @param notebookService
    */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog,
+              private router: ActivatedRoute, private _router: Router) { }
 
 
   ngOnInit(): void {
 
     //The path of the notebook to be loaded
-    let path: string = 'test';
-
-    /**
-     * Get the specific notebook details with notebook id
-     */
-    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
-      .subscribe(result => {
-        console.log(result);
-        // path = result.notebookReference;
-      })
-
+    let path: string = 'test';//891bdd86-0828-49ea-9053-8d60f8fdf671
 
     /**
      * Retrieve the notebook from realtime database
      */
-    const dbRefObject = firebase.database().ref("notebook/" + path);
+    let dbRefObject = firebase.database().ref("notebook/" + path);
+
 
     /**
      * Get the values from the realtime database and insert block if notebook is empty
@@ -214,7 +201,7 @@ export class NotebookComponent implements OnInit {
       autofocus: true,
 
       onChange: () => {
-        (function() {
+        (function()  {
           editor.save().then((outputData) => {
             // console.log(outputData);
             firebase.database().ref("notebook/" + path ).set({
@@ -227,15 +214,96 @@ export class NotebookComponent implements OnInit {
       }
     })
 
+
     /**
-     * Render output on Editor
+     * Get the id of the notebook from the url parameter
      */
-    dbRefObject.once('value', snap =>
-    {
-      editor.render(snap.val().outputData);
+    this.router.queryParams.subscribe(params => {
+      console.log(params);
+      if(params.id !== undefined){
+        this.notebookID = path = params.id;
+
+        /**
+         * Get the specific notebook details with notebook id
+         */
+        this.notebookService.getNoteBookById(path)
+          .subscribe(result => {
+
+            //Change the path to the correct notebook's path
+            dbRefObject = firebase.database().ref("notebook/" + path);
+
+            /**
+             * Get the values from the realtime database and insert block if notebook is empty
+             */
+            dbRefObject.once('value', snap =>
+            {
+              if(snap.val() === null)
+              {
+                firebase.database().ref("notebook/" + path).set({
+                  outputData:
+                    {
+                      blocks: [
+                        {
+                          "id" : "jTFbQOD8j3",
+                          "type" : "header",
+                          "data" : {
+                            "text" : "My Notebook 🚀",
+                            "level" : 2
+                          }
+                        }]
+                    }
+                });
+              }
+            });
+
+
+            /**
+             * Render output on Editor
+             */
+            dbRefObject.once('value', snap =>
+            {
+              editor.render(snap.val().outputData);
+            });
+
+            //Change the path to which the editor should save data
+            editor.on('change', () => {
+              (function()  {
+                editor.save().then((outputData) => {
+                  // console.log(outputData);
+                  firebase.database().ref("notebook/" + path ).set({
+                    outputData
+                  });
+                }).catch((error) => {
+                  console.log('Saving failed: ', error)
+                })
+              }());
+            });
+          })
+
+      }
+
+      //no id in the url
+      else{
+
+        /**
+         * Render output on Editor
+         */
+        dbRefObject.once('value', snap =>
+        {
+          editor.render(snap.val().outputData);
+        });
+      }
+
+
     });
+  }
 
-
+  /**
+   * Add a new tab to the tabs bar
+   */
+  addLink(name: string) {
+    this.links.push(name);
+    return this.links.length;
   }
 
   /**
@@ -257,8 +325,8 @@ export class NotebookComponent implements OnInit {
 
     //Get info and create notebook after dialog is closed
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(result);
 
+      //If the user filled out the form
       if(result !== undefined){
 
         //Create request object
@@ -288,11 +356,19 @@ export class NotebookComponent implements OnInit {
    * Delete a notebook
    */
   removeNotebook(){
-    this.notebookService.removeNotebook('73189a58-2302-4185-9821-1c700971a97b')
-      .subscribe(result => {
-        console.log(result);
-      })
+
+    if(this.notebookID != ''){
+
+      this.notebookService.removeNotebook(this.notebookID)
+        .subscribe(result => {
+          console.log(result);
+
+          this._router.navigate(['notebook']);
+        })
+    }
+
 
   }
+
 
 }

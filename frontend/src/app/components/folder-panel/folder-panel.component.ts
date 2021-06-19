@@ -6,6 +6,7 @@ import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-folder-panel',
@@ -24,6 +25,7 @@ export class FolderPanelComponent implements OnInit {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
+      id: node.id,
       level: level,
     };
   }
@@ -37,7 +39,8 @@ export class FolderPanelComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   //--------------------------------------------------------------------------------
 
-  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService) { }
+  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
+              private router: Router) { }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
@@ -49,11 +52,12 @@ export class FolderPanelComponent implements OnInit {
 
         let children = [];
         for(let i = 0; i < result.length; i++){
-          children.push({name: result[i].course});
+          children.push({name: result[i].course, id: result[i].notebookReference});
         }
 
         this.dataSource.data = [{
           name: 'Notebooks',
+          id:'',
           children: children
         }]
       });
@@ -89,6 +93,11 @@ export class FolderPanelComponent implements OnInit {
     }
   }
 
+  openNotebook(item: any){
+    // console.log(item.id);
+
+    this.router.navigate(['notebook'], {queryParams: {id: item.id}});
+  }
 }
 
 
@@ -97,6 +106,7 @@ export class FolderPanelComponent implements OnInit {
  */
  interface DirectoryNode {
   name: string;
+  id: string;
   children?: DirectoryNode[];
 }
 
@@ -104,6 +114,7 @@ export class FolderPanelComponent implements OnInit {
 interface ExampleFlatNode {
   expandable: boolean;
   name: string;
+  id: string;
   level: number;
 }
 

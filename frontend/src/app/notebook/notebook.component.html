@@ -38,16 +38,16 @@
         <mat-icon>remove</mat-icon>
       </button>
       <mat-tab-group [backgroundColor]="background" id="tabs">
-        <mat-tab *ngFor="let link of links" label="{{link}}">
+        <mat-tab *ngFor="let link of links; let n = index" label="{{link}}">
 
-           <br>
+          <div id="editor" #editor class="editor">
+
+          </div>
 
         </mat-tab>
       </mat-tab-group>
 
-      <div id="editor">
 
-      </div>
 
 
     </div>
