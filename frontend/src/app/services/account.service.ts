@@ -13,11 +13,10 @@ export class AccountService {
 
   constructor(private http: HttpClient) { }
 
-  async registerUser(email: string, phoneNumber: string, Name: string, displayName: string, password: string, passwordConfirm: string): Promise<any> {
+  async registerUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Promise<any> {
     return this.http.post(ACCOUNT_API + 'registerUser', {
       email,
       phoneNumber,
-      Name,
       displayName,
       password,
       passwordConfirm
@@ -31,11 +30,10 @@ export class AccountService {
     }, httpOptions);
   }
 
-  async updateUser(email: string, phoneNumber: string, Name: string, displayName: string, password: string, passwordConfirm: string): Promise<any>{
+  async updateUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Promise<any>{
     return this.http.put(ACCOUNT_API + 'updateUser', {
       email,
       phoneNumber,
-      Name,
       displayName,
       password,
       passwordConfirm
@@ -53,7 +51,5 @@ export class AccountService {
   async deleteUser(EmailAddress: string, Password: string): Promise<any>{
     return this.http.delete(ACCOUNT_API + 'deleteUser', {responseType: 'text'});
   }
-
-
 
 }

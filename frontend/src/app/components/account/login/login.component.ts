@@ -26,9 +26,14 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void>
   {
+    document.body.className = "backgroundIMG";
     // if (await this.accountService.checkAuthenticated()) {
     //   await this.router.navigate([this.returnUrl]);
     // }
+  }
+
+  ngOnDestroy(){
+    document.body.className="";
   }
 
   async onSubmit(): Promise<void>
