@@ -1,5 +1,6 @@
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
+import {NotebookService} from "../../../services/notebook.service";
 
 @Component({
   selector: 'app-notes-panel',
@@ -14,10 +15,20 @@ export class NotesPanelComponent implements OnInit {
 
   open = false;
 
-  constructor() { }
+  public notebooks: any = [];
+
+  constructor(private notebookService: NotebookService) { }
 
   async ngOnInit() {
 
+    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+      .subscribe(result => {
+        // console.log(result);
+
+        for(let i = 0; i < result.length; i++){
+          this.notebooks.push(result[i]);
+        }
+      });
   }
 
 

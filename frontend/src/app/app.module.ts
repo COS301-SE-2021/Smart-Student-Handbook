@@ -17,7 +17,9 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
@@ -36,6 +38,8 @@ import { RestPasswordComponent } from './components/account/reset-password/rest-
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
+
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -63,10 +67,13 @@ import { GlobalConfirmComponent } from './components/modals/global/global-confir
     BrowserAnimationsModule,
     CKEditorModule,
     MDBBootstrapModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase, 'smartStudentNotebook'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    // AngularFireStorageModule,
+    AngularFirestoreModule,
+    HttpClientModule
   ],
   providers: [NotesPanelComponent, MessagingService, AsyncPipe],
   bootstrap: [AppComponent]
