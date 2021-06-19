@@ -1,7 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.6.0/firebase-messaging.js');
 
-const firebaseApp = firebase.initializeApp({
+firebase.initializeApp({
   apiKey: "AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0",
   authDomain: "smartstudentnotebook.firebaseapp.com",
   databaseURL: "https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app",

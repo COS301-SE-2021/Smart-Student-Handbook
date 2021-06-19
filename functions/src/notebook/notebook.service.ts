@@ -132,7 +132,8 @@ export class NotebookService {
 				}
 			).then(() => {
 				return {
-					message : operationType + " was successful!"
+					message : operationType + " was successful!",
+					notebookId: notebookId
 				};
 			}).catch(() => {
 				throw new HttpException('Not Found', HttpStatus.NOT_FOUND);

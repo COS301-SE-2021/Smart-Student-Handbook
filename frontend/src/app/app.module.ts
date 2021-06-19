@@ -7,8 +7,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 //Editor
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -39,6 +37,10 @@ import { ForgotPasswordComponent } from './components/account/forgot-password/fo
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
+import { MatDialogRef } from "@angular/material/dialog";
+
 
 @NgModule({
   declarations: [
@@ -53,12 +55,11 @@ import { GlobalConfirmComponent } from './components/modals/global/global-confir
     ForgotPasswordComponent,
     GlobalErrorComponent,
     GlobalConfirmComponent,
+    AddNotebookComponent,
   ],
   imports: [
     MaterialModule,
     FormsModule,
-    HttpClientModule,
-    RouterModule,
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
@@ -73,7 +74,7 @@ import { GlobalConfirmComponent } from './components/modals/global/global-confir
     AngularFirestoreModule,
     HttpClientModule
   ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
