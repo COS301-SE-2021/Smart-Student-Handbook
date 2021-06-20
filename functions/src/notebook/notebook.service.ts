@@ -111,11 +111,13 @@ export class NotebookService {
 			operationType= "Create";
 		}
 
+
 		/**
 		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
 		 * If successful return success message else throw not found exception.
 		 */
 		try {
+			console.log('1');
 			return await admin.firestore().collection("notebooks").doc(notebookId).set(
 				{
 					title: notebookDto['title'],
@@ -124,23 +126,25 @@ export class NotebookService {
 					description: notebookDto["description"],
 					institution: notebookDto["institution"],
 					name: notebookDto["name"],
-					surname: notebookDto["surname"],
+					// surname: notebookDto["surname"],
 					private: notebookDto["private"],
-					username: notebookDto["username"],
+					// username: notebookDto["username"],
 					notebookReference: notebookId,
 					userId: userId,
 				}
 			).then(() => {
+				console.log('2');
 				return {
 					message : operationType + " was successful!",
 					notebookId: notebookId
 				};
 			}).catch(() => {
+				console.log('3');
 				throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 			});
 		}
 		catch (error)
-		{
+		{ console.log(error);
 			throw new HttpException('Something went wrong. Operation could not be executed.', HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
