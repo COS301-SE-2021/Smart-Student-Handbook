@@ -167,8 +167,6 @@ export class AccountService {
 		catch(error) {
 			throw new HttpException('Bad Request. User might not be signed in or does not exist.'+error.message, HttpStatus.BAD_REQUEST);
 		}
-
-
 	}
 
 
