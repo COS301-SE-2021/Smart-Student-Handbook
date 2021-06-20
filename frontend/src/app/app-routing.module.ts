@@ -5,10 +5,15 @@ import { RegisterComponent } from './components/account/register/register.compon
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
 import { NotebookComponent } from './notebook/notebook.component';
+import {AddNotebookComponent} from "./notebook/add-notebook/add-notebook.component";
 
 const routes: Routes = [
   {
     path: '',
+    component: LoginComponent
+  },
+  {
+    path: 'login',
     component: LoginComponent
   },
   {
@@ -22,6 +27,10 @@ const routes: Routes = [
   {
     path: 'notebook',
     component: NotebookComponent
+  },
+  {
+    path: 'add',
+    component: AddNotebookComponent
   }
 ];
 

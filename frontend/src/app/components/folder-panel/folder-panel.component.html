@@ -2,20 +2,21 @@
   <mat-sidenav #sidenav mode="side" style="width: 100%;">
     <div id="panelContent">
       <mat-card id="card">
-        <mat-card-header>
-          <div mat-card-avatar class="header-image"></div>
-          <mat-card-title id="username">Douglas Nel</mat-card-title>
-          <mat-card-subtitle id="subTitle">Tuks</mat-card-subtitle>
+        <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
 
-          <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
-            <mat-icon>keyboard_arrow_left</mat-icon>
-          </button>
+        <mat-card-header (click)="updateProfile()">
+          <div mat-card-avatar class="header-image"></div>
+          <mat-card-title id="username">{{username}}</mat-card-title>
+          <mat-card-subtitle id="subTitle">{{bio}}</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;">
-        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="folderSelected(node.name)">
-          <button mat-icon-button disabled></button>
-          {{node.name}}
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;" #tree>
+        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="openNotebookPanel()">
+          <button mat-icon-button >
+            {{node.name}}
+          </button>
         </mat-tree-node>
         <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
           <button mat-icon-button matTreeNodeToggle

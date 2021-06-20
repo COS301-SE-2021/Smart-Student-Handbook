@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +10,52 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  form: FormGroup;
+  loginFailed = false;
+  errorMessage: string = "";
 
-  ngOnInit(): void {
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
+  {
+    this.form = this.fb.group({
+      email: ['', Validators.email],
+      password: ['', Validators.required]
+    });
+  }
+
+  async ngOnInit(): Promise<void>
+  {
+    //if user is already logged in move them to the notebook page, if not return to login
+    await this.accountService.isUserLoggedIn();
+    document.body.className = "backgroundIMG";
+  }
+
+  ngOnDestroy(){
+    document.body.className="";
+  }
+
+  async onSubmit(): Promise<void>
+  {
+    this.loginFailed = false;
+
+    if (this.form.valid)
+    {
+        const email = this.form.get('email')?.value;
+        const password = this.form.get('password')?.value;
+
+        this.accountService.loginUser(email, password).subscribe(data => {
+          this.loginFailed = false;
+            this.router.navigateByUrl(`notebook`);
+          },
+          err => {
+            this.loginFailed = true;
+            this.errorMessage = "Error: "+err.error.message;
+          }
+        );
+    }
+    else
+    {
+      return;
+    }
   }
 
 }

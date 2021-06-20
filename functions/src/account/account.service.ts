@@ -15,7 +15,7 @@ export class AccountService {
 	 * Register a new user
 	 * @param registerDto
 	 */
-	async registerUser(registerDto: RegisterDto): Promise<Response>
+	async registerUser(registerDto: RegisterDto): Promise<Account>
 	{
 		//Check if user password and confirm passwords match before creating user
 		if(registerDto.password != registerDto.passwordConfirm)
@@ -34,14 +34,19 @@ export class AccountService {
 			password: registerDto.password,
 			displayName: registerDto.displayName,
 			disabled: false,
-		}).then((userRecord) => {
+		}).then((userCredential) => {
 			// See the UserRecord reference doc for the contents of userRecord.
 			return {
+				uid: userCredential.uid,
+				email: userCredential.email,
+				emailVerified: userCredential.emailVerified,
+				phoneNumber: userCredential.phoneNumber,
+				displayName: userCredential.displayName,
 				message: "User is successfully registered!"
 			};
 		})
 		.catch((error) => {
-			throw new HttpException('Bad Request '+'Error creating new user:', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request '+'Error creating new user: '+error.message, HttpStatus.BAD_REQUEST);
 		});
 	}
 
@@ -49,7 +54,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Response>
+	async updateUser(registerDto: RegisterDto): Promise<Account>
 	{
 		let uid: string = "";
 
@@ -58,7 +63,7 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 		}
 		catch(error) {
-			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request. User might not be signed in or does not exist: '+error.message, HttpStatus.BAD_REQUEST);
 		}
 
 		/**
@@ -71,14 +76,19 @@ export class AccountService {
 			password: registerDto.password,
 			displayName: registerDto.displayName,
 			disabled: false,
-		}).then((userRecord) =>
+		}).then((userCredential) =>
 		{
 			return {
+				uid: userCredential.uid,
+				email: userCredential.email,
+				emailVerified: userCredential.emailVerified,
+				phoneNumber: userCredential.phoneNumber,
+				displayName: userCredential.displayName,
 				message: "User is successfully updated!"
 			};
 		})
 		.catch((error) => {
-			throw new HttpException('Error updating user: '+ error, HttpStatus.BAD_REQUEST);
+			throw new HttpException('Error updating user: '+ error.message, HttpStatus.BAD_REQUEST);
 		});
 	}
 
@@ -100,7 +110,7 @@ export class AccountService {
 			};
 		})
 		.catch((error) => {
-			throw new HttpException('Bad Request '+error.message, HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request '+ error.message, HttpStatus.BAD_REQUEST);
 		});
 	}
 
@@ -115,7 +125,7 @@ export class AccountService {
 				message: "Successfully signed out."
 			}
 		}).catch((error) => {
-			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
 	}
 
@@ -128,19 +138,19 @@ export class AccountService {
 		let user;
 		try{
 			user = firebase.auth().currentUser;
+
+			//Return user object
+			return {
+				uid: user.uid,
+				email: user.email,
+				emailVerified: user.emailVerified,
+				phoneNumber: user.phoneNumber,
+				displayName: user.displayName
+			};
 		}
 		catch(error) {
-			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request. User might not be signed in or does not exist: '+error.message, HttpStatus.BAD_REQUEST);
 		}
-
-		//Return user object
-		return {
-			uid: user.uid,
-			email: user.email,
-			emailVerified: user.emailVerified,
-			phoneNumber: user.phoneNumber,
-			displayName: user.displayName
-		};
 	}
 
 	/**
@@ -155,7 +165,7 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 		}
 		catch(error) {
-			throw new HttpException('Bad Request. User might not be signed in or does not exist.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request. User might not be signed in or does not exist.'+error.message, HttpStatus.BAD_REQUEST);
 		}
 
 		//Try to delete user else throw and exception if not possible
@@ -165,7 +175,7 @@ export class AccountService {
 			};
 		})
 		.catch((error) => {
-			throw new HttpException('Internal Service Error '+error, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
 		});
 	}
 

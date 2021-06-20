@@ -38,7 +38,10 @@ import { GlobalErrorComponent } from './components/modals/global/global-error/gl
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
 import { HttpClientModule } from '@angular/common/http';
-
+import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
+import { MatDialogRef } from "@angular/material/dialog";
+import { ConfirmDeleteComponent } from './notebook/confirm-delete/confirm-delete.component';
+import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.component";
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { HttpClientModule } from '@angular/common/http';
     ForgotPasswordComponent,
     GlobalErrorComponent,
     GlobalConfirmComponent,
+    AddNotebookComponent,
+    ConfirmDeleteComponent,
+    EditProfileComponent
   ],
   imports: [
     MaterialModule,
@@ -71,7 +77,7 @@ import { HttpClientModule } from '@angular/common/http';
     AngularFirestoreModule,
     HttpClientModule
   ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

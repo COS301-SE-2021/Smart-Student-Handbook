@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ProfileService } from './profile.service';
 
-describe('AuthService', () => {
+describe('ProfileService', () => {
   let service: ProfileService;
 
   beforeEach(() => {

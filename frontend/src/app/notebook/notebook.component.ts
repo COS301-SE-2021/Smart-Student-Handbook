@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 
 import EditorJS from '@editorjs/editorjs';
@@ -6,7 +7,14 @@ import {NotebookService} from "../services/notebook.service";
 
 import firebase from "firebase";
 import "firebase/firestore";
-
+import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
+import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
+import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
+import {AccountService} from "../services/account.service";
+import {ProfileService} from "../services/profile.service";
 
 @Component({
   selector: 'app-notebook',
@@ -14,6 +22,15 @@ import "firebase/firestore";
   styleUrls: ['./notebook.component.scss']
 })
 export class NotebookComponent implements OnInit {
+
+  //Variables for add notebook popup dialog
+  title = '';
+  course = '';
+  description = '';
+  institution = '';
+  private = false;
+
+  notebookTitle = 'New Notebook';
 
   /**
     Get all plugins for notebook
@@ -66,72 +83,91 @@ export class NotebookComponent implements OnInit {
 
   // public editorData = '<p>Hello, world!</p>';
 
-  links = ['First', 'Second', 'Third'];
+  links = ['First'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
+  notebookID: string = '';
+  _editor!: EditorJS;
 
-  /**
-   * Add a new tab to the tabs bar
-   */
-  addLink() {
-    this.links.push(`Link ${this.links.length + 1}`);
-  }
+  //Variable that holds the logged in user details
+  user: any;
+  profile: any;
+
+  @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
+  @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
   /**
    * Include the notebook service
    * @param notebookService
    */
-  constructor(private notebookService: NotebookService) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog,
+              private router: ActivatedRoute, private _router: Router,
+              private profileService: ProfileService, private accountService: AccountService) { }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.accountService.isUserLoggedIn();
+
+    this.initialFunction();
+
+    //Assign "openPanel function to the eventhandler from folder panel to open the note panel when the view is loaded"
+    document.addEventListener('DOMContentLoaded', (event) => {
+      this.folderPanelComponent.openNotebookPanel = () => {
+        this.notePanelComponent.openedCloseToggle();
+      };
+    })
+
+    // let userDeatils;
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+    this.profile = this.profile.userInfo;
+  }
+
+  //Open (and close) the notes panel
+  openPanel(){
+    console.log(this.notePanelComponent);
+    this.notePanelComponent.openedCloseToggle();
+  }
+
+  //Initialise the editor
+  initialFunction(){
 
     //The path of the notebook to be loaded
-    let path: string = 'test';
-
-    /**
-     * Get the specific notebook details with notebook id
-     */
-    this.notebookService.getNoteBookById('aICV0OnPUusxezbYm1Dw')
-      .subscribe(result => {
-        console.log(result);
-        // path = result.notebookReference;
-      })
-
+    let path: string = '2aa5ca94-aed8-4a0a-8d54-c490086e5371';//891bdd86-0828-49ea-9053-8d60f8fdf671
 
     /**
      * Retrieve the notebook from realtime database
      */
-    const dbRefObject = firebase.database().ref("notebook/" + path);
+    // let dbRefObject = firebase.database().ref("notebook/" + path);
+
 
     /**
      * Get the values from the realtime database and insert block if notebook is empty
      */
-    dbRefObject.once('value', snap =>
-    {
-      if(snap.val() === null)
-      {
-        firebase.database().ref("notebook/" + path).set({
-          outputData:
-            {
-              blocks: [
-                {
-                  "id" : "jTFbQOD8j3",
-                  "type" : "header",
-                  "data" : {
-                    "text" : "My Notebook 🚀",
-                    "level" : 2
-                  }
-                }]
-            }
-        });
-      }
-    });
+    // dbRefObject.once('value', snap => {
+    //   if (snap.val() === null) {
+    //     firebase.database().ref("notebook/" + path).set({
+    //       outputData:
+    //         {
+    //           blocks: [
+    //             {
+    //               "id": "jTFbQOD8j3",
+    //               "type": "header",
+    //               "data": {
+    //                 "text": "My Notebook 🚀",
+    //                 "level": 2
+    //               }
+    //             }]
+    //         }
+    //     });
+    //   }
+    // });
 
     /**
      * Create the notebook with all the plugins
      */
-    const editor = new EditorJS({
+    let editor = new EditorJS({
       holder: 'editor',
       tools: {
         header: {
@@ -200,15 +236,15 @@ export class NotebookComponent implements OnInit {
       },
       data:
         {
-          blocks:[]
+          blocks: []
         },
       autofocus: true,
 
       onChange: () => {
-        (function() {
+        (function () {
           editor.save().then((outputData) => {
             // console.log(outputData);
-            firebase.database().ref("notebook/" + path ).set({
+            firebase.database().ref("notebook/" + path).set({
               outputData
             });
           }).catch((error) => {
@@ -216,50 +252,220 @@ export class NotebookComponent implements OnInit {
           })
         }());
       }
-    })
-
-    /**
-     * Render output on Editor
-     */
-    dbRefObject.once('value', snap =>
-    {
-      editor.render(snap.val().outputData);
     });
 
+    this._editor = editor;
 
+
+    /**
+     * Get the id of the notebook from the url parameter
+     */
+    this.router.queryParams.subscribe(params => {
+
+      if (params.id !== undefined) {
+
+          this.notebookID = path = params.id;
+
+        /**
+         * Get the specific notebook details with notebook id
+         */
+        this.notebookService.getNoteBookById(path)
+          .subscribe(result => {
+
+            this.notebookTitle = result.title;
+
+            //Change the path to the correct notebook's path
+            let dbRefObject = firebase.database().ref("notebook/" + path);
+
+            /**
+             * Get the values from the realtime database and insert block if notebook is empty
+             */
+            dbRefObject.once('value', snap => {
+              if (snap.val() === null) {
+                firebase.database().ref("notebook/" + path).set({
+                  outputData:
+                    {
+                      blocks: [
+                        {
+                          "id": "jTFbQOD8j3",
+                          "type": "header",
+                          "data": {
+                            "text": this.notebookTitle+ " 🚀",
+                            "level": 2
+                          }
+                        }]
+                    }
+                });
+              }
+            })
+              .then(() => {
+                /**
+                 * Render output on Editor
+                 */
+                dbRefObject.once('value', snap => {
+
+                  // console.log(snap.val());
+                  editor.render(snap.val().outputData);
+                });
+
+                //Change the path to which the editor should save data
+                editor.on('change', () => {
+                  (function () {
+                    editor.save().then((outputData) => {
+                      // console.log(outputData);
+                      firebase.database().ref("notebook/" + path).set({
+                        outputData
+                      });
+                    }).catch((error) => {
+                      console.log('Saving failed: ', error)
+                    })
+                  }());
+                });
+
+                // dbRefObject.once('value', snap => {
+                //   editor.render(snap.val().outputData);
+                // });
+              });
+          })
+
+      }
+
+      //no id in the url
+      else {
+
+        /**
+         * Render output on Editor
+         */
+        // dbRefObject.once('value', snap => {
+        //   editor.render(snap.val().outputData);
+        // });
+
+      }
+
+
+    });
+  }
+
+  /**
+   * Add a new tab to the tabs bar
+   */
+  addLink(name: string) {
+    this.links.push(name);
+    return this.links.length;
   }
 
   /**
    * Create a new notebook
    */
   createNewNotebook(){
-    let request = {
-      title: 'title 2',
-      author: 'author',
-      course: 'COS 301',
-      description: 'Test',
-      institution: 'Tuks',
-      name: 'Arno',
-      surname: 'Moller',
-      private: false,
-      username: 'username',
-    }
 
-    this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
-      .subscribe(result => {
-        console.log(result);
-      })
+    //Open dialog
+    const dialogRef = this.dialog.open(AddNotebookComponent, {
+      width: '50%',
+      data: {
+        title: this.title,
+        course: this.course,
+        description: this.description,
+        institution: this.institution,
+        private: this.private
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      //If the user filled out the form
+      if(result !== undefined){
+
+        //Create request object
+        let request = {
+          title: result.title,
+          author: this.profile.name,
+          course: result.course,
+          description: result.description,
+          institution: result.institution,
+          name: this.profile.name,
+          private: result.private,
+        }
+
+        this.notebookTitle = result.title;
+
+        //Call service and create notebook
+        this.notebookService.createNotebook(request)
+          .subscribe(result => {
+            console.log(result);
+
+            this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
+
+            this.folderPanelComponent.getUserNotebooks();
+            // this.folderPanelComponent.openTree();
+
+              this.notePanelComponent.getUserNotebooks();
+          },
+            error => {
+              this.folderPanelComponent.getUserNotebooks();
+            });
+      }
+    });
+
   }
 
   /**
    * Delete a notebook
    */
   removeNotebook(){
-    this.notebookService.removeNotebook('9c1b694e-24af-4844-b4ad-789068b4c3bc')
-      .subscribe(result => {
-        console.log(result);
-      })
 
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      // width: '50%',
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result === true){
+        if(this.notebookID != ''){
+
+          this.notebookService.removeNotebook(this.notebookID)
+            .subscribe(result => {
+                console.log(result);
+
+                this._router.navigate(['notebook']);
+
+                this.folderPanelComponent.getUserNotebooks();
+                let editor = this._editor;
+                editor.clear();
+
+                this.notebookTitle = '';
+                this.notePanelComponent.getUserNotebooks();
+
+              },
+              error => {
+
+                // this._router.navigate(['notebook']);
+                //
+                // this.folderPanelComponent.getUserNotebooks();
+                //
+                // let editor = this._editor;
+                // editor.clear();
+                //
+                // this.notebookTitle = '';
+              })
+        }
+      }
+    });
   }
+
+  async logout()
+  {
+    this.accountService.singOut().subscribe(data => {
+        this._router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      err => {
+        console.log("Error: "+err.error.message);
+      }
+    );
+  }
+
 
 }
