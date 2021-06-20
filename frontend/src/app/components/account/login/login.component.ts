@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           },
           err => {
             this.loginFailed = true;
-            this.errorMessage = "An Error has occurred: "+err.error.message;
+            this.errorMessage = "Error: "+err.error.message;
           }
         );
     }

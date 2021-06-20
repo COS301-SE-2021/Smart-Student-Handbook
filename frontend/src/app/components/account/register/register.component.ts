@@ -15,12 +15,9 @@ export class RegisterComponent implements OnInit {
   registerFailed = false;
   submitted = false;
   errorMessage: string = "";
-  //private returnUrl: string;
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
   {
-    //this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/notebook';
-
     this.form = this.fb.group({
       email: ['', Validators.email],
       phoneNumber: ['', Validators.required],
@@ -35,9 +32,6 @@ export class RegisterComponent implements OnInit {
   async ngOnInit(): Promise<void>
   {
     document.body.className = "backgroundIMG";
-    // if (await this.accountService.checkAuthenticated()) {
-    //   await this.router.navigate([this.returnUrl]);
-    // }
   }
 
   ngOnDestroy(){
@@ -58,12 +52,11 @@ export class RegisterComponent implements OnInit {
       const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
-          console.log(data);
           this.router.navigateByUrl(`notebook`);
         },
         err => {
           this.registerFailed = true;
-          this.errorMessage = "An Error has occurred: "+err.error.message;
+          this.errorMessage = "Error: "+err.error.message;
         }
       );
     }
