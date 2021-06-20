@@ -47,4 +47,15 @@ export class UserService {
 
     }
 
+    async deleteUserProfile(userId): Promise<UserResponseDto>
+    {
+        return await admin.firestore().collection("users").doc(userId).delete().then(() => {
+                return {
+                    success: true,
+                    message: "User profile was successfully deleted"
+                };
+        }).catch((error) => {
+            throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
+        });
+    }
 }
