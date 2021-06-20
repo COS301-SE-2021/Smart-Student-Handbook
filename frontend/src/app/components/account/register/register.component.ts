@@ -56,8 +56,18 @@ export class RegisterComponent implements OnInit {
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
 
-        this.profileService.createUser(data.uid).subscribe(resp =>{
-            this.router.navigateByUrl(`notebook`);
+        this.profileService.createUser(data.uid,data.displayName).subscribe(resp =>{
+
+            this.accountService.loginUser(email, password).subscribe(data => {
+                this.registerFailed = false;
+                this.router.navigateByUrl(`notebook`);
+              },
+              err => {
+                this.registerFailed = true;
+                this.errorMessage = "Error: "+err.error.message;
+              }
+            );
+
           },
           err => {
             this.registerFailed = true;

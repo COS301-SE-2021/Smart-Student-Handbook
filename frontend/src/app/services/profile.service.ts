@@ -16,7 +16,7 @@ export class ProfileService {
   constructor(private http: HttpClient, private router: Router) { }
 
   getUserDetails(userId: string): Observable<any> {
-    return this.http.get(PROFILE_API + 'getUserDetails', { headers: {'Content-Type':'application/json'}, params: {"userId":userId}, responseType: 'json' });
+    return this.http.get(PROFILE_API + 'getUserDetails/'+userId, { headers: {'Content-Type':'application/json'}, responseType: 'json' });
   }
 
   createUser(uid: string, name?: string, institution?: string, department?:string, program?:string, workStatus?:string, bio?:string, dateJoined?:string ): Observable<any> {
