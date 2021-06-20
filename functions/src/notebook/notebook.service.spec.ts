@@ -3,14 +3,17 @@ import {NotebookService} from "./notebook.service";
 import * as admin from "firebase-admin";
 
 import { Test, TestingModule } from '@nestjs/testing';
-import {mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere} from "firestore-jest-mock/mocks/firestore";
+import {mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere } from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
-import firebase from 'firebase/app';
-import {mockCreateUserWithEmailAndPassword, mockSignInWithEmailAndPassword} from "firestore-jest-mock/mocks/auth";
+import firebase from "firebase/app";
+import {environment} from "../../../frontend/src/environments/environment";
+
+
 
 
 
 admin.initializeApp();
+firebase.initializeApp(environment.firebase);
 
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
 const NoteBookDTo = require("./dto/notebook.dto")
@@ -98,16 +101,37 @@ const NoteBookDTo = require("./dto/notebook.dto")
          })
 
          describe('when an ID  does not match a notebook',()=>{
-             it('Throw and error',async()=>{
+             it('Throw and error',()=>{
 
 
-                 return expect(service.findNotebookById('TestID2')).rejects.toThrow(HttpException);
+                 return expect(  service.findNotebookById('TestID2')).rejects.toThrow(HttpException);
              })
          })
 
     })
+     //Test to delete a notebook
+     describe('DeleteNotebook',()=>{
+         describe('when a notebook matches a notebookID',()=>{
+             it('Delete the notebook',async()=>{
 
- //Test for createOrUpdateNotebook
+                 await service.deleteNotebook('TestID');
+                 expect(mockCollection).toHaveBeenCalledWith('notebooks');
+                 expect(mockDelete).toHaveBeenCalled();
+             })
+         })
+
+         describe('when a notebook does not match a notebookID',()=>{
+             it('The notebook should not be deleted',()=>{
+
+                 //return  expect( service.deleteNotebook( 'TestID2' )).rejects.toThrow(HttpException);
+
+             })
+         })
+     })
+
+
+
+     //Test for createOrUpdateNotebook
 
      describe('createOrUpdateNotebook',()=>{
          describe('when a notebook matches a notebookID the it can ',()=>{
@@ -123,7 +147,7 @@ const NoteBookDTo = require("./dto/notebook.dto")
                      surname: "surname",
                      private: "private",
                      username: "username",
-                    notebookReference: "TestID",
+                     notebookReference: "TestID",
                      userId: "UserIdTest",
                  }]);
                  await service.createOrUpdateNotebook(NoteBookDTo , 'TestID');
@@ -143,34 +167,16 @@ const NoteBookDTo = require("./dto/notebook.dto")
              })
              })
 
-         describe('if no notebook id is wrong  ' , ()=>{
-             it('An error should be given ' , async()=>{
-                //Todo: THIS TEST Should fail but the code is not correct
-                 //return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' ,'UserIdTest')).rejects.toThrow(HttpException);
+         describe('if the notebook id is wrong  ' , ()=>{
+             it('An error should be given ' , ()=>{
+
+                 //return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' )).rejects.toThrow(HttpException);
             })
          })
 
      })
 
- //Test to delete a notebook
-    describe('FindAllUserNoteBooks',()=>{
-         describe('when a notebook matches a notebookID',()=>{
-             it('Delete the notebook',async()=>{
 
-                await service.deleteNotebook('TestID');
-                 expect(mockCollection).toHaveBeenCalledWith('notebooks');
-                 expect(mockDelete).toHaveBeenCalled();
-            })
-        })
-
-         describe('when a notebook does not match a notebookID',()=>{
-             it('The notebook should not be deleted',async()=>{
-
-                //Todo: Implement Fail Case
-
-             })
-         })
-     })
 
 
 

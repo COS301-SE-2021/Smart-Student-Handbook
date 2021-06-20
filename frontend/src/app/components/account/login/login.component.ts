@@ -43,9 +43,7 @@ export class LoginComponent implements OnInit {
         const password = this.form.get('password')?.value;
 
         this.accountService.loginUser(email, password).subscribe(data => {
-          console.log(data);
-          this.loginFailed = true;
-            //save local storage of user login and user profile
+          this.loginFailed = false;
             this.router.navigateByUrl(`notebook`);
           },
           err => {
