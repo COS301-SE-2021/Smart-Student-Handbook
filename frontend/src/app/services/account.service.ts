@@ -44,7 +44,7 @@ export class AccountService {
   }
 
   singOut(): Observable<any>{
-    return this.http.post(ACCOUNT_API + 'singOut', {}, httpOptions);
+    return this.http.post(ACCOUNT_API + 'signOut', {}, httpOptions);
   }
 
   getCurrentUser(): Observable<any> {
@@ -89,7 +89,5 @@ export class AccountService {
       }
     );
   }
-
-
 
 }
