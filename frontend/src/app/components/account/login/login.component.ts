@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +10,57 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  form: FormGroup;
+  loginFailed = false;
+  errorMessage: string = "";
+  //private returnUrl: string;
 
-  ngOnInit(): void {
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
+  {
+    //this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/notebook';
+
+    this.form = this.fb.group({
+      email: ['', Validators.email],
+      password: ['', Validators.required]
+    });
+  }
+
+  async ngOnInit(): Promise<void>
+  {
+    document.body.className = "backgroundIMG";
+    // if (await this.accountService.checkAuthenticated()) {
+    //   await this.router.navigate([this.returnUrl]);
+    // }
+  }
+
+  ngOnDestroy(){
+    document.body.className="";
+  }
+
+  async onSubmit(): Promise<void>
+  {
+    this.loginFailed = false;
+
+    if (this.form.valid)
+    {
+        const email = this.form.get('email')?.value;
+        const password = this.form.get('password')?.value;
+
+        this.accountService.loginUser(email, password).subscribe(data => {
+          console.log(data);
+            this.loginFailed = true;
+            this.router.navigateByUrl(`notebook`);
+          },
+          err => {
+            this.loginFailed = true;
+            this.errorMessage = "An Error has occurred: "+err.error.message;
+          }
+        );
+    }
+    else
+    {
+      return;
+    }
   }
 
 }

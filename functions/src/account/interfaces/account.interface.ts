@@ -4,4 +4,5 @@ export interface Account{
 	emailVerified: boolean,
 	phoneNumber: string,
 	displayName: string,
+	message?: string,
 }

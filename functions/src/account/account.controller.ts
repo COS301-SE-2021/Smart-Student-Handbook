@@ -18,7 +18,7 @@ export class AccountController {
 	}
 
 	@Post("loginUser")
-	loginUser(@Body() loginDto: LoginDto): Promise<Response>
+	loginUser(@Body() loginDto: LoginDto): Promise<Account>
 	{
 		return this.accountService.loginUser(loginDto);
 	}

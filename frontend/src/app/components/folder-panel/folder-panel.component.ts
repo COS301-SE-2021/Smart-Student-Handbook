@@ -2,10 +2,11 @@ import { NotesPanelComponent } from './notes-panel/notes-panel.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {MatTree, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-folder-panel',
@@ -14,6 +15,9 @@ import {NotebookService} from "../../services/notebook.service";
   encapsulation: ViewEncapsulation.None
 })
 export class FolderPanelComponent implements OnInit {
+
+  // @ViewChild('tree') tree!: MatTree<any>;
+  open: boolean = false;
 
   panelOpenState = false;
   width = 68.3;
@@ -24,6 +28,7 @@ export class FolderPanelComponent implements OnInit {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
+      id: node.id,
       level: level,
     };
   }
@@ -37,26 +42,47 @@ export class FolderPanelComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   //--------------------------------------------------------------------------------
 
-  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService) { }
+  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
+              private router: Router) { }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit(): void {
 
+    this.getUserNotebooks();
+
+  }
+
+  getUserNotebooks(){
+
     this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
       .subscribe(result => {
-        // console.log(result);
+        console.log(result);
 
         let children = [];
-        for(let i = 0; i < result.length; i++){
-          children.push({name: result[i].course});
+        for (let i = 0; i < result.length; i++) {
+          children.push({name: result[i].course, id: result[i].notebookReference});
         }
 
         this.dataSource.data = [{
           name: 'Notebooks',
+          id: '',
           children: children
-        }]
+        }];
+
+        this.openTree();
+
       });
+  }
+
+  openTree(){
+
+    // if(this.open)
+      this.treeControl.expandAll();
+
+    // this.open = false;
+
+    // console.log(this.treeControl.dataNodes[0].);
   }
 
   openedCloseToggle(){
@@ -89,6 +115,11 @@ export class FolderPanelComponent implements OnInit {
     }
   }
 
+  openNotebook(item: any){
+    // console.log(item.id);
+
+    this.router.navigate(['notebook'], {queryParams: {id: item.id}});
+  }
 }
 
 
@@ -97,6 +128,7 @@ export class FolderPanelComponent implements OnInit {
  */
  interface DirectoryNode {
   name: string;
+  id: string;
   children?: DirectoryNode[];
 }
 
@@ -104,6 +136,7 @@ export class FolderPanelComponent implements OnInit {
 interface ExampleFlatNode {
   expandable: boolean;
   name: string;
+  id: string;
   level: number;
 }
 
