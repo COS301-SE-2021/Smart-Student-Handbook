@@ -407,8 +407,18 @@ export class NotebookComponent implements OnInit {
             editor.clear();
          })
     }
+  }
 
-
+  async logout()
+  {
+    this.accountService.singOut().subscribe(data => {
+        this._router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      err => {
+        console.log("Error: "+err.error.message);
+      }
+    );
   }
 
 
