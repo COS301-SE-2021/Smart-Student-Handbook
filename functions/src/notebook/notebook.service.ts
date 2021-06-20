@@ -111,11 +111,13 @@ export class NotebookService {
 			operationType= "Create";
 		}
 
+
 		/**
 		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
 		 * If successful return success message else throw not found exception.
 		 */
 		try {
+			console.log('1');
 			return await admin.firestore().collection("notebooks").doc(notebookId).set(
 				{
 					title: notebookDto['title'],
@@ -140,7 +142,7 @@ export class NotebookService {
 			});
 		}
 		catch (error)
-		{
+		{ console.log(error);
 			throw new HttpException('Something went wrong. Operation could not be executed.', HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

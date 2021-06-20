@@ -15,7 +15,7 @@
 
 .sidePanel{
   width: fit-content;
-  transition: all .5s linear;
+  transition: all .1s linear;
   // width: 16.6666666667%;
 }
 .panel{
@@ -35,7 +35,7 @@
 
 .sidePanel.col{
   width: fit-content !important;
-  transition: all .5s linear;
+  transition: all .1s linear;
   // width: 16.6666666667%;
 }
 
@@ -61,4 +61,9 @@
   text-align: left;
   padding: 7px;
   //background-color: #585858;
+}
+
+#notebookTitle{
+  margin: 0px 20px 0px 0px;
+  display: inline-block;
 }

@@ -19,12 +19,15 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width-input">
-        <input type="text" autocomplete="off" matInput placeholder="Phone Number" formControlName="phoneNumber" required>
+      <mat-form-field class="example-full-width">
+        <mat-label>Telephone</mat-label>
+        <span matPrefix>+27 &nbsp;</span>
+        <input type="tel" autocomplete="off" matInput placeholder="0858691024" formControlName="phoneNumber" required>
         <mat-error>
           Please provide a valid phoneNumber
         </mat-error>
       </mat-form-field>
+
 
       <mat-form-field class="full-width-input">
         <input type="text" autocomplete="off" matInput placeholder="Username" formControlName="displayName" required>

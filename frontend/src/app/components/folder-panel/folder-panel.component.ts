@@ -7,6 +7,8 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
 import {Router} from "@angular/router";
+import {ProfileService} from "../../services/profile.service";
+import {MatSidenav} from "@angular/material/sidenav";
 import {EditProfileComponent} from "../../notebook/edit-profile/edit-profile.component";
 import {MatDialog} from "@angular/material/dialog";
 
@@ -18,6 +20,10 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class FolderPanelComponent implements OnInit {
 
+  user: any;
+  profile: any;
+  open: boolean = false;
+
   username: string = '';
   bio: string = '';
   institution: string = '';
@@ -26,12 +32,8 @@ export class FolderPanelComponent implements OnInit {
   program: string = '';
   workstatus: string = '';
 
-  // @ViewChild('tree') tree!: MatTree<any>;
-  open: boolean = false;
-
   panelOpenState = false;
   width = 68.3;
-
 
   //-----------------  Code needed for the tree  ----------------------------------
   private _transformer = (node: DirectoryNode, level: number) => {
@@ -43,59 +45,62 @@ export class FolderPanelComponent implements OnInit {
     };
   }
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-      node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-      this._transformer, node => node.level, node => node.expandable, node => node.children);
-
+  //Variables needed for the tree view
+  treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable);
+  treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children);
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+
   //--------------------------------------------------------------------------------
 
-  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
-              private router: Router, private dialog: MatDialog) { }
 
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
+              private router: Router, private profileService: ProfileService,
+              private dialog: MatDialog) { }
+
 
   ngOnInit(): void {
 
-    this.getUserNotebooks();
+    //Get the user and user profile info from localstorage
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
+    this.username = this.user.displayName;
+    this.bio = this.profile.userInfo.bio;
+
+    this.getUserNotebooks();
   }
 
+  //Get the logged in user's notebooks
   getUserNotebooks(){
 
-    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+    this.notebookService.getUserNotebooks(this.user.uid)
       .subscribe(result => {
-        console.log(result);
 
-        let children = [];
-        for (let i = 0; i < result.length; i++) {
-          children.push({name: result[i].course, id: result[i].notebookReference});
-        }
+        let children = [{name: 'Notebook one', id: ''}];
+        // for (let i = 0; i < result.length; i++) {
+        //   children.push({name: result[i].course, id: result[i].notebookReference});
+        // }
 
         this.dataSource.data = [{
-          name: 'Notebooks',
+          name: 'My notebooks',
           id: '',
           children: children
         }];
 
-        this.openTree();
+        // this.openTree();
 
       });
   }
 
+  //Open the tree view
   openTree(){
-
-    // if(this.open)
       this.treeControl.expandAll();
-
-    // this.open = false;
-
-    // console.log(this.treeControl.dataNodes[0].);
   }
 
+  //Toggle the sliding panel (open and close)
   openedCloseToggle(){
+
     const sideNav = document.getElementById('container') as HTMLElement;
     const col = sideNav?.parentElement?.parentElement;
 
@@ -105,6 +110,7 @@ export class FolderPanelComponent implements OnInit {
 
       if(col){
         col.style.width = 'fit-content';
+        col.style.minWidth = '0px';
       }
 
     }
@@ -113,48 +119,52 @@ export class FolderPanelComponent implements OnInit {
 
       if(col){
         col.style.width = '16.6666666667%';
+        col.style.minWidth = '250px';
       }
     }
 
   }
 
-  folderSelected(item: string){
-
-    if(item === 'COS 301'){
-      this.panel.openedCloseToggle();
-    }
-  }
-
-  openNotebook(item: any){
-    // console.log(item.id);
-
-    this.router.navigate(['notebook'], {queryParams: {id: item.id}});
-  }
+  //Used by notebook to open the notes panel
+  openNotebookPanel(){}
 
   updateProfile(){
 
-    //Open dialog
-    const dialogRef = this.dialog.open(EditProfileComponent, {
-      width: '50%',
-      data: {
-        bio: this.bio,
-        department: this.department,
-        name: this.name,
-        institution: this.institution,
-        program: this.program,
-        workstatus: this.workstatus
+    let user = JSON.parse(<string>localStorage.getItem('user'));
+
+    this.profileService.getUserDetails(user.uid).subscribe(data => {
+
+       //Open dialog
+        const dialogRef = this.dialog.open(EditProfileComponent, {
+          width: '50%',
+          data: {
+            bio: data.userInfo.bio,
+            department: data.userInfo.department,
+            name: data.userInfo.name,
+            institution: data.userInfo.institution,
+            program: data.userInfo.program,
+            workstatus: data.userInfo.workStatus
+          }
+        });
+
+        //Get info and create notebook after dialog is closed
+        dialogRef.afterClosed().subscribe(result => {
+
+          this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
+            },
+            err => {
+              console.log("Error: "+err.error.message);
+            }
+          );
+
+        });
+
+      },
+      err => {
+        console.log("Error: "+err.error.message);
       }
-    });
+    );
 
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-
-      //If the user filled out the form
-      if (result !== undefined) {
-
-        console.log(result);
-      }
-    });
   }
 }
 

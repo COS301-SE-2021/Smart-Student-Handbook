@@ -44,7 +44,7 @@ export class AccountService {
   }
 
   singOut(): Observable<any>{
-    return this.http.post(ACCOUNT_API + 'singOut', {}, httpOptions);
+    return this.http.post(ACCOUNT_API + 'signOut', {}, httpOptions);
   }
 
   getCurrentUser(): Observable<any> {
@@ -74,7 +74,7 @@ export class AccountService {
         localStorage.setItem("user",JSON.stringify(data));
 
         //if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
-        if(curentRoute == "" || curentRoute == "/login" || curentRoute == "/register" || curentRoute == "/forgotPassword")
+        if(curentRoute == "/" || curentRoute == "/login" || curentRoute == "/register" || curentRoute == "/forgotPassword")
         {
           this.router.navigateByUrl(`/notebook`);
         }
@@ -82,14 +82,12 @@ export class AccountService {
       err => {
         console.log(err.error.message);
         //if the user is not logged in allow them to navigate login, register and forgotPassword
-        if(curentRoute !== "/login" && curentRoute !== "/register" && curentRoute !== "/forgotPassword")
+        if(curentRoute !== "/" && curentRoute !== "/login" && curentRoute !== "/register" && curentRoute !== "/forgotPassword")
         {
           this.router.navigateByUrl(`/login`);
         }
       }
     );
   }
-
-
 
 }

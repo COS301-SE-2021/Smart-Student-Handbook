@@ -40,8 +40,8 @@ import { GlobalConfirmComponent } from './components/modals/global/global-confir
 import { HttpClientModule } from '@angular/common/http';
 import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
 import { MatDialogRef } from "@angular/material/dialog";
-import { EditProfileComponent } from './notebook/edit-profile/edit-profile.component';
-
+import { ConfirmDeleteComponent } from './notebook/confirm-delete/confirm-delete.component';
+import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.component";
 
 @NgModule({
   declarations: [
@@ -57,7 +57,8 @@ import { EditProfileComponent } from './notebook/edit-profile/edit-profile.compo
     GlobalErrorComponent,
     GlobalConfirmComponent,
     AddNotebookComponent,
-    EditProfileComponent,
+    ConfirmDeleteComponent,
+    EditProfileComponent
   ],
   imports: [
     MaterialModule,

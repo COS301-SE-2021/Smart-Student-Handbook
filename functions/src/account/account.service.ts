@@ -3,14 +3,19 @@ import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { Response } from "./interfaces/response.interface";
 import { Account } from "./interfaces/account.interface";
+import { NotificationService } from "../notification/notification.service";
+import { EmailNotificationRequestDto } from "../notification/dto/emailNotificationRequest.dto";
+
 import firebase from 'firebase';
 require('firebase/auth');
 import * as admin from 'firebase-admin';
+import {UserService} from "../user/user.service";
 
 
 @Injectable()
 export class AccountService {
 
+	constructor(private notificationService: NotificationService) {}
 	/**
 	 * Register a new user
 	 * @param registerDto
@@ -22,6 +27,13 @@ export class AccountService {
 		{
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
+
+		//send welcome email to new user
+		await this.notificationService.sendEmailNotification({
+			"email": registerDto.email,
+			"subject": "Welcome to Smart Student Handbook",
+			"body": "Good day, "+registerDto.displayName+". We are very exited to see all your amazing notebooks!!!"
+		});
 
 		/**
 		 * Create user.
@@ -163,20 +175,20 @@ export class AccountService {
 		// Check if there is a current user else throw an exception
 		try {
 			uid = firebase.auth().currentUser.uid;
+
+			//Try to delete user else throw and exception if not possible
+			return admin.auth().deleteUser(uid).then(() => {
+				return {
+					message: "Successfully deleted user."
+				};
+			})
+			.catch((error) => {
+				throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+			});
 		}
 		catch(error) {
 			throw new HttpException('Bad Request. User might not be signed in or does not exist.'+error.message, HttpStatus.BAD_REQUEST);
 		}
-
-		//Try to delete user else throw and exception if not possible
-		return admin.auth().deleteUser(uid).then(() => {
-			return {
-				message: "Successfully deleted user."
-			};
-		})
-		.catch((error) => {
-			throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-		});
 	}
 
 

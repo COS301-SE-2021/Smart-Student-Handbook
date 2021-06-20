@@ -11,6 +11,9 @@
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
+
+    <button mat-raised-button (click)="logout()" class="mx-4">Logout</button>
+
   </mat-toolbar>
 </p>
 
@@ -22,9 +25,12 @@
       <app-folder-panel #folderPanelComponent></app-folder-panel>
     </div>
     <div class="sidePanel">
-      <app-notes-panel></app-notes-panel>
+      <app-notes-panel #notePanelComponent></app-notes-panel>
     </div>
     <div class="col" align="end">
+
+      <h3 id="notebookTitle" >{{notebookTitle}}</h3>
+
       <button mat-icon-button class="favorite-icon" class="moreOptions" >
         <mat-icon>share</mat-icon>
       </button>
@@ -37,6 +43,7 @@
       <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="removeNotebook()">
         <mat-icon>remove</mat-icon>
       </button>
+
       <mat-tab-group [backgroundColor]="background" id="tabs">
         <mat-tab *ngFor="let link of links; let n = index" label="{{link}}">
 

@@ -11,11 +11,9 @@ import {SubscribeToTopicRequestDto} from "./dto/subscribeToTopicRequest.dto";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
-
+admin.initializeApp();
 const { mock } = require('nodemailer');
-const nodemailer = require('nodemailer')
-const SMTPTransport = require("nodemailer/lib/smtp-transport")
-const SendmailTransport = require("nodemailer/lib/sendmail-transport")
+
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -32,18 +30,7 @@ describe('NotificationService', () => {
     expect(service).toBeDefined();
   });
 
-  it('email to return true', () => {
-    
-    let emailParams : EmailNotificationRequestDto = {
-		email: 'justin@to.com',
-		subject: "This is an mock email",
-		body: "This is an mock email"
-    }
-    
-    let emailResp = service.sendEmailNotification(emailParams);
-    
-    return emailResp.then(resp => {expect(resp.success).toBe(true)});
-  });
+
   
   it('email to have send an email', () => {
 
@@ -61,6 +48,7 @@ describe('NotificationService', () => {
 		expect(sentEmails[0].to).toBe('justin@to.com');
 	})
 	
+
 	});
 	
     it('email to have send an email', () => {
@@ -80,9 +68,8 @@ describe('NotificationService', () => {
 		});
     });
     
-
   
-    it('email to return true', async () => {
+  it('email to return true', () => {
 		
 		let emailParams : EmailNotificationRequestDto = {
 			email: 'justin@to.com',
@@ -90,12 +77,10 @@ describe('NotificationService', () => {
 			body: "This is an mock email"
 		}
 		
-		
 		let emailResp = service.sendEmailNotification(emailParams);
 		
-		expect.assertions(1);
 		return emailResp.then(resp => {expect(resp.success).toBe(true)});
-	});
+  });
   
 	
   it('email to return false', function () {
@@ -104,17 +89,8 @@ describe('NotificationService', () => {
 		  subject: "This is an mock email",
 		  body: "This is an mock email"
 	  };
-	
-	  let emailResp : EmailNotificationResponseDto = {
-		  success: false,
-		  message: "Something went wrong!"
-	  };
-	
-	  jest.mock('nodemailer', () => ({
-		  creatTransport: jest.fn().mockReturnValue({
-			  sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
-		  })
-	  }));
+
+	  mock.setShouldFailOnce();
 	
 	  jest.mock('nodemailer', () => ({
 		  creatTransport: jest.fn().mockReturnValue({
@@ -124,6 +100,7 @@ describe('NotificationService', () => {
 	
 	  expect.assertions(1);
 	  let resps = service.sendEmailNotification(emailParams);
+
 	  return resps.then(resp => {expect(resp.success).toBe(true)});
 	
 	  // const myMock = jest.fn((emailParams) => service.sendEmailNotification(emailParams));
@@ -131,6 +108,7 @@ describe('NotificationService', () => {
 	  //
 	  // myMock(emailParams)
 	
+
   });
 
     //Send notifications to all users (send to topic of 'general')
@@ -151,19 +129,20 @@ describe('NotificationService', () => {
     });
 
     //Send single user a notification
-    // it('Successfully send a single user a notification', async () => {
-	//
-	//
-    //     const request: SingleNotificationRequestDto = {
-    //         title: 'Test title',
-    //         body: 'Message body',
-    //         token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
-    //     }
-	//
-    //     const response = await service.sendSinglePushNotification(request);
-	//
-    //     expect(response.status).toBe('successful');
-    // });
+
+    it('Successfully send a single user a notification', async () => {
+
+
+        const request: SingleNotificationRequestDto = {
+            title: 'Test title',
+            body: 'Message body',
+            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
+        }
+
+        const response = await service.sendSinglePushNotification(request);
+
+        expect(response.status).toBe('unsuccessful');
+    });
 
     //Subscribe a user to a topic
     it('Successfully subscribed a user to a topic', async () => {

@@ -4,7 +4,9 @@ import * as admin from "firebase-admin";
 import {mockCollection } from "firestore-jest-mock/mocks/firestore";
 import {mockCreateUserWithEmailAndPassword } from "firestore-jest-mock/mocks/auth";
 import {HttpException} from "@nestjs/common";
+
 import firebase from "firebase";
+
 admin.initializeApp();
 var firebaseConfig = {
   apiKey: "AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0",
@@ -19,19 +21,17 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
-const registerDTO = require('./dto/register.dto')
+const registerDTO = require('./dto/register.dto');
+
 mockGoogleCloudFirestore({
-  database: {
-    users: [
-
-
-    ],
-
-
-  },
+	database: {
+		users: [
+			],
+	},
 });
 
 describe('AccountService', () => {
+
   let service: AccountService;
 
   beforeEach(async () => {
@@ -62,6 +62,7 @@ describe('AccountService', () => {
            await expect(service.registerUser(registerDTO)).rejects.toThrowError();
       })
     })
+
 
     describe('The user will enter their details incorrectly' , ()=>{
       it('If all user details are entered incorrectly the user will not be registered' , async()=>{

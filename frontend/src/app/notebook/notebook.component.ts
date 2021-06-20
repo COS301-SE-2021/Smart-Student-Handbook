@@ -10,8 +10,11 @@ import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
+import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
+import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
 import {AccountService} from "../services/account.service";
-
+import {ProfileService} from "../services/profile.service";
 
 @Component({
   selector: 'app-notebook',
@@ -86,22 +89,48 @@ export class NotebookComponent implements OnInit {
   notebookID: string = '';
   _editor!: EditorJS;
 
+  //Variable that holds the logged in user details
+  user: any;
+  profile: any;
+
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
+  @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
   /**
    * Include the notebook service
    * @param notebookService
    */
   constructor(private notebookService: NotebookService, private dialog: MatDialog,
-              private router: ActivatedRoute, private _router: Router, private accountService: AccountService) { }
+              private router: ActivatedRoute, private _router: Router,
+              private profileService: ProfileService, private accountService: AccountService) { }
 
 
-  async ngOnInit(): Promise<void> {
-    //if user is already logged in move them to the notebook page, if not return to login
-    await this.accountService.isUserLoggedIn();
+  ngOnInit() {
+
+    this.accountService.isUserLoggedIn();
+
     this.initialFunction();
+
+    //Assign "openPanel function to the eventhandler from folder panel to open the note panel when the view is loaded"
+    document.addEventListener('DOMContentLoaded', (event) => {
+      this.folderPanelComponent.openNotebookPanel = () => {
+        this.notePanelComponent.openedCloseToggle();
+      };
+    })
+
+    // let userDeatils;
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+    this.profile = this.profile.userInfo;
   }
 
+  //Open (and close) the notes panel
+  openPanel(){
+    console.log(this.notePanelComponent);
+    this.notePanelComponent.openedCloseToggle();
+  }
+
+  //Initialise the editor
   initialFunction(){
 
     //The path of the notebook to be loaded
@@ -243,6 +272,8 @@ export class NotebookComponent implements OnInit {
         this.notebookService.getNoteBookById(path)
           .subscribe(result => {
 
+            this.notebookTitle = result.title;
+
             //Change the path to the correct notebook's path
             let dbRefObject = firebase.database().ref("notebook/" + path);
 
@@ -349,20 +380,18 @@ export class NotebookComponent implements OnInit {
         //Create request object
         let request = {
           title: result.title,
-          author: 'Arno',
+          author: this.profile.name,
           course: result.course,
           description: result.description,
           institution: result.institution,
-          name: 'Arno',
-          surname: 'Moller',
+          name: this.profile.name,
           private: result.private,
-          username: 'userArno'
         }
 
         this.notebookTitle = result.title;
 
-          //Call service and create notebook
-        this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+        //Call service and create notebook
+        this.notebookService.createNotebook(request)
           .subscribe(result => {
             console.log(result);
 
@@ -370,6 +399,8 @@ export class NotebookComponent implements OnInit {
 
             this.folderPanelComponent.getUserNotebooks();
             // this.folderPanelComponent.openTree();
+
+              this.notePanelComponent.getUserNotebooks();
           },
             error => {
               this.folderPanelComponent.getUserNotebooks();
@@ -384,31 +415,56 @@ export class NotebookComponent implements OnInit {
    */
   removeNotebook(){
 
-    if(this.notebookID != ''){
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      // width: '50%',
+    });
 
-      this.notebookService.removeNotebook(this.notebookID)
-        .subscribe(result => {
-          console.log(result);
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
 
-          this._router.navigate(['notebook']);
+      if(result === true){
+        if(this.notebookID != ''){
 
-          this.folderPanelComponent.getUserNotebooks();
-          let editor = this._editor;
-          editor.clear();
+          this.notebookService.removeNotebook(this.notebookID)
+            .subscribe(result => {
+                console.log(result);
 
-        },
-          error => {
+                this._router.navigate(['notebook']);
 
-            this._router.navigate(['notebook']);
+                this.folderPanelComponent.getUserNotebooks();
+                let editor = this._editor;
+                editor.clear();
 
-            this.folderPanelComponent.getUserNotebooks();
+                this.notebookTitle = '';
+                this.notePanelComponent.getUserNotebooks();
 
-            let editor = this._editor;
-            editor.clear();
-         })
-    }
+              },
+              error => {
 
+                // this._router.navigate(['notebook']);
+                //
+                // this.folderPanelComponent.getUserNotebooks();
+                //
+                // let editor = this._editor;
+                // editor.clear();
+                //
+                // this.notebookTitle = '';
+              })
+        }
+      }
+    });
+  }
 
+  async logout()
+  {
+    this.accountService.singOut().subscribe(data => {
+        this._router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      err => {
+        console.log("Error: "+err.error.message);
+      }
+    );
   }
 
 

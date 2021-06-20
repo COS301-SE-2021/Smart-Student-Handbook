@@ -1,0 +1,34 @@
+name: Integrated Backend
+
+on:
+#  push:
+#    branches: [ feature/** ]
+  pull_request:
+    branches: [ master, develop, feature/** ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: functions
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Download Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
