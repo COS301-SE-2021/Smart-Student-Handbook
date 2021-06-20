@@ -85,11 +85,17 @@ export class AccountService {
 	/**
 	 * Login user.
 	 */
-	async loginUser(loginDto: LoginDto): Promise<Response>
+	async loginUser(loginDto: LoginDto): Promise<Account>
 	{
 		// Login user. If successful return success message else throw Bad Request exception
 		return firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password).then((userCredential) => {
+
 			return {
+				uid: userCredential.user.uid,
+				email: userCredential.user.email,
+				emailVerified: userCredential.user.emailVerified,
+				phoneNumber: userCredential.user.phoneNumber,
+				displayName: userCredential.user.displayName,
 				message: "User is successfully logged in.",
 			};
 		})
