@@ -25,9 +25,6 @@ export class LoginComponent implements OnInit {
   async ngOnInit(): Promise<void>
   {
     document.body.className = "backgroundIMG";
-
-    //if user is already logged in move them to the notebook page, if not return to login
-    //await this.accountService.isUserLoggedIn();
   }
 
   ngOnDestroy(){
@@ -45,6 +42,7 @@ export class LoginComponent implements OnInit {
 
         this.accountService.loginUser(email, password).subscribe(data => {
             this.loginFailed = true;
+            //save local storage of user login and user profile
             this.router.navigateByUrl(`notebook`);
           },
           err => {
