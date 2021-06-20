@@ -59,18 +59,18 @@ export class FolderPanelComponent implements OnInit {
       .subscribe(result => {
         console.log(result);
 
-        let children = [];
-        for (let i = 0; i < result.length; i++) {
-          children.push({name: result[i].course, id: result[i].notebookReference});
-        }
+        let children = [{name: 'Notebook one', id: ''}];
+        // for (let i = 0; i < result.length; i++) {
+        //   children.push({name: result[i].course, id: result[i].notebookReference});
+        // }
 
         this.dataSource.data = [{
-          name: 'Notebooks',
+          name: 'My notebooks',
           id: '',
           children: children
         }];
 
-        this.openTree();
+        // this.openTree();
 
       });
   }
@@ -95,6 +95,7 @@ export class FolderPanelComponent implements OnInit {
 
       if(col){
         col.style.width = 'fit-content';
+        col.style.minWidth = '0px';
       }
 
     }
@@ -103,6 +104,7 @@ export class FolderPanelComponent implements OnInit {
 
       if(col){
         col.style.width = '16.6666666667%';
+        col.style.minWidth = '250px';
       }
     }
 
@@ -118,7 +120,11 @@ export class FolderPanelComponent implements OnInit {
   openNotebook(item: any){
     // console.log(item.id);
 
-    this.router.navigate(['notebook'], {queryParams: {id: item.id}});
+    // this.router.navigate(['notebook'], {queryParams: {id: item.id}});
+  }
+
+  openNotebookPanel(){
+
   }
 }
 

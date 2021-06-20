@@ -104,6 +104,7 @@ export class NotebookService {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 
+		
 		//If the notebookId is null, we know the user wants to create a new notebook
 		if(!notebookId)
 		{

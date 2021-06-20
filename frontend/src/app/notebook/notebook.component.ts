@@ -10,6 +10,9 @@ import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
+import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
+import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
 
 
 @Component({
@@ -84,8 +87,10 @@ export class NotebookComponent implements OnInit {
   background: ThemePalette = undefined;
   notebookID: string = '';
   _editor!: EditorJS;
+  t = '';
 
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
+  @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
   /**
    * Include the notebook service
@@ -98,6 +103,18 @@ export class NotebookComponent implements OnInit {
   ngOnInit() {
 
     this.initialFunction();
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      this.folderPanelComponent.openNotebook = () => {
+        this.notePanelComponent.openedCloseToggle();
+      };
+    })
+
+  }
+
+  openPanel(){
+    console.log(this.notePanelComponent);
+    this.notePanelComponent.openedCloseToggle();
   }
 
   initialFunction(){
@@ -241,6 +258,8 @@ export class NotebookComponent implements OnInit {
         this.notebookService.getNoteBookById(path)
           .subscribe(result => {
 
+            this.notebookTitle = result.title;
+
             //Change the path to the correct notebook's path
             let dbRefObject = firebase.database().ref("notebook/" + path);
 
@@ -359,8 +378,8 @@ export class NotebookComponent implements OnInit {
 
         this.notebookTitle = result.title;
 
-          //Call service and create notebook
-        this.notebookService.createNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+        //Call service and create notebook
+        this.notebookService.createUpdateNotebook(request)
           .subscribe(result => {
             console.log(result);
 
@@ -368,6 +387,8 @@ export class NotebookComponent implements OnInit {
 
             this.folderPanelComponent.getUserNotebooks();
             // this.folderPanelComponent.openTree();
+
+              this.notePanelComponent.getUserNotebooks();
           },
             error => {
               this.folderPanelComponent.getUserNotebooks();
@@ -382,30 +403,44 @@ export class NotebookComponent implements OnInit {
    */
   removeNotebook(){
 
-    if(this.notebookID != ''){
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      // width: '50%',
+    });
 
-      this.notebookService.removeNotebook(this.notebookID)
-        .subscribe(result => {
-          console.log(result);
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
 
-          this._router.navigate(['notebook']);
+      if(result === true){
+        if(this.notebookID != ''){
 
-          this.folderPanelComponent.getUserNotebooks();
-          let editor = this._editor;
-          editor.clear();
+          this.notebookService.removeNotebook(this.notebookID)
+            .subscribe(result => {
+                console.log(result);
 
-        },
-          error => {
+                this._router.navigate(['notebook']);
 
-            this._router.navigate(['notebook']);
+                this.folderPanelComponent.getUserNotebooks();
+                let editor = this._editor;
+                editor.clear();
 
-            this.folderPanelComponent.getUserNotebooks();
+                this.notebookTitle = '';
+                this.notePanelComponent.getUserNotebooks();
 
-            let editor = this._editor;
-            editor.clear();
-         })
-    }
+              },
+              error => {
 
+                // this._router.navigate(['notebook']);
+                //
+                // this.folderPanelComponent.getUserNotebooks();
+                //
+                // let editor = this._editor;
+                // editor.clear();
+                //
+                // this.notebookTitle = '';
+              })
+        }
+      }
+    });
 
   }
 
