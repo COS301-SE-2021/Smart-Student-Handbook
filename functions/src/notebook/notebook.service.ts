@@ -104,13 +104,14 @@ export class NotebookService {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 
-		
+		console.log(notebookId);
 		//If the notebookId is null, we know the user wants to create a new notebook
 		if(!notebookId)
 		{
 			notebookId = randomStringGenerator();
 			operationType= "Create";
 		}
+		console.log(notebookId);
 
 		/**
 		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
@@ -132,6 +133,7 @@ export class NotebookService {
 					userId: userId,
 				}
 			).then(() => {
+				console.log(notebookId);
 				return {
 					message : operationType + " was successful!",
 					notebookId: notebookId

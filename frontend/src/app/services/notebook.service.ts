@@ -22,19 +22,27 @@ export class NotebookService {
   createUpdateNotebook(notebookDto: NotebookDto, Id?: string){
 
     if(Id !== undefined) {
-
+      console.log('update');
       return this.httpClient.request<any>('put','http://localhost:5001/notebook/updateNotebook/' + Id, {
         body: notebookDto,
 
       });
     }
     else {
+      console.log('create');
       return this.httpClient.request<any>('post','http://localhost:5001/notebook/createNotebook/', {
         body: notebookDto
       });
     }
 
 
+  }
+
+  updateNotebook(notebookDto: NotebookDto, Id: string){
+    return this.httpClient.request<any>('put','http://localhost:5001/notebook/updateNotebook/' + Id, {
+      body: notebookDto,
+
+    });
   }
 
   removeNotebook(noteBookId: string){

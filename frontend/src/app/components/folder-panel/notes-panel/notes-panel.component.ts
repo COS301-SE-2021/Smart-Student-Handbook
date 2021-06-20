@@ -146,7 +146,7 @@ export class NotesPanelComponent implements OnInit {
           }
 
           //Call service and create notebook
-          this.notebookService.createUpdateNotebook(request, 'zsm6CotjuAVMUynICGD5QCiQNGl2')
+          this.notebookService.updateNotebook(request, id)
             .subscribe(result => {
                 console.log(result);
                 this.getUserNotebooks();
