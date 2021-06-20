@@ -73,8 +73,6 @@ export class AccountService {
 
         localStorage.setItem("user",JSON.stringify(data));
 
-        console.log("vvvvvvvvvvv");
-        console.log(curentRoute);
         //if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
         if(curentRoute == "/" || curentRoute == "/login" || curentRoute == "/register" || curentRoute == "/forgotPassword")
         {
