@@ -58,14 +58,19 @@ export class AccountService {
   //check if user is logged in then roots to the notebook else to login if not logged in
   async isUserLoggedIn():  Promise<void>{
     this.getCurrentUser().subscribe(data => {
-        this.profileService.getUserDetails(data.uid).subscribe(user =>{
-          localStorage.setItem("user",JSON.stringify(data));
-          let userProfileData = user;
-        });
 
-        console.log("aaaaaaaaaaa");
-        console.log(this.router.url);
-        if(this.router.url !== "/notebook")
+        this.profileService.getUserDetails(data.uid).subscribe(user =>{
+            localStorage.setItem("userProfile",JSON.stringify(user));
+        },
+          err => {
+            console.log("Error: "+err.error.message);
+          });
+
+        localStorage.setItem("user",JSON.stringify(data));
+
+        //if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
+        let curentRoute = this.router.url.split('?')[0];
+        if(curentRoute == "" || curentRoute == "/login" || curentRoute == "/register" || curentRoute == "/forgotPassword")
         {
           this.router.navigateByUrl(`/notebook`);
         }
