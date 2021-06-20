@@ -7,6 +7,8 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
 import {Router} from "@angular/router";
+import {EditProfileComponent} from "../../notebook/edit-profile/edit-profile.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-folder-panel',
@@ -15,6 +17,14 @@ import {Router} from "@angular/router";
   encapsulation: ViewEncapsulation.None
 })
 export class FolderPanelComponent implements OnInit {
+
+  username: string = '';
+  bio: string = '';
+  institution: string = '';
+  department: string = '';
+  name: string = '';
+  program: string = '';
+  workstatus: string = '';
 
   // @ViewChild('tree') tree!: MatTree<any>;
   open: boolean = false;
@@ -43,7 +53,7 @@ export class FolderPanelComponent implements OnInit {
   //--------------------------------------------------------------------------------
 
   constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
-              private router: Router) { }
+              private router: Router, private dialog: MatDialog) { }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
@@ -119,6 +129,32 @@ export class FolderPanelComponent implements OnInit {
     // console.log(item.id);
 
     this.router.navigate(['notebook'], {queryParams: {id: item.id}});
+  }
+
+  updateProfile(){
+
+    //Open dialog
+    const dialogRef = this.dialog.open(EditProfileComponent, {
+      width: '50%',
+      data: {
+        bio: this.bio,
+        department: this.department,
+        name: this.name,
+        institution: this.institution,
+        program: this.program,
+        workstatus: this.workstatus
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      //If the user filled out the form
+      if (result !== undefined) {
+
+        console.log(result);
+      }
+    });
   }
 }
 
