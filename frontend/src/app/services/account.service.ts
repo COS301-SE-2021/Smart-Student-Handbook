@@ -57,7 +57,7 @@ export class AccountService {
   //check if user is logged in then roots to the notebook else to login if not logged in
   async isUserLoggedIn():  Promise<void>{
     this.getCurrentUser().subscribe(data => {
-        //this.router.navigateByUrl(`notebook`);
+        this.router.navigateByUrl(`notebook`);
       },
       err => {
         console.log(err.error.message);

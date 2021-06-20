@@ -31,6 +31,8 @@ export class RegisterComponent implements OnInit {
 
   async ngOnInit(): Promise<void>
   {
+    //if user is already logged in move them to the notebook page, if not return to login
+    await this.accountService.isUserLoggedIn();
     document.body.className = "backgroundIMG";
   }
 

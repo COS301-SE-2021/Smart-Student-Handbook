@@ -128,19 +128,19 @@ export class AccountService {
 		let user;
 		try{
 			user = firebase.auth().currentUser;
+
+			//Return user object
+			return {
+				uid: user.uid,
+				email: user.email,
+				emailVerified: user.emailVerified,
+				phoneNumber: user.phoneNumber,
+				displayName: user.displayName
+			};
 		}
 		catch(error) {
 			throw new HttpException('Bad Request. User might not be signed in or does not exist: '+error.message, HttpStatus.BAD_REQUEST);
 		}
-
-		//Return user object
-		return {
-			uid: user.uid,
-			email: user.email,
-			emailVerified: user.emailVerified,
-			phoneNumber: user.phoneNumber,
-			displayName: user.displayName
-		};
 	}
 
 	/**
