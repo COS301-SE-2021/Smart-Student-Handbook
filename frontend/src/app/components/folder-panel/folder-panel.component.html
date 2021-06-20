@@ -1,7 +1,7 @@
 <mat-sidenav-container id="container" style="height: 89vh; width: 40px; background-color: white; margin-right: 0px !important;"><!--  -->
   <mat-sidenav #sidenav mode="side" style="width: 100%;">
     <div id="panelContent">
-      <mat-card id="card">
+      <mat-card id="card" (click)="updateProfile()">
         <mat-card-header>
           <div mat-card-avatar class="header-image"></div>
           <mat-card-title id="username">Douglas Nel</mat-card-title>
