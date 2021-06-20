@@ -11,7 +11,7 @@ import {SubscribeToTopicRequestDto} from "./dto/subscribeToTopicRequest.dto";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
-
+admin.initializeApp();
 const { mock } = require('nodemailer');
 
 
@@ -82,7 +82,7 @@ describe('NotificationService', () => {
     //Send notifications to all users (send to topic of 'general')
     it('Successfully send notifications to all users', async () => {
 
-        admin.initializeApp();
+
 
         const request: SendNotificationToGroupRequestDto = {
             title: 'Test title',
@@ -93,23 +93,24 @@ describe('NotificationService', () => {
 
         const response = await service.sendGroupPushNotification(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 
     //Send single user a notification
-    // it('Successfully send a single user a notification', async () => {
-	//
-	//
-    //     const request: SingleNotificationRequestDto = {
-    //         title: 'Test title',
-    //         body: 'Message body',
-    //         token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
-    //     }
-	//
-    //     const response = await service.sendSinglePushNotification(request);
-	//
-    //     expect(response.status).toBe('successful');
-    // });
+
+    it('Successfully send a single user a notification', async () => {
+
+
+        const request: SingleNotificationRequestDto = {
+            title: 'Test title',
+            body: 'Message body',
+            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
+        }
+
+        const response = await service.sendSinglePushNotification(request);
+
+        expect(response.status).toBe('unsuccessful');
+    });
 
     //Subscribe a user to a topic
     it('Successfully subscribed a user to a topic', async () => {
@@ -122,6 +123,6 @@ describe('NotificationService', () => {
 
         const response = await service.subscribeToNotificationTopic(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 });

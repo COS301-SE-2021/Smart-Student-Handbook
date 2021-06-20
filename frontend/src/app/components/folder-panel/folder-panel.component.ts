@@ -130,28 +130,40 @@ export class FolderPanelComponent implements OnInit {
 
   updateProfile(){
 
-    //Open dialog
-    const dialogRef = this.dialog.open(EditProfileComponent, {
-      width: '50%',
-      data: {
-        bio: this.bio,
-        department: this.department,
-        name: this.name,
-        institution: this.institution,
-        program: this.program,
-        workstatus: this.workstatus
+    let user = JSON.parse(<string>localStorage.getItem('user'));
+
+    this.profileService.getUserDetails(user.uid).subscribe(data => {
+
+       //Open dialog
+        const dialogRef = this.dialog.open(EditProfileComponent, {
+          width: '50%',
+          data: {
+            bio: data.userInfo.bio,
+            department: data.userInfo.department,
+            name: data.userInfo.name,
+            institution: data.userInfo.institution,
+            program: data.userInfo.program,
+            workstatus: data.userInfo.workStatus
+          }
+        });
+
+        //Get info and create notebook after dialog is closed
+        dialogRef.afterClosed().subscribe(result => {
+
+          this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
+            },
+            err => {
+              console.log("Error: "+err.error.message);
+            }
+          );
+
+        });
+
+      },
+      err => {
+        console.log("Error: "+err.error.message);
       }
-    });
-
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-
-      //If the user filled out the form
-      if (result !== undefined) {
-
-        console.log(result);
-      }
-    });
+    );
 
   }
 }
