@@ -138,7 +138,7 @@ export class NotificationService {
 		return admin.messaging().subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
 			.then((response) => {
 				
-				console.log('Successfully sent message:', response);
+				console.log('Successfully subscribed:', response);
 				
 				if (response.successCount == 1) {
 					return {
