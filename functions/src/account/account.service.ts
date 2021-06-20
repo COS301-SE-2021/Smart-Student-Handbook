@@ -128,19 +128,19 @@ export class AccountService {
 		let user;
 		try{
 			user = firebase.auth().currentUser;
+			//Return user object
+
+			return {
+				uid: user.uid,
+				email: user.email,
+				emailVerified: user.emailVerified,
+				phoneNumber: user.phoneNumber,
+				displayName: user.displayName
+			};
 		}
 		catch(error) {
 			throw new HttpException('Bad Request. User might not be signed in or does not exist: '+error.message, HttpStatus.BAD_REQUEST);
 		}
-
-		//Return user object
-		return {
-			uid: user.uid,
-			email: user.email,
-			emailVerified: user.emailVerified,
-			phoneNumber: user.phoneNumber,
-			displayName: user.displayName
-		};
 	}
 
 	/**
@@ -153,20 +153,22 @@ export class AccountService {
 		// Check if there is a current user else throw an exception
 		try {
 			uid = firebase.auth().currentUser.uid;
+
+			//Try to delete user else throw and exception if not possible
+			return admin.auth().deleteUser(uid).then(() => {
+				return {
+					message: "Successfully deleted user."
+				};
+			})
+			.catch((error) => {
+				throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+			});
 		}
 		catch(error) {
 			throw new HttpException('Bad Request. User might not be signed in or does not exist.'+error.message, HttpStatus.BAD_REQUEST);
 		}
 
-		//Try to delete user else throw and exception if not possible
-		return admin.auth().deleteUser(uid).then(() => {
-			return {
-				message: "Successfully deleted user."
-			};
-		})
-		.catch((error) => {
-			throw new HttpException('Internal Service Error: '+error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-		});
+
 	}
 
 
