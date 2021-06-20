@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere} from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
 import firebase from 'firebase/app';
-import {mockCreateUserWithEmailAndPassword, mockSignInWithEmailAndPassword} from "firestore-jest-mock/mocks/auth";
+
 
 
 
@@ -145,8 +145,8 @@ const NoteBookDTo = require("./dto/notebook.dto")
 
          describe('if no notebook id is wrong  ' , ()=>{
              it('An error should be given ' , async()=>{
-                //Todo: THIS TEST Should fail but the code is not correct
-                 //return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' ,'UserIdTest')).rejects.toThrow(HttpException);
+
+                 return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' )).rejects.toThrow(HttpException);
             })
          })
 
@@ -166,7 +166,7 @@ const NoteBookDTo = require("./dto/notebook.dto")
          describe('when a notebook does not match a notebookID',()=>{
              it('The notebook should not be deleted',async()=>{
 
-                //Todo: Implement Fail Case
+                 return expect(service.deleteNotebook( 'TestID2' )).rejects.toThrow(HttpException);
 
              })
          })
