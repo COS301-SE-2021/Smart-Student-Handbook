@@ -13,12 +13,9 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   loginFailed = false;
   errorMessage: string = "";
-  //private returnUrl: string;
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
   {
-    //this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/notebook';
-
     this.form = this.fb.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
@@ -27,10 +24,9 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void>
   {
+    //if user is already logged in move them to the notebook page, if not return to login
+    await this.accountService.isUserLoggedIn();
     document.body.className = "backgroundIMG";
-    // if (await this.accountService.checkAuthenticated()) {
-    //   await this.router.navigate([this.returnUrl]);
-    // }
   }
 
   ngOnDestroy(){
@@ -48,12 +44,13 @@ export class LoginComponent implements OnInit {
 
         this.accountService.loginUser(email, password).subscribe(data => {
           console.log(data);
-            this.loginFailed = true;
+          this.loginFailed = true;
+            //save local storage of user login and user profile
             this.router.navigateByUrl(`notebook`);
           },
           err => {
             this.loginFailed = true;
-            this.errorMessage = "An Error has occurred: "+err.error.message;
+            this.errorMessage = "Error: "+err.error.message;
           }
         );
     }
