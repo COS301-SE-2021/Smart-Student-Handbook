@@ -6,14 +6,24 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere } from "firestore-jest-mock/mocks/firestore";
 import {HttpException} from "@nestjs/common";
 import firebase from "firebase/app";
-import {environment} from "../../../frontend/src/environments/environment";
 
 
 
 
+var firebaseConfig = {
+    apiKey: "AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0",
+    authDomain: "smartstudentnotebook.firebaseapp.com",
+    databaseURL: "https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "smartstudentnotebook",
+    storageBucket: "smartstudentnotebook.appspot.com",
+    messagingSenderId: "254968215542",
+    appId: "1:254968215542:web:be0931c257ad1d8a60b9d7",
+    measurementId: "G-YDRCWDT5QJ"
+};
+firebase.initializeApp(firebaseConfig);
 
 admin.initializeApp();
-firebase.initializeApp(environment.firebase);
+
 
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
 const NoteBookDTo = require("./dto/notebook.dto")
@@ -35,6 +45,7 @@ const NoteBookDTo = require("./dto/notebook.dto")
                 userId: "UserIdTest", },
 
          ],
+
 
 
      },
@@ -120,13 +131,6 @@ const NoteBookDTo = require("./dto/notebook.dto")
              })
          })
 
-         describe('when a notebook does not match a notebookID',()=>{
-             it('The notebook should not be deleted',()=>{
-
-                 //return  expect( service.deleteNotebook( 'TestID2' )).rejects.toThrow(HttpException);
-
-             })
-         })
      })
 
 
@@ -167,12 +171,7 @@ const NoteBookDTo = require("./dto/notebook.dto")
              })
              })
 
-         describe('if the notebook id is wrong  ' , ()=>{
-             it('An error should be given ' , ()=>{
 
-                 //return expect(service.createOrUpdateNotebook(NoteBookDTo ,'TestID2' )).rejects.toThrow(HttpException);
-            })
-         })
 
      })
 

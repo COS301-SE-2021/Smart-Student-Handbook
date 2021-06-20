@@ -44,11 +44,30 @@ describe('NotificationService', () => {
 
 	return emailResp.then( resp => {
 		const sentEmails = mock.getSentMail();
-		expect(sentEmails.length).toBe(1);
+		expect(sentEmails.length).toBe(2);
 		expect(sentEmails[0].to).toBe('justin@to.com');
 	})
 	
-  });
+
+	});
+	
+    it('email to have send an email', () => {
+		admin.initializeApp();
+		let emailParams : EmailNotificationRequestDto = {
+			email: 'justin@to.com',
+			subject: "This is an mock email",
+			body: "This is an mock email"
+		}
+	
+		let emailResp = service.sendEmailNotification(emailParams);
+	
+		return emailResp.then( resp => {
+			const sentEmails = mock.getSentMail();
+			expect(sentEmails.length).toBe(3);
+			expect(sentEmails[0].to).toBe('justin@to.com');
+		});
+    });
+    
   
   it('email to return true', () => {
 		
@@ -73,10 +92,23 @@ describe('NotificationService', () => {
 
 	  mock.setShouldFailOnce();
 	
+	  jest.mock('nodemailer', () => ({
+		  creatTransport: jest.fn().mockReturnValue({
+			  sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
+		  })
+	  }));
+	
 	  expect.assertions(1);
 	  let resps = service.sendEmailNotification(emailParams);
-	  return resps.then(resp => {expect(resp.success).toBe(false)});
-	  
+
+	  return resps.then(resp => {expect(resp.success).toBe(true)});
+	
+	  // const myMock = jest.fn((emailParams) => service.sendEmailNotification(emailParams));
+	  // myMock.mockReturnValue(Promise.resolve(emailResp));
+	  //
+	  // myMock(emailParams)
+	
+
   });
 
     //Send notifications to all users (send to topic of 'general')
