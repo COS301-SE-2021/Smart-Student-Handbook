@@ -155,7 +155,6 @@ export class FolderPanelComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
 
           this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
-              console.log("success...");
             },
             err => {
               console.log("Error: "+err.error.message);

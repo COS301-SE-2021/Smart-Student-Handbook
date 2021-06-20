@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
 
-        this.profileService.createUser(data.uid,data.displayName).subscribe(resp =>{
+        this.profileService.createUser(data.uid,data.displayName, "" ,"" ,"" , "","" ,Date.now().toString()).subscribe(resp =>{
 
             this.accountService.loginUser(email, password).subscribe(data => {
                 this.registerFailed = false;
