@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
+import { ProfileService } from '../../../services/profile.service';
 import { MustMatch } from './must-match.validator';
 
 @Component({
@@ -16,7 +17,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   errorMessage: string = "";
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private profileService: ProfileService)
   {
     this.form = this.fb.group({
       email: ['', Validators.email],
@@ -54,7 +55,12 @@ export class RegisterComponent implements OnInit {
       const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
-          this.router.navigateByUrl(`notebook`);
+          this.profileService.createUser().subscribe(resp =>{
+
+
+
+            this.router.navigateByUrl(`notebook`);
+          });
         },
         err => {
           this.registerFailed = true;

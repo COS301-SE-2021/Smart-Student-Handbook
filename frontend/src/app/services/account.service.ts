@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProfileService } from './profile.service';
 
 const ACCOUNT_API = 'http://localhost:5001/account/';
 const httpOptions = {
@@ -13,7 +14,7 @@ const httpOptions = {
 })
 export class AccountService {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private profileService: ProfileService) { }
 
   registerUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Observable<any> {
     return this.http.post(ACCOUNT_API + 'registerUser', {
@@ -57,10 +58,13 @@ export class AccountService {
   //check if user is logged in then roots to the notebook else to login if not logged in
   async isUserLoggedIn():  Promise<void>{
     this.getCurrentUser().subscribe(data => {
+        this.profileService.getUserDetails(data.uid).subscribe(user =>{
+          localStorage.setItem("user",JSON.stringify(data));
+          let userProfileData = user;
+        });
 
-      localStorage.setItem("user",JSON.stringify(data));
-      localStorage.setItem("userProfile","Still to come");
-
+        console.log("aaaaaaaaaaa");
+        console.log(this.router.url);
         if(this.router.url !== "/notebook")
         {
           this.router.navigateByUrl(`/notebook`);
