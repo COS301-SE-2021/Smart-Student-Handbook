@@ -2,11 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AccountService } from './account.service';
 import * as admin from "firebase-admin";
 import {mockCollection } from "firestore-jest-mock/mocks/firestore";
-import {mockCreateUserWithEmailAndPassword } from "firestore-jest-mock/mocks/auth";
-import {HttpException} from "@nestjs/common";
+import {mockCreateUserWithEmailAndPassword, mockSignInWithEmailAndPassword} from "firestore-jest-mock/mocks/auth";
+import firebase from "firebase/app";
+import {environment} from "../../../frontend/src/environments/environment";
+
+
 admin.initializeApp();
+
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
-const registerDTO = require('./dto/register.dto')
+const registerDTO = require('./dto/register.dto.ts')
+const loginDTO = require('./dto/login.dto.ts')
 mockGoogleCloudFirestore({
   database: {
     users: [
@@ -36,7 +41,7 @@ describe('AccountService', () => {
   //test registerUser
   describe('registerUser' , ()=>{
     describe('The user will enter their details' , ()=>{
-      it('If all user details are entered correctly the user will be registered' , async()=>{
+      it('If all user details are entered correctly the user will be registered' , ()=>{
             registerDTO.RegisterDto= jest.fn(()=>[{
               email: 'Test@gmail.com',
               phoneNumber: '0721234567',
@@ -46,24 +51,25 @@ describe('AccountService', () => {
             }]);
 
 
-           await expect(service.registerUser(registerDTO)).resolves.toMatchObject({
+             expect(service.registerUser(registerDTO)).resolves.toMatchObject({
              message: "User is successfully registered!"
            });
       })
     })
 
-    describe('The user will enter their details incorrectly' , ()=>{
-      it('If all user details are entered incorrectly the user will not be registered' , async()=>{
-        registerDTO.RegisterDto= jest.fn(()=>[{
+
+  })
+
+  describe('LoginUser'  , ()=>{
+    describe("Allow a user to login",()=>{
+      it("If user credentials are correct they will be logged in",()=>{
+        loginDTO.LoginDtoDto= jest.fn( ()=>[{
           email: 'Test@gmail.com',
-          phoneNumber: '0721234567',
-          displayName: 'UserTestName',
-          password: 'TestWrPasswords',
-          passwordConfirm: 'TestPassword'
+          password: 'TestPassword',
+
         }]);
 
-        //Todo This should fail
-        //await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
+       //Todo
       })
     })
   })
