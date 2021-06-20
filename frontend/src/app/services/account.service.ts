@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const ACCOUNT_API = 'http://localhost:5001/account/';
 const httpOptions = {
@@ -12,7 +13,7 @@ const httpOptions = {
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   registerUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Observable<any> {
     return this.http.post(ACCOUNT_API + 'registerUser', {
@@ -24,14 +25,14 @@ export class AccountService {
     }, httpOptions);
   }
 
-   loginUser(email: string, password: string): Observable<any>{
+  loginUser(email: string, password: string): Observable<any>{
     return this.http.post(ACCOUNT_API + 'loginUser', {
       email,
       password
     }, httpOptions);
   }
 
-  async updateUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Promise<any>{
+  updateUser(email: string, phoneNumber: string, displayName: string, password: string, passwordConfirm: string): Observable<any>{
     return this.http.put(ACCOUNT_API + 'updateUser', {
       email,
       phoneNumber,
@@ -41,16 +42,30 @@ export class AccountService {
     }, httpOptions);
   }
 
-  async singOut(): Promise<any>{
+  singOut(): Observable<any>{
     return this.http.post(ACCOUNT_API + 'singOut', {}, httpOptions);
   }
 
-  async getCurrentUser(): Promise<any> {
+  getCurrentUser(): Observable<any> {
     return this.http.get(ACCOUNT_API + 'getCurrentUser', { responseType: 'text' });
   }
 
-  async deleteUser(EmailAddress: string, Password: string): Promise<any>{
+  deleteUser(EmailAddress: string, Password: string): Observable<any>{
     return this.http.delete(ACCOUNT_API + 'deleteUser', {responseType: 'text'});
   }
+
+  //check if user is logged in then roots to the notebook else to login if not logged in
+  async isUserLoggedIn():  Promise<void>{
+    this.getCurrentUser().subscribe(data => {
+        this.router.navigateByUrl(`notebook`);
+      },
+      err => {
+        console.log(err.error.message);
+        this.router.navigateByUrl(`login`);
+      }
+    );
+  }
+
+
 
 }

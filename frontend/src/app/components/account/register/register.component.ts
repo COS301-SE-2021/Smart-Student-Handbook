@@ -58,8 +58,6 @@ export class RegisterComponent implements OnInit {
       const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
-          //this.isLoginFailed = false;
-          //this.isLoggedIn = true;
           console.log(data);
           this.router.navigateByUrl(`notebook`);
         },
