@@ -2,7 +2,7 @@
   position: absolute;
   top: 12px;
   right: 0px;
-  transition: all .15s linear;
+  transition: all .1s linear;
   z-index: 3;
   font-size: larger;
 }
@@ -50,6 +50,7 @@
   padding-left: 5px;
   overflow: hidden;
   margin-top: 15px !important;
+  cursor: pointer;
 }
 
 #username{
@@ -84,3 +85,14 @@
 // .treeNode{
 //   padding-left: 0px !important;
 // }
+
+.editNotebookIcon{
+  font-size: medium;
+}
+
+.editNotebookBtn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}

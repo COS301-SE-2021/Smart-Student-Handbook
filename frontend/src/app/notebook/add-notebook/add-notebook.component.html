@@ -1,0 +1,32 @@
+<mat-form-field appearance="outline" class="form-field">
+  <mat-label>Notebook title</mat-label>
+  <input matInput placeholder="Notebook One" [(ngModel)]="data.title">
+  <mat-hint>Notebook title</mat-hint>
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="form-field">
+  <mat-label>Course</mat-label>
+  <input matInput placeholder="Course one" [(ngModel)]="data.course">
+  <mat-hint>Course</mat-hint>
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="form-field">
+  <mat-label>Description</mat-label>
+  <textarea matInput placeholder="My first notebook" [(ngModel)]="data.description"></textarea>
+  <mat-hint>Description</mat-hint>
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="form-field">
+  <mat-label>Institution</mat-label>
+  <input matInput placeholder="Enter Institution name" [(ngModel)]="data.institution">
+  <mat-hint>Institution</mat-hint>
+</mat-form-field>
+
+<section id="check">
+  <mat-checkbox class="example-margin" [(ngModel)]="data.private">Private</mat-checkbox>
+</section>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>
