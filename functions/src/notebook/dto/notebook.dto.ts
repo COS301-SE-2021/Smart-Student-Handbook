@@ -5,7 +5,5 @@ export class NotebookDto {
 	readonly description: string
 	readonly institution?: string
 	readonly name: string
-	readonly surname: string
 	readonly private: boolean
-	readonly username: string
 }

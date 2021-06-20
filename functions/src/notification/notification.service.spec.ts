@@ -13,9 +13,7 @@ import {SubscribeToTopicRequestDto} from "./dto/subscribeToTopicRequest.dto";
 
 
 const { mock } = require('nodemailer');
-const nodemailer = require('nodemailer')
-const SMTPTransport = require("nodemailer/lib/smtp-transport")
-const SendmailTransport = require("nodemailer/lib/sendmail-transport")
+
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -32,18 +30,7 @@ describe('NotificationService', () => {
     expect(service).toBeDefined();
   });
 
-  it('email to return true', () => {
-    
-    let emailParams : EmailNotificationRequestDto = {
-		email: 'justin@to.com',
-		subject: "This is an mock email",
-		body: "This is an mock email"
-    }
-    
-    let emailResp = service.sendEmailNotification(emailParams);
-    
-    return emailResp.then(resp => {expect(resp.success).toBe(true)});
-  });
+
   
   it('email to have send an email', () => {
 
@@ -61,28 +48,9 @@ describe('NotificationService', () => {
 		expect(sentEmails[0].to).toBe('justin@to.com');
 	})
 	
-	});
-	
-    it('email to have send an email', () => {
-		
-		let emailParams : EmailNotificationRequestDto = {
-			email: 'justin@to.com',
-			subject: "This is an mock email",
-			body: "This is an mock email"
-		}
-	
-		let emailResp = service.sendEmailNotification(emailParams);
-	
-		return emailResp.then( resp => {
-			const sentEmails = mock.getSentMail();
-			expect(sentEmails.length).toBe(1);
-			expect(sentEmails[0].to).toBe('justin@to.com');
-		});
-    });
-    
-
+  });
   
-    it('email to return true', async () => {
+  it('email to return true', () => {
 		
 		let emailParams : EmailNotificationRequestDto = {
 			email: 'justin@to.com',
@@ -90,12 +58,10 @@ describe('NotificationService', () => {
 			body: "This is an mock email"
 		}
 		
-		
 		let emailResp = service.sendEmailNotification(emailParams);
 		
-		expect.assertions(1);
 		return emailResp.then(resp => {expect(resp.success).toBe(true)});
-	});
+  });
   
 	
   it('email to return false', function () {
@@ -104,27 +70,13 @@ describe('NotificationService', () => {
 		  subject: "This is an mock email",
 		  body: "This is an mock email"
 	  };
-	
-	  let emailResp : EmailNotificationResponseDto = {
-		  success: false,
-		  message: "Something went wrong!"
-	  };
-	
-	  jest.mock('nodemailer', () => ({
-		  creatTransport: jest.fn().mockReturnValue({
-			  sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
-		  })
-	  }));
+
+	  mock.setShouldFailOnce();
 	
 	  expect.assertions(1);
 	  let resps = service.sendEmailNotification(emailParams);
 	  return resps.then(resp => {expect(resp.success).toBe(false)});
-	
-	  // const myMock = jest.fn((emailParams) => service.sendEmailNotification(emailParams));
-	  // myMock.mockReturnValue(Promise.resolve(emailResp));
-	  //
-	  // myMock(emailParams)
-	
+	  
   });
 
     //Send notifications to all users (send to topic of 'general')
