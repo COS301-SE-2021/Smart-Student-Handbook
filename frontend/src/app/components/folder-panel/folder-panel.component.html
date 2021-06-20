@@ -1,15 +1,15 @@
 <mat-sidenav-container id="container" style="height: 89vh; width: 40px; background-color: white; margin-right: 0px !important;"><!--  -->
   <mat-sidenav #sidenav mode="side" style="width: 100%;">
     <div id="panelContent">
-      <mat-card id="card" (click)="updateProfile()">
-        <mat-card-header>
+      <mat-card id="card">
+        <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+
+        <mat-card-header (click)="updateProfile()">
           <div mat-card-avatar class="header-image"></div>
           <mat-card-title id="username">{{username}}</mat-card-title>
           <mat-card-subtitle id="subTitle">{{bio}}</mat-card-subtitle>
-
-          <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
-            <mat-icon>keyboard_arrow_left</mat-icon>
-          </button>
         </mat-card-header>
       </mat-card>
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;" #tree>

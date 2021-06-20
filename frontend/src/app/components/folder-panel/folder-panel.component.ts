@@ -9,6 +9,8 @@ import {NotebookService} from "../../services/notebook.service";
 import {Router} from "@angular/router";
 import {ProfileService} from "../../services/profile.service";
 import {MatSidenav} from "@angular/material/sidenav";
+import {EditProfileComponent} from "../../notebook/edit-profile/edit-profile.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-folder-panel',
@@ -25,6 +27,10 @@ export class FolderPanelComponent implements OnInit {
   username: string = '';
   bio: string = '';
   institution: string = '';
+  department: string = '';
+  name: string = '';
+  program: string = '';
+  workstatus: string = '';
 
   panelOpenState = false;
   width = 68.3;
@@ -49,7 +55,8 @@ export class FolderPanelComponent implements OnInit {
 
 
   constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
-              private router: Router, private profileService: ProfileService) { }
+              private router: Router, private profileService: ProfileService,
+              private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
@@ -121,6 +128,32 @@ export class FolderPanelComponent implements OnInit {
   //Used by notebook to open the notes panel
   openNotebookPanel(){}
 
+  updateProfile(){
+
+    //Open dialog
+    const dialogRef = this.dialog.open(EditProfileComponent, {
+      width: '50%',
+      data: {
+        bio: this.bio,
+        department: this.department,
+        name: this.name,
+        institution: this.institution,
+        program: this.program,
+        workstatus: this.workstatus
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      //If the user filled out the form
+      if (result !== undefined) {
+
+        console.log(result);
+      }
+    });
+
+  }
 }
 
 
