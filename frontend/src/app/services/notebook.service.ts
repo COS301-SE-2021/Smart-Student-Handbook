@@ -19,10 +19,18 @@ export class NotebookService {
     return this.httpClient.request<any>('get','http://localhost:5001/notebook/findNotebookById/' + noteBookId);
   }
 
-  createNotebook(notebookDto: NotebookDto, userId: string){
+  createNotebook(notebookDto: NotebookDto){
 
     return this.httpClient.request<any>('post','http://localhost:5001/notebook/createNotebook/', {
       body: notebookDto
+    });
+
+  }
+
+  updateNotebook(notebookDto: NotebookDto, Id: string){
+    return this.httpClient.request<any>('put','http://localhost:5001/notebook/updateNotebook/' + Id, {
+      body: notebookDto,
+
     });
   }
 

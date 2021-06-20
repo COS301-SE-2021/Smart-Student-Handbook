@@ -25,7 +25,7 @@ export class MessagingService {
 
           this.subscribeToTopic(currentToken)
             .subscribe(res => {
-              console.log(res);
+              // console.log(res);
             })
         } else {
           // Show permission request UI
