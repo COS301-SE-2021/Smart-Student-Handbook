@@ -126,20 +126,18 @@ export class NotebookService {
 					description: notebookDto["description"],
 					institution: notebookDto["institution"],
 					name: notebookDto["name"],
-					// surname: notebookDto["surname"],
+					surname: notebookDto["surname"],
 					private: notebookDto["private"],
-					// username: notebookDto["username"],
+					username: notebookDto["username"],
 					notebookReference: notebookId,
 					userId: userId,
 				}
 			).then(() => {
-				console.log('2');
 				return {
 					message : operationType + " was successful!",
 					notebookId: notebookId
 				};
 			}).catch(() => {
-				console.log('3');
 				throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 			});
 		}

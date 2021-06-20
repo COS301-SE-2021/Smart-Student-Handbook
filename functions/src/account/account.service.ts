@@ -3,14 +3,19 @@ import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { Response } from "./interfaces/response.interface";
 import { Account } from "./interfaces/account.interface";
+import { NotificationService } from "../notification/notification.service";
+import { EmailNotificationRequestDto } from "../notification/dto/emailNotificationRequest.dto";
+
 import firebase from 'firebase';
 require('firebase/auth');
 import * as admin from 'firebase-admin';
+import {UserService} from "../user/user.service";
 
 
 @Injectable()
 export class AccountService {
 
+	constructor(private notificationService: NotificationService) {}
 	/**
 	 * Register a new user
 	 * @param registerDto
@@ -22,6 +27,13 @@ export class AccountService {
 		{
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
+
+		//send welcome email to new user
+		await this.notificationService.sendEmailNotification({
+			"email": registerDto.email,
+			"subject": "Welcome to Smart Student Handbook",
+			"body": "Good day, "+registerDto.displayName+". We are very exited to see all your amazing notebooks!!!"
+		});
 
 		/**
 		 * Create user.

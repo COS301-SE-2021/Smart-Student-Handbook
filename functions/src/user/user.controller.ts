@@ -27,4 +27,10 @@ export class UserController
         return await this.userService.createAndUpdateUser(user,true);
     }
 
+    @Delete("deleteUserProfile/:userId")
+    async deleteUserProfile(@Param('userId') userId): Promise<UserResponseDto>
+    {
+        return await this.userService.deleteUserProfile(userId);
+    }
+
 }
