@@ -1,4 +1,6 @@
 
+//Simple module to bundle all the Angular Material imports as to reduce clutter in the app.module.ts
+
 import { BrowserModule } from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import { LayoutModule } from '@angular/cdk/layout';

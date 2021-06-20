@@ -128,13 +128,16 @@ export class FolderPanelComponent implements OnInit {
   //Used by notebook to open the notes panel
   openNotebookPanel(){}
 
+  //Open a modal popup with a form to view and update the users profile
   updateProfile(){
 
+    //Retrieve the current lodged in user from localstorage
     let user = JSON.parse(<string>localStorage.getItem('user'));
 
+    //Call the getUserDetails from the profile service to get the users profile information that match that uid
     this.profileService.getUserDetails(user.uid).subscribe(data => {
 
-       //Open dialog
+       //Open dialog and populate the data attributes of the form fields
         const dialogRef = this.dialog.open(EditProfileComponent, {
           width: '50%',
           data: {
@@ -150,6 +153,7 @@ export class FolderPanelComponent implements OnInit {
         //Get info and create notebook after dialog is closed
         dialogRef.afterClosed().subscribe(result => {
 
+          //update the user profile information based on the entered values in the form
           this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
             },
             err => {
