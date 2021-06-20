@@ -4,7 +4,20 @@ import * as admin from "firebase-admin";
 import {mockCollection } from "firestore-jest-mock/mocks/firestore";
 import {mockCreateUserWithEmailAndPassword } from "firestore-jest-mock/mocks/auth";
 import {HttpException} from "@nestjs/common";
+import firebase from "firebase";
 admin.initializeApp();
+var firebaseConfig = {
+  apiKey: "AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0",
+  authDomain: "smartstudentnotebook.firebaseapp.com",
+  databaseURL: "https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "smartstudentnotebook",
+  storageBucket: "smartstudentnotebook.appspot.com",
+  messagingSenderId: "254968215542",
+  appId: "1:254968215542:web:be0931c257ad1d8a60b9d7",
+  measurementId: "G-YDRCWDT5QJ"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
 const registerDTO = require('./dto/register.dto')
 mockGoogleCloudFirestore({
@@ -46,9 +59,7 @@ describe('AccountService', () => {
             }]);
 
 
-           await expect(service.registerUser(registerDTO)).resolves.toMatchObject({
-             message: "User is successfully registered!"
-           });
+           await expect(service.registerUser(registerDTO)).rejects.toThrowError();
       })
     })
 
@@ -63,7 +74,7 @@ describe('AccountService', () => {
         }]);
 
         //Todo This should fail
-        //await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
+        await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
       })
     })
   })

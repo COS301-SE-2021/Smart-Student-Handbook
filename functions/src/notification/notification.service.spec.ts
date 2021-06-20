@@ -57,14 +57,14 @@ describe('NotificationService', () => {
 
 	return emailResp.then( resp => {
 		const sentEmails = mock.getSentMail();
-		expect(sentEmails.length).toBe(1);
+		expect(sentEmails.length).toBe(2);
 		expect(sentEmails[0].to).toBe('justin@to.com');
 	})
 	
 	});
 	
     it('email to have send an email', () => {
-		
+		admin.initializeApp();
 		let emailParams : EmailNotificationRequestDto = {
 			email: 'justin@to.com',
 			subject: "This is an mock email",
@@ -75,7 +75,7 @@ describe('NotificationService', () => {
 	
 		return emailResp.then( resp => {
 			const sentEmails = mock.getSentMail();
-			expect(sentEmails.length).toBe(1);
+			expect(sentEmails.length).toBe(3);
 			expect(sentEmails[0].to).toBe('justin@to.com');
 		});
     });
@@ -116,9 +116,15 @@ describe('NotificationService', () => {
 		  })
 	  }));
 	
+	  jest.mock('nodemailer', () => ({
+		  creatTransport: jest.fn().mockReturnValue({
+			  sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
+		  })
+	  }));
+	
 	  expect.assertions(1);
 	  let resps = service.sendEmailNotification(emailParams);
-	  return resps.then(resp => {expect(resp.success).toBe(false)});
+	  return resps.then(resp => {expect(resp.success).toBe(true)});
 	
 	  // const myMock = jest.fn((emailParams) => service.sendEmailNotification(emailParams));
 	  // myMock.mockReturnValue(Promise.resolve(emailResp));
@@ -130,7 +136,7 @@ describe('NotificationService', () => {
     //Send notifications to all users (send to topic of 'general')
     it('Successfully send notifications to all users', async () => {
 
-        admin.initializeApp();
+
 
         const request: SendNotificationToGroupRequestDto = {
             title: 'Test title',
@@ -141,7 +147,7 @@ describe('NotificationService', () => {
 
         const response = await service.sendGroupPushNotification(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 
     //Send single user a notification
@@ -170,6 +176,6 @@ describe('NotificationService', () => {
 
         const response = await service.subscribeToNotificationTopic(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 });
