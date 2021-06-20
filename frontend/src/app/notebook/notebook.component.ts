@@ -10,6 +10,7 @@ import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {AccountService} from "../services/account.service";
 
 
 @Component({
@@ -92,11 +93,12 @@ export class NotebookComponent implements OnInit {
    * @param notebookService
    */
   constructor(private notebookService: NotebookService, private dialog: MatDialog,
-              private router: ActivatedRoute, private _router: Router) { }
+              private router: ActivatedRoute, private _router: Router, private accountService: AccountService) { }
 
 
-  ngOnInit() {
-
+  async ngOnInit(): Promise<void> {
+    //if user is already logged in move them to the notebook page, if not return to login
+    await this.accountService.isUserLoggedIn();
     this.initialFunction();
   }
 
@@ -405,8 +407,18 @@ export class NotebookComponent implements OnInit {
             editor.clear();
          })
     }
+  }
 
-
+  async logout()
+  {
+    this.accountService.singOut().subscribe(data => {
+        this._router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      err => {
+        console.log("Error: "+err.error.message);
+      }
+    );
   }
 
 

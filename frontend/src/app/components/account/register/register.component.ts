@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
+import { ProfileService } from '../../../services/profile.service';
 import { MustMatch } from './must-match.validator';
 
 @Component({
@@ -15,12 +16,9 @@ export class RegisterComponent implements OnInit {
   registerFailed = false;
   submitted = false;
   errorMessage: string = "";
-  //private returnUrl: string;
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService, private profileService: ProfileService)
   {
-    //this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/notebook';
-
     this.form = this.fb.group({
       email: ['', Validators.email],
       phoneNumber: ['', Validators.required],
@@ -34,10 +32,9 @@ export class RegisterComponent implements OnInit {
 
   async ngOnInit(): Promise<void>
   {
+    //if user is already logged in move them to the notebook page, if not return to login
+    await this.accountService.isUserLoggedIn();
     document.body.className = "backgroundIMG";
-    // if (await this.accountService.checkAuthenticated()) {
-    //   await this.router.navigate([this.returnUrl]);
-    // }
   }
 
   ngOnDestroy(){
@@ -58,14 +55,29 @@ export class RegisterComponent implements OnInit {
       const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
-          //this.isLoginFailed = false;
-          //this.isLoggedIn = true;
-          console.log(data);
-          this.router.navigateByUrl(`notebook`);
+
+        this.profileService.createUser(data.uid,data.displayName).subscribe(resp =>{
+
+            this.accountService.loginUser(email, password).subscribe(data => {
+                this.registerFailed = false;
+                this.router.navigateByUrl(`notebook`);
+              },
+              err => {
+                this.registerFailed = true;
+                this.errorMessage = "Error: "+err.error.message;
+              }
+            );
+
+          },
+          err => {
+            this.registerFailed = true;
+            this.errorMessage = "Error: "+err.error.message;
+          });
+
         },
         err => {
           this.registerFailed = true;
-          this.errorMessage = "An Error has occurred: "+err.error.message;
+          this.errorMessage = "Error: "+err.error.message;
         }
       );
     }

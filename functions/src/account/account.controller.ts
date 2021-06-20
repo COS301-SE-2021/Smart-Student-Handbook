@@ -12,7 +12,7 @@ export class AccountController {
 	constructor(private readonly accountService : AccountService) {}
 
 	@Post("registerUser")
-	registerUser(@Body() registerDto: RegisterDto): Promise<Response>
+	registerUser(@Body() registerDto: RegisterDto): Promise<Account>
 	{
 		return this.accountService.registerUser(registerDto);
 	}
@@ -24,7 +24,7 @@ export class AccountController {
 	}
 
 	@Put("updateUser")
-	updateUser(@Body() registerDto: RegisterDto): Promise<Response>
+	updateUser(@Body() registerDto: RegisterDto): Promise<Account>
 	{
 		return this.accountService.updateUser(registerDto);
 	}
