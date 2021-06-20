@@ -40,7 +40,7 @@
       <mat-tab-group [backgroundColor]="background" id="tabs">
         <mat-tab *ngFor="let link of links; let n = index" label="{{link}}">
 
-          <div id="editor" #editor class="editor">
+          <div id="editor" #editor class="editor" cdkDropList>
 
           </div>
 
