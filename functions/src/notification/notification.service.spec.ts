@@ -13,9 +13,7 @@ import {SubscribeToTopicRequestDto} from "./dto/subscribeToTopicRequest.dto";
 
 
 const { mock } = require('nodemailer');
-const nodemailer = require('nodemailer')
-const SMTPTransport = require("nodemailer/lib/smtp-transport")
-const SendmailTransport = require("nodemailer/lib/sendmail-transport")
+
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -72,27 +70,13 @@ describe('NotificationService', () => {
 		  subject: "This is an mock email",
 		  body: "This is an mock email"
 	  };
-	
-	  let emailResp : EmailNotificationResponseDto = {
-		  success: false,
-		  message: "Something went wrong!"
-	  };
-	
-	  jest.mock('nodemailer', () => ({
-		  creatTransport: jest.fn().mockReturnValue({
-			  sendMail: jest.fn().mockRejectedValue(new Error("broken")).mockReturnValue(emailResp)
-		  })
-	  }));
+
+	  mock.setShouldFailOnce();
 	
 	  expect.assertions(1);
 	  let resps = service.sendEmailNotification(emailParams);
-	  return resps.then(resp => {expect(!resp.success).toBe(false)});
-	
-	  // const myMock = jest.fn((emailParams) => service.sendEmailNotification(emailParams));
-	  // myMock.mockReturnValue(Promise.resolve(emailResp));
-	  //
-	  // myMock(emailParams)
-	
+	  return resps.then(resp => {expect(resp.success).toBe(false)});
+	  
   });
 
     //Send notifications to all users (send to topic of 'general')

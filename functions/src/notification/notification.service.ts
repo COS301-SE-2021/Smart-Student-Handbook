@@ -53,22 +53,6 @@ export class NotificationService {
 					message: 'Something went wrong!',
 				};
 			});
-		
-		// return transporter.sendMail(mailOptions, (err: Error | null, info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => {
-		// 	if (err != null) {
-		// 		return {
-		// 			success: false,
-		// 			message: err.name + ": " + err.message
-		// 		};
-		//
-		// 	}
-		// 	console.log(info.messageId);
-		// 	return {
-		// 		success: true,
-		// 		message: info.messageId
-		// 	};
-		//
-		// });
 	}
 	
 	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
