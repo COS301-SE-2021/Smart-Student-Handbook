@@ -2,7 +2,7 @@
   position: absolute;
   top: 12px;
   right: 0px;
-  transition: all .15s linear;
+  transition: all .1s linear;
   z-index: 3;
   font-size: larger;
 }
@@ -39,7 +39,7 @@
 }
 
 .header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-image: url("../../../assets/images/defaultProfile.jpg");
   background-size: cover;
 }
 

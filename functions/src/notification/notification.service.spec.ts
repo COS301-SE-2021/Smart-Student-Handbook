@@ -97,6 +97,7 @@ describe('NotificationService', () => {
     });
 
     //Send single user a notification
+
     it('Successfully send a single user a notification', async () => {
 
 
@@ -117,7 +118,7 @@ describe('NotificationService', () => {
 
         const request: SubscribeToTopicRequestDto = {
             topic: 'test',
-            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
+            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bH9MTMBOgMJTKcuCjpWKvwjXjhkVQkT2GauHkt30OZ08l-5Yl5opA97UTBPSFYv-vcc8-BzPbF751uRIb5DMj_Ei35yhs0WAIGHd0Kzd6C8EX1aPOZfiusfJo_oxOhTBya_ijkj',
         }
 
         const response = await service.subscribeToNotificationTopic(request);

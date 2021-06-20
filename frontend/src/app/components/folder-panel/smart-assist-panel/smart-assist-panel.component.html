@@ -1,6 +1,6 @@
 <mat-sidenav-container id="smartAssistContainer" style="height: 89vh; width: 40px; background-color: white; margin-right: 0px !important;"><!--  -->
   <mat-sidenav #sidenav mode="side" style="width: 100%;"  position="end">
-    <div id="panelContent">
+    <div id="panelContent" cdkDropList>
       <mat-card class="card">
         <mat-card-header>
           <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
@@ -11,7 +11,7 @@
         </mat-card-header>
       </mat-card>
 
-      <mat-card align="start" class="card text-left">
+      <mat-card align="start" class="card text-left" cdkDrag>
         <mat-card-header>
           <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>
           <mat-card-title id="username">Functional Requirements</mat-card-title>
@@ -26,7 +26,7 @@
         </mat-chip-list>
       </mat-card>
 
-      <mat-card align="start" class="card text-left">
+      <mat-card align="start" class="card text-left" cdkDrag>
         <mat-card-header>
           <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>
           <mat-card-title id="username">Domain Model</mat-card-title>
