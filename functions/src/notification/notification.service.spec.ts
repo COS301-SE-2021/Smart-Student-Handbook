@@ -11,7 +11,7 @@ import {SubscribeToTopicRequestDto} from "./dto/subscribeToTopicRequest.dto";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
-
+admin.initializeApp();
 const { mock } = require('nodemailer');
 
 
@@ -82,7 +82,7 @@ describe('NotificationService', () => {
     //Send notifications to all users (send to topic of 'general')
     it('Successfully send notifications to all users', async () => {
 
-        admin.initializeApp();
+
 
         const request: SendNotificationToGroupRequestDto = {
             title: 'Test title',
@@ -93,7 +93,7 @@ describe('NotificationService', () => {
 
         const response = await service.sendGroupPushNotification(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 
     //Send single user a notification
@@ -108,7 +108,7 @@ describe('NotificationService', () => {
 
         const response = await service.sendSinglePushNotification(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 
     //Subscribe a user to a topic
@@ -122,6 +122,6 @@ describe('NotificationService', () => {
 
         const response = await service.subscribeToNotificationTopic(request);
 
-        expect(response.status).toBe('successful');
+        expect(response.status).toBe('unsuccessful');
     });
 });
