@@ -49,13 +49,14 @@ export class RegisterComponent implements OnInit {
     if (this.form.valid)
     {
       const email = this.form.get('email')?.value;
-      const phoneNumber = this.form.get('phoneNumber')?.value;
+      const phoneNumber = "+27"+this.form.get('phoneNumber')?.value;
       const displayName = this.form.get('displayName')?.value;
       const password = this.form.get('password')?.value;
       const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
       this.accountService.registerUser(email,phoneNumber,displayName,password,passwordConfirm).subscribe(data => {
 
+        //let dateJoined = '{"_seconds":'+Date.now().toString()+', "_nanoseconds":0}';
         this.profileService.createUser(data.uid,data.displayName, "" ,"" ,"" , "","" ,Date.now().toString()).subscribe(resp =>{
 
             this.accountService.loginUser(email, password).subscribe(data => {
