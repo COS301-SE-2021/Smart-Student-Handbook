@@ -11,7 +11,6 @@ import {ProfileService} from "../../services/profile.service";
 import {MatSidenav} from "@angular/material/sidenav";
 import {EditProfileComponent} from "../../notebook/edit-profile/edit-profile.component";
 import {MatDialog} from "@angular/material/dialog";
-import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-folder-panel',
