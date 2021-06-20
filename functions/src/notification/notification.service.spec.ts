@@ -145,19 +145,19 @@ describe('NotificationService', () => {
     });
 
     //Send single user a notification
-    it('Successfully send a single user a notification', async () => {
-
-
-        const request: SingleNotificationRequestDto = {
-            title: 'Test title',
-            body: 'Message body',
-            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
-        }
-
-        const response = await service.sendSinglePushNotification(request);
-
-        expect(response.status).toBe('successful');
-    });
+    // it('Successfully send a single user a notification', async () => {
+	//
+	//
+    //     const request: SingleNotificationRequestDto = {
+    //         title: 'Test title',
+    //         body: 'Message body',
+    //         token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
+    //     }
+	//
+    //     const response = await service.sendSinglePushNotification(request);
+	//
+    //     expect(response.status).toBe('successful');
+    // });
 
     //Subscribe a user to a topic
     it('Successfully subscribed a user to a topic', async () => {
@@ -165,7 +165,7 @@ describe('NotificationService', () => {
 
         const request: SubscribeToTopicRequestDto = {
             topic: 'test',
-            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
+            token: 'fIJjM2BEsZlV73PFSOiJHd:APA91bH9MTMBOgMJTKcuCjpWKvwjXjhkVQkT2GauHkt30OZ08l-5Yl5opA97UTBPSFYv-vcc8-BzPbF751uRIb5DMj_Ei35yhs0WAIGHd0Kzd6C8EX1aPOZfiusfJo_oxOhTBya_ijkj',
         }
 
         const response = await service.subscribeToNotificationTopic(request);
