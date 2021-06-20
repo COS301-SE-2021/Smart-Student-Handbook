@@ -21,6 +21,9 @@ export class NotesPanelComponent implements OnInit {
   institution = '';
   private = false;
 
+  //sliding panel
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
   public closeNotePanelBtn: any;
 
   open = false;
@@ -39,7 +42,6 @@ export class NotesPanelComponent implements OnInit {
 
     this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
       .subscribe(result => {
-        console.log(result);
 
         for(let i = 0; i < result.length; i++){
           this.notebooks.push(result[i]);
@@ -47,25 +49,9 @@ export class NotesPanelComponent implements OnInit {
       });
   }
 
-
-//   public setSidenav(sidenav: MatSidenav) {
-//     this.sidenav = sidenav;
-// }
-
-// public open() {
-//     return this.sidenav.open();
-// }
-
-
-// public close() {
-//     return this.sidenav.close();
-// }
-
   public openedCloseToggle(){
 
-    // @ViewChild('sidenav') sidenav: any;
-
-    // console.log(sidenav);
+    this.sidenav.toggle();
 
     this.open = true;
 

@@ -104,20 +104,20 @@ export class NotebookService {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 
-		console.log(notebookId);
 		//If the notebookId is null, we know the user wants to create a new notebook
 		if(!notebookId)
 		{
 			notebookId = randomStringGenerator();
 			operationType= "Create";
 		}
-		console.log(notebookId);
+
 
 		/**
 		 * Try to createOrUpdate notebook on firebase. If try fails throw internal error exception.
 		 * If successful return success message else throw not found exception.
 		 */
 		try {
+			console.log('1');
 			return await admin.firestore().collection("notebooks").doc(notebookId).set(
 				{
 					title: notebookDto['title'],
@@ -133,17 +133,18 @@ export class NotebookService {
 					userId: userId,
 				}
 			).then(() => {
-				console.log(notebookId);
+				console.log('2');
 				return {
 					message : operationType + " was successful!",
 					notebookId: notebookId
 				};
 			}).catch(() => {
+				console.log('3');
 				throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 			});
 		}
 		catch (error)
-		{
+		{ console.log(error);
 			throw new HttpException('Something went wrong. Operation could not be executed.', HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

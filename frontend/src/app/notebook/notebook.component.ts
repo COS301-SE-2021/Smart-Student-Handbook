@@ -13,7 +13,8 @@ import {FolderPanelComponent} from "../components/folder-panel/folder-panel.comp
 import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
 import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
 import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
-
+import {AccountService} from "../services/account.service";
+import {ProfileService} from "../services/profile.service";
 
 @Component({
   selector: 'app-notebook',
@@ -87,7 +88,10 @@ export class NotebookComponent implements OnInit {
   background: ThemePalette = undefined;
   notebookID: string = '';
   _editor!: EditorJS;
-  t = '';
+
+  //Variable that holds the logged in user details
+  user: any;
+  profile: any;
 
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
   @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
@@ -97,26 +101,36 @@ export class NotebookComponent implements OnInit {
    * @param notebookService
    */
   constructor(private notebookService: NotebookService, private dialog: MatDialog,
-              private router: ActivatedRoute, private _router: Router) { }
+              private router: ActivatedRoute, private _router: Router,
+              private profileService: ProfileService, private accountService: AccountService) { }
 
 
   ngOnInit() {
 
+    this.accountService.isUserLoggedIn();
+
     this.initialFunction();
 
+    //Assign "openPanel function to the eventhandler from folder panel to open the note panel when the view is loaded"
     document.addEventListener('DOMContentLoaded', (event) => {
-      this.folderPanelComponent.openNotebook = () => {
+      this.folderPanelComponent.openNotebookPanel = () => {
         this.notePanelComponent.openedCloseToggle();
       };
     })
 
+    // let userDeatils;
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+    this.profile = this.profile.userInfo;
   }
 
+  //Open (and close) the notes panel
   openPanel(){
     console.log(this.notePanelComponent);
     this.notePanelComponent.openedCloseToggle();
   }
 
+  //Initialise the editor
   initialFunction(){
 
     //The path of the notebook to be loaded
@@ -366,20 +380,18 @@ export class NotebookComponent implements OnInit {
         //Create request object
         let request = {
           title: result.title,
-          author: 'Arno',
+          author: this.profile.name,
           course: result.course,
           description: result.description,
           institution: result.institution,
-          name: 'Arno',
-          surname: 'Moller',
+          name: this.profile.name,
           private: result.private,
-          username: 'userArno'
         }
 
         this.notebookTitle = result.title;
 
         //Call service and create notebook
-        this.notebookService.createUpdateNotebook(request)
+        this.notebookService.createNotebook(request)
           .subscribe(result => {
             console.log(result);
 

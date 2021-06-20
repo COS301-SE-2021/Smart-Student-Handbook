@@ -7,6 +7,8 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
 import {NotebookService} from "../../services/notebook.service";
 import {Router} from "@angular/router";
+import {ProfileService} from "../../services/profile.service";
+import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-folder-panel',
@@ -16,12 +18,16 @@ import {Router} from "@angular/router";
 })
 export class FolderPanelComponent implements OnInit {
 
-  // @ViewChild('tree') tree!: MatTree<any>;
+  user: any;
+  profile: any;
   open: boolean = false;
+
+  username: string = '';
+  bio: string = '';
+  institution: string = '';
 
   panelOpenState = false;
   width = 68.3;
-
 
   //-----------------  Code needed for the tree  ----------------------------------
   private _transformer = (node: DirectoryNode, level: number) => {
@@ -33,31 +39,36 @@ export class FolderPanelComponent implements OnInit {
     };
   }
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-      node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-      this._transformer, node => node.level, node => node.expandable, node => node.children);
-
+  //Variables needed for the tree view
+  treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable);
+  treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children);
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+
   //--------------------------------------------------------------------------------
 
-  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
-              private router: Router) { }
 
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
+              private router: Router, private profileService: ProfileService) { }
+
 
   ngOnInit(): void {
 
-    this.getUserNotebooks();
+    //Get the user and user profile info from localstorage
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
+    this.username = this.user.displayName;
+    this.bio = this.profile.userInfo.bio;
+
+    this.getUserNotebooks();
   }
 
+  //Get the logged in user's notebooks
   getUserNotebooks(){
 
-    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+    this.notebookService.getUserNotebooks(this.user.uid)
       .subscribe(result => {
-        console.log(result);
 
         let children = [{name: 'Notebook one', id: ''}];
         // for (let i = 0; i < result.length; i++) {
@@ -75,17 +86,14 @@ export class FolderPanelComponent implements OnInit {
       });
   }
 
+  //Open the tree view
   openTree(){
-
-    // if(this.open)
       this.treeControl.expandAll();
-
-    // this.open = false;
-
-    // console.log(this.treeControl.dataNodes[0].);
   }
 
+  //Toggle the sliding panel (open and close)
   openedCloseToggle(){
+
     const sideNav = document.getElementById('container') as HTMLElement;
     const col = sideNav?.parentElement?.parentElement;
 
@@ -110,22 +118,9 @@ export class FolderPanelComponent implements OnInit {
 
   }
 
-  folderSelected(item: string){
+  //Used by notebook to open the notes panel
+  openNotebookPanel(){}
 
-    if(item === 'COS 301'){
-      this.panel.openedCloseToggle();
-    }
-  }
-
-  openNotebook(item: any){
-    // console.log(item.id);
-
-    // this.router.navigate(['notebook'], {queryParams: {id: item.id}});
-  }
-
-  openNotebookPanel(){
-
-  }
 }
 
 

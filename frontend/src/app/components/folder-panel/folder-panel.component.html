@@ -4,8 +4,8 @@
       <mat-card id="card">
         <mat-card-header>
           <div mat-card-avatar class="header-image"></div>
-          <mat-card-title id="username">Douglas Nel</mat-card-title>
-          <mat-card-subtitle id="subTitle">Tuks</mat-card-subtitle>
+          <mat-card-title id="username">{{username}}</mat-card-title>
+          <mat-card-subtitle id="subTitle">{{bio}}</mat-card-subtitle>
 
           <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
             <mat-icon>keyboard_arrow_left</mat-icon>
@@ -13,13 +13,13 @@
         </mat-card-header>
       </mat-card>
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;" #tree>
-        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="folderSelected(node.name)" >
-          <button mat-icon-button (click)="openNotebook(node)">
+        <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="openNotebookPanel()">
+          <button mat-icon-button >
             {{node.name}}
           </button>
         </mat-tree-node>
         <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-          <button mat-icon-button matTreeNodeToggle (click)="openNotebookPanel()"
+          <button mat-icon-button matTreeNodeToggle
                   [attr.aria-label]="'Toggle ' + node.name">
             <mat-icon class="mat-icon-rtl-mirror">
               {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
