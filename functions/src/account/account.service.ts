@@ -15,7 +15,7 @@ export class AccountService {
 	 * Register a new user
 	 * @param registerDto
 	 */
-	async registerUser(registerDto: RegisterDto): Promise<Response>
+	async registerUser(registerDto: RegisterDto): Promise<Account>
 	{
 		//Check if user password and confirm passwords match before creating user
 		if(registerDto.password != registerDto.passwordConfirm)
@@ -34,9 +34,14 @@ export class AccountService {
 			password: registerDto.password,
 			displayName: registerDto.displayName,
 			disabled: false,
-		}).then((userRecord) => {
+		}).then((userCredential) => {
 			// See the UserRecord reference doc for the contents of userRecord.
 			return {
+				uid: userCredential.uid,
+				email: userCredential.email,
+				emailVerified: userCredential.emailVerified,
+				phoneNumber: userCredential.phoneNumber,
+				displayName: userCredential.displayName,
 				message: "User is successfully registered!"
 			};
 		})
@@ -49,7 +54,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Response>
+	async updateUser(registerDto: RegisterDto): Promise<Account>
 	{
 		let uid: string = "";
 
@@ -71,9 +76,14 @@ export class AccountService {
 			password: registerDto.password,
 			displayName: registerDto.displayName,
 			disabled: false,
-		}).then((userRecord) =>
+		}).then((userCredential) =>
 		{
 			return {
+				uid: userCredential.uid,
+				email: userCredential.email,
+				emailVerified: userCredential.emailVerified,
+				phoneNumber: userCredential.phoneNumber,
+				displayName: userCredential.displayName,
 				message: "User is successfully updated!"
 			};
 		})
