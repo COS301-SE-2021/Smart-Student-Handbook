@@ -47,21 +47,28 @@ export class AccountService {
   }
 
   getCurrentUser(): Observable<any> {
-    return this.http.get(ACCOUNT_API + 'getCurrentUser', { responseType: 'text' });
+    return this.http.get(ACCOUNT_API + 'getCurrentUser', { responseType: 'json' });
   }
 
   deleteUser(EmailAddress: string, Password: string): Observable<any>{
-    return this.http.delete(ACCOUNT_API + 'deleteUser', {responseType: 'text'});
+    return this.http.delete(ACCOUNT_API + 'deleteUser', {responseType: 'json'});
   }
 
   //check if user is logged in then roots to the notebook else to login if not logged in
   async isUserLoggedIn():  Promise<void>{
     this.getCurrentUser().subscribe(data => {
-        this.router.navigateByUrl(`notebook`);
+
+      localStorage.setItem("user",JSON.stringify(data));
+      localStorage.setItem("userProfile","Still to come");
+
+        if(this.router.url !== "/notebook")
+        {
+          this.router.navigateByUrl(`/notebook`);
+        }
       },
       err => {
         console.log(err.error.message);
-        this.router.navigateByUrl(`login`);
+        this.router.navigateByUrl(`/login`);
       }
     );
   }
