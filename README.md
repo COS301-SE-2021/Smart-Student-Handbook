@@ -57,7 +57,7 @@ to amount of other users using their notebook.
 <div style="margin-left: 4%">
 
 * <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing">Software Requirements Specification - V1 </a>
-* <a href="https://www.overleaf.com/read/gxhcgtvhrnjf">Software Requirements Specification - V2 </a>
+* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing">Software Requirements Specification - V2 </a>
 * <a href="#">Coding Standards </a>
 <!-- * <a href="#">Technical Installation Guide</a>
 * <a href="#">User Manual</a>
@@ -102,7 +102,7 @@ to amount of other users using their notebook.
 <!-- Descriptions goes here -->
 
 * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
-* <a href="#"> Demo 2 </a>
+* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing"> Demo 2 </a>
 <!-- * <a href="#"> Demo 3 </a>
 * <a href="#"> Demo 4 </a> -->
 
@@ -114,10 +114,12 @@ to amount of other users using their notebook.
 
 The Development Team
 
-| [Steven Jordaan](https://sj-jordaan.github.io) | [Bradley Mapstone](https://bradez-of-map-n-stone.github.io/) | [Shaun Naude](https://shaunnaude.github.io/) | [Matthew Kershaw](https://mattyk-dev.github.io/) | [Daniel Nel](https://mdnel.tech/) |
+| [Louw Claassens](#) | [Luca Prenzler](#) | [Arno Moller](#) | [Theo Morkel](#) | [Douglas van Reeuwyk](#) |
 | :---: |:---:| :---:| :---:| :---:|
-| [![Steven Jordaan](https://avatars2.githubusercontent.com/u/50364770?s=400&u=fc71708e5f1b450bbc8895c133d9ac50ae5c3838&v=4&s=200)](https://sj-jordaan.github.io/)    | [![Bradley Mapstone](https://avatars1.githubusercontent.com/u/56454573?s=400&u=b3edd9887578d8a29dcb467cc296f3ac05d43d05&v=4&s=200)](https://bradez-of-map-n-stone.github.io/) | [![Shaun Naude](https://avatars1.githubusercontent.com/u/44646417?s=400&u=988e26f57a2785a279c93e992838db03382c7d7e&v=4&s=200)](https://shaunnaude.github.io/)  | [![Matthew Kershaw](https://avatars1.githubusercontent.com/u/54933104?s=400&v=4&s=200)](https://mattyk-dev.github.io/)  | [![Daniel Nel](https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200)](https://mdnel.tech/)  |
-| [Portfolio](https://sj-jordaan.github.io/) | [Portfolio](https://bradez-of-map-n-stone.github.io/) | [Portfolio](https://shaunnaude.github.io/) | [Portfolio](https://mattyk-dev.github.io/) | [Portfolio](https://mdnel.tech/) |
+| [![Louw Claassens](#)](#)    | [![Luca Prenzler](#)](#) | [![Arno Moller](#)](#)  | [![Theo Morkel](#)](#)  | [![Douglas van Reeuwyk](#)](#)  |
+| [Portfolio](#) | [Portfolio](#) | [Portfolio](#) | [Portfolio](#) | [Portfolio](#) |
+
+https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200
 
 </div> -->
 
