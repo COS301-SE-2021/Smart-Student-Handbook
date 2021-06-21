@@ -1,3 +1,6 @@
+/**
+ * Response Data object that defines how the json response object is structured that is sent back from the API
+ */
 export class User{
     uid:string
     name?:string

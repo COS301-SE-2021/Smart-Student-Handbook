@@ -8,6 +8,10 @@ import {User, UserResponseDto} from "./dto/userResponse.dto";
 export class UserService {
 
 
+    /**
+     * Queries firestore for the appropriate document in the user collection that contains that uid and returns it as a json object
+     * @param uid
+     */
     async getUserDetails(uid: string): Promise<UserResponseDto>
     {
         let requestedUser: User;
@@ -36,6 +40,12 @@ export class UserService {
         return {success: true, message: "User was successfully found",userInfo:requestedUser};
     }
 
+    /**
+     * Sends a user profile object to firestore where it then creates a new document in the users collection with the user object tha is passed through
+     * This function acts as both a update and create, firestore will take care of the rest and update or create a new record
+     * @param user
+     * @param update
+     */
     async createAndUpdateUser(user: UserRequestDto, update: boolean = false): Promise<UserResponseDto>
     {
         const resp = await admin.firestore().collection("users").doc(user.uid).set(user);
