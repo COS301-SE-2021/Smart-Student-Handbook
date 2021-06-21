@@ -126,9 +126,9 @@ export class NotebookService {
 					description: notebookDto["description"],
 					institution: notebookDto["institution"],
 					name: notebookDto["name"],
-					surname: notebookDto["surname"],
+					// surname: notebookDto["surname"],
 					private: notebookDto["private"],
-					username: notebookDto["username"],
+					// username: notebookDto["username"],
 					notebookReference: notebookId,
 					userId: userId,
 				}
