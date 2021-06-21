@@ -1,6 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
-import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ThemePalette } from '@angular/material/core';
+
+import EditorJS from '@editorjs/editorjs';
+import {NotebookService} from "../services/notebook.service";
+
+import firebase from "firebase";
+import "firebase/firestore";
+import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
+import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
+import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
+import {AccountService} from "../services/account.service";
+import {ProfileService} from "../services/profile.service";
 
 @Component({
   selector: 'app-notebook',
@@ -9,84 +23,449 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 })
 export class NotebookComponent implements OnInit {
 
-  editor = DecoupledEditor;
-  toolbar: any = ['heading', '|', 'bold',
-    'italic', 'fontSize', 'fontFamily', 'underline', 'strikethrough', 'alignment',
-    'highlight', 'numberedList', 'insertTable',
-    'bulletedList', '|', 'indent',
-    'outdent', 'undo', 'redo', 'exportPdf', 'exportWord', 'fontBackgroundColor',
-    'fontColor'];
+  //Variables for add notebook popup dialog
+  title = '';
+  course = '';
+  description = '';
+  institution = '';
+  private = false;
 
-  heading = {
-    options: [
-      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-      { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-      { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-      { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-    ]
-  };
+  notebookTitle = 'New Notebook';
 
-  public editorData = '<p>Hello, world!</p>';
+  /**
+    Get all plugins for notebook
+   */
+  // @ts-ignore
+  Header = require('@editorjs/header');
+  // @ts-ignore
+  LinkTool = require('@editorjs/link');
+  // @ts-ignore
+  RawTool = require('@editorjs/raw');
+  // @ts-ignore
+  SimpleImage = require('@editorjs/simple-image');
+  // @ts-ignore
+  Checklist = require('@editorjs/checklist');
+  // @ts-ignore
+  List = require('@editorjs/list');
+  // @ts-ignore
+  Embed = require('@editorjs/embed');
+  // @ts-ignore
+  Quote = require('@editorjs/quote');
+  // @ts-ignore
+  NestedList = require('@editorjs/nested-list');
+  // @ts-ignore
+  Underline = require('@editorjs/underline');
+  // @ts-ignore
+  Table = require('@editorjs/table');
+  // @ts-ignore
+  Warning = require('@editorjs/warning');
+  // @ts-ignore
+  CodeTool = require('@editorjs/code');
+  // @ts-ignore
+  // Paragraph = require('@editorjs/paragraph');
+  // @ts-ignore
+  TextVariantTune = require('@editorjs/text-variant-tune');
+  // @ts-ignore
+  AttachesTool = require('@editorjs/attaches');
+  // @ts-ignore
+  Marker = require('@editorjs/marker');
+  // @ts-ignore
+  InlineCode = require('@editorjs/inline-code');
+  // @ts-ignore
+  Personality = require('@editorjs/personality');
+  // @ts-ignore
+  Delimiter = require('@editorjs/delimiter');
+  // @ts-ignore
+  Alert = require('editorjs-alert');
+  // @ts-ignore
+  Paragraph = require('editorjs-paragraph-with-alignment');
 
-  public Editor = DecoupledEditor;
 
-  links = ['First', 'Second', 'Third'];
+  // public editorData = '<p>Hello, world!</p>';
+
+  links = ['First'];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
+  notebookID: string = '';
+  _editor!: EditorJS;
+
+  //Variable that holds the logged in user details
+  user: any;
+  profile: any;
+
+  @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
+  @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
+
+  /**
+   * Include the notebook service
+   * @param notebookService
+   */
+  constructor(private notebookService: NotebookService, private dialog: MatDialog,
+              private router: ActivatedRoute, private _router: Router,
+              private profileService: ProfileService, private accountService: AccountService) { }
 
 
+  ngOnInit() {
 
-  addLink() {
-    this.links.push(`Link ${this.links.length + 1}`);
+    this.accountService.isUserLoggedIn();
+
+    this.initialFunction();
+
+    //Assign "openPanel function to the eventhandler from folder panel to open the note panel when the view is loaded"
+    document.addEventListener('DOMContentLoaded', (event) => {
+      this.folderPanelComponent.openNotebookPanel = () => {
+        this.notePanelComponent.openedCloseToggle();
+      };
+    })
+
+    // let userDeatils;
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+    this.profile = this.profile.userInfo;
   }
 
-  constructor() { }
-
-  public onReady( editor: any ) {
-    // editor.ui.getEditableElement().parentElement.insertBefore(
-    //     editor.ui.view.toolbar.element,
-    //     editor.ui.getEditableElement()
-    // );
-
-    console.log(editor);
+  //Open (and close) the notes panel
+  openPanel(){
+    console.log(this.notePanelComponent);
+    this.notePanelComponent.openedCloseToggle();
   }
 
-  ngOnInit(): void {
+  //Initialise the editor
+  initialFunction(){
 
-    DecoupledEditor.create(document.querySelector('.document-editor__editable'), {
-      fontSize: { options: [9, 11, 12, 13, 'default', 17, 19, 21] },
-      // toolbar: this.opciones,
-      // heading: this.heading,
-    }).then((editor:any)  => {
-      const toolbarContainer = document.querySelector('.document-editor__toolbar');
+    //The path of the notebook to be loaded
+    let path: string = '2aa5ca94-aed8-4a0a-8d54-c490086e5371';//891bdd86-0828-49ea-9053-8d60f8fdf671
 
-      if(toolbarContainer)
-      toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+    /**
+     * Retrieve the notebook from realtime database
+     */
+    // let dbRefObject = firebase.database().ref("notebook/" + path);
 
-      this.Editor = editor;
-    }).catch((err: any) => {
-      console.error(err);
+
+    /**
+     * Get the values from the realtime database and insert block if notebook is empty
+     */
+    // dbRefObject.once('value', snap => {
+    //   if (snap.val() === null) {
+    //     firebase.database().ref("notebook/" + path).set({
+    //       outputData:
+    //         {
+    //           blocks: [
+    //             {
+    //               "id": "jTFbQOD8j3",
+    //               "type": "header",
+    //               "data": {
+    //                 "text": "My Notebook 🚀",
+    //                 "level": 2
+    //               }
+    //             }]
+    //         }
+    //     });
+    //   }
+    // });
+
+    /**
+     * Create the notebook with all the plugins
+     */
+    let editor = new EditorJS({
+      holder: 'editor',
+      tools: {
+        header: {
+          class: this.Header,
+          shortcut: 'CTRL+SHIFT+H'
+        },
+        linkTool: {
+          class: this.LinkTool,
+          // config: {
+          //   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
+          // }
+        },
+        raw: this.RawTool,
+        image: this.SimpleImage,
+        checklist: {
+          class: this.Checklist,
+          inlineToolbar: true,
+        },
+        list: {
+          class: this.NestedList,
+          inlineToolbar: true,
+        },
+        embed: this.Embed,
+        quote: this.Quote,
+        underline: this.Underline,
+        table: {
+          class: this.Table,
+        },
+        warning: {
+          class: this.Warning,
+          inlineToolbar: true,
+          shortcut: 'CTRL+SHIFT+W',
+          config: {
+            titlePlaceholder: 'Title',
+            messagePlaceholder: 'Message',
+          },
+        },
+        code: this.CodeTool,
+        paragraph: {
+          class: this.Paragraph,
+          inlineToolbar: true,
+        },
+        textVariant: this.TextVariantTune,
+        attaches: {
+          class: this.AttachesTool,
+          // config: {
+          //   endpoint: 'http://localhost:8008/uploadFile'
+          // }
+        },
+        Marker: {
+          class: this.Marker,
+          shortcut: 'CTRL+SHIFT+M',
+        },
+        inlineCode: {
+          class: this.InlineCode,
+          shortcut: 'CMD+SHIFT+M',
+        },
+        personality: {
+          class: this.Personality,
+          // config: {
+          //   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
+          // }
+        },
+        delimiter: this.Delimiter,
+        alert: this.Alert,
+      },
+      data:
+        {
+          blocks: []
+        },
+      autofocus: true,
+
+      onChange: () => {
+        (function () {
+          editor.save().then((outputData) => {
+            // console.log(outputData);
+            firebase.database().ref("notebook/" + path).set({
+              outputData
+            });
+          }).catch((error) => {
+            console.log('Saving failed: ', error)
+          })
+        }());
+      }
     });
 
-    // window.addEventListener('load', function () {
+    this._editor = editor;
 
-    //   DecoupledEditor
-    //     .create( document.querySelector( '#editor' ) )
-    //     .then( (editor:any) => {
-    //         const toolbarContainer = document.getElementById( 'toolbar-container' );
 
-    //         if(toolbarContainer)
-    //         toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-    //     } )
-    //     .catch( (error: any) => {
-    //         console.error( error );
-    //     } );
-    // })
+    /**
+     * Get the id of the notebook from the url parameter
+     */
+    this.router.queryParams.subscribe(params => {
 
+      if (params.id !== undefined) {
+
+          this.notebookID = path = params.id;
+
+        /**
+         * Get the specific notebook details with notebook id
+         */
+        this.notebookService.getNoteBookById(path)
+          .subscribe(result => {
+
+            this.notebookTitle = result.title;
+
+            //Change the path to the correct notebook's path
+            let dbRefObject = firebase.database().ref("notebook/" + path);
+
+            /**
+             * Get the values from the realtime database and insert block if notebook is empty
+             */
+            dbRefObject.once('value', snap => {
+              if (snap.val() === null) {
+                firebase.database().ref("notebook/" + path).set({
+                  outputData:
+                    {
+                      blocks: [
+                        {
+                          "id": "jTFbQOD8j3",
+                          "type": "header",
+                          "data": {
+                            "text": this.notebookTitle+ " 🚀",
+                            "level": 2
+                          }
+                        }]
+                    }
+                });
+              }
+            })
+              .then(() => {
+                /**
+                 * Render output on Editor
+                 */
+                dbRefObject.once('value', snap => {
+
+                  // console.log(snap.val());
+                  editor.render(snap.val().outputData);
+                });
+
+                //Change the path to which the editor should save data
+                editor.on('change', () => {
+                  (function () {
+                    editor.save().then((outputData) => {
+                      // console.log(outputData);
+                      firebase.database().ref("notebook/" + path).set({
+                        outputData
+                      });
+                    }).catch((error) => {
+                      console.log('Saving failed: ', error)
+                    })
+                  }());
+                });
+
+                // dbRefObject.once('value', snap => {
+                //   editor.render(snap.val().outputData);
+                // });
+              });
+          })
+
+      }
+
+      //no id in the url
+      else {
+
+        /**
+         * Render output on Editor
+         */
+        // dbRefObject.once('value', snap => {
+        //   editor.render(snap.val().outputData);
+        // });
+
+      }
+
+
+    });
+  }
+
+  /**
+   * Add a new tab to the tabs bar
+   */
+  addLink(name: string) {
+    this.links.push(name);
+    return this.links.length;
+  }
+
+  /**
+   * Create a new notebook
+   */
+  createNewNotebook(){
+
+    //Open dialog
+    const dialogRef = this.dialog.open(AddNotebookComponent, {
+      width: '50%',
+      data: {
+        title: this.title,
+        course: this.course,
+        description: this.description,
+        institution: this.institution,
+        private: this.private
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      //If the user filled out the form
+      if(result !== undefined){
+
+        //Create request object
+        let request = {
+          title: result.title,
+          author: this.profile.name,
+          course: result.course,
+          description: result.description,
+          institution: result.institution,
+          name: this.profile.name,
+          private: result.private,
+        }
+
+        this.notebookTitle = result.title;
+
+        //Call service and create notebook
+        this.notebookService.createNotebook(request)
+          .subscribe(result => {
+            console.log(result);
+
+            this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
+
+            this.folderPanelComponent.getUserNotebooks();
+            // this.folderPanelComponent.openTree();
+
+              this.notePanelComponent.getUserNotebooks();
+          },
+            error => {
+              this.folderPanelComponent.getUserNotebooks();
+            });
+      }
+    });
 
   }
+
+  /**
+   * Delete a notebook
+   */
+  removeNotebook(){
+
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      // width: '50%',
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result === true){
+        if(this.notebookID != ''){
+
+          this.notebookService.removeNotebook(this.notebookID)
+            .subscribe(result => {
+                console.log(result);
+
+                this._router.navigate(['notebook']);
+
+                this.folderPanelComponent.getUserNotebooks();
+                let editor = this._editor;
+                editor.clear();
+
+                this.notebookTitle = '';
+                this.notePanelComponent.getUserNotebooks();
+
+              },
+              error => {
+
+                // this._router.navigate(['notebook']);
+                //
+                // this.folderPanelComponent.getUserNotebooks();
+                //
+                // let editor = this._editor;
+                // editor.clear();
+                //
+                // this.notebookTitle = '';
+              })
+        }
+      }
+    });
+  }
+
+  async logout()
+  {
+    this.accountService.singOut().subscribe(data => {
+        this._router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      err => {
+        console.log("Error: "+err.error.message);
+      }
+    );
+  }
+
 
 }

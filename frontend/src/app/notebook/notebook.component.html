@@ -11,6 +11,9 @@
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
+
+    <button mat-raised-button (click)="logout()" class="mx-4">Logout</button>
+
   </mat-toolbar>
 </p>
 
@@ -19,43 +22,40 @@
 <div class="container-fluid">
   <div class="row">
     <div class="sidePanel">
-      <app-folder-panel></app-folder-panel>
+      <app-folder-panel #folderPanelComponent></app-folder-panel>
     </div>
     <div class="sidePanel">
-      <app-notes-panel></app-notes-panel>
+      <app-notes-panel #notePanelComponent></app-notes-panel>
     </div>
     <div class="col" align="end">
-      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+
+      <h3 id="notebookTitle" >{{notebookTitle}}</h3>
+
+      <button mat-icon-button class="favorite-icon" class="moreOptions" >
         <mat-icon>share</mat-icon>
       </button>
-      <button mat-icon-button class="favorite-icon" id="moreOptions" >
+      <!-- <button mat-icon-button class="favorite-icon" id="moreOptions" >
         <mat-icon>more_horiz</mat-icon>
+      </button> -->
+      <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="createNewNotebook()">
+        <mat-icon>add</mat-icon>
       </button>
-      <mat-tab-group [backgroundColor]="background" id="tabs">
-        <mat-tab *ngFor="let link of links" label="{{link}}">
+      <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="removeNotebook()">
+        <mat-icon>remove</mat-icon>
+      </button>
 
-           <br>
-           <!-- <button mat-raised-button class="example-action-button" (click)="addLink()">
-            Add link
-          </button> -->
+      <mat-tab-group [backgroundColor]="background" id="tabs">
+        <mat-tab *ngFor="let link of links; let n = index" label="{{link}}">
+
+          <div id="editor" #editor class="editor" cdkDropList>
+
+          </div>
+
         </mat-tab>
       </mat-tab-group>
 
-      <div class="document-editor">
-        <div class="document-editor__toolbar"></div>
-        <div class="document-editor__editable-container">
-          <div class="document-editor__editable">
-          </div>
-        </div>
-      </div>
 
-      <!-- <ckeditor [(ngModel)]="editorData" [editor]="Editor"></ckeditor> -->
 
-      <!-- <div id="toolbar-container"></div>
-
-      <div id="editor">
-          <p>This is the initial editor content.</p>
-      </div> -->
 
     </div>
     <div class="sidePanel">
