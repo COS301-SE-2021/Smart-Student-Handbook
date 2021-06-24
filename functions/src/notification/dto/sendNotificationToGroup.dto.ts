@@ -1,5 +1,5 @@
 export class SendNotificationToGroupRequestDto {
-  title: string;
-  body: string;
-  topic: string;
+	title: string
+	body: string
+	topic: string
 }

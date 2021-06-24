@@ -1,147 +1,141 @@
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
-import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
-import {NotebookService} from "../../../services/notebook.service";
-import {Router} from "@angular/router";
-import {AddNotebookComponent} from "../../../notebook/add-notebook/add-notebook.component";
-import {MatDialog} from "@angular/material/dialog";
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core'
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav'
+import { NotebookService } from '../../../services/notebook.service'
+import { Router } from '@angular/router'
+import { AddNotebookComponent } from '../../../notebook/add-notebook/add-notebook.component'
+import { MatDialog } from '@angular/material/dialog'
 
 @Component({
-  selector: 'app-notes-panel',
-  templateUrl: './notes-panel.component.html',
-  styleUrls: ['./notes-panel.component.scss']
+	selector: 'app-notes-panel',
+	templateUrl: './notes-panel.component.html',
+	styleUrls: ['./notes-panel.component.scss'],
 })
-
 @Injectable()
 export class NotesPanelComponent implements OnInit {
+	//Variables for add notebook popup dialog
+	title = ''
+	course = ''
+	description = ''
+	institution = ''
+	private = false
 
-  //Variables for add notebook popup dialog
-  title = '';
-  course = '';
-  description = '';
-  institution = '';
-  private = false;
+	//sliding panel
+	@ViewChild('sidenav') sidenav!: MatSidenav
 
-  //sliding panel
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+	public closeNotePanelBtn: any
 
-  public closeNotePanelBtn: any;
+	open = false
 
-  open = false;
+	public notebooks: any = []
 
-  public notebooks: any = [];
+	constructor(
+		private notebookService: NotebookService,
+		private router: Router,
+		private dialog: MatDialog
+	) {}
 
-  constructor(private notebookService: NotebookService, private router: Router, private dialog: MatDialog) { }
+	async ngOnInit() {
+		this.getUserNotebooks()
+	}
 
-  async ngOnInit() {
+	getUserNotebooks() {
+		this.notebooks = []
 
-    this.getUserNotebooks();
-  }
+		this.notebookService
+			.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+			.subscribe((result) => {
+				for (let i = 0; i < result.length; i++) {
+					this.notebooks.push(result[i])
+				}
+			})
+	}
 
-  getUserNotebooks(){
-    this.notebooks = [];
+	public openedCloseToggle() {
+		this.sidenav.toggle()
 
-    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
-      .subscribe(result => {
+		this.open = true
 
-        for(let i = 0; i < result.length; i++){
-          this.notebooks.push(result[i]);
-        }
-      });
-  }
+		// console.log(this.open);
 
-  public openedCloseToggle(){
+		const sideNavContainer = document.getElementById(
+			'notes-container'
+		) as HTMLElement
+		const col = sideNavContainer?.parentElement?.parentElement
 
-    this.sidenav.toggle();
+		if (sideNavContainer.style.width === '100%') {
+			sideNavContainer.style.width = '40px'
 
-    this.open = true;
+			if (col) {
+				col.style.width = 'fit-content'
+				col.style.minWidth = '0px'
+			}
+		} else {
+			sideNavContainer.style.width = '100%'
 
-    // console.log(this.open);
+			if (col) {
+				col.style.width = '16.6666666667%'
+				col.style.minWidth = '250px'
+			}
+		}
+	}
 
-    const sideNavContainer = document.getElementById('notes-container') as HTMLElement;
-    const col = sideNavContainer?.parentElement?.parentElement;
+	//open a specific nptebook
+	openNotebook(id: string) {
+		this.router.navigate(['notebook'], { queryParams: { id: id } })
+	}
 
-    if(sideNavContainer.style.width === '100%')
-    {
-      sideNavContainer.style.width = '40px';
+	//Edit a notebook
+	editNotebook(id: string) {
+		//Get the notebook info to edit
+		this.notebookService.getNoteBookById(id).subscribe((result) => {
+			console.log(result)
 
-      if(col){
-        col.style.width = 'fit-content';
-        col.style.minWidth = '0px';
-      }
+			this.title = result.title
+			this.course = result.course
+			this.description = result.description
+			this.institution = result.institution
+			this.private = result.private
 
-    }
-    else{
-      sideNavContainer.style.width = '100%';
+			//Open dialog
+			const dialogRef = this.dialog.open(AddNotebookComponent, {
+				width: '50%',
+				data: {
+					title: this.title,
+					course: this.course,
+					description: this.description,
+					institution: this.institution,
+					private: this.private,
+				},
+			})
 
-      if(col){
-        col.style.width = '16.6666666667%';
-        col.style.minWidth = '250px';
-      }
-    }
+			//Get info and create notebook after dialog is closed
+			dialogRef.afterClosed().subscribe((result) => {
+				//If the user filled out the form
+				if (result !== undefined) {
+					let request = {
+						title: result.title,
+						author: 'Arno',
+						course: result.course,
+						description: result.description,
+						institution: result.institution,
+						name: 'Arno',
+						surname: 'Moller',
+						private: result.private,
+						username: 'userArno',
+					}
 
-  }
-
-  //open a specific nptebook
-  openNotebook(id: string){
-
-    this.router.navigate(['notebook'], {queryParams: {id: id}});
-  }
-
-  //Edit a notebook
-  editNotebook(id: string){
-
-    //Get the notebook info to edit
-    this.notebookService.getNoteBookById(id)
-    .subscribe(result => {
-      console.log(result);
-
-      this.title  = result.title;
-      this.course  = result.course;
-      this.description = result.description;
-      this.institution = result.institution;
-      this.private  = result.private ;
-
-      //Open dialog
-      const dialogRef = this.dialog.open(AddNotebookComponent, {
-        width: '50%',
-        data: {
-          title: this.title,
-          course: this.course,
-          description: this.description,
-          institution: this.institution,
-          private: this.private
-        }
-      });
-
-      //Get info and create notebook after dialog is closed
-      dialogRef.afterClosed().subscribe(result => {
-
-        //If the user filled out the form
-        if (result !== undefined) {
-
-          let request = {
-            title: result.title,
-            author: 'Arno',
-            course: result.course,
-            description: result.description,
-            institution: result.institution,
-            name: 'Arno',
-            surname: 'Moller',
-            private: result.private,
-            username: 'userArno'
-          }
-
-          //Call service and create notebook
-          this.notebookService.updateNotebook(request, id)
-            .subscribe(result => {
-                console.log(result);
-                this.getUserNotebooks();
-              },
-              error => {
-                console.log(error);
-              });
-        }
-      })
-    });
-  }
+					//Call service and create notebook
+					this.notebookService.updateNotebook(request, id).subscribe(
+						(result) => {
+							console.log(result)
+							this.getUserNotebooks()
+						},
+						(error) => {
+							console.log(error)
+						}
+					)
+				}
+			})
+		})
+	}
 }
