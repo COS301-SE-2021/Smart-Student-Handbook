@@ -1,4 +1,4 @@
-import { NotesPanelComponent } from './notes-panel/notes-panel.component';
+import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FolderPanelComponent } from './folder-panel.component';

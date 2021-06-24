@@ -1,15 +1,15 @@
-import { NotesPanelComponent } from './notes-panel/notes-panel.component';
+import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
 import {MatTree, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
-import {NotebookService} from "../../services/notebook.service";
+import {NotebookService} from "../../../services/notebook.service";
 import {Router} from "@angular/router";
-import {ProfileService} from "../../services/profile.service";
+import {ProfileService} from "../../../services/profile.service";
 import {MatSidenav} from "@angular/material/sidenav";
-import {EditProfileComponent} from "../../notebook/edit-profile/edit-profile.component";
+import {EditProfileComponent} from "../../../notebook/edit-profile/edit-profile.component";
 import {MatDialog} from "@angular/material/dialog";
 
 @Component({

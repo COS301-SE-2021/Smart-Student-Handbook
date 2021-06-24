@@ -9,10 +9,10 @@ import firebase from "firebase";
 import "firebase/firestore";
 import {AddNotebookComponent} from "./add-notebook/add-notebook.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FolderPanelComponent} from "../components/folder-panel/folder-panel.component";
+import {FolderPanelComponent} from "../components/panels/folder-panel/folder-panel.component";
 import {GlobalConfirmComponent} from "../components/modals/global/global-confirm/global-confirm.component";
 import {ConfirmDeleteComponent} from "./confirm-delete/confirm-delete.component";
-import {NotesPanelComponent} from "../components/folder-panel/notes-panel/notes-panel.component";
+import {NotesPanelComponent} from "../components/panels/notes-panel/notes-panel.component";
 import {AccountService} from "../services/account.service";
 import {ProfileService} from "../services/profile.service";
 

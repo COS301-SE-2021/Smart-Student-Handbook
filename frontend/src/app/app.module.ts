@@ -8,9 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 
-//Editor
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
 //Firebase
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -26,10 +23,10 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
 import {MaterialModule} from './material/material/material.module';
 
 //Components
-import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
+import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
 import { NotebookComponent } from './notebook/notebook.component';
-import { SmartAssistPanelComponent } from './components/folder-panel/smart-assist-panel/smart-assist-panel.component';
-import { NotesPanelComponent } from './components/folder-panel/notes-panel/notes-panel.component';
+import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
+import { NotesPanelComponent } from './components/panels/notes-panel/notes-panel.component';
 import { LoginComponent } from './components/account/login/login.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
@@ -67,7 +64,6 @@ import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.compone
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    CKEditorModule,
     MDBBootstrapModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase, 'smartStudentNotebook'),
     AngularFireDatabaseModule,
