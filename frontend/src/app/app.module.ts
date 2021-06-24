@@ -20,7 +20,7 @@ import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
 //Angular Material
-import {MaterialModule} from './material/material/material.module';
+import {MaterialModule} from './material/material.module';
 
 //Components
 import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
