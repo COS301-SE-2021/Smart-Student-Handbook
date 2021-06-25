@@ -1,4 +1,4 @@
 export class SubscribeToTopicRequestDto {
-	token: string
-	topic: string
+  token: string;
+  topic: string;
 }

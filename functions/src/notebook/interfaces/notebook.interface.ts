@@ -1,4 +1,4 @@
-export interface Notebook {
+export interface Notebook{
 	title: string
 	author: string
 	course: string
