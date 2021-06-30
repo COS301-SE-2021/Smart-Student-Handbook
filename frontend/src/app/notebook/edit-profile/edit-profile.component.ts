@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {Component, OnInit, Inject} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DialogData} from "../add-notebook/add-notebook.component";
 
 
@@ -23,7 +23,8 @@ export interface EditProfileDialogData {
 export class EditProfileComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<EditProfileComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: EditProfileDialogData) { }
+              @Inject(MAT_DIALOG_DATA) public data: EditProfileDialogData) {
+  }
 
   ngOnInit(): void {
   }
