@@ -9,8 +9,8 @@ import {NotebookService} from "../../../services/notebook.service";
 import {Router} from "@angular/router";
 import {ProfileService} from "../../../services/profile.service";
 import {MatSidenav} from "@angular/material/sidenav";
-import {EditProfileComponent} from "../../../notebook/edit-profile/edit-profile.component";
 import {MatDialog} from "@angular/material/dialog";
+import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-folder-panel',

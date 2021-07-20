@@ -2,7 +2,7 @@ import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {NotebookService} from "../../../services/notebook.service";
 import {Router} from "@angular/router";
-import {AddNotebookComponent} from "../../../notebook/add-notebook/add-notebook.component";
+import {AddNotebookComponent} from "../../modals/add-notebook/add-notebook.component";
 import {MatDialog} from "@angular/material/dialog";
 
 @Component({
@@ -84,7 +84,6 @@ export class NotesPanelComponent implements OnInit {
   //open a specific nptebook
   openNotebook(id: string){
 
-    this.router.navigate(['notebook'], {queryParams: {id: id}});
   }
 
   //Edit a notebook
