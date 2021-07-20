@@ -1,0 +1,102 @@
+<div id="editorContainer" cdkDropList
+    cdkDropListConnectedTo="list-2"
+    (cdkDropListDropped)="drop($event)"
+    #editorContainer>
+
+  <mat-accordion>
+    <mat-expansion-panel id="noteInfoAccordion" [expanded]="panelOpenState == true" (opened)="openClosePanel()" (closed)="openClosePanel()">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title id="noteTitle">
+        Visual Inspiration
+      </mat-panel-title>
+      <mat-panel-description>
+
+        <button mat-icon-button class="favorite-icon" (click)="showMoreOptions($event)" [matMenuTriggerFor]="menu">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+
+          <button mat-icon-button class="favorite-icon" >
+            <mat-icon>share</mat-icon>
+            Share
+          </button><br>
+
+          <!-- <button mat-icon-button class="favorite-icon" class="moreOptions" >(click)="createNewNotebook()" -->
+            <!-- <mat-icon>add</mat-icon> -->
+          <!-- </button> -->
+
+          <button mat-icon-button class="favorite-icon"><!-- (click)="removeNotebook()" -->
+            <mat-icon>clear</mat-icon>
+            Delete
+          </button>
+
+        </mat-menu>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <table id="noteInfoTable">
+      <tr>
+        <td class="noteInfo"><p>Created By:</p></td>
+        <td>
+
+          <mat-card class="card">
+            <mat-card-header>
+              <div mat-card-avatar class="header-image"></div>
+              <mat-card-title class="personName">Arno</mat-card-title>
+            </mat-card-header>
+          </mat-card>
+
+        </td>
+      </tr>
+      <tr>
+        <td class="noteInfo"><p>Collaborators:</p></td>
+        <td>
+
+          <mat-card class="card">
+            <mat-card-header>
+              <div mat-card-avatar class="header-image"></div>
+              <mat-card-title class="personName">Arno</mat-card-title>
+            </mat-card-header>
+          </mat-card>
+
+        </td>
+      </tr>
+      <tr>
+        <td class="noteInfo"><p>Last Updated:</p></td>
+        <td><p>July 18, 2021 at 14:44</p></td>
+      </tr>
+      <tr>
+        <td class="noteInfo"><p>Tags:</p></td>
+        <td>
+          <mat-form-field id="tags">
+            <mat-label></mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let tag of tags" [selectable]="true"
+                       [removable]="true" (removed)="removeTag(tag)">
+                {{tag.name}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Add tag..."
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="true"
+                     (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+
+  </mat-expansion-panel>
+  </mat-accordion>
+
+  <hr>
+
+  <div id="editor" #editor class="editor">
+
+  </div>
+</div>
+
+<div id="editorOverlay"></div>
+<!-- <mat-spinner></mat-spinner> -->
