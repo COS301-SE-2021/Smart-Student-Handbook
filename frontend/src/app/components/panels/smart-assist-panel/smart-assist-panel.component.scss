@@ -51,15 +51,29 @@
   margin-bottom: 5px;
 }
 
-#username{
-  font-size: medium;
+.snippetCard{
+
 }
 
-#subTitle{
+.date{
   font-size: small;
 }
 
-#description{
+.snippetTitle{
+  font-size: medium;
+}
+
+.snippetContentHeader{
+  max-height: 200px;
+  // white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  text-overflow: ellipsis ellipsis;
+  text-overflow: ellipsis " [..]";
+  margin-bottom: 5px;
+}
+
+.snippetContent{
   font-weight: 400;
   font-size: small;
 }
@@ -78,3 +92,10 @@
 // .treeNode{
 //   padding-left: 0px !important;
 // }
+
+.handle{
+  cursor: move;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
