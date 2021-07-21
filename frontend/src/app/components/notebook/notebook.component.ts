@@ -53,8 +53,7 @@ export class NotebookComponent implements OnInit {
    * Include the notebook service
    * @param notebookService
    */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog,
-              private _router: Router, private accountService: AccountService) { }
+  constructor(private _router: Router, private accountService: AccountService) { }
 
 
   ngOnInit() {
@@ -85,114 +84,6 @@ export class NotebookComponent implements OnInit {
     this.notePanelComponent.openedCloseToggle();
   }
 
-  /**
-   * Add a new tab to the tabs bar
-   */
-  addLink(name: string) {
-    this.links.push(name);
-    return this.links.length;
-  }
-
-  /**
-   * Create a new notebook
-   */
-  createNewNotebook(){
-
-    //Open dialog
-    const dialogRef = this.dialog.open(AddNotebookComponent, {
-      width: '50%',
-      data: {
-        title: this.title,
-        course: this.course,
-        description: this.description,
-        institution: this.institution,
-        private: this.private
-      }
-    });
-
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-
-      //If the user filled out the form
-      if(result !== undefined){
-
-        //Create request object
-        let request = {
-          title: result.title,
-          author: this.profile.name,
-          course: result.course,
-          description: result.description,
-          institution: result.institution,
-          name: this.profile.name,
-          private: result.private,
-        }
-
-        this.notebookTitle = result.title;
-
-        //Call service and create notebook
-        this.notebookService.createNotebook(request)
-          .subscribe(result => {
-            console.log(result);
-
-            this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
-
-            this.folderPanelComponent.getUserNotebooks();
-            // this.folderPanelComponent.openTree();
-
-              this.notePanelComponent.getUserNotebooks();
-          },
-            error => {
-              this.folderPanelComponent.getUserNotebooks();
-            });
-      }
-    });
-
-  }
-
-  /**
-   * Delete a notebook
-   */
-  removeNotebook(){
-
-    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-      // width: '50%',
-    });
-
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-
-      if(result === true){
-        if(this.notebookID != ''){
-
-          this.notebookService.removeNotebook(this.notebookID)
-            .subscribe(result => {
-                console.log(result);
-
-                this._router.navigate(['notebook']);
-
-                this.folderPanelComponent.getUserNotebooks();
-                let editor = this._editor;
-                editor.clear();
-
-                this.notebookTitle = '';
-                this.notePanelComponent.getUserNotebooks();
-
-              },
-              error => {
-
-                // this._router.navigate(['notebook']);
-                //
-                // this.folderPanelComponent.getUserNotebooks();
-                //
-                // let editor = this._editor;
-                // editor.clear();
-                //
-                // this.notebookTitle = '';
-              })
-        }
-      }
-    });
-  }
 
   async logout()
   {

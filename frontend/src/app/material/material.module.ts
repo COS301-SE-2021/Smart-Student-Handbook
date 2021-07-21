@@ -71,7 +71,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatTreeModule,
     MatCommonModule,
     BrowserModule,
-    // MatCheckboxModule,
+    MatCheckboxModule,
     // MatCheckboxModule,
     MatButtonModule,
     MatInputModule,

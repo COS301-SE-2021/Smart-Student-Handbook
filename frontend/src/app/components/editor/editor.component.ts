@@ -8,6 +8,8 @@ import "firebase/firestore";
 import { NotebookService } from 'src/app/services/notebook.service';
 
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
 
 export interface Tag {
   name: string;
@@ -90,113 +92,132 @@ export class EditorComponent implements OnInit {
 
     var doc = parser.parseFromString(e, 'text/html');
 
-    console.log(doc.getElementsByClassName('mat-card-title'));
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    // } else {
-    //   transferArrayItem(event.previousContainer.data,
-    //                     event.container.data,
-    //                     event.previousIndex,
-    //                     event.currentIndex);
-    // }
+    let content = doc.getElementsByClassName('snippetContent');
+    let title = doc.getElementsByClassName('snippetTitle');
+
+    console.log(title);
+
+    this._editor.blocks.insert('paragraph', { text : '1'});
   }
 
 
-  constructor(private notebookService: NotebookService) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.initialFunction();
   }
 
   //Initialise the editor
-  initialFunction(){
+  async initialFunction(){
 
-    /**
-     * Create the notebook with all the plugins
-     */
-    let editor = new EditorJS({
-      holder: 'editor',
-      tools: {
-        header: {
-          class: this.Header,
-          shortcut: 'CTRL+SHIFT+H'
-        },
-        linkTool: {
-          class: this.LinkTool,
-          // config: {
-          //   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
-          // }
-        },
-        raw: this.RawTool,
-        image: this.SimpleImage,
-        checklist: {
-          class: this.Checklist,
-          inlineToolbar: true,
-        },
-        list: {
-          class: this.NestedList,
-          inlineToolbar: true,
-        },
-        embed: this.Embed,
-        quote: this.Quote,
-        underline: this.Underline,
-        table: {
-          class: this.Table,
-        },
-        warning: {
-          class: this.Warning,
-          inlineToolbar: true,
-          shortcut: 'CTRL+SHIFT+W',
-          config: {
-            titlePlaceholder: 'Title',
-            messagePlaceholder: 'Message',
-          },
-        },
-        code: this.CodeTool,
-        paragraph: {
-          class: this.Paragraph,
-          inlineToolbar: true,
-        },
-        textVariant: this.TextVariantTune,
-        attaches: {
-          class: this.AttachesTool,
-          // config: {
-          //   endpoint: 'http://localhost:8008/uploadFile'
-          // }
-        },
-        Marker: {
-          class: this.Marker,
-          shortcut: 'CTRL+SHIFT+M',
-        },
-        inlineCode: {
-          class: this.InlineCode,
-          shortcut: 'CMD+SHIFT+M',
-        },
-        personality: {
-          class: this.Personality,
-          // config: {
-          //   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
-          // }
-        },
-        delimiter: this.Delimiter,
-        alert: this.Alert,
-      },
-      data:
-        {
-          blocks: []
-        },
-      autofocus: true,
-
-      onChange: () => {}
-    });
-
-    this._editor = editor;
-
-    let e = document.getElementById('editor') as HTMLElement;
-    e.style.display = 'none';
   }
 
-  loadEditor(id: string){
+  async loadEditor(id: string){
+
+    this.notebookID = id;
+
+    if(this._editor === undefined){
+      /**
+     * Create the notebook with all the plugins
+     */
+      let editor = new EditorJS({
+        holder: 'editor',
+        tools: {
+          header: {
+            class: this.Header,
+            shortcut: 'CTRL+SHIFT+H'
+          },
+          linkTool: {
+            class: this.LinkTool,
+            // config: {
+            //   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
+            // }
+          },
+          raw: this.RawTool,
+          image: this.SimpleImage,
+          checklist: {
+            class: this.Checklist,
+            inlineToolbar: true,
+          },
+          list: {
+            class: this.NestedList,
+            inlineToolbar: true,
+          },
+          embed: this.Embed,
+          quote: this.Quote,
+          underline: this.Underline,
+          table: {
+            class: this.Table,
+          },
+          warning: {
+            class: this.Warning,
+            inlineToolbar: true,
+            shortcut: 'CTRL+SHIFT+W',
+            config: {
+              titlePlaceholder: 'Title',
+              messagePlaceholder: 'Message',
+            },
+          },
+          code: this.CodeTool,
+          paragraph: {
+            class: this.Paragraph,
+            inlineToolbar: true,
+          },
+          textVariant: this.TextVariantTune,
+          attaches: {
+            class: this.AttachesTool,
+            // config: {
+            //   endpoint: 'http://localhost:8008/uploadFile'
+            // }
+          },
+          Marker: {
+            class: this.Marker,
+            shortcut: 'CTRL+SHIFT+M',
+          },
+          inlineCode: {
+            class: this.InlineCode,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          personality: {
+            class: this.Personality,
+            // config: {
+            //   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
+            // }
+          },
+          delimiter: this.Delimiter,
+          alert: this.Alert,
+        },
+        data:
+          {
+            blocks: []
+          },
+        autofocus: true,
+
+        onChange: () => {
+          editor.save().then((outputData) => {
+            // console.log(this.notebookID, outputData);
+
+            if(outputData.blocks.length > 0){
+              firebase.database().ref("notebook/" + this.notebookID).set({
+                outputData
+              });
+            }
+
+          }).catch((error) => {
+            console.log('Saving failed: ', error)
+          });
+        }
+      });
+
+      this._editor = editor;
+
+      let e = document.getElementById('editor') as HTMLElement;
+      e.style.display = 'none';
+    }
+
+    await this._editor.isReady;
+
+
 
     this._editor.styles.loader = 'mat-spinner';
 
@@ -214,8 +235,6 @@ export class EditorComponent implements OnInit {
     let editor = this._editor;
 
     editor.clear();
-
-    this.notebookID = id;
 
     /**
      * Get the specific notebook details with notebook id
@@ -259,25 +278,56 @@ export class EditorComponent implements OnInit {
               editor.render(snap.val().outputData);
             });
 
-            //Change the path to which the editor should save data
-            editor.on('change', () => {
-              (function () {
-                editor.save().then((outputData) => {
-                  // console.log(outputData);
-                  firebase.database().ref("notebook/" + id).set({
-                    outputData
-                  });
-                }).catch((error) => {
-                  console.log('Saving failed: ', error)
-                })
-              }());
-            });
-
             editorLoad[0].classList.remove('cdx-loader');
             e = document.getElementById('editor') as HTMLElement;
             e.style.overflowY = 'scroll';
           });
       })
+  }
+
+  /**
+   * Delete a notebook
+   */
+  removeNotebook(){
+
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      // width: '50%',
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result === true){
+        if(this.notebookID != ''){
+
+          this.notebookService.removeNotebook(this.notebookID)
+            .subscribe(result => {
+                console.log(result);
+
+                // this._router.navigate(['notebook']);
+
+                // this.folderPanelComponent.getUserNotebooks();
+                let editor = this._editor;
+                editor.clear();
+
+                this.notebookTitle = '';
+                // this.notePanelComponent.getUserNotebooks();
+
+              },
+              error => {
+
+                // this._router.navigate(['notebook']);
+                //
+                // this.folderPanelComponent.getUserNotebooks();
+                //
+                // let editor = this._editor;
+                // editor.clear();
+                //
+                // this.notebookTitle = '';
+              })
+        }
+      }
+    });
   }
 
   showMoreOptions(event: Event){
