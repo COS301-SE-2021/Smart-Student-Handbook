@@ -2,8 +2,8 @@ import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {NotebookService} from "../../../services/notebook.service";
 import {Router} from "@angular/router";
-import {AddNotebookComponent} from "../../modals/add-notebook/add-notebook.component";
 import {MatDialog} from "@angular/material/dialog";
+import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
 
 @Component({
   selector: 'app-notes-panel',

@@ -12,6 +12,28 @@ export class SmartAssistPanelComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showPreview(index: number){
+
+    let snippet = document.getElementsByClassName('snippetCard')[index].children[0] as HTMLElement;
+
+    if(snippet.style.maxHeight == '400px'){
+      this.hidePreview(index);
+    }
+    else{
+      snippet.style.maxHeight = '400px';
+      snippet.style.overflowY = 'scroll';
+    }
+
+  }
+
+  hidePreview(index: number){
+
+    let snippet = document.getElementsByClassName('snippetCard')[index].children[0] as HTMLElement;
+
+    snippet.style.maxHeight = '200px';
+    snippet.style.overflow = 'hidden';
+  }
+
   openedCloseToggle(){
     const sideNav = document.getElementById('smartAssistContainer') as HTMLElement;
     const col = sideNav?.parentElement?.parentElement;

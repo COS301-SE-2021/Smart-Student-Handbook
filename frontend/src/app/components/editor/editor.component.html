@@ -1,5 +1,5 @@
 <div id="editorContainer" cdkDropList
-    cdkDropListConnectedTo="list-2"
+    cdkDropListConnectedTo="panelContent"
     (cdkDropListDropped)="drop($event)"
     #editorContainer>
 
@@ -17,18 +17,14 @@
         </button>
         <mat-menu #menu="matMenu">
 
-          <button mat-icon-button class="favorite-icon" >
+          <button mat-menu-item>
             <mat-icon>share</mat-icon>
-            Share
-          </button><br>
+            <span>Share</span>
+          </button>
 
-          <!-- <button mat-icon-button class="favorite-icon" class="moreOptions" >(click)="createNewNotebook()" -->
-            <!-- <mat-icon>add</mat-icon> -->
-          <!-- </button> -->
-
-          <button mat-icon-button class="favorite-icon" (click)="removeNotebook()">
+          <button mat-menu-item (click)="removeNotebook()">
             <mat-icon>clear</mat-icon>
-            Delete
+            <span>Delete</span>
           </button>
 
         </mat-menu>

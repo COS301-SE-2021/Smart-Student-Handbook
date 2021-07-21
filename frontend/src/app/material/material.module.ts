@@ -97,7 +97,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatProgressSpinnerModule,
     // MatProgressBarModule,
     MatDialogModule,
-    // MatTooltipModule,
+    MatTooltipModule,
     // MatSnackBarModule,
     // MatTableModule,
     // MatSortModule,
