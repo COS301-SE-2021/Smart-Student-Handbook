@@ -18,10 +18,10 @@
         <mat-icon class="handle">drag_indicator</mat-icon>
         <mat-card-header class="snippetContentHeader">
           <mat-card-subtitle class="date">JUNE 3 2021</mat-card-subtitle>
-          <mat-card-title class="snippetTitle">Functional Requirements</mat-card-title>
+          <mat-card-title class="snippetTitle" data-type="header">Functional Requirements</mat-card-title>
 
-          <mat-card-title class="snippetContent">R1:The system should allow users to manage their Profile and Account.</mat-card-title>
-          <mat-card-title class="snippetContent">R2:The system should allow users to create notes and add content to it then add appropriate tags totheir content.</mat-card-title>
+          <mat-card-title class="snippetContent" data-type="paragraph">R1:The system should allow users to manage their Profile and Account.</mat-card-title>
+          <mat-card-title class="snippetContent" data-type="paragraph">R2:The system should allow users to create notes and add content to it then add appropriate tags to their content.</mat-card-title>
 
         </mat-card-header>
 
@@ -30,10 +30,29 @@
         </mat-chip-list>
       </mat-card>
 
+
+
+      <mat-card align="start" class="card text-left snippetCard" cdkDrag>
+        <mat-icon class="handle">drag_indicator</mat-icon>
+        <mat-card-header class="snippetContentHeader">
+          <mat-card-subtitle class="date">JUNE 3 2021</mat-card-subtitle>
+          <mat-card-title class="snippetTitle" data-type="header">Functional Requirements</mat-card-title>
+
+          <mat-card-title class="snippetContent" data-type="image">
+            <img src="assets/InitialClassDiagram.jpg" width="100%" height="100%" style="margin-bottom: 5px;"/>
+          </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-chip-list aria-label="Fish selection">
+          <mat-chip color="primary" selected>SRS</mat-chip>
+        </mat-chip-list>
+      </mat-card>
+
+
     </div>
 
   </mat-sidenav>
-
 
 
   <mat-sidenav-content class="content">

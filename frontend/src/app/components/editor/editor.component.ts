@@ -95,22 +95,22 @@ export class EditorComponent implements OnInit {
     let content = doc.getElementsByClassName('snippetContent');
     let title = doc.getElementsByClassName('snippetTitle');
 
-    console.log(title);
+    //Add the title
+    this._editor.blocks.insert(title[0].getAttribute('data-type')!, { text : title[0].innerHTML });
 
-    this._editor.blocks.insert('paragraph', { text : '1'});
+    for(let i = 0; i < content.length; i++){
+      // console.log(content[i].innerHTML);
+      //Add content
+      this._editor.blocks.insert(content[i].getAttribute('data-type')!, { text : content[i].innerHTML });
+    }
+
+    this.saveContent();
   }
 
 
   constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
-  ngOnInit(): void {
-    this.initialFunction();
-  }
-
-  //Initialise the editor
-  async initialFunction(){
-
-  }
+  ngOnInit(): void {  }
 
   async loadEditor(id: string){
 
@@ -194,18 +194,7 @@ export class EditorComponent implements OnInit {
         autofocus: true,
 
         onChange: () => {
-          editor.save().then((outputData) => {
-            // console.log(this.notebookID, outputData);
-
-            if(outputData.blocks.length > 0){
-              firebase.database().ref("notebook/" + this.notebookID).set({
-                outputData
-              });
-            }
-
-          }).catch((error) => {
-            console.log('Saving failed: ', error)
-          });
+          this.saveContent();
         }
       });
 
@@ -213,11 +202,10 @@ export class EditorComponent implements OnInit {
 
       let e = document.getElementById('editor') as HTMLElement;
       e.style.display = 'none';
+
     }
 
     await this._editor.isReady;
-
-
 
     this._editor.styles.loader = 'mat-spinner';
 
@@ -285,6 +273,21 @@ export class EditorComponent implements OnInit {
       })
   }
 
+  saveContent(){
+    this._editor.save().then((outputData) => {
+      // console.log(this.notebookID, outputData);
+
+      if(outputData.blocks.length > 0){
+        firebase.database().ref("notebook/" + this.notebookID).set({
+          outputData
+        });
+      }
+
+    }).catch((error) => {
+      console.log('Saving failed: ', error)
+    });
+  }
+
   /**
    * Delete a notebook
    */
@@ -347,7 +350,7 @@ export class EditorComponent implements OnInit {
       editor.style.height = p;
     }
     else{
-      let p = (vh - 188) + "px";
+      let p = (vh - 160) + "px";
       editor.style.height = p;
     }
   }
