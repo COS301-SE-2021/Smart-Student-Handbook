@@ -2,12 +2,21 @@
   <mat-sidenav #sidenav mode="side" [(opened)]="open" id="sidenav">
     <div id="panelContent" align="end">
 
-      <button mat-icon-button id="closeNotePanelBtn" #closeNotePanelBtn (click)="openedCloseToggle()">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
 
-      <div align="center" class="text-left" style="margin-top: -30px;">
-        <h2>Notes</h2>
+
+      <div align="center" class="text-left" style="margin-top: 15px;">
+
+        <button mat-icon-button id="closeNotePanelBtn" #closeNotePanelBtn (click)="openedCloseToggle()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+
+        <h2 style="display: inline;">Notes</h2>
+        <button mat-icon-button (click)="createNewNotebook()">
+          <mat-icon>add_circle_outline</mat-icon>
+
+        </button>
+
+
       </div>
 
 
@@ -25,10 +34,6 @@
             <mat-card-title id="description">{{notebook.description}}</mat-card-title>
 
           </mat-card-header>
-
-          <mat-chip-list aria-label="Fish selection">
-            <mat-chip color="primary" selected>Demo</mat-chip>
-          </mat-chip-list>
         </div>
 
       </mat-card>

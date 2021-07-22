@@ -2,8 +2,8 @@ import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {NotebookService} from "../../../services/notebook.service";
 import {Router} from "@angular/router";
-import {AddNotebookComponent} from "../../../notebook/add-notebook/add-notebook.component";
 import {MatDialog} from "@angular/material/dialog";
+import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
 
 @Component({
   selector: 'app-notes-panel',
@@ -21,6 +21,10 @@ export class NotesPanelComponent implements OnInit {
   institution = '';
   private = false;
 
+  //Variable that holds the logged in user details
+  user: any;
+  profile: any;
+
   //sliding panel
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
@@ -35,6 +39,11 @@ export class NotesPanelComponent implements OnInit {
   async ngOnInit() {
 
     this.getUserNotebooks();
+
+    // let userDeatils;
+    this.user = JSON.parse(<string>localStorage.getItem('user'));
+    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+    this.profile = this.profile.userInfo;
   }
 
   getUserNotebooks(){
@@ -84,7 +93,6 @@ export class NotesPanelComponent implements OnInit {
   //open a specific nptebook
   openNotebook(id: string){
 
-    this.router.navigate(['notebook'], {queryParams: {id: id}});
   }
 
   //Edit a notebook
@@ -143,5 +151,61 @@ export class NotesPanelComponent implements OnInit {
         }
       })
     });
+  }
+
+  /**
+   * Create a new notebook
+   */
+   createNewNotebook(){
+
+    //Open dialog
+    const dialogRef = this.dialog.open(AddNotebookComponent, {
+      width: '50%',
+      data: {
+        title: this.title,
+        course: this.course,
+        description: this.description,
+        institution: this.institution,
+        private: this.private
+      }
+    });
+
+    //Get info and create notebook after dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+
+      //If the user filled out the form
+      if(result !== undefined){
+
+        //Create request object
+        let request = {
+          title: result.title,
+          author: this.profile.name,
+          course: result.course,
+          description: result.description,
+          institution: result.institution,
+          name: this.profile.name,
+          private: result.private,
+        }
+
+        // this.notebookTitle = result.title;
+
+        //Call service and create notebook
+        this.notebookService.createNotebook(request)
+          .subscribe(result => {
+            console.log(result);
+
+            // this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
+
+            // this.folderPanelComponent.getUserNotebooks();
+            // this.folderPanelComponent.openTree();
+
+              // this.notePanelComponent.getUserNotebooks();
+          },
+            error => {
+              // this.folderPanelComponent.getUserNotebooks();
+            });
+      }
+    });
+
   }
 }

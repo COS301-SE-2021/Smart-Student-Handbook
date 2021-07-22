@@ -1,8 +1,6 @@
 <p>
   <mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
-    </button>
+
     <span>Smart Student</span>
     <span class="spacer"></span>
 
@@ -21,38 +19,36 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="sidePanel">
+    <div class="sidePanel" id="folderPanelContainer">
       <app-folder-panel #folderPanelComponent></app-folder-panel>
     </div>
-    <div class="sidePanel">
+    <div class="sidePanel" id="notePanelContainer">
       <app-notes-panel #notePanelComponent></app-notes-panel>
     </div>
     <div class="col" align="end">
 
-      <h3 id="notebookTitle" >{{notebookTitle}}</h3>
+      <!-- <h3 id="notebookTitle" >{{notebookTitle}}</h3> -->
 
-      <button mat-icon-button class="favorite-icon" class="moreOptions" >
+      <!-- <button mat-icon-button class="favorite-icon" class="moreOptions" >
         <mat-icon>share</mat-icon>
-      </button>
+      </button> -->
       <!-- <button mat-icon-button class="favorite-icon" id="moreOptions" >
         <mat-icon>more_horiz</mat-icon>
       </button> -->
-      <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="createNewNotebook()">
+      <!-- <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="createNewNotebook()">
         <mat-icon>add</mat-icon>
       </button>
       <button mat-icon-button class="favorite-icon" class="moreOptions" (click)="removeNotebook()">
         <mat-icon>remove</mat-icon>
-      </button>
+      </button> -->
 
-      <mat-tab-group [backgroundColor]="background" id="tabs">
-        <mat-tab *ngFor="let link of links; let n = index" label="{{link}}">
+      <!-- <mat-tab-group [backgroundColor]="background" id="tabs"> -->
+        <!-- <mat-tab *ngFor="let link of links; let n = index" label="{{link}}"> -->
 
-          <div id="editor" #editor class="editor" cdkDropList>
+          <app-editor #editorComponent></app-editor>
 
-          </div>
-
-        </mat-tab>
-      </mat-tab-group>
+        <!-- </mat-tab> -->
+      <!-- </mat-tab-group> -->
 
 
 

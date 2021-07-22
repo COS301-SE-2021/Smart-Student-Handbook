@@ -24,7 +24,7 @@ import {MaterialModule} from './material/material.module';
 
 //Components
 import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
-import { NotebookComponent } from './notebook/notebook.component';
+import { NotebookComponent } from './components/notebook/notebook.component';
 import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
 import { NotesPanelComponent } from './components/panels/notes-panel/notes-panel.component';
 import { LoginComponent } from './components/account/login/login.component';
@@ -35,10 +35,11 @@ import { GlobalErrorComponent } from './components/modals/global/global-error/gl
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
+import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
 import { MatDialogRef } from "@angular/material/dialog";
-import { ConfirmDeleteComponent } from './notebook/confirm-delete/confirm-delete.component';
-import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.component";
+import { EditorComponent } from './components/editor/editor.component';
+import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
+import { EditProfileComponent } from './components/modals/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.compone
     GlobalConfirmComponent,
     AddNotebookComponent,
     ConfirmDeleteComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    EditorComponent
   ],
   imports: [
     MaterialModule,

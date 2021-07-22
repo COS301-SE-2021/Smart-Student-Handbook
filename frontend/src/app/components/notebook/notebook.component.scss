@@ -25,6 +25,14 @@
   // margin-left: -13%;
 }
 
+#folderPanelContainer{
+  padding-right: 0px;
+}
+
+#notePanelContainer{
+  padding-left: 0px;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -54,13 +62,6 @@
 
 .search{
   font-size: medium;
-}
-
-.editor{
-  border: 1px solid #585858;
-  text-align: left;
-  padding: 7px;
-  //background-color: #585858;
 }
 
 #notebookTitle{
