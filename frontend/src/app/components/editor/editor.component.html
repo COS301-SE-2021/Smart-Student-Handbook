@@ -33,12 +33,12 @@
 
     <table id="noteInfoTable" aria-label="Extra information on opened notebook">
       <tr>
-        <th></th>
-        <th></th>
+        <th id="tableTitles"></th>
+        <th id="tableContent"></th>
       </tr>
       <tr>
-        <td class="noteInfo"><p>Created By:</p></td>
-        <td>
+        <td class="noteInfo" headers="tableTitles"><p>Created By:</p></td>
+        <td headers="tableContent">
 
           <mat-card class="card">
             <mat-card-header>
@@ -50,8 +50,8 @@
         </td>
       </tr>
       <tr>
-        <td class="noteInfo"><p>Collaborators:</p></td>
-        <td>
+        <td class="noteInfo" headers="tableTitles"><p>Collaborators:</p></td>
+        <td headers="tableContent">
 
           <mat-card class="card">
             <mat-card-header>
@@ -63,12 +63,12 @@
         </td>
       </tr>
       <tr>
-        <td class="noteInfo"><p>Last Updated:</p></td>
-        <td><p>July 18, 2021 at 14:44</p></td>
+        <td class="noteInfo" headers="tableTitles"><p>Last Updated:</p></td>
+        <td headers="tableContent"><p>July 18, 2021 at 14:44</p></td>
       </tr>
       <tr>
-        <td class="noteInfo"><p>Tags:</p></td>
-        <td>
+        <td class="noteInfo" headers="tableTitles"><p>Tags:</p></td>
+        <td headers="tableContent">
           <mat-form-field id="tags">
             <mat-label></mat-label>
             <mat-chip-list #chipList aria-label="Fruit selection">
