@@ -8,7 +8,7 @@
 
     <mat-expansion-panel-header>
       <mat-panel-title id="noteTitle">
-        Visual Inspiration
+        {{notebookTitle}}
       </mat-panel-title>
       <mat-panel-description>
 
@@ -31,7 +31,11 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <table id="noteInfoTable">
+    <table id="noteInfoTable" aria-label="Extra information on opened notebook">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
       <tr>
         <td class="noteInfo"><p>Created By:</p></td>
         <td>

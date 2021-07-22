@@ -79,12 +79,16 @@ export class EditorComponent implements OnInit {
     {name: 'tag4'}
   ];
   notebookID!: string;
-  notebookTitle!: string;
+  notebookTitle: string = 'Smart Student';
   panelOpenState = false;
   showMore: boolean = false;
 
   @ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
+  /**
+   * Handler for when content from the smart assist panel is drag & dropped into the notebook
+   * @param event get the content that is dropped
+   */
   drop(event: CdkDragDrop<string[]>) {
     var parser = new DOMParser();
 
@@ -107,11 +111,19 @@ export class EditorComponent implements OnInit {
     this.saveContent();
   }
 
-
+  /**
+   * Editor component constructor
+   * @param notebookService To call methods that apply to the notebooks
+   * @param dialog Show dialog when a user wants to delete a notebook for example
+   */
   constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
   ngOnInit(): void {  }
 
+  /**
+   * Instantiate a new editor if one does not exist yet and load previously saved data
+   * @param id the id of the notebook to load
+   */
   async loadEditor(id: string){
 
     this.notebookID = id;
@@ -273,6 +285,9 @@ export class EditorComponent implements OnInit {
       })
   }
 
+  /**
+   * Method to call when notebook content should be saved
+   */
   saveContent(){
     this._editor.save().then((outputData) => {
       // console.log(this.notebookID, outputData);
@@ -333,10 +348,17 @@ export class EditorComponent implements OnInit {
     });
   }
 
+  /**
+   * Show menu when user clicks on ellipsis
+   * @param event To prevent the accordion from opening and closing when ellipsis is clicked
+   */
   showMoreOptions(event: Event){
     event.stopPropagation();
   }
 
+  /**
+   * When the accordion is opened and closed, adjust the height of the notebook
+   */
   openClosePanel(){
 
     this.panelOpenState = !this.panelOpenState;
@@ -355,6 +377,10 @@ export class EditorComponent implements OnInit {
     }
   }
 
+  /**
+   * Insert new tags to the input and tags array
+   * @param event To get the value from the newly inserted tag
+   */
   addTag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
@@ -367,8 +393,12 @@ export class EditorComponent implements OnInit {
     event.chipInput!.clear();
   }
 
-  removeTag(fruit: Tag): void {
-    const index = this.tags.indexOf(fruit);
+  /**
+   * Remove a tag from input and tags array
+   * @param tag the tag to be removed
+   */
+  removeTag(tag: Tag): void {
+    const index = this.tags.indexOf(tag);
 
     if (index >= 0) {
       this.tags.splice(index, 1);
