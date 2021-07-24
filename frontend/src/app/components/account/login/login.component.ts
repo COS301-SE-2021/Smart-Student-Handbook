@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
         this.accountService.loginUser(email, password).subscribe(data => {
           this.loginFailed = false;
           //If login was successful then go to the notebook home page
-            this.router.navigateByUrl(`notebook`);
+            this.router.navigate(['notebook']);
           },
           err => {
             this.loginFailed = true;

@@ -101,7 +101,6 @@ export class NotesPanelComponent implements OnInit {
     //Get the notebook info to edit
     this.notebookService.getNoteBookById(id)
     .subscribe(result => {
-      console.log(result);
 
       this.title  = result.title;
       this.course  = result.course;
@@ -139,15 +138,26 @@ export class NotesPanelComponent implements OnInit {
             username: 'userArno'
           }
 
-          //Call service and create notebook
+          //Call service and update notebook
           this.notebookService.updateNotebook(request, id)
             .subscribe(result => {
-                console.log(result);
-                this.getUserNotebooks();
-              },
-              error => {
-                console.log(error);
+
+              this.notebooks = this.notebooks.map((notebook: any) => {
+                if(notebook.notebookReference === id){
+
+                  notebook.course = request.course;
+                  notebook.description = request.description;
+                  notebook.institution = request.institution;
+                  notebook.private = request.private;
+                  notebook.title = request.title;
+                }
+
+                return notebook;
               });
+            },
+            error => {
+              console.log(error);
+            });
         }
       })
     });
@@ -156,7 +166,7 @@ export class NotesPanelComponent implements OnInit {
   /**
    * Create a new notebook
    */
-   createNewNotebook(){
+  createNewNotebook(){
 
     //Open dialog
     const dialogRef = this.dialog.open(AddNotebookComponent, {
@@ -192,14 +202,22 @@ export class NotesPanelComponent implements OnInit {
         //Call service and create notebook
         this.notebookService.createNotebook(request)
           .subscribe(result => {
-            console.log(result);
 
-            // this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
+            let newNotebook = {
+              author: request.author,
+              course: request.course,
+              description: request.description,
+              institution: request.institution,
+              name: request.name,
+              notebookReference: result.notebookId,
+              private: request.private,
+              title: request.title,
+              userId: this.user.uid
+            }
 
-            // this.folderPanelComponent.getUserNotebooks();
-            // this.folderPanelComponent.openTree();
+            this.notebooks.push(newNotebook);
 
-              // this.notePanelComponent.getUserNotebooks();
+            this.openNotebook(result.notebookId);
           },
             error => {
               // this.folderPanelComponent.getUserNotebooks();
@@ -207,5 +225,14 @@ export class NotesPanelComponent implements OnInit {
       }
     });
 
+  }
+
+  removeNotebook(id: string){
+
+    this.notebooks = this.notebooks.filter((notebook: any) => {
+      if(notebook.notebookReference !== id){
+        return notebook;
+      }
+    });
   }
 }

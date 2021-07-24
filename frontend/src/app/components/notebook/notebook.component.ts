@@ -69,6 +69,10 @@ export class NotebookComponent implements OnInit {
       this.notePanelComponent.openNotebook = (id: string) => {
          this.editorComponent.loadEditor(id);
       }
+
+      this.editorComponent.removeNotebookCard = (id: string) => {
+        this.notePanelComponent.removeNotebook(id);
+      }
     })
 
     // let userDeatils;

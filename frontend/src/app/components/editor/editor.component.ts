@@ -322,30 +322,24 @@ export class EditorComponent implements OnInit {
             .subscribe(result => {
                 console.log(result);
 
-                // this._router.navigate(['notebook']);
-
-                // this.folderPanelComponent.getUserNotebooks();
                 let editor = this._editor;
                 editor.clear();
 
                 this.notebookTitle = '';
-                // this.notePanelComponent.getUserNotebooks();
+
+                this.removeNotebookCard(this.notebookID);
 
               },
               error => {
 
-                // this._router.navigate(['notebook']);
-                //
-                // this.folderPanelComponent.getUserNotebooks();
-                //
-                // let editor = this._editor;
-                // editor.clear();
-                //
-                // this.notebookTitle = '';
               })
         }
       }
     });
+  }
+
+  removeNotebookCard(id: string){
+
   }
 
   /**
