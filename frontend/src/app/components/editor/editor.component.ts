@@ -212,6 +212,7 @@ export class EditorComponent implements OnInit {
 
       this._editor = editor;
 
+
       let e = document.getElementById('editor') as HTMLElement;
       e.style.display = 'none';
 
@@ -231,6 +232,8 @@ export class EditorComponent implements OnInit {
     e = document.getElementById('editor') as HTMLElement;
     e.style.overflowY = 'none';
     e.style.display = 'block';
+    e.style.backgroundImage = 'none';
+    // e.style.backgroundColor = 'grey';
 
     let editor = this._editor;
 
@@ -322,30 +325,24 @@ export class EditorComponent implements OnInit {
             .subscribe(result => {
                 console.log(result);
 
-                // this._router.navigate(['notebook']);
-
-                // this.folderPanelComponent.getUserNotebooks();
                 let editor = this._editor;
                 editor.clear();
 
                 this.notebookTitle = '';
-                // this.notePanelComponent.getUserNotebooks();
+
+                this.removeNotebookCard(this.notebookID);
 
               },
               error => {
 
-                // this._router.navigate(['notebook']);
-                //
-                // this.folderPanelComponent.getUserNotebooks();
-                //
-                // let editor = this._editor;
-                // editor.clear();
-                //
-                // this.notebookTitle = '';
               })
         }
       }
     });
+  }
+
+  removeNotebookCard(id: string){
+
   }
 
   /**
