@@ -1,19 +1,12 @@
 import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 
 import EditorJS from '@editorjs/editorjs';
-import {NotebookService} from "../../services/notebook.service";
 
-
-import {AddNotebookComponent} from "../modals/add-notebook/add-notebook.component";
-import {ActivatedRoute, Router} from "@angular/router";
-import {GlobalConfirmComponent} from "../modals/global/global-confirm/global-confirm.component";
-import {AccountService} from "../../services/account.service";
-import {ProfileService} from "../../services/profile.service";
+import { Router } from "@angular/router";
+import { AccountService } from "../../services/account.service";
 import { FolderPanelComponent } from '../panels/folder-panel/folder-panel.component';
 import { NotesPanelComponent } from '../panels/notes-panel/notes-panel.component';
-import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
 import { EditorComponent } from '../editor/editor.component';
 
 @Component({
@@ -56,11 +49,17 @@ export class NotebookComponent implements OnInit {
   constructor(private _router: Router, private accountService: AccountService) { }
 
 
+  /**
+   * When the view is loaded:
+   *  let the folderPanelComponent openNotebookPanel method call the notePanelComponent's openedCloseToggle method
+   *  let the notePanelComponent openNotebook method call the editor component's load editor method
+   *  let the editorComponent removeNotebookCard method call the notePanelComponent's removeNotebook method
+   */
   ngOnInit() {
 
     this.accountService.isUserLoggedIn();
 
-    //Assign "openPanel function to the eventhandler from folder panel to open the note panel when the view is loaded"
+    //Assign "openPanel" function to the eventhandler from folder panel to open the note panel when the view is loaded
     document.addEventListener('DOMContentLoaded', (event) => {
       this.folderPanelComponent.openNotebookPanel = () => {
         this.notePanelComponent.openedCloseToggle();
@@ -81,14 +80,9 @@ export class NotebookComponent implements OnInit {
     this.profile = this.profile.userInfo;
   }
 
-
-  //Open (and close) the notes panel
-  openPanel(){
-    console.log(this.notePanelComponent);
-    this.notePanelComponent.openedCloseToggle();
-  }
-
-
+  /**
+   * If a user is not logged in, redirect them to the login page
+   */
   async logout()
   {
     this.accountService.singOut().subscribe(data => {

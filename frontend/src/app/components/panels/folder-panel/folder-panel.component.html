@@ -6,12 +6,13 @@
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
 
-        <mat-card-header (click)="updateProfile()">
+        <mat-card-header id="profileCard" (click)="updateProfile()">
           <div mat-card-avatar class="header-image"></div>
           <mat-card-title id="username">{{username}}</mat-card-title>
           <mat-card-subtitle id="subTitle">{{bio}}</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
+
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="width: 200px;" #tree>
         <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePadding="0.9" (click)="openNotebookPanel()">
           <button mat-icon-button >

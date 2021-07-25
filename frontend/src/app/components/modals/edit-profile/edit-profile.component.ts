@@ -1,7 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {DialogData} from "../add-notebook/add-notebook.component";
-
 
 /**
  * Data for the add notebook popup

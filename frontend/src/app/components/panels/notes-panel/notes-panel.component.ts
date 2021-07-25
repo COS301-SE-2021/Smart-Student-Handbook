@@ -1,8 +1,7 @@
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
-import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
-import {NotebookService} from "../../../services/notebook.service";
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import { MatSidenav } from '@angular/material/sidenav';
+import { NotebookService } from "../../../services/notebook.service";
+import { MatDialog } from "@angular/material/dialog";
 import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
 
 @Component({
@@ -28,14 +27,21 @@ export class NotesPanelComponent implements OnInit {
   //sliding panel
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
-  public closeNotePanelBtn: any;
-
   open = false;
 
   public notebooks: any = [];
 
-  constructor(private notebookService: NotebookService, private router: Router, private dialog: MatDialog) { }
+  /**
+   * Notes panel constructor
+   * @param notebookService call notebook related requests to backend
+   * @param dialog show dialog to update notebook details
+   */
+  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
+  /**
+   * Get the logged in user's notebooks as well as
+   * User information from localstorage
+   */
   async ngOnInit() {
 
     this.getUserNotebooks();
@@ -46,6 +52,9 @@ export class NotesPanelComponent implements OnInit {
     this.profile = this.profile.userInfo;
   }
 
+  /**
+   * Retrieve the logged in user's notebooks
+   */
   getUserNotebooks(){
     this.notebooks = [];
 
@@ -58,6 +67,9 @@ export class NotesPanelComponent implements OnInit {
       });
   }
 
+  /**
+   * Open and close or hide and show the panel
+   */
   public openedCloseToggle(){
 
     this.sidenav.toggle();
@@ -90,12 +102,18 @@ export class NotesPanelComponent implements OnInit {
 
   }
 
-  //open a specific nptebook
+  /**
+   * Used in notebookcomponent to open a specific nptebook
+   * @param id the id of the notebook to be opened
+   */
   openNotebook(id: string){
 
   }
 
-  //Edit a notebook
+  /**
+   * Edit the details of a notebook
+   * @param id the id of the notebook to be updated
+   */
   editNotebook(id: string){
 
     //Get the notebook info to edit
@@ -227,6 +245,11 @@ export class NotesPanelComponent implements OnInit {
 
   }
 
+  /**
+   * Remove the notebook from the view
+   * (The notebook is deleted in the editor component)
+   * @param id the id of the notebook to be removed
+   */
   removeNotebook(id: string){
 
     this.notebooks = this.notebooks.filter((notebook: any) => {

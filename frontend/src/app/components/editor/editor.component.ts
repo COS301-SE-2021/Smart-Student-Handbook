@@ -212,6 +212,7 @@ export class EditorComponent implements OnInit {
 
       this._editor = editor;
 
+
       let e = document.getElementById('editor') as HTMLElement;
       e.style.display = 'none';
 
@@ -231,6 +232,8 @@ export class EditorComponent implements OnInit {
     e = document.getElementById('editor') as HTMLElement;
     e.style.overflowY = 'none';
     e.style.display = 'block';
+    e.style.backgroundImage = 'none';
+    // e.style.backgroundColor = 'grey';
 
     let editor = this._editor;
 
