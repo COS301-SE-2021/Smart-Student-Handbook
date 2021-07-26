@@ -1,3 +1,4 @@
+import { NotebookBottomSheetComponent } from './../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -10,6 +11,8 @@ import { NotebookService } from 'src/app/services/notebook.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
+
+import {MatBottomSheet } from '@angular/material/bottom-sheet';
 
 export interface Tag {
   name: string;
@@ -89,7 +92,7 @@ export class EditorComponent implements OnInit {
    * Handler for when content from the smart assist panel is drag & dropped into the notebook
    * @param event get the content that is dropped
    */
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: any) {
     var parser = new DOMParser();
 
     let e = event.item.element.nativeElement.innerHTML;
@@ -116,7 +119,8 @@ export class EditorComponent implements OnInit {
    * @param notebookService To call methods that apply to the notebooks
    * @param dialog Show dialog when a user wants to delete a notebook for example
    */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog,
+              private bottomSheet: MatBottomSheet) { }
 
   ngOnInit(): void {  }
 
@@ -400,5 +404,13 @@ export class EditorComponent implements OnInit {
     if (index >= 0) {
       this.tags.splice(index, 1);
     }
+  }
+
+
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(NotebookBottomSheetComponent, {
+      panelClass: 'bottomPanelClass'
+    });
   }
 }

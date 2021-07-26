@@ -10,3 +10,9 @@
   -moz-background-size: cover;
   -o-background-size: cover;
 }
+
+body{
+  overflow-y: hidden;
+  // width: 100vw;
+  // height: 100vh;
+}

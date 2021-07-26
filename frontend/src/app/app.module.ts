@@ -20,7 +20,7 @@ import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
 //Angular Material
-import {MaterialModule} from './material/material.module';
+import { MaterialModule } from './material/material.module';
 
 //Components
 import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
@@ -35,11 +35,15 @@ import { GlobalErrorComponent } from './components/modals/global/global-error/gl
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
-import { MatDialogRef } from "@angular/material/dialog";
 import { EditorComponent } from './components/editor/editor.component';
-import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
 import { EditProfileComponent } from './components/modals/edit-profile/edit-profile.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
+import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +61,8 @@ import { EditProfileComponent } from './components/modals/edit-profile/edit-prof
     AddNotebookComponent,
     ConfirmDeleteComponent,
     EditProfileComponent,
-    EditorComponent
+    EditorComponent,
+    NotebookBottomSheetComponent
   ],
   imports: [
     MaterialModule,
@@ -73,9 +78,16 @@ import { EditProfileComponent } from './components/modals/edit-profile/edit-prof
     AngularFireMessagingModule,
     // AngularFireStorageModule,
     AngularFirestoreModule,
-    HttpClientModule
+    FlexLayoutModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent, MaterialModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,16 +5,18 @@ import { RegisterComponent } from './components/account/register/register.compon
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
 import { NotebookComponent } from './components/notebook/notebook.component';
-import {AddNotebookComponent} from "./components/modals/add-notebook/add-notebook.component";
+import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
     path: 'login',
-    component: LoginComponent
+    // component: LoginComponent,
+    loadChildren: () => import('./components/account/login/login.component').then( m => m.LoginComponent)
   },
   {
     path: 'register',
@@ -28,10 +30,6 @@ const routes: Routes = [
     path: 'notebook',
     component: NotebookComponent
   },
-  {
-    path: 'add',
-    component: AddNotebookComponent
-  }
 ];
 
 @NgModule({

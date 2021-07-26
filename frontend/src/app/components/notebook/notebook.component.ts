@@ -8,6 +8,7 @@ import { AccountService } from "../../services/account.service";
 import { FolderPanelComponent } from '../panels/folder-panel/folder-panel.component';
 import { NotesPanelComponent } from '../panels/notes-panel/notes-panel.component';
 import { EditorComponent } from '../editor/editor.component';
+import { MatDrawerMode } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-notebook',
@@ -22,6 +23,9 @@ export class NotebookComponent implements OnInit {
   description = '';
   institution = '';
   private = false;
+
+  menuMode: MatDrawerMode = 'over';
+  hasBackDrop: boolean = true;
 
   notebookTitle = 'New Notebook';
 
