@@ -1,13 +1,17 @@
 # Ignore artifacts:
 lib
-dist
+/dist
+/coverage
 node_modules
+dist
+build
+coverage
 
-*.html
-*.json
-*.js
-*.scss
-*.css
-*.jpg
-*.ico
-*.xml
+#*.html
+#*.json
+#*.js
+#*.scss
+#*.css
+#*.jpg
+#*.ico
+#*.xml

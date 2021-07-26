@@ -4,5 +4,21 @@
 	"tabWidth": 4,
 	"semi": false,
 	"singleQuote": true,
-	"bracketSpacing": true
+	"bracketSpacing": true,
+  "arrow-body-style": "off",
+  "prefer-arrow-callback": "off",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.component.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
 }
