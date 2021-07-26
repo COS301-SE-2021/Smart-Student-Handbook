@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core'
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 // global confirm Dialog that can be used to confirm users actions
 
@@ -14,10 +14,10 @@ export class GlobalConfirmComponent implements OnInit {
 	ngOnInit(): void {}
 
 	Confirm(): void {
-		this.dialogRef.close(true)
+		this.dialogRef.close(true);
 	}
 
 	Cancel(): void {
-		this.dialogRef.close(false)
+		this.dialogRef.close(false);
 	}
 }

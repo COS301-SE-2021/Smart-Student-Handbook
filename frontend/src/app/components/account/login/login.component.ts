@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AccountService } from '../../../services/account.service'
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
 	selector: 'app-login',
@@ -9,11 +9,11 @@ import { AccountService } from '../../../services/account.service'
 	styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-	form: FormGroup
+	form: FormGroup;
 
-	loginFailed = false
+	loginFailed = false;
 
-	errorMessage: string = ''
+	errorMessage: string = '';
 
 	constructor(
 		private fb: FormBuilder,
@@ -25,42 +25,42 @@ export class LoginComponent implements OnInit {
 		this.form = this.fb.group({
 			email: ['', Validators.email],
 			password: ['', Validators.required],
-		})
+		});
 	}
 
 	async ngOnInit(): Promise<void> {
 		// if user is already logged in move them to the notebook page, if not return to login
-		await this.accountService.isUserLoggedIn()
+		await this.accountService.isUserLoggedIn();
 		// add image background to body
-		document.body.className = 'backgroundIMG'
+		document.body.className = 'backgroundIMG';
 	}
 
 	ngOnDestroy() {
 		// Remove image background to body
-		document.body.className = ''
+		document.body.className = '';
 	}
 
 	// When user submits Login form
 	async onSubmit(): Promise<void> {
-		this.loginFailed = false
+		this.loginFailed = false;
 
 		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value
-			const password = this.form.get('password')?.value
+			const email = this.form.get('email')?.value;
+			const password = this.form.get('password')?.value;
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
 				(data) => {
-					this.loginFailed = false
+					this.loginFailed = false;
 					// If login was successful then go to the notebook home page
-					this.router.navigateByUrl(`notebook`)
+					this.router.navigateByUrl(`notebook`);
 				},
 				(err) => {
-					this.loginFailed = true
-					this.errorMessage = `Error: ${err.error.message}`
+					this.loginFailed = true;
+					this.errorMessage = `Error: ${err.error.message}`;
 				}
-			)
+			);
 		} else {
 		}
 	}

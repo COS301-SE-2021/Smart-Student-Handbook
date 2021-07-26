@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core'
-import { AngularFireMessaging } from '@angular/fire/messaging'
-import { BehaviorSubject } from 'rxjs'
-import firebase from 'firebase'
-import { HttpClient } from '@angular/common/http'
-import { environment } from '../../environments/environment'
+import { Injectable } from '@angular/core';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { BehaviorSubject } from 'rxjs';
+import firebase from 'firebase';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MessagingService {
-	currentMessage = new BehaviorSubject(null)
+	currentMessage = new BehaviorSubject(null);
 
-	messaging
+	messaging;
 
 	constructor(
 		private angularFireMessaging: AngularFireMessaging,
 		private httpClient: HttpClient
 	) {
-		firebase.initializeApp(environment.firebase)
+		firebase.initializeApp(environment.firebase);
 
-		this.messaging = firebase.messaging()
+		this.messaging = firebase.messaging();
 
 		this.messaging
 			.getToken({
@@ -27,26 +27,26 @@ export class MessagingService {
 			.then((currentToken) => {
 				if (currentToken) {
 					// Send the token to your server and update the UI if necessary
-					console.log(currentToken)
+					console.log(currentToken);
 					this.messaging.onMessage = this.messaging.onMessage.bind(
 						this.messaging
-					)
+					);
 					this.messaging.onTokenRefresh =
-						this.messaging.onTokenRefresh.bind(this.messaging)
+						this.messaging.onTokenRefresh.bind(this.messaging);
 
 					this.subscribeToTopic(currentToken).subscribe((res) => {
 						// console.log(res);
-					})
+					});
 				} else {
 					// Show permission request UI
 					console.log(
 						'No registration token available. Request permission to generate one.'
-					)
+					);
 				}
 			})
 			.catch((err) => {
-				console.log('An error occurred while retrieving token. ', err)
-			})
+				console.log('An error occurred while retrieving token. ', err);
+			});
 
 		// this.angularFireMessaging.messaging.subscribe(
 		//   (_messaging) => {
@@ -57,7 +57,7 @@ export class MessagingService {
 	}
 
 	requestPermission() {
-		this.messaging.requestPermission()
+		this.messaging.requestPermission();
 
 		// this.angularFireMessaging.requestToken.subscribe(
 		//   (token) => {
@@ -92,6 +92,6 @@ export class MessagingService {
 					topic: 'general',
 				},
 			}
-		)
+		);
 	}
 }

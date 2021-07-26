@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AccountService } from '../../../services/account.service'
-import { ProfileService } from '../../../services/profile.service'
-import { MustMatch } from './must-match.validator'
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from '../../../services/account.service';
+import { ProfileService } from '../../../services/profile.service';
+import { MustMatch } from './must-match.validator';
 
 @Component({
 	selector: 'app-register',
@@ -11,13 +11,13 @@ import { MustMatch } from './must-match.validator'
 	styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-	form: FormGroup
+	form: FormGroup;
 
-	registerFailed = false
+	registerFailed = false;
 
-	submitted = false
+	submitted = false;
 
-	errorMessage: string = ''
+	errorMessage: string = '';
 
 	constructor(
 		private fb: FormBuilder,
@@ -38,33 +38,33 @@ export class RegisterComponent implements OnInit {
 			{
 				validator: MustMatch('password', 'passwordConfirm'),
 			}
-		)
+		);
 	}
 
 	async ngOnInit(): Promise<void> {
 		// if user is already logged in move them to the notebook page, if not return to login
-		await this.accountService.isUserLoggedIn()
+		await this.accountService.isUserLoggedIn();
 		// add image background to body
-		document.body.className = 'backgroundIMG'
+		document.body.className = 'backgroundIMG';
 	}
 
 	ngOnDestroy() {
 		// Remove image background to body
-		document.body.className = ''
+		document.body.className = '';
 	}
 
 	// When user submits Register form
 	async onSubmit(): Promise<void> {
-		this.registerFailed = false
-		this.submitted = true
+		this.registerFailed = false;
+		this.submitted = true;
 
 		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value
-			const phoneNumber = `+27${this.form.get('phoneNumber')?.value}`
-			const displayName = this.form.get('displayName')?.value
-			const password = this.form.get('password')?.value
-			const passwordConfirm = this.form.get('passwordConfirm')?.value
+			const email = this.form.get('email')?.value;
+			const phoneNumber = `+27${this.form.get('phoneNumber')?.value}`;
+			const displayName = this.form.get('displayName')?.value;
+			const password = this.form.get('password')?.value;
+			const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
 			// Call account service to register a new Account
 			this.accountService
@@ -97,28 +97,28 @@ export class RegisterComponent implements OnInit {
 										.loginUser(email, password)
 										.subscribe(
 											(data) => {
-												this.registerFailed = false
+												this.registerFailed = false;
 												this.router.navigateByUrl(
 													`notebook`
-												)
+												);
 											},
 											(err) => {
-												this.registerFailed = true
-												this.errorMessage = `Error: ${err.error.message}`
+												this.registerFailed = true;
+												this.errorMessage = `Error: ${err.error.message}`;
 											}
-										)
+										);
 								},
 								(err) => {
-									this.registerFailed = true
-									this.errorMessage = `Error: ${err.error.message}`
+									this.registerFailed = true;
+									this.errorMessage = `Error: ${err.error.message}`;
 								}
-							)
+							);
 					},
 					(err) => {
-						this.registerFailed = true
-						this.errorMessage = `Error: ${err.error.message}`
+						this.registerFailed = true;
+						this.errorMessage = `Error: ${err.error.message}`;
 					}
-				)
+				);
 		} else {
 		}
 	}

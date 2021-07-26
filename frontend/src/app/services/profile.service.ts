@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // API URL for the account endpoint on the backend
-const PROFILE_API = 'http://localhost:5001/user/'
+const PROFILE_API = 'http://localhost:5001/user/';
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-}
+};
 
 @Injectable({
 	providedIn: 'root',
@@ -24,7 +24,7 @@ export class ProfileService {
 		return this.http.get(`${PROFILE_API}getUserDetails/${userId}`, {
 			headers: { 'Content-Type': 'application/json' },
 			responseType: 'json',
-		})
+		});
 	}
 
 	/**
@@ -62,7 +62,7 @@ export class ProfileService {
 				dateJoined,
 			},
 			httpOptions
-		)
+		);
 	}
 
 	/**
@@ -100,6 +100,6 @@ export class ProfileService {
 				dateJoined,
 			},
 			httpOptions
-		)
+		);
 	}
 }

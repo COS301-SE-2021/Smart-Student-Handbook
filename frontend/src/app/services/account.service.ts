@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { ActivatedRoute, Router } from '@angular/router'
-import { ProfileService } from './profile.service'
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProfileService } from './profile.service';
 
 // API URL for the account endpoint on the backend
-const ACCOUNT_API = 'http://localhost:5001/account/'
+const ACCOUNT_API = 'http://localhost:5001/account/';
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-}
+};
 
 @Injectable({
 	providedIn: 'root',
@@ -47,7 +47,7 @@ export class AccountService {
 				passwordConfirm,
 			},
 			httpOptions
-		)
+		);
 	}
 
 	/**
@@ -63,7 +63,7 @@ export class AccountService {
 				password,
 			},
 			httpOptions
-		)
+		);
 	}
 
 	/**
@@ -91,14 +91,14 @@ export class AccountService {
 				passwordConfirm,
 			},
 			httpOptions
-		)
+		);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
 	 */
 	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions)
+		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions);
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class AccountService {
 	getCurrentUser(): Observable<any> {
 		return this.http.get(`${ACCOUNT_API}getCurrentUser`, {
 			responseType: 'json',
-		})
+		});
 	}
 
 	/**
@@ -118,7 +118,7 @@ export class AccountService {
 	deleteUser(EmailAddress: string, Password: string): Observable<any> {
 		return this.http.delete(`${ACCOUNT_API}deleteUser`, {
 			responseType: 'json',
-		})
+		});
 	}
 
 	/**
@@ -128,7 +128,7 @@ export class AccountService {
 	 * every time the function runs update the local storage with most up to date information
 	 */
 	async isUserLoggedIn(): Promise<void> {
-		const curentRoute = this.router.url.split('?')[0]
+		const curentRoute = this.router.url.split('?')[0];
 
 		// TODO first check if the user value has been set in the localstorage...
 
@@ -141,14 +141,14 @@ export class AccountService {
 						localStorage.setItem(
 							'userProfile',
 							JSON.stringify(user)
-						)
+						);
 					},
 					(err) => {
-						console.log(`Error: ${err.error.message}`)
+						console.log(`Error: ${err.error.message}`);
 					}
-				)
+				);
 
-				localStorage.setItem('user', JSON.stringify(data))
+				localStorage.setItem('user', JSON.stringify(data));
 
 				// if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
 				if (
@@ -157,11 +157,11 @@ export class AccountService {
 					curentRoute == '/register' ||
 					curentRoute == '/forgotPassword'
 				) {
-					this.router.navigateByUrl(`/notebook`)
+					this.router.navigateByUrl(`/notebook`);
 				}
 			},
 			(err) => {
-				console.log(err.error.message)
+				console.log(err.error.message);
 				// if the user is not logged in allow them to navigate login, register and forgotPassword
 				if (
 					curentRoute !== '/' &&
@@ -169,9 +169,9 @@ export class AccountService {
 					curentRoute !== '/register' &&
 					curentRoute !== '/forgotPassword'
 				) {
-					this.router.navigateByUrl(`/login`)
+					this.router.navigateByUrl(`/login`);
 				}
 			}
-		)
+		);
 	}
 }
