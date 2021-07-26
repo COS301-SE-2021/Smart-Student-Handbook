@@ -1,44 +1,67 @@
+<mat-drawer-container class="example-container" [hasBackdrop]="hasBackDrop">
+  <!-- Menu elements -->
+  <mat-drawer #drawer [mode]="menuMode" (openedStart)="showOverlay()" (closedStart)="hideOverlay()">
+    <mat-card id="card">
+      <button mat-icon-button id="closePanelBtn" (click)="drawer.toggle()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
 
-<p>
-  <mat-toolbar color="primary">
+      <mat-card-header id="profileCard"><!-- (click)="updateProfile()" -->
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title id="username">{{username}}</mat-card-title>
+        <mat-card-subtitle id="subTitle">{{degree}}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
 
-    <button mat-icon-button>
-      <mat-icon>menu</mat-icon>
-    </button>
+    <app-tree-view></app-tree-view>
+  </mat-drawer>
 
-    <span>Smart Student</span>
-    <span class="spacer"></span>
+  <!-- Body elements -->
+  <mat-drawer-content>
+    <p>
+      <mat-toolbar color="primary">
+
+        <button mat-icon-button (click)="drawer.toggle()" fxHide.gt-sm>
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span>Smart Student</span>
+        <span class="spacer"></span>
 
 
-    <!-- <mat-form-field class="search">
-      <input matInput type="search" color="light" placeholder="Search">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field> -->
+        <!-- <mat-form-field class="search">
+          <input matInput type="search" color="light" placeholder="Search">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field> -->
 
 
-    <!-- <button mat-raised-button (click)="logout()" class="mx-4">Logout</button> -->
+        <!-- <button mat-raised-button (click)="logout()" class="mx-4">Logout</button> -->
 
-  </mat-toolbar>
-</p>
+      </mat-toolbar>
+    </p>
 
-<!-- <router-outlet></router-outlet> -->
+    <router-outlet></router-outlet>
 
-<div class="container-fluid">
-  <div class="row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
-    <div class="sidePanel" id="folderPanelContainer" fxHide.lt-md>
-      <app-folder-panel #folderPanelComponent></app-folder-panel>
+    <div class="container-fluid">
+      <div class="row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
+        <div class="sidePanel" id="folderPanelContainer" fxHide.lt-md>
+          <app-folder-panel #folderPanelComponent></app-folder-panel>
+        </div>
+        <div class="sidePanel" id="notePanelContainer" fxHide.lt-md>
+          <app-notes-panel #notePanelComponent></app-notes-panel>
+        </div>
+        <div class="col" align="end">
+
+          <app-editor #editorComponent></app-editor>
+
+        </div>
+        <div class="sidePanel" fxHide.lt-md>
+          <app-smart-assist-panel></app-smart-assist-panel>
+        </div>
+      </div>
     </div>
-    <div class="sidePanel" id="notePanelContainer" fxHide.lt-md>
-      <app-notes-panel #notePanelComponent></app-notes-panel>
-    </div>
-    <div class="col" align="end">
 
-      <app-editor #editorComponent></app-editor>
-
-    </div>
-    <div class="sidePanel" fxHide.lt-md>
-      <app-smart-assist-panel></app-smart-assist-panel>
-    </div>
-  </div>
-</div>
+    <div id="overlay" #overlay (click)="drawer.toggle()"></div>
+  </mat-drawer-content>
+</mat-drawer-container>
 

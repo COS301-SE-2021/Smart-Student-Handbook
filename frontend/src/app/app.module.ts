@@ -43,6 +43,7 @@ import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confi
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+import { TreeViewComponent } from './components/tree-view/tree-view.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { NotebookBottomSheetComponent } from './components/modals/notebook-botto
     ConfirmDeleteComponent,
     EditProfileComponent,
     EditorComponent,
-    NotebookBottomSheetComponent
+    NotebookBottomSheetComponent,
+    TreeViewComponent
   ],
   imports: [
     MaterialModule,

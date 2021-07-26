@@ -28,7 +28,8 @@ export class NotebookComponent implements OnInit {
   hasBackDrop: boolean = true;
 
   notebookTitle = 'New Notebook';
-
+  username = 'Arno';
+  degree = 'Computer Science';
 
   // public editorData = '<p>Hello, world!</p>';
 
@@ -45,6 +46,7 @@ export class NotebookComponent implements OnInit {
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
   @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
   @ViewChild('editorComponent') editorComponent!: EditorComponent;
+  @ViewChild('overlay') overlay!: HTMLDivElement;//treeViewComponent
 
   /**
    * Include the notebook service
@@ -65,7 +67,7 @@ export class NotebookComponent implements OnInit {
 
     //Assign "openPanel" function to the eventhandler from folder panel to open the note panel when the view is loaded
     document.addEventListener('DOMContentLoaded', (event) => {
-      this.folderPanelComponent.openNotebookPanel = () => {
+      this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
         this.notePanelComponent.openedCloseToggle();
       };
 
@@ -99,5 +101,14 @@ export class NotebookComponent implements OnInit {
     );
   }
 
+  showOverlay(){
+    let e = document.getElementById('overlay')!;
+    e.style.display = 'block';
+  }
+
+  hideOverlay(){
+    let e = document.getElementById('overlay')!;
+    e.style.display = 'none';
+  }
 
 }
