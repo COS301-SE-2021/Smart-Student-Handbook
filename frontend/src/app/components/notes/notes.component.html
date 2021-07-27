@@ -1,0 +1,25 @@
+<p>
+	<mat-toolbar color="primary">
+		<button
+			mat-icon-button
+			aria-label="Back button"
+			(click)="navigateBack()"
+		>
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<span>Notes</span>
+		<span class="example-spacer"></span>
+	</mat-toolbar>
+</p>
+
+<div class="container">
+	<div
+		class="noteContainer"
+		*ngFor="let note of notes; let i = index"
+		(click)="openNote(note.notebookReference)"
+	>
+		<mat-card class="note" [style.background-image]="colours[i % 6].colour">
+		</mat-card>
+		<h4>{{ note.title }}</h4>
+	</div>
+</div>

@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
+// import { Test, TestingModule } from '@nestjs/testing';
 import { AccountController } from './account.controller';
-import { AccountService} from "./account.service";
-import { NotificationService} from "../notification/notification.service";
+import { AccountService } from './account.service';
+import { NotificationService } from '../notification/notification.service';
 
 describe('AccountController', () => {
   let accountService: AccountService;
-  let accountController: AccountController
+  let accountController: AccountController;
 
   beforeEach(async () => {
     accountService = new AccountService(new NotificationService());

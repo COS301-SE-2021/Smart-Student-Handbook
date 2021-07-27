@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
-  selector: 'app-forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss']
+	selector: 'app-forgot-password',
+	templateUrl: './forgot-password.component.html',
+	styleUrls: ['./forgot-password.component.scss'],
 })
 export class ForgotPasswordComponent implements OnInit {
+	constructor(private userService: AccountService) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+	ngOnInit(): void {}
 }

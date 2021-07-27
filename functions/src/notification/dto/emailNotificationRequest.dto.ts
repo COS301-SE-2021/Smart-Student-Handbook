@@ -1,5 +1,7 @@
 export class EmailNotificationRequestDto {
-	email: string;
-	subject: string;
-	body: string;
+  email: string;
+
+  subject: string;
+
+  body: string;
 }
