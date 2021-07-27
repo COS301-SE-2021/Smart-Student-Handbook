@@ -98,12 +98,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
@@ -128,6 +126,43 @@
               "src/**/*.ts",
               "src/**/*.html"
             ]
+          }
+        },
+        "cypress-run": {
+          "builder": "@briebug/cypress-schematic:cypress",
+          "options": {
+            "devServerTarget": "smart-student:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "smart-student:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@briebug/cypress-schematic:cypress",
+          "options": {
+            "devServerTarget": "smart-student:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "smart-student:serve:production"
+            }
+          }
+        },
+        "e2e": {
+          "builder": "@briebug/cypress-schematic:cypress",
+          "options": {
+            "devServerTarget": "smart-student:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "smart-student:serve:production"
+            }
           }
         }
       }
