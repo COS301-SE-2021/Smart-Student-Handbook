@@ -67,7 +67,8 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(() => {
+		this.notebookService.getUserNotebooks().subscribe(() => {
+			// this.user.uid
 			const children = [{ name: 'Notebook one', id: '' }];
 			// for (let i = 0; i < result.length; i++) {
 			//   children.push({name: result[i].course, id: result[i].notebookReference});

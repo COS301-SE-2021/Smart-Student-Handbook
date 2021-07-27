@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class NotebookDto {
+export class NotebookDto {
 	readonly author?: string;
 
 	readonly course?: string;

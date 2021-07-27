@@ -65,7 +65,7 @@ export class NotesPanelComponent implements OnInit {
 		this.notebooks = [];
 
 		this.notebookService
-			.getUserNotebooks(this.user.uid)
+			.getUserNotebooks() // this.user.uid
 			.subscribe((result) => {
 				for (let i = 0; i < result.length; i += 1) {
 					this.notebooks.push(result[i]);

@@ -59,7 +59,7 @@ export class NotesComponent implements OnInit {
 		this.notes = [];
 
 		this.notebookService
-			.getUserNotebooks(this.user.uid)
+			.getUserNotebooks() // this.user.uid
 			.subscribe((result) => {
 				for (let i = 0; i < result.length; i += 1) {
 					// console.log(result[i]);
