@@ -1,16 +1,12 @@
-import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatCardModule} from '@angular/material/card';
-import {MatTree, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {FlatTreeControl} from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
 import { ViewEncapsulation } from '@angular/core';
-import {NotebookService} from "../../../services/notebook.service";
-import {Router} from "@angular/router";
-import {ProfileService} from "../../../services/profile.service";
-import {MatSidenav} from "@angular/material/sidenav";
-import {MatDialog} from "@angular/material/dialog";
+import { NotebookService } from "../../../services/notebook.service";
+import { ProfileService } from "../../../services/profile.service";
+import { MatDialog } from "@angular/material/dialog";
 import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.component';
+import { TreeViewComponent } from '../../tree-view/tree-view.component';
 
 @Component({
   selector: 'app-folder-panel',
@@ -20,10 +16,12 @@ import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.com
 })
 export class FolderPanelComponent implements OnInit {
 
+  //Hold user information
   user: any;
   profile: any;
   open: boolean = false;
 
+  //Variables to be used when updating user profile
   username: string = '';
   bio: string = '';
   institution: string = '';
@@ -35,30 +33,24 @@ export class FolderPanelComponent implements OnInit {
   panelOpenState = false;
   width = 68.3;
 
-  //-----------------  Code needed for the tree  ----------------------------------
-  private _transformer = (node: DirectoryNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      id: node.id,
-      level: level,
-    };
-  }
-
-  //Variables needed for the tree view
-  treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable);
-  treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children);
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
-
-  //--------------------------------------------------------------------------------
+  @ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
 
 
-  constructor(private panel: NotesPanelComponent, private notebookService: NotebookService,
-              private router: Router, private profileService: ProfileService,
+  /**
+   * The folder panel component constructor
+   * @param notebookService call notebook related queries to the backend
+   * @param profileService call user profile related queries to the backend
+   * @param dialog open a dialog when a user wants to edit their information
+   */
+  constructor(private notebookService: NotebookService,
+              private profileService: ProfileService,
               private dialog: MatDialog) { }
 
 
+  /**
+   * Get the note structure of the logged in user
+   * Get the user information from localstorage
+   */
   ngOnInit(): void {
 
     //Get the user and user profile info from localstorage
@@ -68,37 +60,11 @@ export class FolderPanelComponent implements OnInit {
     this.username = this.user.displayName;
     this.bio = this.profile.userInfo.bio;
 
-    this.getUserNotebooks();
   }
 
-  //Get the logged in user's notebooks
-  getUserNotebooks(){
-
-    this.notebookService.getUserNotebooks(this.user.uid)
-      .subscribe(result => {
-
-        let children = [{name: 'Notebook one', id: ''}];
-        // for (let i = 0; i < result.length; i++) {
-        //   children.push({name: result[i].course, id: result[i].notebookReference});
-        // }
-
-        this.dataSource.data = [{
-          name: 'My notebooks',
-          id: '',
-          children: children
-        }];
-
-        // this.openTree();
-
-      });
-  }
-
-  //Open the tree view
-  openTree(){
-      this.treeControl.expandAll();
-  }
-
-  //Toggle the sliding panel (open and close)
+  /**
+   * Toggle the sliding panel (open and close)
+   */
   openedCloseToggle(){
 
     const sideNav = document.getElementById('container') as HTMLElement;
@@ -125,10 +91,9 @@ export class FolderPanelComponent implements OnInit {
 
   }
 
-  //Used by notebook to open the notes panel
-  openNotebookPanel(){}
-
-  //Open a modal popup with a form to view and update the users profile
+  /**
+   * Open a modal popup with a form to view and update the users profile
+   */
   updateProfile(){
 
     //Retrieve the current lodged in user from localstorage
@@ -153,13 +118,15 @@ export class FolderPanelComponent implements OnInit {
         //Get info and create notebook after dialog is closed
         dialogRef.afterClosed().subscribe(result => {
 
-          //update the user profile information based on the entered values in the form
-          this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
+          if(result !== undefined){
+             //update the user profile information based on the entered values in the form
+            this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
+
             },
             err => {
-              console.log("Error: "+err.error.message);
-            }
-          );
+                console.log("Error: "+err.error.message);
+            });
+          }
 
         });
 

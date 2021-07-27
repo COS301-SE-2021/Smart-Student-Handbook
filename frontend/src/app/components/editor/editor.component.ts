@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { NotebookBottomSheetComponent } from './../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -7,13 +8,15 @@ import firebase from "firebase";
 import "firebase/firestore";
 import { NotebookService } from 'src/app/services/notebook.service';
 
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
+
+import {MatBottomSheet } from '@angular/material/bottom-sheet';
 
 export interface Tag {
   name: string;
 }
+
 
 @Component({
   selector: 'app-editor',
@@ -89,7 +92,7 @@ export class EditorComponent implements OnInit {
    * Handler for when content from the smart assist panel is drag & dropped into the notebook
    * @param event get the content that is dropped
    */
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: any) {
     var parser = new DOMParser();
 
     let e = event.item.element.nativeElement.innerHTML;
@@ -116,7 +119,8 @@ export class EditorComponent implements OnInit {
    * @param notebookService To call methods that apply to the notebooks
    * @param dialog Show dialog when a user wants to delete a notebook for example
    */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
+  constructor(private notebookService: NotebookService, private dialog: MatDialog,
+              private bottomSheet: MatBottomSheet) { }
 
   ngOnInit(): void {  }
 
@@ -128,7 +132,7 @@ export class EditorComponent implements OnInit {
 
     this.notebookID = id;
 
-    if(this._editor === undefined){
+    if(this._editor === undefined || window.outerWidth <= 600){
       /**
      * Create the notebook with all the plugins
      */
@@ -212,6 +216,7 @@ export class EditorComponent implements OnInit {
 
       this._editor = editor;
 
+
       let e = document.getElementById('editor') as HTMLElement;
       e.style.display = 'none';
 
@@ -222,6 +227,7 @@ export class EditorComponent implements OnInit {
     this._editor.styles.loader = 'mat-spinner';
 
     let editorLoad = document.getElementsByClassName('codex-editor')!;
+    console.log(editorLoad);
 
     editorLoad[0].classList.add('cdx-loader');
 
@@ -231,6 +237,8 @@ export class EditorComponent implements OnInit {
     e = document.getElementById('editor') as HTMLElement;
     e.style.overflowY = 'none';
     e.style.display = 'block';
+    e.style.backgroundImage = 'none';
+    // e.style.backgroundColor = 'grey';
 
     let editor = this._editor;
 
@@ -322,30 +330,24 @@ export class EditorComponent implements OnInit {
             .subscribe(result => {
                 console.log(result);
 
-                // this._router.navigate(['notebook']);
-
-                // this.folderPanelComponent.getUserNotebooks();
                 let editor = this._editor;
                 editor.clear();
 
                 this.notebookTitle = '';
-                // this.notePanelComponent.getUserNotebooks();
+
+                this.removeNotebookCard(this.notebookID);
 
               },
               error => {
 
-                // this._router.navigate(['notebook']);
-                //
-                // this.folderPanelComponent.getUserNotebooks();
-                //
-                // let editor = this._editor;
-                // editor.clear();
-                //
-                // this.notebookTitle = '';
               })
         }
       }
     });
+  }
+
+  removeNotebookCard(id: string){
+
   }
 
   /**
@@ -403,5 +405,13 @@ export class EditorComponent implements OnInit {
     if (index >= 0) {
       this.tags.splice(index, 1);
     }
+  }
+
+
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(NotebookBottomSheetComponent, {
+      panelClass: 'bottomPanelClass'
+    });
   }
 }

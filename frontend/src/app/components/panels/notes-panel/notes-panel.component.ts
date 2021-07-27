@@ -1,8 +1,7 @@
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
-import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
-import {NotebookService} from "../../../services/notebook.service";
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import { MatSidenav } from '@angular/material/sidenav';
+import { NotebookService } from "../../../services/notebook.service";
+import { MatDialog } from "@angular/material/dialog";
 import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
 
 @Component({
@@ -28,28 +27,38 @@ export class NotesPanelComponent implements OnInit {
   //sliding panel
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
-  public closeNotePanelBtn: any;
-
   open = false;
 
   public notebooks: any = [];
 
-  constructor(private notebookService: NotebookService, private router: Router, private dialog: MatDialog) { }
+  /**
+   * Notes panel constructor
+   * @param notebookService call notebook related requests to backend
+   * @param dialog show dialog to update notebook details
+   */
+  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
 
+  /**
+   * Get the logged in user's notebooks as well as
+   * User information from localstorage
+   */
   async ngOnInit() {
-
-    this.getUserNotebooks();
 
     // let userDeatils;
     this.user = JSON.parse(<string>localStorage.getItem('user'));
     this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
     this.profile = this.profile.userInfo;
+
+    this.getUserNotebooks();
   }
 
+  /**
+   * Retrieve the logged in user's notebooks
+   */
   getUserNotebooks(){
     this.notebooks = [];
 
-    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+    this.notebookService.getUserNotebooks(this.user.uid)
       .subscribe(result => {
 
         for(let i = 0; i < result.length; i++){
@@ -58,6 +67,9 @@ export class NotesPanelComponent implements OnInit {
       });
   }
 
+  /**
+   * Open and close or hide and show the panel
+   */
   public openedCloseToggle(){
 
     this.sidenav.toggle();
@@ -90,18 +102,23 @@ export class NotesPanelComponent implements OnInit {
 
   }
 
-  //open a specific nptebook
+  /**
+   * Used in notebookcomponent to open a specific nptebook
+   * @param id the id of the notebook to be opened
+   */
   openNotebook(id: string){
 
   }
 
-  //Edit a notebook
+  /**
+   * Edit the details of a notebook
+   * @param id the id of the notebook to be updated
+   */
   editNotebook(id: string){
 
     //Get the notebook info to edit
     this.notebookService.getNoteBookById(id)
     .subscribe(result => {
-      console.log(result);
 
       this.title  = result.title;
       this.course  = result.course;
@@ -139,15 +156,26 @@ export class NotesPanelComponent implements OnInit {
             username: 'userArno'
           }
 
-          //Call service and create notebook
+          //Call service and update notebook
           this.notebookService.updateNotebook(request, id)
             .subscribe(result => {
-                console.log(result);
-                this.getUserNotebooks();
-              },
-              error => {
-                console.log(error);
+
+              this.notebooks = this.notebooks.map((notebook: any) => {
+                if(notebook.notebookReference === id){
+
+                  notebook.course = request.course;
+                  notebook.description = request.description;
+                  notebook.institution = request.institution;
+                  notebook.private = request.private;
+                  notebook.title = request.title;
+                }
+
+                return notebook;
               });
+            },
+            error => {
+              console.log(error);
+            });
         }
       })
     });
@@ -156,7 +184,7 @@ export class NotesPanelComponent implements OnInit {
   /**
    * Create a new notebook
    */
-   createNewNotebook(){
+  createNewNotebook(){
 
     //Open dialog
     const dialogRef = this.dialog.open(AddNotebookComponent, {
@@ -192,14 +220,22 @@ export class NotesPanelComponent implements OnInit {
         //Call service and create notebook
         this.notebookService.createNotebook(request)
           .subscribe(result => {
-            console.log(result);
 
-            // this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
+            let newNotebook = {
+              author: request.author,
+              course: request.course,
+              description: request.description,
+              institution: request.institution,
+              name: request.name,
+              notebookReference: result.notebookId,
+              private: request.private,
+              title: request.title,
+              userId: this.user.uid
+            }
 
-            // this.folderPanelComponent.getUserNotebooks();
-            // this.folderPanelComponent.openTree();
+            this.notebooks.push(newNotebook);
 
-              // this.notePanelComponent.getUserNotebooks();
+            this.openNotebook(result.notebookId);
           },
             error => {
               // this.folderPanelComponent.getUserNotebooks();
@@ -207,5 +243,19 @@ export class NotesPanelComponent implements OnInit {
       }
     });
 
+  }
+
+  /**
+   * Remove the notebook from the view
+   * (The notebook is deleted in the editor component)
+   * @param id the id of the notebook to be removed
+   */
+  removeNotebook(id: string){
+
+    this.notebooks = this.notebooks.filter((notebook: any) => {
+      if(notebook.notebookReference !== id){
+        return notebook;
+      }
+    });
   }
 }
