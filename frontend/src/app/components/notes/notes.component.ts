@@ -13,28 +13,22 @@ import { NotebookComponent } from '../notebook/notebook.component';
 export class NotesComponent implements OnInit {
 	colours = [
 		{
-			top: 'rgb(233, 97, 124)',
-			bottom: 'rgb(231, 7, 52)',
+			colour: 'linear-gradient(to bottom right, rgb(233, 97, 124), rgb(231, 7, 52))',
 		},
 		{
-			top: 'rgb(134, 172, 173)',
-			bottom: 'rgb(8, 193, 199)',
+			colour: 'linear-gradient(to bottom right, rgb(134, 172, 173), rgb(8, 193, 199))',
 		},
 		{
-			top: 'rgb(133, 173, 133)',
-			bottom: 'rgb(71, 218, 71)',
+			colour: 'linear-gradient(to bottom right, rgb(133, 173, 133), rgb(71, 218, 71))',
 		},
 		{
-			top: 'rgb(253, 210, 130)',
-			bottom: 'rgb(255, 174, 24)',
+			colour: 'linear-gradient(to bottom right, rgb(253, 210, 130), rgb(255, 174, 24))',
 		},
 		{
-			top: 'rgb(202, 117, 117)',
-			bottom: 'rgb(190, 49, 49)',
+			colour: 'linear-gradient(to bottom right, rgb(202, 117, 117), rgb(190, 49, 49))',
 		},
 		{
-			top: 'rgb(133, 133, 255)',
-			bottom: 'rgb(72, 72, 255)',
+			colour: 'linear-gradient(to bottom right, rgb(133, 133, 255), rgb(72, 72, 255))',
 		},
 	];
 
