@@ -1,9 +1,7 @@
 import { Router } from '@angular/router';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NotebookService } from 'src/app/services/notebook.service';
 import { NotebookEventEmitterService } from 'src/app/services/notebook-event-emitter.service';
-import { EditorComponent } from '../editor/editor.component';
-import { NotebookComponent } from '../notebook/notebook.component';
 
 @Component({
 	selector: 'app-notes',
@@ -63,7 +61,7 @@ export class NotesComponent implements OnInit {
 		this.notebookService
 			.getUserNotebooks(this.user.uid)
 			.subscribe((result) => {
-				for (let i = 0; i < result.length; i++) {
+				for (let i = 0; i < result.length; i += 1) {
 					// console.log(result[i]);
 					this.notes.push(result[i]);
 				}

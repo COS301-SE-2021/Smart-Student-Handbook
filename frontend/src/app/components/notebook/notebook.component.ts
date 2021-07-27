@@ -1,10 +1,4 @@
-import {
-	Component,
-	Injectable,
-	OnInit,
-	ViewChild,
-	ViewChildren,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
@@ -96,7 +90,7 @@ export class NotebookComponent implements OnInit {
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 		this.profile = this.profile.userInfo;
 
-		if (this.notebookEventEmitterService.subsVar == undefined) {
+		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
 				this.notebookEventEmitterService.loadEditor.subscribe(
 					(id: string) => {
@@ -129,7 +123,7 @@ export class NotebookComponent implements OnInit {
 	 */
 	async logout() {
 		this.accountService.singOut().subscribe(
-			(data) => {
+			() => {
 				this.router.navigateByUrl(`/login`);
 				localStorage.clear();
 			},

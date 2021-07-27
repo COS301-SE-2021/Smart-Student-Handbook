@@ -16,6 +16,8 @@
       ],
       "plugins": ["prettier"],
       "rules": {
+        "class-methods-use-this": "off",
+        "@angular-eslint/use-life-cycle-interface": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

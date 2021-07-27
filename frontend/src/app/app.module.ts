@@ -6,16 +6,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
-import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
 
 // Modules
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Firebase
-import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
@@ -35,17 +36,16 @@ import { ForgotPasswordComponent } from './components/account/forgot-password/fo
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
-import { HttpClientModule } from '@angular/common/http';
 import { EditorComponent } from './components/editor/editor.component';
 import { EditProfileComponent } from './components/modals/edit-profile/edit-profile.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
 import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { TreeViewComponent } from './components/tree-view/tree-view.component';
 import { NotesComponent } from './components/notes/notes.component';
+
+import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
 
 @NgModule({
 	declarations: [

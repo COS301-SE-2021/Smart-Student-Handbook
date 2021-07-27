@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 export class NotebookService {
 	constructor(private httpClient: HttpClient) {}
 
-	getUserNotebooks(userId: string): Observable<any> {
+	// getUserNotebooks(userId: string): Observable<any> {
+	getUserNotebooks(): Observable<any> {
 		return this.httpClient.request<any>(
 			'get',
 			'http://localhost:5001/notebook/findAllUserNotebooks/'
@@ -48,22 +49,4 @@ export class NotebookService {
 			`http://localhost:5001/notebook/deleteNotebook/${noteBookId}`
 		);
 	}
-}
-
-class NotebookDto {
-	readonly author?: string;
-
-	readonly course?: string;
-
-	readonly description?: string;
-
-	readonly institution?: string;
-
-	readonly name?: string;
-
-	readonly surname?: string;
-
-	readonly private?: boolean;
-
-	readonly username?: string;
 }

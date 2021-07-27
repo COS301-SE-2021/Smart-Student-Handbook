@@ -18,12 +18,8 @@
 		*ngFor="let note of notes; let i = index"
 		(click)="openNote(note.notebookReference)"
 	>
-		<mat-card
-			class="note"
-			[style.background-image]="colours[i%6].colour"
-		>
+		<mat-card class="note" [style.background-image]="colours[i % 6].colour">
 		</mat-card>
 		<h4>{{ note.title }}</h4>
 	</div>
-
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
@@ -18,13 +18,11 @@ export interface EditProfileDialogData {
 	templateUrl: './edit-profile.component.html',
 	styleUrls: ['./edit-profile.component.scss'],
 })
-export class EditProfileComponent implements OnInit {
+export class EditProfileComponent {
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: EditProfileDialogData
 	) {}
-
-	ngOnInit(): void {}
 
 	onNoClick(): void {
 		this.dialogRef.close();

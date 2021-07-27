@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
@@ -12,7 +12,7 @@ export interface Tag {
 	templateUrl: './notebook-bottom-sheet.component.html',
 	styleUrls: ['./notebook-bottom-sheet.component.scss'],
 })
-export class NotebookBottomSheetComponent implements OnInit {
+export class NotebookBottomSheetComponent {
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
 	tags: Tag[] = [
@@ -25,8 +25,6 @@ export class NotebookBottomSheetComponent implements OnInit {
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>
 	) {}
-
-	ngOnInit(): void {}
 
 	/**
 	 * Insert new tags to the input and tags array

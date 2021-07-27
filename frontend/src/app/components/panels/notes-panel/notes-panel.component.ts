@@ -1,4 +1,6 @@
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '../../../services/notebook.service';
@@ -9,7 +11,6 @@ import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.com
 	templateUrl: './notes-panel.component.html',
 	styleUrls: ['./notes-panel.component.scss'],
 })
-@Injectable()
 export class NotesPanelComponent implements OnInit {
 	// Variables for add notebook popup dialog
 	title = '';
@@ -48,7 +49,7 @@ export class NotesPanelComponent implements OnInit {
 	 * Get the logged in user's notebooks as well as
 	 * User information from localstorage
 	 */
-	async ngOnInit() {
+	ngOnInit(): void {
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
@@ -66,7 +67,7 @@ export class NotesPanelComponent implements OnInit {
 		this.notebookService
 			.getUserNotebooks(this.user.uid)
 			.subscribe((result) => {
-				for (let i = 0; i < result.length; i++) {
+				for (let i = 0; i < result.length; i += 1) {
 					this.notebooks.push(result[i]);
 				}
 			});
@@ -106,9 +107,10 @@ export class NotesPanelComponent implements OnInit {
 
 	/**
 	 * Used in notebookcomponent to open a specific nptebook
-	 * @param id the id of the notebook to be opened
+	 * @param _id the id of the notebook to be opened
 	 */
-	openNotebook(id: string) {}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	openNotebook(_id: string) {}
 
 	/**
 	 * Edit the details of a notebook
@@ -136,24 +138,24 @@ export class NotesPanelComponent implements OnInit {
 			});
 
 			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe((result) => {
+			dialogRef.afterClosed().subscribe((data) => {
 				// If the user filled out the form
-				if (result !== undefined) {
+				if (data !== undefined) {
 					const request = {
-						title: result.title,
+						title: data.title,
 						author: 'Arno',
-						course: result.course,
-						description: result.description,
-						institution: result.institution,
+						course: data.course,
+						description: data.description,
+						institution: data.institution,
 						name: 'Arno',
 						surname: 'Moller',
-						private: result.private,
+						private: data.private,
 						username: 'userArno',
 					};
 
 					// Call service and update notebook
 					this.notebookService.updateNotebook(request, id).subscribe(
-						(result) => {
+						() => {
 							this.notebooks = this.notebooks.map(
 								(notebook: any) => {
 									if (notebook.notebookReference === id) {
@@ -214,14 +216,14 @@ export class NotesPanelComponent implements OnInit {
 
 				// Call service and create notebook
 				this.notebookService.createNotebook(request).subscribe(
-					(result) => {
+					(data) => {
 						const newNotebook = {
 							author: request.author,
 							course: request.course,
 							description: request.description,
 							institution: request.institution,
 							name: request.name,
-							notebookReference: result.notebookId,
+							notebookReference: data.notebookId,
 							private: request.private,
 							title: request.title,
 							userId: this.user.uid,
@@ -229,9 +231,10 @@ export class NotesPanelComponent implements OnInit {
 
 						this.notebooks.push(newNotebook);
 
-						this.openNotebook(result.notebookId);
+						this.openNotebook(data.notebookId);
 					},
 					(error) => {
+						console.log(error);
 						// this.folderPanelComponent.getUserNotebooks();
 					}
 				);
@@ -245,6 +248,7 @@ export class NotesPanelComponent implements OnInit {
 	 * @param id the id of the notebook to be removed
 	 */
 	removeNotebook(id: string) {
+		// eslint-disable-next-line array-callback-return
 		this.notebooks = this.notebooks.filter((notebook: any) => {
 			if (notebook.notebookReference !== id) {
 				return notebook;

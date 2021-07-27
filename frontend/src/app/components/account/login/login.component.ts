@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
@@ -8,7 +8,7 @@ import { AccountService } from '../../../services/account.service';
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 	form: FormGroup;
 
 	loginFailed = false;
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				(data) => {
+				() => {
 					this.loginFailed = false;
 					// If login was successful then go to the notebook home page
 					this.router.navigate(['notebook']);
@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit {
 					this.errorMessage = `Error: ${err.error.message}`;
 				}
 			);
-		} else {
 		}
 	}
 }

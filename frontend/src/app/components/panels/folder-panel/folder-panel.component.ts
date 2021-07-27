@@ -1,10 +1,4 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-	MatTreeFlatDataSource,
-	MatTreeFlattener,
-} from '@angular/material/tree';
-import { FlatTreeControl } from '@angular/cdk/tree';
-
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '../../../services/notebook.service';
 import { ProfileService } from '../../../services/profile.service';
@@ -133,7 +127,7 @@ export class FolderPanelComponent implements OnInit {
 								result.bio
 							)
 							.subscribe(
-								(data) => {},
+								() => {},
 								(err) => {
 									console.log(`Error: ${err.error.message}`);
 								}
@@ -154,10 +148,12 @@ export class FolderPanelComponent implements OnInit {
 interface DirectoryNode {
 	name: string;
 	id: string;
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	children?: DirectoryNode[];
 }
 
 /** Flat node with expandable and level information */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface ExampleFlatNode {
 	expandable: boolean;
 	name: string;
