@@ -23,7 +23,7 @@ export class TreeViewComponent implements OnInit {
 	 * @param level the level of the node
 	 * @returns a node transformed into a parent node that can have children
 	 */
-	private _transformer = (node: DirectoryNode, level: number) => ({
+	private transformer = (node: DirectoryNode, level: number) => ({
 		expandable: !!node.children && node.children.length > 0,
 		name: node.name,
 		id: node.id,
@@ -37,7 +37,7 @@ export class TreeViewComponent implements OnInit {
 	);
 
 	treeFlattener = new MatTreeFlattener(
-		this._transformer,
+		this.transformer,
 		(node) => node.level,
 		(node) => node.expandable,
 		(node) => node.children
@@ -67,24 +67,23 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService
-			.getUserNotebooks(this.user.uid)
-			.subscribe((result) => {
-				const children = [{ name: 'Notebook one', id: '' }];
-				// for (let i = 0; i < result.length; i++) {
-				//   children.push({name: result[i].course, id: result[i].notebookReference});
-				// }
+		this.notebookService.getUserNotebooks().subscribe(() => {
+			// this.user.uid
+			const children = [{ name: 'Notebook one', id: '' }];
+			// for (let i = 0; i < result.length; i++) {
+			//   children.push({name: result[i].course, id: result[i].notebookReference});
+			// }
 
-				this.dataSource.data = [
-					{
-						name: 'My notebooks',
-						id: '',
-						children,
-					},
-				];
+			this.dataSource.data = [
+				{
+					name: 'My notebooks',
+					id: '',
+					children,
+				},
+			];
 
-				// this.openTree();
-			});
+			// this.openTree();
+		});
 	}
 
 	openNotebookFolder() {

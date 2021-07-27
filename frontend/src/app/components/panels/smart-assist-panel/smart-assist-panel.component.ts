@@ -6,8 +6,9 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./smart-assist-panel.component.scss'],
 })
 export class SmartAssistPanelComponent implements OnInit {
-	constructor() {}
+	// constructor() {}
 
+	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {}
 
 	/**
@@ -18,7 +19,7 @@ export class SmartAssistPanelComponent implements OnInit {
 		const snippet = document.getElementsByClassName('snippetCard')[index]
 			.children[0] as HTMLElement;
 
-		if (snippet.style.maxHeight == '400px') {
+		if (snippet.style.maxHeight === '400px') {
 			this.hidePreview(index);
 		} else {
 			snippet.style.maxHeight = '400px';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ProfileService } from './profile.service';
 
 // API URL for the account endpoint on the backend
@@ -115,7 +115,8 @@ export class AccountService {
 	 * @param EmailAddress
 	 * @param Password
 	 */
-	deleteUser(EmailAddress: string, Password: string): Observable<any> {
+	// deleteUser(EmailAddress: string, Password: string): Observable<any> {
+	deleteUser(): Observable<any> {
 		return this.http.delete(`${ACCOUNT_API}deleteUser`, {
 			responseType: 'json',
 		});
@@ -152,10 +153,10 @@ export class AccountService {
 
 				// if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
 				if (
-					curentRoute == '/' ||
-					curentRoute == '/login' ||
-					curentRoute == '/register' ||
-					curentRoute == '/forgotPassword'
+					curentRoute === '/' ||
+					curentRoute === '/login' ||
+					curentRoute === '/register' ||
+					curentRoute === '/forgotPassword'
 				) {
 					this.router.navigateByUrl(`/notebook`);
 				}

@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import firebase from 'firebase';
+import { Component, OnInit } from '@angular/core';
 import { MessagingService } from './services/messaging.service';
 // import * as firebase from "firebase/database";
-import { environment } from '../environments/environment';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	panelOpenState = false;
 
 	title = 'smart-student';

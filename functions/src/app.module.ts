@@ -12,7 +12,19 @@ import { AccountService } from './account/account.service';
 
 @Module({
   imports: [],
-  controllers: [AppController, NotificationController, UserController, NotebookController, AccountController],
-  providers: [AppService, NotificationService, UserService, NotebookService, AccountService],
+  controllers: [
+    AppController,
+    NotificationController,
+    UserController,
+    NotebookController,
+    AccountController,
+  ],
+  providers: [
+    AppService,
+    NotificationService,
+    UserService,
+    NotebookService,
+    AccountService,
+  ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
@@ -10,7 +10,7 @@ import { MustMatch } from './must-match.validator';
 	templateUrl: './register.component.html',
 	styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 	form: FormGroup;
 
 	registerFailed = false;
@@ -91,12 +91,12 @@ export class RegisterComponent implements OnInit {
 								Date.now().toString()
 							)
 							.subscribe(
-								(resp) => {
+								() => {
 									// If createUser was successful then login the user and take them to the notebook page
 									this.accountService
 										.loginUser(email, password)
 										.subscribe(
-											(data) => {
+											() => {
 												this.registerFailed = false;
 												this.router.navigateByUrl(
 													`notebook`
@@ -119,7 +119,6 @@ export class RegisterComponent implements OnInit {
 						this.errorMessage = `Error: ${err.error.message}`;
 					}
 				);
-		} else {
 		}
 	}
 }

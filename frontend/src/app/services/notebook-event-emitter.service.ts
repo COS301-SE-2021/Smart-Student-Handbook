@@ -9,7 +9,7 @@ export class NotebookEventEmitterService {
 
 	subsVar: Subscription | undefined;
 
-	constructor() {}
+	// constructor() {}
 
 	LoadEditor(id: string) {
 		this.loadEditor.emit(id);

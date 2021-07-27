@@ -34,7 +34,7 @@ export class MessagingService {
 					this.messaging.onTokenRefresh =
 						this.messaging.onTokenRefresh.bind(this.messaging);
 
-					this.subscribeToTopic(currentToken).subscribe((res) => {
+					this.subscribeToTopic(currentToken).subscribe(() => {
 						// console.log(res);
 					});
 				} else {

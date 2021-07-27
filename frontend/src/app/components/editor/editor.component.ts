@@ -1,5 +1,6 @@
-import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable global-require */
+import { Component, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -11,6 +12,7 @@ import { NotebookService } from 'src/app/services/notebook.service';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
 
 export interface Tag {
@@ -22,76 +24,56 @@ export interface Tag {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent {
 	/**
     Get all plugins for notebook
    */
-	// @ts-ignore
+
 	Header = require('@editorjs/header');
 
-	// @ts-ignore
 	LinkTool = require('@editorjs/link');
 
-	// @ts-ignore
 	RawTool = require('@editorjs/raw');
 
-	// @ts-ignore
 	SimpleImage = require('@editorjs/simple-image');
 
-	// @ts-ignore
 	Checklist = require('@editorjs/checklist');
 
-	// @ts-ignore
 	List = require('@editorjs/list');
 
-	// @ts-ignore
 	Embed = require('@editorjs/embed');
 
-	// @ts-ignore
 	Quote = require('@editorjs/quote');
 
-	// @ts-ignore
 	NestedList = require('@editorjs/nested-list');
 
-	// @ts-ignore
 	Underline = require('@editorjs/underline');
 
-	// @ts-ignore
 	Table = require('@editorjs/table');
 
-	// @ts-ignore
 	Warning = require('@editorjs/warning');
 
-	// @ts-ignore
 	CodeTool = require('@editorjs/code');
 
-	// @ts-ignore
 	// Paragraph = require('@editorjs/paragraph');
-	// @ts-ignore
+
 	TextVariantTune = require('@editorjs/text-variant-tune');
 
-	// @ts-ignore
 	AttachesTool = require('@editorjs/attaches');
 
-	// @ts-ignore
 	Marker = require('@editorjs/marker');
 
-	// @ts-ignore
 	InlineCode = require('@editorjs/inline-code');
 
-	// @ts-ignore
 	Personality = require('@editorjs/personality');
 
-	// @ts-ignore
 	Delimiter = require('@editorjs/delimiter');
 
-	// @ts-ignore
 	Alert = require('editorjs-alert');
 
-	// @ts-ignore
 	Paragraph = require('editorjs-paragraph-with-alignment');
 
-	_editor!: EditorJS;
+	Editor!: EditorJS;
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -127,14 +109,14 @@ export class EditorComponent implements OnInit {
 		const title = doc.getElementsByClassName('snippetTitle');
 
 		// Add the title
-		this._editor.blocks.insert(title[0].getAttribute('data-type')!, {
+		this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
 			text: title[0].innerHTML,
 		});
 
-		for (let i = 0; i < content.length; i++) {
+		for (let i = 0; i < content.length; i += 1) {
 			// console.log(content[i].innerHTML);
 			// Add content
-			this._editor.blocks.insert(content[i].getAttribute('data-type')!, {
+			this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
 				text: content[i].innerHTML,
 			});
 		}
@@ -153,8 +135,6 @@ export class EditorComponent implements OnInit {
 		private bottomSheet: MatBottomSheet
 	) {}
 
-	ngOnInit(): void {}
-
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
 	 * @param id the id of the notebook to load
@@ -162,7 +142,7 @@ export class EditorComponent implements OnInit {
 	async loadEditor(id: string) {
 		this.notebookID = id;
 
-		if (this._editor === undefined || window.outerWidth <= 600) {
+		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
 			 * Create the notebook with all the plugins
 			 */
@@ -243,18 +223,18 @@ export class EditorComponent implements OnInit {
 				},
 			});
 
-			this._editor = editor;
+			this.Editor = editor;
 
 			const e = document.getElementById('editor') as HTMLElement;
 			e.style.display = 'none';
 		}
 
-		await this._editor.isReady;
+		await this.Editor.isReady;
 
-		this._editor.styles.loader = 'mat-spinner';
+		this.Editor.styles.loader = 'mat-spinner';
 
 		const editorLoad = document.getElementsByClassName('codex-editor')!;
-		console.log(editorLoad);
+		// console.log(editorLoad);
 
 		editorLoad[0].classList.add('cdx-loader');
 
@@ -267,7 +247,7 @@ export class EditorComponent implements OnInit {
 		e.style.backgroundImage = 'none';
 		// e.style.backgroundColor = 'grey';
 
-		const editor = this._editor;
+		const editor = this.Editor;
 
 		editor.clear();
 
@@ -325,8 +305,7 @@ export class EditorComponent implements OnInit {
 	 * Method to call when notebook content should be saved
 	 */
 	saveContent() {
-		this._editor
-			.save()
+		this.Editor.save()
 			.then((outputData) => {
 				// console.log(this.notebookID, outputData);
 
@@ -352,28 +331,31 @@ export class EditorComponent implements OnInit {
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true) {
-				if (this.notebookID != '') {
+				if (this.notebookID !== '') {
 					this.notebookService
 						.removeNotebook(this.notebookID)
 						.subscribe(
-							(result) => {
-								console.log(result);
+							(data) => {
+								console.log(data);
 
-								const editor = this._editor;
+								const editor = this.Editor;
 								editor.clear();
 
 								this.notebookTitle = '';
 
 								this.removeNotebookCard(this.notebookID);
 							},
-							(error) => {}
+							(error) => {
+								console.log(error);
+							}
 						);
 				}
 			}
 		});
 	}
 
-	removeNotebookCard(id: string) {}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	removeNotebookCard(_id: string) {}
 
 	/**
 	 * Show menu when user clicks on ellipsis

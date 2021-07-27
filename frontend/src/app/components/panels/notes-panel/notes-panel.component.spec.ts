@@ -1,8 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { NotesPanelComponent } from './notes-panel.component';
 
 describe('NotesPanelComponent', () => {
