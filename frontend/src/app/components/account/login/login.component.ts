@@ -1,61 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+	form: FormGroup;
 
-  form: FormGroup;
-  loginFailed = false;
-  errorMessage: string = "";
+	loginFailed = false;
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private accountService: AccountService)
-  {
-    this.form = this.fb.group({
-      email: ['', Validators.email],
-      password: ['', Validators.required]
-    });
-  }
+	errorMessage: string = '';
 
-  async ngOnInit(): Promise<void>
-  {
-    //if user is already logged in move them to the notebook page, if not return to login
-    await this.accountService.isUserLoggedIn();
-    document.body.className = "backgroundIMG";
-  }
+	constructor(
+		private fb: FormBuilder,
+		private route: ActivatedRoute,
+		private router: Router,
+		private accountService: AccountService
+	) {
+		// setup the form and validation
+		this.form = this.fb.group({
+			email: ['', Validators.email],
+			password: ['', Validators.required],
+		});
+	}
 
-  ngOnDestroy(){
-    document.body.className="";
-  }
+	async ngOnInit(): Promise<void> {
+		// if user is already logged in move them to the notebook page, if not return to login
+		await this.accountService.isUserLoggedIn();
+		// add image background to body
+		document.body.className = 'backgroundIMG';
+	}
 
-  async onSubmit(): Promise<void>
-  {
-    this.loginFailed = false;
+	ngOnDestroy() {
+		// Remove image background to body
+		document.body.className = '';
+	}
 
-    if (this.form.valid)
-    {
-        const email = this.form.get('email')?.value;
-        const password = this.form.get('password')?.value;
+	// When user submits Login form
+	async onSubmit(): Promise<void> {
+		this.loginFailed = false;
 
-        this.accountService.loginUser(email, password).subscribe(data => {
-          this.loginFailed = false;
-            this.router.navigateByUrl(`notebook`);
-          },
-          err => {
-            this.loginFailed = true;
-            this.errorMessage = "Error: "+err.error.message;
-          }
-        );
-    }
-    else
-    {
-      return;
-    }
-  }
+		// check if form is valid
+		if (this.form.valid) {
+			const email = this.form.get('email')?.value;
+			const password = this.form.get('password')?.value;
 
+			// Call the account service to login the user with Firebase
+			this.accountService.loginUser(email, password).subscribe(
+				() => {
+					this.loginFailed = false;
+					// If login was successful then go to the notebook home page
+					this.router.navigate(['notebook']);
+				},
+				(err) => {
+					this.loginFailed = true;
+					this.errorMessage = `Error: ${err.error.message}`;
+				}
+			);
+		}
+	}
 }
