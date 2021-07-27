@@ -1,17 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from '../add-notebook/add-notebook.component';
+import { Component, OnInit, Inject } from '@angular/core'
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { DialogData } from '../add-notebook/add-notebook.component'
 
 /**
  * Data for the add notebook popup
  */
 export interface EditProfileDialogData {
-	bio: string;
-	department: string;
-	name: string;
-	institution: string;
-	program: string;
-	workstatus: string;
+	bio: string
+	department: string
+	name: string
+	institution: string
+	program: string
+	workstatus: string
 }
 
 @Component({
@@ -28,6 +28,6 @@ export class EditProfileComponent implements OnInit {
 	ngOnInit(): void {}
 
 	onNoClick(): void {
-		this.dialogRef.close();
+		this.dialogRef.close()
 	}
 }

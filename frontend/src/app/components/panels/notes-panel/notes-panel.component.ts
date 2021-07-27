@@ -1,9 +1,9 @@
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { NotebookService } from '../../../services/notebook.service';
-import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core'
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav'
+import { Router } from '@angular/router'
+import { MatDialog } from '@angular/material/dialog'
+import { NotebookService } from '../../../services/notebook.service'
+import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component'
 
 @Component({
 	selector: 'app-notes-panel',
@@ -13,29 +13,29 @@ import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.com
 @Injectable()
 export class NotesPanelComponent implements OnInit {
 	// Variables for add notebook popup dialog
-	title = '';
+	title = ''
 
-	course = '';
+	course = ''
 
-	description = '';
+	description = ''
 
-	institution = '';
+	institution = ''
 
-	private = false;
+	private = false
 
 	// Variable that holds the logged in user details
-	user: any;
+	user: any
 
-	profile: any;
+	profile: any
 
 	// sliding panel
-	@ViewChild('sidenav') sidenav!: MatSidenav;
+	@ViewChild('sidenav') sidenav!: MatSidenav
 
-	public closeNotePanelBtn: any;
+	public closeNotePanelBtn: any
 
-	open = false;
+	open = false
 
-	public notebooks: any = [];
+	public notebooks: any = []
 
 	constructor(
 		private notebookService: NotebookService,
@@ -44,51 +44,51 @@ export class NotesPanelComponent implements OnInit {
 	) {}
 
 	async ngOnInit() {
-		this.getUserNotebooks();
+		this.getUserNotebooks()
 
 		// let userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
+		this.user = JSON.parse(<string>localStorage.getItem('user'))
+		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'))
+		this.profile = this.profile.userInfo
 	}
 
 	getUserNotebooks() {
-		this.notebooks = [];
+		this.notebooks = []
 
 		this.notebookService
 			.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
 			.subscribe((result) => {
 				for (let i = 0; i < result.length; i++) {
-					this.notebooks.push(result[i]);
+					this.notebooks.push(result[i])
 				}
-			});
+			})
 	}
 
 	public openedCloseToggle() {
-		this.sidenav.toggle();
+		this.sidenav.toggle()
 
-		this.open = true;
+		this.open = true
 
 		// console.log(this.open);
 
 		const sideNavContainer = document.getElementById(
 			'notes-container'
-		) as HTMLElement;
-		const col = sideNavContainer?.parentElement?.parentElement;
+		) as HTMLElement
+		const col = sideNavContainer?.parentElement?.parentElement
 
 		if (sideNavContainer.style.width === '100%') {
-			sideNavContainer.style.width = '40px';
+			sideNavContainer.style.width = '40px'
 
 			if (col) {
-				col.style.width = 'fit-content';
-				col.style.minWidth = '0px';
+				col.style.width = 'fit-content'
+				col.style.minWidth = '0px'
 			}
 		} else {
-			sideNavContainer.style.width = '100%';
+			sideNavContainer.style.width = '100%'
 
 			if (col) {
-				col.style.width = '16.6666666667%';
-				col.style.minWidth = '250px';
+				col.style.width = '16.6666666667%'
+				col.style.minWidth = '250px'
 			}
 		}
 	}
@@ -100,13 +100,13 @@ export class NotesPanelComponent implements OnInit {
 	editNotebook(id: string) {
 		// Get the notebook info to edit
 		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			console.log(result);
+			console.log(result)
 
-			this.title = result.title;
-			this.course = result.course;
-			this.description = result.description;
-			this.institution = result.institution;
-			this.private = result.private;
+			this.title = result.title
+			this.course = result.course
+			this.description = result.description
+			this.institution = result.institution
+			this.private = result.private
 
 			// Open dialog
 			const dialogRef = this.dialog.open(AddNotebookComponent, {
@@ -118,7 +118,7 @@ export class NotesPanelComponent implements OnInit {
 					institution: this.institution,
 					private: this.private,
 				},
-			});
+			})
 
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe((result) => {
@@ -134,21 +134,21 @@ export class NotesPanelComponent implements OnInit {
 						surname: 'Moller',
 						private: result.private,
 						username: 'userArno',
-					};
+					}
 
 					// Call service and create notebook
 					this.notebookService.updateNotebook(request, id).subscribe(
 						(result) => {
-							console.log(result);
-							this.getUserNotebooks();
+							console.log(result)
+							this.getUserNotebooks()
 						},
 						(error) => {
-							console.log(error);
+							console.log(error)
 						}
-					);
+					)
 				}
-			});
-		});
+			})
+		})
 	}
 
 	/**
@@ -165,7 +165,7 @@ export class NotesPanelComponent implements OnInit {
 				institution: this.institution,
 				private: this.private,
 			},
-		});
+		})
 
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
@@ -180,14 +180,14 @@ export class NotesPanelComponent implements OnInit {
 					institution: result.institution,
 					name: this.profile.name,
 					private: result.private,
-				};
+				}
 
 				// this.notebookTitle = result.title;
 
 				// Call service and create notebook
 				this.notebookService.createNotebook(request).subscribe(
 					(result) => {
-						console.log(result);
+						console.log(result)
 
 						// this._router.navigate(['notebook'], {queryParams: {id: result.notebookId}});
 
@@ -199,8 +199,8 @@ export class NotesPanelComponent implements OnInit {
 					(error) => {
 						// this.folderPanelComponent.getUserNotebooks();
 					}
-				);
+				)
 			}
-		});
+		})
 	}
 }

@@ -2,9 +2,11 @@
 	"trailingComma": "es5",
 	"useTabs": true,
 	"tabWidth": 4,
-	"semi": true,
+	"semi": false,
 	"singleQuote": true,
 	"bracketSpacing": true,
+  "arrow-body-style": "off",
+  "prefer-arrow-callback": "off",
   "overrides": [
     {
       "files": "*.html",
