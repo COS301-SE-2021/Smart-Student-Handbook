@@ -1,29 +1,29 @@
-import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-//Modules
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule , ReactiveFormsModule } from '@angular/forms';
-
-//Firebase
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
+import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
+
+// Modules
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+// Firebase
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
-//Angular Material
+// Angular Material
 import { MaterialModule } from './material/material.module';
 
-//Components
+// Components
 import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
 import { NotebookComponent } from './components/notebook/notebook.component';
 import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
@@ -47,52 +47,61 @@ import { NotebookBottomSheetComponent } from './components/modals/notebook-botto
 import { TreeViewComponent } from './components/tree-view/tree-view.component';
 import { NotesComponent } from './components/notes/notes.component';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    FolderPanelComponent,
-    NotebookComponent,
-    SmartAssistPanelComponent,
-    NotesPanelComponent,
-    LoginComponent,
-    RegisterComponent,
-    RestPasswordComponent,
-    ForgotPasswordComponent,
-    GlobalErrorComponent,
-    GlobalConfirmComponent,
-    AddNotebookComponent,
-    ConfirmDeleteComponent,
-    EditProfileComponent,
-    EditorComponent,
-    NotebookBottomSheetComponent,
-    TreeViewComponent,
-    NotesComponent
-  ],
-  imports: [
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MDBBootstrapModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase, 'smartStudentNotebook'),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
-    AngularFireMessagingModule,
-    // AngularFireStorageModule,
-    AngularFirestoreModule,
-    FlexLayoutModule,
-    HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
-  ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent, MaterialModule, NotebookEventEmitterService],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		FolderPanelComponent,
+		NotebookComponent,
+		SmartAssistPanelComponent,
+		NotesPanelComponent,
+		LoginComponent,
+		RegisterComponent,
+		RestPasswordComponent,
+		ForgotPasswordComponent,
+		GlobalErrorComponent,
+		GlobalConfirmComponent,
+		AddNotebookComponent,
+		ConfirmDeleteComponent,
+		EditProfileComponent,
+		EditorComponent,
+		NotebookBottomSheetComponent,
+		TreeViewComponent,
+		NotesComponent,
+	],
+	imports: [
+		MaterialModule,
+		FormsModule,
+		ReactiveFormsModule,
+		BrowserModule,
+		AppRoutingModule,
+		BrowserAnimationsModule,
+		MDBBootstrapModule.forRoot(),
+		AngularFireModule.initializeApp(
+			environment.firebase,
+			'smartStudentNotebook'
+		),
+		AngularFireDatabaseModule,
+		AngularFireAuthModule,
+		AngularFireMessagingModule,
+		// AngularFireStorageModule,
+		AngularFirestoreModule,
+		FlexLayoutModule,
+		HttpClientModule,
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: environment.production,
+			// Register the ServiceWorker as soon as the app is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000',
+		}),
+	],
+	providers: [
+		NotesPanelComponent,
+		MessagingService,
+		AsyncPipe,
+		FolderPanelComponent,
+		MaterialModule,
+		NotebookEventEmitterService,
+	],
+	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

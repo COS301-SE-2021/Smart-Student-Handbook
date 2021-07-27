@@ -1,159 +1,166 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+	MatTreeFlatDataSource,
+	MatTreeFlattener,
+} from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { ViewEncapsulation } from '@angular/core';
-import { NotebookService } from "../../../services/notebook.service";
-import { ProfileService } from "../../../services/profile.service";
-import { MatDialog } from "@angular/material/dialog";
+
+import { MatDialog } from '@angular/material/dialog';
+import { NotebookService } from '../../../services/notebook.service';
+import { ProfileService } from '../../../services/profile.service';
 import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.component';
 import { TreeViewComponent } from '../../tree-view/tree-view.component';
 
 @Component({
-  selector: 'app-folder-panel',
-  templateUrl: './folder-panel.component.html',
-  styleUrls: ['./folder-panel.component.scss'],
-  encapsulation: ViewEncapsulation.None
+	selector: 'app-folder-panel',
+	templateUrl: './folder-panel.component.html',
+	styleUrls: ['./folder-panel.component.scss'],
+	encapsulation: ViewEncapsulation.None,
 })
 export class FolderPanelComponent implements OnInit {
+	// Hold user information
+	user: any;
 
-  //Hold user information
-  user: any;
-  profile: any;
-  open: boolean = false;
+	profile: any;
 
-  //Variables to be used when updating user profile
-  username: string = '';
-  bio: string = '';
-  institution: string = '';
-  department: string = '';
-  name: string = '';
-  program: string = '';
-  workstatus: string = '';
+	open: boolean = false;
 
-  panelOpenState = false;
-  width = 68.3;
+	// Variables to be used when updating user profile
+	username: string = '';
 
-  @ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
+	bio: string = '';
 
+	institution: string = '';
 
-  /**
-   * The folder panel component constructor
-   * @param notebookService call notebook related queries to the backend
-   * @param profileService call user profile related queries to the backend
-   * @param dialog open a dialog when a user wants to edit their information
-   */
-  constructor(private notebookService: NotebookService,
-              private profileService: ProfileService,
-              private dialog: MatDialog) { }
+	department: string = '';
 
+	name: string = '';
 
-  /**
-   * Get the note structure of the logged in user
-   * Get the user information from localstorage
-   */
-  ngOnInit(): void {
+	program: string = '';
 
-    //Get the user and user profile info from localstorage
-    this.user = JSON.parse(<string>localStorage.getItem('user'));
-    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+	workstatus: string = '';
 
-    this.username = this.user.displayName;
-    this.bio = this.profile.userInfo.bio;
+	panelOpenState = false;
 
-  }
+	width = 68.3;
 
-  /**
-   * Toggle the sliding panel (open and close)
-   */
-  openedCloseToggle(){
+	@ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
 
-    const sideNav = document.getElementById('container') as HTMLElement;
-    const col = sideNav?.parentElement?.parentElement;
+	/**
+	 * The folder panel component constructor
+	 * @param notebookService call notebook related queries to the backend
+	 * @param profileService call user profile related queries to the backend
+	 * @param dialog open a dialog when a user wants to edit their information
+	 */
+	constructor(
+		private notebookService: NotebookService,
+		private profileService: ProfileService,
+		private dialog: MatDialog
+	) {}
 
-    if(sideNav.style.width === '100%')
-    {
-      sideNav.style.width = '40px';
+	/**
+	 * Get the note structure of the logged in user
+	 * Get the user information from localstorage
+	 */
+	ngOnInit(): void {
+		// Get the user and user profile info from localstorage
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
-      if(col){
-        col.style.width = 'fit-content';
-        col.style.minWidth = '0px';
-      }
+		this.username = this.user.displayName;
+		this.bio = this.profile.userInfo.bio;
+	}
 
-    }
-    else{
-      sideNav.style.width = '100%';
+	/**
+	 * Toggle the sliding panel (open and close)
+	 */
+	openedCloseToggle() {
+		const sideNav = document.getElementById('container') as HTMLElement;
+		const col = sideNav?.parentElement?.parentElement;
 
-      if(col){
-        col.style.width = '16.6666666667%';
-        col.style.minWidth = '250px';
-      }
-    }
+		if (sideNav.style.width === '100%') {
+			sideNav.style.width = '40px';
 
-  }
+			if (col) {
+				col.style.width = 'fit-content';
+				col.style.minWidth = '0px';
+			}
+		} else {
+			sideNav.style.width = '100%';
 
-  /**
-   * Open a modal popup with a form to view and update the users profile
-   */
-  updateProfile(){
+			if (col) {
+				col.style.width = '16.6666666667%';
+				col.style.minWidth = '250px';
+			}
+		}
+	}
 
-    //Retrieve the current lodged in user from localstorage
-    let user = JSON.parse(<string>localStorage.getItem('user'));
+	/**
+	 * Open a modal popup with a form to view and update the users profile
+	 */
+	updateProfile() {
+		// Retrieve the current lodged in user from localstorage
+		const user = JSON.parse(<string>localStorage.getItem('user'));
 
-    //Call the getUserDetails from the profile service to get the users profile information that match that uid
-    this.profileService.getUserDetails(user.uid).subscribe(data => {
+		// Call the getUserDetails from the profile service to get the users profile information that match that uid
+		this.profileService.getUserDetails(user.uid).subscribe(
+			(data) => {
+				// Open dialog and populate the data attributes of the form fields
+				const dialogRef = this.dialog.open(EditProfileComponent, {
+					width: '50%',
+					data: {
+						bio: data.userInfo.bio,
+						department: data.userInfo.department,
+						name: data.userInfo.name,
+						institution: data.userInfo.institution,
+						program: data.userInfo.program,
+						workstatus: data.userInfo.workStatus,
+					},
+				});
 
-       //Open dialog and populate the data attributes of the form fields
-        const dialogRef = this.dialog.open(EditProfileComponent, {
-          width: '50%',
-          data: {
-            bio: data.userInfo.bio,
-            department: data.userInfo.department,
-            name: data.userInfo.name,
-            institution: data.userInfo.institution,
-            program: data.userInfo.program,
-            workstatus: data.userInfo.workStatus
-          }
-        });
-
-        //Get info and create notebook after dialog is closed
-        dialogRef.afterClosed().subscribe(result => {
-
-          if(result !== undefined){
-             //update the user profile information based on the entered values in the form
-            this.profileService.updateUser(user.uid, result.name, result.institution, result.department, result.program, result.workstatus, result.bio).subscribe(data => {
-
-            },
-            err => {
-                console.log("Error: "+err.error.message);
-            });
-          }
-
-        });
-
-      },
-      err => {
-        console.log("Error: "+err.error.message);
-      }
-    );
-
-  }
+				// Get info and create notebook after dialog is closed
+				dialogRef.afterClosed().subscribe((result) => {
+					if (result !== undefined) {
+						// update the user profile information based on the entered values in the form
+						this.profileService
+							.updateUser(
+								user.uid,
+								result.name,
+								result.institution,
+								result.department,
+								result.program,
+								result.workstatus,
+								result.bio
+							)
+							.subscribe(
+								(data) => {},
+								(err) => {
+									console.log(`Error: ${err.error.message}`);
+								}
+							);
+					}
+				});
+			},
+			(err) => {
+				console.log(`Error: ${err.error.message}`);
+			}
+		);
+	}
 }
-
 
 /**
  * Tree structure
  */
- interface DirectoryNode {
-  name: string;
-  id: string;
-  children?: DirectoryNode[];
+interface DirectoryNode {
+	name: string;
+	id: string;
+	children?: DirectoryNode[];
 }
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  id: string;
-  level: number;
+	expandable: boolean;
+	name: string;
+	id: string;
+	level: number;
 }
-

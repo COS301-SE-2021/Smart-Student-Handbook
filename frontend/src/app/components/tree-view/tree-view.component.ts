@@ -1,94 +1,110 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import {
+	MatTreeFlatDataSource,
+	MatTreeFlattener,
+} from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NotebookService } from 'src/app/services/notebook.service';
 
 @Component({
-  selector: 'app-tree-view',
-  templateUrl: './tree-view.component.html',
-  styleUrls: ['./tree-view.component.scss']
+	selector: 'app-tree-view',
+	templateUrl: './tree-view.component.html',
+	styleUrls: ['./tree-view.component.scss'],
 })
 export class TreeViewComponent implements OnInit {
+	user: any;
 
-  user: any;
-  profile: any;
+	profile: any;
 
-  /**
-   * If a tree node has children, transform the node to a parent node
-   * @param node the node to be transformed
-   * @param level the level of the node
-   * @returns a node transformed into a parent node that can have children
-   */
-   private _transformer = (node: DirectoryNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      id: node.id,
-      level: level,
-    };
-  }
+	/**
+	 * If a tree node has children, transform the node to a parent node
+	 * @param node the node to be transformed
+	 * @param level the level of the node
+	 * @returns a node transformed into a parent node that can have children
+	 */
+	private _transformer = (node: DirectoryNode, level: number) => ({
+		expandable: !!node.children && node.children.length > 0,
+		name: node.name,
+		id: node.id,
+		level,
+	});
 
-  //Variables needed for the tree view
-  treeControl = new FlatTreeControl<ExampleFlatNode>(node => node.level, node => node.expandable);
-  treeFlattener = new MatTreeFlattener(this._transformer, node => node.level, node => node.expandable, node => node.children);
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+	// Variables needed for the tree view
+	treeControl = new FlatTreeControl<ExampleFlatNode>(
+		(node) => node.level,
+		(node) => node.expandable
+	);
 
-  constructor(private notebookService: NotebookService, private router: Router) { }
+	treeFlattener = new MatTreeFlattener(
+		this._transformer,
+		(node) => node.level,
+		(node) => node.expandable,
+		(node) => node.children
+	);
 
-  ngOnInit(): void {
+	dataSource = new MatTreeFlatDataSource(
+		this.treeControl,
+		this.treeFlattener
+	);
 
-    //Get the user and user profile info from localstorage
-    this.user = JSON.parse(<string>localStorage.getItem('user'));
-    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+	hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
-    this.getUserNotebooks();
-  }
+	constructor(
+		private notebookService: NotebookService,
+		private router: Router
+	) {}
 
-   /**
-   * Get the logged in user's notebooks to add to the treeview
-   */
-  getUserNotebooks(){
+	ngOnInit(): void {
+		// Get the user and user profile info from localstorage
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
-      this.notebookService.getUserNotebooks(this.user.uid)
-        .subscribe(result => {
+		this.getUserNotebooks();
+	}
 
-          let children = [{name: 'Notebook one', id: ''}];
-          // for (let i = 0; i < result.length; i++) {
-          //   children.push({name: result[i].course, id: result[i].notebookReference});
-          // }
+	/**
+	 * Get the logged in user's notebooks to add to the treeview
+	 */
+	getUserNotebooks() {
+		this.notebookService
+			.getUserNotebooks(this.user.uid)
+			.subscribe((result) => {
+				const children = [{ name: 'Notebook one', id: '' }];
+				// for (let i = 0; i < result.length; i++) {
+				//   children.push({name: result[i].course, id: result[i].notebookReference});
+				// }
 
-          this.dataSource.data = [{
-            name: 'My notebooks',
-            id: '',
-            children: children
-          }];
+				this.dataSource.data = [
+					{
+						name: 'My notebooks',
+						id: '',
+						children,
+					},
+				];
 
-          // this.openTree();
+				// this.openTree();
+			});
+	}
 
-        });
-  }
-
-  openNotebookFolder(){
-    this.router.navigate(['notes']);
-  }
-
+	openNotebookFolder() {
+		this.router.navigate(['notes']);
+	}
 }
 
 /**
  * Tree structure
  */
- interface DirectoryNode {
-  name: string;
-  id: string;
-  children?: DirectoryNode[];
+interface DirectoryNode {
+	name: string;
+	id: string;
+	children?: DirectoryNode[];
 }
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  id: string;
-  level: number;
+	expandable: boolean;
+	name: string;
+	id: string;
+	level: number;
 }
