@@ -1,10 +1,8 @@
-import * as functions from 'firebase-functions';
+// import * as functions from 'firebase-functions';
 import { NestFactory } from '@nestjs/core';
 import * as admin from 'firebase-admin';
 import firebase from 'firebase/app';
 import { AppModule } from './app.module';
-
-const dotenv = require('dotenv');
 
 export async function createNestServer() {
   const app = await NestFactory.create(AppModule);
@@ -32,5 +30,5 @@ export async function createNestServer() {
 }
 
 createNestServer()
-  .then((v) => console.log('Nest Ready'))
+  .then(() => console.log('Nest Ready'))
   .catch((err) => console.error('Nest broken', err));

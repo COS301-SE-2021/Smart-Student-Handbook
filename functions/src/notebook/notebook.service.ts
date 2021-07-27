@@ -23,7 +23,7 @@ export class NotebookService {
     } catch (error) {
       throw new HttpException(
         'Unable to complete request. User might not be signed in.',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -92,7 +92,7 @@ export class NotebookService {
    */
   async createOrUpdateNotebook(
     notebookDto: NotebookDto,
-    notebookId: string
+    notebookId: string,
   ): Promise<Response> {
     // Assume the user wants to update the notebook
     let userId = '';
@@ -104,7 +104,7 @@ export class NotebookService {
     } catch (error) {
       throw new HttpException(
         'Unable to complete request. User might not be signed in.',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -148,7 +148,7 @@ export class NotebookService {
       console.log(error);
       throw new HttpException(
         'Something went wrong. Operation could not be executed.',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

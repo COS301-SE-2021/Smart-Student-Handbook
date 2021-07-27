@@ -6,9 +6,9 @@ import { RegisterDto } from './dto/register.dto';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
-import { EmailNotificationRequestDto } from '../notification/dto/emailNotificationRequest.dto';
+// import { EmailNotificationRequestDto } from '../notification/dto/emailNotificationRequest.dto';
 
-import { UserService } from '../user/user.service';
+// import { UserService } from '../user/user.service';
 
 require('firebase/auth');
 
@@ -22,10 +22,10 @@ export class AccountService {
    */
   async registerUser(registerDto: RegisterDto): Promise<Account> {
     // Check if user password and confirm passwords match before creating user
-    if (registerDto.password != registerDto.passwordConfirm) {
+    if (registerDto.password !== registerDto.passwordConfirm) {
       throw new HttpException(
         'Passwords do not match!',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -50,21 +50,18 @@ export class AccountService {
         displayName: registerDto.displayName,
         disabled: false,
       })
-      .then((userCredential) =>
-        // See the UserRecord reference doc for the contents of userRecord.
-        ({
-          uid: userCredential.uid,
-          email: userCredential.email,
-          emailVerified: userCredential.emailVerified,
-          phoneNumber: userCredential.phoneNumber,
-          displayName: userCredential.displayName,
-          message: 'User is successfully registered!',
-        })
-      )
+      .then((userCredential) => ({
+        uid: userCredential.uid,
+        email: userCredential.email,
+        emailVerified: userCredential.emailVerified,
+        phoneNumber: userCredential.phoneNumber,
+        displayName: userCredential.displayName,
+        message: 'User is successfully registered!',
+      }))
       .catch((error) => {
         throw new HttpException(
-          `${'Bad Request ' + 'Error creating new user: '}${error.message}`,
-          HttpStatus.BAD_REQUEST
+          `${'Bad Request Error creating new user: '}${error.message}`,
+          HttpStatus.BAD_REQUEST,
         );
       });
   }
@@ -82,7 +79,7 @@ export class AccountService {
     } catch (error) {
       throw new HttpException(
         `Bad Request. User might not be signed in or does not exist: ${error.message}`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -110,7 +107,7 @@ export class AccountService {
       .catch((error) => {
         throw new HttpException(
           `Error updating user: ${error.message}`,
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       });
   }
@@ -134,7 +131,7 @@ export class AccountService {
       .catch((error) => {
         throw new HttpException(
           `Bad Request ${error.message}`,
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       });
   }
@@ -153,7 +150,7 @@ export class AccountService {
       .catch((error) => {
         throw new HttpException(
           `Internal Service Error: ${error.message}`,
-          HttpStatus.INTERNAL_SERVER_ERROR
+          HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
   }
@@ -178,7 +175,7 @@ export class AccountService {
     } catch (error) {
       throw new HttpException(
         `Bad Request. User might not be signed in or does not exist: ${error.message}`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -203,13 +200,13 @@ export class AccountService {
         .catch((error) => {
           throw new HttpException(
             `Internal Service Error: ${error.message}`,
-            HttpStatus.INTERNAL_SERVER_ERROR
+            HttpStatus.INTERNAL_SERVER_ERROR,
           );
         });
     } catch (error) {
       throw new HttpException(
         `Bad Request. User might not be signed in or does not exist.${error.message}`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

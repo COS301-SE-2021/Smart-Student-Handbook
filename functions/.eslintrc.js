@@ -32,7 +32,15 @@ module.exports = {
       "error",
       {
         "endOfLine": "crlf",
+        "trailingComma": "all"
       }
-    ]
+    ],
+    "import/prefer-default-export": "off",
+    'object-curly-newline': 'off',
+    '@typescript-eslint/no-var-requires': 0, //?? not sure
+    "class-methods-use-this": 0,
+    '@typescript-eslint/indent':"off", //?? not sure
+    "no-mixed-spaces-and-tabs": 0,
+    'max-len': ["error", { "code": 120 }],
   },
 };

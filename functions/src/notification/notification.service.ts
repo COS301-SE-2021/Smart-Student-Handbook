@@ -44,7 +44,7 @@ export class NotificationService {
           message: info.messageId,
         }),
       )
-      .catch((Err) => ({
+      .catch(() => ({
         success: false,
         message: 'Something went wrong!',
       }));
@@ -113,16 +113,19 @@ export class NotificationService {
       .then((response) => {
         console.log('Successfully subscribed:', response);
 
-        if (response.successCount == 1) {
+        if (response.successCount === 1) {
           return {
             status: 'successful',
           };
-        } if (response.failureCount == 1) {
+        } if (response.failureCount === 1) {
           return {
             status: 'unsuccessful',
             error: response.errors,
           };
         }
+        return {
+          status: 'unsuccessful',
+        };
       })
       .catch((error) => {
         console.log('Error sending message:', error);

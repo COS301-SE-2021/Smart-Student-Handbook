@@ -34,7 +34,7 @@ export class NotebookController {
   @Put('updateNotebook/:notebookId')
   updateNotebook(
     @Body() notebookDto: NotebookDto,
-      @Param('notebookId') notebookId,
+    @Param('notebookId') notebookId,
   ): Promise<Response> {
     return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId);
   }

@@ -68,11 +68,11 @@ describe('NotebookService', () => {
       it('Return the notebooks of the user with the user ID', async () => {
         const authMock = jest.fn(() => ({
           createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-            Promise.resolve(true)
+            Promise.resolve(true),
           ),
           sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
           signInAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-            Promise.resolve(true)
+            Promise.resolve(true),
           ),
           fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
           signOut: jest.fn(() => {
@@ -83,6 +83,7 @@ describe('NotebookService', () => {
             sendEmailVerification: jest.fn(() => Promise.resolve(true)),
           },
         }));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         firebase.auth = authMock;
         await service.findAllUserNotebooks();
@@ -110,8 +111,8 @@ describe('NotebookService', () => {
     describe('when an ID  does not match a notebook', () => {
       it('Throw and error', () =>
         expect(service.findNotebookById('TestID2')).rejects.toThrow(
-        HttpException
-      ));
+          HttpException,
+        ));
     });
   });
   // Test to delete a notebook
