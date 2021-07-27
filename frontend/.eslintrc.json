@@ -11,7 +11,7 @@
       "extends": [
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
-        "airbnb-typescript/base", // optional
+        "airbnb-typescript/base",
         "prettier"
       ],
       "plugins": ["prettier"],
@@ -32,8 +32,13 @@
             "style": "kebab-case"
           }
         ],
-        "import/prefer-default-export": "off", // if using airbnb
-        "prettier/prettier": "error"
+        "import/prefer-default-export": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "crlf"
+          }
+        ]
       }
     },
     {
@@ -41,7 +46,12 @@
       "extends": ["plugin:@angular-eslint/template/recommended", "prettier"],
       "plugins": ["prettier"],
       "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "crlf"
+          }
+        ]
       }
     }
   ]
