@@ -1,261 +1,254 @@
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { NotebookService } from "../../../services/notebook.service";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
+import { NotebookService } from '../../../services/notebook.service';
 import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
 
 @Component({
-  selector: 'app-notes-panel',
-  templateUrl: './notes-panel.component.html',
-  styleUrls: ['./notes-panel.component.scss']
+	selector: 'app-notes-panel',
+	templateUrl: './notes-panel.component.html',
+	styleUrls: ['./notes-panel.component.scss'],
 })
-
 @Injectable()
 export class NotesPanelComponent implements OnInit {
+	// Variables for add notebook popup dialog
+	title = '';
 
-  //Variables for add notebook popup dialog
-  title = '';
-  course = '';
-  description = '';
-  institution = '';
-  private = false;
+	course = '';
 
-  //Variable that holds the logged in user details
-  user: any;
-  profile: any;
+	description = '';
 
-  //sliding panel
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+	institution = '';
 
-  open = false;
+	private = false;
 
-  public notebooks: any = [];
+	// Variable that holds the logged in user details
+	user: any;
 
-  /**
-   * Notes panel constructor
-   * @param notebookService call notebook related requests to backend
-   * @param dialog show dialog to update notebook details
-   */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog) { }
+	profile: any;
 
-  /**
-   * Get the logged in user's notebooks as well as
-   * User information from localstorage
-   */
-  async ngOnInit() {
+	// sliding panel
+	@ViewChild('sidenav') sidenav!: MatSidenav;
 
-    // let userDeatils;
-    this.user = JSON.parse(<string>localStorage.getItem('user'));
-    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-    this.profile = this.profile.userInfo;
+	open = false;
 
-    this.getUserNotebooks();
-  }
+	public notebooks: any = [];
 
-  /**
-   * Retrieve the logged in user's notebooks
-   */
-  getUserNotebooks(){
-    this.notebooks = [];
+	/**
+	 * Notes panel constructor
+	 * @param notebookService call notebook related requests to backend
+	 * @param dialog show dialog to update notebook details
+	 */
+	constructor(
+		private notebookService: NotebookService,
+		private dialog: MatDialog
+	) {}
 
-    this.notebookService.getUserNotebooks(this.user.uid)
-      .subscribe(result => {
+	/**
+	 * Get the logged in user's notebooks as well as
+	 * User information from localstorage
+	 */
+	async ngOnInit() {
+		// let userDeatils;
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+		this.profile = this.profile.userInfo;
 
-        for(let i = 0; i < result.length; i++){
-          this.notebooks.push(result[i]);
-        }
-      });
-  }
+		this.getUserNotebooks();
+	}
 
-  /**
-   * Open and close or hide and show the panel
-   */
-  public openedCloseToggle(){
+	/**
+	 * Retrieve the logged in user's notebooks
+	 */
+	getUserNotebooks() {
+		this.notebooks = [];
 
-    this.sidenav.toggle();
+		this.notebookService
+			.getUserNotebooks(this.user.uid)
+			.subscribe((result) => {
+				for (let i = 0; i < result.length; i++) {
+					this.notebooks.push(result[i]);
+				}
+			});
+	}
 
-    this.open = true;
+	/**
+	 * Open and close or hide and show the panel
+	 */
+	public openedCloseToggle() {
+		this.sidenav.toggle();
 
-    // console.log(this.open);
+		this.open = true;
 
-    const sideNavContainer = document.getElementById('notes-container') as HTMLElement;
-    const col = sideNavContainer?.parentElement?.parentElement;
+		// console.log(this.open);
 
-    if(sideNavContainer.style.width === '100%')
-    {
-      sideNavContainer.style.width = '40px';
+		const sideNavContainer = document.getElementById(
+			'notes-container'
+		) as HTMLElement;
+		const col = sideNavContainer?.parentElement?.parentElement;
 
-      if(col){
-        col.style.width = 'fit-content';
-        col.style.minWidth = '0px';
-      }
+		if (sideNavContainer.style.width === '100%') {
+			sideNavContainer.style.width = '40px';
 
-    }
-    else{
-      sideNavContainer.style.width = '100%';
+			if (col) {
+				col.style.width = 'fit-content';
+				col.style.minWidth = '0px';
+			}
+		} else {
+			sideNavContainer.style.width = '100%';
 
-      if(col){
-        col.style.width = '16.6666666667%';
-        col.style.minWidth = '250px';
-      }
-    }
+			if (col) {
+				col.style.width = '16.6666666667%';
+				col.style.minWidth = '250px';
+			}
+		}
+	}
 
-  }
+	/**
+	 * Used in notebookcomponent to open a specific nptebook
+	 * @param id the id of the notebook to be opened
+	 */
+	openNotebook(id: string) {}
 
-  /**
-   * Used in notebookcomponent to open a specific nptebook
-   * @param id the id of the notebook to be opened
-   */
-  openNotebook(id: string){
+	/**
+	 * Edit the details of a notebook
+	 * @param id the id of the notebook to be updated
+	 */
+	editNotebook(id: string) {
+		// Get the notebook info to edit
+		this.notebookService.getNoteBookById(id).subscribe((result) => {
+			this.title = result.title;
+			this.course = result.course;
+			this.description = result.description;
+			this.institution = result.institution;
+			this.private = result.private;
 
-  }
+			// Open dialog
+			const dialogRef = this.dialog.open(AddNotebookComponent, {
+				width: '50%',
+				data: {
+					title: this.title,
+					course: this.course,
+					description: this.description,
+					institution: this.institution,
+					private: this.private,
+				},
+			});
 
-  /**
-   * Edit the details of a notebook
-   * @param id the id of the notebook to be updated
-   */
-  editNotebook(id: string){
+			// Get info and create notebook after dialog is closed
+			dialogRef.afterClosed().subscribe((result) => {
+				// If the user filled out the form
+				if (result !== undefined) {
+					const request = {
+						title: result.title,
+						author: 'Arno',
+						course: result.course,
+						description: result.description,
+						institution: result.institution,
+						name: 'Arno',
+						surname: 'Moller',
+						private: result.private,
+						username: 'userArno',
+					};
 
-    //Get the notebook info to edit
-    this.notebookService.getNoteBookById(id)
-    .subscribe(result => {
+					// Call service and update notebook
+					this.notebookService.updateNotebook(request, id).subscribe(
+						(result) => {
+							this.notebooks = this.notebooks.map(
+								(notebook: any) => {
+									if (notebook.notebookReference === id) {
+										notebook.course = request.course;
+										notebook.description =
+											request.description;
+										notebook.institution =
+											request.institution;
+										notebook.private = request.private;
+										notebook.title = request.title;
+									}
 
-      this.title  = result.title;
-      this.course  = result.course;
-      this.description = result.description;
-      this.institution = result.institution;
-      this.private  = result.private ;
+									return notebook;
+								}
+							);
+						},
+						(error) => {
+							console.log(error);
+						}
+					);
+				}
+			});
+		});
+	}
 
-      //Open dialog
-      const dialogRef = this.dialog.open(AddNotebookComponent, {
-        width: '50%',
-        data: {
-          title: this.title,
-          course: this.course,
-          description: this.description,
-          institution: this.institution,
-          private: this.private
-        }
-      });
+	/**
+	 * Create a new notebook
+	 */
+	createNewNotebook() {
+		// Open dialog
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: '50%',
+			data: {
+				title: this.title,
+				course: this.course,
+				description: this.description,
+				institution: this.institution,
+				private: this.private,
+			},
+		});
 
-      //Get info and create notebook after dialog is closed
-      dialogRef.afterClosed().subscribe(result => {
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((result) => {
+			// If the user filled out the form
+			if (result !== undefined) {
+				// Create request object
+				const request = {
+					title: result.title,
+					author: this.profile.name,
+					course: result.course,
+					description: result.description,
+					institution: result.institution,
+					name: this.profile.name,
+					private: result.private,
+				};
 
-        //If the user filled out the form
-        if (result !== undefined) {
+				// this.notebookTitle = result.title;
 
-          let request = {
-            title: result.title,
-            author: 'Arno',
-            course: result.course,
-            description: result.description,
-            institution: result.institution,
-            name: 'Arno',
-            surname: 'Moller',
-            private: result.private,
-            username: 'userArno'
-          }
+				// Call service and create notebook
+				this.notebookService.createNotebook(request).subscribe(
+					(result) => {
+						const newNotebook = {
+							author: request.author,
+							course: request.course,
+							description: request.description,
+							institution: request.institution,
+							name: request.name,
+							notebookReference: result.notebookId,
+							private: request.private,
+							title: request.title,
+							userId: this.user.uid,
+						};
 
-          //Call service and update notebook
-          this.notebookService.updateNotebook(request, id)
-            .subscribe(result => {
+						this.notebooks.push(newNotebook);
 
-              this.notebooks = this.notebooks.map((notebook: any) => {
-                if(notebook.notebookReference === id){
+						this.openNotebook(result.notebookId);
+					},
+					(error) => {
+						// this.folderPanelComponent.getUserNotebooks();
+					}
+				);
+			}
+		});
+	}
 
-                  notebook.course = request.course;
-                  notebook.description = request.description;
-                  notebook.institution = request.institution;
-                  notebook.private = request.private;
-                  notebook.title = request.title;
-                }
-
-                return notebook;
-              });
-            },
-            error => {
-              console.log(error);
-            });
-        }
-      })
-    });
-  }
-
-  /**
-   * Create a new notebook
-   */
-  createNewNotebook(){
-
-    //Open dialog
-    const dialogRef = this.dialog.open(AddNotebookComponent, {
-      width: '50%',
-      data: {
-        title: this.title,
-        course: this.course,
-        description: this.description,
-        institution: this.institution,
-        private: this.private
-      }
-    });
-
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-
-      //If the user filled out the form
-      if(result !== undefined){
-
-        //Create request object
-        let request = {
-          title: result.title,
-          author: this.profile.name,
-          course: result.course,
-          description: result.description,
-          institution: result.institution,
-          name: this.profile.name,
-          private: result.private,
-        }
-
-        // this.notebookTitle = result.title;
-
-        //Call service and create notebook
-        this.notebookService.createNotebook(request)
-          .subscribe(result => {
-
-            let newNotebook = {
-              author: request.author,
-              course: request.course,
-              description: request.description,
-              institution: request.institution,
-              name: request.name,
-              notebookReference: result.notebookId,
-              private: request.private,
-              title: request.title,
-              userId: this.user.uid
-            }
-
-            this.notebooks.push(newNotebook);
-
-            this.openNotebook(result.notebookId);
-          },
-            error => {
-              // this.folderPanelComponent.getUserNotebooks();
-            });
-      }
-    });
-
-  }
-
-  /**
-   * Remove the notebook from the view
-   * (The notebook is deleted in the editor component)
-   * @param id the id of the notebook to be removed
-   */
-  removeNotebook(id: string){
-
-    this.notebooks = this.notebooks.filter((notebook: any) => {
-      if(notebook.notebookReference !== id){
-        return notebook;
-      }
-    });
-  }
+	/**
+	 * Remove the notebook from the view
+	 * (The notebook is deleted in the editor component)
+	 * @param id the id of the notebook to be removed
+	 */
+	removeNotebook(id: string) {
+		this.notebooks = this.notebooks.filter((notebook: any) => {
+			if (notebook.notebookReference !== id) {
+				return notebook;
+			}
+		});
+	}
 }

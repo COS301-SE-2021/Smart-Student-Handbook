@@ -1,23 +1,34 @@
 <p>
-  <mat-toolbar color="primary">
-   <button mat-icon-button aria-label="Back button" (click)="navigateBack()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span>Notes</span>
-  <span class="example-spacer"></span>
-</mat-toolbar>
+	<mat-toolbar color="primary">
+		<button
+			mat-icon-button
+			aria-label="Back button"
+			(click)="navigateBack()"
+		>
+			<mat-icon>arrow_back</mat-icon>
+		</button>
+		<span>Notes</span>
+		<span class="example-spacer"></span>
+	</mat-toolbar>
 </p>
 
 <div class="container">
+	<div
+		class="noteContainer"
+		*ngFor="let note of notes; let i = index"
+		(click)="openNote(note.notebookReference)"
+	>
+		<mat-card
+			class="note"
+			style="background-image: linear-gradient(to bottom right, {{
+				colours[i % 6].top
+			}},  {{ colours[i % 6].bottom }})"
+		>
+		</mat-card>
+		<h4>{{ note.title }}</h4>
+	</div>
 
-  <div class="noteContainer" *ngFor="let note of notes; let i = index;" (click)="openNote(note.notebookReference)">
-    <mat-card class="note" style="background-image: linear-gradient(to bottom right, {{colours[i%6].top}},  {{colours[i%6].bottom}})">
-
-    </mat-card>
-    <h4>{{note.title}}</h4>
-  </div>
-
-  <!-- <div class="noteContainer">
+	<!-- <div class="noteContainer">
     <mat-card class="note" [ngStyle]="{'background-image': 'linear-gradient(to bottom right, rgb(233, 97, 124), rgb(231, 7, 52))'}">
 
     </mat-card>
@@ -58,7 +69,4 @@
     </mat-card>
     <h4>Title</h4>
   </div> -->
-
-
 </div>
-

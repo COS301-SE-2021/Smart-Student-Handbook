@@ -1,417 +1,438 @@
-import { NotebookBottomSheetComponent } from './../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 
-import firebase from "firebase";
-import "firebase/firestore";
+import firebase from 'firebase';
+import 'firebase/firestore';
 import { NotebookService } from 'src/app/services/notebook.service';
 
 import { MatDialog } from '@angular/material/dialog';
+
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
 
-import {MatBottomSheet } from '@angular/material/bottom-sheet';
-
 export interface Tag {
-  name: string;
+	name: string;
 }
 
-
 @Component({
-  selector: 'app-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
+	selector: 'app-editor',
+	templateUrl: './editor.component.html',
+	styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
-
-  /**
+	/**
     Get all plugins for notebook
    */
-  // @ts-ignore
-  Header = require('@editorjs/header');
-  // @ts-ignore
-  LinkTool = require('@editorjs/link');
-  // @ts-ignore
-  RawTool = require('@editorjs/raw');
-  // @ts-ignore
-  SimpleImage = require('@editorjs/simple-image');
-  // @ts-ignore
-  Checklist = require('@editorjs/checklist');
-  // @ts-ignore
-  List = require('@editorjs/list');
-  // @ts-ignore
-  Embed = require('@editorjs/embed');
-  // @ts-ignore
-  Quote = require('@editorjs/quote');
-  // @ts-ignore
-  NestedList = require('@editorjs/nested-list');
-  // @ts-ignore
-  Underline = require('@editorjs/underline');
-  // @ts-ignore
-  Table = require('@editorjs/table');
-  // @ts-ignore
-  Warning = require('@editorjs/warning');
-  // @ts-ignore
-  CodeTool = require('@editorjs/code');
-  // @ts-ignore
-  // Paragraph = require('@editorjs/paragraph');
-  // @ts-ignore
-  TextVariantTune = require('@editorjs/text-variant-tune');
-  // @ts-ignore
-  AttachesTool = require('@editorjs/attaches');
-  // @ts-ignore
-  Marker = require('@editorjs/marker');
-  // @ts-ignore
-  InlineCode = require('@editorjs/inline-code');
-  // @ts-ignore
-  Personality = require('@editorjs/personality');
-  // @ts-ignore
-  Delimiter = require('@editorjs/delimiter');
-  // @ts-ignore
-  Alert = require('editorjs-alert');
-  // @ts-ignore
-  Paragraph = require('editorjs-paragraph-with-alignment');
+	// @ts-ignore
+	Header = require('@editorjs/header');
 
-  _editor!: EditorJS;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  tags: Tag[] = [
-    {name: 'tag1'},
-    {name: 'tag2'},
-    {name: 'tag3'},
-    {name: 'tag4'}
-  ];
-  notebookID!: string;
-  notebookTitle: string = 'Smart Student';
-  panelOpenState = false;
-  showMore: boolean = false;
+	// @ts-ignore
+	LinkTool = require('@editorjs/link');
 
-  @ViewChild('editorContainer') editorContainer!: HTMLDivElement;
+	// @ts-ignore
+	RawTool = require('@editorjs/raw');
 
-  /**
-   * Handler for when content from the smart assist panel is drag & dropped into the notebook
-   * @param event get the content that is dropped
-   */
-  drop(event: any) {
-    var parser = new DOMParser();
+	// @ts-ignore
+	SimpleImage = require('@editorjs/simple-image');
 
-    let e = event.item.element.nativeElement.innerHTML;
+	// @ts-ignore
+	Checklist = require('@editorjs/checklist');
 
-    var doc = parser.parseFromString(e, 'text/html');
+	// @ts-ignore
+	List = require('@editorjs/list');
 
-    let content = doc.getElementsByClassName('snippetContent');
-    let title = doc.getElementsByClassName('snippetTitle');
+	// @ts-ignore
+	Embed = require('@editorjs/embed');
 
-    //Add the title
-    this._editor.blocks.insert(title[0].getAttribute('data-type')!, { text : title[0].innerHTML });
+	// @ts-ignore
+	Quote = require('@editorjs/quote');
 
-    for(let i = 0; i < content.length; i++){
-      // console.log(content[i].innerHTML);
-      //Add content
-      this._editor.blocks.insert(content[i].getAttribute('data-type')!, { text : content[i].innerHTML });
-    }
+	// @ts-ignore
+	NestedList = require('@editorjs/nested-list');
 
-    this.saveContent();
-  }
+	// @ts-ignore
+	Underline = require('@editorjs/underline');
 
-  /**
-   * Editor component constructor
-   * @param notebookService To call methods that apply to the notebooks
-   * @param dialog Show dialog when a user wants to delete a notebook for example
-   */
-  constructor(private notebookService: NotebookService, private dialog: MatDialog,
-              private bottomSheet: MatBottomSheet) { }
+	// @ts-ignore
+	Table = require('@editorjs/table');
 
-  ngOnInit(): void {  }
+	// @ts-ignore
+	Warning = require('@editorjs/warning');
 
-  /**
-   * Instantiate a new editor if one does not exist yet and load previously saved data
-   * @param id the id of the notebook to load
-   */
-  async loadEditor(id: string){
+	// @ts-ignore
+	CodeTool = require('@editorjs/code');
 
-    this.notebookID = id;
+	// @ts-ignore
+	// Paragraph = require('@editorjs/paragraph');
+	// @ts-ignore
+	TextVariantTune = require('@editorjs/text-variant-tune');
 
-    if(this._editor === undefined || window.outerWidth <= 600){
-      /**
-     * Create the notebook with all the plugins
-     */
-      let editor = new EditorJS({
-        holder: 'editor',
-        tools: {
-          header: {
-            class: this.Header,
-            shortcut: 'CTRL+SHIFT+H'
-          },
-          linkTool: {
-            class: this.LinkTool,
-            // config: {
-            //   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
-            // }
-          },
-          raw: this.RawTool,
-          image: this.SimpleImage,
-          checklist: {
-            class: this.Checklist,
-            inlineToolbar: true,
-          },
-          list: {
-            class: this.NestedList,
-            inlineToolbar: true,
-          },
-          embed: this.Embed,
-          quote: this.Quote,
-          underline: this.Underline,
-          table: {
-            class: this.Table,
-          },
-          warning: {
-            class: this.Warning,
-            inlineToolbar: true,
-            shortcut: 'CTRL+SHIFT+W',
-            config: {
-              titlePlaceholder: 'Title',
-              messagePlaceholder: 'Message',
-            },
-          },
-          code: this.CodeTool,
-          paragraph: {
-            class: this.Paragraph,
-            inlineToolbar: true,
-          },
-          textVariant: this.TextVariantTune,
-          attaches: {
-            class: this.AttachesTool,
-            // config: {
-            //   endpoint: 'http://localhost:8008/uploadFile'
-            // }
-          },
-          Marker: {
-            class: this.Marker,
-            shortcut: 'CTRL+SHIFT+M',
-          },
-          inlineCode: {
-            class: this.InlineCode,
-            shortcut: 'CMD+SHIFT+M',
-          },
-          personality: {
-            class: this.Personality,
-            // config: {
-            //   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
-            // }
-          },
-          delimiter: this.Delimiter,
-          alert: this.Alert,
-        },
-        data:
-          {
-            blocks: []
-          },
-        autofocus: true,
+	// @ts-ignore
+	AttachesTool = require('@editorjs/attaches');
 
-        onChange: () => {
-          this.saveContent();
-        }
-      });
+	// @ts-ignore
+	Marker = require('@editorjs/marker');
 
-      this._editor = editor;
+	// @ts-ignore
+	InlineCode = require('@editorjs/inline-code');
 
+	// @ts-ignore
+	Personality = require('@editorjs/personality');
 
-      let e = document.getElementById('editor') as HTMLElement;
-      e.style.display = 'none';
+	// @ts-ignore
+	Delimiter = require('@editorjs/delimiter');
 
-    }
+	// @ts-ignore
+	Alert = require('editorjs-alert');
 
-    await this._editor.isReady;
+	// @ts-ignore
+	Paragraph = require('editorjs-paragraph-with-alignment');
 
-    this._editor.styles.loader = 'mat-spinner';
+	_editor!: EditorJS;
 
-    let editorLoad = document.getElementsByClassName('codex-editor')!;
-    console.log(editorLoad);
+	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-    editorLoad[0].classList.add('cdx-loader');
+	tags: Tag[] = [
+		{ name: 'tag1' },
+		{ name: 'tag2' },
+		{ name: 'tag3' },
+		{ name: 'tag4' },
+	];
 
-    let e = editorLoad[0] as HTMLElement;
-    e.style.border = 'none';
+	notebookID!: string;
 
-    e = document.getElementById('editor') as HTMLElement;
-    e.style.overflowY = 'none';
-    e.style.display = 'block';
-    e.style.backgroundImage = 'none';
-    // e.style.backgroundColor = 'grey';
+	notebookTitle: string = 'Smart Student';
 
-    let editor = this._editor;
+	panelOpenState = false;
 
-    editor.clear();
+	showMore: boolean = false;
 
-    /**
-     * Get the specific notebook details with notebook id
-     */
-    this.notebookService.getNoteBookById(id)
-      .subscribe(result => {
+	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
-        this.notebookTitle = result.title;
+	/**
+	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
+	 * @param event get the content that is dropped
+	 */
+	drop(event: any) {
+		const parser = new DOMParser();
 
-        //Change the path to the correct notebook's path
-        let dbRefObject = firebase.database().ref("notebook/" + id);
+		const e = event.item.element.nativeElement.innerHTML;
 
-        /**
-         * Get the values from the realtime database and insert block if notebook is empty
-         */
-        dbRefObject.once('value', snap => {
-          if (snap.val() === null) {
-            firebase.database().ref("notebook/" + id).set({
-              outputData:
-                {
-                  blocks: [
-                    {
-                      "id": "jTFbQOD8j3",
-                      "type": "header",
-                      "data": {
-                        "text": this.notebookTitle+ " 🚀",
-                        "level": 2
-                      }
-                    }]
-                }
-            });
-          }
-        })
-          .then(() => {
-            /**
-             * Render output on Editor
-             */
-            dbRefObject.once('value', snap => {
+		const doc = parser.parseFromString(e, 'text/html');
 
-              // console.log(snap.val());
-              editor.render(snap.val().outputData);
-            });
+		const content = doc.getElementsByClassName('snippetContent');
+		const title = doc.getElementsByClassName('snippetTitle');
 
-            editorLoad[0].classList.remove('cdx-loader');
-            e = document.getElementById('editor') as HTMLElement;
-            e.style.overflowY = 'scroll';
-          });
-      })
-  }
+		// Add the title
+		this._editor.blocks.insert(title[0].getAttribute('data-type')!, {
+			text: title[0].innerHTML,
+		});
 
-  /**
-   * Method to call when notebook content should be saved
-   */
-  saveContent(){
-    this._editor.save().then((outputData) => {
-      // console.log(this.notebookID, outputData);
+		for (let i = 0; i < content.length; i++) {
+			// console.log(content[i].innerHTML);
+			// Add content
+			this._editor.blocks.insert(content[i].getAttribute('data-type')!, {
+				text: content[i].innerHTML,
+			});
+		}
 
-      if(outputData.blocks.length > 0){
-        firebase.database().ref("notebook/" + this.notebookID).set({
-          outputData
-        });
-      }
+		this.saveContent();
+	}
 
-    }).catch((error) => {
-      console.log('Saving failed: ', error)
-    });
-  }
+	/**
+	 * Editor component constructor
+	 * @param notebookService To call methods that apply to the notebooks
+	 * @param dialog Show dialog when a user wants to delete a notebook for example
+	 */
+	constructor(
+		private notebookService: NotebookService,
+		private dialog: MatDialog,
+		private bottomSheet: MatBottomSheet
+	) {}
 
-  /**
-   * Delete a notebook
-   */
-  removeNotebook(){
+	ngOnInit(): void {}
 
-    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-      // width: '50%',
-    });
+	/**
+	 * Instantiate a new editor if one does not exist yet and load previously saved data
+	 * @param id the id of the notebook to load
+	 */
+	async loadEditor(id: string) {
+		this.notebookID = id;
 
-    //Get info and create notebook after dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
+		if (this._editor === undefined || window.outerWidth <= 600) {
+			/**
+			 * Create the notebook with all the plugins
+			 */
+			const editor = new EditorJS({
+				holder: 'editor',
+				tools: {
+					header: {
+						class: this.Header,
+						shortcut: 'CTRL+SHIFT+H',
+					},
+					linkTool: {
+						class: this.LinkTool,
+						// config: {
+						//   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
+						// }
+					},
+					raw: this.RawTool,
+					image: this.SimpleImage,
+					checklist: {
+						class: this.Checklist,
+						inlineToolbar: true,
+					},
+					list: {
+						class: this.NestedList,
+						inlineToolbar: true,
+					},
+					embed: this.Embed,
+					quote: this.Quote,
+					underline: this.Underline,
+					table: {
+						class: this.Table,
+					},
+					warning: {
+						class: this.Warning,
+						inlineToolbar: true,
+						shortcut: 'CTRL+SHIFT+W',
+						config: {
+							titlePlaceholder: 'Title',
+							messagePlaceholder: 'Message',
+						},
+					},
+					code: this.CodeTool,
+					paragraph: {
+						class: this.Paragraph,
+						inlineToolbar: true,
+					},
+					textVariant: this.TextVariantTune,
+					attaches: {
+						class: this.AttachesTool,
+						// config: {
+						//   endpoint: 'http://localhost:8008/uploadFile'
+						// }
+					},
+					Marker: {
+						class: this.Marker,
+						shortcut: 'CTRL+SHIFT+M',
+					},
+					inlineCode: {
+						class: this.InlineCode,
+						shortcut: 'CMD+SHIFT+M',
+					},
+					personality: {
+						class: this.Personality,
+						// config: {
+						//   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
+						// }
+					},
+					delimiter: this.Delimiter,
+					alert: this.Alert,
+				},
+				data: {
+					blocks: [],
+				},
+				autofocus: true,
 
-      if(result === true){
-        if(this.notebookID != ''){
+				onChange: () => {
+					this.saveContent();
+				},
+			});
 
-          this.notebookService.removeNotebook(this.notebookID)
-            .subscribe(result => {
-                console.log(result);
+			this._editor = editor;
 
-                let editor = this._editor;
-                editor.clear();
+			const e = document.getElementById('editor') as HTMLElement;
+			e.style.display = 'none';
+		}
 
-                this.notebookTitle = '';
+		await this._editor.isReady;
 
-                this.removeNotebookCard(this.notebookID);
+		this._editor.styles.loader = 'mat-spinner';
 
-              },
-              error => {
+		const editorLoad = document.getElementsByClassName('codex-editor')!;
+		console.log(editorLoad);
 
-              })
-        }
-      }
-    });
-  }
+		editorLoad[0].classList.add('cdx-loader');
 
-  removeNotebookCard(id: string){
+		let e = editorLoad[0] as HTMLElement;
+		e.style.border = 'none';
 
-  }
+		e = document.getElementById('editor') as HTMLElement;
+		e.style.overflowY = 'none';
+		e.style.display = 'block';
+		e.style.backgroundImage = 'none';
+		// e.style.backgroundColor = 'grey';
 
-  /**
-   * Show menu when user clicks on ellipsis
-   * @param event To prevent the accordion from opening and closing when ellipsis is clicked
-   */
-  showMoreOptions(event: Event){
-    event.stopPropagation();
-  }
+		const editor = this._editor;
 
-  /**
-   * When the accordion is opened and closed, adjust the height of the notebook
-   */
-  openClosePanel(){
+		editor.clear();
 
-    this.panelOpenState = !this.panelOpenState;
+		/**
+		 * Get the specific notebook details with notebook id
+		 */
+		this.notebookService.getNoteBookById(id).subscribe((result) => {
+			this.notebookTitle = result.title;
 
-    let editor = document.getElementById('editor') as HTMLElement;
+			// Change the path to the correct notebook's path
+			const dbRefObject = firebase.database().ref(`notebook/${id}`);
 
-    let vh = window.innerHeight;
+			/**
+			 * Get the values from the realtime database and insert block if notebook is empty
+			 */
+			dbRefObject
+				.once('value', (snap) => {
+					if (snap.val() === null) {
+						firebase
+							.database()
+							.ref(`notebook/${id}`)
+							.set({
+								outputData: {
+									blocks: [
+										{
+											id: 'jTFbQOD8j3',
+											type: 'header',
+											data: {
+												text: `${this.notebookTitle} 🚀`,
+												level: 2,
+											},
+										},
+									],
+								},
+							});
+					}
+				})
+				.then(() => {
+					/**
+					 * Render output on Editor
+					 */
+					dbRefObject.once('value', (snap) => {
+						// console.log(snap.val());
+						editor.render(snap.val().outputData);
+					});
 
-    if(this.panelOpenState){
-      let p = (vh - 402) + "px";
-      editor.style.height = p;
-    }
-    else{
-      let p = (vh - 160) + "px";
-      editor.style.height = p;
-    }
-  }
+					editorLoad[0].classList.remove('cdx-loader');
+					e = document.getElementById('editor') as HTMLElement;
+					e.style.overflowY = 'scroll';
+				});
+		});
+	}
 
-  /**
-   * Insert new tags to the input and tags array
-   * @param event To get the value from the newly inserted tag
-   */
-  addTag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+	/**
+	 * Method to call when notebook content should be saved
+	 */
+	saveContent() {
+		this._editor
+			.save()
+			.then((outputData) => {
+				// console.log(this.notebookID, outputData);
 
-    // Add our fruit
-    if (value) {
-      this.tags.push({name: value});
-    }
+				if (outputData.blocks.length > 0) {
+					firebase.database().ref(`notebook/${this.notebookID}`).set({
+						outputData,
+					});
+				}
+			})
+			.catch((error) => {
+				console.log('Saving failed: ', error);
+			});
+	}
 
-    // Clear the input value
-    event.chipInput!.clear();
-  }
+	/**
+	 * Delete a notebook
+	 */
+	removeNotebook() {
+		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+			// width: '50%',
+		});
 
-  /**
-   * Remove a tag from input and tags array
-   * @param tag the tag to be removed
-   */
-  removeTag(tag: Tag): void {
-    const index = this.tags.indexOf(tag);
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result === true) {
+				if (this.notebookID != '') {
+					this.notebookService
+						.removeNotebook(this.notebookID)
+						.subscribe(
+							(result) => {
+								console.log(result);
 
-    if (index >= 0) {
-      this.tags.splice(index, 1);
-    }
-  }
+								const editor = this._editor;
+								editor.clear();
 
+								this.notebookTitle = '';
 
+								this.removeNotebookCard(this.notebookID);
+							},
+							(error) => {}
+						);
+				}
+			}
+		});
+	}
 
-  openBottomSheet(): void {
-    this.bottomSheet.open(NotebookBottomSheetComponent, {
-      panelClass: 'bottomPanelClass'
-    });
-  }
+	removeNotebookCard(id: string) {}
+
+	/**
+	 * Show menu when user clicks on ellipsis
+	 * @param event To prevent the accordion from opening and closing when ellipsis is clicked
+	 */
+	showMoreOptions(event: Event) {
+		event.stopPropagation();
+	}
+
+	/**
+	 * When the accordion is opened and closed, adjust the height of the notebook
+	 */
+	openClosePanel() {
+		this.panelOpenState = !this.panelOpenState;
+
+		const editor = document.getElementById('editor') as HTMLElement;
+
+		const vh = window.innerHeight;
+
+		if (this.panelOpenState) {
+			const p = `${vh - 402}px`;
+			editor.style.height = p;
+		} else {
+			const p = `${vh - 160}px`;
+			editor.style.height = p;
+		}
+	}
+
+	/**
+	 * Insert new tags to the input and tags array
+	 * @param event To get the value from the newly inserted tag
+	 */
+	addTag(event: MatChipInputEvent): void {
+		const value = (event.value || '').trim();
+
+		// Add our fruit
+		if (value) {
+			this.tags.push({ name: value });
+		}
+
+		// Clear the input value
+		event.chipInput!.clear();
+	}
+
+	/**
+	 * Remove a tag from input and tags array
+	 * @param tag the tag to be removed
+	 */
+	removeTag(tag: Tag): void {
+		const index = this.tags.indexOf(tag);
+
+		if (index >= 0) {
+			this.tags.splice(index, 1);
+		}
+	}
+
+	openBottomSheet(): void {
+		this.bottomSheet.open(NotebookBottomSheetComponent, {
+			panelClass: 'bottomPanelClass',
+		});
+	}
 }

@@ -2,16 +2,16 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root',
 })
 export class NotebookEventEmitterService {
+	loadEditor = new EventEmitter();
 
-  loadEditor = new EventEmitter();
-  subsVar: Subscription | undefined;
+	subsVar: Subscription | undefined;
 
-  constructor() { }
+	constructor() {}
 
-  LoadEditor(id: string) {
-    this.loadEditor.emit(id);
-  }
+	LoadEditor(id: string) {
+		this.loadEditor.emit(id);
+	}
 }

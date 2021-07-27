@@ -1,140 +1,157 @@
-import { NotebookEventEmitterService } from './../../services/notebook-event-emitter.service';
-import {Component, Injectable, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {
+	Component,
+	Injectable,
+	OnInit,
+	ViewChild,
+	ViewChildren,
+} from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-
 import EditorJS from '@editorjs/editorjs';
+import { Router } from '@angular/router';
+import { MatDrawerMode } from '@angular/material/sidenav';
+import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
 
-import { Router } from "@angular/router";
-import { AccountService } from "../../services/account.service";
+import { AccountService } from '../../services/account.service';
 import { FolderPanelComponent } from '../panels/folder-panel/folder-panel.component';
 import { NotesPanelComponent } from '../panels/notes-panel/notes-panel.component';
 import { EditorComponent } from '../editor/editor.component';
-import { MatDrawerMode } from '@angular/material/sidenav';
 import { TreeViewComponent } from '../tree-view/tree-view.component';
 
-
 @Component({
-  selector: 'app-notebook',
-  templateUrl: './notebook.component.html',
-  styleUrls: ['./notebook.component.scss']
+	selector: 'app-notebook',
+	templateUrl: './notebook.component.html',
+	styleUrls: ['./notebook.component.scss'],
 })
 export class NotebookComponent implements OnInit {
+	// Variables for add notebook popup dialog
+	title = '';
 
-  //Variables for add notebook popup dialog
-  title = '';
-  course = '';
-  description = '';
-  institution = '';
-  private = false;
+	course = '';
 
-  menuMode: MatDrawerMode = 'over';
-  hasBackDrop: boolean = true;
+	description = '';
 
-  notebookTitle = 'New Notebook';
-  username = 'Arno';
-  degree = 'Computer Science';
+	institution = '';
 
-  // public editorData = '<p>Hello, world!</p>';
+	private = false;
 
-  links = ['First'];
-  activeLink = this.links[0];
-  background: ThemePalette = undefined;
-  notebookID: string = '';
-  _editor!: EditorJS;
+	menuMode: MatDrawerMode = 'over';
 
-  //Variable that holds the logged in user details
-  user: any;
-  profile: any;
+	hasBackDrop: boolean = true;
 
-  @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
-  @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
-  @ViewChild('editorComponent') editorComponent!: EditorComponent;
-  @ViewChild('treeComponent') treeComponent!: TreeViewComponent;
-  @ViewChild('overlay') overlay!: HTMLDivElement;//treeViewComponent
+	notebookTitle = 'New Notebook';
 
-  /**
-   * Include the notebook service
-   * @param notebookService
-   */
-  constructor(private router: Router, private accountService: AccountService,
-            private notebookEventEmitterService: NotebookEventEmitterService) { }
+	username = 'Arno';
 
+	degree = 'Computer Science';
 
-  /**
-   * When the view is loaded:
-   *  let the folderPanelComponent openNotebookPanel method call the notePanelComponent's openedCloseToggle method
-   *  let the notePanelComponent openNotebook method call the editor component's load editor method
-   *  let the editorComponent removeNotebookCard method call the notePanelComponent's removeNotebook method
-   */
-  ngOnInit() {
+	// public editorData = '<p>Hello, world!</p>';
 
-    this.accountService.isUserLoggedIn();
+	links = ['First'];
 
-    // get userDeatils;
-    this.user = JSON.parse(<string>localStorage.getItem('user'));
-    this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-    this.profile = this.profile.userInfo;
+	activeLink = this.links[0];
 
+	background: ThemePalette = undefined;
 
-    if (this.notebookEventEmitterService.subsVar==undefined) {
+	notebookID: string = '';
 
-      this.notebookEventEmitterService.subsVar = this.notebookEventEmitterService.loadEditor
-      .subscribe((id:string) => {
-        this.loadEditor(id);
-      });
+	_editor!: EditorJS;
 
-    }
-  }
+	// Variable that holds the logged in user details
+	user: any;
 
-  ngAfterViewInit(){
-    this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
-      this.notePanelComponent.openedCloseToggle();
-    };
+	profile: any;
 
-    this.treeComponent.openNotebookFolder = () => {
-      this.router.navigate(['notes']);
-    }
+	@ViewChild('folderPanelComponent')
+	folderPanelComponent!: FolderPanelComponent;
 
-    this.notePanelComponent.openNotebook = (id: string) => {
-       this.editorComponent.loadEditor(id);
-    }
+	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
-    this.editorComponent.removeNotebookCard = (id: string) => {
-      this.notePanelComponent.removeNotebook(id);
-    }
+	@ViewChild('editorComponent') editorComponent!: EditorComponent;
 
-  }
+	@ViewChild('treeComponent') treeComponent!: TreeViewComponent;
 
-  /**
-   * If a user is not logged in, redirect them to the login page
-   */
-  async logout()
-  {
-    this.accountService.singOut().subscribe(data => {
-        this.router.navigateByUrl(`/login`);
-        localStorage.clear();
-      },
-      err => {
-        console.log("Error: "+err.error.message);
-      }
-    );
-  }
+	@ViewChild('overlay') overlay!: HTMLDivElement; // treeViewComponent
 
-  showOverlay(){
-    let e = document.getElementById('overlay')!;
-    e.style.display = 'block';
-  }
+	/**
+	 * Include the notebook service
+	 * @param notebookService
+	 */
+	constructor(
+		private router: Router,
+		private accountService: AccountService,
+		private notebookEventEmitterService: NotebookEventEmitterService
+	) {}
 
-  hideOverlay(){
-    let e = document.getElementById('overlay')!;
-    e.style.display = 'none';
-  }
+	/**
+	 * When the view is loaded:
+	 *  let the folderPanelComponent openNotebookPanel method call the notePanelComponent's openedCloseToggle method
+	 *  let the notePanelComponent openNotebook method call the editor component's load editor method
+	 *  let the editorComponent removeNotebookCard method call the notePanelComponent's removeNotebook method
+	 */
+	ngOnInit() {
+		this.accountService.isUserLoggedIn();
 
-  loadEditor(id: string){
-    console.log(id);
+		// get userDeatils;
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+		this.profile = this.profile.userInfo;
 
-    this.editorComponent.loadEditor(id);
-  }
+		if (this.notebookEventEmitterService.subsVar == undefined) {
+			this.notebookEventEmitterService.subsVar =
+				this.notebookEventEmitterService.loadEditor.subscribe(
+					(id: string) => {
+						this.loadEditor(id);
+					}
+				);
+		}
+	}
 
+	ngAfterViewInit() {
+		this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
+			this.notePanelComponent.openedCloseToggle();
+		};
 
+		this.treeComponent.openNotebookFolder = () => {
+			this.router.navigate(['notes']);
+		};
+
+		this.notePanelComponent.openNotebook = (id: string) => {
+			this.editorComponent.loadEditor(id);
+		};
+
+		this.editorComponent.removeNotebookCard = (id: string) => {
+			this.notePanelComponent.removeNotebook(id);
+		};
+	}
+
+	/**
+	 * If a user is not logged in, redirect them to the login page
+	 */
+	async logout() {
+		this.accountService.singOut().subscribe(
+			(data) => {
+				this.router.navigateByUrl(`/login`);
+				localStorage.clear();
+			},
+			(err) => {
+				console.log(`Error: ${err.error.message}`);
+			}
+		);
+	}
+
+	showOverlay() {
+		const e = document.getElementById('overlay')!;
+		e.style.display = 'block';
+	}
+
+	hideOverlay() {
+		const e = document.getElementById('overlay')!;
+		e.style.display = 'none';
+	}
+
+	loadEditor(id: string) {
+		console.log(id);
+
+		this.editorComponent.loadEditor(id);
+	}
 }
