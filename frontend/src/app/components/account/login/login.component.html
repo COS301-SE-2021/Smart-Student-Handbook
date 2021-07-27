@@ -1,0 +1,58 @@
+<div class="container transparent">
+	<div class="p-5 mb-4">
+		<h1 class="display-1 fw-bold fs-1 text-center">
+			Smart Student Handbook
+		</h1>
+	</div>
+</div>
+
+<mat-card>
+	<mat-card-content>
+		<form [formGroup]="form" (ngSubmit)="onSubmit()">
+			<h2>Log In</h2>
+			<mat-error *ngIf="loginFailed">
+				{{ errorMessage }}
+			</mat-error>
+			<mat-form-field class="full-width-input">
+				<input
+					autocomplete="off"
+					matInput
+					placeholder="Email"
+					formControlName="email"
+					required
+				/>
+				<mat-error> Please provide a valid email address </mat-error>
+			</mat-form-field>
+			<mat-form-field class="full-width-input">
+				<input
+					autocomplete="off"
+					matInput
+					type="Password"
+					placeholder="Password"
+					formControlName="password"
+					required
+				/>
+				<mat-error> Please provide a valid password </mat-error>
+			</mat-form-field>
+			<button mat-raised-button color="primary" type="submit">
+				Login
+			</button>
+		</form>
+	</mat-card-content>
+
+	<p class="text-center">
+		Dont have an Account? <a [routerLink]="['/register']">Register</a>
+	</p>
+	<!--  <p class="text-center"><a [routerLink]="['/forgotPassword']">Forgot Password?</a></p>-->
+</mat-card>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

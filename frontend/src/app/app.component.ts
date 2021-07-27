@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
-import { MessagingService } from './service/messaging.service';
+import { Component, OnInit } from '@angular/core';
+import { MessagingService } from './services/messaging.service';
+// import * as firebase from "firebase/database";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  panelOpenState = false;
-  title = 'smart-student';
-  message: any;
+export class AppComponent implements OnInit {
+	panelOpenState = false;
 
-  constructor(private messagingService: MessagingService) { }
-  ngOnInit() {
-    this.messagingService.requestPermission()
-    this.messagingService.receiveMessage()
-    this.message = this.messagingService.currentMessage
-  }
+	title = 'smart-student';
+
+	message: any;
+
+	constructor(private messagingService: MessagingService) {}
+
+	ngOnInit() {
+		// firebase.initializeApp(environment.firebase);
+
+		this.messagingService.requestPermission();
+		this.messagingService.receiveMessage();
+		this.message = this.messagingService.currentMessage;
+	}
 }

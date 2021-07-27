@@ -7,12 +7,24 @@ import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { NotebookController } from './notebook/notebook.controller';
 import { NotebookService } from './notebook/notebook.service';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
+import { AccountController } from './account/account.controller';
+import { AccountService } from './account/account.service';
 
 @Module({
   imports: [],
-  controllers: [AppController, NotificationController, UserController, NotebookController, AuthController],
-  providers: [AppService, NotificationService, UserService, NotebookService, AuthService],
+  controllers: [
+    AppController,
+    NotificationController,
+    UserController,
+    NotebookController,
+    AccountController,
+  ],
+  providers: [
+    AppService,
+    NotificationService,
+    UserService,
+    NotebookService,
+    AccountService,
+  ],
 })
 export class AppModule {}

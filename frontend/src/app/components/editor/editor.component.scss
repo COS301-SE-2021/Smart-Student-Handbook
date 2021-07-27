@@ -1,0 +1,148 @@
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+
+  #noteInfoAccordion{
+    display: none;
+  }
+}
+
+#mobileMoreOptions{
+  margin-top: -10px;
+}
+
+#editorContainer{
+  padding: 15px 20px 7px 20px;
+  box-shadow: 0px 0px 8px 2px rgb(216, 216, 216);
+  text-align: left;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+#editor{
+  text-align: left;
+  padding: 7px;
+  height: calc(100vh - 155px);
+  margin-top: 5px;
+  background-image: url("../../../assets/images/notebook-placeholder-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-clip: border-box;
+}
+
+#noteTitle{
+  font-size: large;
+  margin-top: 12px;
+}
+
+.favorite-icon{
+  padding-left: 15px;
+  color: rgb(85, 85, 85);
+}
+
+.header-image {
+  background-image: url("../../../assets/images/defaultProfile.jpg");
+  background-size: cover;
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  // margin: 0px 0px -5px 10px;
+}
+
+.noteInfo{
+  color: rgb(151, 151, 151);
+  display: inline-block;
+}
+
+.card{
+  padding: 0px 0px 5px 0px;
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+}
+
+.personName{
+  padding-top: 2px;
+  color: rgb(99, 99, 99);
+  font-size: medium;
+}
+
+#noteInfoTable{
+  tr{
+    width: max-content;
+    align-items: center;
+    line-height: 30px;
+  }
+
+  td{
+    // width: min-content;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  td:nth-child(2){
+    width: 100%;
+  }
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header-description{
+  flex-grow: 0;
+}
+
+#noteInfoAccordion{
+  border: 10px black;
+}
+
+mat-spinner{
+  position: absolute;
+  top: 46%;
+  left: 47%;
+}
+
+#tags{
+  width: 100%;
+  margin-top: -15px;
+}
+
+
+mat-expansion-panel{
+  background-color: rgb(243, 243, 243);
+  margin-bottom: 5px;
+}
+
+
+.editorBackground{
+  background-color: rgb(104, 104, 104) !important;
+}
+
+
+/********* Scrollbar *********/
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
