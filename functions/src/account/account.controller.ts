@@ -1,6 +1,4 @@
-import {
- Body, Controller, Post, Get, Delete, Put, 
-} from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, Put } from '@nestjs/common';
 import firebase from 'firebase';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
