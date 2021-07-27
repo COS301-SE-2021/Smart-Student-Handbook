@@ -1,0 +1,61 @@
+<div>
+
+  <div id="topDividerContainer">
+    <hr id="topDivider" (click)="closeSheet($event)">
+  </div>
+
+
+  <div>
+    <h2 class="lastUpdated">Last Updated:</h2>
+    <p class="lastUpdated">July 18, 2021 at 14:44</p>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <button color="primary" mat-icon-button  id="addGroupBtn">
+      <mat-icon>group_add</mat-icon>
+    </button>
+
+    <h2>Collaborators:</h2>
+
+    <div align="center" class="collaborators">
+      <div mat-card-avatar class="collaborator-image"></div>
+
+      <mat-icon class="removeCollaboratorIcon">remove_circle_outline</mat-icon>
+
+      <p class="personName">Arno</p>
+    </div>
+    <div align="center" class="collaborators">
+      <div mat-card-avatar class="collaborator-image"></div>
+
+      <mat-icon class="removeCollaboratorIcon">remove_circle_outline</mat-icon>
+
+      <p class="personName">Douglas van Reeuwyk</p>
+    </div>
+
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <h2>Tags:</h2>
+
+    <mat-form-field id="tags">
+      <mat-label></mat-label>
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip *ngFor="let tag of tags" [selectable]="true"
+                  [removable]="true" (removed)="removeTag(tag)">
+          {{tag.name}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Add tag..."
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addTag($event)">
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
+
+</div>

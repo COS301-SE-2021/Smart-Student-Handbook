@@ -3,6 +3,13 @@
     (cdkDropListDropped)="drop($event)"
     #editorContainer>
 
+
+  <div id="mobileMoreOptions" align="right">
+    <button mat-icon-button class="favorite-icon" (click)="openBottomSheet()">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+  </div>
+
   <mat-accordion>
     <mat-expansion-panel id="noteInfoAccordion" [expanded]="panelOpenState == true" (opened)="openClosePanel()" (closed)="openClosePanel()">
 
@@ -97,6 +104,3 @@
 
   </div>
 </div>
-
-<div id="editorOverlay"></div>
-<!-- <mat-spinner></mat-spinner> -->

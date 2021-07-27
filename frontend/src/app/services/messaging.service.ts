@@ -19,7 +19,7 @@ export class MessagingService {
       .then((currentToken) => {
         if (currentToken) {
           // Send the token to your server and update the UI if necessary
-          console.log(currentToken);
+          // console.log(currentToken);
           this.messaging.onMessage = this.messaging.onMessage.bind(this.messaging);
           this.messaging.onTokenRefresh = this.messaging.onTokenRefresh.bind(this.messaging);
 

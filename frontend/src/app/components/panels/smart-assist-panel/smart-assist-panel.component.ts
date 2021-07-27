@@ -12,6 +12,10 @@ export class SmartAssistPanelComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Enlarge the recommendation card and make it scrollable
+   * @param index the index of the card to enlarge
+   */
   showPreview(index: number){
 
     let snippet = document.getElementsByClassName('snippetCard')[index].children[0] as HTMLElement;
@@ -26,6 +30,10 @@ export class SmartAssistPanelComponent implements OnInit {
 
   }
 
+  /**
+   * Hide the preview of the recommendation card
+   * @param index the index of the card to hide
+   */
   hidePreview(index: number){
 
     let snippet = document.getElementsByClassName('snippetCard')[index].children[0] as HTMLElement;
@@ -34,6 +42,9 @@ export class SmartAssistPanelComponent implements OnInit {
     snippet.style.overflow = 'hidden';
   }
 
+  /**
+   * Show and hide (open and close) the panel
+   */
   openedCloseToggle(){
     const sideNav = document.getElementById('smartAssistContainer') as HTMLElement;
     const col = sideNav?.parentElement?.parentElement;
