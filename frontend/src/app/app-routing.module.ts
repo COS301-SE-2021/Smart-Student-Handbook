@@ -1,3 +1,4 @@
+import { NotesComponent } from './components/notes/notes.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/account/login/login.component';
@@ -15,8 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    // component: LoginComponent,
-    loadChildren: () => import('./components/account/login/login.component').then( m => m.LoginComponent)
+    component: LoginComponent,
+    // loadChildren: () => import('./components/account/login/login.component').then( m => m.LoginComponent)
   },
   {
     path: 'register',
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'notebook',
     component: NotebookComponent
+  },
+  {
+    path: 'notes',
+    component: NotesComponent
   },
 ];
 

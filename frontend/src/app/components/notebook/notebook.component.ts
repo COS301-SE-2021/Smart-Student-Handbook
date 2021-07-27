@@ -1,4 +1,5 @@
-import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import { NotebookEventEmitterService } from './../../services/notebook-event-emitter.service';
+import {Component, Injectable, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 import EditorJS from '@editorjs/editorjs';
@@ -9,6 +10,8 @@ import { FolderPanelComponent } from '../panels/folder-panel/folder-panel.compon
 import { NotesPanelComponent } from '../panels/notes-panel/notes-panel.component';
 import { EditorComponent } from '../editor/editor.component';
 import { MatDrawerMode } from '@angular/material/sidenav';
+import { TreeViewComponent } from '../tree-view/tree-view.component';
+
 
 @Component({
   selector: 'app-notebook',
@@ -46,13 +49,15 @@ export class NotebookComponent implements OnInit {
   @ViewChild('folderPanelComponent') folderPanelComponent!: FolderPanelComponent;
   @ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
   @ViewChild('editorComponent') editorComponent!: EditorComponent;
+  @ViewChild('treeComponent') treeComponent!: TreeViewComponent;
   @ViewChild('overlay') overlay!: HTMLDivElement;//treeViewComponent
 
   /**
    * Include the notebook service
    * @param notebookService
    */
-  constructor(private _router: Router, private accountService: AccountService) { }
+  constructor(private router: Router, private accountService: AccountService,
+            private notebookEventEmitterService: NotebookEventEmitterService) { }
 
 
   /**
@@ -65,25 +70,39 @@ export class NotebookComponent implements OnInit {
 
     this.accountService.isUserLoggedIn();
 
-    //Assign "openPanel" function to the eventhandler from folder panel to open the note panel when the view is loaded
-    document.addEventListener('DOMContentLoaded', (event) => {
-      this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
-        this.notePanelComponent.openedCloseToggle();
-      };
-
-      this.notePanelComponent.openNotebook = (id: string) => {
-         this.editorComponent.loadEditor(id);
-      }
-
-      this.editorComponent.removeNotebookCard = (id: string) => {
-        this.notePanelComponent.removeNotebook(id);
-      }
-    })
-
-    // let userDeatils;
+    // get userDeatils;
     this.user = JSON.parse(<string>localStorage.getItem('user'));
     this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
     this.profile = this.profile.userInfo;
+
+
+    if (this.notebookEventEmitterService.subsVar==undefined) {
+
+      this.notebookEventEmitterService.subsVar = this.notebookEventEmitterService.loadEditor
+      .subscribe((id:string) => {
+        this.loadEditor(id);
+      });
+
+    }
+  }
+
+  ngAfterViewInit(){
+    this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
+      this.notePanelComponent.openedCloseToggle();
+    };
+
+    this.treeComponent.openNotebookFolder = () => {
+      this.router.navigate(['notes']);
+    }
+
+    this.notePanelComponent.openNotebook = (id: string) => {
+       this.editorComponent.loadEditor(id);
+    }
+
+    this.editorComponent.removeNotebookCard = (id: string) => {
+      this.notePanelComponent.removeNotebook(id);
+    }
+
   }
 
   /**
@@ -92,7 +111,7 @@ export class NotebookComponent implements OnInit {
   async logout()
   {
     this.accountService.singOut().subscribe(data => {
-        this._router.navigateByUrl(`/login`);
+        this.router.navigateByUrl(`/login`);
         localStorage.clear();
       },
       err => {
@@ -110,5 +129,12 @@ export class NotebookComponent implements OnInit {
     let e = document.getElementById('overlay')!;
     e.style.display = 'none';
   }
+
+  loadEditor(id: string){
+    console.log(id);
+
+    this.editorComponent.loadEditor(id);
+  }
+
 
 }

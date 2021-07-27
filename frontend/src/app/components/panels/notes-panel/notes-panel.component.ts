@@ -44,12 +44,12 @@ export class NotesPanelComponent implements OnInit {
    */
   async ngOnInit() {
 
-    this.getUserNotebooks();
-
     // let userDeatils;
     this.user = JSON.parse(<string>localStorage.getItem('user'));
     this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
     this.profile = this.profile.userInfo;
+
+    this.getUserNotebooks();
   }
 
   /**
@@ -58,7 +58,7 @@ export class NotesPanelComponent implements OnInit {
   getUserNotebooks(){
     this.notebooks = [];
 
-    this.notebookService.getUserNotebooks('zsm6CotjuAVMUynICGD5QCiQNGl2')
+    this.notebookService.getUserNotebooks(this.user.uid)
       .subscribe(result => {
 
         for(let i = 0; i < result.length; i++){

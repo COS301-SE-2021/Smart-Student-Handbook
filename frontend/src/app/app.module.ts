@@ -1,3 +1,4 @@
+import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -44,6 +45,7 @@ import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confi
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { TreeViewComponent } from './components/tree-view/tree-view.component';
+import { NotesComponent } from './components/notes/notes.component';
 
 
 @NgModule({
@@ -64,7 +66,8 @@ import { TreeViewComponent } from './components/tree-view/tree-view.component';
     EditProfileComponent,
     EditorComponent,
     NotebookBottomSheetComponent,
-    TreeViewComponent
+    TreeViewComponent,
+    NotesComponent
   ],
   imports: [
     MaterialModule,
@@ -89,7 +92,7 @@ import { TreeViewComponent } from './components/tree-view/tree-view.component';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent, MaterialModule],
+  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent, MaterialModule, NotebookEventEmitterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

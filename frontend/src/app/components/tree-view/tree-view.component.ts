@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -34,7 +35,7 @@ export class TreeViewComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
-  constructor(private notebookService: NotebookService) { }
+  constructor(private notebookService: NotebookService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -70,7 +71,7 @@ export class TreeViewComponent implements OnInit {
   }
 
   openNotebookFolder(){
-
+    this.router.navigate(['notes']);
   }
 
 }

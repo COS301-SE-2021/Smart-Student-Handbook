@@ -34,7 +34,7 @@ h2{
 
 .removeCollaboratorIcon{
   position: absolute;
-  font-size: medium;
+  font-size: large;
 }
 
 #tags{
@@ -59,7 +59,9 @@ h2{
   }
 }
 
-
+mat-divider {
+  margin: 7px 0px 17px 0px;
+}
 
 /********* Scrollbar *********/
 

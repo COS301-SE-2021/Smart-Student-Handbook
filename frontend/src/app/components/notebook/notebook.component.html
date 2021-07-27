@@ -13,7 +13,7 @@
       </mat-card-header>
     </mat-card>
 
-    <app-tree-view></app-tree-view>
+    <app-tree-view #treeComponent id="treeComponent"></app-tree-view>
   </mat-drawer>
 
   <!-- Body elements -->
@@ -39,8 +39,6 @@
 
       </mat-toolbar>
     </p>
-
-    <router-outlet></router-outlet>
 
     <div class="container-fluid">
       <div class="row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">

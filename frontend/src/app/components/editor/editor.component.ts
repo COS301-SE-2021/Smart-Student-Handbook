@@ -1,5 +1,5 @@
 import { NotebookBottomSheetComponent } from './../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -8,7 +8,6 @@ import firebase from "firebase";
 import "firebase/firestore";
 import { NotebookService } from 'src/app/services/notebook.service';
 
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
 
@@ -17,6 +16,7 @@ import {MatBottomSheet } from '@angular/material/bottom-sheet';
 export interface Tag {
   name: string;
 }
+
 
 @Component({
   selector: 'app-editor',
@@ -132,7 +132,7 @@ export class EditorComponent implements OnInit {
 
     this.notebookID = id;
 
-    if(this._editor === undefined){
+    if(this._editor === undefined || window.outerWidth <= 600){
       /**
      * Create the notebook with all the plugins
      */
@@ -227,6 +227,7 @@ export class EditorComponent implements OnInit {
     this._editor.styles.loader = 'mat-spinner';
 
     let editorLoad = document.getElementsByClassName('codex-editor')!;
+    console.log(editorLoad);
 
     editorLoad[0].classList.add('cdx-loader');
 
