@@ -1,0 +1,89 @@
+.lastUpdated{
+  display: inline-block;
+  margin-right: 10px;
+}
+
+h2{
+  font-weight: 400;
+  font-size: medium;
+  margin-top: 10px;
+}
+
+#addGroupBtn{
+  position: absolute;
+  right: 5px;
+  margin-top: -5px;
+}
+
+.collaborators{
+  text-align: center;
+  width: fit-content;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.collaborator-image{
+  margin: auto;
+  background-image: url("../../../../assets/images/defaultProfile.jpg");
+  background-size: cover;
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  box-shadow: 2px 2px 4px 1px #d8d8d8;
+}
+
+.removeCollaboratorIcon{
+  position: absolute;
+  font-size: large;
+}
+
+#tags{
+  width: 100%;
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
+
+::ng-deep .mat-bottom-sheet-container{
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+}
+
+#topDividerContainer{
+  padding: 7px 0px 10px 0px;
+
+  #topDivider{
+    margin: auto;
+    width: 50px;
+    height: 3px;
+    border-radius: 3px;
+  }
+}
+
+mat-divider {
+  margin: 7px 0px 17px 0px;
+}
+
+/********* Scrollbar *********/
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
