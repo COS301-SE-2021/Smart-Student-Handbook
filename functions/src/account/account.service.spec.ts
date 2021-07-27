@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
-import { mockCollection } from 'firestore-jest-mock/mocks/firestore';
-import { mockCreateUserWithEmailAndPassword } from 'firestore-jest-mock/mocks/auth';
+// import { mockCollection } from 'firestore-jest-mock/mocks/firestore';
+// import { mockCreateUserWithEmailAndPassword } from 'firestore-jest-mock/mocks/auth';
 import { HttpException } from '@nestjs/common';
 
 import firebase from 'firebase';
@@ -77,7 +77,7 @@ describe('AccountService', () => {
 
         // Todo This should fail
         await expect(service.registerUser(registerDTO)).rejects.toThrow(
-          HttpException
+          HttpException,
         );
       });
     });

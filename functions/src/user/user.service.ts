@@ -1,13 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import firebase from 'firebase/app';
+// import firebase from 'firebase/app';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { User, UserResponseDto } from './dto/userResponse.dto';
 
 @Injectable()
 export class UserService {
   /**
-   * Queries firestore for the appropriate document in the user collection that contains that uid and returns it as a json object
+   * Queries firestore for the appropriate document in the user collection
+   * that contains that uid and returns it as a json object
    * @param uid
    */
   async getUserDetails(uid: string): Promise<UserResponseDto> {
@@ -38,14 +39,17 @@ export class UserService {
   }
 
   /**
-   * Sends a user profile object to firestore where it then creates a new document in the users collection with the user object tha is passed through
-   * This function acts as both a update and create, firestore will take care of the rest and update or create a new record
+   * Sends a user profile object to firestore where it then creates a new document in the
+   * users collection with the user object tha is passed through
+   * This function acts as both a update and create, firestore will take
+   * care of the rest and update or create a new record
    * @param user
    * @param update
    */
   async createAndUpdateUser(
     user: UserRequestDto,
-    update = false
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    update = false,
   ): Promise<UserResponseDto> {
     const resp = await admin
       .firestore()
@@ -56,7 +60,7 @@ export class UserService {
     if (resp) return { success: true, message: 'User was successfully added' };
     throw new HttpException(
       'An unexpected Error Occurred',
-      HttpStatus.BAD_REQUEST
+      HttpStatus.BAD_REQUEST,
     );
   }
 
@@ -70,10 +74,10 @@ export class UserService {
         success: true,
         message: 'User profile was successfully deleted',
       }))
-      .catch((error) => {
+      .catch(() => {
         throw new HttpException(
           'An unexpected Error Occurred',
-          HttpStatus.BAD_REQUEST
+          HttpStatus.BAD_REQUEST,
         );
       });
   }

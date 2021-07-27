@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { initializeApp } from 'firebase-admin/lib/firebase-namespace-api';
+// import { initializeApp } from 'firebase-admin/lib/firebase-namespace-api';
 import * as admin from 'firebase-admin';
 import { NotificationService } from './notification.service';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
-import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
+// import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
-import { createNestServer } from '../main';
+// import { createNestServer } from '../main';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
 import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 
@@ -38,7 +38,7 @@ describe('NotificationService', () => {
 
     const emailResp = service.sendEmailNotification(emailParams);
 
-    return emailResp.then((resp) => {
+    return emailResp.then(() => {
       const sentEmails = mock.getSentMail();
       expect(sentEmails.length).toBe(1);
       expect(sentEmails[0].to).toBe('justin@to.com');
@@ -95,6 +95,7 @@ describe('NotificationService', () => {
       title: 'Test title',
       body: 'Message body',
       token:
+        // eslint-disable-next-line max-len
         'fIJjM2BEsZlV73PFSOiJHd:APA91bEoPMzIwnIQqHZOMAomnhfmE8vrZeTDelPGkRhA3iIJieG0kXIbUMDkfqn9tOa4U-P5uhdqxDjUtfP1C3cNntkAIQqZxRfe8YQ41_J44BDS8Fxf2Xyn9wyAbgKWNad4ECKNcvre',
     };
 
@@ -108,6 +109,7 @@ describe('NotificationService', () => {
     const request: SubscribeToTopicRequestDto = {
       topic: 'test',
       token:
+        // eslint-disable-next-line max-len
         'fIJjM2BEsZlV73PFSOiJHd:APA91bH9MTMBOgMJTKcuCjpWKvwjXjhkVQkT2GauHkt30OZ08l-5Yl5opA97UTBPSFYv-vcc8-BzPbF751uRIb5DMj_Ei35yhs0WAIGHd0Kzd6C8EX1aPOZfiusfJo_oxOhTBya_ijkj',
     };
 

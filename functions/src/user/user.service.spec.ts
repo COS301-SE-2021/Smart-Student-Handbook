@@ -2,10 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
 import {
   mockCollection,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mockDelete,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mockDoc,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mockGet,
   mockSet,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mockWhere,
 } from 'firestore-jest-mock/mocks/firestore';
 import { HttpException } from '@nestjs/common';
@@ -58,10 +62,9 @@ describe('UserService', () => {
     });
 
     describe('This should  not retrieve the user details with the current uid', () => {
-      it('if uid is not valid return error message', () =>
-        expect(service.getUserDetails('wrong ud ')).rejects.toThrow(
-        HttpException
-      ));
+      it('if uid is not valid return error message', () => expect(service.getUserDetails('wrong ud ')).rejects.toThrow(
+          HttpException,
+        ));
     });
   });
 
@@ -80,6 +83,7 @@ describe('UserService', () => {
             workStatus: 'test status',
           },
         ]);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         await service.createAndUpdateUser(UserRequestDto);
         expect(mockCollection).toHaveBeenCalledWith('users');

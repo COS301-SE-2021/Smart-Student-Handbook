@@ -1,6 +1,7 @@
 /**
  * Response Data object that defines how the json response object is structured that is sent back from the API
  */
+// eslint-disable-next-line max-classes-per-file
 export class User {
   uid: string;
 
