@@ -1,16 +1,10 @@
 <h2 mat-dialog-title>Confirm</h2>
 <mat-dialog-content class="mat-typography">
-	<p>Are you sure?</p>
+  <p>
+    Are you sure?
+  </p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-	<button mat-button (click)="Cancel()">No</button>
-	<button
-		mat-raised-button
-		type="submit"
-		color="primary"
-		cdkFocusInitial
-		(click)="Confirm()"
-	>
-		Yes
-	</button>
+  <button mat-button (click)="Cancel()">No</button>
+  <button mat-raised-button type="submit" color="primary" cdkFocusInitial (click)="Confirm()">Yes</button>
 </mat-dialog-actions>

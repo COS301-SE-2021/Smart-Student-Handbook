@@ -2,8 +2,6 @@
 lib
 /dist
 /coverage
-/documentation
-documentation
 node_modules
 dist
 build

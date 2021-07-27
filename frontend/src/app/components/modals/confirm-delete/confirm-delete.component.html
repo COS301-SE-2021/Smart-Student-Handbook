@@ -1,16 +1,10 @@
 <h2 mat-dialog-title>Confirm</h2>
 <mat-dialog-content class="mat-typography">
-	<p>Are you sure you want to delete this notebook?</p>
+  <p>
+    Are you sure you want to delete this notebook?
+  </p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-	<button mat-button (click)="Cancel()">Cancel</button>
-	<button
-		mat-raised-button
-		type="submit"
-		color="primary"
-		cdkFocusInitial
-		(click)="Confirm()"
-	>
-		Delete
-	</button>
+  <button mat-button (click)="Cancel()">Cancel</button>
+  <button mat-raised-button type="submit" color="primary" cdkFocusInitial (click)="Confirm()">Delete</button>
 </mat-dialog-actions>

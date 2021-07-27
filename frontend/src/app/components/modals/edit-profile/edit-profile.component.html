@@ -1,55 +1,43 @@
 <h3>Update Profile</h3>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Name</mat-label>
-	<input
-		matInput
-		placeholder="Name"
-		[(ngModel)]="data.name"
-		cdkFocusInitial
-	/>
-	<mat-hint>Your Name</mat-hint>
+  <mat-label>Name</mat-label>
+  <input matInput placeholder="Name" [(ngModel)]="data.name" cdkFocusInitial>
+  <mat-hint>Your Name</mat-hint>
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Institution</mat-label>
-	<input matInput placeholder="Institution" [(ngModel)]="data.institution" />
-	<mat-hint>The institution where you study</mat-hint>
+  <mat-label>Institution</mat-label>
+  <input matInput placeholder="Institution" [(ngModel)]="data.institution">
+  <mat-hint>The institution where you study</mat-hint>
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Biography</mat-label>
-	<input
-		matInput
-		placeholder="A little about myself"
-		[(ngModel)]="data.bio"
-	/>
-	<mat-hint>A short biography</mat-hint>
+  <mat-label>Biography</mat-label>
+  <input matInput placeholder="A little about myself" [(ngModel)]="data.bio">
+  <mat-hint>A short biography</mat-hint>
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Department</mat-label>
-	<textarea
-		matInput
-		placeholder="Department"
-		[(ngModel)]="data.department"
-	></textarea>
-	<mat-hint>Your department, ex: Computer science</mat-hint>
+  <mat-label>Department</mat-label>
+  <textarea matInput placeholder="Department" [(ngModel)]="data.department"></textarea>
+  <mat-hint>Your department, ex: Computer science</mat-hint>
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Program</mat-label>
-	<input matInput placeholder="Program" [(ngModel)]="data.program" />
-	<mat-hint>The program that you are studying</mat-hint>
+  <mat-label>Program</mat-label>
+  <input matInput placeholder="Program" [(ngModel)]="data.program">
+  <mat-hint>The program that you are studying</mat-hint>
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="form-field">
-	<mat-label>Work Status</mat-label>
-	<input matInput placeholder="Student" [(ngModel)]="data.workstatus" />
-	<mat-hint>Your work status</mat-hint>
+  <mat-label>Work Status</mat-label>
+  <input matInput placeholder="Student" [(ngModel)]="data.workstatus">
+  <mat-hint>Your work status</mat-hint>
 </mat-form-field>
+
 
 <div mat-dialog-actions>
-	<button mat-button (click)="onNoClick()">Cancel</button>
-	<button mat-button [mat-dialog-close]="data">Save</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data">Save</button>
 </div>
