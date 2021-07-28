@@ -3,14 +3,49 @@
   height: 100vh;
   overflow: auto;
   padding-bottom: 70px;
+  //background-color: #fafafa;
+}
+
+#mobileOverlay{
+  //display: flex;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(208, 208, 208, 0.43);
+  //display: none;
+
+  #noteSpinner{
+    //position: absolute;
+    //margin: auto;
+    z-index: 3;
+  }
+
+  ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #4a5fd0;
+  }
+}
+
+#toolbar{
+  margin: 0px;
+}
+
+.row{
+  margin-top: 15px;
+}
+
+@media only screen and (max-width: 575px) {
+  .row{
+    padding: 15px 20px 15px 20px;
+  }
 }
 
 .noteContainer{
   display: inline-block;
-  width: 50%;
-  height: 35%;
-  margin: 20px 0px 5px 0px;
-  padding: 0px 15px 0px 15px;
+  height: 35vh;
 }
 
 .note{
@@ -18,16 +53,38 @@
   width: 100%;
   margin: 0;
   display: inline-block;
-  // background-image: linear-gradient(to bottom right, rgb(133, 133, 255), rgb(72, 72, 255));
-  color:rgb(8, 193, 199);
+  overflow: hidden;
+  box-shadow: 0px 0px 8px 2px rgb(216, 216, 216);
 }
 
-h4{
-  white-space: nowrap;
+.description{
+  font-size: medium;
+  color: #878787;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 20px;
+}
+
+#bottomColor{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  margin-top: 10px;
+}
+
+.title{
+  font-weight: 500;
 }
 
 body{
   overflow: auto;
 }
+
+#addNoteBtn{
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+
