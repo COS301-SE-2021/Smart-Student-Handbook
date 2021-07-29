@@ -25,7 +25,7 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
 import { MaterialModule } from './material/material.module';
 
 // Components
-import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
+import { MenuPanelComponent } from './components/panels/menu-panel/menu-panel.component';
 import { NotebookComponent } from './components/notebook/notebook.component';
 import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
 import { NotesPanelComponent } from './components/panels/notes-panel/notes-panel.component';
@@ -50,7 +50,7 @@ import { NotebookEventEmitterService } from './services/notebook-event-emitter.s
 @NgModule({
 	declarations: [
 		AppComponent,
-		FolderPanelComponent,
+		MenuPanelComponent,
 		NotebookComponent,
 		SmartAssistPanelComponent,
 		NotesPanelComponent,
@@ -98,7 +98,7 @@ import { NotebookEventEmitterService } from './services/notebook-event-emitter.s
 		NotesPanelComponent,
 		MessagingService,
 		AsyncPipe,
-		FolderPanelComponent,
+		MenuPanelComponent,
 		MaterialModule,
 		NotebookEventEmitterService,
 	],

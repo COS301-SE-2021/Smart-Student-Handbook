@@ -235,7 +235,7 @@ export class NotesPanelComponent implements OnInit {
 					},
 					(error) => {
 						console.log(error);
-						// this.folderPanelComponent.getUserNotebooks();
+						// this.MenuPanelComponent.getUserNotebooks();
 					}
 				);
 			}

@@ -6,7 +6,7 @@ import { MatDrawerMode } from '@angular/material/sidenav';
 import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
 
 import { AccountService } from '../../services/account.service';
-import { FolderPanelComponent } from '../panels/folder-panel/folder-panel.component';
+import { MenuPanelComponent } from '../panels/menu-panel/menu-panel.component';
 import { NotesPanelComponent } from '../panels/notes-panel/notes-panel.component';
 import { EditorComponent } from '../editor/editor.component';
 import { TreeViewComponent } from '../tree-view/tree-view.component';
@@ -55,8 +55,7 @@ export class NotebookComponent implements OnInit {
 
 	profile: any;
 
-	@ViewChild('folderPanelComponent')
-	folderPanelComponent!: FolderPanelComponent;
+	@ViewChild('menuPanelComponent') menuPanelComponent!: MenuPanelComponent;
 
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
@@ -78,7 +77,7 @@ export class NotebookComponent implements OnInit {
 
 	/**
 	 * When the view is loaded:
-	 *  let the folderPanelComponent openNotebookPanel method call the notePanelComponent's openedCloseToggle method
+	 *  let the menuPanelComponent openNotebookPanel method call the notePanelComponent's openedCloseToggle method
 	 *  let the notePanelComponent openNotebook method call the editor component's load editor method
 	 *  let the editorComponent removeNotebookCard method call the notePanelComponent's removeNotebook method
 	 */
@@ -101,7 +100,7 @@ export class NotebookComponent implements OnInit {
 	}
 
 	ngAfterViewInit() {
-		this.folderPanelComponent.treeViewComponent.openNotebookFolder = () => {
+		this.menuPanelComponent.treeViewComponent.openNotebookFolder = () => {
 			this.notePanelComponent.openedCloseToggle();
 		};
 
@@ -116,21 +115,6 @@ export class NotebookComponent implements OnInit {
 		this.editorComponent.removeNotebookCard = (id: string) => {
 			this.notePanelComponent.removeNotebook(id);
 		};
-	}
-
-	/**
-	 * If a user is not logged in, redirect them to the login page
-	 */
-	async logout() {
-		this.accountService.singOut().subscribe(
-			() => {
-				this.router.navigateByUrl(`/login`);
-				localStorage.clear();
-			},
-			(err) => {
-				console.log(`Error: ${err.error.message}`);
-			}
-		);
 	}
 
 	showOverlay() {

@@ -9,7 +9,7 @@ dist
 build
 coverage
 
-#*.html
+*.html
 #*.json
 #*.js
 #*.scss

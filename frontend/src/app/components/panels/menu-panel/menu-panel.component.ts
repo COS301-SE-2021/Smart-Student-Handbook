@@ -1,17 +1,19 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NotebookService } from '../../../services/notebook.service';
 import { ProfileService } from '../../../services/profile.service';
 import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.component';
 import { TreeViewComponent } from '../../tree-view/tree-view.component';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
-	selector: 'app-folder-panel',
-	templateUrl: './folder-panel.component.html',
-	styleUrls: ['./folder-panel.component.scss'],
+	selector: 'app-menu-panel',
+	templateUrl: './menu-panel.component.html',
+	styleUrls: ['./menu-panel.component.scss'],
 	encapsulation: ViewEncapsulation.None,
 })
-export class FolderPanelComponent implements OnInit {
+export class MenuPanelComponent implements OnInit {
 	// Hold user information
 	user: any;
 
@@ -41,7 +43,7 @@ export class FolderPanelComponent implements OnInit {
 	@ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
 
 	/**
-	 * The folder panel component constructor
+	 * The menu panel component constructor
 	 * @param notebookService call notebook related queries to the backend
 	 * @param profileService call user profile related queries to the backend
 	 * @param dialog open a dialog when a user wants to edit their information
@@ -49,7 +51,9 @@ export class FolderPanelComponent implements OnInit {
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+    private accountService: AccountService,
+    private router: Router,
 	) {}
 
 	/**
@@ -140,6 +144,24 @@ export class FolderPanelComponent implements OnInit {
 			}
 		);
 	}
+
+
+  /**
+   * If a user is not logged in, redirect them to the login page
+   */
+  async logout() {
+    this.accountService.singOut().subscribe(
+      () => {
+        this.router.navigateByUrl(`/login`);
+        localStorage.clear();
+      },
+      (err) => {
+        console.log(`Error: ${err.error.message}`);
+      }
+    );
+  }
+
+
 }
 
 /**

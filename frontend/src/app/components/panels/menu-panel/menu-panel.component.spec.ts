@@ -1,24 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FolderPanelComponent } from './folder-panel.component';
+import { MenuPanelComponent } from './menu-panel.component';
 import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
 
-describe('FolderPanelComponent', () => {
-	let component: FolderPanelComponent;
-	let fixture: ComponentFixture<FolderPanelComponent>;
+describe('MenuPanelComponent', () => {
+	let component: MenuPanelComponent;
+	let fixture: ComponentFixture<MenuPanelComponent>;
 
 	// const notes = NotesPanelComponent;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [FolderPanelComponent],
+			declarations: [MenuPanelComponent],
 			imports: [],
 			providers: [NotesPanelComponent],
 		}).compileComponents();
 	});
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(FolderPanelComponent);
+		fixture = TestBed.createComponent(MenuPanelComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});
