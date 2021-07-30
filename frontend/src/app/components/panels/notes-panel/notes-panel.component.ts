@@ -3,8 +3,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookService } from '../../../services/notebook.service';
-import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
+import { NotebookService } from '@app/services';
+import { AddNotebookComponent } from '@app/components';
 
 @Component({
 	selector: 'app-notes-panel',

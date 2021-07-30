@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotebookBottomSheetComponent } from './notebook-bottom-sheet.component';
+import { NotebookBottomSheetComponent } from '@app/mobile';
 
 describe('NotebookBottomSheetComponent', () => {
 	let component: NotebookBottomSheetComponent;

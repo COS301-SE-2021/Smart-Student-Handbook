@@ -3,13 +3,14 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
 
-import { AccountService } from '../../services/account.service';
-import { MenuPanelComponent } from '../../core/components/side-navigation-panel/menu-panel.component';
-import { NotesPanelComponent } from '../../components/panels/notes-panel/notes-panel.component';
-import { EditorComponent } from '../../components/editor/editor.component';
-import { TreeViewComponent } from '../../components/tree-view/tree-view.component';
+import { NotebookEventEmitterService, AccountService } from '@app/services';
+import { MenuPanelComponent } from '@app/core';
+import {
+	NotesPanelComponent,
+	EditorComponent,
+	TreeViewComponent,
+} from '@app/components';
 
 @Component({
 	selector: 'app-notebook',

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { NotebookService } from 'src/app/services/notebook.service';
-import { NotebookEventEmitterService } from 'src/app/services/notebook-event-emitter.service';
+
+import { NotebookService, NotebookEventEmitterService } from '@app/services';
 
 @Component({
 	selector: 'app-notes',

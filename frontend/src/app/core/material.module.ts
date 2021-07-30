@@ -109,9 +109,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 		MatBottomSheetModule,
 		MatDividerModule,
 	],
-	declarations: [
-   PageNotFoundComponent
-	],
+	declarations: [PageNotFoundComponent],
 })
 @Injectable({
 	providedIn: 'root',

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuPanelComponent } from './menu-panel.component';
-import { NotesPanelComponent } from '../../../components/panels/notes-panel/notes-panel.component';
+import { MenuPanelComponent } from '@app/core';
+import { NotesPanelComponent } from '@app/components';
 
 describe('MenuPanelComponent', () => {
 	let component: MenuPanelComponent;

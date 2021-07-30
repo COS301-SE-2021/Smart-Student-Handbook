@@ -7,13 +7,12 @@ import { MatChipInputEvent } from '@angular/material/chips';
 
 import firebase from 'firebase';
 import 'firebase/firestore';
-import { NotebookService } from 'src/app/services/notebook.service';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { NotebookBottomSheetComponent } from '../../mobile/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
+
+import { NotebookService } from '@app/services';
+import { NotebookBottomSheetComponent } from '@app/mobile';
+import { ConfirmDeleteComponent } from '@app/components';
 
 export interface Tag {
 	name: string;

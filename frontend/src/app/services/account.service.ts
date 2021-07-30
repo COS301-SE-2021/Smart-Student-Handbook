@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '@app/services';
 
 // API URL for the account endpoint on the backend
 const ACCOUNT_API = 'http://localhost:5001/account/';

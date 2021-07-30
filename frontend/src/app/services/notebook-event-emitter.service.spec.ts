@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NotebookEventEmitterService } from './notebook-event-emitter.service';
+import { NotebookEventEmitterService } from '@app/services';
 
 describe('NotebookEventEmitterService', () => {
 	let service: NotebookEventEmitterService;

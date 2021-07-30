@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RestPasswordComponent } from './rest-password.component';
+import { RestPasswordComponent } from '@app/features';
 
 describe('RestPasswordComponent', () => {
 	let component: RestPasswordComponent;

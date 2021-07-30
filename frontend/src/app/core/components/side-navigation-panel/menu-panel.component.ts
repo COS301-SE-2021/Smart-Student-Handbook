@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { NotebookService } from '../../../services/notebook.service';
-import { ProfileService } from '../../../services/profile.service';
-import { EditProfileComponent } from '../../../components/modals/edit-profile/edit-profile.component';
-import { TreeViewComponent } from '../../../components/tree-view/tree-view.component';
-import { AccountService } from '../../../services/account.service';
+
+import { NotebookService, ProfileService, AccountService } from '@app/services';
+import { EditProfileComponent, TreeViewComponent } from '@app/components';
 
 interface Page {
 	link: string;
