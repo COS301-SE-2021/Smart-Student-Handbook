@@ -46,6 +46,8 @@ import { TreeViewComponent } from './components/tree-view/tree-view.component';
 import { NotesComponent } from './mobile/notes/notes.component';
 
 import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
+import { HomeComponent } from './features/home/home.component';
+import { ExploreComponent } from './features/explore/explore.component';
 
 @NgModule({
 	declarations: [
@@ -67,6 +69,8 @@ import { NotebookEventEmitterService } from './services/notebook-event-emitter.s
 		NotebookBottomSheetComponent,
 		TreeViewComponent,
 		NotesComponent,
+  HomeComponent,
+  ExploreComponent,
 	],
 	imports: [
 		MaterialModule,
