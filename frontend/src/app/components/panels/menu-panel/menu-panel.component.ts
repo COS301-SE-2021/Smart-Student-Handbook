@@ -7,6 +7,12 @@ import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.com
 import { TreeViewComponent } from '../../tree-view/tree-view.component';
 import { AccountService } from '../../../services/account.service';
 
+interface Page {
+	link: string;
+	name: string;
+	icon: string;
+}
+
 @Component({
 	selector: 'app-menu-panel',
 	templateUrl: './menu-panel.component.html',
@@ -14,6 +20,12 @@ import { AccountService } from '../../../services/account.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class MenuPanelComponent implements OnInit {
+	public pages: Page[] = [
+		{ name: 'Inbox', link: 'some-link', icon: 'inbox' },
+		{ name: 'Starred', link: 'some-link', icon: 'star' },
+		{ name: 'Send email', link: 'some-link', icon: 'send' },
+	];
+
 	// Hold user information
 	user: any;
 
@@ -52,8 +64,8 @@ export class MenuPanelComponent implements OnInit {
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
-    private accountService: AccountService,
-    private router: Router,
+		private accountService: AccountService,
+		private router: Router
 	) {}
 
 	/**
@@ -145,23 +157,20 @@ export class MenuPanelComponent implements OnInit {
 		);
 	}
 
-
-  /**
-   * If a user is not logged in, redirect them to the login page
-   */
-  async logout() {
-    this.accountService.singOut().subscribe(
-      () => {
-        this.router.navigateByUrl(`/login`);
-        localStorage.clear();
-      },
-      (err) => {
-        console.log(`Error: ${err.error.message}`);
-      }
-    );
-  }
-
-
+	/**
+	 * If a user is not logged in, redirect them to the login page
+	 */
+	async logout() {
+		this.accountService.singOut().subscribe(
+			() => {
+				this.router.navigateByUrl(`/login`);
+				localStorage.clear();
+			},
+			(err) => {
+				console.log(`Error: ${err.error.message}`);
+			}
+		);
+	}
 }
 
 /**
