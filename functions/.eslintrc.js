@@ -32,7 +32,8 @@ module.exports = {
       "error",
       {
         "endOfLine": "crlf",
-        "trailingComma": "all"
+        "trailingComma": "all",
+        "useTabs": true,
       }
     ],
     "import/prefer-default-export": "off",
@@ -42,5 +43,7 @@ module.exports = {
     '@typescript-eslint/indent':"off", //?? not sure
     "no-mixed-spaces-and-tabs": 0,
     'max-len': ["error", { "code": 120 }],
+    "indent": ["error", "tab"],
+    "no-tabs": "off"
   },
 };
