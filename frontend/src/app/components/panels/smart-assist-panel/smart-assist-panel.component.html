@@ -1,55 +1,137 @@
-<mat-sidenav-container id="smartAssistContainer" style="height: 89vh; width: 40px; background-color: white; margin-right: 0px !important;"><!--  -->
-  <mat-sidenav #sidenav mode="side" style="width: 100%;"  position="end">
-    <div id="panelContent" cdkDropList>
-      <mat-card class="card">
-        <mat-card-header>
-          <button mat-icon-button id="closePanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
-            <mat-icon>keyboard_arrow_right</mat-icon>
-          </button>
+<mat-sidenav-container
+	id="smartAssistContainer"
+	style="
+		height: 89vh;
+		width: 40px;
+		background-color: white;
+		margin-right: 0px !important;
+	"
+	><!--  -->
+	<mat-sidenav #sidenav mode="side" style="width: 100%" position="end">
+		<div
+			id="panelContent"
+			cdkDropList
+			cdkDropListConnectedTo="editorContainer"
+		>
+			<div align="center" id="smartAssistHeader">
+				<!-- <mat-card-header> -->
+				<button
+					mat-icon-button
+					id="closePanelBtn"
+					(click)="sidenav.toggle(); openedCloseToggle()"
+				>
+					<mat-icon>keyboard_arrow_right</mat-icon>
+				</button>
 
-          <mat-card-title id="username">Smart Assist</mat-card-title>
-        </mat-card-header>
-      </mat-card>
+				<h2>Smart Assist</h2>
+				<!-- </mat-card-header> -->
+			</div>
 
-      <mat-card align="start" class="card text-left" cdkDrag>
-        <mat-card-header>
-          <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>
-          <mat-card-title id="username">Functional Requirements</mat-card-title>
+			<mat-card
+				align="start"
+				class="card text-left snippetCard"
+				cdkDrag
+				(mouseleave)="hidePreview(0)"
+			>
+				<mat-card-header class="snippetContentHeader">
+					<mat-card-subtitle class="date"
+						>JUNE 3 2021</mat-card-subtitle
+					>
 
-          <mat-card-title id="description">R1:The system should allow users to manage their Profile and Account.</mat-card-title>
-          <mat-card-title id="description">R2:The system should allow users to create notes and add content to it then add appropriate tags totheir content.</mat-card-title>
+					<mat-icon class="preview" (click)="showPreview(0)"
+						>crop_free</mat-icon
+					>
 
-        </mat-card-header>
+					<mat-card-title class="snippetTitle" data-type="header"
+						>Functional Requirements</mat-card-title
+					>
 
-        <mat-chip-list aria-label="Fish selection">
-          <mat-chip color="primary" selected>SRS</mat-chip>
-        </mat-chip-list>
-      </mat-card>
+					<mat-card-title class="snippetContent" data-type="paragraph"
+						>R1:The system should allow users to manage their
+						Profile and Account.</mat-card-title
+					>
+					<mat-card-title class="snippetContent" data-type="paragraph"
+						>R2:The system should allow users to create notes and
+						add content to it then add appropriate tags to their
+						content.</mat-card-title
+					>
+				</mat-card-header>
 
-      <mat-card align="start" class="card text-left" cdkDrag>
-        <mat-card-header>
-          <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>
-          <mat-card-title id="username">Domain Model</mat-card-title>
-        </mat-card-header>
+				<div class="tags">
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+					<div class="tag">
+						<mat-chip color="primary" class="item">Test</mat-chip>
+					</div>
+				</div>
+			</mat-card>
 
-        <img src="assets/InitialClassDiagram.jpg" width="100%" height="100%" style="margin-bottom: 5px;"/>
+			<mat-card
+				align="start"
+				class="card text-left snippetCard"
+				cdkDrag
+				(mouseleave)="hidePreview(1)"
+			>
+				<mat-card-header class="snippetContentHeader">
+					<mat-card-subtitle class="date"
+						>JUNE 3 2021</mat-card-subtitle
+					>
+					<mat-card-title class="snippetTitle" data-type="header"
+						>Functional Requirements</mat-card-title
+					>
 
-        <mat-chip-list aria-label="Fish selection">
-          <mat-chip color="primary" selected>SRS</mat-chip>
-        </mat-chip-list>
-      </mat-card>
+					<mat-icon class="preview" (click)="showPreview(1)"
+						>crop_free</mat-icon
+					>
 
-    </div>
+					<mat-card-title class="snippetContent" data-type="image">
+						<img
+							src="assets/InitialClassDiagram.jpg"
+							width="100%"
+							height="100%"
+							style="margin-bottom: 5px"
+							alt="snippet image"
+						/>
+					</mat-card-title>
+				</mat-card-header>
 
-  </mat-sidenav>
+				<mat-chip-list aria-label="Fish selection">
+					<mat-chip color="primary" selected>SRS</mat-chip>
+				</mat-chip-list>
+			</mat-card>
+		</div>
+	</mat-sidenav>
 
-
-
-  <mat-sidenav-content class="content">
-    <!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
-    <button mat-icon-button id="openPanelBtn" (click)="sidenav.toggle(); openedCloseToggle()">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-
-  </mat-sidenav-content>
+	<mat-sidenav-content class="content">
+		<!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
+		<button
+			mat-icon-button
+			id="openPanelBtn"
+			(click)="sidenav.toggle(); openedCloseToggle()"
+		>
+			<mat-icon>keyboard_arrow_left</mat-icon>
+		</button>
+	</mat-sidenav-content>
 </mat-sidenav-container>
