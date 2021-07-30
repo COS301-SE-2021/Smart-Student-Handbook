@@ -6,32 +6,32 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-// import {MatAutocompleteModule} from '@angular/material/autocomplete';
-// import {MatDatepickerModule} from '@angular/material/datepicker';
-// import {MatFormFieldModule} from '@angular/material/form-field';
-// import {MatRadioModule} from '@angular/material/radio';
-// import {MatSelectModule} from '@angular/material/select';
+// import {MatAutocompleteModule} from '@angular/core/autocomplete';
+// import {MatDatepickerModule} from '@angular/core/datepicker';
+// import {MatFormFieldModule} from '@angular/core/form-field';
+// import {MatRadioModule} from '@angular/core/radio';
+// import {MatSelectModule} from '@angular/core/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-// import {MatListModule} from '@angular/material/list';
-// import {MatGridListModule} from '@angular/material/grid-list';
+// import {MatListModule} from '@angular/core/list';
+// import {MatGridListModule} from '@angular/core/grid-list';
 import { MatCardModule } from '@angular/material/card';
-// import {MatStepperModule} from '@angular/material/stepper';
+// import {MatStepperModule} from '@angular/core/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-// import {MatProgressBarModule} from '@angular/material/progress-bar';
+// import {MatProgressBarModule} from '@angular/core/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-// import {MatSnackBarModule} from '@angular/material/snack-bar';
-// import {MatTableModule} from '@angular/material/table';
-// import {MatSortModule} from '@angular/material/sort';
+// import {MatSnackBarModule} from '@angular/core/snack-bar';
+// import {MatTableModule} from '@angular/core/table';
+// import {MatSortModule} from '@angular/core/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatCommonModule } from '@angular/material/core';
@@ -51,7 +51,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 
 /**
- * NgModule that includes all Material modules. This helps you avoid importing material modules every time you
+ * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
  * want to make use of one. this module should be injected into your app.module.ts file in order to work properly.
  */
 @NgModule({

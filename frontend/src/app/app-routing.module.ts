@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotesComponent } from './components/notes/notes.component';
-import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
-import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-import { NotebookComponent } from './components/notebook/notebook.component';
+import { NotesComponent } from './mobile/notes/notes.component';
+import { LoginComponent } from './features/account/login/login.component';
+import { RegisterComponent } from './features/account/register/register.component';
+import { ForgotPasswordComponent } from './features/account/forgot-password/forgot-password.component';
+import { NotebookComponent } from './features/notebook/notebook.component';
 
 const routes: Routes = [
 	{

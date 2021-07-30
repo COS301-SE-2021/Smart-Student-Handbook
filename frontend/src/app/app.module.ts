@@ -22,17 +22,17 @@ import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
 // Angular Material
-import { MaterialModule } from './material/material.module';
+import { MaterialModule } from './core/material.module';
 
 // Components
-import { MenuPanelComponent } from './components/panels/menu-panel/menu-panel.component';
-import { NotebookComponent } from './components/notebook/notebook.component';
+import { MenuPanelComponent } from './core/components/side-navigation-panel/menu-panel.component';
+import { NotebookComponent } from './features/notebook/notebook.component';
 import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
 import { NotesPanelComponent } from './components/panels/notes-panel/notes-panel.component';
-import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
-import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
-import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
+import { LoginComponent } from './features/account/login/login.component';
+import { RegisterComponent } from './features/account/register/register.component';
+import { RestPasswordComponent } from './features/account/reset-password/rest-password.component';
+import { ForgotPasswordComponent } from './features/account/forgot-password/forgot-password.component';
 import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
 import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
 
@@ -41,9 +41,9 @@ import { EditProfileComponent } from './components/modals/edit-profile/edit-prof
 import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
 import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
 
-import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+import { NotebookBottomSheetComponent } from './mobile/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
 import { TreeViewComponent } from './components/tree-view/tree-view.component';
-import { NotesComponent } from './components/notes/notes.component';
+import { NotesComponent } from './mobile/notes/notes.component';
 
 import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
 

@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NotebookService } from '../../../services/notebook.service';
 import { ProfileService } from '../../../services/profile.service';
-import { EditProfileComponent } from '../../modals/edit-profile/edit-profile.component';
-import { TreeViewComponent } from '../../tree-view/tree-view.component';
+import { EditProfileComponent } from '../../../components/modals/edit-profile/edit-profile.component';
+import { TreeViewComponent } from '../../../components/tree-view/tree-view.component';
 import { AccountService } from '../../../services/account.service';
 
 interface Page {
