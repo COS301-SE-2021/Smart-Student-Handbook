@@ -69,8 +69,8 @@ import { ExploreComponent } from './features/explore/explore.component';
 		NotebookBottomSheetComponent,
 		TreeViewComponent,
 		NotesComponent,
-  HomeComponent,
-  ExploreComponent,
+		HomeComponent,
+		ExploreComponent,
 	],
 	imports: [
 		MaterialModule,
