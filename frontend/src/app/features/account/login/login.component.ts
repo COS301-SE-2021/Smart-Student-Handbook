@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 				() => {
 					this.loginFailed = false;
 					// If login was successful then go to the notebook home page
-					this.router.navigate(['notebook']);
+					this.router.navigate(['/notebook']);
 				},
 				(err) => {
 					this.loginFailed = true;

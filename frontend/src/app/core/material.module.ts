@@ -1,6 +1,5 @@
 // Simple module to bundle all the Angular Material imports as to reduce clutter in the app.module.ts
 
-import { BrowserModule } from '@angular/platform-browser';
 import { Injectable, NgModule } from '@angular/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -74,7 +73,6 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 		MatListModule,
 		MatTreeModule,
 		MatCommonModule,
-		BrowserModule,
 		MatCheckboxModule,
 		// MatCheckboxModule,
 		MatButtonModule,
