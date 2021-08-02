@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RestPasswordComponent } from '@app/features';
+import { LandingPageComponent } from '@app/features/account';
 
-describe('RestPasswordComponent', () => {
-	let component: RestPasswordComponent;
-	let fixture: ComponentFixture<RestPasswordComponent>;
+describe('LandingPageComponent', () => {
+	let component: LandingPageComponent;
+	let fixture: ComponentFixture<LandingPageComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [RestPasswordComponent],
+			declarations: [LandingPageComponent],
 		}).compileComponents();
 	});
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(RestPasswordComponent);
+		fixture = TestBed.createComponent(LandingPageComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

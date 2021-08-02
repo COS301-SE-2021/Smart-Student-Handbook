@@ -5,8 +5,8 @@ import {
 	AccountComponent,
 	LoginComponent,
 	RegisterComponent,
-	RestPasswordComponent,
-	ForgotPasswordComponent,
+	ResetPasswordComponent,
+	LandingPageComponent,
 } from '@app/features/account';
 
 const routes: Routes = [
@@ -16,8 +16,8 @@ const routes: Routes = [
 		children: [
 			{ path: 'login', component: LoginComponent },
 			{ path: 'register', component: RegisterComponent },
-			{ path: 'resetPassword', component: RestPasswordComponent },
-			{ path: 'forgotPassword', component: ForgotPasswordComponent },
+			{ path: 'resetPassword', component: ResetPasswordComponent },
+			{ path: 'welcome', component: LandingPageComponent },
 		],
 	},
 ];

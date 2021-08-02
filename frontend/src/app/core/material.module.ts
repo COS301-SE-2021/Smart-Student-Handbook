@@ -48,7 +48,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -107,7 +106,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 		MatBottomSheetModule,
 		MatDividerModule,
 	],
-	declarations: [PageNotFoundComponent],
+	declarations: [],
 })
 @Injectable({
 	providedIn: 'root',

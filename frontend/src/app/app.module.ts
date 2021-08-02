@@ -15,7 +15,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Core
-import { MaterialModule, MenuPanelComponent } from '@app/core';
+import {
+	MaterialModule,
+	MenuPanelComponent,
+	PageNotFoundComponent,
+} from '@app/core';
 import { environment } from '@environments/environment';
 
 // Services
@@ -65,6 +69,7 @@ import { AppRoutingModule } from './app-routing.module';
 		NotesComponent,
 		HomeComponent,
 		ExploreComponent,
+		PageNotFoundComponent,
 	],
 	imports: [
 		MaterialModule,

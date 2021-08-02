@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@app/core';
+import { AuthGuard, PageNotFoundComponent } from '@app/core';
 
 import { NotesComponent } from '@app/mobile';
 
@@ -19,6 +19,7 @@ const routes: Routes = [
 	{ path: '', component: NotebookComponent, canActivate: [AuthGuard] },
 	{ path: 'explore', component: ExploreComponent, canActivate: [AuthGuard] },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+	{ path: 'pageNotFound', component: PageNotFoundComponent },
 	{
 		path: 'notebook',
 		component: NotebookComponent,

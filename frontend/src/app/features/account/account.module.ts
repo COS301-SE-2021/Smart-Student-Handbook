@@ -7,8 +7,8 @@ import {
 	AccountComponent,
 	LoginComponent,
 	RegisterComponent,
-	RestPasswordComponent,
-	ForgotPasswordComponent,
+	ResetPasswordComponent,
+	LandingPageComponent,
 } from '@app/features/account';
 import { AccountRoutingModule } from './account-routing.module';
 
@@ -23,8 +23,8 @@ import { AccountRoutingModule } from './account-routing.module';
 		AccountComponent,
 		LoginComponent,
 		RegisterComponent,
-		RestPasswordComponent,
-		ForgotPasswordComponent,
+		ResetPasswordComponent,
+		LandingPageComponent,
 	],
 })
 export class AccountModule {}
