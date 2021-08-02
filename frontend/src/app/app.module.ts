@@ -17,7 +17,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // Core
 import {
 	MaterialModule,
-	MenuPanelComponent,
+	LeftMenuComponent,
 	PageNotFoundComponent,
 	HeaderComponent,
 } from '@app/core';
@@ -58,7 +58,7 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
 	declarations: [
 		AppComponent,
-		MenuPanelComponent,
+		LeftMenuComponent,
 		NotebookComponent,
 		SmartAssistPanelComponent,
 		NotesPanelComponent,
@@ -109,7 +109,7 @@ import { AppRoutingModule } from './app-routing.module';
 		NotesPanelComponent,
 		MessagingService,
 		AsyncPipe,
-		MenuPanelComponent,
+		LeftMenuComponent,
 		MaterialModule,
 		NotebookEventEmitterService,
 	],

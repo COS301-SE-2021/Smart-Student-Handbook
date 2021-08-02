@@ -1,1 +1,53 @@
-<router-outlet></router-outlet>
+<div>
+  <app-header [sidenav]="leftSidenav"></app-header>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #leftSidenav mode="side" opened>
+      <app-left-menu></app-left-menu>
+    </mat-sidenav>
+    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
+      <div class="main_content">
+        <div style="padding: 20px">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+</div>
+
+<!--<mat-toolbar color="primary" class="example-toolbar">-->
+<!--  <button mat-icon-button (click)="isExpanded = !isExpanded"><mat-icon>menu</mat-icon></button>-->
+<!--  <h1 class="example-app-name">Nested Menus</h1>-->
+<!--</mat-toolbar>-->
+<!--<mat-sidenav-container class="example-container" autosize>-->
+<!--  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">-->
+<!--    <mat-nav-list>-->
+<!--      <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">-->
+<!--        <span class="full-width" *ngIf="isExpanded || isShowing">Parent Menu</span>-->
+<!--        <mat-icon mat-list-icon>home</mat-icon>-->
+<!--        <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>-->
+<!--      </mat-list-item>-->
+<!--      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">-->
+<!--        <a mat-list-item href="...">Submenu Item 1</a>-->
+<!--        <a mat-list-item href="...">Submenu Item 2</a>-->
+<!--        <mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">-->
+<!--          <span class="full-width" *ngIf="isExpanded || isShowing">Nested Menu</span>-->
+<!--          <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>-->
+<!--        </mat-list-item>-->
+<!--        <div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">-->
+<!--          <mat-list-item>SubSubmenu Item 1</mat-list-item>-->
+<!--          <mat-list-item>SubSubmenu Item 2</mat-list-item>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-nav-list>-->
+<!--    <mat-nav-list>-->
+<!--    </mat-nav-list>-->
+<!--  </mat-sidenav>-->
+
+<!--  <div class="example-sidenav-content">-->
+<!--&lt;!&ndash;    Main content that resizes properly&ndash;&gt;-->
+<!--    <router-outlet></router-outlet>-->
+<!--  </div>-->
+
+<!--</mat-sidenav-container>-->

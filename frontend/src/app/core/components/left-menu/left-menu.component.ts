@@ -2,8 +2,14 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
-import { NotebookService, ProfileService, AccountService } from '@app/services';
+import {
+	NotebookService,
+	ProfileService,
+	AccountService,
+	SideNavService,
+} from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
+import { animateText, onSideNavChange } from '@app/styling/animations';
 
 interface Page {
 	link: string;
@@ -12,17 +18,23 @@ interface Page {
 }
 
 @Component({
-	selector: 'app-menu-panel',
-	templateUrl: './menu-panel.component.html',
-	styleUrls: ['./menu-panel.component.scss'],
+	selector: 'app-left-menu',
+	templateUrl: './left-menu.component.html',
+	styleUrls: ['./left-menu.component.scss'],
 	encapsulation: ViewEncapsulation.None,
+	animations: [onSideNavChange, animateText],
 })
-export class MenuPanelComponent implements OnInit {
+export class LeftMenuComponent implements OnInit {
 	public pages: Page[] = [
-		{ name: 'Inbox', link: 'home', icon: 'inbox' },
+		{ name: 'Inbox', link: 'some-link', icon: 'inbox' },
 		{ name: 'Starred', link: 'some-link', icon: 'star' },
 		{ name: 'Send email', link: 'some-link', icon: 'send' },
+		{ name: 'Logout', link: 'logout()', icon: 'exit_to_app' },
 	];
+
+	public sideNavState: boolean = false;
+
+	public linkText: boolean = false;
 
 	// Hold user information
 	user: any;
@@ -63,8 +75,18 @@ export class MenuPanelComponent implements OnInit {
 		private profileService: ProfileService,
 		private dialog: MatDialog,
 		private accountService: AccountService,
-		private router: Router
+		private router: Router,
+		private sidenavService: SideNavService
 	) {}
+
+	onSinenavToggle() {
+		this.sideNavState = !this.sideNavState;
+
+		setTimeout(() => {
+			this.linkText = this.sideNavState;
+		}, 200);
+		this.sidenavService.sideNavState$.next(this.sideNavState);
+	}
 
 	/**
 	 * Get the note structure of the logged in user

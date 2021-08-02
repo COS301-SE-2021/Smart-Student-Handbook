@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
 
 import { NotebookEventEmitterService, AccountService } from '@app/services';
-import { MenuPanelComponent } from '@app/core';
+import { LeftMenuComponent } from '@app/core';
 import {
 	NotesPanelComponent,
 	EditorComponent,
@@ -56,7 +56,8 @@ export class NotebookComponent implements OnInit {
 
 	profile: any;
 
-	@ViewChild('menuPanelComponent') menuPanelComponent!: MenuPanelComponent;
+	@ViewChild('menuPanelComponent')
+	menuPanelComponent!: LeftMenuComponent;
 
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 

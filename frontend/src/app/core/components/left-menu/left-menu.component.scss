@@ -1,3 +1,18 @@
+.sidenav_container {
+  min-width: 60px;
+  height: calc(100vh - 200px);
+}
+
+.jim {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+//------------------------------------------------
+
+
 #openPanelBtn{
   position: absolute;
   top: 12px;
@@ -8,9 +23,9 @@
 }
 
 #closePanelBtn{
-    position: absolute;
-    top: 12px;
-    right: 0px;
+  position: absolute;
+  top: 12px;
+  right: 0px;
 }
 
 #panel{
@@ -101,8 +116,4 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-.search{
-  font-size: medium;
 }
