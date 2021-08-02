@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./explore.component.scss'],
 })
 export class ExploreComponent implements OnInit {
-	constructor() {}
+	// constructor() {}
 
+	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {}
 }

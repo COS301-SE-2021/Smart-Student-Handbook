@@ -50,6 +50,9 @@ import {
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { RecentNotesComponent } from './features/recent-notes/recent-notes.component';
+import { SharedWithMeComponent } from './features/shared-with-me/shared-with-me.component';
+import { NotificationsComponent } from './features/notifications/notifications.component';
 
 @NgModule({
 	declarations: [
@@ -70,6 +73,9 @@ import { AppRoutingModule } from './app-routing.module';
 		HomeComponent,
 		ExploreComponent,
 		PageNotFoundComponent,
+		RecentNotesComponent,
+		SharedWithMeComponent,
+		NotificationsComponent,
 	],
 	imports: [
 		MaterialModule,

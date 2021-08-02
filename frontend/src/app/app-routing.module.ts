@@ -8,6 +8,9 @@ import {
 	HomeComponent,
 	ExploreComponent,
 	NotebookComponent,
+	NotificationsComponent,
+	RecentNotesComponent,
+	SharedWithMeComponent,
 } from 'src/app/features';
 
 const accountModule = () =>
@@ -19,7 +22,21 @@ const routes: Routes = [
 	{ path: '', component: NotebookComponent, canActivate: [AuthGuard] },
 	{ path: 'explore', component: ExploreComponent, canActivate: [AuthGuard] },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-	{ path: 'pageNotFound', component: PageNotFoundComponent },
+	{
+		path: 'notifications',
+		component: NotificationsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'recentNotes',
+		component: RecentNotesComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'sharedWithMe',
+		component: SharedWithMeComponent,
+		canActivate: [AuthGuard],
+	},
 	{
 		path: 'notebook',
 		component: NotebookComponent,
@@ -30,8 +47,8 @@ const routes: Routes = [
 		component: NotesComponent,
 		canActivate: [AuthGuard],
 	},
+	{ path: 'pageNotFound', component: PageNotFoundComponent },
 	{ path: 'account', loadChildren: accountModule },
-
 	// otherwise redirect to home
 	{ path: '**', redirectTo: '' },
 ];
