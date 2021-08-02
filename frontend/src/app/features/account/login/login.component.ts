@@ -28,9 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	async ngOnInit(): Promise<void> {
-		// if user is already logged in move them to the notebook page, if not return to login
-		await this.accountService.isUserLoggedIn();
+	ngOnInit() {
 		// add image background to body
 		document.body.className = 'backgroundIMG';
 	}
@@ -41,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	}
 
 	// When user submits Login form
-	async onSubmit(): Promise<void> {
+	onSubmit() {
 		this.loginFailed = false;
 
 		// check if form is valid
@@ -53,8 +51,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 			this.accountService.loginUser(email, password).subscribe(
 				() => {
 					this.loginFailed = false;
-					// If login was successful then go to the notebook home page
-					this.router.navigate(['/notebook']);
+					this.accountService.setUserSessionLocalStorage();
+					this.accountService.setLoginState = true;
+					localStorage.setItem('loginState', 'true');
+
+					this.router.navigate(['notebook']);
+					// this.router.navigateByUrl(`notebook`);
 				},
 				(err) => {
 					this.loginFailed = true;

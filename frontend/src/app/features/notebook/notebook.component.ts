@@ -83,8 +83,6 @@ export class NotebookComponent implements OnInit {
 	 *  let the editorComponent removeNotebookCard method call the notePanelComponent's removeNotebook method
 	 */
 	ngOnInit() {
-		this.accountService.isUserLoggedIn();
-
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));

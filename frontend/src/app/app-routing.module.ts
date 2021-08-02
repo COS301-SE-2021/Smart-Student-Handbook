@@ -16,8 +16,9 @@ const accountModule = () =>
 	);
 
 const routes: Routes = [
-	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+	{ path: '', component: NotebookComponent, canActivate: [AuthGuard] },
 	{ path: 'explore', component: ExploreComponent, canActivate: [AuthGuard] },
+	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 	{
 		path: 'notebook',
 		component: NotebookComponent,
@@ -31,7 +32,7 @@ const routes: Routes = [
 	{ path: 'account', loadChildren: accountModule },
 
 	// otherwise redirect to home
-	{ path: '**', redirectTo: 'home' },
+	{ path: '**', redirectTo: '' },
 ];
 
 @NgModule({

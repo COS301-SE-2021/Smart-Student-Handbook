@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessagingService } from '@app/services';
+import { MessagingService, AccountService } from '@app/services';
 // import * as firebase from "firebase/database";
 
 @Component({
@@ -14,7 +14,16 @@ export class AppComponent implements OnInit {
 
 	message: any;
 
-	constructor(private messagingService: MessagingService) {}
+	private isUserLoggedIn: boolean | undefined;
+
+	constructor(
+		private messagingService: MessagingService,
+		private accountService: AccountService
+	) {
+		this.accountService.userLoggedInState.subscribe((state) => {
+			this.isUserLoggedIn = state;
+		});
+	}
 
 	ngOnInit() {
 		// firebase.initializeApp(environment.firebase);

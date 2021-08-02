@@ -19,7 +19,7 @@ interface Page {
 })
 export class MenuPanelComponent implements OnInit {
 	public pages: Page[] = [
-		{ name: 'Inbox', link: 'some-link', icon: 'inbox' },
+		{ name: 'Inbox', link: 'home', icon: 'inbox' },
 		{ name: 'Starred', link: 'some-link', icon: 'star' },
 		{ name: 'Send email', link: 'some-link', icon: 'send' },
 	];
@@ -161,8 +161,11 @@ export class MenuPanelComponent implements OnInit {
 	async logout() {
 		this.accountService.singOut().subscribe(
 			() => {
-				this.router.navigateByUrl(`/login`);
+				// this.router.navigateByUrl(`/account/login`);
 				localStorage.clear();
+				this.accountService.setLoginState = false;
+				this.router.navigate(['/account/login']);
+				localStorage.setItem('loginState', 'false');
 			},
 			(err) => {
 				console.log(`Error: ${err.error.message}`);
