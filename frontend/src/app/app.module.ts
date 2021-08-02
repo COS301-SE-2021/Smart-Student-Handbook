@@ -19,6 +19,7 @@ import {
 	MaterialModule,
 	MenuPanelComponent,
 	PageNotFoundComponent,
+	HeaderComponent,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -30,6 +31,9 @@ import {
 	NotebookComponent,
 	HomeComponent,
 	ExploreComponent,
+	RecentNotesComponent,
+	SharedWithMeComponent,
+	NotificationsComponent,
 } from '@app/features';
 
 // Mobile
@@ -50,9 +54,6 @@ import {
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RecentNotesComponent } from './features/recent-notes/recent-notes.component';
-import { SharedWithMeComponent } from './features/shared-with-me/shared-with-me.component';
-import { NotificationsComponent } from './features/notifications/notifications.component';
 
 @NgModule({
 	declarations: [
@@ -76,6 +77,7 @@ import { NotificationsComponent } from './features/notifications/notifications.c
 		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
+		HeaderComponent,
 	],
 	imports: [
 		MaterialModule,
