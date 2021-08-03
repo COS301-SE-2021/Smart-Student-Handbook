@@ -1,6 +1,6 @@
 <mat-sidenav-container
 	id="notes-container"
-	><!--  -->
+	>
 	<mat-sidenav #sidenav mode="side" [(opened)]="open" id="sidenav">
 		<div id="panelContent" align="end">
 			<div align="center" class="text-left" style="margin-top: 15px">
@@ -19,50 +19,38 @@
 				</button>
 			</div>
 
-			<mat-card
-				align="start"
-				class="card text-left"
-				*ngFor="let notebook of notebooks"
-			>
-				<button
-					mat-icon-button
-					class="favorite-icon"
-					class="editNotebookBtn"
-					(click)="editNotebook(notebook.notebookReference)"
-				>
-					<mat-icon class="editNotebookIcon">edit</mat-icon>
-				</button>
+      <div id="noteHolderDiv">
+        <mat-card
+          align="start"
+          class="card text-left"
+          *ngFor="let notebook of notebooks"
+        >
+          <button
+            mat-icon-button
+            class="favorite-icon"
+            class="editNotebookBtn"
+            (click)="editNotebook(notebook.notebookReference)"
+          >
+            <mat-icon class="editNotebookIcon">edit</mat-icon>
+          </button>
 
-				<div (click)="openNotebook(notebook.notebookReference)">
-					<mat-card-header>
-						<mat-card-subtitle id="subTitle"
-							>JUNE 17 2021</mat-card-subtitle
-						>
-						<mat-card-title id="username">{{
-							notebook.title
-						}}</mat-card-title>
+          <div (click)="openNotebook(notebook.notebookReference)">
+            <mat-card-header>
+              <mat-card-subtitle id="subTitle"
+                >JUNE 17 2021</mat-card-subtitle
+              >
+              <mat-card-title id="username">{{
+                notebook.title
+              }}</mat-card-title>
 
-						<mat-card-title id="description">{{
-							notebook.description
-						}}</mat-card-title>
-					</mat-card-header>
-				</div>
-			</mat-card>
+              <mat-card-title id="description">{{
+                notebook.description
+              }}</mat-card-title>
+            </mat-card-header>
+          </div>
+        </mat-card>
+      </div>
 
-			<!--      <mat-card align="start" class="card text-left">-->
-			<!--        <mat-card-header>-->
-			<!--          <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>-->
-			<!--          <mat-card-title id="username">Capstone Demo 1</mat-card-title>-->
-
-			<!--          <mat-card-title id="description">The SRS document of Algorithmic Aces for demo 1 of capstone project</mat-card-title>-->
-
-			<!--        </mat-card-header>-->
-
-			<!--        <mat-chip-list aria-label="Fish selection">-->
-			<!--          <mat-chip color="primary" selected>SRS</mat-chip>-->
-			<!--          <mat-chip color="primary" selected>Demo</mat-chip>-->
-			<!--        </mat-chip-list>-->
-			<!--      </mat-card>-->
 		</div>
 	</mat-sidenav>
 

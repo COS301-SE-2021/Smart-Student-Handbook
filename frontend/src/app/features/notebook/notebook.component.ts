@@ -11,6 +11,7 @@ import {
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
+import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
 
 @Component({
 	selector: 'app-notebook',
@@ -56,9 +57,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 
 	profile: any;
 
-	@ViewChild('menuPanelComponent')
-	menuPanelComponent!: LeftMenuComponent;
-
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -78,7 +76,8 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	constructor(
 		private router: Router,
 		private accountService: AccountService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookEventEmitterService: NotebookEventEmitterService,
+		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
 	/**
@@ -93,6 +92,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 		this.profile = this.profile.userInfo;
 
+		// Open a note when one is selected from the mobile view and update the title
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
 				this.notebookEventEmitterService.loadEmitter.subscribe(
@@ -100,25 +100,37 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 						this.loadEditor(id);
 					}
 				);
-			this.notebookEventEmitterService.getTitleEmitter.subscribe(
-				(title: string) => {
-					const note = document.getElementById(
-						'mobileTitle'
-					) as HTMLSpanElement;
-					note.innerHTML = title;
-				}
-			);
+			// this.notebookEventEmitterService.getTitleEmitter.subscribe(
+			// 	(title: string) => {
+			// 		const noteTitle = document.getElementById(
+			// 			'mobileTitle'
+			// 		) as HTMLSpanElement;
+			// 		// noteTitle.innerHTML = title;
+			// 	}
+			// );
+		}
+
+		// Toggle the notePanelComponent when in desktop view and notebook is selected
+		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
+			this.openNotebookPanelService.toggleSubscribe =
+				this.openNotebookPanelService.togglePanelEmitter.subscribe(
+					() => {
+						this.notePanelComponent.openedCloseToggle();
+					}
+				);
 		}
 	}
 
 	ngAfterViewInit() {
-		this.menuPanelComponent.treeViewComponent.openNotebookFolder = () => {
-			this.notePanelComponent.openedCloseToggle();
-		};
+		// this.menuPanelComponent.treeViewComponent.openNotebookFolder = () => {
+		// 	alert();
+		// 	// 	this.notePanelComponent.openedCloseToggle();
+		// };
 
-		this.treeComponent.openNotebookFolder = () => {
-			this.router.navigate(['notes']);
-		};
+		// this.treeComponent.openNotebookFolder = () => {
+		// 	// this.router.navigate(['notes']);
+		// 	this.notePanelComponent.openedCloseToggle();
+		// };
 
 		this.notePanelComponent.openNotebook = (id: string) => {
 			this.editorComponent.loadEditor(id);

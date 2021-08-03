@@ -82,15 +82,6 @@ export class LeftMenuComponent implements OnInit {
 		private sidenavService: SideNavService
 	) {}
 
-	onSinenavToggle() {
-		this.sideNavState = !this.sideNavState;
-
-		setTimeout(() => {
-			this.linkText = this.sideNavState;
-		}, 200);
-		this.sidenavService.sideNavState$.next(this.sideNavState);
-	}
-
 	/**
 	 * Get the note structure of the logged in user
 	 * Get the user information from localstorage
@@ -104,29 +95,38 @@ export class LeftMenuComponent implements OnInit {
 		this.bio = this.profile.userInfo.bio;
 	}
 
+	onSinenavToggle() {
+		this.sideNavState = !this.sideNavState;
+
+		setTimeout(() => {
+			this.linkText = this.sideNavState;
+		}, 200);
+		this.sidenavService.sideNavState$.next(this.sideNavState);
+	}
+
 	/**
 	 * Toggle the sliding panel (open and close)
 	 */
-	openedCloseToggle() {
-		const sideNav = document.getElementById('container') as HTMLElement;
-		const col = sideNav?.parentElement?.parentElement;
-
-		if (sideNav.style.width === '100%') {
-			sideNav.style.width = '40px';
-
-			if (col) {
-				col.style.width = 'fit-content';
-				col.style.minWidth = '0px';
-			}
-		} else {
-			sideNav.style.width = '100%';
-
-			if (col) {
-				col.style.width = '16.6666666667%';
-				col.style.minWidth = '250px';
-			}
-		}
-	}
+	// openedCloseToggle() {
+	// 	const sideNav = document.getElementById('container') as HTMLElement;
+	// 	const col = sideNav?.parentElement?.parentElement;
+	//
+	// 	if (sideNav.style.width === '100%') {
+	// 		sideNav.style.width = '40px';
+	//
+	// 		if (col) {
+	// 			col.style.width = 'fit-content';
+	// 			col.style.minWidth = '0px';
+	// 		}
+	// 	} else {
+	// 		sideNav.style.width = '100%';
+	//
+	// 		if (col) {
+	// 			col.style.width = '16.6666666667%';
+	// 			col.style.minWidth = '250px';
+	// 		}
+	// 	}
+	// }
 
 	/**
 	 * Open a modal popup with a form to view and update the users profile

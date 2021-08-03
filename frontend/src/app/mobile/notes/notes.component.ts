@@ -81,7 +81,7 @@ export class NotesComponent implements OnInit {
 		this.notebookEventEmitterService.LoadEditor(id);
 	}
 
-	navigateBack() {
-		this.router.navigate(['notebook']);
-	}
+	// navigateBack() {
+	// 	this.router.navigate(['notebook']);
+	// }
 }

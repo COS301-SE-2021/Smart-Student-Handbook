@@ -6,6 +6,7 @@ import {
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NotebookService } from '@app/services';
+import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -52,7 +53,8 @@ export class TreeViewComponent implements OnInit {
 
 	constructor(
 		private notebookService: NotebookService,
-		private router: Router
+		private router: Router,
+		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
 	ngOnInit(): void {
@@ -86,8 +88,21 @@ export class TreeViewComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * Navigate to the Notes component when using a mobile device and
+	 * toggle the notesPanel component when using a desktop
+	 */
 	openNotebookFolder() {
-		this.router.navigate(['notes']);
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			this.router.navigate(['notes']);
+		} else {
+			this.openNotebookPanelService.toggleNotePanel();
+		}
 	}
 }
 
