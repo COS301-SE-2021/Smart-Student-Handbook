@@ -1,9 +1,16 @@
-
 #smartAssistContainer {
   height: 100vh;
   width: 40px;
   background-color: white;
   margin-right: 0px !important;
+}
+
+#contentContainer {
+  margin: 0;
+}
+
+::ng-deep .mat-drawer-inner-container{
+  max-width: fit-content;
 }
 
 #openPanelBtn{
@@ -89,8 +96,8 @@ mat-sidenav{
   max-height: 200px;
   // white-space: nowrap;
   overflow: hidden;
-  text-overflow: clip;
-  text-overflow: ellipsis ellipsis;
+  //text-overflow: clip;
+  //text-overflow: ellipsis ellipsis;
   text-overflow: ellipsis " [..]";
   margin-bottom: 10px;
 }

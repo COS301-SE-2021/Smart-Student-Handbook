@@ -56,5 +56,5 @@ export const animateText = trigger('animateText', [
 		})
 	),
 	transition('close => open', animate('100ms ease-in')),
-	transition('open => close', animate('200ms ease-out')),
+	transition('open => close', animate('100ms ease-out')),
 ]);
