@@ -1,5 +1,5 @@
 export class SendNotificationToAllRequestDto {
-  title: string;
+	title: string;
 
-  body: string;
+	body: string;
 }
