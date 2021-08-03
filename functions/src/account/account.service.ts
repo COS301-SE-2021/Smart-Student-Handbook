@@ -45,7 +45,6 @@ export class AccountService {
 			.createUser({
 				email: registerDto.email,
 				emailVerified: false,
-				phoneNumber: registerDto.phoneNumber,
 				password: registerDto.password,
 				displayName: registerDto.displayName,
 				disabled: false,
@@ -54,7 +53,6 @@ export class AccountService {
 				uid: userCredential.uid,
 				email: userCredential.email,
 				emailVerified: userCredential.emailVerified,
-				phoneNumber: userCredential.phoneNumber,
 				displayName: userCredential.displayName,
 				message: 'User is successfully registered!',
 			}))
@@ -91,7 +89,6 @@ export class AccountService {
 			.updateUser(uid, {
 				email: registerDto.email,
 				emailVerified: false,
-				phoneNumber: registerDto.phoneNumber,
 				password: registerDto.password,
 				displayName: registerDto.displayName,
 				disabled: false,
@@ -100,7 +97,6 @@ export class AccountService {
 				uid: userCredential.uid,
 				email: userCredential.email,
 				emailVerified: userCredential.emailVerified,
-				phoneNumber: userCredential.phoneNumber,
 				displayName: userCredential.displayName,
 				message: 'User is successfully updated!',
 			}))
@@ -169,7 +165,6 @@ export class AccountService {
 				uid: user.uid,
 				email: user.email,
 				emailVerified: user.emailVerified,
-				phoneNumber: user.phoneNumber,
 				displayName: user.displayName,
 			};
 		} catch (error) {
