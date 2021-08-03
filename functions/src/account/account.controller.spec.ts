@@ -4,15 +4,15 @@ import { AccountService } from './account.service';
 import { NotificationService } from '../notification/notification.service';
 
 describe('AccountController', () => {
-  let accountService: AccountService;
-  let accountController: AccountController;
+	let accountService: AccountService;
+	let accountController: AccountController;
 
-  beforeEach(async () => {
-    accountService = new AccountService(new NotificationService());
-    accountController = new AccountController(accountService);
-  });
+	beforeEach(async () => {
+		accountService = new AccountService(new NotificationService());
+		accountController = new AccountController(accountService);
+	});
 
-  it('should be defined', () => {
-    expect(accountController).toBeDefined();
-  });
+	it('should be defined', () => {
+		expect(accountController).toBeDefined();
+	});
 });

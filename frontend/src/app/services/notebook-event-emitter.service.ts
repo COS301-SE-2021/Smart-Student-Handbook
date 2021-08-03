@@ -5,13 +5,19 @@ import { Subscription } from 'rxjs/internal/Subscription';
 	providedIn: 'root',
 })
 export class NotebookEventEmitterService {
-	loadEditor = new EventEmitter();
+	loadEmitter = new EventEmitter();
+
+	getTitleEmitter = new EventEmitter();
 
 	subsVar: Subscription | undefined;
 
 	// constructor() {}
 
 	LoadEditor(id: string) {
-		this.loadEditor.emit(id);
+		this.loadEmitter.emit(id);
+	}
+
+	GetNoteTitle(title: string) {
+		this.getTitleEmitter.emit(title);
 	}
 }

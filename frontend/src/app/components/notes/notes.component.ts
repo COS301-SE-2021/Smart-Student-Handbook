@@ -56,6 +56,9 @@ export class NotesComponent implements OnInit {
 	 * Retrieve the logged in user's notebooks
 	 */
 	getUserNotebooks() {
+		const loader = document.getElementById('mobileOverlay') as HTMLElement;
+		// loader.style.display = 'flex';
+
 		this.notes = [];
 
 		this.notebookService
@@ -65,6 +68,7 @@ export class NotesComponent implements OnInit {
 					// console.log(result[i]);
 					this.notes.push(result[i]);
 				}
+				loader.style.display = 'none';
 			});
 	}
 
