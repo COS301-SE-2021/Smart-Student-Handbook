@@ -30,13 +30,14 @@
 
 	<!-- Body elements -->
 	<mat-drawer-content>
-		<p>
+		<p id="toolbar">
 			<mat-toolbar color="primary">
 				<button mat-icon-button (click)="drawer.toggle()" fxHide.gt-sm>
 					<mat-icon>menu</mat-icon>
 				</button>
 
-				<span>Smart Student</span>
+				<!--				<span>Smart Student</span>-->
+				<span #mobileTitle id="mobileTitle">Smart Student</span>
 				<span class="spacer"></span>
 
 				<!-- <mat-form-field class="search">
@@ -45,6 +46,11 @@
         </mat-form-field> -->
 
 				<!-- <button mat-raised-button (click)="logout()" class="mx-4">Logout</button> -->
+				<!--				<div id="mobileMoreOptions" align="right" fxHide.gt-sm>-->
+				<!--					<button mat-icon-button class="favorite-icon">-->
+				<!--						<mat-icon>more_vert</mat-icon>-->
+				<!--					</button>-->
+				<!--				</div>-->
 			</mat-toolbar>
 		</p>
 

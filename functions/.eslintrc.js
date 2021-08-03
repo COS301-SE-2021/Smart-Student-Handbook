@@ -44,6 +44,6 @@ module.exports = {
     "no-mixed-spaces-and-tabs": 0,
     'max-len': ["error", { "code": 120 }],
     "indent": ["error", "tab"],
-    "no-tabs": "off"
+    "no-tabs": "off",
   },
 };

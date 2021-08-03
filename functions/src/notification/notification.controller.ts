@@ -10,40 +10,40 @@ import { NotificationService } from './notification.service';
 
 @Controller('notification')
 export class NotificationController {
-  constructor(private readonly notificationService: NotificationService) {}
+	constructor(private readonly notificationService: NotificationService) {}
 
   @Post()
-  async sendEmailNotification(
+	async sendEmailNotification(
     @Body() emailNotificationDto: EmailNotificationRequestDto,
-  ): Promise<EmailNotificationResponseDto> {
-    return this.notificationService.sendEmailNotification(
-      emailNotificationDto,
-    );
-  }
+	): Promise<EmailNotificationResponseDto> {
+		return this.notificationService.sendEmailNotification(
+			emailNotificationDto,
+		);
+	}
 
   @Post('sendSingleNotification')
   async sendPushNotification(@Body() singleNotificationRequest: SingleNotificationRequestDto) {
-    return this.notificationService.sendSinglePushNotification(singleNotificationRequest);
+  	return this.notificationService.sendSinglePushNotification(singleNotificationRequest);
   }
 
   @Post('subscribeToTopic')
   async subscribeToTopic(@Body() subscribeToTopicRequest: SubscribeToTopicRequestDto) {
-    return this.notificationService.subscribeToNotificationTopic(subscribeToTopicRequest);
+  	return this.notificationService.subscribeToNotificationTopic(subscribeToTopicRequest);
   }
 
   @Post('sendNotificationToAll')
   async sendNotificationToAll(@Body() sendNotificationToAllRequest: SendNotificationToAllRequestDto) {
-    const sendNotificationToGroupRequest: SendNotificationToGroupRequestDto = {
-        title: sendNotificationToAllRequest.title,
-        body: sendNotificationToAllRequest.body,
-        topic: 'general',
-    };
+  	const sendNotificationToGroupRequest: SendNotificationToGroupRequestDto = {
+  		title: sendNotificationToAllRequest.title,
+  		body: sendNotificationToAllRequest.body,
+  		topic: 'general',
+  	};
 
-    return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
+  	return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
   }
 
   @Post('sendNotificationToTopic')
   async sendNotificationToTopic(@Body() sendNotificationToGroupRequest: SendNotificationToGroupRequestDto) {
-    return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
+  	return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
   }
 }
