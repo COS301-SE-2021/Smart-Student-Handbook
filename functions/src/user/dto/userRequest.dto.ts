@@ -2,19 +2,19 @@
  * Request Data object that defines how the json object needs to be structured that is sent to the Api endpoint
  */
 export class UserRequestDto {
-  readonly uid: string;
+	readonly uid: string;
 
-  readonly name?: string;
+	readonly name?: string;
 
-  readonly institution?: string;
+	readonly institution?: string;
 
-  readonly department?: string;
+	readonly department?: string;
 
-  readonly program?: string;
+	readonly program?: string;
 
-  readonly workStatus?: string;
+	readonly workStatus?: string;
 
-  readonly bio?: string;
+	readonly bio?: string;
 
-  readonly dateJoined: string;
+	readonly dateJoined: string;
 }

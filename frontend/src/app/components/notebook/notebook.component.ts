@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
 import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
 
 import { AccountService } from '../../services/account.service';
@@ -16,7 +17,7 @@ import { TreeViewComponent } from '../tree-view/tree-view.component';
 	templateUrl: './notebook.component.html',
 	styleUrls: ['./notebook.component.scss'],
 })
-export class NotebookComponent implements OnInit {
+export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
@@ -32,7 +33,7 @@ export class NotebookComponent implements OnInit {
 
 	hasBackDrop: boolean = true;
 
-	notebookTitle = 'New Notebook';
+	notebookTitle = '';
 
 	username = 'Arno';
 
@@ -64,11 +65,15 @@ export class NotebookComponent implements OnInit {
 
 	@ViewChild('treeComponent') treeComponent!: TreeViewComponent;
 
-	@ViewChild('overlay') overlay!: HTMLDivElement; // treeViewComponent
+	@ViewChild('overlay') overlay!: HTMLDivElement;
+
+	@ViewChild('mobileTitle') mobileTitle!: HTMLSpanElement;
 
 	/**
-	 * Include the notebook service
-	 * @param notebookService
+	 *
+	 * @param router
+	 * @param accountService
+	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private router: Router,
@@ -92,11 +97,19 @@ export class NotebookComponent implements OnInit {
 
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEditor.subscribe(
+				this.notebookEventEmitterService.loadEmitter.subscribe(
 					(id: string) => {
 						this.loadEditor(id);
 					}
 				);
+			this.notebookEventEmitterService.getTitleEmitter.subscribe(
+				(title: string) => {
+					const note = document.getElementById(
+						'mobileTitle'
+					) as HTMLSpanElement;
+					note.innerHTML = title;
+				}
+			);
 		}
 	}
 
@@ -143,9 +156,7 @@ export class NotebookComponent implements OnInit {
 		e.style.display = 'none';
 	}
 
-	loadEditor(id: string) {
-		console.log(id);
-
-		this.editorComponent.loadEditor(id);
+	async loadEditor(id: string) {
+		await this.editorComponent.loadEditor(id);
 	}
 }
