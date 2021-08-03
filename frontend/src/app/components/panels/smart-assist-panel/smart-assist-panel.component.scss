@@ -1,8 +1,16 @@
+
+#smartAssistContainer {
+  height: 100vh;
+  width: 40px;
+  background-color: white;
+  margin-right: 0px !important;
+}
+
 #openPanelBtn{
   position: absolute;
   top: 12px;
   right: 0px;
-  // transition: all .15s linear;
+  // transition: all .25s linear;
   z-index: 3;
   font-size: larger;
 }
@@ -15,17 +23,17 @@
 
 #panel{
   width: 100%;
-  height: 90vh;
+  height: 100vh;
   position: fixed;
   border: 2px solid black;
-  transition: all .1s linear;
+  transition: all .2s linear;
   border-radius: 3px;
   overflow: hidden;
 }
 
 :host{
   width: 100%;
-  height: 90vh;
+  height: 100vh;
   // position: fixed;
 }
 
@@ -54,7 +62,7 @@ mat-sidenav{
   width: 100%;
   padding-bottom: 5px;
   // box-shadow: none !important;
-  transition: all .1s linear;
+  transition: all .2s linear;
   margin-bottom: 5px;
   cursor: move;
   // margin: 0px 10px 5px 0px;

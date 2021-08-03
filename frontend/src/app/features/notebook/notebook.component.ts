@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import {
 	templateUrl: './notebook.component.html',
 	styleUrls: ['./notebook.component.scss'],
 })
-export class NotebookComponent implements OnInit {
+export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
@@ -69,7 +69,9 @@ export class NotebookComponent implements OnInit {
 
 	/**
 	 * Include the notebook service
-	 * @param notebookService
+	 * @param router
+	 * @param accountService
+	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private router: Router,

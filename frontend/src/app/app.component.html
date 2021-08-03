@@ -2,12 +2,12 @@
   <app-header [sidenav]="leftSidenav"></app-header>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #leftSidenav mode="side" opened>
+    <mat-sidenav #leftSidenav id="leftSidenav" mode="side" opened>
       <app-left-menu></app-left-menu>
     </mat-sidenav>
     <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
       <div class="main_content">
-        <div style="padding: 20px">
+        <div>
           <router-outlet></router-outlet>
         </div>
       </div>

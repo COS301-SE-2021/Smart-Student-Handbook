@@ -69,6 +69,9 @@ export class LeftMenuComponent implements OnInit {
 	 * @param notebookService call notebook related queries to the backend
 	 * @param profileService call user profile related queries to the backend
 	 * @param dialog open a dialog when a user wants to edit their information
+	 * @param accountService
+	 * @param router
+	 * @param sidenavService
 	 */
 	constructor(
 		private notebookService: NotebookService,
