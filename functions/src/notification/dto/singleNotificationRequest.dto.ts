@@ -1,7 +1,7 @@
 export class SingleNotificationRequestDto {
-  token: string;
+	token: string;
 
-  title: string;
+	title: string;
 
-  body: string;
+	body: string;
 }

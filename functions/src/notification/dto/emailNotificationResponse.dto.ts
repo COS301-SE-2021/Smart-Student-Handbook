@@ -1,5 +1,5 @@
 export class EmailNotificationResponseDto {
-  success: boolean;
+	success: boolean;
 
-  message: string;
+	message: string;
 }

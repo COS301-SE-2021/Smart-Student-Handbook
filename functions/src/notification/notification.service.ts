@@ -15,124 +15,124 @@ dotenv.config();
 
 @Injectable()
 export class NotificationService {
-  async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      authMethod: 'PLAIN',
+	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
+		const transporter = nodemailer.createTransport({
+			host: process.env.EMAIL_HOST,
+			port: process.env.EMAIL_PORT,
+			auth: {
+				user: process.env.EMAIL_USER,
+				pass: process.env.EMAIL_PASS,
+			},
+			authMethod: 'PLAIN',
 
-      // secure: true,
+			// secure: true,
 
-    });
+		});
 
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: email.email,
-      subject: email.subject,
-      text: email.body,
-    };
+		const mailOptions = {
+			from: process.env.EMAIL_FROM,
+			to: email.email,
+			subject: email.subject,
+			text: email.body,
+		};
 
-    return transporter
-      .sendMail(mailOptions)
-      .then(
-        (info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
-          success: true,
-          message: info.messageId,
-        }),
-      )
-      .catch(() => ({
-        success: false,
-        message: 'Something went wrong!',
-      }));
-  }
+		return transporter
+			.sendMail(mailOptions)
+			.then(
+				(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
+					success: true,
+					message: info.messageId,
+				}),
+			)
+			.catch(() => ({
+				success: false,
+				message: 'Something went wrong!',
+			}));
+	}
 
-  async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
-    // Send notification to single user
-    const message = {
+	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
+		// Send notification to single user
+		const message = {
 
-      token: singleNotificationRequest.token,
-      notification: {
-        title: singleNotificationRequest.title,
-        body: singleNotificationRequest.body,
-      },
-      data: {
-        test: 'test data',
-      },
-    };
+			token: singleNotificationRequest.token,
+			notification: {
+				title: singleNotificationRequest.title,
+				body: singleNotificationRequest.body,
+			},
+			data: {
+				test: 'test data',
+			},
+		};
 
-    return admin.messaging().send(message)
-      .then((response) => {
-        console.log('Successfully sent individual message:', response);
+		return admin.messaging().send(message)
+			.then((response) => {
+				console.log('Successfully sent individual message:', response);
 
-        return {
-          status: 'successful',
-        };
-      })
-      .catch((error) => {
-        console.log('Error sending individual message:', error);
+				return {
+					status: 'successful',
+				};
+			})
+			.catch((error) => {
+				console.log('Error sending individual message:', error);
 
-        return {
-          status: 'unsuccessful',
-          error: error.errorInfo,
-        };
-      });
-  }
+				return {
+					status: 'unsuccessful',
+					error: error.errorInfo,
+				};
+			});
+	}
 
-  async sendGroupPushNotification(sendNotificationToGroupRequest: SendNotificationToGroupRequestDto) {
-    const message = {
-      notification: {
-        title: sendNotificationToGroupRequest.title,
-        body: sendNotificationToGroupRequest.body,
-      },
-      topic: sendNotificationToGroupRequest.topic,
-    };
+	async sendGroupPushNotification(sendNotificationToGroupRequest: SendNotificationToGroupRequestDto) {
+		const message = {
+			notification: {
+				title: sendNotificationToGroupRequest.title,
+				body: sendNotificationToGroupRequest.body,
+			},
+			topic: sendNotificationToGroupRequest.topic,
+		};
 
-    return admin.messaging().send(message)
-      .then((response) => {
-        console.log('Successfully sent notification to group:', response);
+		return admin.messaging().send(message)
+			.then((response) => {
+				console.log('Successfully sent notification to group:', response);
 
-        return {
-          status: 'successful',
-        };
-      })
-      .catch((error) => {
-        console.log('Error sending notification to group:', error);
+				return {
+					status: 'successful',
+				};
+			})
+			.catch((error) => {
+				console.log('Error sending notification to group:', error);
 
-        return {
-          status: 'unsuccessful',
-        };
-      });
-  }
+				return {
+					status: 'unsuccessful',
+				};
+			});
+	}
 
-  async subscribeToNotificationTopic(subscribeToTopicRequest: SubscribeToTopicRequestDto) {
-    return admin.messaging().subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
-      .then((response) => {
-        console.log('Successfully subscribed:', response);
+	async subscribeToNotificationTopic(subscribeToTopicRequest: SubscribeToTopicRequestDto) {
+		return admin.messaging().subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
+			.then((response) => {
+				console.log('Successfully subscribed:', response);
 
-        if (response.successCount === 1) {
-          return {
-            status: 'successful',
-          };
-        } if (response.failureCount === 1) {
-          return {
-            status: 'unsuccessful',
-            error: response.errors,
-          };
-        }
-        return {
-          status: 'unsuccessful',
-        };
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
+				if (response.successCount === 1) {
+					return {
+						status: 'successful',
+					};
+				} if (response.failureCount === 1) {
+					return {
+						status: 'unsuccessful',
+						error: response.errors,
+					};
+				}
+				return {
+					status: 'unsuccessful',
+				};
+			})
+			.catch((error) => {
+				console.log('Error sending message:', error);
 
-        return {
-          status: 'unsuccessful',
-        };
-      });
-  }
+				return {
+					status: 'unsuccessful',
+				};
+			});
+	}
 }
