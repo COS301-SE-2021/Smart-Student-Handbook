@@ -13,6 +13,10 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NotebookService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { ConfirmDeleteComponent } from '@app/components';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
+import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
+import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
 
 export interface Tag {
 	name: string;
@@ -93,45 +97,20 @@ export class EditorComponent {
 
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
-	/**
-	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
-	 * @param event get the content that is dropped
-	 */
-	drop(event: any) {
-		const parser = new DOMParser();
-
-		const e = event.item.element.nativeElement.innerHTML;
-
-		const doc = parser.parseFromString(e, 'text/html');
-
-		const content = doc.getElementsByClassName('snippetContent');
-		const title = doc.getElementsByClassName('snippetTitle');
-
-		// Add the title
-		this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
-			text: title[0].innerHTML,
-		});
-
-		for (let i = 0; i < content.length; i += 1) {
-			// console.log(content[i].innerHTML);
-			// Add content
-			this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
-				text: content[i].innerHTML,
-			});
-		}
-
-		this.saveContent();
-	}
+	@ViewChild('progressBar') progressBar!: HTMLElement;
 
 	/**
 	 * Editor component constructor
 	 * @param notebookService To call methods that apply to the notebooks
 	 * @param dialog Show dialog when a user wants to delete a notebook for example
+	 * @param bottomSheet
+	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
-		private bottomSheet: MatBottomSheet
+		private bottomSheet: MatBottomSheet,
+		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	/**
@@ -230,17 +209,15 @@ export class EditorComponent {
 
 		await this.Editor.isReady;
 
+		const progressbar = document.getElementById(
+			'progressbar'
+		) as HTMLElement;
+
+		if (progressbar) progressbar.style.display = 'block';
+
 		this.Editor.styles.loader = 'mat-spinner';
 
-		const editorLoad = document.getElementsByClassName('codex-editor')!;
-		// console.log(editorLoad);
-
-		editorLoad[0].classList.add('cdx-loader');
-
-		let e = editorLoad[0] as HTMLElement;
-		e.style.border = 'none';
-
-		e = document.getElementById('editor') as HTMLElement;
+		let e = document.getElementById('editor') as HTMLElement;
 		e.style.overflowY = 'none';
 		e.style.display = 'block';
 		e.style.backgroundImage = 'none';
@@ -255,6 +232,9 @@ export class EditorComponent {
 		 */
 		this.notebookService.getNoteBookById(id).subscribe((result) => {
 			this.notebookTitle = result.title;
+			this.notebookEventEmitterService.GetNoteTitle(result.title);
+
+			// call event transmitter
 
 			// Change the path to the correct notebook's path
 			const dbRefObject = firebase.database().ref(`notebook/${id}`);
@@ -293,11 +273,42 @@ export class EditorComponent {
 						editor.render(snap.val().outputData);
 					});
 
-					editorLoad[0].classList.remove('cdx-loader');
 					e = document.getElementById('editor') as HTMLElement;
 					e.style.overflowY = 'scroll';
+
+					if (progressbar) progressbar.style.display = 'none';
 				});
 		});
+	}
+
+	/**
+	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
+	 * @param event get the content that is dropped
+	 */
+	drop(event: any) {
+		const parser = new DOMParser();
+
+		const e = event.item.element.nativeElement.innerHTML;
+
+		const doc = parser.parseFromString(e, 'text/html');
+
+		const content = doc.getElementsByClassName('snippetContent');
+		const title = doc.getElementsByClassName('snippetTitle');
+
+		// Add the title
+		this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
+			text: title[0].innerHTML,
+		});
+
+		for (let i = 0; i < content.length; i += 1) {
+			// console.log(content[i].innerHTML);
+			// Add content
+			this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
+				text: content[i].innerHTML,
+			});
+		}
+
+		this.saveContent();
 	}
 
 	/**

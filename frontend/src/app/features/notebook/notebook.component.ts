@@ -3,7 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-
+import { Observable } from 'rxjs';
 import { NotebookEventEmitterService, AccountService } from '@app/services';
 import { LeftMenuComponent } from '@app/core';
 import {
@@ -33,7 +33,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 
 	hasBackDrop: boolean = true;
 
-	notebookTitle = 'New Notebook';
+	notebookTitle = '';
 
 	username = 'Arno';
 
@@ -65,7 +65,9 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 
 	@ViewChild('treeComponent') treeComponent!: TreeViewComponent;
 
-	@ViewChild('overlay') overlay!: HTMLDivElement; // treeViewComponent
+	@ViewChild('overlay') overlay!: HTMLDivElement;
+
+	@ViewChild('mobileTitle') mobileTitle!: HTMLSpanElement;
 
 	/**
 	 * Include the notebook service
@@ -93,11 +95,19 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEditor.subscribe(
+				this.notebookEventEmitterService.loadEmitter.subscribe(
 					(id: string) => {
 						this.loadEditor(id);
 					}
 				);
+			this.notebookEventEmitterService.getTitleEmitter.subscribe(
+				(title: string) => {
+					const note = document.getElementById(
+						'mobileTitle'
+					) as HTMLSpanElement;
+					note.innerHTML = title;
+				}
+			);
 		}
 	}
 
@@ -129,9 +139,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	loadEditor(id: string) {
-		console.log(id);
-
-		this.editorComponent.loadEditor(id);
+	async loadEditor(id: string) {
+		await this.editorComponent.loadEditor(id);
 	}
 }

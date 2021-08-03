@@ -6,10 +6,31 @@
   #noteInfoAccordion{
     display: none;
   }
+
+  #editorContainer{
+    height: calc(100vh - 58px) !important;
+    box-shadow: none !important;
+
+    #editor{
+      height: calc(100vh - 100px);
+    }
+  }
+}
+
+#progressbar{
+  //position: absolute;
+  //margin-top: -10px;
+  display: none;
 }
 
 #mobileMoreOptions{
-  margin-top: -10px;
+  position: absolute;
+  top: 7px;
+  right: 15px;
+
+  #mobileMoreIcon{
+    color: white;
+  }
 }
 
 #editorContainer{

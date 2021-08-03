@@ -11,11 +11,11 @@
 			class="favorite-icon"
 			(click)="openBottomSheet()"
 		>
-			<mat-icon>more_horiz</mat-icon>
+			<mat-icon id="mobileMoreIcon">more_vert</mat-icon>
 		</button>
 	</div>
 
-	<mat-accordion>
+	<mat-accordion fxHide.lt-md>
 		<mat-expansion-panel
 			id="noteInfoAccordion"
 			[expanded]="panelOpenState === true"
@@ -130,7 +130,7 @@
 		</mat-expansion-panel>
 	</mat-accordion>
 
-	<!-- <hr> -->
+	<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
 
 	<div id="editor" #editor class="editor"></div>
 </div>
