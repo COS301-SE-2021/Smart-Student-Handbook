@@ -110,15 +110,16 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 			// );
 		}
 
-		// Toggle the notePanelComponent when in desktop view and notebook is selected
-		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-			this.openNotebookPanelService.toggleSubscribe =
-				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					() => {
-						this.notePanelComponent.openedCloseToggle();
-					}
-				);
-		}
+		// // Toggle the notePanelComponent when in desktop view and notebook is selected
+		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
+		// 	this.openNotebookPanelService.toggleSubscribe =
+		// 		this.openNotebookPanelService.togglePanelEmitter.subscribe(
+		// 			() => {
+		// 				console.log('openClose');
+		// 				this.notePanelComponent.openedCloseToggle();
+		// 			}
+		// 		);
+		// }
 	}
 
 	ngAfterViewInit() {
