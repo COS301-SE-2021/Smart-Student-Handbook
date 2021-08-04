@@ -3,27 +3,27 @@
  */
 // eslint-disable-next-line max-classes-per-file
 export class User {
-  uid: string;
+	uid: string;
 
-  name?: string;
+	name?: string;
 
-  institution?: string;
+	institution?: string;
 
-  department?: string;
+	department?: string;
 
-  program?: string;
+	program?: string;
 
-  workStatus?: string;
+	workStatus?: string;
 
-  bio?: string;
+	bio?: string;
 
-  dateJoined: string;
+	dateJoined: string;
 }
 
 export class UserResponseDto {
-  success?: boolean;
+	success?: boolean;
 
-  message?: string;
+	message?: string;
 
-  userInfo?: User;
+	userInfo?: User;
 }

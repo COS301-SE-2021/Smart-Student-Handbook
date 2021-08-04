@@ -6,17 +6,40 @@
   #noteInfoAccordion{
     display: none;
   }
+
+  #editorContainer{
+    height: calc(100vh - 58px) !important;
+    box-shadow: none !important;
+
+    #editor{
+      height: calc(100vh - 100px);
+    }
+  }
+}
+
+#progressbar{
+  //position: absolute;
+  //margin-top: -10px;
+  display: none;
 }
 
 #mobileMoreOptions{
-  margin-top: -10px;
+  position: absolute;
+  top: 7px;
+  right: 15px;
+
+  #mobileMoreIcon{
+    color: white;
+  }
 }
 
 #editorContainer{
+  //margin-top: 10px;
   padding: 15px 20px 7px 20px;
   box-shadow: 0px 0px 8px 2px rgb(216, 216, 216);
   text-align: left;
-  height: calc(100vh - 70px);
+  //height: calc(100vh - 70px);
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -112,7 +135,7 @@ mat-spinner{
 
 
 mat-expansion-panel{
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(246, 246, 246);
   margin-bottom: 5px;
 }
 
