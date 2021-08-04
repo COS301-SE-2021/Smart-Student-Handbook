@@ -103,6 +103,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		// MatSnackBarModule,
 		// MatTableModule,
 		// MatSortModule,
+		MatTooltipModule,
 		MatPaginatorModule,
 		MatBottomSheetModule,
 		MatDividerModule,

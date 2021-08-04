@@ -25,11 +25,12 @@
 
 #mobileMoreOptions{
   position: absolute;
-  top: 7px;
-  right: 15px;
+  top: 10px;
+  right: 20px;
+  z-index: 3;
 
   #mobileMoreIcon{
-    color: white;
+    color: black;
   }
 }
 
