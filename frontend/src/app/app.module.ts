@@ -18,8 +18,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
 	MaterialModule,
 	LeftMenuComponent,
-	PageNotFoundComponent,
+	P404Component,
 	HeaderComponent,
+	SecureLayoutComponent,
+	PublicLayoutComponent,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -35,6 +37,14 @@ import {
 	SharedWithMeComponent,
 	NotificationsComponent,
 } from '@app/features';
+
+// public
+import {
+	LoginComponent,
+	RegisterComponent,
+	ResetPasswordComponent,
+	LandingPageComponent,
+} from '@app/features/public';
 
 // Mobile
 import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
@@ -73,11 +83,17 @@ import { AppRoutingModule } from './app-routing.module';
 		NotesComponent,
 		HomeComponent,
 		ExploreComponent,
-		PageNotFoundComponent,
+		P404Component,
 		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
 		HeaderComponent,
+		SecureLayoutComponent,
+		PublicLayoutComponent,
+		LoginComponent,
+		RegisterComponent,
+		ResetPasswordComponent,
+		LandingPageComponent,
 	],
 	imports: [
 		MaterialModule,

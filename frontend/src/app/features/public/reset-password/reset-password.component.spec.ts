@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageNotFoundComponent } from '@app/core';
+import { ResetPasswordComponent } from '@app/features/public';
 
-describe('PageNotFoundComponent', () => {
-	let component: PageNotFoundComponent;
-	let fixture: ComponentFixture<PageNotFoundComponent>;
+describe('ResetPasswordComponent', () => {
+	let component: ResetPasswordComponent;
+	let fixture: ComponentFixture<ResetPasswordComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [PageNotFoundComponent],
+			declarations: [ResetPasswordComponent],
 		}).compileComponents();
 	});
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(PageNotFoundComponent);
+		fixture = TestBed.createComponent(ResetPasswordComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

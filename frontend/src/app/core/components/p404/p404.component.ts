@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'app-page-not-found',
-	templateUrl: './page-not-found.component.html',
-	styleUrls: ['./page-not-found.component.scss'],
+	templateUrl: './p404.component.html',
+	styleUrls: ['./p404.component.scss'],
 })
-export class PageNotFoundComponent implements OnInit {
+export class P404Component implements OnInit {
 	// constructor() {}
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method

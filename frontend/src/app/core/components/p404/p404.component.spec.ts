@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LandingPageComponent } from '@app/features/account';
+import { P404Component } from '@app/core';
 
-describe('LandingPageComponent', () => {
-	let component: LandingPageComponent;
-	let fixture: ComponentFixture<LandingPageComponent>;
+describe('PageNotFoundComponent', () => {
+	let component: P404Component;
+	let fixture: ComponentFixture<P404Component>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [LandingPageComponent],
+			declarations: [P404Component],
 		}).compileComponents();
 	});
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(LandingPageComponent);
+		fixture = TestBed.createComponent(P404Component);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

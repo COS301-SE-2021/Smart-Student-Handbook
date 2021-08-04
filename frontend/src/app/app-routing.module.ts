@@ -1,56 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard, PageNotFoundComponent } from '@app/core';
-
-import { NotesComponent } from '@app/mobile';
-
 import {
-	HomeComponent,
-	ExploreComponent,
-	NotebookComponent,
-	NotificationsComponent,
-	RecentNotesComponent,
-	SharedWithMeComponent,
-} from 'src/app/features';
-
-const accountModule = () =>
-	import('src/app/features/account/account.module').then(
-		(x) => x.AccountModule
-	);
+	AuthGuard,
+	PublicLayoutComponent,
+	SecureLayoutComponent,
+	PUBLIC_ROUTES,
+	SECURE_ROUTES,
+} from '@app/core';
 
 const routes: Routes = [
-	{ path: '', component: NotebookComponent, canActivate: [AuthGuard] },
-	{ path: 'explore', component: ExploreComponent, canActivate: [AuthGuard] },
-	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 	{
-		path: 'notifications',
-		component: NotificationsComponent,
-		canActivate: [AuthGuard],
+		path: '',
+		component: PublicLayoutComponent,
+		children: PUBLIC_ROUTES,
 	},
 	{
-		path: 'recentNotes',
-		component: RecentNotesComponent,
+		path: '',
+		component: SecureLayoutComponent,
 		canActivate: [AuthGuard],
+		children: SECURE_ROUTES,
 	},
-	{
-		path: 'sharedWithMe',
-		component: SharedWithMeComponent,
-		canActivate: [AuthGuard],
-	},
-	{
-		path: 'notebook',
-		component: NotebookComponent,
-		canActivate: [AuthGuard],
-	},
-	{
-		path: 'notes',
-		component: NotesComponent,
-		canActivate: [AuthGuard],
-	},
-	{ path: 'pageNotFound', component: PageNotFoundComponent },
-	{ path: 'account', loadChildren: accountModule },
-	// otherwise redirect to home
-	{ path: '**', redirectTo: '' },
+	{ path: '**', redirectTo: 'page-not-found' },
 ];
 
 @NgModule({
