@@ -1,83 +1,134 @@
+// Angular
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-//Modules
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule , ReactiveFormsModule } from '@angular/forms';
-
-//Editor
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
-//Firebase
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
+import { AsyncPipe } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { MessagingService } from './services/messaging.service';
-import { environment } from '../environments/environment';
-import { AsyncPipe } from '../../node_modules/@angular/common';
-
-//Angular Material
-import {MaterialModule} from './material/material/material.module';
-
-//Components
-import { FolderPanelComponent } from './components/folder-panel/folder-panel.component';
-import { NotebookComponent } from './notebook/notebook.component';
-import { SmartAssistPanelComponent } from './components/folder-panel/smart-assist-panel/smart-assist-panel.component';
-import { NotesPanelComponent } from './components/folder-panel/notes-panel/notes-panel.component';
-import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
-import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
-import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
-import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
-
 import { HttpClientModule } from '@angular/common/http';
-import { AddNotebookComponent } from './notebook/add-notebook/add-notebook.component';
-import { MatDialogRef } from "@angular/material/dialog";
-import { ConfirmDeleteComponent } from './notebook/confirm-delete/confirm-delete.component';
-import {EditProfileComponent} from "./notebook/edit-profile/edit-profile.component";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+// Core
+import {
+	MaterialModule,
+	LeftMenuComponent,
+	P404Component,
+	HeaderComponent,
+	SecureLayoutComponent,
+	PublicLayoutComponent,
+} from '@app/core';
+import { environment } from '@environments/environment';
+
+// Services
+import { MessagingService, NotebookEventEmitterService } from '@app/services';
+
+// Features
+import {
+	NotebookComponent,
+	HomeComponent,
+	ExploreComponent,
+	RecentNotesComponent,
+	SharedWithMeComponent,
+	NotificationsComponent,
+} from '@app/features';
+
+// public
+import {
+	LoginComponent,
+	RegisterComponent,
+	ResetPasswordComponent,
+	LandingPageComponent,
+} from '@app/features/public';
+
+// Mobile
+import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
+
+// Components
+import {
+	SmartAssistPanelComponent,
+	NotesPanelComponent,
+	GlobalErrorComponent,
+	GlobalConfirmComponent,
+	EditorComponent,
+	EditProfileComponent,
+	AddNotebookComponent,
+	ConfirmDeleteComponent,
+	TreeViewComponent,
+} from '@app/components';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FolderPanelComponent,
-    NotebookComponent,
-    SmartAssistPanelComponent,
-    NotesPanelComponent,
-    LoginComponent,
-    RegisterComponent,
-    RestPasswordComponent,
-    ForgotPasswordComponent,
-    GlobalErrorComponent,
-    GlobalConfirmComponent,
-    AddNotebookComponent,
-    ConfirmDeleteComponent,
-    EditProfileComponent
-  ],
-  imports: [
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    CKEditorModule,
-    MDBBootstrapModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase, 'smartStudentNotebook'),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
-    AngularFireMessagingModule,
-    // AngularFireStorageModule,
-    AngularFirestoreModule,
-    HttpClientModule
-  ],
-  providers: [NotesPanelComponent, MessagingService, AsyncPipe, FolderPanelComponent],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		LeftMenuComponent,
+		NotebookComponent,
+		SmartAssistPanelComponent,
+		NotesPanelComponent,
+		GlobalErrorComponent,
+		GlobalConfirmComponent,
+		AddNotebookComponent,
+		ConfirmDeleteComponent,
+		EditProfileComponent,
+		EditorComponent,
+		NotebookBottomSheetComponent,
+		TreeViewComponent,
+		NotesComponent,
+		HomeComponent,
+		ExploreComponent,
+		P404Component,
+		RecentNotesComponent,
+		SharedWithMeComponent,
+		NotificationsComponent,
+		HeaderComponent,
+		SecureLayoutComponent,
+		PublicLayoutComponent,
+		LoginComponent,
+		RegisterComponent,
+		ResetPasswordComponent,
+		LandingPageComponent,
+	],
+	imports: [
+		MaterialModule,
+		FormsModule,
+		ReactiveFormsModule,
+		BrowserModule,
+		AppRoutingModule,
+		BrowserAnimationsModule,
+		MDBBootstrapModule.forRoot(),
+		AngularFireModule.initializeApp(
+			environment.firebase,
+			'smartStudentNotebook'
+		),
+		AngularFireDatabaseModule,
+		AngularFireAuthModule,
+		AngularFireMessagingModule,
+		// AngularFireStorageModule,
+		AngularFirestoreModule,
+		FlexLayoutModule,
+		HttpClientModule,
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: environment.production,
+			// Register the ServiceWorker as soon as the app is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000',
+		}),
+	],
+	providers: [
+		NotesPanelComponent,
+		MessagingService,
+		AsyncPipe,
+		LeftMenuComponent,
+		MaterialModule,
+		NotebookEventEmitterService,
+	],
+	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

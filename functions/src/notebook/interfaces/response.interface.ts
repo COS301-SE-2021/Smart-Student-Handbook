@@ -1,4 +1,4 @@
-export interface Response{
-	message: string
-	notebookId?: string
+export interface Response {
+	message: string;
+	notebookId?: string;
 }

@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
+// import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
-import { UserService } from "./user.service";
+import { UserService } from './user.service';
 
 describe('AccountController', () => {
 	let userService: UserService;
-	let userController: UserController
+	let userController: UserController;
 
 	beforeEach(async () => {
 		userService = new UserService();

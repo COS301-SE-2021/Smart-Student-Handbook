@@ -14,7 +14,7 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "public",
+    "public": "frontend/dist/smart-student",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -23,7 +23,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "index.html"
       }
     ]
   },
@@ -41,7 +41,7 @@
       "port": 8080
     },
     "database": {
-      "port": 9000
+      "port": 9001
     },
     "hosting": {
       "port": 5000

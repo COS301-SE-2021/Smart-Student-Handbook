@@ -1,0 +1,19 @@
+# Ignore artifacts:
+lib
+/dist
+/coverage
+/documentation
+documentation
+node_modules
+dist
+build
+coverage
+
+*.html
+#*.json
+#*.js
+#*.scss
+#*.css
+#*.jpg
+#*.ico
+#*.xml
