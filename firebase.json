@@ -14,24 +14,58 @@
     ],
     "source": "functions"
   },
-  "hosting": {
-    "public": "frontend/dist/smart-student",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-	  {
-		"source": "/api",
-		"function": "api"
-	  },
-	  {
-		"source": "**",
-		"function": "app"
-	  }
-    ]
-  },
+  "hosting": [
+	{
+	  "target": "master",
+	  "site": "smartstudentnotebook",
+
+	  "public": "frontend/dist/smart-student",
+	  "ignore": [
+		"firebase.json",
+		"**/.*",
+		"**/node_modules/**"
+	  ],
+	  "rewrites": [
+		{
+		  "source": "/api",
+		  "function": "api"
+		},
+		{
+		  "source": "**",
+		  "function": "app"
+		}
+	  ],
+	  "predeploy": [
+		"npm --prefix frontend run build",
+		"npm --prefix functions run build"
+	  ]
+	},
+	{
+	  "target": "develop",
+	  "site": "develop-smartstudentnotebook",
+
+	  "public": "frontend/dist/smart-student",
+	  "ignore": [
+		"firebase.json",
+		"**/.*",
+		"**/node_modules/**"
+	  ],
+	  "rewrites": [
+		{
+		  "source": "/api",
+		  "function": "api"
+		},
+		{
+		  "source": "**",
+		  "function": "app"
+		}
+	  ],
+	  "predeploy": [
+		"npm --prefix frontend run build",
+		"npm --prefix functions run build"
+	  ]
+	}
+  ],
   "storage": {
     "rules": "storage.rules"
   },
