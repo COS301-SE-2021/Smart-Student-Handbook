@@ -17,7 +17,6 @@
   "hosting": [
 	{
 	  "target": "master",
-	  "site": "smartstudentnotebook",
 
 	  "public": "frontend/dist/smart-student",
 	  "ignore": [
@@ -42,7 +41,6 @@
 	},
 	{
 	  "target": "develop",
-	  "site": "develop-smartstudentnotebook",
 
 	  "public": "frontend/dist/smart-student",
 	  "ignore": [
