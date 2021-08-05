@@ -1,12 +1,4 @@
-import {
-	Controller,
-	Get,
-	Post,
-	Put,
-	Delete,
-	Body,
-	Param,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { NotebookDto } from './dto/notebook.dto';
 import { Notebook } from './interfaces/notebook.interface';
 import { NotebookService } from './notebook.service';
@@ -32,10 +24,7 @@ export class NotebookController {
 	}
 
 	@Put('updateNotebook/:notebookId')
-	updateNotebook(
-		@Body() notebookDto: NotebookDto,
-		@Param('notebookId') notebookId,
-	): Promise<Response> {
+	updateNotebook(@Body() notebookDto: NotebookDto, @Param('notebookId') notebookId): Promise<Response> {
 		return this.notebookService.createOrUpdateNotebook(notebookDto, notebookId);
 	}
 

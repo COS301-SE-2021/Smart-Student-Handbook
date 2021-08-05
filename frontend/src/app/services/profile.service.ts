@@ -4,7 +4,15 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 // API URL for the account endpoint on the backend
-const PROFILE_API = 'http://localhost:5001/user/';
+let addr;
+if (window.location.host.includes('localhost')) {
+	addr = 'http://localhost:5001/smartstudentnotebook/us-central1/app/user/';
+} else {
+	addr =
+		'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/user/';
+}
+
+const PROFILE_API = addr;
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
