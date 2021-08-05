@@ -1,6 +1,7 @@
-name: Integrated Backend
+name: Integrate Functions
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
