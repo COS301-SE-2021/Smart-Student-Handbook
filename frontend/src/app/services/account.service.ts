@@ -5,17 +5,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '@app/services';
 
 // API URL for the account endpoint on the backend
-let addr;
-if (window.location.host.includes('localhost')) {
-	addr =
-		'http://localhost:5001/smartstudentnotebook/us-central1/app/account/';
-} else {
-	addr =
-		'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/account/';
-}
-
-const ACCOUNT_API = addr;
-
+const ACCOUNT_API = 'http://localhost:5001/account/';
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

@@ -21,7 +21,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ["/lib/**/*",'.eslintrc.js', "/test/**/*"],
+  ignorePatterns: ["/lib/**/*",'.eslintrc.js'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -34,7 +34,6 @@ module.exports = {
         "endOfLine": "crlf",
         "trailingComma": "all",
         "useTabs": true,
-				"printWidth": 120
       }
     ],
     "import/prefer-default-export": "off",
@@ -46,6 +45,5 @@ module.exports = {
     'max-len': ["error", { "code": 120 }],
     "indent": ["error", "tab"],
     "no-tabs": "off",
-
   },
 };

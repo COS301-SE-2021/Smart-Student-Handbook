@@ -5,15 +5,6 @@ import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 
-let addr;
-if (window.location.host.includes('localhost')) {
-	addr = 'http://localhost:5001/smartstudentnotebook/us-central1/app/';
-} else {
-	addr = 'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/';
-}
-
-const MESSAGE_API = addr;
-
 @Injectable()
 export class MessagingService {
 	currentMessage = new BehaviorSubject(null);
@@ -94,7 +85,7 @@ export class MessagingService {
 	subscribeToTopic(currentToken: string) {
 		return this.httpClient.request<any>(
 			'post',
-			`${MESSAGE_API}subscribeToTopic`,
+			'http://localhost:5001/notification/subscribeToTopic',
 			{
 				body: {
 					token: currentToken,

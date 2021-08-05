@@ -13,8 +13,9 @@ export class NotificationController {
 	constructor(private readonly notificationService: NotificationService) {}
 
   @Post()
-  // eslint-disable-next-line max-len
-	async sendEmailNotification(@Body() emailNotificationDto: EmailNotificationRequestDto): Promise<EmailNotificationResponseDto> {
+	async sendEmailNotification(
+    @Body() emailNotificationDto: EmailNotificationRequestDto,
+	): Promise<EmailNotificationResponseDto> {
 		return this.notificationService.sendEmailNotification(
 			emailNotificationDto,
 		);

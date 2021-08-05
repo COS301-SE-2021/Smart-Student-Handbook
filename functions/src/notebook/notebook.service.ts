@@ -21,11 +21,17 @@ export class NotebookService {
 		try {
 			userId = firebase.auth().currentUser.uid;
 		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+			throw new HttpException(
+				'Unable to complete request. User might not be signed in.',
+				HttpStatus.BAD_REQUEST,
+			);
 		}
 
 		// Connect to firebase and retrieve all records with a matching uid
-		const notebookRef = admin.firestore().collection('notebooks').where('userId', '==', userId);
+		const notebookRef = admin
+			.firestore()
+			.collection('notebooks')
+			.where('userId', '==', userId);
 		const snapshot = await notebookRef.get();
 		snapshot.forEach((doc) => {
 			const notebookTemp: Notebook = {
@@ -53,7 +59,11 @@ export class NotebookService {
 	 */
 	async findNotebookById(notebookId: string): Promise<Notebook> {
 		// Connect to firebase and retrieve notebook with the provided notebookId
-		const doc = await admin.firestore().collection('notebooks').doc(notebookId).get();
+		const doc = await admin
+			.firestore()
+			.collection('notebooks')
+			.doc(notebookId)
+			.get();
 
 		// Return document if the document exists or else throw and exception
 		if (doc.exists) {
@@ -80,7 +90,10 @@ export class NotebookService {
 	 * @param notebookDto
 	 * @param notebookId
 	 */
-	async createOrUpdateNotebook(notebookDto: NotebookDto, notebookId: string): Promise<Response> {
+	async createOrUpdateNotebook(
+		notebookDto: NotebookDto,
+		notebookId: string,
+	): Promise<Response> {
 		// Assume the user wants to update the notebook
 		let userId = '';
 		let operationType = 'Update';
@@ -89,12 +102,14 @@ export class NotebookService {
 		try {
 			userId = firebase.auth().currentUser.uid;
 		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+			throw new HttpException(
+				'Unable to complete request. User might not be signed in.',
+				HttpStatus.BAD_REQUEST,
+			);
 		}
 
 		// If the notebookId is null, we know the user wants to create a new notebook
 		if (!notebookId) {
-			// eslint-disable-next-line no-param-reassign
 			notebookId = randomStringGenerator();
 			operationType = 'Create';
 		}
@@ -162,7 +177,10 @@ export class NotebookService {
 				};
 			})
 			.catch((error) => {
-				throw new HttpException(`Error removing document: ${error}`, HttpStatus.BAD_REQUEST);
+				throw new HttpException(
+					`Error removing document: ${error}`,
+					HttpStatus.BAD_REQUEST,
+				);
 			});
 	}
 }
