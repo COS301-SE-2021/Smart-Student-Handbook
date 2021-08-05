@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
+import { NotesService } from '@app/services/notes.service';
 
 @Component({
 	selector: 'app-notes',
@@ -39,12 +40,13 @@ export class NotesComponent implements OnInit {
 
 	constructor(
 		private router: Router,
+		private notesService: NotesService,
 		private notebookService: NotebookService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	ngOnInit(): void {
-		// get userDeatils;
+		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 		this.profile = this.profile.userInfo;
@@ -81,7 +83,47 @@ export class NotesComponent implements OnInit {
 		this.notebookEventEmitterService.LoadEditor(id);
 	}
 
-	// navigateBack() {
-	// 	this.router.navigate(['notebook']);
-	// }
+	createNewNotebook() {
+		this.notesService
+			.createNewNotebook(this.profile.name, this.user.uid)
+			.subscribe((data) => {
+				// console.log(data);
+				this.openNote(data.id);
+				// data = id, notebook
+			});
+	}
+
+	/**
+	 * Edit the details of a notebook
+	 * @param id the id of the notebook to be updated
+	 */
+	editNote(id: string) {
+		this.notesService.editNotebook(id).subscribe((data) => {
+			if (data) {
+				this.notes = this.notes.map((note: any) => {
+					if (note.notebookReference === id) {
+						note.course = data.course;
+						note.description = data.description;
+						note.institution = data.institution;
+						note.private = data.private;
+						note.title = data.title;
+					}
+
+					return note;
+				});
+			}
+		});
+	}
+
+	deleteNote(id: string) {
+		this.notesService.removeNotebook(id).subscribe((removed) => {
+			if (removed) {
+				this.notes = this.notes.filter((notebook: any) => {
+					if (notebook.notebookReference !== id) {
+						return notebook;
+					}
+				});
+			}
+		});
+	}
 }

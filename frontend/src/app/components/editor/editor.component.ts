@@ -13,6 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { ConfirmDeleteComponent } from '@app/components';
+import { NotesService } from '@app/services/notes.service';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -107,6 +108,7 @@ export class EditorComponent {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
+		private notesService: NotesService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
@@ -331,38 +333,35 @@ export class EditorComponent {
 	 * Delete a notebook
 	 */
 	removeNotebook() {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-			// width: '50%',
-		});
+		this.notesService
+			.removeNotebook(this.notebookID)
+			.subscribe((removed) => {
+				if (removed) {
+					const editor = this.Editor;
+					editor.clear();
 
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				if (this.notebookID !== '') {
-					this.notebookService
-						.removeNotebook(this.notebookID)
-						.subscribe(
-							(data) => {
-								console.log(data);
+					this.notebookTitle = '';
 
-								const editor = this.Editor;
-								editor.clear();
+					this.removeNotebookCard(this.notebookID);
 
-								this.notebookTitle = '';
-
-								this.removeNotebookCard(this.notebookID);
-							},
-							(error) => {
-								console.log(error);
-							}
-						);
+					this.showDefaultImage();
 				}
-			}
-		});
+			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeNotebookCard(_id: string) {}
+
+	showDefaultImage() {
+		console.log('delete');
+		const e = document.getElementById('editor') as HTMLElement;
+		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
+
+		this.Editor.destroy();
+		// @ts-ignore
+		this.Editor = undefined;
+		this.notebookTitle = 'Smart Student';
+	}
 
 	/**
 	 * Show menu when user clicks on ellipsis
