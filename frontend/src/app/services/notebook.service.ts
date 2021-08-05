@@ -22,21 +22,21 @@ export class NotebookService {
 	getUserNotebooks(): Observable<any> {
 		return this.httpClient.request<any>(
 			'get',
-			`${NOTEBOOK_API}/notebook/findAllUserNotebooks/`
+			`${NOTEBOOK_API}notebook/findAllUserNotebooks/`
 		);
 	}
 
 	getNoteBookById(noteBookId: string): Observable<any> {
 		return this.httpClient.request<any>(
 			'get',
-			`${NOTEBOOK_API}/notebook/findNotebookById/${noteBookId}`
+			`${NOTEBOOK_API}notebook/findNotebookById/${noteBookId}`
 		);
 	}
 
 	createNotebook(notebookDto: NotebookDto) {
 		return this.httpClient.request<any>(
 			'post',
-			`${NOTEBOOK_API}/notebook/createNotebook/`,
+			`${NOTEBOOK_API}notebook/createNotebook/`,
 			{
 				body: notebookDto,
 			}
@@ -46,7 +46,7 @@ export class NotebookService {
 	updateNotebook(notebookDto: NotebookDto, Id: string) {
 		return this.httpClient.request<any>(
 			'put',
-			`${NOTEBOOK_API}/notebook/updateNotebook/${Id}`,
+			`${NOTEBOOK_API}notebook/updateNotebook/${Id}`,
 			{
 				body: notebookDto,
 			}
@@ -56,7 +56,7 @@ export class NotebookService {
 	removeNotebook(noteBookId: string) {
 		return this.httpClient.request<any>(
 			'delete',
-			`${NOTEBOOK_API}/notebook/deleteNotebook/${noteBookId}`
+			`${NOTEBOOK_API}notebook/deleteNotebook/${noteBookId}`
 		);
 	}
 }
