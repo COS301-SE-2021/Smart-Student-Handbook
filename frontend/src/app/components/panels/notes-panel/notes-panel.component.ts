@@ -1,10 +1,11 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+// import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookService } from '../../../services/notebook.service';
-import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
+import { NotebookService, OpenNotebookPanelService } from '@app/services';
+import { AddNotebookComponent } from '@app/components';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
 	selector: 'app-notes-panel',
@@ -31,7 +32,7 @@ export class NotesPanelComponent implements OnInit {
 	// sliding panel
 	@ViewChild('sidenav') sidenav!: MatSidenav;
 
-	open = false;
+	open!: boolean;
 
 	public notebooks: any = [];
 
@@ -39,10 +40,12 @@ export class NotesPanelComponent implements OnInit {
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
+	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private notebookService: NotebookService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
 	/**
@@ -56,6 +59,22 @@ export class NotesPanelComponent implements OnInit {
 		this.profile = this.profile.userInfo;
 
 		this.getUserNotebooks();
+
+		this.open = false;
+
+		// Toggle the notePanelComponent when in desktop view and notebook is selected
+		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
+			this.openNotebookPanelService.toggleSubscribe =
+				this.openNotebookPanelService.togglePanelEmitter.subscribe(
+					() => {
+						// navigate to notebook if not on page
+						const button = document.getElementById(
+							'openPanelBtn'
+						) as HTMLButtonElement;
+						if (button) button.click();
+					}
+				);
+		}
 	}
 
 	/**
@@ -77,12 +96,7 @@ export class NotesPanelComponent implements OnInit {
 	 * Open and close or hide and show the panel
 	 */
 	public openedCloseToggle() {
-		this.sidenav.toggle();
-
-		this.open = true;
-
-		// console.log(this.open);
-
+		this.open = !this.open;
 		const sideNavContainer = document.getElementById(
 			'notes-container'
 		) as HTMLElement;
@@ -103,10 +117,11 @@ export class NotesPanelComponent implements OnInit {
 				col.style.minWidth = '250px';
 			}
 		}
+		// this.sidenav.toggle();
 	}
 
 	/**
-	 * Used in notebookcomponent to open a specific nptebook
+	 * Used in notebook component to open a specific notebook
 	 * @param _id the id of the notebook to be opened
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -235,7 +250,7 @@ export class NotesPanelComponent implements OnInit {
 					},
 					(error) => {
 						console.log(error);
-						// this.folderPanelComponent.getUserNotebooks();
+						// this.LeftMenuComponent.getUserNotebooks();
 					}
 				);
 			}

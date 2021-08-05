@@ -34,10 +34,12 @@
 }
 
 #editorContainer{
+  //margin-top: 10px;
   padding: 15px 20px 7px 20px;
   box-shadow: 0px 0px 8px 2px rgb(216, 216, 216);
   text-align: left;
-  height: calc(100vh - 70px);
+  //height: calc(100vh - 70px);
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -133,7 +135,7 @@ mat-spinner{
 
 
 mat-expansion-panel{
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(246, 246, 246);
   margin-bottom: 5px;
 }
 

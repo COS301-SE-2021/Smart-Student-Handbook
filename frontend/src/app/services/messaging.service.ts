@@ -3,7 +3,7 @@ import { AngularFireMessaging } from '@angular/fire/messaging';
 import { BehaviorSubject } from 'rxjs';
 import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { environment } from '@environments/environment';
 
 let addr;
 if (window.location.host.includes('localhost')) {
