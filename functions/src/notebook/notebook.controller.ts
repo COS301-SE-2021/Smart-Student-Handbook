@@ -8,6 +8,8 @@ import {
 	Param,
 } from '@nestjs/common';
 import { NotebookDto } from './dto/notebook.dto';
+import { FolderDto } from './dto/folder.dto';
+import { NoteDto } from './dto/note.dto';
 import { Notebook } from './interfaces/notebook.interface';
 import { NotebookService } from './notebook.service';
 import { Response } from './interfaces/response.interface';
@@ -28,7 +30,7 @@ export class NotebookController {
 
 	@Post('createNotebook')
 	createNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
-		return this.notebookService.createOrUpdateNotebook(notebookDto, null);
+		return this.notebookService.createNotebooks(notebookDto);
 	}
 
 	@Put('updateNotebook/:notebookId')
@@ -42,5 +44,15 @@ export class NotebookController {
 	@Delete('deleteNotebook/:notebookId')
 	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
 		return this.notebookService.deleteNotebook(notebookId);
+	}
+
+	@Post('createFolder')
+	createFolder(@Body() folderDto: FolderDto): Promise<Response> {
+		return this.notebookService.createFolder(folderDto);
+	}
+
+	@Post('createNote')
+	createNote(@Body() noteDto: NoteDto): Promise<Response> {
+		return this.notebookService.createFolder(noteDto);
 	}
 }

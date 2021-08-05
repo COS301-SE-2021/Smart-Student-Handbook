@@ -4,7 +4,10 @@ import firebase from 'firebase';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { Notebook } from './interfaces/notebook.interface';
 import { NotebookDto } from './dto/notebook.dto';
+import { FolderDto } from './dto/folder.dto';
+import { NoteDto } from './dto/note.dto';
 import { Response } from './interfaces/response.interface';
+// import { Folder } from './interfaces/folder.interface';
 
 require('firebase/auth');
 
@@ -45,6 +48,7 @@ export class NotebookService {
 				private: doc.data().private,
 				username: doc.data().username,
 				notebookReference: doc.data().notebookReference,
+				type: doc.data().type,
 				userId: doc.data().userId,
 			};
 			notebooks.push(notebookTemp);
@@ -78,6 +82,7 @@ export class NotebookService {
 				private: doc.data().private,
 				username: doc.data().username,
 				notebookReference: doc.data().notebookReference,
+				type: doc.data().type,
 				userId: doc.data().userId,
 			};
 		}
@@ -110,6 +115,7 @@ export class NotebookService {
 
 		// If the notebookId is null, we know the user wants to create a new notebook
 		if (!notebookId) {
+			// eslint-disable-next-line no-param-reassign
 			notebookId = randomStringGenerator();
 			operationType = 'Create';
 		}
@@ -119,10 +125,9 @@ export class NotebookService {
 		 * If successful return success message else throw not found exception.
 		 */
 		try {
-			console.log('1');
 			return await admin
 				.firestore()
-				.collection('notebooks')
+				.collection('files')
 				.doc(notebookId)
 				.set({
 					title: notebookDto.title,
@@ -131,10 +136,9 @@ export class NotebookService {
 					description: notebookDto.description,
 					institution: notebookDto.institution,
 					name: notebookDto.name,
-					// surname: notebookDto["surname"],
 					private: notebookDto.private,
-					// username: notebookDto["username"],
 					notebookReference: notebookId,
+					type: notebookDto.type,
 					userId,
 				})
 				.then(() => ({
@@ -145,9 +149,8 @@ export class NotebookService {
 					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
-			console.log(error);
 			throw new HttpException(
-				'Something went wrong. Operation could not be executed.',
+				`Something went wrong. Operation could not be executed. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -182,5 +185,134 @@ export class NotebookService {
 					HttpStatus.BAD_REQUEST,
 				);
 			});
+	}
+
+	async createFolder(folderDto: FolderDto): Promise<Response> {
+		let userId = '';
+
+		try {
+			userId = firebase.auth().currentUser.uid;
+		} catch (error) {
+			throw new HttpException(
+				'Unable to complete request. User might not be signed in.',
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
+		try {
+			return await admin
+				.firestore()
+				.collection(`files/${userId}${folderDto.path}`)
+				.doc(folderDto.name)
+				.set({
+					type: 'root',
+					name: folderDto.name,
+					userId,
+				})
+				.then(() => ({
+					message: 'Folder created!',
+				}))
+				.catch(() => {
+					throw new HttpException(
+						'Could not create folder',
+						HttpStatus.BAD_REQUEST,
+					);
+				});
+		} catch (error) {
+			throw new HttpException(
+				'Something went wrong. Operation could not be executed.',
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
+	async createNotebooks(notebookDto: NotebookDto): Promise<Response> {
+		let userId = '';
+
+		try {
+			userId = firebase.auth().currentUser.uid;
+		} catch (error) {
+			throw new HttpException(
+				'Unable to complete request. User might not be signed in.',
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
+		const notebookId = randomStringGenerator();
+
+		try {
+			return await admin
+				.firestore()
+				.collection(`files/${userId}${notebookDto.path}/${notebookDto.name}`)
+				.doc(notebookDto.name)
+				.set({
+					title: notebookDto.title,
+					author: notebookDto.author,
+					course: notebookDto.course,
+					description: notebookDto.description,
+					institution: notebookDto.institution,
+					name: notebookDto.name,
+					private: notebookDto.private,
+					notebookReference: notebookId,
+					type: notebookDto.type,
+					userId,
+				})
+				.then(() => ({
+					message: 'Notebook created!',
+				}))
+				.catch(() => {
+					throw new HttpException(
+						'Could not create notebook',
+						HttpStatus.BAD_REQUEST,
+					);
+				});
+		} catch (error) {
+			throw new HttpException(
+				'Something went wrong. Operation could not be executed.',
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
+	async createNote(noteDto: NoteDto): Promise<Response> {
+		let userId = '';
+
+		try {
+			userId = firebase.auth().currentUser.uid;
+		} catch (error) {
+			throw new HttpException(
+				'Unable to complete request. User might not be signed in.',
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
+		const noteId = randomStringGenerator();
+
+		try {
+			return await admin
+				.firestore()
+				.collection(`files/${userId}${noteDto.path}/${noteDto.name}`)
+				.doc(noteDto.name)
+				.set({
+					name: noteDto.name,
+					noteReference: noteId,
+					type: 'note',
+					userId,
+				})
+				.then(() => ({
+					message: 'Note created!',
+				}))
+				.catch(() => {
+					throw new HttpException(
+						'Could not create note',
+						HttpStatus.BAD_REQUEST,
+					);
+				});
+		} catch (error) {
+			throw new HttpException(
+				'Something went wrong. Operation could not be executed.',
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
 	}
 }

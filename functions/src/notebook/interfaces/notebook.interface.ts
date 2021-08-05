@@ -9,5 +9,6 @@ export interface Notebook {
 	private: boolean;
 	username: string;
 	notebookReference: string;
+	type: string;
 	userId: string;
 }
