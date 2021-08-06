@@ -12,4 +12,8 @@ export class NotebookDto {
 	readonly name: string;
 
 	readonly private: boolean;
+
+	readonly type: string;
+
+	readonly path: string;
 }
