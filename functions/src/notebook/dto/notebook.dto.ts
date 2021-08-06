@@ -9,11 +9,11 @@ export class NotebookDto {
 
 	readonly institution: string;
 
-	readonly name: string;
+	readonly creatorId: string;
 
 	readonly private: boolean;
 
 	readonly type: string;
 
-	readonly path: string;
+	readonly tags: string[];
 }

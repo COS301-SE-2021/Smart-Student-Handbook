@@ -6,8 +6,8 @@ export interface Notebook {
 	course: string;
 	description: string;
 	institution: string;
-	name: string;
+	creatorId: string;
 	private: boolean;
-	notebookReference: string;
+	notebookId: string;
 	notes?: Note[];
 }
