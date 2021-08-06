@@ -87,7 +87,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		MatMenuModule,
 		MatSidenavModule,
 		MatToolbarModule,
-		// MatListModule,
+		MatListModule,
 		// MatGridListModule,
 		MatCardModule,
 		// MatStepperModule,
