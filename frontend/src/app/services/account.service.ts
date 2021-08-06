@@ -4,8 +4,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '@app/services';
 
+// let addr;
+// if (window.location.host.includes('localhost')) {
+// 	addr = 'http://localhost:5001/smartstudentnotebook/us-central1/app/';
+// } else {
+// 	addr = 'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/';
+// }
+
 // API URL for the account endpoint on the backend
-const ACCOUNT_API = 'http://localhost:5001/account/';
+const ACCOUNT_API = 'http://localhost:5001/';
+
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -60,7 +68,7 @@ export class AccountService {
 		passwordConfirm: string
 	): Observable<any> {
 		return this.http.post(
-			`${ACCOUNT_API}registerUser`,
+			`${ACCOUNT_API}account/registerUser`,
 			{
 				email,
 				phoneNumber,
@@ -79,7 +87,7 @@ export class AccountService {
 	 */
 	loginUser(email: string, password: string): Observable<any> {
 		return this.http.post(
-			`${ACCOUNT_API}loginUser`,
+			`${ACCOUNT_API}account/loginUser`,
 			{
 				email,
 				password,
@@ -104,7 +112,7 @@ export class AccountService {
 		passwordConfirm: string
 	): Observable<any> {
 		return this.http.put(
-			`${ACCOUNT_API}updateUser`,
+			`${ACCOUNT_API}account/updateUser`,
 			{
 				email,
 				phoneNumber,
@@ -120,22 +128,20 @@ export class AccountService {
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
 	 */
 	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions);
+		return this.http.post(`${ACCOUNT_API}account/signOut`, {}, httpOptions);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to get the current Lodged in user and return the result (User Object)
 	 */
 	getCurrentUser(): Observable<any> {
-		return this.http.get(`${ACCOUNT_API}getCurrentUser`, {
+		return this.http.get(`${ACCOUNT_API}account/getCurrentUser`, {
 			responseType: 'json',
 		});
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to Delete the current Lodged in user
-	 * @param EmailAddress
-	 * @param Password
 	 */
 	// deleteUser(EmailAddress: string, Password: string): Observable<any> {
 	deleteUser(): Observable<any> {

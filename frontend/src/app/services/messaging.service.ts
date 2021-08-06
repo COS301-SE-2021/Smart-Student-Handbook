@@ -2,8 +2,16 @@ import { Injectable } from '@angular/core';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { BehaviorSubject } from 'rxjs';
 import firebase from 'firebase';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
+
+// API URL for the account endpoint on the backend
+const NOTIFICATION_API = 'http://localhost:5001/';
+
+// Shared header options for API request
+const httpOptions = {
+	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+};
 
 @Injectable()
 export class MessagingService {
@@ -83,15 +91,13 @@ export class MessagingService {
 	}
 
 	subscribeToTopic(currentToken: string) {
-		return this.httpClient.request<any>(
-			'post',
-			'http://localhost:5001/notification/subscribeToTopic',
+		return this.httpClient.post(
+			`${NOTIFICATION_API}notification/subscribeToTopic`,
 			{
-				body: {
-					token: currentToken,
-					topic: 'general',
-				},
-			}
+				token: currentToken,
+				topic: 'general',
+			},
+			httpOptions
 		);
 	}
 }

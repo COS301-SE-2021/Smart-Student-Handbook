@@ -231,7 +231,7 @@ export class NotesPanelComponent implements OnInit {
 
 				// Call service and create notebook
 				this.notebookService.createNotebook(request).subscribe(
-					(data) => {
+					(data: any) => {
 						const newNotebook = {
 							author: request.author,
 							course: request.course,
