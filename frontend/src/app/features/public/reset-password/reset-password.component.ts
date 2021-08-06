@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { AccountService } from '@app/services';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-rest-password',
 	templateUrl: './reset-password.component.html',
 	styleUrls: ['./reset-password.component.scss'],
 })
-export class ResetPasswordComponent implements OnInit {
-	// eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
-	constructor() {}
-
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+export class ResetPasswordComponent {
+	constructor(
+		private router: Router,
+		private accountService: AccountService
+	) {
+		// redirect to home if already logged in
+		// if (this.accountService.getLoginState) {
+		// 	this.router.navigate(['/home']);
+		// }
+	}
 }
