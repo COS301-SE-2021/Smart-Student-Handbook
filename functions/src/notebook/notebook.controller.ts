@@ -8,9 +8,11 @@ import {
 	Param,
 } from '@nestjs/common';
 import { NotebookDto } from './dto/notebook.dto';
+import { NoteDto } from './dto/note.dto';
 import { Notebook } from './interfaces/notebook.interface';
 import { NotebookService } from './notebook.service';
 import { Response } from './interfaces/response.interface';
+import { Note } from './interfaces/note.interface';
 
 @Controller('notebook')
 export class NotebookController {
@@ -42,5 +44,25 @@ export class NotebookController {
 	@Delete('deleteNotebook/:notebookId')
 	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
 		return this.notebookService.deleteNotebook(notebookId);
+	}
+
+	@Post('createNewNotebook')
+	createNewNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
+		return this.notebookService.createNotebook(notebookDto);
+	}
+
+	@Post('getNotes')
+	getNotes(@Body() noteDto: NoteDto): Promise<Note[]> {
+		return this.notebookService.getNotes(noteDto);
+	}
+
+	@Post('createNote')
+	createNote(@Body() noteDto: NoteDto): Promise<Response> {
+		return this.notebookService.createNote(noteDto);
+	}
+
+	@Post('updateNote')
+	updateNote(@Body() noteDto: NoteDto): Promise<Response> {
+		return this.notebookService.updateNote(noteDto);
 	}
 }

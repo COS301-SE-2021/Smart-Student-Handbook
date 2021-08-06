@@ -1,3 +1,5 @@
+import { Note } from './note.interface';
+
 export interface Notebook {
 	title: string;
 	author: string;
@@ -5,9 +7,7 @@ export interface Notebook {
 	description: string;
 	institution: string;
 	name: string;
-	surname: string;
 	private: boolean;
-	username: string;
 	notebookReference: string;
-	userId: string;
+	notes?: Note[];
 }
