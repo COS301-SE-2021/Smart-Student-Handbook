@@ -26,6 +26,12 @@ export class AccountService {
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
 
+		const actionCodeSettings = {
+			// URL you want to redirect back to. The domain (www.example.com) for this
+			// URL must be in the authorized domains list in the Firebase Console.
+			url: 'https://smartstudentnotebook.web.app/home',
+		};
+
 		// send welcome email to new user
 		await this.notificationService.sendEmailNotification({
 			email: registerDto.email,
@@ -37,7 +43,7 @@ export class AccountService {
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
 		 */
-		return admin
+		const resp = admin
 			.auth()
 			.createUser({
 				email: registerDto.email,
@@ -46,17 +52,36 @@ export class AccountService {
 				displayName: registerDto.displayName,
 				disabled: false,
 			})
-			.then((userCredential) => ({
-				uid: userCredential.uid,
-				email: userCredential.email,
-				emailVerified: userCredential.emailVerified,
-				displayName: userCredential.displayName,
-				message: 'User is successfully registered!',
-			}))
+			.then(
+				(userCredential): Account => ({
+					uid: userCredential.uid,
+					email: userCredential.email,
+					emailVerified: userCredential.emailVerified,
+					displayName: userCredential.displayName,
+					message: 'User is successfully registered!',
+				}),
+			)
 			.catch((error) => {
 				// eslint-disable-next-line max-len
 				throw new HttpException(`${'Bad Request Error creating new user: '}${error.message}`, HttpStatus.BAD_REQUEST);
 			});
+
+		admin
+			.auth()
+			.generateEmailVerificationLink(registerDto.email, actionCodeSettings)
+			.then(async (link) => {
+				await this.notificationService.sendEmailNotification({
+					email: registerDto.email,
+					subject: 'Smart Student Handbook Email Verification',
+					body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
+				});
+			})
+			.catch((error) => {
+				// eslint-disable-next-line max-len
+				throw new HttpException(`${'Bad Request Verifying Email: '}${error.message}`, HttpStatus.BAD_REQUEST);
+			});
+
+		return resp;
 	}
 
 	/**
