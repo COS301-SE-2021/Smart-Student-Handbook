@@ -1,14 +1,7 @@
 import * as admin from 'firebase-admin';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-	mockCollection,
-	mockDelete,
-	mockDoc,
-	mockGet,
-	mockSet,
-	mockWhere,
-} from 'firestore-jest-mock/mocks/firestore';
+import { mockCollection, mockDelete, mockDoc, mockGet, mockSet, mockWhere } from 'firestore-jest-mock/mocks/firestore';
 import { HttpException } from '@nestjs/common';
 import firebase from 'firebase/app';
 import { NotebookService } from './notebook.service';
@@ -16,8 +9,7 @@ import { NotebookService } from './notebook.service';
 const firebaseConfig = {
 	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
 	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL:
-		'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 	projectId: 'smartstudentnotebook',
 	storageBucket: 'smartstudentnotebook.appspot.com',
 	messagingSenderId: '254968215542',
@@ -67,13 +59,9 @@ describe('NotebookService', () => {
 		describe('when a notebook matches a user id', () => {
 			it('Return the notebooks of the user with the user ID', async () => {
 				const authMock = jest.fn(() => ({
-					createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-						Promise.resolve(true),
-					),
+					createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
 					sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
-					signInAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-						Promise.resolve(true),
-					),
+					signInAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
 					fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
 					signOut: jest.fn(() => {
 						Promise.resolve(true);
@@ -109,10 +97,7 @@ describe('NotebookService', () => {
 		});
 
 		describe('when an ID  does not match a notebook', () => {
-			it('Throw and error', () =>
-				expect(service.findNotebookById('TestID2')).rejects.toThrow(
-				HttpException,
-			));
+			it('Throw and error', () => expect(service.findNotebookById('TestID2')).rejects.toThrow(HttpException));
 		});
 	});
 	// Test to delete a notebook
