@@ -1,4 +1,4 @@
 export interface Note {
 	name: string;
-	noteReference: string;
+	noteId: string;
 }
