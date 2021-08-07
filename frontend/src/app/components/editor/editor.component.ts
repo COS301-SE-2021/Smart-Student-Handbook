@@ -13,7 +13,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { ConfirmDeleteComponent } from '@app/components';
-// import { MatProgressBar } from '@angular/material/progress-bar';
+import { AddTagsTool } from '@app/AddTagsTool/AddTagsTool';
+// import { AddTagsTool } from '@app/AddTagsTool/AddTagsTool';
 
 export interface Tag {
 	name: string;
@@ -73,6 +74,8 @@ export class EditorComponent {
 
 	Paragraph = require('editorjs-paragraph-with-alignment');
 
+	// AddTagsTool = require('./AddTagsTool');
+
 	Editor!: EditorJS;
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -124,6 +127,10 @@ export class EditorComponent {
 			const editor = new EditorJS({
 				holder: 'editor',
 				tools: {
+					snippet: {
+						class: AddTagsTool,
+						shortcut: 'CTRL+S',
+					},
 					header: {
 						class: this.Header,
 						shortcut: 'CTRL+SHIFT+H',
