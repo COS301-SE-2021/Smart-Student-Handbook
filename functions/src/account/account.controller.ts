@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Get, Delete, Put } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { AccountService } from './account.service';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
@@ -37,5 +38,10 @@ export class AccountController {
 	@Delete('deleteUser')
 	deleteUser(): Promise<Response> {
 		return this.accountService.deleteUser();
+	}
+
+	@Post('requestResetPassword')
+	requestResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+		return this.accountService.requestResetPassword(resetPasswordDto);
 	}
 }

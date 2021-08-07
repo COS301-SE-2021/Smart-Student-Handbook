@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import * as admin from 'firebase-admin';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
@@ -213,5 +214,9 @@ export class AccountService {
 				HttpStatus.BAD_REQUEST,
 			);
 		}
+	}
+
+	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
+		return { message: `Request Send to ${resetPasswordDto.email}` };
 	}
 }
