@@ -1,7 +1,9 @@
 export class ResetPasswordDto {
 	readonly email: string;
 
-	readonly password?: string;
+	readonly isLocahost: boolean;
 
-	readonly resetCode?: string;
+	readonly newPassword?: string;
+
+	readonly code?: string;
 }
