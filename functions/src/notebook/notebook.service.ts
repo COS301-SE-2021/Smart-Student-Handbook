@@ -415,4 +415,23 @@ export class NotebookService {
 			message: 'Successfully removed user from access list!',
 		};
 	}
+
+	async checkCreator(notebookId: string, userId: string): Promise<boolean> {
+		try {
+			const doc = await admin
+				.firestore()
+				.collection('userNotebooks')
+				.doc(notebookId)
+				.get();
+
+			if (doc.exists) {
+				if (doc.data().creatorId === userId) {
+					return true;
+				}
+			}
+			return false;
+		} catch (e) {
+			throw new HttpException(`Bad Request${e}`, HttpStatus.BAD_REQUEST);
+		}
+	}
 }
