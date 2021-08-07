@@ -64,6 +64,7 @@ import {
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ForgotPasswordComponent } from './features/public/forgot-password/forgot-password.component';
 
 @NgModule({
 	declarations: [
@@ -94,6 +95,7 @@ import { AppRoutingModule } from './app-routing.module';
 		RegisterComponent,
 		ResetPasswordComponent,
 		LandingPageComponent,
+  ForgotPasswordComponent,
 	],
 	imports: [
 		MaterialModule,

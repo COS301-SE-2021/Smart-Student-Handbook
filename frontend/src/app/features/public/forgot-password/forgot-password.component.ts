@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-	selector: 'app-rest-password',
-	templateUrl: './reset-password.component.html',
-	styleUrls: ['./reset-password.component.scss'],
+	selector: 'app-forgot-password',
+	templateUrl: './forgot-password.component.html',
+	styleUrls: ['./forgot-password.component.scss'],
 })
-export class ResetPasswordComponent {
+export class ForgotPasswordComponent {
 	form: FormGroup;
 
 	errorMessage: string = '';
@@ -14,15 +14,14 @@ export class ResetPasswordComponent {
 	constructor(private fb: FormBuilder) {
 		// setup the form and validation
 		this.form = this.fb.group({
-			password: ['', Validators.required],
-			confirmPassword: ['', Validators.required],
+			email: ['', Validators.email],
 		});
 	}
 
 	onSubmit() {
 		// check if form is valid
 		if (this.form.valid) {
-			const password = this.form.get('password')?.value;
+			const email = this.form.get('email')?.value;
 
 			const resetPassword = document.getElementById(
 				'resetPassword'
