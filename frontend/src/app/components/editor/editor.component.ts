@@ -7,15 +7,13 @@ import { MatChipInputEvent } from '@angular/material/chips';
 
 import firebase from 'firebase';
 import 'firebase/firestore';
-import { NotebookService } from 'src/app/services/notebook.service';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatProgressBar } from '@angular/material/progress-bar';
-import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
-import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
+
+import { NotebookService, NotebookEventEmitterService } from '@app/services';
+import { NotebookBottomSheetComponent } from '@app/mobile';
+import { ConfirmDeleteComponent } from '@app/components';
+// import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
 	name: string;

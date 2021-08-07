@@ -8,7 +8,7 @@ import {
 	Body,
 	Param,
 } from '@nestjs/common';
-// import { User } from './interfaces/user.interface';
+// import { User } from './models/user.interface';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UserService } from './user.service';

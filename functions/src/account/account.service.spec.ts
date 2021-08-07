@@ -11,8 +11,7 @@ admin.initializeApp();
 const firebaseConfig = {
 	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
 	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL:
-		'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 	projectId: 'smartstudentnotebook',
 	storageBucket: 'smartstudentnotebook.appspot.com',
 	messagingSenderId: '254968215542',
@@ -76,9 +75,7 @@ describe('AccountService', () => {
 				]);
 
 				// Todo This should fail
-				await expect(service.registerUser(registerDTO)).rejects.toThrow(
-					HttpException,
-				);
+				await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
 			});
 		});
 	});

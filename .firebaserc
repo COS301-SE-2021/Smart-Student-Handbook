@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "smartstudentnotebook"
+  },
+  "targets": {
+    "smartstudentnotebook": {
+      "hosting": {
+        "develop": [
+          "develop-smartstudentnotebook"
+        ],
+        "master": [
+          "smartstudentnotebook"
+        ]
+      }
+    }
   }
 }
