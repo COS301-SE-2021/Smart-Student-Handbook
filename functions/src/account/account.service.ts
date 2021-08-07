@@ -23,10 +23,7 @@ export class AccountService {
 	async registerUser(registerDto: RegisterDto): Promise<Account> {
 		// Check if user password and confirm passwords match before creating user
 		if (registerDto.password !== registerDto.passwordConfirm) {
-			throw new HttpException(
-				'Passwords do not match!',
-				HttpStatus.BAD_REQUEST,
-			);
+			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
 
 		// send welcome email to new user
@@ -59,10 +56,8 @@ export class AccountService {
 				message: 'User is successfully registered!',
 			}))
 			.catch((error) => {
-				throw new HttpException(
-					`${'Bad Request Error creating new user: '}${error.message}`,
-					HttpStatus.BAD_REQUEST,
-				);
+				// eslint-disable-next-line max-len
+				throw new HttpException(`${'Bad Request Error creating new user: '}${error.message}`, HttpStatus.BAD_REQUEST);
 			});
 	}
 
@@ -105,10 +100,7 @@ export class AccountService {
 				message: 'User is successfully updated!',
 			}))
 			.catch((error) => {
-				throw new HttpException(
-					`Error updating user: ${error.message}`,
-					HttpStatus.BAD_REQUEST,
-				);
+				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
 			});
 	}
 
@@ -129,10 +121,7 @@ export class AccountService {
 				message: 'User is successfully logged in.',
 			}))
 			.catch((error) => {
-				throw new HttpException(
-					`Bad Request ${error.message}`,
-					HttpStatus.BAD_REQUEST,
-				);
+				throw new HttpException(`Bad Request ${error.message}`, HttpStatus.BAD_REQUEST);
 			});
 	}
 
@@ -148,10 +137,7 @@ export class AccountService {
 				message: 'Successfully signed out.',
 			}))
 			.catch((error) => {
-				throw new HttpException(
-					`Internal Service Error: ${error.message}`,
-					HttpStatus.INTERNAL_SERVER_ERROR,
-				);
+				throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
 			});
 	}
 
@@ -198,10 +184,8 @@ export class AccountService {
 					message: 'Successfully deleted user.',
 				}))
 				.catch((error) => {
-					throw new HttpException(
-						`Internal Service Error: ${error.message}`,
-						HttpStatus.INTERNAL_SERVER_ERROR,
-					);
+					// eslint-disable-next-line max-len
+					throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
 				});
 		} catch (error) {
 			throw new HttpException(

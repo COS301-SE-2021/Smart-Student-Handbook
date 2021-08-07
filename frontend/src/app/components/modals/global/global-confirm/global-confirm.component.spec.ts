@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GlobalConfirmComponent } from './global-confirm.component';
+import { GlobalConfirmComponent } from '@app/components';
 
 describe('GlobalConfirmComponent', () => {
 	let component: GlobalConfirmComponent;
