@@ -23,19 +23,19 @@ export class NotebookService {
 		const notebooks = [];
 
 		try {
-			const notebookIdSnapshot = await admin
-				.firestore()
-				.collection(`userContent/${userId}/Notebooks`)
-				.get();
+			const notebookIdSnapshot = await admin.firestore().collection(`userContent/${userId}/Notebooks`).get();
 			notebookIdSnapshot.forEach((doc) => {
 				notebookIds.push(doc.id);
 			});
+			console.log('test', notebookIds);
 
 			const notebookSnapshot = await admin
 				.firestore()
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
+
+			console.log(notebookSnapshot);
 
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
@@ -88,7 +88,17 @@ export class NotebookService {
 				.collection('userNotebooks')
 				.doc(notebookId)
 				.set({
-					notebook,
+					title: notebookDto.title,
+					author: notebookDto.author,
+					course: notebookDto.course,
+					description: notebookDto.description,
+					institution: notebookDto.institution,
+					creatorId: notebookDto.creatorId,
+					private: notebookDto.private,
+					tags: notebookDto.tags,
+					notebookId,
+					notes: [note],
+					access: [],
 				})
 				.catch(() => {
 					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
@@ -174,11 +184,7 @@ export class NotebookService {
 
 	async getNotes(notebookId: string): Promise<Note[]> {
 		try {
-			const doc = await admin
-				.firestore()
-				.collection('userNotebooks')
-				.doc(notebookId)
-				.get();
+			const doc = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
 			if (doc.exists) {
 				return doc.data().notes;
@@ -186,10 +192,7 @@ export class NotebookService {
 		} catch (e) {
 			throw new HttpException(`Bad Request${e}`, HttpStatus.BAD_REQUEST);
 		}
-		throw new HttpException(
-			'Document Could not be found!',
-			HttpStatus.NOT_FOUND,
-		);
+		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
 	}
 
 	async deleteNotebook(notebookId: string): Promise<Response> {
@@ -241,10 +244,7 @@ export class NotebookService {
 		try {
 			return firebase.auth().currentUser.uid;
 		} catch (error) {
-			throw new HttpException(
-				'Unable to complete request. User might not be signed in.',
-				HttpStatus.BAD_REQUEST,
-			);
+			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -361,11 +361,7 @@ export class NotebookService {
 
 	async getAccessList(notebookId: string): Promise<Access[]> {
 		try {
-			const doc = await admin
-				.firestore()
-				.collection('userNotebooks')
-				.doc(notebookId)
-				.get();
+			const doc = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
 			if (doc.exists) {
 				return doc.data().access;
@@ -373,16 +369,11 @@ export class NotebookService {
 		} catch (e) {
 			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 		}
-		throw new HttpException(
-			'Document Could not be found!',
-			HttpStatus.NOT_FOUND,
-		);
+		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
 	}
 
 	async checkUserAccess(checkAccessDto: CheckAccessDto): Promise<boolean> {
-		const access: Access[] = await this.getAccessList(
-			checkAccessDto.notebookId,
-		);
+		const access: Access[] = await this.getAccessList(checkAccessDto.notebookId);
 		let accessGranted = false;
 
 		access.forEach((user: Access) => {
@@ -395,9 +386,7 @@ export class NotebookService {
 	}
 
 	async removeUserAccess(checkAccessDto: CheckAccessDto): Promise<Response> {
-		const access: Access[] = await this.getAccessList(
-			checkAccessDto.notebookId,
-		);
+		const access: Access[] = await this.getAccessList(checkAccessDto.notebookId);
 
 		try {
 			access.forEach((item: Access, index: number) => {
@@ -418,11 +407,7 @@ export class NotebookService {
 
 	async checkCreator(notebookId: string, userId: string): Promise<boolean> {
 		try {
-			const doc = await admin
-				.firestore()
-				.collection('userNotebooks')
-				.doc(notebookId)
-				.get();
+			const doc = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
 			if (doc.exists) {
 				if (doc.data().creatorId === userId) {
