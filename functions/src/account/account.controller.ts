@@ -48,9 +48,10 @@ export class AccountController {
 	}
 
 	@Get('checkResetPassword/:email/:local/:code')
-	@Redirect('https://smartstudentnotebook.web.app')
-	checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
-		return this.accountService.checkResetPassword(resetPasswordCodeDto);
+	@Redirect('https://smartstudentnotebook.web.app', 308)
+	async checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
+		const url = await this.accountService.checkResetPassword(resetPasswordCodeDto);
+		return url;
 	}
 
 	@Post('finalizeResetPassword')

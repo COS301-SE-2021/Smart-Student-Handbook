@@ -220,6 +220,7 @@ export class AccountService {
 
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
+		console.log(resetPasswordDto);
 		const userData = await admin
 			.auth()
 			.getUserByEmail(resetPasswordDto.email)
@@ -229,22 +230,29 @@ export class AccountService {
 				email: userRecord.email,
 			}))
 			.catch((error) => {
-				throw new HttpException(`Bad Request. User does not exist: ${error.message}`, HttpStatus.BAD_REQUEST);
+				throw new HttpException(`Bad Request. User does not exist: ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
-		const host = '';
-		const path = '';
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (resetPasswordDto.isLocalhost == true) {
+			host = 'localhost:5001/smartstudentnotebook/us-central1';
+		} else {
+			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
+		}
+
+		const path = '/app/account/checkResetPassword';
 		const { email } = userData;
 		const encodedCode = this.encodeResetCode(userData.uid, userData.email);
-		const link = 'https://';
+		let link = 'http://';
 		// eslint-disable-next-line max-len
-		link.concat(host, path, '/', email, '/', String(resetPasswordDto.isLocahost), '/', encodedCode);
+		link = link.concat(host, path, '/', email, '/', String(resetPasswordDto.isLocalhost), '/', encodedCode);
 
 		await this.notificationService.sendEmailNotification({
 			email: resetPasswordDto.email,
-			subject: 'Smart Student Handbook Email Verification',
+			subject: 'Smart Student Handbook Password Reset',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${userData.displayName}. You request to change your password. \nPlease do so with this link: ${link}`,
+			body: `Good day, ${userData.displayName}. You request to change your password. \nPlease do so with this link: \n${link}`,
 		});
 
 		return { message: `Request Send to ${resetPasswordDto.email}` };
@@ -253,15 +261,19 @@ export class AccountService {
 	async checkResetPassword(resetPasswordCodeDto: ResetPasswordCodeDto): Promise<{ url: string }> {
 		const { email, code, local } = resetPasswordCodeDto;
 
+		console.log(resetPasswordCodeDto);
+
 		let host;
 		// eslint-disable-next-line eqeqeq
 		if (local == 'true') {
 			host = 'localhost:5000';
 		} else {
-			host = 'https://smartstudentnotebook.web.app/';
+			host = 'smartstudentnotebook.web.app';
 		}
 
 		const codeInterface = this.decodeResetCode(code);
+
+		console.log(codeInterface);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
@@ -289,22 +301,23 @@ export class AccountService {
 			return { url: `${host}` };
 		}
 
-		return { url: `${host}/account/resetPassword?${code}` };
+		return { url: `http://${host}/account/resetPassword?${code}` };
 	}
 
 	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
 		const { email, code, newPassword } = resetPasswordFinalizeDto;
-
+		console.log(resetPasswordFinalizeDto);
 		// eslint-disable-next-line eqeqeq
 		if (code == undefined || newPassword == undefined) {
 			throw new HttpException('Bad Request. Not all parameters provided', HttpStatus.BAD_REQUEST);
 		}
 
 		const codeInterface = this.decodeResetCode(code);
+		console.log(codeInterface);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
-			throw new HttpException('Bad Request. Invalid Code', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request. Invalid Code:1', HttpStatus.BAD_REQUEST);
 		}
 
 		const userData = await admin
@@ -318,13 +331,14 @@ export class AccountService {
 				throw new HttpException(`Bad Request. User does not exist: ${error.message}`, HttpStatus.BAD_REQUEST);
 			});
 
+		const uid = userData.uid.substr(0, 8);
 		// eslint-disable-next-line eqeqeq,max-len
-		if (codeInterface.checksumPassed == false || codeInterface.email != email || codeInterface.uid != userData.uid) {
-			throw new HttpException('Bad Request. Invalid Code', HttpStatus.BAD_REQUEST);
+		if (codeInterface.checksumPassed == false || codeInterface.email != email || codeInterface.uid != uid) {
+			throw new HttpException('Bad Request. Invalid Code:2', HttpStatus.BAD_REQUEST);
 		}
 
 		if (codeInterface.timeExpire < Date.now()) {
-			throw new HttpException('Bad Request. Invalid Code', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request. Invalid Code:3', HttpStatus.BAD_REQUEST);
 		}
 
 		return admin
@@ -347,17 +361,17 @@ export class AccountService {
 	encodeResetCode(uid: string, email: string) {
 		const timeExpire = Date.now() + 1800000;
 
-		const randNum = '';
+		let randNum = '';
 		let checkNum = 0;
 		for (let i = 0; i < 7; i += 1) {
 			const num = Math.floor(Math.random() * 10);
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			checkNum += num;
-			randNum.concat(num.toString());
+			randNum = randNum.concat(num.toString());
 		}
 
-		const code: string = timeExpire.toString();
-		code.concat(
+		let code: string = timeExpire.toString();
+		code = code.concat(
 			'.',
 			uid.substr(0, 8),
 			'.',
@@ -367,15 +381,15 @@ export class AccountService {
 			checkNum.toString().charAt(checkNum.toString().length - 1),
 		);
 
-		return btoa(code);
+		return Buffer.from(code).toString('base64');
 	}
 
 	decodeResetCode(code: string) {
-		const decodedCode = atob(code);
-		const codeSplit = decodedCode.split('.');
+		const decodedCode = Buffer.from(code, 'base64').toString();
 
+		const codeSplit = decodedCode.split('.');
 		// eslint-disable-next-line eqeqeq
-		if (codeSplit.length != 3) {
+		if (codeSplit.length != 5) {
 			return {
 				timeExpire: 0,
 				uid: '',
@@ -389,20 +403,20 @@ export class AccountService {
 		// eslint-disable-next-line no-plusplus
 		for (let i = 0; i < 7; i++) {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			checkSum += Number(codeSplit[3].charAt(i));
+			checkSum += Number(codeSplit[4].charAt(i));
 		}
 		const checkNum = checkSum.toString().charAt(checkSum.toString().length - 1);
 		let checkPassed = false;
 		// eslint-disable-next-line eqeqeq
-		if (checkNum == codeSplit[3].charAt(7)) {
+		if (checkNum == codeSplit[4].charAt(7)) {
 			checkPassed = true;
 		}
 
 		return {
 			timeExpire: Number(codeSplit[0]),
 			uid: codeSplit[1],
-			email: codeSplit[2],
-			checksum: Number(codeSplit[3]),
+			email: `${codeSplit[2]}.${codeSplit[3]}`,
+			checksum: Number(codeSplit[4]),
 			checksumPassed: checkPassed,
 		};
 	}
