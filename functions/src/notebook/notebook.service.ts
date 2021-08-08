@@ -27,7 +27,7 @@ export class NotebookService {
 			notebookIdSnapshot.forEach((doc) => {
 				notebookIds.push(doc.id);
 			});
-			console.log('test', notebookIds);
+			// console.log('test', notebookIds);
 
 			const notebookSnapshot = await admin
 				.firestore()
@@ -35,7 +35,7 @@ export class NotebookService {
 				.where('notebookId', 'in', notebookIds)
 				.get();
 
-			console.log(notebookSnapshot);
+			// console.log(notebookSnapshot);
 
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
@@ -52,6 +52,8 @@ export class NotebookService {
 					tags: doc.data().tags,
 				});
 			});
+			console.log('notebooks');
+			console.log(notebooks);
 
 			return notebooks;
 		} catch (e) {
@@ -330,7 +332,11 @@ export class NotebookService {
 	async addAccess(accessDto: AccessDto): Promise<Response> {
 		const access: Access[] = await this.getAccessList(accessDto.notebookId);
 
-		access.push(accessDto);
+		access.push({
+			displayName: accessDto.displayName,
+			userId: accessDto.userId,
+			profileUrl: accessDto.profileUrl,
+		});
 
 		return this.updateAccess(accessDto.notebookId, access);
 	}
