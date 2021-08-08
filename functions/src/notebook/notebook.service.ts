@@ -27,15 +27,12 @@ export class NotebookService {
 			notebookIdSnapshot.forEach((doc) => {
 				notebookIds.push(doc.id);
 			});
-			console.log('test', notebookIds);
 
 			const notebookSnapshot = await admin
 				.firestore()
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-
-			console.log(notebookSnapshot);
 
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
@@ -55,7 +52,7 @@ export class NotebookService {
 
 			return notebooks;
 		} catch (e) {
-			throw new HttpException(`Bad Request${e}`, HttpStatus.BAD_REQUEST);
+			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -74,7 +71,7 @@ export class NotebookService {
 			course: notebookDto.course,
 			description: notebookDto.description,
 			institution: notebookDto.institution,
-			creatorId: notebookDto.creatorId,
+			creatorId: userId,
 			private: notebookDto.private,
 			tags: notebookDto.tags,
 			notebookId,
@@ -133,6 +130,35 @@ export class NotebookService {
 		}
 	}
 
+	async updateNotebook(notebookDto: NotebookDto): Promise<Response> {
+		try {
+			return await admin
+				.firestore()
+				.collection('userNotebooks')
+				.doc(notebookDto.notebookId)
+				.update({
+					title: notebookDto.title,
+					author: notebookDto.author,
+					course: notebookDto.course,
+					description: notebookDto.description,
+					institution: notebookDto.institution,
+					private: notebookDto.private,
+					tags: notebookDto.tags,
+				})
+				.then(() => ({
+					message: 'Updated notebook successful!',
+				}))
+				.catch(() => {
+					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+				});
+		} catch (error) {
+			throw new HttpException(
+				'Something went wrong. Operation could not be executed.',
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
 	async createNote(noteDto: NoteDto): Promise<Response> {
 		const note: Note = {
 			name: noteDto.name,
@@ -142,7 +168,13 @@ export class NotebookService {
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
 		notes.push(note);
 
-		return this.updateNotes(noteDto.notebookId, notes);
+		if ((await this.updateNotes(noteDto.notebookId, notes)).message === 'Creating a notebook was successful!') {
+			return {
+				message: 'Creating a notebook was successful!',
+				noteId: note.noteId,
+			};
+		}
+		throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {
@@ -273,7 +305,7 @@ export class NotebookService {
 				});
 		} catch (error) {
 			throw new HttpException(
-				`Something went wrong. Operation could not be executed.${error}`,
+				'Something went wrong. Operation could not be executed.',
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
