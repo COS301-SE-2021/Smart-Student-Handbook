@@ -34,11 +34,10 @@ export class NotebookController {
 		return this.notebookService.createNote(noteDto);
 	}
 
-
 	@Put('updateNote')
 	updateNote(@Body() noteDto: NoteDto): Promise<Response> {
 		return this.notebookService.updateNote(noteDto);
-
+	}
 
 	@Delete('deleteNotebook/:notebookId')
 	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
