@@ -230,7 +230,6 @@ export class NotebookService {
 	}
 
 	async updateNotes(notebookId: string, notes: Note[]): Promise<Response> {
-		console.log(notes);
 		try {
 			return await admin
 				.firestore()
