@@ -26,7 +26,6 @@ import {
 import { environment } from '@environments/environment';
 
 // Services
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
 
 // Features
 import {
@@ -62,6 +61,7 @@ import {
 	TreeViewComponent,
 } from '@app/components';
 
+import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 

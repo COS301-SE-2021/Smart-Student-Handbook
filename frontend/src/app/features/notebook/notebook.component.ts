@@ -55,8 +55,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -72,6 +70,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * @param router
 	 * @param accountService
 	 * @param notebookEventEmitterService
+	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private router: Router,
@@ -89,8 +88,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
 
 		// Open a note when one is selected from the mobile view and update the title
 		if (this.notebookEventEmitterService.subsVar === undefined) {
