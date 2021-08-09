@@ -1,3 +1,4 @@
+// Angular
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -7,57 +8,70 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
-
-// Modules
+import { AsyncPipe } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
-// Firebase
-import { MessagingService } from './services/messaging.service';
-import { environment } from '../environments/environment';
-import { AsyncPipe } from '../../node_modules/@angular/common';
+// Core
+import {
+	MaterialModule,
+	LeftMenuComponent,
+	P404Component,
+	HeaderComponent,
+	SecureLayoutComponent,
+	PublicLayoutComponent,
+} from '@app/core';
+import { environment } from '@environments/environment';
 
-// Angular Material
-import { MaterialModule } from './material/material.module';
+// Services
+
+// Features
+import {
+	NotebookComponent,
+	HomeComponent,
+	ExploreComponent,
+	RecentNotesComponent,
+	SharedWithMeComponent,
+	NotificationsComponent,
+} from '@app/features';
+
+// public
+import {
+	LoginComponent,
+	RegisterComponent,
+	ResetPasswordComponent,
+	LandingPageComponent,
+} from '@app/features/public';
+
+// Mobile
+import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
 
 // Components
-import { FolderPanelComponent } from './components/panels/folder-panel/folder-panel.component';
-import { NotebookComponent } from './components/notebook/notebook.component';
-import { SmartAssistPanelComponent } from './components/panels/smart-assist-panel/smart-assist-panel.component';
-import { NotesPanelComponent } from './components/panels/notes-panel/notes-panel.component';
-import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
-import { RestPasswordComponent } from './components/account/reset-password/rest-password.component';
-import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-import { GlobalErrorComponent } from './components/modals/global/global-error/global-error.component';
-import { GlobalConfirmComponent } from './components/modals/global/global-confirm/global-confirm.component';
+import {
+	SmartAssistPanelComponent,
+	NotesPanelComponent,
+	GlobalErrorComponent,
+	GlobalConfirmComponent,
+	EditorComponent,
+	EditProfileComponent,
+	AddNotebookComponent,
+	ConfirmDeleteComponent,
+	TreeViewComponent,
+} from '@app/components';
 
-import { EditorComponent } from './components/editor/editor.component';
-import { EditProfileComponent } from './components/modals/edit-profile/edit-profile.component';
-import { AddNotebookComponent } from './components/modals/add-notebook/add-notebook.component';
-import { ConfirmDeleteComponent } from './components/modals/confirm-delete/confirm-delete.component';
-
-import { NotebookBottomSheetComponent } from './components/modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { TreeViewComponent } from './components/tree-view/tree-view.component';
-import { NotesComponent } from './components/notes/notes.component';
-
-import { NotebookEventEmitterService } from './services/notebook-event-emitter.service';
+import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		FolderPanelComponent,
+		LeftMenuComponent,
 		NotebookComponent,
 		SmartAssistPanelComponent,
 		NotesPanelComponent,
-		LoginComponent,
-		RegisterComponent,
-		RestPasswordComponent,
-		ForgotPasswordComponent,
 		GlobalErrorComponent,
 		GlobalConfirmComponent,
 		AddNotebookComponent,
@@ -67,6 +81,19 @@ import { NotebookEventEmitterService } from './services/notebook-event-emitter.s
 		NotebookBottomSheetComponent,
 		TreeViewComponent,
 		NotesComponent,
+		HomeComponent,
+		ExploreComponent,
+		P404Component,
+		RecentNotesComponent,
+		SharedWithMeComponent,
+		NotificationsComponent,
+		HeaderComponent,
+		SecureLayoutComponent,
+		PublicLayoutComponent,
+		LoginComponent,
+		RegisterComponent,
+		ResetPasswordComponent,
+		LandingPageComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -98,7 +125,7 @@ import { NotebookEventEmitterService } from './services/notebook-event-emitter.s
 		NotesPanelComponent,
 		MessagingService,
 		AsyncPipe,
-		FolderPanelComponent,
+		LeftMenuComponent,
 		MaterialModule,
 		NotebookEventEmitterService,
 	],

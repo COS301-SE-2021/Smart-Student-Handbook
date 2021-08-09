@@ -1,38 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotesComponent } from './components/notes/notes.component';
-import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
-import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
-import { NotebookComponent } from './components/notebook/notebook.component';
+import {
+	AuthGuard,
+	PublicLayoutComponent,
+	SecureLayoutComponent,
+	PUBLIC_ROUTES,
+	SECURE_ROUTES,
+} from '@app/core';
 
 const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'login',
-		pathMatch: 'full',
+		component: PublicLayoutComponent,
+		children: PUBLIC_ROUTES,
 	},
 	{
-		path: 'login',
-		component: LoginComponent,
-		// loadChildren: () => import('./components/account/login/login.component').then( m => m.LoginComponent)
+		path: '',
+		component: SecureLayoutComponent,
+		canActivate: [AuthGuard],
+		children: SECURE_ROUTES,
 	},
-	{
-		path: 'register',
-		component: RegisterComponent,
-	},
-	{
-		path: 'forgotPassword',
-		component: ForgotPasswordComponent,
-	},
-	{
-		path: 'notebook',
-		component: NotebookComponent,
-	},
-	{
-		path: 'notes',
-		component: NotesComponent,
-	},
+	{ path: '**', redirectTo: 'page-not-found' },
 ];
 
 @NgModule({

@@ -1,48 +1,54 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+// import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookService } from '../../../services/notebook.service';
-import { AddNotebookComponent } from '../../modals/add-notebook/add-notebook.component';
+import { NotebookService, OpenNotebookPanelService } from '@app/services';
+import { AddNotebookComponent } from '@app/components';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
 	selector: 'app-notes-panel',
 	templateUrl: './notes-panel.component.html',
+	encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
 export class NotesPanelComponent implements OnInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
-	course = '';
+	// course = '';
 
 	description = '';
 
-	institution = '';
+	date = '';
 
-	private = false;
+	notebookId = '';
+
+	// institution = '';
+
+	// private = false;
 
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	// sliding panel
 	@ViewChild('sidenav') sidenav!: MatSidenav;
 
-	open = false;
+	open!: boolean;
 
-	public notebooks: any = [];
+	public notes: any = [];
 
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
+	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private notebookService: NotebookService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
 	/**
@@ -52,65 +58,103 @@ export class NotesPanelComponent implements OnInit {
 	ngOnInit(): void {
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
+		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+		// this.profile = this.profile.userInfo;
 
-		this.getUserNotebooks();
+		this.open = false;
+
+		// Toggle the notePanelComponent when in desktop view and notebook is selected
+		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
+			this.openNotebookPanelService.toggleSubscribe =
+				this.openNotebookPanelService.togglePanelEmitter.subscribe(
+					(notebookId) => {
+						this.notes = [];
+						this.getUserNotebooks(notebookId);
+
+						// navigate to notebook if not on page
+						const button = document.getElementById(
+							'openNotesPanelBtn'
+						) as HTMLButtonElement;
+						if (button) button.click();
+					}
+				);
+		}
 	}
 
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
-	getUserNotebooks() {
-		this.notebooks = [];
+	getUserNotebooks(notebookId: string) {
+		this.notebookId = notebookId;
+
+		this.notes = [];
+
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+
+		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
-			.getUserNotebooks() // this.user.uid
+			.getNotes(notebookId) // this.user.uid
 			.subscribe((result) => {
+				// const noteHolderDiv = document.getElementById('noteHolderDiv');
+
 				for (let i = 0; i < result.length; i += 1) {
-					this.notebooks.push(result[i]);
+					this.notes.push(result[i]);
 				}
+
+				if (progressbar) progressbar.style.display = 'none';
 			});
+	}
+
+	openPanelBtn() {
+		if (this.notes.length > 0) {
+			this.openPanel();
+		}
 	}
 
 	/**
 	 * Open and close or hide and show the panel
 	 */
-	public openedCloseToggle() {
-		this.sidenav.toggle();
-
+	public openPanel() {
 		this.open = true;
+		const sideNavContainer = document.getElementById(
+			'notes-container'
+		) as HTMLElement;
+		const col = sideNavContainer?.parentElement?.parentElement;
 
-		// console.log(this.open);
+		sideNavContainer.style.width = '100%';
+
+		if (col) {
+			col.style.width = '16.6666666667%';
+			col.style.minWidth = '250px';
+		}
+	}
+
+	closePanel() {
+		this.open = false;
 
 		const sideNavContainer = document.getElementById(
 			'notes-container'
 		) as HTMLElement;
 		const col = sideNavContainer?.parentElement?.parentElement;
 
-		if (sideNavContainer.style.width === '100%') {
-			sideNavContainer.style.width = '40px';
+		sideNavContainer.style.width = '40px';
 
-			if (col) {
-				col.style.width = 'fit-content';
-				col.style.minWidth = '0px';
-			}
-		} else {
-			sideNavContainer.style.width = '100%';
-
-			if (col) {
-				col.style.width = '16.6666666667%';
-				col.style.minWidth = '250px';
-			}
+		if (col) {
+			col.style.width = 'fit-content';
+			col.style.minWidth = '0px';
 		}
 	}
 
 	/**
-	 * Used in notebookcomponent to open a specific nptebook
+	 * Used in notebook component to open a specific notebook
 	 * @param _id the id of the notebook to be opened
+	 * @param _title
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_id: string) {}
+	openNotebook(_id: string, _title: string) {}
 
 	/**
 	 * Edit the details of a notebook
@@ -118,66 +162,44 @@ export class NotesPanelComponent implements OnInit {
 	 */
 	editNotebook(id: string) {
 		// Get the notebook info to edit
-		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			this.title = result.title;
-			this.course = result.course;
-			this.description = result.description;
-			this.institution = result.institution;
-			this.private = result.private;
 
-			// Open dialog
-			const dialogRef = this.dialog.open(AddNotebookComponent, {
-				width: '50%',
-				data: {
-					title: this.title,
-					course: this.course,
+		// Open dialog
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: '50%',
+			data: {
+				title: this.title,
+				description: this.description,
+			},
+		});
+
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((data) => {
+			// If the user filled out the form
+			if (data !== undefined) {
+				const request = {
+					notebookId: this.notebookId,
+					noteId: id,
+					name: this.title,
 					description: this.description,
-					institution: this.institution,
-					private: this.private,
-				},
-			});
+				};
 
-			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe((data) => {
-				// If the user filled out the form
-				if (data !== undefined) {
-					const request = {
-						title: data.title,
-						author: 'Arno',
-						course: data.course,
-						description: data.description,
-						institution: data.institution,
-						name: 'Arno',
-						surname: 'Moller',
-						private: data.private,
-						username: 'userArno',
-					};
+				// Call service and update notebook
+				this.notebookService.updateNote(request).subscribe(
+					() => {
+						this.notes = this.notes.map((notebook: any) => {
+							if (notebook.notebookReference === id) {
+								notebook.description = request.description;
+								notebook.title = request.name;
+							}
 
-					// Call service and update notebook
-					this.notebookService.updateNotebook(request, id).subscribe(
-						() => {
-							this.notebooks = this.notebooks.map(
-								(notebook: any) => {
-									if (notebook.notebookReference === id) {
-										notebook.course = request.course;
-										notebook.description =
-											request.description;
-										notebook.institution =
-											request.institution;
-										notebook.private = request.private;
-										notebook.title = request.title;
-									}
-
-									return notebook;
-								}
-							);
-						},
-						(error) => {
-							console.log(error);
-						}
-					);
-				}
-			});
+							return notebook;
+						});
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+			}
 		});
 	}
 
@@ -190,10 +212,7 @@ export class NotesPanelComponent implements OnInit {
 			width: '50%',
 			data: {
 				title: this.title,
-				course: this.course,
 				description: this.description,
-				institution: this.institution,
-				private: this.private,
 			},
 		});
 
@@ -203,39 +222,30 @@ export class NotesPanelComponent implements OnInit {
 			if (result !== undefined) {
 				// Create request object
 				const request = {
-					title: result.title,
-					author: this.profile.name,
-					course: result.course,
+					notebookId: this.notebookId,
+					name: result.title,
 					description: result.description,
-					institution: result.institution,
-					name: this.profile.name,
-					private: result.private,
 				};
 
+				console.log(request);
 				// this.notebookTitle = result.title;
 
 				// Call service and create notebook
-				this.notebookService.createNotebook(request).subscribe(
+				this.notebookService.createNote(request).subscribe(
 					(data) => {
 						const newNotebook = {
-							author: request.author,
-							course: request.course,
-							description: request.description,
-							institution: request.institution,
 							name: request.name,
-							notebookReference: data.notebookId,
-							private: request.private,
-							title: request.title,
-							userId: this.user.uid,
+							description: request.description,
+							notebookReference: data.noteId,
 						};
 
-						this.notebooks.push(newNotebook);
+						this.notes.push(newNotebook);
 
-						this.openNotebook(data.notebookId);
+						this.openNotebook(data.noteId, result.title);
 					},
 					(error) => {
 						console.log(error);
-						// this.folderPanelComponent.getUserNotebooks();
+						// this.LeftMenuComponent.getUserNotebooks();
 					}
 				);
 			}
@@ -249,7 +259,7 @@ export class NotesPanelComponent implements OnInit {
 	 */
 	removeNotebook(id: string) {
 		// eslint-disable-next-line array-callback-return
-		this.notebooks = this.notebooks.filter((notebook: any) => {
+		this.notes = this.notes.filter((notebook: any) => {
 			if (notebook.notebookReference !== id) {
 				return notebook;
 			}

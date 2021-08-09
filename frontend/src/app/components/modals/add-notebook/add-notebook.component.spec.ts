@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNotebookComponent } from './add-notebook.component';
+import { AddNotebookComponent } from '@app/components';
 
 describe('AddNotebookComponent', () => {
 	let component: AddNotebookComponent;

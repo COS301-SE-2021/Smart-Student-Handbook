@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '@app/services';
 
 // API URL for the account endpoint on the backend
-const ACCOUNT_API = 'http://localhost:5001/account/';
+let addr;
+if (window.location.host.includes('localhost')) {
+	addr =
+		'http://localhost:5001/smartstudentnotebook/us-central1/app/account/';
+} else {
+	addr =
+		'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/account/';
+}
+
+const ACCOUNT_API = addr;
+
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -15,12 +25,34 @@ const httpOptions = {
 	providedIn: 'root',
 })
 export class AccountService {
+	private isUserLoggedIn: BehaviorSubject<boolean>;
+
+	public userLoggedInState: Observable<boolean>;
+
 	// inject serves needed
 	constructor(
 		private http: HttpClient,
 		private router: Router,
 		private profileService: ProfileService
-	) {}
+	) {
+		const loginState = localStorage.getItem('loginState');
+		if (loginState != null) {
+			this.isUserLoggedIn = new BehaviorSubject<boolean>(
+				JSON.parse(loginState)
+			);
+		} else {
+			this.isUserLoggedIn = new BehaviorSubject<boolean>(false);
+		}
+		this.userLoggedInState = this.isUserLoggedIn.asObservable();
+	}
+
+	get getLoginState(): boolean {
+		return this.isUserLoggedIn.value;
+	}
+
+	set setLoginState(state: boolean) {
+		this.isUserLoggedIn.next(state);
+	}
 
 	/**
 	 * Send a API request to the backend account endPoint to register a user and return the result (User Object)
@@ -122,21 +154,10 @@ export class AccountService {
 		});
 	}
 
-	/**
-	 * check if user is logged in
-	 * if already logged in redirect them to the notebook page
-	 * if the user is not logged in redirect them to the login page
-	 * every time the function runs update the local storage with most up to date information
-	 */
-	async isUserLoggedIn(): Promise<void> {
-		const curentRoute = this.router.url.split('?')[0];
-
-		// TODO first check if the user value has been set in the localstorage...
-
-		// Get the current Lodged in userDetails, if fail then user is not logged in
+	setUserSessionLocalStorage(): void {
 		this.getCurrentUser().subscribe(
 			(data) => {
-				// update the LocalStorage for "user" and "userProfile"
+				localStorage.setItem('user', JSON.stringify(data));
 				this.profileService.getUserDetails(data.uid).subscribe(
 					(user) => {
 						localStorage.setItem(
@@ -148,30 +169,9 @@ export class AccountService {
 						console.log(`Error: ${err.error.message}`);
 					}
 				);
-
-				localStorage.setItem('user', JSON.stringify(data));
-
-				// if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
-				if (
-					curentRoute === '/' ||
-					curentRoute === '/login' ||
-					curentRoute === '/register' ||
-					curentRoute === '/forgotPassword'
-				) {
-					this.router.navigateByUrl(`/notebook`);
-				}
 			},
 			(err) => {
 				console.log(err.error.message);
-				// if the user is not logged in allow them to navigate login, register and forgotPassword
-				if (
-					curentRoute !== '/' &&
-					curentRoute !== '/login' &&
-					curentRoute !== '/register' &&
-					curentRoute !== '/forgotPassword'
-				) {
-					this.router.navigateByUrl(`/login`);
-				}
 			}
 		);
 	}

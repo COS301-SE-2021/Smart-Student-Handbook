@@ -1,12 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AppService } from './app.service';
 
 @Controller('')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+	constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+	@Get()
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getHello(@Req() req: Request, @Res() res: Response): string {
+		const resp = this.appService.getHello();
+		res.send(resp);
+		return resp;
+	}
 }
