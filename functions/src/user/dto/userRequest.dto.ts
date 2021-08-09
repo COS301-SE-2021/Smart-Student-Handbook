@@ -16,5 +16,7 @@ export class UserRequestDto {
 
 	readonly bio?: string;
 
-	readonly dateJoined: string;
+	readonly profilePicUrl?: string;
+
+	readonly dateJoined: Date;
 }

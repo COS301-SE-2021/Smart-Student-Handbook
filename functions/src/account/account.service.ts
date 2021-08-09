@@ -9,6 +9,7 @@ import { ResetPasswordFinalizeDto } from './dto/resetPasswordFinalize.dto';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
+import { UserService } from '../user/user.service';
 // import { EmailNotificationRequestDto } from '../notification/dto/emailNotificationRequest.dto';
 
 // import { UserService } from '../user/user.service';
@@ -17,7 +18,7 @@ require('firebase/auth');
 
 @Injectable()
 export class AccountService {
-	constructor(private notificationService: NotificationService) {}
+	constructor(private notificationService: NotificationService, private userService: UserService) {}
 
 	/**
 	 * Register a new user
@@ -42,11 +43,18 @@ export class AccountService {
 			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
 		});
 
+		const bucket = admin.storage().bucket();
+
+		const defualtPic = bucket.file('UserProfilePictures/default.jpg');
+		defualtPic.makePublic(() => {});
+
+		const defualtPicLink = defualtPic.publicUrl();
+
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
 		 */
-		const resp = admin
+		const resp = await admin
 			.auth()
 			.createUser({
 				email: registerDto.email,
@@ -57,17 +65,35 @@ export class AccountService {
 			})
 			.then(
 				(userCredential): Account => ({
-					uid: userCredential.uid,
-					email: userCredential.email,
-					emailVerified: userCredential.emailVerified,
-					displayName: userCredential.displayName,
+					success: true,
+					user: {
+						uid: userCredential.uid,
+						email: userCredential.email,
+						emailVerified: userCredential.emailVerified,
+						displayName: userCredential.displayName,
+						profilePicUrl: defualtPicLink,
+					},
 					message: 'User is successfully registered!',
 				}),
 			)
-			.catch((error) => {
-				// eslint-disable-next-line max-len
-				throw new HttpException(`${'Bad Request Error creating new user: '}${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: true,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: error.message,
+			}));
+
+		await this.userService.createAndUpdateUser({
+			uid: resp.user.uid,
+			name: resp.user.displayName,
+			institution: '',
+			department: '',
+			program: '',
+			workStatus: '',
+			bio: '',
+			profilePicUrl: defualtPicLink,
+			dateJoined: new Date(),
+		});
 
 		admin
 			.auth()
@@ -79,10 +105,12 @@ export class AccountService {
 					body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
 				});
 			})
-			.catch((error) => {
-				// eslint-disable-next-line max-len
-				throw new HttpException(`${'Bad Request Verifying Email: '}${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: true,
+				user: null,
+				message: 'Email Verification unsuccessful',
+				error: error.message,
+			}));
 
 		return resp;
 	}
@@ -98,10 +126,12 @@ export class AccountService {
 		try {
 			uid = firebase.auth().currentUser.uid;
 		} catch (error) {
-			throw new HttpException(
-				`Bad Request. User might not be signed in or does not exist: ${error.message}`,
-				HttpStatus.BAD_REQUEST,
-			);
+			return {
+				success: true,
+				user: null,
+				message: 'User does not exist',
+				error: error.message,
+			};
 		}
 
 		/**
@@ -117,11 +147,14 @@ export class AccountService {
 				disabled: false,
 			})
 			.then((userCredential) => ({
-				uid: userCredential.uid,
-				email: userCredential.email,
-				emailVerified: userCredential.emailVerified,
-				displayName: userCredential.displayName,
-				message: 'User is successfully updated!',
+				success: true,
+				user: {
+					uid: userCredential.uid,
+					email: userCredential.email,
+					emailVerified: userCredential.emailVerified,
+					displayName: userCredential.displayName,
+				},
+				message: 'User is successfully registered!',
 			}))
 			.catch((error) => {
 				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
@@ -138,21 +171,8 @@ export class AccountService {
 			.then((userRecord) => ({
 				uid: userRecord.uid,
 			}))
-			.catch((error) => ({
-				success: true,
-				uid: '',
-				email: '',
-				emailVerified: false,
-				phoneNumber: '',
-				displayName: '',
-				name: '',
-				institution: '',
-				department: '',
-				program: '',
-				workStatus: '',
-				bio: '',
-				dateJoined: '',
-				message: error.message,
+			.catch(() => ({
+				uid: null,
 			}));
 
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
@@ -164,35 +184,28 @@ export class AccountService {
 			.signInWithEmailAndPassword(loginDto.email, loginDto.password)
 			.then((userCredential) => ({
 				success: true,
-				uid: userCredential.user.uid,
-				email: userCredential.user.email,
-				emailVerified: userCredential.user.emailVerified,
-				phoneNumber: userCredential.user.phoneNumber,
-				displayName: userCredential.user.displayName,
-				name: doc.data().name,
-				institution: doc.data().institution,
-				department: doc.data().department,
-				program: doc.data().program,
-				workStatus: doc.data().workStatus,
-				bio: doc.data().bio,
-				dateJoined: doc.data().dateJoined,
+				user: {
+					uid: userCredential.user.uid,
+					email: userCredential.user.email,
+					emailVerified: userCredential.user.emailVerified,
+					phoneNumber: userCredential.user.phoneNumber,
+					displayName: userCredential.user.displayName,
+					name: doc.data().name,
+					institution: doc.data().institution,
+					department: doc.data().department,
+					program: doc.data().program,
+					workStatus: doc.data().workStatus,
+					bio: doc.data().bio,
+					profilePic: doc.data().profilePicUrl,
+					dateJoined: doc.data().dateJoined,
+				},
 				message: 'User is successfully logged in.',
 			}))
 			.catch((error) => ({
-				success: true,
-				uid: '',
-				email: '',
-				emailVerified: false,
-				phoneNumber: '',
-				displayName: '',
-				name: '',
-				institution: '',
-				department: '',
-				program: '',
-				workStatus: '',
-				bio: '',
-				dateJoined: '',
-				message: error.message,
+				success: false,
+				user: null,
+				message: 'User is successfully logged in.',
+				error: error.message,
 			}));
 	}
 
@@ -227,36 +240,29 @@ export class AccountService {
 			// Return user object
 			return {
 				success: true,
-				uid: user.uid,
-				email: user.email,
-				emailVerified: user.emailVerified,
-				phoneNumber: user.phoneNumber,
-				displayName: user.displayName,
-				name: doc.data().name,
-				institution: doc.data().institution,
-				department: doc.data().department,
-				program: doc.data().program,
-				workStatus: doc.data().workStatus,
-				bio: doc.data().bio,
-				dateJoined: doc.data().dateJoined,
+				user: {
+					uid: user.uid,
+					email: user.email,
+					emailVerified: user.emailVerified,
+					phoneNumber: user.phoneNumber,
+					displayName: user.displayName,
+					name: doc.data().name,
+					institution: doc.data().institution,
+					department: doc.data().department,
+					program: doc.data().program,
+					workStatus: doc.data().workStatus,
+					bio: doc.data().bio,
+					profilePicUrl: doc.data().profilePicUrl,
+					dateJoined: doc.data().dateJoined,
+				},
 				message: 'User is successfully logged in.',
 			};
 		} catch (error) {
 			return {
-				success: true,
-				uid: '',
-				email: '',
-				emailVerified: false,
-				phoneNumber: '',
-				displayName: '',
-				name: '',
-				institution: '',
-				department: '',
-				program: '',
-				workStatus: '',
-				bio: '',
-				dateJoined: '',
-				message: error.message,
+				success: false,
+				user: null,
+				message: 'User is not logged in.',
+				error: error.message,
 			};
 		}
 	}
@@ -270,6 +276,8 @@ export class AccountService {
 		// Check if there is a current user else throw an exception
 		try {
 			uid = firebase.auth().currentUser.uid;
+
+			this.userService.deleteUserProfile(uid);
 
 			// Try to delete user else throw and exception if not possible
 			return await admin
