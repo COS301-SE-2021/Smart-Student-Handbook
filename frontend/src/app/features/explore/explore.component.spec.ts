@@ -8,7 +8,10 @@ describe('ExploreComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [],
 			declarations: [ExploreComponent],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

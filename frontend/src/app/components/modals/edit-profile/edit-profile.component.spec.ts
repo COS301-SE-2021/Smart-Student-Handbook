@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditProfileComponent } from '@app/components';
+import { MaterialModule } from '@app/core';
 
 describe('EditProfileComponent', () => {
 	let component: EditProfileComponent;
@@ -8,7 +9,10 @@ describe('EditProfileComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [MaterialModule],
 			declarations: [EditProfileComponent],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

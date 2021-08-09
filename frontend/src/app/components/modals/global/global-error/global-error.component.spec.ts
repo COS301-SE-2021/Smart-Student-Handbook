@@ -8,7 +8,10 @@ describe('GlobalErrorComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [],
 			declarations: [GlobalErrorComponent],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

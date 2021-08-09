@@ -21,7 +21,7 @@
       "es2018",
       "dom"
     ],
-    "types": ["node"],
+    "types": ["node","@types/jest"],
     "paths": {
       "@app/*": ["src/app/*"],
       "@environments/*": ["src/environments/*"]

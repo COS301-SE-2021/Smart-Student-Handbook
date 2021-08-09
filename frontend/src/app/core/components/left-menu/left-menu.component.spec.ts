@@ -13,7 +13,8 @@ describe('MenuPanelComponent', () => {
 		await TestBed.configureTestingModule({
 			declarations: [LeftMenuComponent],
 			imports: [],
-			providers: [NotesPanelComponent],
+			providers: [NotesPanelComponent], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

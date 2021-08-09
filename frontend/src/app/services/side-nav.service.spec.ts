@@ -6,7 +6,12 @@ describe('SideNavService', () => {
 	let service: SideNavService;
 
 	beforeEach(() => {
-		TestBed.configureTestingModule({});
+		TestBed.configureTestingModule({
+			imports: [],
+			declarations: [],
+			providers: [], // Some stubs used here
+			// schemas: []
+		});
 		service = TestBed.inject(SideNavService);
 	});
 

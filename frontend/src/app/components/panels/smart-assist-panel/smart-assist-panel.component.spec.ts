@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmartAssistPanelComponent } from './smart-assist-panel.component';
+import { SmartAssistPanelComponent } from '@app/components';
 
 describe('SmartAssistPanelComponent', () => {
 	let component: SmartAssistPanelComponent;
@@ -8,8 +8,10 @@ describe('SmartAssistPanelComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [SmartAssistPanelComponent],
 			imports: [],
+			declarations: [SmartAssistPanelComponent],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

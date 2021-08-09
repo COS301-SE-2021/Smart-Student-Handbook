@@ -8,7 +8,10 @@ describe('PageNotFoundComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [],
 			declarations: [P404Component],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 

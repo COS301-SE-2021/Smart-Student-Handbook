@@ -10,8 +10,10 @@ describe('NotesPanelComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [NotesPanelComponent],
 			imports: [MatSidenavModule, BrowserAnimationsModule],
+			declarations: [NotesPanelComponent],
+			providers: [], // Some stubs used here
+			// schemas: []
 		}).compileComponents();
 	});
 
