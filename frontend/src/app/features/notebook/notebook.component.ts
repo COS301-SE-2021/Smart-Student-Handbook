@@ -55,8 +55,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -72,6 +70,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * @param router
 	 * @param accountService
 	 * @param notebookEventEmitterService
+	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private router: Router,
@@ -89,15 +88,13 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
 
 		// Open a note when one is selected from the mobile view and update the title
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
 				this.notebookEventEmitterService.loadEmitter.subscribe(
-					(id: string) => {
-						this.loadEditor(id);
+					({ id, title }) => {
+						this.loadEditor(id, title);
 					}
 				);
 			// this.notebookEventEmitterService.getTitleEmitter.subscribe(
@@ -133,8 +130,8 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		// 	this.notePanelComponent.openedCloseToggle();
 		// };
 
-		this.notePanelComponent.openNotebook = (id: string) => {
-			this.editorComponent.loadEditor(id);
+		this.notePanelComponent.openNotebook = (id: string, title: string) => {
+			this.editorComponent.loadEditor(id, title);
 		};
 
 		this.editorComponent.removeNotebookCard = (id: string) => {
@@ -152,7 +149,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(id: string) {
-		await this.editorComponent.loadEditor(id);
+	async loadEditor(id: string, title: string) {
+		await this.editorComponent.loadEditor(id, title);
 	}
 }

@@ -1,2 +1,2 @@
-export * from './NotebookDto.model';
+export * from './notebook/NotebookDto.model';
 export * from './user.model';

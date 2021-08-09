@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 // import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService, OpenNotebookPanelService } from '@app/services';
@@ -11,31 +11,34 @@ import { NotesService } from '@app/services/notes.service';
 @Component({
 	selector: 'app-notes-panel',
 	templateUrl: './notes-panel.component.html',
+	encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
 export class NotesPanelComponent implements OnInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
-	course = '';
+	// course = '';
 
 	description = '';
 
-	institution = '';
+	date = '';
 
-	private = false;
+	notebookId = '';
+
+	// institution = '';
+
+	// private = false;
 
 	// Variable that holds the logged in user details
 	user: any;
-
-	profile: any;
 
 	// sliding panel
 	@ViewChild('sidenav') sidenav!: MatSidenav;
 
 	open!: boolean;
 
-	public notebooks: any = [];
+	public notes: any = [];
 
 	/**
 	 * Notes panel constructor
@@ -58,10 +61,8 @@ export class NotesPanelComponent implements OnInit {
 	ngOnInit(): void {
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
-
-		this.getUserNotebooks();
+		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
+		// this.profile = this.profile.userInfo;
 
 		this.open = false;
 
@@ -69,10 +70,13 @@ export class NotesPanelComponent implements OnInit {
 		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
 			this.openNotebookPanelService.toggleSubscribe =
 				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					() => {
+					(notebookId) => {
+						this.notes = [];
+						this.getUserNotebooks(notebookId);
+
 						// navigate to notebook if not on page
 						const button = document.getElementById(
-							'openPanelBtn'
+							'openNotesPanelBtn'
 						) as HTMLButtonElement;
 						if (button) button.click();
 					}
@@ -83,71 +87,121 @@ export class NotesPanelComponent implements OnInit {
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
-	getUserNotebooks() {
-		this.notebooks = [];
+	getUserNotebooks(notebookId: string) {
+		this.notebookId = notebookId;
+
+		this.notes = [];
+
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+
+		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
-			.getUserNotebooks() // this.user.uid
+			.getNotes(notebookId) // this.user.uid
 			.subscribe((result) => {
+				// const noteHolderDiv = document.getElementById('noteHolderDiv');
+
 				for (let i = 0; i < result.length; i += 1) {
-					this.notebooks.push(result[i]);
+					this.notes.push(result[i]);
 				}
+
+				if (progressbar) progressbar.style.display = 'none';
 			});
+	}
+
+	openPanelBtn() {
+		if (this.notes.length > 0) {
+			this.openPanel();
+		}
 	}
 
 	/**
 	 * Open and close or hide and show the panel
 	 */
-	public openedCloseToggle() {
-		this.open = !this.open;
+	public openPanel() {
+		this.open = true;
 		const sideNavContainer = document.getElementById(
 			'notes-container'
 		) as HTMLElement;
 		const col = sideNavContainer?.parentElement?.parentElement;
 
-		if (sideNavContainer.style.width === '100%') {
-			sideNavContainer.style.width = '40px';
+		sideNavContainer.style.width = '100%';
 
-			if (col) {
-				col.style.width = 'fit-content';
-				col.style.minWidth = '0px';
-			}
-		} else {
-			sideNavContainer.style.width = '100%';
-
-			if (col) {
-				col.style.width = '16.6666666667%';
-				col.style.minWidth = '250px';
-			}
+		if (col) {
+			col.style.width = '16.6666666667%';
+			col.style.minWidth = '250px';
 		}
-		// this.sidenav.toggle();
+	}
+
+	closePanel() {
+		this.open = false;
+
+		const sideNavContainer = document.getElementById(
+			'notes-container'
+		) as HTMLElement;
+		const col = sideNavContainer?.parentElement?.parentElement;
+
+		sideNavContainer.style.width = '40px';
+
+		if (col) {
+			col.style.width = 'fit-content';
+			col.style.minWidth = '0px';
+		}
 	}
 
 	/**
 	 * Used in notebook component to open a specific notebook
 	 * @param _id the id of the notebook to be opened
+	 * @param _title
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_id: string) {}
+	openNotebook(_id: string, _title: string) {}
 
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
 	 */
 	editNotebook(id: string) {
-		this.notesService.editNotebook(id).subscribe((data) => {
-			if (data) {
-				this.notebooks = this.notebooks.map((notebook: any) => {
-					if (notebook.notebookReference === id) {
-						notebook.course = data.course;
-						notebook.description = data.description;
-						notebook.institution = data.institution;
-						notebook.private = data.private;
-						notebook.title = data.title;
-					}
+		// Get the notebook info to edit
 
-					return notebook;
-				});
+		// Open dialog
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: '50%',
+			data: {
+				title: this.title,
+				description: this.description,
+			},
+		});
+
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((data) => {
+			// If the user filled out the form
+			if (data !== undefined) {
+				const request = {
+					notebookId: this.notebookId,
+					noteId: id,
+					name: this.title,
+					description: this.description,
+				};
+
+				// Call service and update notebook
+				this.notebookService.updateNote(request).subscribe(
+					() => {
+						this.notes = this.notes.map((notebook: any) => {
+							if (notebook.notebookReference === id) {
+								notebook.description = request.description;
+								notebook.title = request.name;
+							}
+
+							return notebook;
+						});
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
 			}
 		});
 	}
@@ -156,14 +210,49 @@ export class NotesPanelComponent implements OnInit {
 	 * Create a new notebook
 	 */
 	createNewNotebook() {
-		this.notesService
-			.createNewNotebook(this.profile.name, this.user.uid)
-			.subscribe((data) => {
-				if (data) {
-					this.notebooks.push(data.notebook);
-					this.openNotebook(data.id);
-				}
-			});
+		// Open dialog
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: '50%',
+			data: {
+				title: this.title,
+				description: this.description,
+			},
+		});
+
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((result) => {
+			// If the user filled out the form
+			if (result !== undefined) {
+				// Create request object
+				const request = {
+					notebookId: this.notebookId,
+					name: result.title,
+					description: result.description,
+				};
+
+				console.log(request);
+				// this.notebookTitle = result.title;
+
+				// Call service and create notebook
+				this.notebookService.createNote(request).subscribe(
+					(data) => {
+						const newNotebook = {
+							name: request.name,
+							description: request.description,
+							notebookReference: data.noteId,
+						};
+
+						this.notes.push(newNotebook);
+
+						this.openNotebook(data.noteId, result.title);
+					},
+					(error) => {
+						console.log(error);
+						// this.LeftMenuComponent.getUserNotebooks();
+					}
+				);
+			}
+		});
 	}
 
 	/**
@@ -173,7 +262,7 @@ export class NotesPanelComponent implements OnInit {
 	 */
 	removeNotebook(id: string) {
 		// eslint-disable-next-line array-callback-return
-		this.notebooks = this.notebooks.filter((notebook: any) => {
+		this.notes = this.notes.filter((notebook: any) => {
 			if (notebook.notebookReference !== id) {
 				return notebook;
 			}
