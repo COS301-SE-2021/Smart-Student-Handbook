@@ -33,8 +33,6 @@ export class NotesComponent implements OnInit {
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	notes: any = [];
 
 	constructor(
@@ -46,8 +44,6 @@ export class NotesComponent implements OnInit {
 	ngOnInit(): void {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
 
 		this.getUserNotebooks();
 	}

@@ -49,9 +49,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				() => {
+				(userInfo: any) => {
+					console.log(userInfo);
+
 					this.loginFailed = false;
-					this.accountService.setUserSessionLocalStorage();
+					// this.accountService.setUserSessionLocalStorage();
+					localStorage.setItem('user', JSON.stringify(userInfo));
 					this.accountService.setLoginState = true;
 					localStorage.setItem('loginState', 'true');
 
