@@ -1,13 +1,13 @@
 export class ReviewDto {
-	readonly notebookId: string;
+	readonly notebookId?: string;
 
-	readonly message: string;
+	readonly message?: string;
 
-	readonly rating: string;
+	readonly rating?: number;
 
-	readonly displayName: string;
+	readonly displayName?: string;
 
-	readonly userId: string;
+	readonly userId?: string;
 
-	readonly profileUrl: string;
+	readonly profileUrl?: string;
 }

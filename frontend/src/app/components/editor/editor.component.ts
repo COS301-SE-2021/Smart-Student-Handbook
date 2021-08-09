@@ -12,7 +12,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
-import { ConfirmDeleteComponent } from '@app/components';
+import { NotesService } from '@app/services/notes.service';
+import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -86,6 +87,8 @@ export class EditorComponent {
 
 	notebookID!: string;
 
+	noteId!: string;
+
 	notebookTitle: string = 'Smart Student';
 
 	panelOpenState = false;
@@ -101,21 +104,26 @@ export class EditorComponent {
 	 * @param notebookService To call methods that apply to the notebooks
 	 * @param dialog Show dialog when a user wants to delete a notebook for example
 	 * @param bottomSheet
+	 * @param notesService
 	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
+		private notesService: NotesService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
-	 * @param id the id of the notebook to load
+	 * @param notebookId
+	 * @param noteId
+	 * @param title
 	 */
-	async loadEditor(id: string) {
-		this.notebookID = id;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.noteId = noteId;
+		this.notebookID = notebookId;
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
@@ -124,6 +132,7 @@ export class EditorComponent {
 			const editor = new EditorJS({
 				holder: 'editor',
 				tools: {
+					snippet: AddTagsTool,
 					header: {
 						class: this.Header,
 						shortcut: 'CTRL+SHIFT+H',
@@ -227,55 +236,55 @@ export class EditorComponent {
 		/**
 		 * Get the specific notebook details with notebook id
 		 */
-		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			this.notebookTitle = result.title;
-			this.notebookEventEmitterService.GetNoteTitle(result.title);
+		// this.notebookService.getNoteBookById(id).subscribe((result) => {
+		this.notebookTitle = title;
+		this.notebookEventEmitterService.GetNoteTitle(title);
 
-			// call event transmitter
+		// call event transmitter
 
-			// Change the path to the correct notebook's path
-			const dbRefObject = firebase.database().ref(`notebook/${id}`);
+		// Change the path to the correct notebook's path
+		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
 
-			/**
-			 * Get the values from the realtime database and insert block if notebook is empty
-			 */
-			dbRefObject
-				.once('value', (snap) => {
-					if (snap.val() === null) {
-						firebase
-							.database()
-							.ref(`notebook/${id}`)
-							.set({
-								outputData: {
-									blocks: [
-										{
-											id: 'jTFbQOD8j3',
-											type: 'header',
-											data: {
-												text: `${this.notebookTitle} 🚀`,
-												level: 2,
-											},
+		/**
+		 * Get the values from the realtime database and insert block if notebook is empty
+		 */
+		dbRefObject
+			.once('value', (snap) => {
+				if (snap.val() === null) {
+					firebase
+						.database()
+						.ref(`notebook/${noteId}`)
+						.set({
+							outputData: {
+								blocks: [
+									{
+										id: 'jTFbQOD8j3',
+										type: 'header',
+										data: {
+											text: `${this.notebookTitle} 🚀`,
+											level: 2,
 										},
-									],
-								},
-							});
-					}
-				})
-				.then(() => {
-					/**
-					 * Render output on Editor
-					 */
-					dbRefObject.once('value', (snap) => {
-						// console.log(snap.val());
-						editor.render(snap.val().outputData);
-					});
-
-					e = document.getElementById('editor') as HTMLElement;
-					e.style.overflowY = 'scroll';
-
-					if (progressbar) progressbar.style.display = 'none';
+									},
+								],
+							},
+						});
+				}
+			})
+			.then(() => {
+				/**
+				 * Render output on Editor
+				 */
+				dbRefObject.once('value', (snap) => {
+					// console.log(snap.val());
+					editor.render(snap.val().outputData);
 				});
-		});
+
+				e = document.getElementById('editor') as HTMLElement;
+				e.style.overflowY = 'scroll';
+
+				if (progressbar) progressbar.style.display = 'none';
+			});
+		// });
 	}
 
 	/**
@@ -317,7 +326,7 @@ export class EditorComponent {
 				// console.log(this.notebookID, outputData);
 
 				if (outputData.blocks.length > 0) {
-					firebase.database().ref(`notebook/${this.notebookID}`).set({
+					firebase.database().ref(`notebook/${this.noteId}`).set({
 						outputData,
 					});
 				}
@@ -330,39 +339,36 @@ export class EditorComponent {
 	/**
 	 * Delete a notebook
 	 */
-	removeNotebook() {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-			// width: '50%',
-		});
+	removeNote() {
+		this.notesService
+			.removeNote(this.notebookID, this.noteId)
+			.subscribe((removed) => {
+				if (removed) {
+					const editor = this.Editor;
+					editor.clear();
 
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				if (this.notebookID !== '') {
-					this.notebookService
-						.removeNotebook(this.notebookID)
-						.subscribe(
-							(data) => {
-								console.log(data);
+					this.notebookTitle = '';
 
-								const editor = this.Editor;
-								editor.clear();
+					this.removeNoteCard(this.noteId);
 
-								this.notebookTitle = '';
-
-								this.removeNotebookCard(this.notebookID);
-							},
-							(error) => {
-								console.log(error);
-							}
-						);
+					this.showDefaultImage();
 				}
-			}
-		});
+			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	removeNotebookCard(_id: string) {}
+	removeNoteCard(_id: string) {}
+
+	showDefaultImage() {
+		console.log('delete');
+		const e = document.getElementById('editor') as HTMLElement;
+		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
+
+		this.Editor.destroy();
+		// @ts-ignore
+		this.Editor = undefined;
+		this.notebookTitle = 'Smart Student';
+	}
 
 	/**
 	 * Show menu when user clicks on ellipsis

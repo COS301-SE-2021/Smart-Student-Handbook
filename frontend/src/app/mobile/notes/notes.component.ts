@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
+import { NotesService } from '@app/services/notes.service';
 
 @Component({
 	selector: 'app-notes',
@@ -33,21 +34,20 @@ export class NotesComponent implements OnInit {
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	notes: any = [];
+
+	notebookId: string = '';
 
 	constructor(
 		private router: Router,
+		private notesService: NotesService,
 		private notebookService: NotebookService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	ngOnInit(): void {
-		// get userDeatils;
+		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
 
 		this.getUserNotebooks();
 	}
@@ -55,33 +55,82 @@ export class NotesComponent implements OnInit {
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
-	getUserNotebooks() {
+	async getUserNotebooks() {
 		const loader = document.getElementById('mobileOverlay') as HTMLElement;
-		// loader.style.display = 'flex';
+
+		const notebookId = localStorage.getItem('notebookId');
+
+		if (notebookId) this.notebookId = notebookId;
 
 		this.notes = [];
 
-		this.notebookService
-			.getUserNotebooks() // this.user.uid
-			.subscribe((result) => {
-				for (let i = 0; i < result.length; i += 1) {
-					// console.log(result[i]);
-					this.notes.push(result[i]);
-				}
-				loader.style.display = 'none';
-			});
+		if (notebookId !== null) {
+			this.notebookService
+				.getNotes(notebookId) // this.user.uid
+				.subscribe((result) => {
+					for (let i = 0; i < result.length; i += 1) {
+						// console.log(result[i]);
+						this.notes.push(result[i]);
+					}
+					loader.style.display = 'none';
+				});
+		}
 	}
 
-	async openNote(id: string) {
+	async openNote(noteId: string, title: string) {
 		await this.router.navigate(['notebook']);
 
 		// setTimeout(() => {
 		//   this.notebook.loadEditor(id);
 		// }, 2000)
-		this.notebookEventEmitterService.LoadEditor(id);
+		this.notebookEventEmitterService.LoadEditor(
+			this.notebookId,
+			noteId,
+			title
+		);
 	}
 
-	// navigateBack() {
-	// 	this.router.navigate(['notebook']);
-	// }
+	createNewNotebook() {
+		this.notesService.createNewNote(this.notebookId).subscribe((data) => {
+			console.log(data);
+			this.openNote(data.id, data.notebook.name);
+			// data = id, notebook
+		});
+	}
+
+	/**
+	 * Edit the details of a notebook
+	 * @param id the id of the notebook to be updated
+	 */
+	editNote(id: string) {
+		this.notesService
+			.editNotebook(this.notebookId, id)
+			.subscribe((data) => {
+				if (data) {
+					this.notes = this.notes.map((note: any) => {
+						if (note.noteId === id) {
+							note.description = data.description;
+							note.name = data.title;
+						}
+
+						return note;
+					});
+				}
+			});
+	}
+
+	deleteNote(id: string) {
+		console.log(this.notebookId, id);
+		this.notesService
+			.removeNote(this.notebookId, id)
+			.subscribe((removed) => {
+				if (removed) {
+					this.notes = this.notes.filter((notebook: any) => {
+						if (notebook.noteId !== id) {
+							return notebook;
+						}
+					});
+				}
+			});
+	}
 }

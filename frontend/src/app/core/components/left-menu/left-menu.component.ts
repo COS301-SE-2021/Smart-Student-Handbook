@@ -26,8 +26,6 @@ export class LeftMenuComponent implements OnInit {
 	// Hold user information
 	user: any;
 
-	profile: any;
-
 	open: boolean = false;
 
 	// Variables to be used when updating user profile
@@ -76,10 +74,9 @@ export class LeftMenuComponent implements OnInit {
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
 		this.username = this.user.displayName;
-		this.bio = this.profile.userInfo.bio;
+		this.bio = this.user.bio;
 	}
 
 	onSinenavToggle() {

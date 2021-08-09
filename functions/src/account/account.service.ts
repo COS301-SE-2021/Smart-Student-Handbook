@@ -381,7 +381,7 @@ export class AccountService {
 			return { url: `${host}` };
 		}
 
-		return { url: `http://${host}/account/resetPassword?${code}` };
+		return { url: `http://${host}/account/resetPassword?email=${email}&code=${code}` };
 	}
 
 	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {

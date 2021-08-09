@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { NotebookDto } from '@app/models';
 import { NoteDto } from '@app/models/notebook/NoteDto.model';
 import { CheckAccessDto } from '@app/models/notebook/CheckAccessDto.model';
-import { Response } from '../../../../functions/src/notebook/interfaces/response.interface';
 import { ReviewDto } from '../../../../functions/src/notebook/dto/review.dto';
 import { AccessDto } from '../../../../functions/src/notebook/dto/access.dto';
 
@@ -64,7 +63,7 @@ export class NotebookService {
 	 */
 	getUserNotebooks(): Observable<any> {
 		return this.httpClient.get(
-			`${NOTEBOOK_API}/getUserNotebooks`,
+			`http://localhost:5001/smartstudentnotebook/us-central1/app/notebook/getUserNotebooks`,
 			httpOptions
 		);
 	}
@@ -90,6 +89,7 @@ export class NotebookService {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -105,6 +105,7 @@ export class NotebookService {
 			notebookId: noteDto.notebookId,
 			noteId: noteDto.noteId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -221,46 +222,4 @@ export class NotebookService {
 			`${NOTEBOOK_API}/removeUserAccess/${checkAccessDto.userId}/${checkAccessDto.notebookId}`
 		);
 	}
-
-	// getUserNotebooks(userId: string): Observable<any> {
-	// getUserNotebooks(): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findAllUserNotebooks/`
-	// 	);
-	// }
-	//
-	// getNoteBookById(noteBookId: string): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findNotebookById/${noteBookId}`
-	// 	);
-	// }
-	//
-	// createNotebook(notebookDto: NotebookDto) {
-	// 	return this.httpClient.request<any>(
-	// 		'post',
-	// 		`${NOTEBOOK_API}notebook/createNotebook/`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// updateNotebook(notebookDto: NotebookDto, Id: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'put',
-	// 		`${NOTEBOOK_API}notebook/updateNotebook/${Id}`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// removeNotebook(noteBookId: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'delete',
-	// 		`${NOTEBOOK_API}notebook/deleteNotebook/${noteBookId}`
-	// 	);
-	// }
 }

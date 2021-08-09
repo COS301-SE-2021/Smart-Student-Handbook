@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node lib/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-	"fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --forceExit",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
