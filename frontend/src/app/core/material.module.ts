@@ -49,6 +49,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -100,7 +101,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		MatProgressBarModule,
 		MatDialogModule,
 		MatTooltipModule,
-		// MatSnackBarModule,
+		MatSnackBarModule,
 		// MatTableModule,
 		// MatSortModule,
 		MatTooltipModule,
