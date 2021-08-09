@@ -87,6 +87,8 @@ export class EditorComponent {
 
 	notebookID!: string;
 
+	noteId!: string;
+
 	notebookTitle: string = 'Smart Student';
 
 	panelOpenState = false;
@@ -114,11 +116,13 @@ export class EditorComponent {
 
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
-	 * @param id the id of the notebook to load
+	 * @param notebookId
+	 * @param noteId
 	 * @param title
 	 */
-	async loadEditor(id: string, title: string) {
-		this.notebookID = id;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.noteId = noteId;
+		this.notebookID = notebookId;
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
@@ -237,7 +241,7 @@ export class EditorComponent {
 		// call event transmitter
 
 		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${id}`);
+		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
 
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
@@ -247,7 +251,7 @@ export class EditorComponent {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notebook/${id}`)
+						.ref(`notebook/${noteId}`)
 						.set({
 							outputData: {
 								blocks: [
@@ -333,9 +337,9 @@ export class EditorComponent {
 	/**
 	 * Delete a notebook
 	 */
-	removeNotebook() {
+	removeNote() {
 		this.notesService
-			.removeNotebook(this.notebookID)
+			.removeNote(this.notebookID, this.noteId)
 			.subscribe((removed) => {
 				if (removed) {
 					const editor = this.Editor;
@@ -343,36 +347,15 @@ export class EditorComponent {
 
 					this.notebookTitle = '';
 
-					this.removeNotebookCard(this.notebookID);
+					this.removeNoteCard(this.noteId);
 
 					this.showDefaultImage();
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				if (this.notebookID !== '') {
-					// this.notebookService
-					// 	.removeNotebook(this.notebookID)
-					// 	.subscribe(
-					// 		(data) => {
-					// 			console.log(data);
-					//
-					// 			const editor = this.Editor;
-					// 			editor.clear();
-					//
-					// 			this.notebookTitle = '';
-					//
-					// 			this.removeNotebookCard(this.notebookID);
-					// 		},
-					// 		(error) => {
-					// 			console.log(error);
-					// 		}
-					// 	);
 				}
 			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	removeNotebookCard(_id: string) {}
+	removeNoteCard(_id: string) {}
 
 	showDefaultImage() {
 		console.log('delete');

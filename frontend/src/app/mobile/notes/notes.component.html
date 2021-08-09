@@ -12,16 +12,16 @@
 			class="col-6 col-sm-4 noteContainer"
 			*ngFor="let note of notes; let i = index"
 		>
-			<mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.notebookReference)">
+			<mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.noteId)">
         <button
           mat-icon-button
           class="favorite-icon editNoteBtn"
-          (click)="editNote(note.notebookReference)"
+          (click)="editNote(note.noteId)"
         >
           <mat-icon class="editNotebookIcon">edit</mat-icon>
         </button>
-        <div (click)="openNote(note.notebookReference)">
-          <h3 class="title">{{ note.title }}</h3>
+        <div (click)="openNote(note.noteId, note.name)">
+          <h3 class="title">{{ note.name }}</h3>
           <h4 class="description">{{ note.description }}</h4>
 
           <div

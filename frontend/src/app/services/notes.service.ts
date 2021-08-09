@@ -27,7 +27,7 @@ export class NotesService {
 	/**
 	 * Create a new notebook
 	 */
-	createNewNotebook(userName: string, uid: string): Observable<any> {
+	createNewNote(notebookId: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -46,10 +46,7 @@ export class NotesService {
 				width: screenWidth,
 				data: {
 					title: this.title,
-					course: this.course,
 					description: this.description,
-					institution: this.institution,
-					private: this.private,
 				},
 			});
 
@@ -59,39 +56,27 @@ export class NotesService {
 				if (result !== undefined) {
 					// Create request object
 					const request = {
-						title: result.title,
-						author: userName,
-						course: result.course,
+						notebookId,
+						name: result.title,
 						description: result.description,
-						institution: result.institution,
-						name: userName,
-						private: result.private,
 					};
 
+					console.log(request);
 					// this.notebookTitle = result.title;
 
 					// Call service and create notebook
-					this.notebookService.createNotebook(request).subscribe(
+					this.notebookService.createNote(request).subscribe(
 						(data) => {
 							const newNotebook = {
-								author: request.author,
-								course: request.course,
-								description: request.description,
-								institution: request.institution,
 								name: request.name,
-								notebookReference: data.notebookId,
-								private: request.private,
-								title: request.title,
-								userId: uid,
+								description: request.description,
+								noteId: data.noteId,
 							};
 
-							// this.notebooks.push(newNotebook);
 							observer.next({
 								notebook: newNotebook,
-								id: data.notebookId,
+								id: data.noteId,
 							});
-
-							// this.openNotebook(data.notebookId);
 						},
 						(error) => {
 							console.log(error);
@@ -99,17 +84,16 @@ export class NotesService {
 						}
 					);
 				}
-
-				return null;
 			});
 		});
 	}
 
 	/**
 	 * Edit the details of a notebook
-	 * @param id the id of the notebook to be updated
+	 * @param notebookId
+	 * @param noteId
 	 */
-	editNotebook(id: string): Observable<any> {
+	editNotebook(notebookId: string, noteId: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -123,61 +107,39 @@ export class NotesService {
 		}
 
 		return Observable.create((observer: any) => {
-			// Get the notebook info to edit
-			this.notebookService.getNoteBookById(id).subscribe((result) => {
-				this.title = result.title;
-				this.course = result.course;
-				this.description = result.description;
-				this.institution = result.institution;
-				this.private = result.private;
+			// Open dialog
+			const dialogRef = this.dialog.open(AddNotebookComponent, {
+				width: screenWidth,
+				data: {
+					title: this.title,
+					description: this.description,
+				},
+			});
 
-				// Open dialog
-				const dialogRef = this.dialog.open(AddNotebookComponent, {
-					width: screenWidth,
-					data: {
-						title: this.title,
-						course: this.course,
-						description: this.description,
-						institution: this.institution,
-						private: this.private,
-					},
-				});
+			// Get info and update notebook after dialog is closed
+			dialogRef.afterClosed().subscribe((data) => {
+				// If the user filled out the form
+				if (data !== undefined) {
+					const request = {
+						notebookId,
+						noteId,
+						name: data.title,
+						description: data.description,
+					};
 
-				// Get info and update notebook after dialog is closed
-				dialogRef.afterClosed().subscribe((data) => {
-					// If the user filled out the form
-					if (data !== undefined) {
-						const request = {
-							title: data.title,
-							author: 'Arno',
-							course: data.course,
-							description: data.description,
-							institution: data.institution,
-							name: 'Arno',
-							surname: 'Moller',
-							private: data.private,
-							username: 'userArno',
-						};
-
-						// Call service and update notebook
-						this.notebookService
-							.updateNotebook(request, id)
-							.subscribe(
-								() => {
-									observer.next({
-										course: request.course,
-										description: request.description,
-										institution: request.institution,
-										private: request.private,
-										title: request.title,
-									});
-								},
-								(error) => {
-									console.log(error);
-								}
-							);
-					}
-				});
+					// Call service and update notebook
+					this.notebookService.updateNote(request).subscribe(
+						() => {
+							observer.next({
+								description: request.description,
+								title: request.name,
+							});
+						},
+						(error) => {
+							console.log(error);
+						}
+					);
+				}
 			});
 		});
 	}
@@ -185,7 +147,7 @@ export class NotesService {
 	/**
 	 * Delete a notebook
 	 */
-	removeNotebook(notebookID: string): Observable<any> {
+	removeNote(notebookID: string, noteId: string): Observable<any> {
 		return Observable.create((observer: any) => {
 			const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
 				// width: '50%',
@@ -196,7 +158,7 @@ export class NotesService {
 				if (result === true) {
 					if (notebookID !== '') {
 						this.notebookService
-							.removeNotebook(notebookID)
+							.deleteNote(notebookID, noteId)
 							.subscribe(
 								() => {
 									observer.next(true);

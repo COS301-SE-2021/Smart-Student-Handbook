@@ -105,6 +105,7 @@ export class NotebookService {
 			notebookId: noteDto.notebookId,
 			noteId: noteDto.noteId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 

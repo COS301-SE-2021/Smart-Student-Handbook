@@ -153,106 +153,47 @@ export class NotesPanelComponent implements OnInit {
 
 	/**
 	 * Used in notebook component to open a specific notebook
-	 * @param _id the id of the notebook to be opened
+	 * @param _noteBookId
+	 * @param _noteId
 	 * @param _title
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_id: string, _title: string) {}
+	openNotebook(_noteBookId: string, _noteId: string, _title: string) {}
 
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
 	 */
 	editNotebook(id: string) {
-		// Get the notebook info to edit
-
-		// Open dialog
-		const dialogRef = this.dialog.open(AddNotebookComponent, {
-			width: '50%',
-			data: {
-				title: this.title,
-				description: this.description,
-			},
-		});
-
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((data) => {
-			// If the user filled out the form
-			if (data !== undefined) {
-				const request = {
-					notebookId: this.notebookId,
-					noteId: id,
-					name: this.title,
-					description: this.description,
-				};
-
-				// Call service and update notebook
-				this.notebookService.updateNote(request).subscribe(
-					() => {
-						this.notes = this.notes.map((notebook: any) => {
-							if (notebook.notebookReference === id) {
-								notebook.description = request.description;
-								notebook.title = request.name;
-							}
-
-							return notebook;
-						});
-					},
-					(error) => {
-						console.log(error);
+		this.notesService
+			.editNotebook(this.notebookId, id)
+			.subscribe((newNote) => {
+				this.notes = this.notes.map((notebook: any) => {
+					if (notebook.noteId === id) {
+						notebook.description = newNote.description;
+						notebook.name = newNote.title;
 					}
-				);
-			}
-		});
+
+					return notebook;
+				});
+			});
 	}
 
 	/**
 	 * Create a new notebook
 	 */
-	createNewNotebook() {
-		// Open dialog
-		const dialogRef = this.dialog.open(AddNotebookComponent, {
-			width: '50%',
-			data: {
-				title: this.title,
-				description: this.description,
-			},
-		});
+	createNewNote() {
+		this.notesService
+			.createNewNote(this.notebookId)
+			.subscribe((newNote) => {
+				this.notes.push(newNote.notebook);
 
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			// If the user filled out the form
-			if (result !== undefined) {
-				// Create request object
-				const request = {
-					notebookId: this.notebookId,
-					name: result.title,
-					description: result.description,
-				};
-
-				console.log(request);
-				// this.notebookTitle = result.title;
-
-				// Call service and create notebook
-				this.notebookService.createNote(request).subscribe(
-					(data) => {
-						const newNotebook = {
-							name: request.name,
-							description: request.description,
-							notebookReference: data.noteId,
-						};
-
-						this.notes.push(newNotebook);
-
-						this.openNotebook(data.noteId, result.title);
-					},
-					(error) => {
-						console.log(error);
-						// this.LeftMenuComponent.getUserNotebooks();
-					}
+				this.openNotebook(
+					this.notebookId,
+					newNote.id,
+					newNote.notebook.name
 				);
-			}
-		});
+			});
 	}
 
 	/**
@@ -260,10 +201,10 @@ export class NotesPanelComponent implements OnInit {
 	 * (The notebook is deleted in the editor component)
 	 * @param id the id of the notebook to be removed
 	 */
-	removeNotebook(id: string) {
+	removeNote(id: string) {
 		// eslint-disable-next-line array-callback-return
 		this.notes = this.notes.filter((notebook: any) => {
-			if (notebook.notebookReference !== id) {
+			if (notebook.noteId !== id) {
 				return notebook;
 			}
 		});

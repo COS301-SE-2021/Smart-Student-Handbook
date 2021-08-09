@@ -14,7 +14,7 @@
 				</button>
 
 				<h2 style="display: inline">Notes</h2>
-				<button mat-icon-button (click)="createNewNotebook()">
+				<button mat-icon-button (click)="createNewNote()">
 					<mat-icon>add_circle_outline</mat-icon>
 				</button>
 			</div>
@@ -34,7 +34,7 @@
             <mat-icon class="editNotebookIcon">edit</mat-icon>
           </button>
 
-          <div class="text-left" (click)="openNotebook(note.noteId, note.name)">
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name)">
             <mat-card-header>
               <mat-card-subtitle id="date">
                 JUNE 17 2021

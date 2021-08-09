@@ -36,6 +36,8 @@ export class NotesComponent implements OnInit {
 
 	notes: any = [];
 
+	notebookId: string = '';
+
 	constructor(
 		private router: Router,
 		private notesService: NotesService,
@@ -58,6 +60,8 @@ export class NotesComponent implements OnInit {
 
 		const notebookId = localStorage.getItem('notebookId');
 
+		if (notebookId) this.notebookId = notebookId;
+
 		this.notes = [];
 
 		if (notebookId !== null) {
@@ -73,23 +77,25 @@ export class NotesComponent implements OnInit {
 		}
 	}
 
-	async openNote(id: string, title: string) {
+	async openNote(noteId: string, title: string) {
 		await this.router.navigate(['notebook']);
 
 		// setTimeout(() => {
 		//   this.notebook.loadEditor(id);
 		// }, 2000)
-		this.notebookEventEmitterService.LoadEditor(id, title);
+		this.notebookEventEmitterService.LoadEditor(
+			this.notebookId,
+			noteId,
+			title
+		);
 	}
 
 	createNewNotebook() {
-		this.notesService
-			.createNewNotebook(this.profile.name, this.user.uid)
-			.subscribe((data) => {
-				// console.log(data);
-				this.openNote(data.id);
-				// data = id, notebook
-			});
+		this.notesService.createNewNote(this.notebookId).subscribe((data) => {
+			console.log(data);
+			this.openNote(data.id, data.notebook.name);
+			// data = id, notebook
+		});
 	}
 
 	/**
@@ -97,32 +103,34 @@ export class NotesComponent implements OnInit {
 	 * @param id the id of the notebook to be updated
 	 */
 	editNote(id: string) {
-		this.notesService.editNotebook(id).subscribe((data) => {
-			if (data) {
-				this.notes = this.notes.map((note: any) => {
-					if (note.notebookReference === id) {
-						note.course = data.course;
-						note.description = data.description;
-						note.institution = data.institution;
-						note.private = data.private;
-						note.title = data.title;
-					}
+		this.notesService
+			.editNotebook(this.notebookId, id)
+			.subscribe((data) => {
+				if (data) {
+					this.notes = this.notes.map((note: any) => {
+						if (note.noteId === id) {
+							note.description = data.description;
+							note.name = data.title;
+						}
 
-					return note;
-				});
-			}
-		});
+						return note;
+					});
+				}
+			});
 	}
 
 	deleteNote(id: string) {
-		this.notesService.removeNotebook(id).subscribe((removed) => {
-			if (removed) {
-				this.notes = this.notes.filter((notebook: any) => {
-					if (notebook.notebookReference !== id) {
-						return notebook;
-					}
-				});
-			}
-		});
+		console.log(this.notebookId, id);
+		this.notesService
+			.removeNote(this.notebookId, id)
+			.subscribe((removed) => {
+				if (removed) {
+					this.notes = this.notes.filter((notebook: any) => {
+						if (notebook.noteId !== id) {
+							return notebook;
+						}
+					});
+				}
+			});
 	}
 }
