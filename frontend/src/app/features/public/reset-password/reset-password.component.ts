@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ResetPasswordService } from '@app/services/reset-password.service';
+import { MustMatch } from '@app/features/public/register/must-match.validator';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
 	selector: 'app-rest-password',
@@ -11,12 +15,23 @@ export class ResetPasswordComponent {
 
 	errorMessage: string = '';
 
-	constructor(private fb: FormBuilder) {
+	constructor(
+		private fb: FormBuilder,
+		private resetPasswordService: ResetPasswordService,
+		private activeRoute: ActivatedRoute,
+		private router: Router,
+		private snackBar: MatSnackBar
+	) {
 		// setup the form and validation
-		this.form = this.fb.group({
-			password: ['', Validators.required],
-			confirmPassword: ['', Validators.required],
-		});
+		this.form = this.fb.group(
+			{
+				password: ['', Validators.required],
+				confirmPassword: ['', Validators.required],
+			},
+			{
+				validator: MustMatch('password', 'confirmPassword'),
+			}
+		);
 	}
 
 	onSubmit() {
@@ -24,17 +39,29 @@ export class ResetPasswordComponent {
 		if (this.form.valid) {
 			const password = this.form.get('password')?.value;
 
-			const resetPassword = document.getElementById(
-				'resetPassword'
-			) as HTMLDivElement;
+			let isLocalHost = false;
+			if (window.location.host.includes('localhost')) {
+				isLocalHost = true;
+			}
 
-			resetPassword.style.display = 'none';
+			let email = '';
+			let code = '';
 
-			const checkMail = document.getElementById(
-				'checkMail'
-			) as HTMLDivElement;
+			this.activeRoute.queryParams.subscribe((params) => {
+				email = params.email;
+				code = params.code;
 
-			checkMail.style.display = 'block';
+				this.resetPasswordService
+					.finalizeResetPassword(email, isLocalHost, password, code)
+					.subscribe(() => {
+						this.snackBar
+							.open('Password successfully reset', 'Login')
+							.afterDismissed()
+							.subscribe(() => {
+								this.router.navigate(['account/login']);
+							});
+					});
+			});
 		}
 	}
 }
