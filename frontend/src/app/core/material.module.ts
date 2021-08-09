@@ -49,6 +49,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -70,6 +71,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		DragDropModule,
 
 		// Material
+		ReactiveFormsModule,
+		FormsModule,
 		MatListModule,
 		MatTreeModule,
 		MatCommonModule,

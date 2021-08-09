@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { LeftMenuComponent } from '@app/core';
-import { NotesPanelComponent } from '@app/components';
+import { LeftMenuComponent, MaterialModule } from '@app/core';
+import { NotesPanelComponent, TreeViewComponent } from '@app/components';
+import { RouterModule } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('MenuPanelComponent', () => {
 	let component: LeftMenuComponent;
@@ -11,10 +15,15 @@ describe('MenuPanelComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [LeftMenuComponent],
-			imports: [],
+			imports: [
+				MaterialModule,
+				RouterModule,
+				HttpClientTestingModule,
+				RouterTestingModule.withRoutes([]),
+			],
+			declarations: [LeftMenuComponent, TreeViewComponent],
 			providers: [NotesPanelComponent], // Some stubs used here
-			// schemas: []
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});
 

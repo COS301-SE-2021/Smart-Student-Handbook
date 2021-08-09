@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -97,8 +96,6 @@ import { AppRoutingModule } from './app-routing.module';
 	],
 	imports: [
 		MaterialModule,
-		FormsModule,
-		ReactiveFormsModule,
 		BrowserModule,
 		AppRoutingModule,
 		BrowserAnimationsModule,

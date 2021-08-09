@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddNotebookComponent } from '@app/components';
+import { MaterialModule } from '@app/core';
+import { RouterModule } from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AddNotebookComponent', () => {
 	let component: AddNotebookComponent;
@@ -8,10 +11,10 @@ describe('AddNotebookComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [],
+			imports: [MaterialModule, RouterModule],
 			declarations: [AddNotebookComponent],
 			providers: [], // Some stubs used here
-			// schemas: []
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});
 

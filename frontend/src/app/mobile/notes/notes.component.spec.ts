@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NotesComponent } from '@app/mobile';
+import { MaterialModule } from '@app/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('NotesComponent', () => {
 	let component: NotesComponent;
@@ -8,10 +12,14 @@ describe('NotesComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [],
+			imports: [
+				MaterialModule,
+				HttpClientTestingModule,
+				RouterTestingModule.withRoutes([]),
+			],
 			declarations: [NotesComponent],
 			providers: [], // Some stubs used here
-			// schemas: []
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});
 

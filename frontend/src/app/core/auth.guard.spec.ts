@@ -10,7 +10,7 @@ describe('AuthGuard', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [RouterTestingModule, HttpClientTestingModule],
-			declarations: [],
+			declarations: [AuthGuard],
 			providers: [], // Some stubs used here
 			// schemas: []
 		});

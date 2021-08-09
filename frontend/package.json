@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:coverage": "jest --coverage",
+    "test:detect": "jest --detectOpenHandles",
     "compodoc": "npx compodoc -p tsconfig.doc.json",
     "lint": "ng lint"
   },
