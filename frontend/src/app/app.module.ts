@@ -61,6 +61,9 @@ import {
 	TreeViewComponent,
 } from '@app/components';
 
+// Long press
+import { NgxLongPress2Module } from 'ngx-long-press2';
+
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -113,6 +116,7 @@ import { AppRoutingModule } from './app-routing.module';
 		// AngularFireStorageModule,
 		AngularFirestoreModule,
 		FlexLayoutModule,
+		NgxLongPress2Module,
 		HttpClientModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: environment.production,
