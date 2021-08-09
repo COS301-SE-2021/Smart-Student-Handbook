@@ -180,6 +180,14 @@ export class NotebookService {
 		}
 	}
 
+	async deleteUserNotebook(notebookId: string, userId: string): Promise<void> {
+		try {
+			await admin.firestore().collection(`userContent/${userId}/Notebooks`).doc(notebookId).delete();
+		} catch (e) {
+			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	async createNote(noteDto: NoteDto): Promise<Response> {
 		const userId = await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
@@ -424,7 +432,7 @@ export class NotebookService {
 
 		access.push(accessDto);
 
-		await this.addNotebookToUser(accessDto.notebookId, userId);
+		await this.addNotebookToUser(accessDto.notebookId, accessDto.userId);
 
 		return this.updateAccess(accessDto.notebookId, access);
 	}
@@ -506,6 +514,8 @@ export class NotebookService {
 		}
 
 		await this.updateAccess(checkAccessDto.notebookId, access);
+
+		await this.deleteUserNotebook(checkAccessDto.notebookId, checkAccessDto.userId);
 
 		return {
 			message: 'Successfully removed user from access list!',
