@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
-import { user } from 'firebase-functions/lib/providers/auth';
 import { NotebookDto } from './dto/notebook.dto';
 import { NoteDto } from './dto/note.dto';
 import { Notebook } from './interfaces/notebook.interface';
@@ -9,7 +8,6 @@ import { Response } from './interfaces/response.interface';
 import { Note } from './interfaces/note.interface';
 import { ReviewDto } from './dto/review.dto';
 import { AccessDto } from './dto/access.dto';
-import { CheckAccessDto } from './dto/checkAccess.dto';
 
 @Controller('notebook')
 export class NotebookController {

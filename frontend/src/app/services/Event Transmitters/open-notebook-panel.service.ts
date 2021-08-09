@@ -9,7 +9,7 @@ export class OpenNotebookPanelService {
 
 	toggleSubscribe: Subscription | undefined;
 
-	toggleNotePanel() {
-		this.togglePanelEmitter.emit();
+	toggleNotePanel(notebookId: string) {
+		this.togglePanelEmitter.emit(notebookId);
 	}
 }
