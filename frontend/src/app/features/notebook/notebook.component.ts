@@ -93,8 +93,8 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
 				this.notebookEventEmitterService.loadEmitter.subscribe(
-					({ id, title }) => {
-						this.loadEditor(id, title);
+					({ notebookId, noteId, title }) => {
+						this.loadEditor(notebookId, noteId, title);
 					}
 				);
 			// this.notebookEventEmitterService.getTitleEmitter.subscribe(
@@ -130,12 +130,16 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		// 	this.notePanelComponent.openedCloseToggle();
 		// };
 
-		this.notePanelComponent.openNotebook = (id: string, title: string) => {
-			this.editorComponent.loadEditor(id, title);
+		this.notePanelComponent.openNotebook = (
+			notebookId: string,
+			noteId: string,
+			title: string
+		) => {
+			this.editorComponent.loadEditor(notebookId, noteId, title);
 		};
 
-		this.editorComponent.removeNotebookCard = (id: string) => {
-			this.notePanelComponent.removeNotebook(id);
+		this.editorComponent.removeNoteCard = (id: string) => {
+			this.notePanelComponent.removeNote(id);
 		};
 	}
 
@@ -149,7 +153,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(id: string, title: string) {
-		await this.editorComponent.loadEditor(id, title);
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		await this.editorComponent.loadEditor(notebookId, noteId, title);
 	}
 }

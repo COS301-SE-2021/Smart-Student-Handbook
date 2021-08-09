@@ -7,3 +7,10 @@
 #check{
   margin: 15px 0px 10px 0px;
 }
+
+//Mobile view
+@media only screen and (max-width: 600px) {
+  ::ng-deep mat-dialog-container{
+    width: 100vw !important;
+  }
+}
