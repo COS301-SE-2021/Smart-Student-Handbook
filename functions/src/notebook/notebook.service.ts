@@ -33,7 +33,7 @@ export class NotebookService {
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-
+      
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
 					title: doc.data().title,
@@ -49,6 +49,8 @@ export class NotebookService {
 					tags: doc.data().tags,
 				});
 			});
+			console.log('notebooks');
+			console.log(notebooks);
 
 			return notebooks;
 		} catch (e) {
@@ -430,7 +432,11 @@ export class NotebookService {
 
 		const access: Access[] = await this.getAccessList(accessDto.notebookId);
 
-		access.push(accessDto);
+		access.push({
+			displayName: accessDto.displayName,
+			userId: accessDto.userId,
+			profileUrl: accessDto.profileUrl,
+		});
 
 		await this.addNotebookToUser(accessDto.notebookId, accessDto.userId);
 

@@ -14,10 +14,8 @@
     ],
     "source": "functions"
   },
-  "hosting": [
+  "hosting":
 	{
-	  "target": "master",
-
 	  "public": "frontend/dist/smart-student",
 	  "ignore": [
 		"firebase.json",
@@ -39,31 +37,6 @@
 		"npm --prefix functions run build"
 	  ]
 	},
-	{
-	  "target": "develop",
-
-	  "public": "frontend/dist/smart-student",
-	  "ignore": [
-		"firebase.json",
-		"**/.*",
-		"**/node_modules/**"
-	  ],
-	  "rewrites": [
-		{
-		  "source": "/api",
-		  "function": "api"
-		},
-		{
-		  "source": "**",
-		  "function": "app"
-		}
-	  ],
-	  "predeploy": [
-		"npm --prefix frontend run build",
-		"npm --prefix functions run build"
-	  ]
-	}
-  ],
   "storage": {
     "rules": "storage.rules"
   },

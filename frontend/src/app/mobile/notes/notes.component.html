@@ -11,10 +11,10 @@
 		<div
 			class="col-6 col-sm-4 noteContainer"
 			*ngFor="let note of notes; let i = index"
-			(click)="openNote(note.notebookReference)"
+			(click)="openNote(note.noteId, note.name)"
 		>
 			<mat-card class="note">
-				<h3 class="title">{{ note.title }}</h3>
+				<h3 class="title">{{ note.name }}</h3>
 				<h4 class="description">{{ note.description }}</h4>
 				<div
 					id="bottomColor"
