@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '@app/services';
+import { map } from 'rxjs/operators';
 
 // API URL for the account endpoint on the backend
 let addr;
@@ -88,14 +89,22 @@ export class AccountService {
 	 * @param password
 	 */
 	loginUser(email: string, password: string): Observable<any> {
-		return this.http.post(
-			`${ACCOUNT_API}loginUser`,
-			{
-				email,
-				password,
-			},
-			httpOptions
-		);
+		return this.http
+			.post(
+				`${ACCOUNT_API}loginUser`,
+				{
+					email,
+					password,
+				},
+				httpOptions
+			)
+			.pipe(
+				map((user) => {
+					console.log('aaaaaaaaaaaaaaaaaaaaaaaaa');
+					console.log(user);
+					return user;
+				})
+			);
 	}
 
 	/**
