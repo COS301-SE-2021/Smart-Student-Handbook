@@ -3,7 +3,7 @@ export class ReviewDto {
 
 	readonly message?: string;
 
-	readonly rating?: string;
+	readonly rating: number;
 
 	readonly displayName?: string;
 

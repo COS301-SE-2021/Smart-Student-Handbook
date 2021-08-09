@@ -38,6 +38,11 @@ export class NotebookController {
 		return this.notebookService.updateNote(noteDto);
 	}
 
+	@Put('updateNotebook')
+	updateNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
+		return this.notebookService.updateNotebook(notebookDto);
+	}
+
 	@Delete('deleteNotebook/:notebookId')
 	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
 		return this.notebookService.deleteNotebook(notebookId);
