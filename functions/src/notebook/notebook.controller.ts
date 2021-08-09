@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { user } from 'firebase-functions/lib/providers/auth';
 import { NotebookDto } from './dto/notebook.dto';
 import { NoteDto } from './dto/note.dto';
 import { Notebook } from './interfaces/notebook.interface';
@@ -24,9 +25,9 @@ export class NotebookController {
 		return this.notebookService.getUserNotebooks();
 	}
 
-	@Get('getNotes')
-	getNotes(@Body() noteDto: NoteDto): Promise<Note[]> {
-		return this.notebookService.getNotes(noteDto.notebookId);
+	@Get('getNotes/:noteId')
+	getNotes(@Param('noteId') noteId): Promise<Note[]> {
+		return this.notebookService.getNotes(noteId);
 	}
 
 	@Post('createNote')
@@ -44,9 +45,9 @@ export class NotebookController {
 		return this.notebookService.deleteNotebook(notebookId);
 	}
 
-	@Delete('deleteNote')
-	deleteNote(@Body() noteDto: NoteDto): Promise<Response> {
-		return this.notebookService.deleteNote(noteDto);
+	@Delete('deleteNote/:notebookId/:noteId')
+	deleteNote(@Param('notebookId') notebookId, @Param('noteId') noteId): Promise<Response> {
+		return this.notebookService.deleteNote({ notebookId, noteId });
 	}
 
 	@Post('addNotebookReview')
@@ -69,13 +70,13 @@ export class NotebookController {
 		return this.notebookService.addAccess(accessDto);
 	}
 
-	@Get('checkUserAccess')
-	checkUserAccess(@Body() checkAccessDto: CheckAccessDto): Promise<boolean> {
-		return this.notebookService.checkUserAccess(checkAccessDto);
+	@Get('checkUserAccess/:userId/:notebookId')
+	checkUserAccess(@Param('userId') userId, @Param('notebookId') notebookId): Promise<boolean> {
+		return this.notebookService.checkUserAccess({ userId, notebookId });
 	}
 
-	@Delete('removeUserAccess')
-	removeUserAccess(@Body() checkAccessDto: CheckAccessDto): Promise<Response> {
-		return this.notebookService.removeUserAccess(checkAccessDto);
+	@Delete('removeUserAccess/:userId/:notebookId')
+	removeUserAccess(@Param('userId') userId, @Param('notebookId') notebookId): Promise<Response> {
+		return this.notebookService.removeUserAccess({ userId, notebookId });
 	}
 }
