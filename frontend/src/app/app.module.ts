@@ -26,7 +26,6 @@ import {
 import { environment } from '@environments/environment';
 
 // Services
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
 
 // Features
 import {
@@ -62,6 +61,10 @@ import {
 	TreeViewComponent,
 } from '@app/components';
 
+// Long press
+import { NgxLongPress2Module } from 'ngx-long-press2';
+
+import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ForgotPasswordComponent } from './features/public/forgot-password/forgot-password.component';
@@ -115,6 +118,7 @@ import { ForgotPasswordComponent } from './features/public/forgot-password/forgo
 		// AngularFireStorageModule,
 		AngularFirestoreModule,
 		FlexLayoutModule,
+		NgxLongPress2Module,
 		HttpClientModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: environment.production,

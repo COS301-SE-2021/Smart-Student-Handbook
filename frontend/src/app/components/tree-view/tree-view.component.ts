@@ -16,8 +16,6 @@ import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-
 export class TreeViewComponent implements OnInit {
 	user: any;
 
-	profile: any;
-
 	/**
 	 * If a tree node has children, transform the node to a parent node
 	 * @param node the node to be transformed
@@ -60,7 +58,6 @@ export class TreeViewComponent implements OnInit {
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
 		this.getUserNotebooks();
 	}

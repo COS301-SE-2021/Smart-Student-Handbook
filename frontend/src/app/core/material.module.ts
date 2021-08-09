@@ -104,6 +104,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 		MatSnackBarModule,
 		// MatTableModule,
 		// MatSortModule,
+		MatTooltipModule,
 		MatPaginatorModule,
 		MatBottomSheetModule,
 		MatDividerModule,

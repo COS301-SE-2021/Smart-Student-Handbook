@@ -13,6 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { ConfirmDeleteComponent } from '@app/components';
+import { NotesService } from '@app/services/notes.service';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -86,6 +87,8 @@ export class EditorComponent {
 
 	notebookID!: string;
 
+	noteId!: string;
+
 	notebookTitle: string = 'Smart Student';
 
 	panelOpenState = false;
@@ -107,16 +110,19 @@ export class EditorComponent {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
+		private notesService: NotesService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
-	 * @param id the id of the notebook to load
+	 * @param notebookId
+	 * @param noteId
 	 * @param title
 	 */
-	async loadEditor(id: string, title: string) {
-		this.notebookID = id;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.noteId = noteId;
+		this.notebookID = notebookId;
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
@@ -235,7 +241,7 @@ export class EditorComponent {
 		// call event transmitter
 
 		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${id}`);
+		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
 
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
@@ -245,7 +251,7 @@ export class EditorComponent {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notebook/${id}`)
+						.ref(`notebook/${noteId}`)
 						.set({
 							outputData: {
 								blocks: [
@@ -331,39 +337,36 @@ export class EditorComponent {
 	/**
 	 * Delete a notebook
 	 */
-	removeNotebook() {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-			// width: '50%',
-		});
+	removeNote() {
+		this.notesService
+			.removeNote(this.notebookID, this.noteId)
+			.subscribe((removed) => {
+				if (removed) {
+					const editor = this.Editor;
+					editor.clear();
 
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				if (this.notebookID !== '') {
-					// this.notebookService
-					// 	.removeNotebook(this.notebookID)
-					// 	.subscribe(
-					// 		(data) => {
-					// 			console.log(data);
-					//
-					// 			const editor = this.Editor;
-					// 			editor.clear();
-					//
-					// 			this.notebookTitle = '';
-					//
-					// 			this.removeNotebookCard(this.notebookID);
-					// 		},
-					// 		(error) => {
-					// 			console.log(error);
-					// 		}
-					// 	);
+					this.notebookTitle = '';
+
+					this.removeNoteCard(this.noteId);
+
+					this.showDefaultImage();
 				}
-			}
-		});
+			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	removeNotebookCard(_id: string) {}
+	removeNoteCard(_id: string) {}
+
+	showDefaultImage() {
+		console.log('delete');
+		const e = document.getElementById('editor') as HTMLElement;
+		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
+
+		this.Editor.destroy();
+		// @ts-ignore
+		this.Editor = undefined;
+		this.notebookTitle = 'Smart Student';
+	}
 
 	/**
 	 * Show menu when user clicks on ellipsis

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@app/services';
@@ -8,7 +8,7 @@ import { AccountService } from '@app/services';
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent {
 	form: FormGroup;
 
 	loginFailed = false;
@@ -21,21 +21,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private accountService: AccountService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
+
 		// setup the form and validation
 		this.form = this.fb.group({
 			email: ['', Validators.email],
 			password: ['', Validators.required],
 		});
-	}
-
-	ngOnInit() {
-		// add image background to body
-		document.body.className = 'backgroundIMG';
-	}
-
-	ngOnDestroy() {
-		// Remove image background to body
-		document.body.className = '';
 	}
 
 	// When user submits Login form
@@ -49,9 +44,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				() => {
+				(userInfo: any) => {
+					console.log(userInfo);
+
 					this.loginFailed = false;
-					this.accountService.setUserSessionLocalStorage();
+					// this.accountService.setUserSessionLocalStorage();
+					localStorage.setItem('user', JSON.stringify(userInfo));
 					this.accountService.setLoginState = true;
 					localStorage.setItem('loginState', 'true');
 

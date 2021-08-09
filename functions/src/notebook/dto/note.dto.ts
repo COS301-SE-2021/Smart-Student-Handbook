@@ -3,5 +3,7 @@ export class NoteDto {
 
 	readonly notebookId: string;
 
-	readonly noteId: string;
+	readonly noteId?: string;
+
+	readonly description?: string;
 }

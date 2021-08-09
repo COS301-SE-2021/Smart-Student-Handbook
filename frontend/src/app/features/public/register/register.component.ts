@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { MustMatch } from './must-match.validator';
 	templateUrl: './register.component.html',
 	styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent {
 	form: FormGroup;
 
 	registerFailed = false;
@@ -26,6 +26,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 		private accountService: AccountService,
 		private profileService: ProfileService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
+
 		// setup the form and validation
 		this.form = this.fb.group(
 			{
@@ -39,16 +44,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
 				validator: MustMatch('password', 'passwordConfirm'),
 			}
 		);
-	}
-
-	async ngOnInit(): Promise<void> {
-		// add image background to body
-		document.body.className = 'backgroundIMG';
-	}
-
-	ngOnDestroy() {
-		// Remove image background to body
-		document.body.className = '';
 	}
 
 	// When user submits Register form

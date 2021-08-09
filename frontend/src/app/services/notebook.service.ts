@@ -89,6 +89,7 @@ export class NotebookService {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -104,6 +105,7 @@ export class NotebookService {
 			notebookId: noteDto.notebookId,
 			noteId: noteDto.noteId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -220,46 +222,4 @@ export class NotebookService {
 			`${NOTEBOOK_API}/removeUserAccess/${checkAccessDto.userId}/${checkAccessDto.notebookId}`
 		);
 	}
-
-	// getUserNotebooks(userId: string): Observable<any> {
-	// getUserNotebooks(): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findAllUserNotebooks/`
-	// 	);
-	// }
-	//
-	// getNoteBookById(noteBookId: string): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findNotebookById/${noteBookId}`
-	// 	);
-	// }
-	//
-	// createNotebook(notebookDto: NotebookDto) {
-	// 	return this.httpClient.request<any>(
-	// 		'post',
-	// 		`${NOTEBOOK_API}notebook/createNotebook/`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// updateNotebook(notebookDto: NotebookDto, Id: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'put',
-	// 		`${NOTEBOOK_API}notebook/updateNotebook/${Id}`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// removeNotebook(noteBookId: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'delete',
-	// 		`${NOTEBOOK_API}notebook/deleteNotebook/${noteBookId}`
-	// 	);
-	// }
 }
