@@ -12,8 +12,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { NotebookService, NotebookEventEmitterService } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
-import { ConfirmDeleteComponent } from '@app/components';
 import { NotesService } from '@app/services/notes.service';
+import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -104,6 +104,7 @@ export class EditorComponent {
 	 * @param notebookService To call methods that apply to the notebooks
 	 * @param dialog Show dialog when a user wants to delete a notebook for example
 	 * @param bottomSheet
+	 * @param notesService
 	 * @param notebookEventEmitterService
 	 */
 	constructor(
@@ -131,6 +132,7 @@ export class EditorComponent {
 			const editor = new EditorJS({
 				holder: 'editor',
 				tools: {
+					snippet: AddTagsTool,
 					header: {
 						class: this.Header,
 						shortcut: 'CTRL+SHIFT+H',
@@ -324,7 +326,7 @@ export class EditorComponent {
 				// console.log(this.notebookID, outputData);
 
 				if (outputData.blocks.length > 0) {
-					firebase.database().ref(`notebook/${this.notebookID}`).set({
+					firebase.database().ref(`notebook/${this.noteId}`).set({
 						outputData,
 					});
 				}
