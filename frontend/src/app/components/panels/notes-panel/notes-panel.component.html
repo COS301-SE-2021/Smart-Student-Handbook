@@ -2,13 +2,13 @@
 	id="notes-container"
 	>
 	<mat-sidenav #sidenav mode="side" [(opened)]="open" id="sidenav">
-		<div id="panelContent" align="end">
-			<div align="center" class="text-left" style="margin-top: 15px">
+		<div id="panelContent">
+			<div class="text-center" style="margin-top: 15px">
 				<button
 					mat-icon-button
 					id="closeNotePanelBtn"
 					#closeNotePanelBtn
-					(click)="openedCloseToggle()"
+					(click)="closePanel()"
 				>
 					<mat-icon>keyboard_arrow_left</mat-icon>
 				</button>
@@ -19,33 +19,35 @@
 				</button>
 			</div>
 
+      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+
       <div id="noteHolderDiv">
         <mat-card
-          align="start"
           class="card text-left"
-          *ngFor="let notebook of notebooks"
+          *ngFor="let note of notes"
         >
           <button
             mat-icon-button
-            class="favorite-icon"
-            class="editNotebookBtn"
-            (click)="editNotebook(notebook.notebookReference)"
+            class="favorite-icon editNotebookBtn"
+            (click)="editNotebook(note.noteId)"
           >
             <mat-icon class="editNotebookIcon">edit</mat-icon>
           </button>
 
-          <div (click)="openNotebook(notebook.notebookReference)">
+          <div class="text-left" (click)="openNotebook(note.noteId, note.name)">
             <mat-card-header>
-              <mat-card-subtitle id="subTitle"
-                >JUNE 17 2021</mat-card-subtitle
-              >
-              <mat-card-title id="username">{{
-                notebook.title
-              }}</mat-card-title>
+              <mat-card-subtitle id="date">
+                JUNE 17 2021
+              </mat-card-subtitle>
 
-              <mat-card-title id="description">{{
-                notebook.description
-              }}</mat-card-title>
+              <mat-card-title id="noteCardTitle">
+                {{ note.name }}
+              </mat-card-title>
+
+              <mat-card-title id="description">
+<!--                {{note.description}}-->
+                Placeholder description
+              </mat-card-title>
             </mat-card-header>
           </div>
         </mat-card>
@@ -58,10 +60,17 @@
 		<!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
 		<button
 			mat-icon-button
-			id="openPanelBtn"
-			(click)="openedCloseToggle()"
+			class="openPanelBtn"
+			(click)="openPanelBtn()"
 		>
 			<mat-icon>keyboard_arrow_right</mat-icon>
 		</button>
+
+    <button
+      style="display: none"
+      id="openNotesPanelBtn"
+      (click)="openPanel()"
+    ></button>
+
 	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -94,7 +94,7 @@ export class MessagingService {
 	subscribeToTopic(currentToken: string) {
 		return this.httpClient.request<any>(
 			'post',
-			`${MESSAGE_API}subscribeToTopic`,
+			`${MESSAGE_API}/notification/subscribeToTopic`,
 			{
 				body: {
 					token: currentToken,

@@ -113,8 +113,9 @@ export class EditorComponent {
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
 	 * @param id the id of the notebook to load
+	 * @param title
 	 */
-	async loadEditor(id: string) {
+	async loadEditor(id: string, title: string) {
 		this.notebookID = id;
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
@@ -227,55 +228,55 @@ export class EditorComponent {
 		/**
 		 * Get the specific notebook details with notebook id
 		 */
-		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			this.notebookTitle = result.title;
-			this.notebookEventEmitterService.GetNoteTitle(result.title);
+		// this.notebookService.getNoteBookById(id).subscribe((result) => {
+		this.notebookTitle = title;
+		this.notebookEventEmitterService.GetNoteTitle(title);
 
-			// call event transmitter
+		// call event transmitter
 
-			// Change the path to the correct notebook's path
-			const dbRefObject = firebase.database().ref(`notebook/${id}`);
+		// Change the path to the correct notebook's path
+		const dbRefObject = firebase.database().ref(`notebook/${id}`);
 
-			/**
-			 * Get the values from the realtime database and insert block if notebook is empty
-			 */
-			dbRefObject
-				.once('value', (snap) => {
-					if (snap.val() === null) {
-						firebase
-							.database()
-							.ref(`notebook/${id}`)
-							.set({
-								outputData: {
-									blocks: [
-										{
-											id: 'jTFbQOD8j3',
-											type: 'header',
-											data: {
-												text: `${this.notebookTitle} 🚀`,
-												level: 2,
-											},
+		/**
+		 * Get the values from the realtime database and insert block if notebook is empty
+		 */
+		dbRefObject
+			.once('value', (snap) => {
+				if (snap.val() === null) {
+					firebase
+						.database()
+						.ref(`notebook/${id}`)
+						.set({
+							outputData: {
+								blocks: [
+									{
+										id: 'jTFbQOD8j3',
+										type: 'header',
+										data: {
+											text: `${this.notebookTitle} 🚀`,
+											level: 2,
 										},
-									],
-								},
-							});
-					}
-				})
-				.then(() => {
-					/**
-					 * Render output on Editor
-					 */
-					dbRefObject.once('value', (snap) => {
-						// console.log(snap.val());
-						editor.render(snap.val().outputData);
-					});
-
-					e = document.getElementById('editor') as HTMLElement;
-					e.style.overflowY = 'scroll';
-
-					if (progressbar) progressbar.style.display = 'none';
+									},
+								],
+							},
+						});
+				}
+			})
+			.then(() => {
+				/**
+				 * Render output on Editor
+				 */
+				dbRefObject.once('value', (snap) => {
+					// console.log(snap.val());
+					editor.render(snap.val().outputData);
 				});
-		});
+
+				e = document.getElementById('editor') as HTMLElement;
+				e.style.overflowY = 'scroll';
+
+				if (progressbar) progressbar.style.display = 'none';
+			});
+		// });
 	}
 
 	/**
@@ -339,23 +340,23 @@ export class EditorComponent {
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true) {
 				if (this.notebookID !== '') {
-					this.notebookService
-						.removeNotebook(this.notebookID)
-						.subscribe(
-							(data) => {
-								console.log(data);
-
-								const editor = this.Editor;
-								editor.clear();
-
-								this.notebookTitle = '';
-
-								this.removeNotebookCard(this.notebookID);
-							},
-							(error) => {
-								console.log(error);
-							}
-						);
+					// this.notebookService
+					// 	.removeNotebook(this.notebookID)
+					// 	.subscribe(
+					// 		(data) => {
+					// 			console.log(data);
+					//
+					// 			const editor = this.Editor;
+					// 			editor.clear();
+					//
+					// 			this.notebookTitle = '';
+					//
+					// 			this.removeNotebookCard(this.notebookID);
+					// 		},
+					// 		(error) => {
+					// 			console.log(error);
+					// 		}
+					// 	);
 				}
 			}
 		});

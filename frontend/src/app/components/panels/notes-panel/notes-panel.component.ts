@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 // import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService, OpenNotebookPanelService } from '@app/services';
@@ -10,6 +10,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 @Component({
 	selector: 'app-notes-panel',
 	templateUrl: './notes-panel.component.html',
+	encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
 export class NotesPanelComponent implements OnInit {
@@ -34,7 +35,7 @@ export class NotesPanelComponent implements OnInit {
 
 	open!: boolean;
 
-	public notebooks: any = [];
+	public notes: any = [];
 
 	/**
 	 * Notes panel constructor
@@ -58,18 +59,19 @@ export class NotesPanelComponent implements OnInit {
 		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 		this.profile = this.profile.userInfo;
 
-		this.getUserNotebooks();
-
 		this.open = false;
 
 		// Toggle the notePanelComponent when in desktop view and notebook is selected
 		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
 			this.openNotebookPanelService.toggleSubscribe =
 				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					() => {
+					(notebookId) => {
+						this.notes = [];
+						this.getUserNotebooks(notebookId);
+
 						// navigate to notebook if not on page
 						const button = document.getElementById(
-							'openPanelBtn'
+							'openNotesPanelBtn'
 						) as HTMLButtonElement;
 						if (button) button.click();
 					}
@@ -80,52 +82,75 @@ export class NotesPanelComponent implements OnInit {
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
-	getUserNotebooks() {
-		this.notebooks = [];
+	getUserNotebooks(notebookId: string) {
+		this.notes = [];
+
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+
+		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
-			.getUserNotebooks() // this.user.uid
+			.getNotes(notebookId) // this.user.uid
 			.subscribe((result) => {
+				// const noteHolderDiv = document.getElementById('noteHolderDiv');
+
 				for (let i = 0; i < result.length; i += 1) {
-					this.notebooks.push(result[i]);
+					this.notes.push(result[i]);
 				}
+
+				if (progressbar) progressbar.style.display = 'none';
 			});
+	}
+
+	openPanelBtn() {
+		if (this.notes.length > 0) {
+			this.openPanel();
+		}
 	}
 
 	/**
 	 * Open and close or hide and show the panel
 	 */
-	public openedCloseToggle() {
-		this.open = !this.open;
+	public openPanel() {
+		this.open = true;
 		const sideNavContainer = document.getElementById(
 			'notes-container'
 		) as HTMLElement;
 		const col = sideNavContainer?.parentElement?.parentElement;
 
-		if (sideNavContainer.style.width === '100%') {
-			sideNavContainer.style.width = '40px';
+		sideNavContainer.style.width = '100%';
 
-			if (col) {
-				col.style.width = 'fit-content';
-				col.style.minWidth = '0px';
-			}
-		} else {
-			sideNavContainer.style.width = '100%';
-
-			if (col) {
-				col.style.width = '16.6666666667%';
-				col.style.minWidth = '250px';
-			}
+		if (col) {
+			col.style.width = '16.6666666667%';
+			col.style.minWidth = '250px';
 		}
-		// this.sidenav.toggle();
+	}
+
+	closePanel() {
+		this.open = false;
+
+		const sideNavContainer = document.getElementById(
+			'notes-container'
+		) as HTMLElement;
+		const col = sideNavContainer?.parentElement?.parentElement;
+
+		sideNavContainer.style.width = '40px';
+
+		if (col) {
+			col.style.width = 'fit-content';
+			col.style.minWidth = '0px';
+		}
 	}
 
 	/**
 	 * Used in notebook component to open a specific notebook
 	 * @param _id the id of the notebook to be opened
+	 * @param _title
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_id: string) {}
+	openNotebook(_id: string, _title: string) {}
 
 	/**
 	 * Edit the details of a notebook
@@ -133,67 +158,67 @@ export class NotesPanelComponent implements OnInit {
 	 */
 	editNotebook(id: string) {
 		// Get the notebook info to edit
-		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			this.title = result.title;
-			this.course = result.course;
-			this.description = result.description;
-			this.institution = result.institution;
-			this.private = result.private;
-
-			// Open dialog
-			const dialogRef = this.dialog.open(AddNotebookComponent, {
-				width: '50%',
-				data: {
-					title: this.title,
-					course: this.course,
-					description: this.description,
-					institution: this.institution,
-					private: this.private,
-				},
-			});
-
-			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe((data) => {
-				// If the user filled out the form
-				if (data !== undefined) {
-					const request = {
-						title: data.title,
-						author: 'Arno',
-						course: data.course,
-						description: data.description,
-						institution: data.institution,
-						name: 'Arno',
-						surname: 'Moller',
-						private: data.private,
-						username: 'userArno',
-					};
-
-					// Call service and update notebook
-					this.notebookService.updateNotebook(request, id).subscribe(
-						() => {
-							this.notebooks = this.notebooks.map(
-								(notebook: any) => {
-									if (notebook.notebookReference === id) {
-										notebook.course = request.course;
-										notebook.description =
-											request.description;
-										notebook.institution =
-											request.institution;
-										notebook.private = request.private;
-										notebook.title = request.title;
-									}
-
-									return notebook;
-								}
-							);
-						},
-						(error) => {
-							console.log(error);
-						}
-					);
-				}
-			});
-		});
+		// this.notebookService.getNoteBookById(id).subscribe((result) => {
+		// 	this.title = result.title;
+		// 	this.course = result.course;
+		// 	this.description = result.description;
+		// 	this.institution = result.institution;
+		// 	this.private = result.private;
+		//
+		// 	// Open dialog
+		// 	const dialogRef = this.dialog.open(AddNotebookComponent, {
+		// 		width: '50%',
+		// 		data: {
+		// 			title: this.title,
+		// 			course: this.course,
+		// 			description: this.description,
+		// 			institution: this.institution,
+		// 			private: this.private,
+		// 		},
+		// 	});
+		//
+		// 	// Get info and create notebook after dialog is closed
+		// 	dialogRef.afterClosed().subscribe((data) => {
+		// 		// If the user filled out the form
+		// 		if (data !== undefined) {
+		// 			const request = {
+		// 				title: data.title,
+		// 				author: 'Arno',
+		// 				course: data.course,
+		// 				description: data.description,
+		// 				institution: data.institution,
+		// 				name: 'Arno',
+		// 				surname: 'Moller',
+		// 				private: data.private,
+		// 				username: 'userArno',
+		// 			};
+		//
+		// 			// Call service and update notebook
+		// 			this.notebookService.updateNotebook(request, id).subscribe(
+		// 				() => {
+		// 					this.notebooks = this.notebooks.map(
+		// 						(notebook: any) => {
+		// 							if (notebook.notebookReference === id) {
+		// 								notebook.course = request.course;
+		// 								notebook.description =
+		// 									request.description;
+		// 								notebook.institution =
+		// 									request.institution;
+		// 								notebook.private = request.private;
+		// 								notebook.title = request.title;
+		// 							}
+		//
+		// 							return notebook;
+		// 						}
+		// 					);
+		// 				},
+		// 				(error) => {
+		// 					console.log(error);
+		// 				}
+		// 			);
+		// 		}
+		// 	});
+		// });
 	}
 
 	/**
@@ -244,9 +269,9 @@ export class NotesPanelComponent implements OnInit {
 							userId: this.user.uid,
 						};
 
-						this.notebooks.push(newNotebook);
+						this.notes.push(newNotebook);
 
-						this.openNotebook(data.notebookId);
+						this.openNotebook(data.notebookId, result.title);
 					},
 					(error) => {
 						console.log(error);
@@ -264,7 +289,7 @@ export class NotesPanelComponent implements OnInit {
 	 */
 	removeNotebook(id: string) {
 		// eslint-disable-next-line array-callback-return
-		this.notebooks = this.notebooks.filter((notebook: any) => {
+		this.notes = this.notes.filter((notebook: any) => {
 			if (notebook.notebookReference !== id) {
 				return notebook;
 			}

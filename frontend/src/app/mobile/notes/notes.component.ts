@@ -55,30 +55,33 @@ export class NotesComponent implements OnInit {
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
-	getUserNotebooks() {
+	async getUserNotebooks() {
 		const loader = document.getElementById('mobileOverlay') as HTMLElement;
-		// loader.style.display = 'flex';
+
+		const notebookId = localStorage.getItem('notebookId');
 
 		this.notes = [];
 
-		this.notebookService
-			.getUserNotebooks() // this.user.uid
-			.subscribe((result) => {
-				for (let i = 0; i < result.length; i += 1) {
-					// console.log(result[i]);
-					this.notes.push(result[i]);
-				}
-				loader.style.display = 'none';
-			});
+		if (notebookId !== null) {
+			this.notebookService
+				.getNotes(notebookId) // this.user.uid
+				.subscribe((result) => {
+					for (let i = 0; i < result.length; i += 1) {
+						// console.log(result[i]);
+						this.notes.push(result[i]);
+					}
+					loader.style.display = 'none';
+				});
+		}
 	}
 
-	async openNote(id: string) {
+	async openNote(id: string, title: string) {
 		await this.router.navigate(['notebook']);
 
 		// setTimeout(() => {
 		//   this.notebook.loadEditor(id);
 		// }, 2000)
-		this.notebookEventEmitterService.LoadEditor(id);
+		this.notebookEventEmitterService.LoadEditor(id, title);
 	}
 
 	// navigateBack() {
