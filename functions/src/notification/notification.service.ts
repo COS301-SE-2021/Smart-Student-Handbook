@@ -57,6 +57,13 @@ export class NotificationService {
 			}));
 	}
 
+	/**
+	 * Takes a singleNotificationRequest object in and uses it to set the message with the appropriate
+	 * data such as the token and the title as well as the body and date.
+	 * Then it sends the message using firebase admin.messaging() function if successful it returns
+	 * a successful status else an unsuccessful message with the error information is returned.
+	 * @param singleNotificationRequest
+	 */
 	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
 		// Send notification to single user
 		const message = {
