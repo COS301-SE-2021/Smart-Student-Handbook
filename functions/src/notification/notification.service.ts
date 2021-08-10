@@ -129,6 +129,13 @@ export class NotificationService {
 			});
 	}
 
+	/**
+	 * Takes a subscribeToTopicRequest object in and uses it t0 send the message using firebase
+	 * admin.messaging().subscribeToTopic() function if successful it returns
+	 * a successful status else an unsuccessful message with the error information is returned.
+	 * @param subscribeToTopicRequest
+	 * @returns status
+	 */
 	async subscribeToNotificationTopic(subscribeToTopicRequest: SubscribeToTopicRequestDto) {
 		return admin.messaging().subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
 			.then((response) => {
