@@ -43,9 +43,9 @@ export class LoginComponent {
 			this.accountService.loginUser(email, password).subscribe(
 				(res: any) => {
 					if (res.success) {
+						this.loginFailed = false;
 						this.router.navigate(['/notebook']);
 						// this.router.navigateByUrl(`notebook`);
-						this.loginFailed = false;
 						// TODO SET A LOADER FOR LOGIN
 					} else {
 						this.loginFailed = true;

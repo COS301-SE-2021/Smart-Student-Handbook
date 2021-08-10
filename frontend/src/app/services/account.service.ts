@@ -72,31 +72,16 @@ export class AccountService {
 		password: string,
 		passwordConfirm: string
 	): Observable<any> {
-		return this.http
-			.post(
-				`${ACCOUNT_API}registerUser`,
-				{
-					email,
-					displayName,
-					password,
-					passwordConfirm,
-				},
-				httpOptions
-			)
-			.pipe(
-				map((user: any) => {
-					if (user.success) {
-						localStorage.setItem('loginState', 'true');
-						localStorage.setItem('user', JSON.stringify(user.user));
-						this.isUserLoggedIn.next(true);
-					} else {
-						localStorage.setItem('loginState', 'false');
-						localStorage.removeItem('user');
-						this.isUserLoggedIn.next(false);
-					}
-					return user;
-				})
-			);
+		return this.http.post(
+			`${ACCOUNT_API}registerUser`,
+			{
+				email,
+				displayName,
+				password,
+				passwordConfirm,
+			},
+			httpOptions
+		);
 	}
 
 	/**
