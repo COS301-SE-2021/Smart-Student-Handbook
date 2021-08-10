@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -10,14 +10,27 @@ import 'firebase/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
-import { NotebookService, NotebookEventEmitterService } from '@app/services';
+import {
+	NotebookService,
+	NotebookEventEmitterService,
+	ProfileService,
+} from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { NotesService } from '@app/services/notes.service';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
+import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
+import { AddCollaboratorComponent } from '@app/components/modals/add-collaborator/add-collaborator.component';
+import { NoteMoreService } from '@app/services/note-more.service';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
 	name: string;
+}
+
+export interface Collaborators {
+	name: string;
+	url: string;
+	id: string;
 }
 
 @Component({
@@ -78,22 +91,37 @@ export class EditorComponent {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	tags: Tag[] = [
-		{ name: 'tag1' },
-		{ name: 'tag2' },
-		{ name: 'tag3' },
-		{ name: 'tag4' },
-	];
+	tags: Tag[] = [];
 
-	notebookID!: string;
+	collaborators: Collaborators[] = [];
 
-	noteId!: string;
+	creator: Collaborators = {
+		name: '',
+		url: '',
+		id: '',
+	};
+
+	date: string = '';
+
+	notebookID: string = '';
+
+	noteId: string = '';
 
 	notebookTitle: string = 'Smart Student';
+
+	static staticNotebookID: string = '';
+
+	static staticNoteId: string = '';
+
+	static staticNotebookTitle: string = 'Smart Student';
 
 	panelOpenState = false;
 
 	showMore: boolean = false;
+
+	notebook: any;
+
+	user: any;
 
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
@@ -105,6 +133,8 @@ export class EditorComponent {
 	 * @param dialog Show dialog when a user wants to delete a notebook for example
 	 * @param bottomSheet
 	 * @param notesService
+	 * @param profileService
+	 * @param noteMore
 	 * @param notebookEventEmitterService
 	 */
 	constructor(
@@ -112,8 +142,20 @@ export class EditorComponent {
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
 		private notesService: NotesService,
+		private profileService: ProfileService,
+		private noteMore: NoteMoreService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
+
+	getNotebook(notebookId: string): void {
+		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
+			this.date = data.date;
+			this.notebook = data.notebook;
+			this.tags = data.tags;
+			this.collaborators = data.collaborators;
+			this.creator = data.creator;
+		});
+	}
 
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
@@ -122,8 +164,9 @@ export class EditorComponent {
 	 * @param title
 	 */
 	async loadEditor(notebookId: string, noteId: string, title: string) {
-		this.noteId = noteId;
-		this.notebookID = notebookId;
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.getNotebook(notebookId);
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
@@ -236,8 +279,14 @@ export class EditorComponent {
 		/**
 		 * Get the specific notebook details with notebook id
 		 */
-		// this.notebookService.getNoteBookById(id).subscribe((result) => {
 		this.notebookTitle = title;
+		this.noteId = noteId;
+		this.notebookID = notebookId;
+
+		EditorComponent.staticNotebookID = notebookId;
+		EditorComponent.staticNoteId = noteId;
+		EditorComponent.staticNotebookTitle = title;
+
 		this.notebookEventEmitterService.GetNoteTitle(title);
 
 		// call event transmitter
@@ -360,7 +409,6 @@ export class EditorComponent {
 	removeNoteCard(_id: string) {}
 
 	showDefaultImage() {
-		console.log('delete');
 		const e = document.getElementById('editor') as HTMLElement;
 		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
 
@@ -425,9 +473,32 @@ export class EditorComponent {
 		}
 	}
 
+	addCollaborator() {
+		this.noteMore
+			.addCollaborator(this.notebookID)
+			.subscribe((collaborator: any) => {
+				this.collaborators.push(collaborator);
+			});
+	}
+
+	removeCollaborator(userId: string) {
+		this.noteMore
+			.removeCollaborator(userId, this.notebookID)
+			.subscribe((id: string) => {
+				this.collaborators = this.collaborators.filter(
+					(collaborator) => collaborator.id !== id
+				);
+			});
+	}
+
 	openBottomSheet(): void {
 		this.bottomSheet.open(NotebookBottomSheetComponent, {
 			panelClass: 'bottomPanelClass',
+			data: {
+				notebookID: EditorComponent.staticNotebookID,
+				noteId: EditorComponent.staticNoteId,
+				notebookTitle: EditorComponent.staticNotebookTitle,
+			},
 		});
 	}
 }

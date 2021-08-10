@@ -68,6 +68,7 @@ import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ForgotPasswordComponent } from './features/public/forgot-password/forgot-password.component';
+import { AddCollaboratorComponent } from './components/modals/add-collaborator/add-collaborator.component';
 
 @NgModule({
 	declarations: [
@@ -98,7 +99,8 @@ import { ForgotPasswordComponent } from './features/public/forgot-password/forgo
 		RegisterComponent,
 		ResetPasswordComponent,
 		LandingPageComponent,
-  ForgotPasswordComponent,
+		ForgotPasswordComponent,
+		AddCollaboratorComponent,
 	],
 	imports: [
 		MaterialModule,

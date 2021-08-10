@@ -116,6 +116,18 @@ export class LeftMenuComponent implements OnInit {
 	 * Open a modal popup with a form to view and update the users profile
 	 */
 	updateProfile() {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
 		// Retrieve the current lodged in user from localstorage
 		const user = JSON.parse(<string>localStorage.getItem('user'));
 
@@ -124,7 +136,7 @@ export class LeftMenuComponent implements OnInit {
 			(data) => {
 				// Open dialog and populate the data attributes of the form fields
 				const dialogRef = this.dialog.open(EditProfileComponent, {
-					width: '50%',
+					width: screenWidth,
 					data: {
 						bio: data.userInfo.bio,
 						department: data.userInfo.department,
@@ -150,7 +162,14 @@ export class LeftMenuComponent implements OnInit {
 								result.bio
 							)
 							.subscribe(
-								() => {},
+								() => {
+									this.user.name = result.name;
+									this.user.institution = result.institution;
+									this.user.department = result.department;
+									this.user.program = result.program;
+									this.user.workstatus = result.workstatus;
+									this.user.bio = result.bio;
+								},
 								(err) => {
 									console.log(`Error: ${err.error.message}`);
 								}

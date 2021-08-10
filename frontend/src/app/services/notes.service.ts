@@ -150,7 +150,9 @@ export class NotesService {
 	removeNote(notebookID: string, noteId: string): Observable<any> {
 		return Observable.create((observer: any) => {
 			const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-				// width: '50%',
+				data: {
+					message: 'Are you sure you want to delete this notebook?',
+				},
 			});
 
 			// Get info and create notebook after dialog is closed

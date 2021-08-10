@@ -53,7 +53,6 @@ export class AddTagsTool implements BlockTool {
 		this.wrapper = document.createElement('div');
 		this.wrapper.classList.add('addTagsTool');
 
-		console.log(this.data && this.data.header);
 		if (this.data && this.data.header) {
 			this.createSnippet(this.data.header, this.data.tags);
 			return this.wrapper;

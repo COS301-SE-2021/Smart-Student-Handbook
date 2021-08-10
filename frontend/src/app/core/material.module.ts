@@ -50,6 +50,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -78,7 +79,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 		// MatCheckboxModule,
 		MatButtonModule,
 		MatInputModule,
-		// MatAutocompleteModule,
+		MatAutocompleteModule,
 		// MatDatepickerModule,
 		// MatFormFieldModule,
 		// MatRadioModule,
