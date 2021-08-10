@@ -1,0 +1,81 @@
+<mat-drawer-container class="example-container" [hasBackdrop]="hasBackDrop">
+	<!-- Menu elements -->
+	<mat-drawer
+		#drawer
+		[mode]="menuMode"
+		(openedStart)="showOverlay()"
+		(closedStart)="hideOverlay()"
+	>
+		<mat-card id="card">
+			<button
+				mat-icon-button
+				id="closePanelBtn"
+				(click)="drawer.toggle()"
+			>
+				<mat-icon>keyboard_arrow_left</mat-icon>
+			</button>
+
+			<mat-card-header id="profileCard"
+				><!-- (click)="updateProfile()" -->
+				<div mat-card-avatar class="header-image"></div>
+				<mat-card-title id="username">{{ username }}</mat-card-title>
+				<mat-card-subtitle id="subTitle">{{
+					degree
+				}}</mat-card-subtitle>
+			</mat-card-header>
+		</mat-card>
+
+		<app-tree-view #treeComponent id="treeComponent"></app-tree-view>
+	</mat-drawer>
+
+	<!-- Body elements -->
+	<mat-drawer-content>
+		<p id="toolbar">
+			<mat-toolbar color="primary">
+				<button mat-icon-button (click)="drawer.toggle()" fxHide.gt-sm>
+					<mat-icon>menu</mat-icon>
+				</button>
+
+				<!--				<span>Smart Student</span>-->
+				<span #mobileTitle id="mobileTitle">Smart Student</span>
+				<span class="spacer"></span>
+
+				<!-- <mat-form-field class="search">
+          <input matInput type="search" color="light" placeholder="Search">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field> -->
+
+				<!-- <button mat-raised-button (click)="logout()" class="mx-4">Logout</button> -->
+				<!--				<div id="mobileMoreOptions" align="right" fxHide.gt-sm>-->
+				<!--					<button mat-icon-button class="favorite-icon">-->
+				<!--						<mat-icon>more_vert</mat-icon>-->
+				<!--					</button>-->
+				<!--				</div>-->
+			</mat-toolbar>
+		</p>
+
+		<div class="container-fluid">
+			<div
+				class="row"
+				fxLayout="row"
+				fxLayout.xs="column"
+				fxLayoutGap="0px"
+			>
+				<div class="sidePanel" id="folderPanelContainer" fxHide.lt-md>
+					<app-folder-panel #folderPanelComponent></app-folder-panel>
+				</div>
+				<div class="sidePanel" id="notePanelContainer" fxHide.lt-md>
+					<app-notes-panel #notePanelComponent></app-notes-panel>
+				</div>
+				<div class="col" align="end">
+					<app-editor #editorComponent></app-editor>
+				</div>
+				<div class="sidePanel" fxHide.lt-md>
+					<app-smart-assist-panel></app-smart-assist-panel>
+				</div>
+			</div>
+		</div>
+
+		<div id="overlay" #overlay (click)="drawer.toggle()"></div>
+	</mat-drawer-content>
+</mat-drawer-container>
