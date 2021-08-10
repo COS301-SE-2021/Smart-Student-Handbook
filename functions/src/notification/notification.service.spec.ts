@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
-import {SendNotificationToGroupRequestDto} from "./dto/sendNotificationToGroup.dto";
+import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import {initializeApp} from "firebase-admin/lib/firebase-namespace-api";
 import * as admin from 'firebase-admin';
 import {createNestServer} from "../main";
@@ -97,7 +97,7 @@ describe('NotificationService', () => {
     });
 
     //Send single user a notification
-<<<<<<<<< Temporary merge branch 1
+
     // it('Successfully send a single user a notification', async () => {
 	//
 	//
@@ -111,7 +111,7 @@ describe('NotificationService', () => {
 	//
     //     expect(response.status).toBe('successful');
     // });
-=========
+
     it('Successfully send a single user a notification', async () => {
 
 
@@ -125,7 +125,7 @@ describe('NotificationService', () => {
 
         expect(response.status).toBe('unsuccessful');
     });
->>>>>>>>> Temporary merge branch 2
+
 
     //Subscribe a user to a topic
     it('Successfully subscribed a user to a topic', async () => {
