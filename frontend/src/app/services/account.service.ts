@@ -30,7 +30,6 @@ export class AccountService {
 
 	public userLoggedInState: Observable<boolean>;
 
-	// inject serves needed
 	constructor(
 		private http: HttpClient,
 		private router: Router,
@@ -49,10 +48,6 @@ export class AccountService {
 
 	get getLoginState(): boolean {
 		return this.isUserLoggedIn.value;
-	}
-
-	set setLoginState(state: boolean) {
-		this.isUserLoggedIn.next(state);
 	}
 
 	/**
@@ -99,9 +94,17 @@ export class AccountService {
 				httpOptions
 			)
 			.pipe(
-				map((user) => {
-					console.log('aaaaaaaaaaaaaaaaaaaaaaaaa');
-					console.log(user);
+				map((user: any) => {
+					if (user.success) {
+						localStorage.setItem('loginState', 'true');
+						localStorage.setItem('user', JSON.stringify(user.user));
+						this.isUserLoggedIn.next(true);
+					} else {
+						localStorage.setItem('loginState', 'false');
+						localStorage.removeItem('user');
+						this.isUserLoggedIn.next(false);
+					}
+
 					return user;
 				})
 			);
@@ -139,7 +142,13 @@ export class AccountService {
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
 	 */
 	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions);
+		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions).pipe(
+			map((x) => {
+				localStorage.clear();
+				this.isUserLoggedIn.next(false);
+				return x;
+			})
+		);
 	}
 
 	/**
@@ -161,27 +170,5 @@ export class AccountService {
 		return this.http.delete(`${ACCOUNT_API}deleteUser`, {
 			responseType: 'json',
 		});
-	}
-
-	setUserSessionLocalStorage(): void {
-		this.getCurrentUser().subscribe(
-			(data) => {
-				localStorage.setItem('user', JSON.stringify(data));
-				this.profileService.getUserDetails(data.uid).subscribe(
-					(user) => {
-						localStorage.setItem(
-							'userProfile',
-							JSON.stringify(user)
-						);
-					},
-					(err) => {
-						console.log(`Error: ${err.error.message}`);
-					}
-				);
-			},
-			(err) => {
-				console.log(err.error.message);
-			}
-		);
 	}
 }

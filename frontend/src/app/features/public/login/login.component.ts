@@ -35,30 +35,27 @@ export class LoginComponent {
 
 	// When user submits Login form
 	onSubmit() {
-		this.loginFailed = false;
-
-		// check if form is valid
 		if (this.form.valid) {
 			const email = this.form.get('email')?.value;
 			const password = this.form.get('password')?.value;
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				(userInfo: any) => {
-					console.log(userInfo);
-
-					this.loginFailed = false;
-					// this.accountService.setUserSessionLocalStorage();
-					localStorage.setItem('user', JSON.stringify(userInfo));
-					this.accountService.setLoginState = true;
-					localStorage.setItem('loginState', 'true');
-
-					this.router.navigate(['notebook']);
-					// this.router.navigateByUrl(`notebook`);
+				(res: any) => {
+					if (res.success) {
+						this.router.navigate(['/notebook']);
+						// this.router.navigateByUrl(`notebook`);
+						this.loginFailed = false;
+						// TODO SET A LOADER FOR LOGIN
+					} else {
+						this.loginFailed = true;
+						this.errorMessage =
+							'Username or Password was incorrect, Please try again!';
+					}
 				},
 				(err) => {
 					this.loginFailed = true;
-					this.errorMessage = `Error: ${err.error.message}`;
+					this.errorMessage = err.error.message;
 				}
 			);
 		}

@@ -5,3 +5,5 @@ export * from './Event Transmitters/notebook-event-emitter.service';
 export * from './Event Transmitters/open-notebook-panel.service';
 export * from './profile.service';
 export * from './side-nav.service';
+export * from './reset-password.service';
+export * from './note-more.service';
