@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class NotebookEventEmitterService {
 	loadEmitter = new EventEmitter();
 
+	loadInfoEmitter = new EventEmitter();
+
 	getTitleEmitter = new EventEmitter();
 
 	subsVar: Subscription | undefined;

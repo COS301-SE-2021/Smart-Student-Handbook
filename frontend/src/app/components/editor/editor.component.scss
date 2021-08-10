@@ -14,6 +14,7 @@
   }
 }
 
+
 #progressbar{
   //position: absolute;
   //margin-top: -10px;
@@ -78,14 +79,18 @@
 }
 
 .card{
+  width: min-content;
   padding: 0px 0px 5px 0px;
   box-shadow: none;
   border: none;
   background-color: transparent;
+  display: inline-flex;
+  float: left;
 }
 
 .personName{
   padding-top: 2px;
+  padding-left: 5px;
   color: rgb(99, 99, 99);
   font-size: medium;
 }
@@ -106,7 +111,24 @@
   td:nth-child(2){
     width: 100%;
   }
+
+  td:nth-child(1){
+    min-width: max-content;
+  }
 }
+.removeCollaboratorIcon{
+  position: absolute;
+  font-size: large;
+  left: 35px;
+}
+
+#addGroupBtn{
+  display: inline-flex;
+  position: absolute;
+  right: 0;
+  //margin-top: 10px;
+}
+
 
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
   box-shadow: none !important;

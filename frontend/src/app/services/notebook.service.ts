@@ -59,6 +59,35 @@ export class NotebookService {
 	}
 
 	/**
+	 * Update a notebook with the following variables
+	 * @param notebookDto
+	 * param title
+	 * param author
+	 * param course
+	 * param description
+	 * param institution
+	 * param creatorId
+	 * param private
+	 * param tags
+	 */
+	updateNotebook(notebookDto: NotebookDto): Observable<any> {
+		return this.httpClient.put(
+			`${NOTEBOOK_API}/updateNote`,
+			{
+				title: notebookDto.title,
+				author: notebookDto.author,
+				course: notebookDto.course,
+				description: notebookDto.description,
+				institution: notebookDto.institution,
+				creatorId: notebookDto.creatorId,
+				private: notebookDto.private,
+				tags: notebookDto.tags,
+			},
+			httpOptions
+		);
+	}
+
+	/**
 	 * Get all the user's notebooks and note id's
 	 */
 	getUserNotebooks(): Observable<any> {
