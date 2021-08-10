@@ -167,7 +167,7 @@ export class NotesPanelComponent implements OnInit {
 	editNotebook(id: string) {
 		this.notesService
 			.editNotebook(this.notebookId, id)
-			.subscribe((newNote) => {
+			.subscribe((newNote: { description: any; title: any }) => {
 				this.notes = this.notes.map((notebook: any) => {
 					if (notebook.noteId === id) {
 						notebook.description = newNote.description;
