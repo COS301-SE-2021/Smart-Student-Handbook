@@ -40,12 +40,6 @@ export class AccountService {
 			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
 		});
 
-		const bucket = admin.storage().bucket('smartstudentnotebook.appspot.com');
-
-		const defualtPic = bucket.file('UserProfilePictures/default.jpg');
-		defualtPic.makePublic(() => {});
-
-		const defualtPicLink = defualtPic.publicUrl();
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
@@ -67,7 +61,9 @@ export class AccountService {
 						email: userCredential.email,
 						emailVerified: userCredential.emailVerified,
 						displayName: userCredential.displayName,
-						profilePicUrl: defualtPicLink,
+						profilePicUrl:
+							// eslint-disable-next-line max-len
+							'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 					},
 					message: 'User is successfully registered!',
 				}),
@@ -87,7 +83,9 @@ export class AccountService {
 			program: '',
 			workStatus: '',
 			bio: '',
-			profilePicUrl: defualtPicLink,
+			profilePicUrl:
+				// eslint-disable-next-line max-len
+				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
 

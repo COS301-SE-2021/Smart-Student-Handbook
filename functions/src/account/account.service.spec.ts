@@ -1,13 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import MockDate from 'mockdate';
-import * as admin from 'firebase-admin';
 import { AccountService } from './account.service';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 
 const registerDTO = require('./dto/register.dto');
 
-admin.initializeApp();
+// admin.initializeApp();
 
 jest.mock('firebase-admin');
 
