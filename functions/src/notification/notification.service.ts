@@ -21,6 +21,7 @@ export class NotificationService {
 	 * the correct mailOptions
 	 * after which a success message will be returned if it was successful else it will return an error message
 	 * @param email
+	 * @return success
 	 */
 	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
 		const transporter = nodemailer.createTransport({
@@ -63,6 +64,8 @@ export class NotificationService {
 	 * Then it sends the message using firebase admin.messaging() function if successful it returns
 	 * a successful status else an unsuccessful message with the error information is returned.
 	 * @param singleNotificationRequest
+	 * @returns status
+	 * @return error
 	 */
 	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
 		// Send notification to single user
@@ -102,6 +105,7 @@ export class NotificationService {
 	 * Then it sends the message using firebase admin.messaging() function if successful it returns
 	 * a successful status else an unsuccessful message with the error information is returned.
 	 * @param sendNotificationToGroupRequest
+	 * @returns status
 	 */
 	async sendGroupPushNotification(sendNotificationToGroupRequest: SendNotificationToGroupRequestDto) {
 		const message = {
