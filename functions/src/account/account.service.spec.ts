@@ -1,47 +1,62 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as admin from 'firebase-admin';
-// import { mockCollection } from 'firestore-jest-mock/mocks/firestore';
-// import { mockCreateUserWithEmailAndPassword } from 'firestore-jest-mock/mocks/auth';
-import { HttpException } from '@nestjs/common';
-
-import firebase from 'firebase';
 import { AccountService } from './account.service';
-
-admin.initializeApp();
-const firebaseConfig = {
-	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-	projectId: 'smartstudentnotebook',
-	storageBucket: 'smartstudentnotebook.appspot.com',
-	messagingSenderId: '254968215542',
-	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-	measurementId: 'G-YDRCWDT5QJ',
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
+import { NotificationService } from '../notification/notification.service';
+// import firebase from 'firebase';
+// import * as admin from 'firebase-admin';
 const registerDTO = require('./dto/register.dto');
 
-mockGoogleCloudFirestore({
-	database: {
-		users: [],
-	},
-});
+jest.mock('firebase-admin');
+
+/* jest.mock('firebase-admin', () => {
+	return {
+		auth: jest.fn().mockImplementation(()=>{
+			return {
+				createUser: jest.fn().mockImplementation(()=>{
+					return{
+						then: jest.fn().mockImplementation(()=>{
+							return{
+								catch: jest.fn().mockImplementation(()=>{
+									return{
+										Promise: true
+									}
+								})
+							}
+						})
+
+					}
+				})
+			};
+		}),
+
+	};
+}); */
 
 describe('AccountService', () => {
-	let service: AccountService;
+	let serviceAccount: AccountService;
+	let serviceNotification: NotificationService;
+
+	/* const mockFirestoreProperty = admin => {
+		const auth = jest.fn();
+		Object.defineProperty(admin, 'auth', {
+			get: jest.fn(() => auth),
+			configurable: true
+		});
+	}; */
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [AccountService],
+			providers: [AccountService, NotificationService],
 		}).compile();
 
-		service = module.get<AccountService>(AccountService);
+		serviceAccount = module.get<AccountService>(AccountService);
+		serviceNotification = module.get<NotificationService>(NotificationService);
+		// mockFirestoreProperty(admin);
+		// admin.auth=jest.fn();
 	});
 
 	it('should be defined', () => {
-		expect(service).toBeDefined();
+		expect(serviceAccount).toBeDefined();
+		expect(serviceNotification).toBeDefined();
 	});
 
 	// test registerUser
@@ -57,8 +72,8 @@ describe('AccountService', () => {
 						passwordConfirm: 'TestPassword',
 					},
 				]);
-
-				await expect(service.registerUser(registerDTO)).rejects.toThrowError();
+				const results = await serviceAccount.registerUser(registerDTO);
+				await expect(results).toEqual('true');
 			});
 		});
 
@@ -75,7 +90,7 @@ describe('AccountService', () => {
 				]);
 
 				// Todo This should fail
-				await expect(service.registerUser(registerDTO)).rejects.toThrow(HttpException);
+				await expect(serviceAccount.registerUser(registerDTO)).rejects.toThrowError();
 			});
 		});
 	});
