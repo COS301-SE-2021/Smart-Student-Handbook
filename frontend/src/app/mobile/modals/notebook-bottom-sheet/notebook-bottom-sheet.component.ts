@@ -6,9 +6,12 @@ import {
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
 import { Collaborators } from '@app/components';
-import { NoteMoreService } from '@app/services/note-more.service';
-import { NotesService } from '@app/services/notes.service';
-import { NotebookService, ProfileService } from '@app/services';
+import {
+	NotebookService,
+	ProfileService,
+	NotesService,
+	NoteMoreService,
+} from '@app/services';
 
 export interface Tag {
 	name: string;

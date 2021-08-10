@@ -4,6 +4,7 @@ export * from './modals/confirm-delete/confirm-delete.component';
 export * from './modals/edit-profile/edit-profile.component';
 export * from './modals/global/global-error/global-error.component';
 export * from './modals/global/global-confirm/global-confirm.component';
+export * from './modals/add-collaborator/add-collaborator.component';
 export * from './panels/notes-panel/notes-panel.component';
 export * from './panels/smart-assist-panel/smart-assist-panel.component';
 export * from './tree-view/tree-view.component';
