@@ -1,3 +1,5 @@
+import * as admin from 'firebase-admin';
+
 export interface Account {
 	success: boolean;
 	user: {
@@ -13,7 +15,7 @@ export interface Account {
 		workStatus?: string;
 		bio?: string;
 		profilePicUrl?: string;
-		dateJoined?: Date;
+		dateJoined?: admin.firestore.FieldValue;
 	};
 	message?: string;
 	error?: string;

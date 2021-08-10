@@ -1,6 +1,8 @@
 /**
  * Request Data object that defines how the json object needs to be structured that is sent to the Api endpoint
  */
+import * as admin from 'firebase-admin';
+
 export class UserRequestDto {
 	readonly uid: string;
 
@@ -18,5 +20,5 @@ export class UserRequestDto {
 
 	readonly profilePicUrl?: string;
 
-	readonly dateJoined: Date;
+	readonly dateJoined: admin.firestore.FieldValue;
 }

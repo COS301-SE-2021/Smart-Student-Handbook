@@ -10,9 +10,6 @@ import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
-// import { EmailNotificationRequestDto } from '../notification/dto/emailNotificationRequest.dto';
-
-// import { UserService } from '../user/user.service';
 
 require('firebase/auth');
 
@@ -43,13 +40,12 @@ export class AccountService {
 			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
 		});
 
-		const bucket = admin.storage().bucket();
+		const bucket = admin.storage().bucket('smartstudentnotebook.appspot.com');
 
 		const defualtPic = bucket.file('UserProfilePictures/default.jpg');
 		defualtPic.makePublic(() => {});
 
 		const defualtPicLink = defualtPic.publicUrl();
-
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
@@ -92,7 +88,7 @@ export class AccountService {
 			workStatus: '',
 			bio: '',
 			profilePicUrl: defualtPicLink,
-			dateJoined: new Date(),
+			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
 
 		admin
@@ -277,7 +273,7 @@ export class AccountService {
 		try {
 			uid = firebase.auth().currentUser.uid;
 
-			this.userService.deleteUserProfile(uid);
+			await this.userService.deleteUserProfile(uid);
 
 			// Try to delete user else throw and exception if not possible
 			return await admin
@@ -300,7 +296,6 @@ export class AccountService {
 
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
-		console.log(resetPasswordDto);
 		const userData = await admin
 			.auth()
 			.getUserByEmail(resetPasswordDto.email)
@@ -341,8 +336,6 @@ export class AccountService {
 	async checkResetPassword(resetPasswordCodeDto: ResetPasswordCodeDto): Promise<{ url: string }> {
 		const { email, code, local } = resetPasswordCodeDto;
 
-		console.log(resetPasswordCodeDto);
-
 		let host;
 		// eslint-disable-next-line eqeqeq
 		if (local == 'true') {
@@ -352,8 +345,6 @@ export class AccountService {
 		}
 
 		const codeInterface = this.decodeResetCode(code);
-
-		console.log(codeInterface);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
@@ -386,14 +377,13 @@ export class AccountService {
 
 	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
 		const { email, code, newPassword } = resetPasswordFinalizeDto;
-		console.log(resetPasswordFinalizeDto);
+
 		// eslint-disable-next-line eqeqeq
 		if (code == undefined || newPassword == undefined) {
 			throw new HttpException('Bad Request. Not all parameters provided', HttpStatus.BAD_REQUEST);
 		}
 
 		const codeInterface = this.decodeResetCode(code);
-		console.log(codeInterface);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
