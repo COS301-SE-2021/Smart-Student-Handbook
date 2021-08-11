@@ -19,6 +19,7 @@
 
 - [Project Overview](#project-overview)
 - [Git Structure](#git-structure)
+- [Technology Stack](#technology-stack)
 - [Documentation](#documentation)
 - [Project Management](#project-management)
 - [Demo Video Links](#demo-video-links)
@@ -55,33 +56,44 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
- <a href="https://www.overleaf.com/read/gxhcgtvhrnjf">Software Requirements Specification </a>
-  <!-- *
+* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing">Software Requirements Specification - V1 </a>
+* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing">Software Requirements Specification - V2 </a>
 * <a href="#">Coding Standards </a>
-* <a href="#">Technical Installation Guide</a>
+<!-- * <a href="#">Technical Installation Guide</a>
 * <a href="#">User Manual</a>
 * <a href="#">Testing Policy</a> -->
 
 </div>
 
+# Technology Stack
+
+### Frontend
+- Angular 12
+### Backend
+- NestJS
+- Firebase
+### Testing
+- Jest (Backend)
+- Jasmine (Frontend)
+- Karma (Frontend)
+
+
 # Project Management
 
 <div style="margin-left: 4%">
 
-<!-- Description -->
-Project management tools used
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking, project boards, issue tracking.</p>
+* <p>Github Actions: continuos integration and automated testing</p>
+* <p><a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.</p>
+* <p>Discord</p>
 
-<a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking.
-<a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
-  <!-- * 
-* <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
+
+<!-- * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
 * <a href="https://discord.com/brand-newover">Discord:</a> Informal team meetings for quick debriefs, communication.
 * <a href="https://discord.com/developers/docs/resources/webhooks">Github and Discord Webhooks:</a> Notifications sent to the team's discord server when a commit is made to the GitHub repository.
 * <a href="https://www.overleaf.com">Overleaf:</a> LaTeX editor that allows collaboration on creating documentation. -->
 
 </div>
-
-
 
 # Demo Video Links
 
@@ -89,36 +101,33 @@ Project management tools used
 
 <!-- Descriptions goes here -->
 
- * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
-  <!--
-* <a href="#"> Demo 2 </a>
-* <a href="#"> Demo 3 </a>
+* <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
+* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing"> Demo 2 </a>
+<!-- * <a href="#"> Demo 3 </a>
 * <a href="#"> Demo 4 </a> -->
 
 </div>
 
-<!--# Collaborators
+<!-- # Collaborators
 
 <div style="margin-left: 4%">
 
-<!-- The Development Team
+The Development Team
 
-| [Steven Jordaan](https://sj-jordaan.github.io) | [Bradley Mapstone](https://bradez-of-map-n-stone.github.io/) | [Shaun Naude](https://shaunnaude.github.io/) | [Matthew Kershaw](https://mattyk-dev.github.io/) | [Daniel Nel](https://mdnel.tech/) |
+| [Louw Claassens](#) | [Luca Prenzler](#) | [Arno Moller](#) | [Theo Morkel](#) | [Douglas van Reeuwyk](#) |
 | :---: |:---:| :---:| :---:| :---:|
-| [![Steven Jordaan](https://avatars2.githubusercontent.com/u/50364770?s=400&u=fc71708e5f1b450bbc8895c133d9ac50ae5c3838&v=4&s=200)](https://sj-jordaan.github.io/)    | [![Bradley Mapstone](https://avatars1.githubusercontent.com/u/56454573?s=400&u=b3edd9887578d8a29dcb467cc296f3ac05d43d05&v=4&s=200)](https://bradez-of-map-n-stone.github.io/) | [![Shaun Naude](https://avatars1.githubusercontent.com/u/44646417?s=400&u=988e26f57a2785a279c93e992838db03382c7d7e&v=4&s=200)](https://shaunnaude.github.io/)  | [![Matthew Kershaw](https://avatars1.githubusercontent.com/u/54933104?s=400&v=4&s=200)](https://mattyk-dev.github.io/)  | [![Daniel Nel](https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200)](https://mdnel.tech/)  |
-| [Portfolio](https://sj-jordaan.github.io/) | [Portfolio](https://bradez-of-map-n-stone.github.io/) | [Portfolio](https://shaunnaude.github.io/) | [Portfolio](https://mattyk-dev.github.io/) | [Portfolio](https://mdnel.tech/) | -->
+| [![Louw Claassens](#)](#)    | [![Luca Prenzler](#)](#) | [![Arno Moller](#)](#)  | [![Theo Morkel](#)](#)  | [![Douglas van Reeuwyk](#)](#)  |
+| [Portfolio](#) | [Portfolio](#) | [Portfolio](#) | [Portfolio](#) | [Portfolio](#) |
 
-</div>
+https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200
 
-# Contributions
+</div> -->
 
-<div style="margin-left: 4%">
+<!-- # Contributions -->
 
-  ## Group Members
+# Group Members
 
-### Louw Claassens - Team Leader (u18000402)
-
-#### Description
+## Louw Claassens   | u18000402
 
 I am currently a Computer Science Student at The University of Pretoria
 
@@ -134,10 +143,15 @@ I am currently a Computer Science Student at The University of Pretoria
   - Implemented The firebase system and the register and login functionality
   - Documentation on the SRS document.
  </details>
-  
-### Luca Prenzler - (u18002112)
+ <details><summary> What I did for Demo 2</summary>
 
-#### Description
+  - a
+  - b
+</details>
+  
+<hr/>
+
+## Luca Prenzler   | u18002112
 
 I am currently a Computer Science Student at The University of Pretoria
 
@@ -153,10 +167,15 @@ I am currently a Computer Science Student at The University of Pretoria
   - Implemented firebase functionality
   - Implemented  the SRS document
  </details>
+ <details><summary> What I did for Demo 2</summary>
 
-### Arno Moller - (u19324058)
+  - a
+  - b
+</details>
 
-#### Description
+<hr/>
+
+ ## Arno Moller   | u19324058
 
 I am currently a Information and Knowledge Systems student at The University of Pretoria
 
@@ -172,10 +191,16 @@ I am currently a Information and Knowledge Systems student at The University of 
   - Implemented the angular frontend
   - Implemented the SRS document
 </details>
+<details><summary> What I did for Demo 2</summary>
 
-### Theo Morkel -(u19002514)
+  - a
+  - b
+</details>
 
-#### Description
+<hr/>
+
+## Theo Morkel   | u19002514
+
 
 I am currently a Computer Science Student at The University of Pretoria
 
@@ -187,14 +212,19 @@ I am currently a Computer Science Student at The University of Pretoria
 </details>
 
 <details><summary> What I did for Demo 1</summary>
-  
+
   - Implemented firebase functionality
   - Implemented SRS documentation
-  </details>
+</details>
+<details><summary> What I did for Demo 2</summary>
 
-  ### Douglas van Reeuwyk -(u19049782)
+  - a
+  - b
+</details>
 
-#### Description
+<hr/>
+
+## Douglas van Reeuwyk   | u19049782
 
 I am currently a Information and Knowledge Systems student at The University of Pretoria
 
@@ -206,23 +236,20 @@ I am currently a Information and Knowledge Systems student at The University of 
 </details>
 
 <details><summary> What I did for Demo 1</summary>
-  
-- Implemented the angular frontend
-- Implemented the SRS document
 
+  - Implemented the angular frontend
+  - Implemented the SRS document
+</details>
+<details><summary> What I did for Demo 2</summary>
 
-</div>
+  - a
+  - b
+</details>
+
+  <hr/>
 
 # Contact us
-
-<div style="margin-left: 4%">
-
-  
-  <details><summary>Contact Us </summary>
 
 - Team Email:  algorithmicaces@gmail.com
 - Client email: arne.schreuder@advance.io
 
-</details>
-
-</div>

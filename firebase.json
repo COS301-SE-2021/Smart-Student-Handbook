@@ -1,5 +1,5 @@
 {
-  "database": {
+    "database": {
     "rules": "database.rules.json"
   },
   "firestore": {
@@ -7,25 +7,36 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
+	"runtime": "nodejs14",
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint",
       "npm --prefix \"$RESOURCE_DIR\" run build"
-    ]
-  },
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "source": "functions"
   },
+  "hosting":
+	{
+	  "public": "frontend/dist/smart-student",
+	  "ignore": [
+		"firebase.json",
+		"**/.*",
+		"**/node_modules/**"
+	  ],
+	  "rewrites": [
+		{
+		  "source": "/api",
+		  "function": "api"
+		},
+		{
+		  "source": "**",
+		  "function": "app"
+		}
+	  ],
+	  "predeploy": [
+		"npm --prefix frontend run build",
+		"npm --prefix functions run build"
+	  ]
+	},
   "storage": {
     "rules": "storage.rules"
   },
@@ -40,7 +51,7 @@
       "port": 8080
     },
     "database": {
-      "port": 9000
+      "port": 9001
     },
     "hosting": {
       "port": 5000

@@ -1,0 +1,61 @@
+<h3 mat-dialog-title>Create New Note</h3>
+
+<mat-dialog-content class="mat-typography">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Notebook title</mat-label>
+    <input
+      matInput
+      placeholder="Notebook One"
+      name="title"
+      [(ngModel)]="data.title"
+    />
+    <mat-hint>Notebook title</mat-hint>
+  </mat-form-field>
+
+  <!--<mat-form-field appearance="outline" class="form-field">-->
+  <!--	<mat-label>Course</mat-label>-->
+  <!--	<input-->
+  <!--		matInput-->
+  <!--		placeholder="Course one"-->
+  <!--		name="course"-->
+  <!--		[(ngModel)]="data.course"-->
+  <!--	/>-->
+  <!--	<mat-hint>Course</mat-hint>-->
+  <!--</mat-form-field>-->
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      placeholder="My first notebook"
+      name="description"
+      [(ngModel)]="data.description"
+    ></textarea>
+    <mat-hint>Description</mat-hint>
+  </mat-form-field>
+
+  <!--<mat-form-field appearance="outline" class="form-field">-->
+  <!--	<mat-label>Institution</mat-label>-->
+  <!--	<input-->
+  <!--		matInput-->
+  <!--		placeholder="Enter Institution name"-->
+  <!--		name="institution"-->
+  <!--		[(ngModel)]="data.institution"-->
+  <!--	/>-->
+  <!--	<mat-hint>Institution</mat-hint>-->
+  <!--</mat-form-field>-->
+
+  <!--<section id="check">-->
+  <!--	<mat-checkbox-->
+  <!--		class="example-margin"-->
+  <!--		name="private"-->
+  <!--		[(ngModel)]="data.private"-->
+  <!--		>Private</mat-checkbox-->
+  <!--	>-->
+  <!--</section>-->
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+	<button mat-button (click)="onNoClick()">Cancel</button>
+	<button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

@@ -1,0 +1,150 @@
+<div
+	id="editorContainer"
+	cdkDropList
+	cdkDropListConnectedTo="panelContent"
+	(cdkDropListDropped)="drop($event)"
+	#editorContainer
+>
+	<div id="mobileMoreOptions" align="right" fxHide.gt-sm>
+		<button
+			mat-icon-button
+			class="favorite-icon"
+			(click)="openBottomSheet()"
+		>
+			<mat-icon id="mobileMoreIcon">more_vert</mat-icon>
+		</button>
+	</div>
+
+	<mat-accordion fxHide.lt-md>
+		<mat-expansion-panel
+			id="noteInfoAccordion"
+			[expanded]="panelOpenState === true"
+			(opened)="openClosePanel()"
+			(closed)="openClosePanel()"
+		>
+			<mat-expansion-panel-header>
+				<mat-panel-title id="noteTitle">
+					{{ notebookTitle }}
+				</mat-panel-title>
+				<mat-panel-description>
+					<button
+						mat-icon-button
+						class="favorite-icon"
+						(click)="showMoreOptions($event)"
+						[matMenuTriggerFor]="menu"
+					>
+						<mat-icon>more_horiz</mat-icon>
+					</button>
+					<mat-menu #menu="matMenu">
+						<button mat-menu-item>
+							<mat-icon>share</mat-icon>
+							<span>Share</span>
+						</button>
+
+						<button mat-menu-item (click)="removeNote()">
+							<mat-icon>clear</mat-icon>
+							<span>Delete</span>
+						</button>
+					</mat-menu>
+				</mat-panel-description>
+			</mat-expansion-panel-header>
+
+			<table
+				id="noteInfoTable"
+				aria-label="Extra information on opened notebook"
+			>
+				<tr>
+					<th id="tableTitles"></th>
+					<th id="tableContent"></th>
+				</tr>
+				<tr *ngIf="creator.name !== ''">
+					<td class="noteInfo" headers="tableTitles">
+						<p>Created By:</p>
+					</td>
+					<td headers="tableContent">
+						<mat-card class="card">
+							<mat-card-header>
+								<div mat-card-avatar class="header-image"></div>
+								<mat-card-title class="personName"
+									>{{creator.name}}</mat-card-title
+								>
+							</mat-card-header>
+						</mat-card>
+					</td>
+				</tr>
+        <tr style="height: 0px">
+          <td style="height: 0px"></td>
+          <td style="height: 0px">
+            <button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+              <mat-icon>group_add</mat-icon>
+            </button>
+          </td>
+        </tr>
+				<tr>
+					<td class="noteInfo" headers="tableTitles">
+						<p>Collaborators:</p>
+					</td>
+					<td headers="tableContent">
+
+						<mat-card class="card" *ngFor="let collaborator of collaborators">
+							<mat-card-header>
+								<div mat-card-avatar class="header-image"></div>
+
+                <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+                  remove_circle_outline
+                </mat-icon>
+
+								<mat-card-title class="personName"
+									>{{collaborator.name}}</mat-card-title
+								>
+							</mat-card-header>
+						</mat-card>
+					</td>
+				</tr>
+				<tr *ngIf="date !== ''">
+					<td class="noteInfo" headers="tableTitles">
+						<p>Last Updated:</p>
+					</td>
+					<td headers="tableContent">
+						<p>July 18, 2021 at 14:44</p>
+					</td>
+				</tr>
+				<tr *ngIf="tags.length > 0">
+					<td class="noteInfo" headers="tableTitles"><p>Tags:</p></td>
+					<td headers="tableContent">
+						<mat-form-field id="tags">
+							<mat-label></mat-label>
+							<mat-chip-list
+								#chipList
+								aria-label="Fruit selection"
+							>
+								<mat-chip
+									*ngFor="let tag of tags"
+									[selectable]="true"
+									[removable]="true"
+									(removed)="removeTag(tag)"
+								>
+									{{ tag.name }}
+									<mat-icon matChipRemove>cancel</mat-icon>
+								</mat-chip>
+								<input
+									placeholder="Add tag..."
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="
+										separatorKeysCodes
+									"
+									[matChipInputAddOnBlur]="true"
+									(matChipInputTokenEnd)="addTag($event)"
+								/>
+							</mat-chip-list>
+						</mat-form-field>
+					</td>
+				</tr>
+			</table>
+		</mat-expansion-panel>
+	</mat-accordion>
+
+	<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
+
+	<div id="editor" #editor class="editor"></div>
+</div>

@@ -1,0 +1,76 @@
+<mat-sidenav-container
+	id="notes-container"
+	>
+	<mat-sidenav #sidenav mode="side" [(opened)]="open" id="sidenav">
+		<div id="panelContent">
+			<div class="text-center" style="margin-top: 15px">
+				<button
+					mat-icon-button
+					id="closeNotePanelBtn"
+					#closeNotePanelBtn
+					(click)="closePanel()"
+				>
+					<mat-icon>keyboard_arrow_left</mat-icon>
+				</button>
+
+				<h2 style="display: inline">Notes</h2>
+				<button mat-icon-button (click)="createNewNote()">
+					<mat-icon>add_circle_outline</mat-icon>
+				</button>
+			</div>
+
+      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+
+      <div id="noteHolderDiv">
+        <mat-card
+          class="card text-left"
+          *ngFor="let note of notes"
+        >
+          <button
+            mat-icon-button
+            class="favorite-icon editNotebookBtn"
+            (click)="editNotebook(note.noteId)"
+          >
+            <mat-icon class="editNotebookIcon">edit</mat-icon>
+          </button>
+
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name)">
+            <mat-card-header>
+              <mat-card-subtitle id="date">
+                JUNE 17 2021
+              </mat-card-subtitle>
+
+              <mat-card-title id="noteCardTitle">
+                {{ note.name }}
+              </mat-card-title>
+
+              <mat-card-title id="description">
+                {{note.description}}
+<!--                Placeholder description-->
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+        </mat-card>
+      </div>
+
+		</div>
+	</mat-sidenav>
+
+	<mat-sidenav-content class="content">
+		<!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
+		<button
+			mat-icon-button
+			class="openPanelBtn"
+			(click)="openPanelBtn()"
+		>
+			<mat-icon>keyboard_arrow_right</mat-icon>
+		</button>
+
+    <button
+      style="display: none"
+      id="openNotesPanelBtn"
+      (click)="openPanel()"
+    ></button>
+
+	</mat-sidenav-content>
+</mat-sidenav-container>
