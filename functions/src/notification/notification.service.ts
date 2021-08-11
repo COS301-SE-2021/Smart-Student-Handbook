@@ -322,4 +322,19 @@ export class NotificationService {
 			);
 		}
 	}
+
+	async getUserNotificationID(userId: string): Promise<string> {
+		try {
+			const userID = await admin.firestore().collection('users').doc(userId).get();
+
+			return userID.data().notificationID;
+		} catch (error) {
+			throw new HttpException(
+				`Something went wrong. Operation could not be executed.${error}`,
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
+	async sendUserToUserNotifications(userSender: string, userReciever: string) {}
 }
