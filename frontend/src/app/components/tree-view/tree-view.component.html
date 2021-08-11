@@ -1,8 +1,12 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" id="notebookTree">
 
     <!-- notes -->
-    <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding  (click)="openNotebookFolder(node.id)">
-      <button mat-icon-button>{{ node.name }}</button>
+    <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding >
+      <button mat-button class="notebookNode" (click)="openNotebookFolder(node.id, node.name)">{{ node.name }}</button>
+
+      <button mat-icon-button aria-label="Delete notebook" >
+        <mat-icon (click)="deleteNotebook(node.id)">delete_outline</mat-icon>
+      </button>
     </mat-tree-node>
 
     <!-- notebook -->
@@ -23,12 +27,12 @@
       </button>
       <span class="notebookHead">{{ node.name }}</span>
 
-      <button mat-icon-button aria-label="Example icon-button with a menu" [matMenuTriggerFor]="NotebookMenu">
+      <button mat-icon-button aria-label="Add a new notebook" [matMenuTriggerFor]="NotebookMenu">
         <mat-icon>add</mat-icon>
       </button>
 
       <mat-menu #NotebookMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="createNewNotebook()">
           <mat-icon>create_new_folder</mat-icon>
           <span>Notebook</span>
         </button>

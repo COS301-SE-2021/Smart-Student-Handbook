@@ -5,7 +5,13 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { NotebookService, OpenNotebookPanelService } from '@app/services';
+import {
+	NotebookService,
+	NoteMoreService,
+	OpenNotebookPanelService,
+} from '@app/services';
+import { ConfirmDeleteComponent } from '@app/components';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-tree-view',
@@ -53,6 +59,8 @@ export class TreeViewComponent implements OnInit {
 	constructor(
 		private notebookService: NotebookService,
 		private router: Router,
+		private dialog: MatDialog,
+		private noteMore: NoteMoreService,
 		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
@@ -64,17 +72,18 @@ export class TreeViewComponent implements OnInit {
 
 		this.childrenSize = 0;
 
-    this.dataSource.data = [
-      {
-        name: 'My notebooks',
-        id: '',
-        children: [{
-          'name': '',
-          'id': ''
-        }
-        ],
-      },
-    ];
+		this.dataSource.data = [
+			{
+				name: 'My notebooks',
+				id: '',
+				children: [
+					{
+						name: '',
+						id: '',
+					},
+				],
+			},
+		];
 	}
 
 	/**
@@ -85,8 +94,7 @@ export class TreeViewComponent implements OnInit {
 			(notebooks) => {
 				const tree = [];
 				for (let i = 0; i < notebooks.length; i += 1) {
-
-          this.childrenSize += 1;
+					this.childrenSize += 1;
 
 					const child = {
 						name: notebooks[i].title,
@@ -97,16 +105,15 @@ export class TreeViewComponent implements OnInit {
 					tree.push(child);
 				}
 
-				if (this.childrenSize > 0){
-          this.dataSource.data = [
-            {
-              name: 'My notebooks',
-              id: '',
-              children: tree,
-            },
-          ];
-        }
-
+				if (this.childrenSize > 0) {
+					this.dataSource.data = [
+						{
+							name: 'My notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
 			},
 			(error) => {
 				// eslint-disable-next-line no-console
@@ -119,7 +126,7 @@ export class TreeViewComponent implements OnInit {
 	 * Navigate to the Notes component when using a mobile device and
 	 * toggle the notesPanel component when using a desktop
 	 */
-	openNotebookFolder(notebookId: string) {
+	openNotebookFolder(notebookId: string, notebookTitle: string) {
 		const screenType = navigator.userAgent;
 		if (
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
@@ -130,8 +137,124 @@ export class TreeViewComponent implements OnInit {
 
 			this.router.navigate(['notes']);
 		} else {
-			this.openNotebookPanelService.toggleNotePanel(notebookId);
+			this.openNotebookPanelService.toggleNotePanel(
+				notebookId,
+				notebookTitle
+			);
 		}
+	}
+
+	createNewNotebook() {
+		// console.log(this.user);
+		this.noteMore
+			.createNewNotebook({
+				title: '',
+				author: this.user.name,
+				course: '',
+				description: '',
+				institution: this.user.institution,
+				creatorId: this.user.uid,
+				private: false,
+				tags: [],
+			})
+			.subscribe((val: any) => {
+				const child = {
+					name: val.notebook.title,
+					id: val.notebook.notebookId,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'My notebooks',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'My notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+
+				this.openNotebookFolder(
+					val.notebook.notebookId,
+					val.notebook.title
+				);
+			});
+	}
+
+	deleteNotebook(notebookId: string) {
+		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+			data: {
+				message: 'Are you sure you want to delete this notebook?',
+			},
+		});
+
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result === true) {
+				// console.log(notebookId);
+				this.notebookService
+					.deleteNotebook(notebookId)
+					.subscribe(() => {
+						this.childrenSize -= 1;
+
+						let tree: any[];
+						if (this.dataSource.data[0].children) {
+							tree = this.dataSource.data[0].children;
+							tree = this.dataSource.data[0].children;
+
+							tree = tree.filter(
+								(node: any) => node.id !== notebookId
+							);
+
+							if (this.childrenSize > 0) {
+								this.dataSource.data = [
+									{
+										name: 'My notebooks',
+										id: '',
+										children: tree,
+									},
+								];
+
+								this.treeControl.expandAll();
+							} else {
+								this.treeControl.collapseAll();
+
+								this.dataSource.data = [
+									{
+										name: 'My notebooks',
+										id: '',
+										children: [
+											{
+												name: '',
+												id: '',
+											},
+										],
+									},
+								];
+							}
+
+							this.openNotebookPanelService.closePanel();
+						}
+					});
+			}
+		});
 	}
 }
 

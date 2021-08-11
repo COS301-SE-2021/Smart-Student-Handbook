@@ -389,7 +389,7 @@ export class EditorComponent {
 	removeNote() {
 		this.notesService
 			.removeNote(this.notebookID, this.noteId)
-			.subscribe((removed) => {
+			.subscribe((removed: any) => {
 				if (removed) {
 					const editor = this.Editor;
 					editor.clear();

@@ -28,7 +28,7 @@ export class NotebookService {
 				notebookIds.push(doc.id);
 			});
 
-			if(notebookIds.length === 0){
+			if (notebookIds.length === 0) {
 				return notebooks;
 			}
 
@@ -53,8 +53,6 @@ export class NotebookService {
 					tags: doc.data().tags,
 				});
 			});
-			// console.log('notebooks');
-			// console.log(notebooks);
 
 			return notebooks;
 		} catch (e) {

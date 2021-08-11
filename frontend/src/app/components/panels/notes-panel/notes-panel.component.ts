@@ -43,6 +43,8 @@ export class NotesPanelComponent implements OnInit {
 
 	public notes: any = [];
 
+	notebookTitle = 'Notes';
+
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
@@ -73,7 +75,8 @@ export class NotesPanelComponent implements OnInit {
 		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
 			this.openNotebookPanelService.toggleSubscribe =
 				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					(notebookId) => {
+					({ notebookId, notebookTitle }) => {
+						this.notebookTitle = notebookTitle;
 						this.notes = [];
 						this.getUserNotebooks(notebookId);
 
@@ -84,6 +87,11 @@ export class NotesPanelComponent implements OnInit {
 						if (button) button.click();
 					}
 				);
+
+			this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
+				this.closePanel();
+				this.notes = [];
+			});
 		}
 	}
 
