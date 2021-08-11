@@ -5,6 +5,14 @@
   margin-right: 0px !important;
 }
 
+#notebookPanelHeader{
+  display: inline-block;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .openPanelBtn{
   position: absolute;
   top: 12px;

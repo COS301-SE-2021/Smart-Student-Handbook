@@ -176,7 +176,7 @@ export class NoteMoreService {
 						tags: notebookDto.tags,
 					})
 					.subscribe((data: any) => {
-						console.log(data);
+						// console.log(data);
 						observer.next(data);
 					});
 			});
