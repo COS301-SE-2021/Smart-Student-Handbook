@@ -25,6 +25,7 @@ export class UserService {
 				program: doc.data().program,
 				workStatus: doc.data().workStatus,
 				bio: doc.data().bio,
+				profilePicUrl: doc.data().profilePicUrl,
 				dateJoined: doc.data().dateJoined,
 			};
 		} else {
@@ -51,17 +52,10 @@ export class UserService {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		update = false,
 	): Promise<UserResponseDto> {
-		const resp = await admin
-			.firestore()
-			.collection('users')
-			.doc(user.uid)
-			.set(user);
+		const resp = await admin.firestore().collection('users').doc(user.uid).set(user);
 
 		if (resp) return { success: true, message: 'User was successfully added' };
-		throw new HttpException(
-			'An unexpected Error Occurred',
-			HttpStatus.BAD_REQUEST,
-		);
+		throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 	}
 
 	async deleteUserProfile(userId): Promise<UserResponseDto> {
@@ -75,10 +69,7 @@ export class UserService {
 				message: 'User profile was successfully deleted',
 			}))
 			.catch(() => {
-				throw new HttpException(
-					'An unexpected Error Occurred',
-					HttpStatus.BAD_REQUEST,
-				);
+				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
 	}
 }

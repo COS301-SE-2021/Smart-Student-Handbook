@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GlobalErrorComponent } from './global-error.component';
+import { GlobalErrorComponent } from '@app/components';
 
 describe('GlobalErrorComponent', () => {
 	let component: GlobalErrorComponent;

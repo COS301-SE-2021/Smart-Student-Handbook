@@ -5,7 +5,7 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { NotebookService } from 'src/app/services/notebook.service';
+import { NotebookService, OpenNotebookPanelService } from '@app/services';
 
 @Component({
 	selector: 'app-tree-view',
@@ -15,7 +15,7 @@ import { NotebookService } from 'src/app/services/notebook.service';
 export class TreeViewComponent implements OnInit {
 	user: any;
 
-	profile: any;
+	childrenSize = 0;
 
 	/**
 	 * If a tree node has children, transform the node to a parent node
@@ -52,42 +52,86 @@ export class TreeViewComponent implements OnInit {
 
 	constructor(
 		private notebookService: NotebookService,
-		private router: Router
+		private router: Router,
+		private openNotebookPanelService: OpenNotebookPanelService
 	) {}
 
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
 		this.getUserNotebooks();
+
+		this.childrenSize = 0;
+
+    this.dataSource.data = [
+      {
+        name: 'My notebooks',
+        id: '',
+        children: [{
+          'name': '',
+          'id': ''
+        }
+        ],
+      },
+    ];
 	}
 
 	/**
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks().subscribe(() => {
-			// this.user.uid
-			const children = [{ name: 'Notebook one', id: '' }];
-			// for (let i = 0; i < result.length; i++) {
-			//   children.push({name: result[i].course, id: result[i].notebookReference});
-			// }
+		this.notebookService.getUserNotebooks().subscribe(
+			(notebooks) => {
+				const tree = [];
+				for (let i = 0; i < notebooks.length; i += 1) {
 
-			this.dataSource.data = [
-				{
-					name: 'My notebooks',
-					id: '',
-					children,
-				},
-			];
+          this.childrenSize += 1;
 
-			// this.openTree();
-		});
+					const child = {
+						name: notebooks[i].title,
+						id: notebooks[i].notebookId,
+						// children: childArr,
+					};
+
+					tree.push(child);
+				}
+
+				if (this.childrenSize > 0){
+          this.dataSource.data = [
+            {
+              name: 'My notebooks',
+              id: '',
+              children: tree,
+            },
+          ];
+        }
+
+			},
+			(error) => {
+				// eslint-disable-next-line no-console
+				console.log(error.message);
+			}
+		);
 	}
 
-	openNotebookFolder() {
-		this.router.navigate(['notes']);
+	/**
+	 * Navigate to the Notes component when using a mobile device and
+	 * toggle the notesPanel component when using a desktop
+	 */
+	openNotebookFolder(notebookId: string) {
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			localStorage.setItem('notebookId', notebookId);
+
+			this.router.navigate(['notes']);
+		} else {
+			this.openNotebookPanelService.toggleNotePanel(notebookId);
+		}
 	}
 }
 

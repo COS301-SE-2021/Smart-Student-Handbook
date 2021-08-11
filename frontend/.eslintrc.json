@@ -53,7 +53,8 @@
           {
             "endOfLine": "crlf"
           }
-        ]
+        ],
+        "max-len": ["error", { "code": 200 }]
       }
     }
   ]

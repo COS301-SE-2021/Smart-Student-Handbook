@@ -1,0 +1,22 @@
+@import '/src/app/styling/global';
+
+mat-card {
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+  background-color: rgba(255,255,255,0.8);
+
+}
+
+mat-form-field {
+  display: block;
+}
+
+.transparent{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#notesProgressbar{
+  display: none;
+}
+

@@ -1,6 +1,9 @@
-import { Body, Controller, Post, Get, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, Put, Param, Redirect } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { ResetPasswordCodeDto } from './dto/resetPasswordCode.dto';
+import { ResetPasswordFinalizeDto } from './dto/resetPasswordFinalize.dto';
 import { AccountService } from './account.service';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
@@ -37,5 +40,22 @@ export class AccountController {
 	@Delete('deleteUser')
 	deleteUser(): Promise<Response> {
 		return this.accountService.deleteUser();
+	}
+
+	@Post('requestResetPassword')
+	requestResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+		return this.accountService.requestResetPassword(resetPasswordDto);
+	}
+
+	@Get('checkResetPassword/:email/:local/:code')
+	@Redirect('https://smartstudentnotebook.web.app', 308)
+	async checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
+		const url = await this.accountService.checkResetPassword(resetPasswordCodeDto);
+		return url;
+	}
+
+	@Post('finalizeResetPassword')
+	finalizeResetPassword(@Body() resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
+		return this.accountService.finalizeResetPassword(resetPasswordFinalizeDto);
 	}
 }

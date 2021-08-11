@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreeViewComponent } from './tree-view.component';
+import { TreeViewComponent } from '@app/components';
 
 describe('TreeViewComponent', () => {
 	let component: TreeViewComponent;
