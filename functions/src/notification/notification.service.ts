@@ -11,6 +11,8 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { Notification } from './interfaces/notification.interface';
 import { NotificationDto } from './dto/notification.dto';
+import { Access } from '../notebook/interfaces/access.interface';
+import { Response } from '../notebook/interfaces/response.interface';
 
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
@@ -294,6 +296,30 @@ export class NotificationService {
 			return notifications;
 		} catch (e) {
 			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	async updateRead(notificationId: string): Promise<Response> {
+		try {
+			return await admin
+				.firestore()
+				.collection('notifications')
+				.doc(notificationId)
+				.update({
+					opened: true,
+				})
+				.then(() => ({
+					message: 'Successfully opened!',
+					notificationId,
+				}))
+				.catch(() => {
+					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+				});
+		} catch (error) {
+			throw new HttpException(
+				`Something went wrong. Operation could not be executed.${error}`,
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
 		}
 	}
 }
