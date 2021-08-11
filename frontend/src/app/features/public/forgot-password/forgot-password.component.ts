@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordService } from '@app/services/reset-password.service';
+import { ResetPasswordService } from '@app/services';
 
 @Component({
 	selector: 'app-forgot-password',

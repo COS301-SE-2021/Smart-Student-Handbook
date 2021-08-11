@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -14,13 +14,11 @@ import {
 	NotebookService,
 	NotebookEventEmitterService,
 	ProfileService,
+	NotesService,
+	NoteMoreService,
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
-import { NotesService } from '@app/services/notes.service';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
-import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
-import { AddCollaboratorComponent } from '@app/components/modals/add-collaborator/add-collaborator.component';
-import { NoteMoreService } from '@app/services/note-more.service';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {

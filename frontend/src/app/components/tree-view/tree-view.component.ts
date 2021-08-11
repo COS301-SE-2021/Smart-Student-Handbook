@@ -5,8 +5,7 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { NotebookService } from '@app/services';
-import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
+import { NotebookService, OpenNotebookPanelService } from '@app/services';
 
 @Component({
 	selector: 'app-tree-view',

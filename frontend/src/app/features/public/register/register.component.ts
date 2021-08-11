@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AccountService, ProfileService } from '@app/services';
+import { AccountService } from '@app/services';
 import { MustMatch } from './must-match.validator';
 
 @Component({
@@ -19,12 +19,13 @@ export class RegisterComponent {
 
 	errorMessage: string = '';
 
+	isDisabled: boolean = false;
+
 	constructor(
 		private fb: FormBuilder,
 		private route: ActivatedRoute,
 		private router: Router,
-		private accountService: AccountService,
-		private profileService: ProfileService
+		private accountService: AccountService
 	) {
 		// redirect to home if already logged in
 		if (this.accountService.getLoginState) {
@@ -35,7 +36,6 @@ export class RegisterComponent {
 		this.form = this.fb.group(
 			{
 				email: ['', Validators.email],
-				phoneNumber: ['', Validators.required],
 				displayName: ['', Validators.required],
 				password: ['', Validators.required],
 				passwordConfirm: ['', Validators.required],
@@ -51,61 +51,60 @@ export class RegisterComponent {
 		this.registerFailed = false;
 		this.submitted = true;
 
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
+
 		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value;
-			const phoneNumber = `+27${this.form.get('phoneNumber')?.value}`;
-			const displayName = this.form.get('displayName')?.value;
+			const email = this.form.get('email')?.value.slice();
+			const displayName = this.form.get('displayName')?.value.slice();
 			const password = this.form.get('password')?.value;
 			const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
 			// Call account service to register a new Account
 			this.accountService
-				.registerUser(
-					email,
-					phoneNumber,
-					displayName,
-					password,
-					passwordConfirm
-				)
+				.registerUser(email, displayName, password, passwordConfirm)
 				.subscribe(
-					(data) => {
-						// let dateJoined = '{"_seconds":'+Date.now().toString()+', "_nanoseconds":0}';
-						// If RegisterUser was successful create a new user profile with default values
-						this.profileService
-							.createUser(
-								data.uid,
-								data.displayName,
-								'',
-								'',
-								'',
-								'',
-								'',
-								Date.now().toString()
-							)
-							.subscribe(
-								() => {
-									// If createUser was successful then login the user and take them to the notebook page
-									this.accountService
-										.loginUser(email, password)
-										.subscribe(
-											() => {
-												this.registerFailed = false;
-												this.router.navigateByUrl(
-													`notebook`
-												);
-											},
-											(err) => {
-												this.registerFailed = true;
-												this.errorMessage = `Error: ${err.error.message}`;
-											}
-										);
-								},
-								(err) => {
-									this.registerFailed = true;
-									this.errorMessage = `Error: ${err.error.message}`;
-								}
-							);
+					(res: any) => {
+						if (res.success) {
+							// If createUser was successful then login the user and take them to the notebook page
+							this.accountService
+								.loginUser(email, password)
+								.subscribe(
+									(x: any) => {
+										if (x.success) {
+											this.registerFailed = false;
+											this.router.navigateByUrl(
+												`/notebook`
+											);
+											if (progressbar)
+												progressbar.style.display =
+													'none';
+											this.isDisabled = false;
+										} else {
+											this.registerFailed = true;
+											this.errorMessage =
+												'An error occurred, please sign in manually!';
+											if (progressbar)
+												progressbar.style.display =
+													'none';
+											this.isDisabled = false;
+										}
+									},
+									(err) => {
+										this.registerFailed = true;
+										this.errorMessage = `Error: ${err.error.message}`;
+									}
+								);
+						} else {
+							this.errorMessage = res.message;
+							// this.errorMessage = res.error;
+							if (progressbar) progressbar.style.display = 'none';
+							this.isDisabled = false;
+						}
 					},
 					(err) => {
 						this.registerFailed = true;
