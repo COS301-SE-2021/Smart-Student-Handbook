@@ -38,6 +38,7 @@
     "firebase": "^8.6.8",
     "hamburgers": "^1.1.3",
     "jquery": "^3.6.0",
+    "ngx-long-press2": "^1.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"

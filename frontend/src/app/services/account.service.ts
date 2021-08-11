@@ -1,11 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '@app/services';
+import { map } from 'rxjs/operators';
 
 // API URL for the account endpoint on the backend
-const ACCOUNT_API = 'http://localhost:5001/account/';
+let addr;
+if (window.location.host.includes('localhost')) {
+	addr =
+		'http://localhost:5001/smartstudentnotebook/us-central1/app/account/';
+} else {
+	addr =
+		'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/account/';
+}
+
+const ACCOUNT_API = addr;
+
 // Shared header options for API request
 const httpOptions = {
 	headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -15,15 +26,40 @@ const httpOptions = {
 	providedIn: 'root',
 })
 export class AccountService {
-	// inject serves needed
+	private isUserLoggedIn: BehaviorSubject<boolean>;
+
+	public userLoggedInState: Observable<boolean>;
+
+	/**
+	 * Inside the constructor it is first checked if the LoginState localstorage has been set and if so then set the behavioral subject
+	 *  keep it persistent as other wise it will reset every time the user refreshes the page
+	 * @param http
+	 * @param router
+	 * @param profileService
+	 */
 	constructor(
 		private http: HttpClient,
 		private router: Router,
 		private profileService: ProfileService
-	) {}
+	) {
+		const loginState = localStorage.getItem('loginState');
+		if (loginState != null) {
+			this.isUserLoggedIn = new BehaviorSubject<boolean>(
+				JSON.parse(loginState)
+			);
+		} else {
+			this.isUserLoggedIn = new BehaviorSubject<boolean>(false);
+		}
+		this.userLoggedInState = this.isUserLoggedIn.asObservable();
+	}
+
+	get getLoginState(): boolean {
+		return this.isUserLoggedIn.value;
+	}
 
 	/**
 	 * Send a API request to the backend account endPoint to register a user and return the result (User Object)
+	 * If Register was successful then set the appropriate localstorage and Login Sate and return the user object
 	 * @param email
 	 * @param phoneNumber
 	 * @param displayName
@@ -32,7 +68,6 @@ export class AccountService {
 	 */
 	registerUser(
 		email: string,
-		phoneNumber: string,
 		displayName: string,
 		password: string,
 		passwordConfirm: string
@@ -41,7 +76,6 @@ export class AccountService {
 			`${ACCOUNT_API}registerUser`,
 			{
 				email,
-				phoneNumber,
 				displayName,
 				password,
 				passwordConfirm,
@@ -51,128 +85,93 @@ export class AccountService {
 	}
 
 	/**
-	 * Send a API request to the backend account endPoint to login a user and return the result (User Object)
+	 * Send a API request to the backend account endPoint to login a user
+	 * If the login request was successful a success of true will be returned with the user object
+	 * If the login was successful all the appropriate localstorage values and behavioral subject sate will be updated
+	 * Before the user object is returned
 	 * @param email
 	 * @param password
 	 */
 	loginUser(email: string, password: string): Observable<any> {
-		return this.http.post(
-			`${ACCOUNT_API}loginUser`,
-			{
-				email,
-				password,
-			},
-			httpOptions
-		);
-	}
-
-	/**
-	 * Send a API request to the backend account endPoint to update a user and return the result (User Object)
-	 * @param email
-	 * @param phoneNumber
-	 * @param displayName
-	 * @param password
-	 * @param passwordConfirm
-	 */
-	updateUser(
-		email: string,
-		phoneNumber: string,
-		displayName: string,
-		password: string,
-		passwordConfirm: string
-	): Observable<any> {
-		return this.http.put(
-			`${ACCOUNT_API}updateUser`,
-			{
-				email,
-				phoneNumber,
-				displayName,
-				password,
-				passwordConfirm,
-			},
-			httpOptions
-		);
+		return this.http
+			.post(
+				`${ACCOUNT_API}loginUser`,
+				{
+					email,
+					password,
+				},
+				httpOptions
+			)
+			.pipe(
+				map((user: any) => {
+					if (user.success) {
+						localStorage.setItem('loginState', 'true');
+						localStorage.setItem('user', JSON.stringify(user.user));
+						this.isUserLoggedIn.next(true);
+					} else {
+						localStorage.setItem('loginState', 'false');
+						localStorage.removeItem('user');
+						this.isUserLoggedIn.next(false);
+					}
+					return user;
+				})
+			);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
+	 * Clear all the LocalStorage values that store the user information and loginState
+	 * Update the isUserLoggedIn Behavioural subject to false to indicate the user is no longer logged in
 	 */
 	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions);
+		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions).pipe(
+			map((x) => {
+				localStorage.clear();
+				this.isUserLoggedIn.next(false);
+				return x;
+			})
+		);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to get the current Lodged in user and return the result (User Object)
+	 * Update the Localstorage user object when user is returned
 	 */
 	getCurrentUser(): Observable<any> {
-		return this.http.get(`${ACCOUNT_API}getCurrentUser`, {
-			responseType: 'json',
-		});
+		return this.http
+			.get(`${ACCOUNT_API}getCurrentUser`, {
+				responseType: 'json',
+			})
+			.pipe(
+				map((user: any) => {
+					if (user.success) {
+						localStorage.setItem('user', JSON.stringify(user.user));
+					}
+					return user.user;
+				})
+			);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to Delete the current Lodged in user
+	 * Delete all the LocalStorage Data of the user and set their LoginSate to false
+	 * Return the user to the Login Page
 	 * @param EmailAddress
 	 * @param Password
 	 */
 	// deleteUser(EmailAddress: string, Password: string): Observable<any> {
 	deleteUser(): Observable<any> {
-		return this.http.delete(`${ACCOUNT_API}deleteUser`, {
-			responseType: 'json',
-		});
-	}
-
-	/**
-	 * check if user is logged in
-	 * if already logged in redirect them to the notebook page
-	 * if the user is not logged in redirect them to the login page
-	 * every time the function runs update the local storage with most up to date information
-	 */
-	async isUserLoggedIn(): Promise<void> {
-		const curentRoute = this.router.url.split('?')[0];
-
-		// TODO first check if the user value has been set in the localstorage...
-
-		// Get the current Lodged in userDetails, if fail then user is not logged in
-		this.getCurrentUser().subscribe(
-			(data) => {
-				// update the LocalStorage for "user" and "userProfile"
-				this.profileService.getUserDetails(data.uid).subscribe(
-					(user) => {
-						localStorage.setItem(
-							'userProfile',
-							JSON.stringify(user)
-						);
-					},
-					(err) => {
-						console.log(`Error: ${err.error.message}`);
-					}
-				);
-
-				localStorage.setItem('user', JSON.stringify(data));
-
-				// if the user is logged in and they are not in the login, register or forgot password then take them to the notebook page
-				if (
-					curentRoute === '/' ||
-					curentRoute === '/login' ||
-					curentRoute === '/register' ||
-					curentRoute === '/forgotPassword'
-				) {
-					this.router.navigateByUrl(`/notebook`);
-				}
-			},
-			(err) => {
-				console.log(err.error.message);
-				// if the user is not logged in allow them to navigate login, register and forgotPassword
-				if (
-					curentRoute !== '/' &&
-					curentRoute !== '/login' &&
-					curentRoute !== '/register' &&
-					curentRoute !== '/forgotPassword'
-				) {
-					this.router.navigateByUrl(`/login`);
-				}
-			}
-		);
+		return this.http
+			.delete(`${ACCOUNT_API}deleteUser`, {
+				responseType: 'json',
+			})
+			.pipe(
+				map((x) => {
+					localStorage.clear();
+					this.isUserLoggedIn.next(false);
+					this.router.navigate(['account/login']);
+					return x;
+				})
+			);
 	}
 }

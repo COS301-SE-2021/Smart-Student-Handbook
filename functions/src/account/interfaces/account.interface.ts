@@ -1,8 +1,22 @@
+import * as admin from 'firebase-admin';
+
 export interface Account {
-	uid: string;
-	email: string;
-	emailVerified: boolean;
-	phoneNumber: string;
-	displayName: string;
+	success: boolean;
+	user: {
+		uid: string;
+		email: string;
+		emailVerified: boolean;
+		phoneNumber?: string;
+		displayName: string;
+		name?: string;
+		institution?: string;
+		department?: string;
+		program?: string;
+		workStatus?: string;
+		bio?: string;
+		profilePicUrl?: string;
+		dateJoined?: admin.firestore.FieldValue;
+	};
 	message?: string;
+	error?: string;
 }

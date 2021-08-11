@@ -17,6 +17,8 @@ export class User {
 
 	bio?: string;
 
+	profilePicUrl?: string;
+
 	dateJoined: string;
 }
 

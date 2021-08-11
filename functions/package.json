@@ -14,12 +14,14 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node lib/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "test": "jest",
+    "fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest --forceExit",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "serve": "npm run build --watch && firebase emulators:start --only functions"
+    "serve": "npm run build --watch && firebase emulators:start --only functions",
+    "serve:dev": "npm run build --watch"
   },
   "main": "lib/main.js",
   "dependencies": {
