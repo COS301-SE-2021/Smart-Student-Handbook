@@ -104,14 +104,14 @@ describe('AccountService', () => {
 		it('It should return code', () => {
 			MockDate.set('2000-11-22');
 
-			const code = serviceAccount.encodeResetCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
+			const code = serviceAccount.encodeSecureCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
 			expect(code).toBeDefined();
 		});
 
 		it('The code should have the correct data', () => {
 			MockDate.set('2000-11-22');
 
-			const code = serviceAccount.encodeResetCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
+			const code = serviceAccount.encodeSecureCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
 			const decodedCode = Buffer.from(code, 'base64').toString();
 
 			const codeSplit = decodedCode.split('.');
@@ -125,7 +125,7 @@ describe('AccountService', () => {
 		it('The check code should be calculated correctly', () => {
 			MockDate.set('2000-11-22');
 
-			const code = serviceAccount.encodeResetCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
+			const code = serviceAccount.encodeSecureCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
 			const decodedCode = Buffer.from(code, 'base64').toString();
 
 			const codeSplit = decodedCode.split('.');
@@ -144,7 +144,8 @@ describe('AccountService', () => {
 
 	describe('Reset Password Decode Code', () => {
 		it('It should decode the code correctly', () => {
-			const code = serviceAccount.decodeResetCode('OTc0ODUzMDAwMDAwLmlIVENITGQ4LnRlc3RAZ21haWwuY29tLjg1MzE3NTMy');
+			// eslint-disable-next-line max-len
+			const code = serviceAccount.decodeSecureCode('OTc0ODUzMDAwMDAwLmlIVENITGQ4LnRlc3RAZ21haWwuY29tLjg1MzE3NTMy');
 
 			expect(code.email).toBe('test@gmail.com');
 			expect(code.timeExpire).toBe(974853000000);

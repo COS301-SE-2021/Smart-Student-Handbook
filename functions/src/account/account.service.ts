@@ -10,6 +10,7 @@ import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
+import { VerifyEmailDto } from './dto/verifyEmail.dto';
 
 require('firebase/auth');
 
@@ -26,19 +27,6 @@ export class AccountService {
 		if (registerDto.password !== registerDto.passwordConfirm) {
 			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
 		}
-
-		const actionCodeSettings = {
-			// URL you want to redirect back to. The domain (www.example.com) for this
-			// URL must be in the authorized domains list in the Firebase Console.
-			url: 'https://smartstudentnotebook.web.app/home',
-		};
-
-		// send welcome email to new user
-		await this.notificationService.sendEmailNotification({
-			email: registerDto.email,
-			subject: 'Welcome to Smart Student Handbook',
-			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
-		});
 
 		/**
 		 * Create user.
@@ -69,11 +57,16 @@ export class AccountService {
 				}),
 			)
 			.catch((error) => ({
-				success: true,
+				success: false,
 				user: null,
 				message: 'User is unsuccessfully registered:',
 				error: error.message,
 			}));
+
+		// eslint-disable-next-line eqeqeq
+		if (resp.success == false) {
+			return resp;
+		}
 
 		await this.userService.createAndUpdateUser({
 			uid: resp.user.uid,
@@ -89,22 +82,32 @@ export class AccountService {
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
 
-		admin
-			.auth()
-			.generateEmailVerificationLink(registerDto.email, actionCodeSettings)
-			.then(async (link) => {
-				await this.notificationService.sendEmailNotification({
-					email: registerDto.email,
-					subject: 'Smart Student Handbook Email Verification',
-					body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
-				});
-			})
-			.catch((error) => ({
-				success: true,
-				user: null,
-				message: 'Email Verification unsuccessful',
-				error: error.message,
-			}));
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (registerDto.isLocalhost != undefined || registerDto.isLocalhost == true) {
+			host = 'localhost:5001/smartstudentnotebook/us-central1';
+		} else {
+			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
+		}
+
+		const path = '/app/account/verifyEmail';
+		const encodedCode = this.encodeSecureCode(resp.user.uid, resp.user.email);
+		let link = 'http://';
+		// eslint-disable-next-line max-len
+		link = link.concat(host, path, '/', resp.user.email, '/', String(registerDto.isLocalhost), '/', encodedCode);
+
+		await this.notificationService.sendEmailNotification({
+			email: registerDto.email,
+			subject: 'Smart Student Handbook Email Verification',
+			body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
+		});
+
+		// send welcome email to new user
+		await this.notificationService.sendEmailNotification({
+			email: registerDto.email,
+			subject: 'Welcome to Smart Student Handbook',
+			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
+		});
 
 		return resp;
 	}
@@ -198,7 +201,7 @@ export class AccountService {
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is successfully logged in.',
+				message: 'User is unsuccessfully logged in.',
 				error: error.message,
 			}));
 	}
@@ -292,6 +295,57 @@ export class AccountService {
 		}
 	}
 
+	async verifyEmail(verifyEmailDto: VerifyEmailDto) {
+		const userData = await admin
+			.auth()
+			.getUserByEmail(verifyEmailDto.email)
+			.then((userRecord) => ({
+				email: userRecord.email,
+				uid: userRecord.uid,
+			}))
+			.catch((error) => {
+				throw new HttpException(`Bad Request. User does not exist: ${error}`, HttpStatus.BAD_REQUEST);
+			});
+
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (verifyEmailDto.local == 'true') {
+			host = 'localhost:5000';
+		} else {
+			host = 'smartstudenthandbook.co.za';
+		}
+
+		const codeInterface = this.decodeSecureCode(verifyEmailDto.code);
+
+		// eslint-disable-next-line eqeqeq
+		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
+			return { url: `${host}` };
+		}
+
+		const uid = userData.uid.substr(0, 8);
+
+		// eslint-disable-next-line eqeqeq,max-len
+		if (codeInterface.checksumPassed == false || codeInterface.email != userData.email || codeInterface.uid != uid) {
+			return { url: `${host}` };
+		}
+
+		if (codeInterface.timeExpire < Date.now()) {
+			return { url: `${host}` };
+		}
+
+		return admin
+			.auth()
+			.updateUser(userData.uid, {
+				emailVerified: true,
+			})
+			.then(() => ({
+				url: `${host}`,
+			}))
+			.catch((error) => {
+				throw new HttpException(`Error Verifying Email: ${error.message}`, HttpStatus.BAD_REQUEST);
+			});
+	}
+
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
 		const userData = await admin
@@ -316,7 +370,7 @@ export class AccountService {
 
 		const path = '/app/account/checkResetPassword';
 		const { email } = userData;
-		const encodedCode = this.encodeResetCode(userData.uid, userData.email);
+		const encodedCode = this.encodeSecureCode(userData.uid, userData.email);
 		let link = 'http://';
 		// eslint-disable-next-line max-len
 		link = link.concat(host, path, '/', email, '/', String(resetPasswordDto.isLocalhost), '/', encodedCode);
@@ -339,10 +393,10 @@ export class AccountService {
 		if (local == 'true') {
 			host = 'localhost:5000';
 		} else {
-			host = 'smartstudentnotebook.web.app';
+			host = 'smartstudenthandbook.co.za';
 		}
 
-		const codeInterface = this.decodeResetCode(code);
+		const codeInterface = this.decodeSecureCode(code);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
@@ -381,7 +435,7 @@ export class AccountService {
 			throw new HttpException('Bad Request. Not all parameters provided', HttpStatus.BAD_REQUEST);
 		}
 
-		const codeInterface = this.decodeResetCode(code);
+		const codeInterface = this.decodeSecureCode(code);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
@@ -426,7 +480,7 @@ export class AccountService {
 			});
 	}
 
-	encodeResetCode(uid: string, email: string) {
+	encodeSecureCode(uid: string, email: string) {
 		const timeExpire = Date.now() + 1800000;
 
 		let randNum = '';
@@ -452,7 +506,7 @@ export class AccountService {
 		return Buffer.from(code).toString('base64');
 	}
 
-	decodeResetCode(code: string) {
+	decodeSecureCode(code: string) {
 		const decodedCode = Buffer.from(code, 'base64').toString();
 
 		const codeSplit = decodedCode.split('.');
