@@ -32,12 +32,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 	date: string = '';
 
-	tags: Tag[] = [
-		{ name: 'tag1' },
-		{ name: 'tag2' },
-		{ name: 'tag3' },
-		{ name: 'tag4' },
-	];
+	tags: Tag[] = [];
 
 	notebookId: string = '';
 
@@ -84,6 +79,8 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 		// Clear the input value
 		event.chipInput!.clear();
+
+		this.updateTags();
 	}
 
 	/**
@@ -96,6 +93,27 @@ export class NotebookBottomSheetComponent implements OnInit {
 		if (index >= 0) {
 			this.tags.splice(index, 1);
 		}
+
+		this.updateTags();
+	}
+
+	updateTags() {
+		const tagList: string[] = [];
+		for (let i = 0; i < this.tags.length; i += 1) {
+			tagList.push(this.tags[i].name);
+		}
+
+		this.noteMore.updateNotebook({
+			title: this.notebook.title,
+			author: this.notebook.author,
+			course: this.notebook.course,
+			description: this.notebook.description,
+			institution: this.notebook.institution,
+			creatorId: this.notebook.creatorId,
+			private: this.notebook.private,
+			tags: tagList,
+			notebookId: this.notebook.notebookId,
+		});
 	}
 
 	addCollaborator() {

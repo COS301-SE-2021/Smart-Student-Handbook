@@ -17,4 +17,6 @@ export class NotebookDto {
 	readonly type?: string;
 
 	readonly tags?: string[];
+
+	readonly notebookId?: string;
 }

@@ -5,6 +5,7 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
+import { NotebookDto } from '@app/models';
 
 @Injectable({
 	providedIn: 'root',
@@ -139,25 +140,17 @@ export class NoteMoreService {
 		});
 	}
 
-	updateNotebook(
-		title: string,
-		author: string,
-		course: string,
-		description: string,
-		institution: string,
-		creatorId: string,
-		isPrivate: boolean,
-		tags: any
-	) {
+	updateNotebook(notebookDto: NotebookDto) {
 		this.notebookService.updateNotebook({
-			title,
-			author,
-			course,
-			description,
-			institution,
-			creatorId,
-			private: isPrivate,
-			tags,
+			title: notebookDto.title,
+			author: notebookDto.author,
+			course: notebookDto.course,
+			description: notebookDto.description,
+			institution: notebookDto.institution,
+			creatorId: notebookDto.creatorId,
+			private: notebookDto.private,
+			tags: notebookDto.tags,
+			notebookId: notebookDto.notebookId,
 		});
 	}
 }

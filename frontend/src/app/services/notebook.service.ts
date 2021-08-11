@@ -72,7 +72,7 @@ export class NotebookService {
 	 */
 	updateNotebook(notebookDto: NotebookDto): Observable<any> {
 		return this.httpClient.put(
-			`${NOTEBOOK_API}/updateNote`,
+			`${NOTEBOOK_API}/updateNotebook`,
 			{
 				title: notebookDto.title,
 				author: notebookDto.author,
@@ -82,6 +82,7 @@ export class NotebookService {
 				creatorId: notebookDto.creatorId,
 				private: notebookDto.private,
 				tags: notebookDto.tags,
+				notebookId: notebookDto.notebookId,
 			},
 			httpOptions
 		);

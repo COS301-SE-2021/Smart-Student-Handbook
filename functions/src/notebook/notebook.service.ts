@@ -33,7 +33,7 @@ export class NotebookService {
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-      
+
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
 					title: doc.data().title,
@@ -249,7 +249,7 @@ export class NotebookService {
 					notes,
 				})
 				.then(() => ({
-					message: 'Creating a notebook was successful!',
+					message: 'Update a notebook was successful!',
 					notebookId,
 				}))
 				.catch(() => {
