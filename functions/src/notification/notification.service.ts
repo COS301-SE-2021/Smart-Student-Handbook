@@ -3,7 +3,6 @@ import * as admin from 'firebase-admin';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import firebase from 'firebase';
-import { doc } from 'prettier';
 import { EmailInterface } from './interfaces/email.interface';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -11,7 +10,6 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { Notification } from './interfaces/notification.interface';
 import { NotificationDto } from './dto/notification.dto';
-import { Access } from '../notebook/interfaces/access.interface';
 import { Response } from '../notebook/interfaces/response.interface';
 
 const nodemailer = require('nodemailer');
