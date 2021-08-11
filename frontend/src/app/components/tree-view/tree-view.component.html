@@ -1,22 +1,42 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" id="notebookTree" >
 
-<!-- notes -->
-	<mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding  (click)="openNotebookFolder(node.id)">
-		<button mat-icon-button>{{ node.name }}</button>
-	</mat-tree-node>
+  <!-- notes -->
+  <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding  (click)="openNotebookFolder(node.id)">
+    <button mat-icon-button>{{ node.name }}</button>
+  </mat-tree-node>
 
-<!-- notebook -->
+  <!-- notebook -->
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+    <!--    <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>-->
     <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+      <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right" id="bookIcon">book</mat-icon>
       <mat-icon class="mat-icon-rtl-mirror">
         {{
         treeControl.isExpanded(node)
           ? 'expand_more'
           : 'chevron_right'
         }}
+        <!--        book-->
       </mat-icon>
+      <!--      <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>-->
     </button>
-    {{ node.name }}
+    <span id="notebookHead">{{ node.name }}</span>
+
+    <button mat-icon-button aria-label="Example icon-button with a menu" [matMenuTriggerFor]="NotebookMenu">
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-menu #NotebookMenu="matMenu">
+      <!--      <button mat-menu-item >-->
+      <!--        <mat-icon>book</mat-icon>-->
+      <!--        <span>Note</span>-->
+      <!--      </button>-->
+      <button mat-menu-item>
+        <mat-icon>create_new_folder</mat-icon>
+        <span>Notebook</span>
+      </button>
+    </mat-menu>
+
   </mat-tree-node>
 
 </mat-tree>

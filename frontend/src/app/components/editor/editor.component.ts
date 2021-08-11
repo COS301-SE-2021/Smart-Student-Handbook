@@ -457,6 +457,27 @@ export class EditorComponent {
 
 		// Clear the input value
 		event.chipInput!.clear();
+
+		this.updateTags();
+	}
+
+	updateTags() {
+		const tagList: string[] = [];
+		for (let i = 0; i < this.tags.length; i += 1) {
+			tagList.push(this.tags[i].name);
+		}
+
+		this.noteMore.updateNotebook({
+			title: this.notebook.title,
+			author: this.notebook.author,
+			course: this.notebook.course,
+			description: this.notebook.description,
+			institution: this.notebook.institution,
+			creatorId: this.notebook.creatorId,
+			private: this.notebook.private,
+			tags: tagList,
+			notebookId: this.notebook.notebookId,
+		});
 	}
 
 	/**
@@ -469,6 +490,8 @@ export class EditorComponent {
 		if (index >= 0) {
 			this.tags.splice(index, 1);
 		}
+
+		this.updateTags();
 	}
 
 	addCollaborator() {
