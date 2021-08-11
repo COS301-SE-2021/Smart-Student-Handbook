@@ -28,7 +28,7 @@
       </button>
 
       <mat-menu #NotebookMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="createNewNotebook()">
           <mat-icon>create_new_folder</mat-icon>
           <span>Notebook</span>
         </button>

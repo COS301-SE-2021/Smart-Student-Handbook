@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AddCollaboratorComponent } from '@app/components/modals/add-collaborator/add-collaborator.component';
-import { ConfirmDeleteComponent } from '@app/components';
+import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
 import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
@@ -135,6 +135,49 @@ export class NoteMoreService {
 							collaborators,
 							creator,
 						});
+					});
+			});
+		});
+	}
+
+	createNewNotebook(notebookDto: NotebookDto): Observable<any> {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: screenWidth,
+			data: {
+				title: '',
+				description: '',
+				private: '',
+			},
+		});
+
+		return Observable.create((observer: any) => {
+			dialogRef.afterClosed().subscribe((result) => {
+				this.notebookService
+					.createNotebook({
+						title: result.title,
+						author: notebookDto.author,
+						course: result.course,
+						description: result.description,
+						institution: notebookDto.institution,
+						creatorId: notebookDto.creatorId,
+						private: result.private,
+						tags: notebookDto.tags,
+					})
+					.subscribe((data: any) => {
+						console.log(data);
+						observer.next(data);
 					});
 			});
 		});
