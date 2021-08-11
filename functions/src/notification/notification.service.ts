@@ -16,21 +16,53 @@ dotenv.config();
 @Injectable()
 export class NotificationService {
 	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
+		// const transporter = nodemailer.createTransport({
+		// 	host: 'smtp.gmail.com',
+		// 	port: 465,
+		// 	secure: true,
+		// 	auth: {
+		// 		type: 'OAuth2',
+		// 		clientId: process.env.CLIENT_ID,
+		// 		clientSecret: process.env.CLIENT_SECRET,
+		// 	},
+		// });
+		// 	// 4/0AX4XfWhjOWiEfF-RNmn61Az6QEKg1bMETFeH2ve2-f8GjpPnmPmSkuUrVl3MFuNUKaIjkA
+		// const mailOptions = {
+		// 	from: process.env.EMAIL_USER,
+		// 	to: email.email,
+		// 	subject: email.subject,
+		// 	text: email.body,
+		// 	auth: {
+		// 		user: process.env.EMAIL_USER,
+		// 		refreshToken: process.env.REFRESH_TOKEN,
+		// 		accessToken: process.env.ACCESS_TOKEN,
+		// 		expires: 1484314697598,
+		// 	},
+		// };
+		//
+		// return transporter
+		// 	.sendMail(mailOptions)
+		// 	.then(
+		// 		(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
+		// 			success: true,
+		// 			message: info.messageId,
+		// 		}),
+		// 	)
+		// 	.catch(() => ({
+		// 		success: false,
+		// 		message: 'Something went wrong!',
+		// 	}));
+
 		const transporter = nodemailer.createTransport({
-			host: process.env.EMAIL_HOST,
-			port: process.env.EMAIL_PORT,
+			service: 'gmail',
 			auth: {
 				user: process.env.EMAIL_USER,
 				pass: process.env.EMAIL_PASS,
 			},
-			authMethod: 'PLAIN',
-
-			// secure: true,
-
 		});
 
 		const mailOptions = {
-			from: process.env.EMAIL_FROM,
+			from: process.env.EMAIL_USER,
 			to: email.email,
 			subject: email.subject,
 			text: email.body,
