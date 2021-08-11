@@ -336,5 +336,5 @@ export class NotificationService {
 		}
 	}
 
-	async sendUserToUserNotifications(userSender: string, userReciever: string) {}
+	// async sendUserToUserNotifications(userSender: string, userReciever: string) {}
 }
