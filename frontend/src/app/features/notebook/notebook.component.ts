@@ -3,15 +3,16 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { NotebookEventEmitterService, AccountService } from '@app/services';
-import { LeftMenuComponent } from '@app/core';
+import {
+	NotebookEventEmitterService,
+	AccountService,
+	OpenNotebookPanelService,
+} from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
-import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
 
 @Component({
 	selector: 'app-notebook',

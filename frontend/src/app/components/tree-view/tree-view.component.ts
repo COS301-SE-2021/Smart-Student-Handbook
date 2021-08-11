@@ -5,8 +5,7 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { NotebookService } from '@app/services';
-import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
+import { NotebookService, OpenNotebookPanelService } from '@app/services';
 
 @Component({
 	selector: 'app-tree-view',
@@ -15,6 +14,8 @@ import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-
 })
 export class TreeViewComponent implements OnInit {
 	user: any;
+
+	childrenSize = 0;
 
 	/**
 	 * If a tree node has children, transform the node to a parent node
@@ -60,6 +61,20 @@ export class TreeViewComponent implements OnInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.getUserNotebooks();
+
+		this.childrenSize = 0;
+
+    this.dataSource.data = [
+      {
+        name: 'My notebooks',
+        id: '',
+        children: [{
+          'name': '',
+          'id': ''
+        }
+        ],
+      },
+    ];
 	}
 
 	/**
@@ -70,30 +85,28 @@ export class TreeViewComponent implements OnInit {
 			(notebooks) => {
 				const tree = [];
 				for (let i = 0; i < notebooks.length; i += 1) {
-					// const childArr = [];
-					// for (let k = 0; k < notebooks[i].notes.length; k++) {
-					// 	childArr.push({
-					// 		name: notebooks[i].notes[k].name,
-					// 		id: notebooks[i].notes[k].noteId,
-					// 	});
-					// }
 
-					const parent = {
+          this.childrenSize += 1;
+
+					const child = {
 						name: notebooks[i].title,
 						id: notebooks[i].notebookId,
 						// children: childArr,
 					};
 
-					tree.push(parent);
+					tree.push(child);
 				}
 
-				this.dataSource.data = [
-					{
-						name: 'My notebooks',
-						id: '',
-						children: tree,
-					},
-				];
+				if (this.childrenSize > 0){
+          this.dataSource.data = [
+            {
+              name: 'My notebooks',
+              id: '',
+              children: tree,
+            },
+          ];
+        }
+
 			},
 			(error) => {
 				// eslint-disable-next-line no-console

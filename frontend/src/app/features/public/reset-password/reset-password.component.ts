@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordService } from '@app/services/reset-password.service';
+import { ResetPasswordService } from '@app/services';
 import { MustMatch } from '@app/features/public/register/must-match.validator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';

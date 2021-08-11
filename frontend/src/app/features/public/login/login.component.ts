@@ -15,6 +15,8 @@ export class LoginComponent {
 
 	errorMessage: string = '';
 
+	isDisabled: boolean = false;
+
 	constructor(
 		private fb: FormBuilder,
 		private route: ActivatedRoute,
@@ -35,32 +37,41 @@ export class LoginComponent {
 
 	// When user submits Login form
 	onSubmit() {
-		this.loginFailed = false;
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
 
-		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value;
+			const email = this.form.get('email')?.value.slice();
 			const password = this.form.get('password')?.value;
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				(userInfo: any) => {
-					console.log(userInfo);
+				(res: any) => {
+					if (res.success) {
+						this.loginFailed = false;
+						this.router.navigate(['/notebook']);
 
-					this.loginFailed = false;
-					// this.accountService.setUserSessionLocalStorage();
-					localStorage.setItem('user', JSON.stringify(userInfo));
-					this.accountService.setLoginState = true;
-					localStorage.setItem('loginState', 'true');
-
-					this.router.navigate(['notebook']);
-					// this.router.navigateByUrl(`notebook`);
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
+					} else {
+						this.loginFailed = true;
+						this.errorMessage =
+							'Username or Password was incorrect, Please try again!';
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
+					}
 				},
 				(err) => {
 					this.loginFailed = true;
-					this.errorMessage = `Error: ${err.error.message}`;
+					this.errorMessage = err.error.message;
 				}
 			);
+		} else {
+			if (progressbar) progressbar.style.display = 'none';
+			this.isDisabled = false;
 		}
 	}
 }
