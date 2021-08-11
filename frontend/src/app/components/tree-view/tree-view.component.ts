@@ -15,6 +15,8 @@ import { NotebookService, OpenNotebookPanelService } from '@app/services';
 export class TreeViewComponent implements OnInit {
 	user: any;
 
+	childrenSize = 0;
+
 	/**
 	 * If a tree node has children, transform the node to a parent node
 	 * @param node the node to be transformed
@@ -59,6 +61,20 @@ export class TreeViewComponent implements OnInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.getUserNotebooks();
+
+		this.childrenSize = 0;
+
+    this.dataSource.data = [
+      {
+        name: 'My notebooks',
+        id: '',
+        children: [{
+          'name': '',
+          'id': ''
+        }
+        ],
+      },
+    ];
 	}
 
 	/**
@@ -69,30 +85,28 @@ export class TreeViewComponent implements OnInit {
 			(notebooks) => {
 				const tree = [];
 				for (let i = 0; i < notebooks.length; i += 1) {
-					// const childArr = [];
-					// for (let k = 0; k < notebooks[i].notes.length; k++) {
-					// 	childArr.push({
-					// 		name: notebooks[i].notes[k].name,
-					// 		id: notebooks[i].notes[k].noteId,
-					// 	});
-					// }
 
-					const parent = {
+          this.childrenSize += 1;
+
+					const child = {
 						name: notebooks[i].title,
 						id: notebooks[i].notebookId,
 						// children: childArr,
 					};
 
-					tree.push(parent);
+					tree.push(child);
 				}
 
-				this.dataSource.data = [
-					{
-						name: 'My notebooks',
-						id: '',
-						children: tree,
-					},
-				];
+				if (this.childrenSize > 0){
+          this.dataSource.data = [
+            {
+              name: 'My notebooks',
+              id: '',
+              children: tree,
+            },
+          ];
+        }
+
 			},
 			(error) => {
 				// eslint-disable-next-line no-console
