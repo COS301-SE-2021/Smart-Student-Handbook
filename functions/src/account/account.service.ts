@@ -490,4 +490,19 @@ export class AccountService {
 			checksumPassed: checkPassed,
 		};
 	}
+
+	async setUserNotificationToken(notificationID: string): Promise<Response> {
+		const userId: string = firebase.auth().currentUser.uid;
+
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(userId)
+			.update({
+				notificationId: notificationID,
+			})
+			.then(() => ({
+				message: 'Successfully set the notificationID.',
+			}));
+	}
 }
