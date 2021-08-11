@@ -19,6 +19,8 @@ export class RegisterComponent {
 
 	errorMessage: string = '';
 
+	isDisabled: boolean = false;
+
 	constructor(
 		private fb: FormBuilder,
 		private route: ActivatedRoute,
@@ -49,10 +51,16 @@ export class RegisterComponent {
 		this.registerFailed = false;
 		this.submitted = true;
 
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
+
 		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value;
-			const displayName = this.form.get('displayName')?.value;
+			const email = this.form.get('email')?.value.slice();
+			const displayName = this.form.get('displayName')?.value.slice();
 			const password = this.form.get('password')?.value;
 			const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
@@ -72,11 +80,18 @@ export class RegisterComponent {
 											this.router.navigateByUrl(
 												`/notebook`
 											);
-											// TODO SET A LOADER FOR Register
+											if (progressbar)
+												progressbar.style.display =
+													'none';
+											this.isDisabled = false;
 										} else {
 											this.registerFailed = true;
 											this.errorMessage =
 												'An error occurred, please sign in manually!';
+											if (progressbar)
+												progressbar.style.display =
+													'none';
+											this.isDisabled = false;
 										}
 									},
 									(err) => {
@@ -87,6 +102,8 @@ export class RegisterComponent {
 						} else {
 							this.errorMessage = res.message;
 							// this.errorMessage = res.error;
+							if (progressbar) progressbar.style.display = 'none';
+							this.isDisabled = false;
 						}
 					},
 					(err) => {

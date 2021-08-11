@@ -1,3 +1,5 @@
+<mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+
 <img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" alt="Responsive image">
 
 <mat-card class="transparent">
@@ -29,7 +31,7 @@
 				<!--<mat-hint>Confirm your password (must match)</mat-hint>-->
 			</mat-form-field>
 
-			<button mat-raised-button type="submit">Register</button>
+			<button mat-raised-button type="submit" [disabled]="isDisabled">Register</button>
 		</form>
 	</mat-card-content>
 

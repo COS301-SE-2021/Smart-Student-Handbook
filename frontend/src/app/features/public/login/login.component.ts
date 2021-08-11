@@ -15,6 +15,8 @@ export class LoginComponent {
 
 	errorMessage: string = '';
 
+	isDisabled: boolean = false;
+
 	constructor(
 		private fb: FormBuilder,
 		private route: ActivatedRoute,
@@ -35,8 +37,14 @@ export class LoginComponent {
 
 	// When user submits Login form
 	onSubmit() {
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
+
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value;
+			const email = this.form.get('email')?.value.slice();
 			const password = this.form.get('password')?.value;
 
 			// Call the account service to login the user with Firebase
@@ -45,12 +53,15 @@ export class LoginComponent {
 					if (res.success) {
 						this.loginFailed = false;
 						this.router.navigate(['/notebook']);
-						// this.router.navigateByUrl(`notebook`);
-						// TODO SET A LOADER FOR LOGIN
+
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
 					} else {
 						this.loginFailed = true;
 						this.errorMessage =
 							'Username or Password was incorrect, Please try again!';
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
 					}
 				},
 				(err) => {
@@ -58,6 +69,9 @@ export class LoginComponent {
 					this.errorMessage = err.error.message;
 				}
 			);
+		} else {
+			if (progressbar) progressbar.style.display = 'none';
+			this.isDisabled = false;
 		}
 	}
 }

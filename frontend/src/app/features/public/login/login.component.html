@@ -1,3 +1,5 @@
+<mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+
 <img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" alt="Responsive image">
 
 <mat-card class="transparent">
@@ -15,7 +17,7 @@
 				<input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required/>
 				<mat-error> Please provide a valid password </mat-error>
 			</mat-form-field>
-			<button mat-raised-button type="submit">Login</button>
+			<button mat-raised-button type="submit" [disabled]="isDisabled">Login</button>
 		</form>
 	</mat-card-content>
 
