@@ -1609,7 +1609,7 @@ FodyWeavers.xsd
 
 ##Firebase ENV
 
-functions/
+#functions/
 
 *.runtimeconfig.json
 

@@ -33,7 +33,7 @@ export class NotebookService {
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-      
+
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
 					title: doc.data().title,
