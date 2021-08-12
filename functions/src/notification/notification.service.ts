@@ -334,5 +334,50 @@ export class NotificationService {
 		}
 	}
 
-	// async sendUserToUserNotifications(userSender: string, userReciever: string) {}
+	async getUserEmail(userId: string): Promise<string> {
+		try {
+			const userEmail = await admin.firestore().collection('users').doc(userId).get();
+
+			return userEmail.data().email;
+		} catch (error) {
+			throw new HttpException(
+				`Something went wrong. Operation could not be executed.${error}`,
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
+	async sendUserToUserEmail(userSender: string, userReciever: string, email: EmailInterface): Promise<Response> {
+		const recieverEmail = this.getUserEmail(userReciever);
+
+		const transporter = nodemailer.createTransport({
+			host: process.env.EMAIL_HOST,
+			port: process.env.EMAIL_PORT,
+			auth: {
+				user: process.env.EMAIL_USER,
+				pass: process.env.EMAIL_PASS,
+			},
+			authMethod: 'PLAIN',
+		});
+
+		const mailOptions = {
+			from: process.env.EMAIL_FROM,
+			to: recieverEmail,
+			subject: email.subject,
+			text: email.body,
+		};
+
+		return transporter
+			.sendMail(mailOptions)
+			.then(
+				(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
+					success: true,
+					message: info.messageId,
+				}),
+			)
+			.catch(() => ({
+				success: false,
+				message: 'Something went wrong!',
+			}));
+	}
 }
