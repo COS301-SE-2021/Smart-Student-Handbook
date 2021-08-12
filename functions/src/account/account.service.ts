@@ -132,21 +132,68 @@ export class AccountService {
 	 * Login user.
 	 */
 	async loginUser(loginDto: LoginDto): Promise<Account> {
+		const userData = await admin
+			.auth()
+			.getUserByEmail(loginDto.email)
+			.then((userRecord) => ({
+				uid: userRecord.uid,
+			}))
+			.catch((error) => ({
+				success: true,
+				uid: '',
+				email: '',
+				emailVerified: false,
+				phoneNumber: '',
+				displayName: '',
+				name: '',
+				institution: '',
+				department: '',
+				program: '',
+				workStatus: '',
+				bio: '',
+				dateJoined: '',
+				message: error.message,
+			}));
+
+		const userRef = admin.firestore().collection('users').doc(userData.uid);
+		const doc = await userRef.get();
+
 		// Login user. If successful return success message else throw Bad Request exception
 		return firebase
 			.auth()
 			.signInWithEmailAndPassword(loginDto.email, loginDto.password)
 			.then((userCredential) => ({
+				success: true,
 				uid: userCredential.user.uid,
 				email: userCredential.user.email,
 				emailVerified: userCredential.user.emailVerified,
 				phoneNumber: userCredential.user.phoneNumber,
 				displayName: userCredential.user.displayName,
+				name: doc.data().name,
+				institution: doc.data().institution,
+				department: doc.data().department,
+				program: doc.data().program,
+				workStatus: doc.data().workStatus,
+				bio: doc.data().bio,
+				dateJoined: doc.data().dateJoined,
 				message: 'User is successfully logged in.',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Bad Request ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: true,
+				uid: '',
+				email: '',
+				emailVerified: false,
+				phoneNumber: '',
+				displayName: '',
+				name: '',
+				institution: '',
+				department: '',
+				program: '',
+				workStatus: '',
+				bio: '',
+				dateJoined: '',
+				message: error.message,
+			}));
 	}
 
 	/**
@@ -174,18 +221,43 @@ export class AccountService {
 		try {
 			user = firebase.auth().currentUser;
 
+			const userRef = admin.firestore().collection('users').doc(user.uid);
+			const doc = await userRef.get();
+
 			// Return user object
 			return {
+				success: true,
 				uid: user.uid,
 				email: user.email,
 				emailVerified: user.emailVerified,
+				phoneNumber: user.phoneNumber,
 				displayName: user.displayName,
+				name: doc.data().name,
+				institution: doc.data().institution,
+				department: doc.data().department,
+				program: doc.data().program,
+				workStatus: doc.data().workStatus,
+				bio: doc.data().bio,
+				dateJoined: doc.data().dateJoined,
+				message: 'User is successfully logged in.',
 			};
 		} catch (error) {
-			throw new HttpException(
-				`Bad Request. User might not be signed in or does not exist: ${error.message}`,
-				HttpStatus.BAD_REQUEST,
-			);
+			return {
+				success: true,
+				uid: '',
+				email: '',
+				emailVerified: false,
+				phoneNumber: '',
+				displayName: '',
+				name: '',
+				institution: '',
+				department: '',
+				program: '',
+				workStatus: '',
+				bio: '',
+				dateJoined: '',
+				message: error.message,
+			};
 		}
 	}
 
