@@ -105,7 +105,6 @@ export class AddTagsTool implements BlockTool {
 	}
 
 	validate(savedData: any) {
-		console.log(savedData.header.trim() !== '');
 		return savedData.header.trim() !== '';
 	}
 }

@@ -13,8 +13,11 @@
 					<mat-icon>keyboard_arrow_left</mat-icon>
 				</button>
 
-				<h2 style="display: inline">Notes</h2>
-				<button mat-icon-button (click)="createNewNote()">
+        <div style="display: inline-flex; width: min-content">
+          <h2 id="notebookPanelHeader">{{notebookTitle}}</h2>
+        </div>
+
+				<button id="addNoteButton" mat-icon-button (click)="createNewNote()">
 					<mat-icon>add_circle_outline</mat-icon>
 				</button>
 			</div>
