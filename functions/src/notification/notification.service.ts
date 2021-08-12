@@ -9,7 +9,7 @@ import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dt
 import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { Notification } from './interfaces/notification.interface';
-import { NotificationDto } from './dto/notification.dto';
+import { NotificationDto } from './dto/Notification.dto';
 import { Response } from '../notebook/interfaces/response.interface';
 
 const nodemailer = require('nodemailer');
