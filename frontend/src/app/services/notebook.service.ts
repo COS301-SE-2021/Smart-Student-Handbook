@@ -71,6 +71,7 @@ export class NotebookService {
 	 * param tags
 	 */
 	updateNotebook(notebookDto: NotebookDto): Observable<any> {
+		// console.log(notebookDto);
 		return this.httpClient.put(
 			`${NOTEBOOK_API}/updateNotebook`,
 			{

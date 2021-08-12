@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -19,6 +19,7 @@ import {
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
+import { MatExpansionPanel } from '@angular/material/expansion';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -36,7 +37,7 @@ export interface Collaborators {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit {
 	/**
     Get all plugins for notebook
    */
@@ -121,9 +122,15 @@ export class EditorComponent {
 
 	user: any;
 
+	private: boolean = true;
+
+	opened: boolean = false;
+
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
 	@ViewChild('progressBar') progressBar!: HTMLElement;
+
+	@ViewChild('noteInfoAccordion') noteInfoAccordion!: MatExpansionPanel;
 
 	/**
 	 * Editor component constructor
@@ -145,6 +152,29 @@ export class EditorComponent {
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
+	ngOnInit(): void {
+		if (this.notebookEventEmitterService.subsVar === undefined) {
+			this.notebookEventEmitterService.subsVar =
+				this.notebookEventEmitterService.loadEmitter.subscribe(
+					({ notebookId, noteId, title }) => {
+						this.loadEditor(notebookId, noteId, title);
+					}
+				);
+
+			this.notebookEventEmitterService.closeNoteEmitter.subscribe(() => {
+				this.showDefaultImage();
+				this.noteInfoAccordion.close();
+				this.opened = false;
+			});
+
+			this.notebookEventEmitterService.changePrivacyEmitter.subscribe(
+				(privacy: boolean) => {
+					this.private = privacy;
+				}
+			);
+		}
+	}
+
 	getNotebook(notebookId: string): void {
 		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
 			this.date = data.date;
@@ -152,6 +182,8 @@ export class EditorComponent {
 			this.tags = data.tags;
 			this.collaborators = data.collaborators;
 			this.creator = data.creator;
+			this.private = data.notebook.private;
+			this.opened = true;
 		});
 	}
 
@@ -389,7 +421,7 @@ export class EditorComponent {
 	removeNote() {
 		this.notesService
 			.removeNote(this.notebookID, this.noteId)
-			.subscribe((removed) => {
+			.subscribe((removed: any) => {
 				if (removed) {
 					const editor = this.Editor;
 					editor.clear();
@@ -467,7 +499,7 @@ export class EditorComponent {
 			tagList.push(this.tags[i].name);
 		}
 
-		this.noteMore.updateNotebook({
+		this.noteMore.updateNotebookTags({
 			title: this.notebook.title,
 			author: this.notebook.author,
 			course: this.notebook.course,
