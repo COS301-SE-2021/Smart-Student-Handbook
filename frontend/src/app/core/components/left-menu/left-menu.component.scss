@@ -30,9 +30,6 @@
 }
 
 
-//------------------------------------------------
-
-
 #openPanelBtn{
   position: absolute;
   top: 12px;
@@ -52,7 +49,6 @@
   width: 100%;
   height: calc(100vh - 70px);
   position: fixed;
-  //border: 2px solid black;
   transition: all .1s linear;
   border-radius: 3px;
   overflow: hidden;
@@ -61,16 +57,10 @@
 :host{
   width: 100%;
   height: 90vh;
-  // position: fixed;
 }
 
 #panelContent{
-  // border: 2px solid black;
-  // height: 99vh;
   width: 100%;
-  // margin-left: 39px;
-  // margin-top: 5vh;
-
 }
 
 .header-image {
@@ -83,9 +73,27 @@
   //height: 30px !important;
 }
 
+.logo-image {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  background-image: url("../../../../assets/logo/SmartStudentHandbookLogo.png");
+  background-size: cover;
+  //width: 30px !important;
+  //height: 30px !important;
+}
+
 #profileMenuPic{
   height: 40px;
   width: 40px;
+  margin-bottom: 20px !important;
+  margin-top: 10px;
+  margin-left: 0 !important;
+  background-size: cover;
+  transition: all .1s linear;
+  position: absolute !important;
+  bottom: 60px;
+  cursor: pointer;
 }
 
 .profileCard{
@@ -96,9 +104,9 @@
   transition: all .1s linear;
   //padding-bottom: -20px;
   position: absolute !important;
+  //bottom: 40px;
   bottom: 60px;
-  cursor: pointer;
-  border-top: 1px solid #dedede;
+  border: 1px solid #dedede;
 }
 
 .margin{
@@ -106,11 +114,20 @@
 }
 
 #username{
-  font-size: medium;
+  font-size: small;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70px;
 }
 
 #subTitle{
   font-size: small;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70px;
 }
 
 .content{
@@ -129,7 +146,8 @@
 // }
 
 #profileCardHeader{
-  cursor: pointer;
+  height:45px;
+  margin-bottom: 5px;
 }
 
 
