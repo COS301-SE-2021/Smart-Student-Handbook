@@ -220,6 +220,7 @@ export class NotebookService {
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {
+		console.log(noteDto);
 		const userId = await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 

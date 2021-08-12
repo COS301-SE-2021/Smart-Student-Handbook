@@ -8,7 +8,8 @@ export interface DialogData {
 	title: string;
 	description: string;
 	course: string;
-	private: string;
+	private: boolean;
+	header: string;
 }
 
 @Component({
@@ -20,7 +21,10 @@ export class AddNotebookComponent {
 	constructor(
 		public dialogRef: MatDialogRef<AddNotebookComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: DialogData
-	) {}
+	) {
+		// eslint-disable-next-line no-param-reassign
+		if (!data.private) data.private = false;
+	}
 
 	onNoClick(): void {
 		this.dialogRef.close();

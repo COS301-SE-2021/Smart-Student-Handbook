@@ -159,41 +159,105 @@ export class NoteMoreService {
 				title: '',
 				description: '',
 				private: '',
+				header: 'Create New Notebook',
 			},
 		});
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				this.notebookService
-					.createNotebook({
-						title: result.title,
-						author: notebookDto.author,
-						course: result.course,
-						description: result.description,
-						institution: notebookDto.institution,
-						creatorId: notebookDto.creatorId,
-						private: result.private,
-						tags: notebookDto.tags,
-					})
-					.subscribe((data: any) => {
-						// console.log(data);
-						observer.next(data);
-					});
+				if (result) {
+					this.notebookService
+						.createNotebook({
+							title: result.title,
+							author: notebookDto.author,
+							course: result.course,
+							description: result.description,
+							institution: notebookDto.institution,
+							creatorId: notebookDto.creatorId,
+							private: result.private,
+							tags: notebookDto.tags,
+						})
+						.subscribe((data: any) => {
+							// console.log(data);
+							observer.next(data);
+						});
+				}
 			});
 		});
 	}
 
-	updateNotebook(notebookDto: NotebookDto) {
-		this.notebookService.updateNotebook({
-			title: notebookDto.title,
-			author: notebookDto.author,
-			course: notebookDto.course,
-			description: notebookDto.description,
-			institution: notebookDto.institution,
-			creatorId: notebookDto.creatorId,
-			private: notebookDto.private,
-			tags: notebookDto.tags,
-			notebookId: notebookDto.notebookId,
+	updateNotebookTags(notebookDto: NotebookDto) {
+		this.notebookService
+			.updateNotebook({
+				title: notebookDto.title,
+				author: notebookDto.author,
+				course: notebookDto.course,
+				description: notebookDto.description,
+				institution: notebookDto.institution,
+				creatorId: notebookDto.creatorId,
+				private: notebookDto.private,
+				tags: notebookDto.tags,
+				notebookId: notebookDto.notebookId,
+			})
+			.subscribe(() => {
+				// console.log(res);
+			});
+	}
+
+	updateNotebook(notebookDto: NotebookDto): Observable<any> {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		const dialogRef = this.dialog.open(AddNotebookComponent, {
+			width: screenWidth,
+			data: {
+				title: notebookDto.title,
+				course: notebookDto.course,
+				description: notebookDto.description,
+				private: notebookDto.private,
+				header: 'Update Notebook',
+			},
+		});
+
+		return Observable.create((observer: any) => {
+			dialogRef.afterClosed().subscribe((result) => {
+				if (result) {
+					this.notebookService
+						.updateNotebook({
+							title: result.title,
+							author: notebookDto.author,
+							course: notebookDto.course,
+							description: result.description,
+							institution: notebookDto.institution,
+							creatorId: notebookDto.creatorId,
+							private: result.private,
+							tags: notebookDto.tags,
+							notebookId: notebookDto.notebookId,
+						})
+						.subscribe(() => {
+							observer.next({
+								title: result.title,
+								author: notebookDto.author,
+								course: result.course,
+								description: result.description,
+								institution: notebookDto.institution,
+								creatorId: notebookDto.creatorId,
+								private: result.private,
+								tags: notebookDto.tags,
+								notebookId: notebookDto.notebookId,
+							});
+						});
+				}
+			});
 		});
 	}
 }

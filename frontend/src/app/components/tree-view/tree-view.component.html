@@ -4,10 +4,23 @@
     <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding >
       <button mat-button class="notebookNode" (click)="openNotebookFolder(node.id, node.name)">{{ node.name }}</button>
 
-      <button mat-icon-button aria-label="Delete notebook" >
-        <mat-icon (click)="deleteNotebook(node.id)">delete_outline</mat-icon>
+      <button mat-icon-button aria-label="Delete notebook" [matMenuTriggerFor]="notebookMenu">
+        <mat-icon >more_vert</mat-icon>
       </button>
+
+      <mat-menu #notebookMenu="matMenu">
+        <button mat-menu-item (click)="updateNotebook(node.id)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit Notebook</span>
+        </button>
+        <button mat-menu-item (click)="deleteNotebook(node.id)">
+          <mat-icon>delete_outline</mat-icon>
+          <span>Delete Notebook</span>
+        </button>
+      </mat-menu>
     </mat-tree-node>
+
+
 
     <!-- notebook -->
     <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>

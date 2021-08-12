@@ -6,12 +6,14 @@ import {
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
+	NotebookEventEmitterService,
 	NotebookService,
 	NoteMoreService,
 	OpenNotebookPanelService,
 } from '@app/services';
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
+import { not } from 'rxjs/internal-compatibility';
 
 @Component({
 	selector: 'app-tree-view',
@@ -22,6 +24,10 @@ export class TreeViewComponent implements OnInit {
 	user: any;
 
 	childrenSize = 0;
+
+	notebooks: any[] = [];
+
+	openedNotebookId: string = '';
 
 	/**
 	 * If a tree node has children, transform the node to a parent node
@@ -61,7 +67,8 @@ export class TreeViewComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private noteMore: NoteMoreService,
-		private openNotebookPanelService: OpenNotebookPanelService
+		private openNotebookPanelService: OpenNotebookPanelService,
+		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
 	ngOnInit(): void {
@@ -92,6 +99,8 @@ export class TreeViewComponent implements OnInit {
 	getUserNotebooks() {
 		this.notebookService.getUserNotebooks().subscribe(
 			(notebooks) => {
+				this.notebooks = notebooks;
+
 				const tree = [];
 				for (let i = 0; i < notebooks.length; i += 1) {
 					this.childrenSize += 1;
@@ -122,11 +131,62 @@ export class TreeViewComponent implements OnInit {
 		);
 	}
 
+	updateNotebook(notebookId: string) {
+		const notebook = this.notebooks.filter(
+			(noteb) => noteb.notebookId === notebookId
+		);
+
+		this.noteMore
+			.updateNotebook({
+				title: notebook[0].title,
+				author: notebook[0].author,
+				course: notebook[0].course,
+				description: notebook[0].description,
+				institution: notebook[0].institution,
+				creatorId: notebook[0].creatorId,
+				private: notebook[0].private,
+				tags: notebook[0].tags,
+				notebookId: notebook[0].notebookId,
+			})
+			.subscribe((val) => {
+				this.notebooks = this.notebooks.map((nb: any) => {
+					if (nb.notebookId === notebookId) {
+						nb.title = val.title;
+						nb.course = val.course;
+						nb.description = val.description;
+						nb.private = val.private;
+					}
+					return nb;
+				});
+
+				let tree = this.dataSource.data[0].children;
+				if (tree)
+					tree = tree.map((node) => {
+						if (node.id === notebookId) {
+							node.name = val.title;
+						}
+						return node;
+					});
+
+				this.dataSource.data = [
+					{
+						name: 'My notebooks',
+						id: '',
+						children: tree,
+					},
+				];
+				this.treeControl.expandAll();
+				this.notebookEventEmitterService.ChangePrivacy(val.private);
+			});
+	}
+
 	/**
 	 * Navigate to the Notes component when using a mobile device and
 	 * toggle the notesPanel component when using a desktop
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
+		this.openedNotebookId = notebookId;
+
 		const screenType = navigator.userAgent;
 		if (
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
@@ -145,7 +205,6 @@ export class TreeViewComponent implements OnInit {
 	}
 
 	createNewNotebook() {
-		// console.log(this.user);
 		this.noteMore
 			.createNewNotebook({
 				title: '',
@@ -158,6 +217,10 @@ export class TreeViewComponent implements OnInit {
 				tags: [],
 			})
 			.subscribe((val: any) => {
+				this.openedNotebookId = val.notebook.notebookId;
+
+				this.notebooks.push(val.notebook);
+
 				const child = {
 					name: val.notebook.title,
 					id: val.notebook.notebookId,
@@ -208,7 +271,10 @@ export class TreeViewComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true) {
-				// console.log(notebookId);
+				this.notebooks = this.notebooks.filter(
+					(notebook) => notebook.notebookId !== notebookId
+				);
+
 				this.notebookService
 					.deleteNotebook(notebookId)
 					.subscribe(() => {
@@ -250,7 +316,10 @@ export class TreeViewComponent implements OnInit {
 								];
 							}
 
-							this.openNotebookPanelService.closePanel();
+							if (this.openedNotebookId === notebookId) {
+								this.openNotebookPanelService.closePanel();
+								this.notebookEventEmitterService.CloseNote();
+							}
 						}
 					});
 			}
