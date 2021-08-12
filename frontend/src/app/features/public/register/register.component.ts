@@ -77,9 +77,7 @@ export class RegisterComponent {
 									(x: any) => {
 										if (x.success) {
 											this.registerFailed = false;
-											this.router.navigateByUrl(
-												`/notebook`
-											);
+											this.router.navigateByUrl(`/home`);
 											if (progressbar)
 												progressbar.style.display =
 													'none';
@@ -97,6 +95,9 @@ export class RegisterComponent {
 									(err) => {
 										this.registerFailed = true;
 										this.errorMessage = `Error: ${err.error.message}`;
+										if (progressbar)
+											progressbar.style.display = 'none';
+										this.isDisabled = false;
 									}
 								);
 						} else {
@@ -109,6 +110,8 @@ export class RegisterComponent {
 					(err) => {
 						this.registerFailed = true;
 						this.errorMessage = `Error: ${err.error.message}`;
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
 					}
 				);
 		}

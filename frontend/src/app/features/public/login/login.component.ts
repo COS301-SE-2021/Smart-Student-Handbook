@@ -52,7 +52,7 @@ export class LoginComponent {
 				(res: any) => {
 					if (res.success) {
 						this.loginFailed = false;
-						this.router.navigate(['/notebook']);
+						this.router.navigate(['/home']);
 
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
@@ -66,7 +66,11 @@ export class LoginComponent {
 				},
 				(err) => {
 					this.loginFailed = true;
-					this.errorMessage = err.error.message;
+					// this.errorMessage = err.error.message;
+					this.errorMessage =
+						'Username or Password was incorrect, Please try again!';
+					if (progressbar) progressbar.style.display = 'none';
+					this.isDisabled = false;
 				}
 			);
 		} else {
