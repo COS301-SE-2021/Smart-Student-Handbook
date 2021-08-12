@@ -325,7 +325,7 @@ export class NotificationService {
 		try {
 			const userID = await admin.firestore().collection('users').doc(userId).get();
 
-			return userID.data().notificationID;
+			return userID.data().notificationID.value;
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
@@ -347,8 +347,8 @@ export class NotificationService {
 		}
 	}
 
-	async sendUserToUserEmail(userSender: string, userReciever: string, email: EmailInterface): Promise<Response> {
-		const recieverEmail = this.getUserEmail(userReciever);
+	async sendUserToUserEmail(userSender: string, userReceiver: string, email: EmailInterface): Promise<Response> {
+		const receiverEmail = await this.getUserEmail(userReceiver);
 
 		const transporter = nodemailer.createTransport({
 			host: process.env.EMAIL_HOST,
@@ -362,7 +362,7 @@ export class NotificationService {
 
 		const mailOptions = {
 			from: process.env.EMAIL_FROM,
-			to: recieverEmail,
+			to: receiverEmail,
 			subject: email.subject,
 			text: email.body,
 		};
@@ -379,5 +379,42 @@ export class NotificationService {
 				success: false,
 				message: 'Something went wrong!',
 			}));
+	}
+
+	async SendUserToUserPushNotification(
+		singleNotificationRequest: SingleNotificationRequestDto,
+		receiverUserID: string,
+	) {
+		// Send notification to single user
+		const receiverToken = await this.getUserNotificationID(receiverUserID);
+		const message = {
+			token: receiverToken,
+			notification: {
+				title: singleNotificationRequest.title,
+				body: singleNotificationRequest.body,
+			},
+			data: {
+				test: 'test data',
+			},
+		};
+
+		return admin
+			.messaging()
+			.send(message)
+			.then((response) => {
+				console.log('Successfully sent individual message:', response);
+
+				return {
+					status: 'successful',
+				};
+			})
+			.catch((error) => {
+				console.log('Error sending individual message:', error);
+
+				return {
+					status: 'unsuccessful',
+					error: error.errorInfo,
+				};
+			});
 	}
 }
