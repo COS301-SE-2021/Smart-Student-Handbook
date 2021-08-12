@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
+import * as functions from 'firebase-functions';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import firebase from 'firebase';
 import { EmailInterface } from './interfaces/email.interface';
@@ -29,19 +30,15 @@ dotenv.config();
 export class NotificationService {
 	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
 		const transporter = nodemailer.createTransport({
-			host: process.env.EMAIL_HOST,
-			port: process.env.EMAIL_PORT,
+			service: 'gmail',
 			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
+				user: functions.config().email.user,
+				pass: functions.config().email.pass,
 			},
-			authMethod: 'PLAIN',
-
-			// secure: true,
 		});
 
 		const mailOptions = {
-			from: process.env.EMAIL_FROM,
+			from: functions.config().email.user,
 			to: email.email,
 			subject: email.subject,
 			text: email.body,
