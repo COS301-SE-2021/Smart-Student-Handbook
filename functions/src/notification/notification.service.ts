@@ -381,7 +381,7 @@ export class NotificationService {
 			}));
 	}
 
-	async SendUserToUserPushNotification(
+	async sendUserToUserPushNotification(
 		singleNotificationRequest: SingleNotificationRequestDto,
 		receiverUserID: string,
 	) {
