@@ -26,7 +26,6 @@ import {
 import { environment } from '@environments/environment';
 
 // Services
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
 
 // Features
 import {
@@ -44,6 +43,7 @@ import {
 	RegisterComponent,
 	ResetPasswordComponent,
 	LandingPageComponent,
+	ForgotPasswordComponent,
 } from '@app/features/public';
 
 // Mobile
@@ -60,10 +60,16 @@ import {
 	AddNotebookComponent,
 	ConfirmDeleteComponent,
 	TreeViewComponent,
+	AddCollaboratorComponent,
 } from '@app/components';
 
+// Long press
+import { NgxLongPress2Module } from 'ngx-long-press2';
+
+import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AddNoteComponent } from './components/modals/add-note/add-note.component';
 
 @NgModule({
 	declarations: [
@@ -94,6 +100,9 @@ import { AppRoutingModule } from './app-routing.module';
 		RegisterComponent,
 		ResetPasswordComponent,
 		LandingPageComponent,
+		ForgotPasswordComponent,
+		AddCollaboratorComponent,
+  AddNoteComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -113,6 +122,7 @@ import { AppRoutingModule } from './app-routing.module';
 		// AngularFireStorageModule,
 		AngularFirestoreModule,
 		FlexLayoutModule,
+		NgxLongPress2Module,
 		HttpClientModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: environment.production,

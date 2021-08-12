@@ -26,8 +26,6 @@ export class LeftMenuComponent implements OnInit {
 	// Hold user information
 	user: any;
 
-	profile: any;
-
 	open: boolean = false;
 
 	// Variables to be used when updating user profile
@@ -40,6 +38,8 @@ export class LeftMenuComponent implements OnInit {
 	department: string = '';
 
 	name: string = '';
+
+	userEmail: string = '';
 
 	program: string = '';
 
@@ -76,10 +76,10 @@ export class LeftMenuComponent implements OnInit {
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
 
-		this.username = this.user.displayName;
-		this.bio = this.profile.userInfo.bio;
+		this.username = this.user.name;
+		this.bio = this.user.bio;
+		this.userEmail = this.user.email;
 	}
 
 	onSinenavToggle() {
@@ -119,6 +119,18 @@ export class LeftMenuComponent implements OnInit {
 	 * Open a modal popup with a form to view and update the users profile
 	 */
 	updateProfile() {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
 		// Retrieve the current lodged in user from localstorage
 		const user = JSON.parse(<string>localStorage.getItem('user'));
 
@@ -127,7 +139,7 @@ export class LeftMenuComponent implements OnInit {
 			(data) => {
 				// Open dialog and populate the data attributes of the form fields
 				const dialogRef = this.dialog.open(EditProfileComponent, {
-					width: '50%',
+					width: screenWidth,
 					data: {
 						bio: data.userInfo.bio,
 						department: data.userInfo.department,
@@ -153,7 +165,14 @@ export class LeftMenuComponent implements OnInit {
 								result.bio
 							)
 							.subscribe(
-								() => {},
+								() => {
+									this.user.name = result.name;
+									this.user.institution = result.institution;
+									this.user.department = result.department;
+									this.user.program = result.program;
+									this.user.workstatus = result.workstatus;
+									this.user.bio = result.bio;
+								},
 								(err) => {
 									console.log(`Error: ${err.error.message}`);
 								}
@@ -173,11 +192,7 @@ export class LeftMenuComponent implements OnInit {
 	async logout() {
 		this.accountService.singOut().subscribe(
 			() => {
-				// this.router.navigateByUrl(`/account/login`);
-				localStorage.clear();
-				this.accountService.setLoginState = false;
-				this.router.navigate(['/account/login']);
-				localStorage.setItem('loginState', 'false');
+				this.router.navigate(['account/login']);
 			},
 			(err) => {
 				console.log(`Error: ${err.error.message}`);

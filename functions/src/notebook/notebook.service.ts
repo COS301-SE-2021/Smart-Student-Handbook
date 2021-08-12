@@ -28,12 +28,16 @@ export class NotebookService {
 				notebookIds.push(doc.id);
 			});
 
+			if (notebookIds.length === 0) {
+				return notebooks;
+			}
+
 			const notebookSnapshot = await admin
 				.firestore()
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-      
+
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
 					title: doc.data().title,
@@ -49,8 +53,6 @@ export class NotebookService {
 					tags: doc.data().tags,
 				});
 			});
-			console.log('notebooks');
-			console.log(notebooks);
 
 			return notebooks;
 		} catch (e) {
@@ -218,6 +220,7 @@ export class NotebookService {
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {
+		console.log(noteDto);
 		const userId = await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
@@ -249,7 +252,7 @@ export class NotebookService {
 					notes,
 				})
 				.then(() => ({
-					message: 'Creating a notebook was successful!',
+					message: 'Update a notebook was successful!',
 					notebookId,
 				}))
 				.catch(() => {

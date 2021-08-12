@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@app/services';
@@ -8,12 +8,14 @@ import { AccountService } from '@app/services';
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent {
 	form: FormGroup;
 
 	loginFailed = false;
 
 	errorMessage: string = '';
+
+	isDisabled: boolean = false;
 
 	constructor(
 		private fb: FormBuilder,
@@ -21,6 +23,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private accountService: AccountService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
+
 		// setup the form and validation
 		this.form = this.fb.group({
 			email: ['', Validators.email],
@@ -28,41 +35,43 @@ export class LoginComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	ngOnInit() {
-		// add image background to body
-		document.body.className = 'backgroundIMG';
-	}
-
-	ngOnDestroy() {
-		// Remove image background to body
-		document.body.className = '';
-	}
-
 	// When user submits Login form
 	onSubmit() {
-		this.loginFailed = false;
+		const progressbar = document.getElementById(
+			'notesProgressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
 
-		// check if form is valid
 		if (this.form.valid) {
-			const email = this.form.get('email')?.value;
+			const email = this.form.get('email')?.value.slice();
 			const password = this.form.get('password')?.value;
 
 			// Call the account service to login the user with Firebase
 			this.accountService.loginUser(email, password).subscribe(
-				() => {
-					this.loginFailed = false;
-					this.accountService.setUserSessionLocalStorage();
-					this.accountService.setLoginState = true;
-					localStorage.setItem('loginState', 'true');
+				(res: any) => {
+					if (res.success) {
+						this.loginFailed = false;
+						this.router.navigate(['/notebook']);
 
-					this.router.navigate(['notebook']);
-					// this.router.navigateByUrl(`notebook`);
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
+					} else {
+						this.loginFailed = true;
+						this.errorMessage =
+							'Username or Password was incorrect, Please try again!';
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
+					}
 				},
 				(err) => {
 					this.loginFailed = true;
-					this.errorMessage = `Error: ${err.error.message}`;
+					this.errorMessage = err.error.message;
 				}
 			);
+		} else {
+			if (progressbar) progressbar.style.display = 'none';
+			this.isDisabled = false;
 		}
 	}
 }

@@ -25,6 +25,7 @@ export class UserService {
 				program: doc.data().program,
 				workStatus: doc.data().workStatus,
 				bio: doc.data().bio,
+				profilePicUrl: doc.data().profilePicUrl,
 				dateJoined: doc.data().dateJoined,
 			};
 		} else {

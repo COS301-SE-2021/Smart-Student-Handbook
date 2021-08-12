@@ -59,6 +59,37 @@ export class NotebookService {
 	}
 
 	/**
+	 * Update a notebook with the following variables
+	 * @param notebookDto
+	 * param title
+	 * param author
+	 * param course
+	 * param description
+	 * param institution
+	 * param creatorId
+	 * param private
+	 * param tags
+	 */
+	updateNotebook(notebookDto: NotebookDto): Observable<any> {
+		// console.log(notebookDto);
+		return this.httpClient.put(
+			`${NOTEBOOK_API}/updateNotebook`,
+			{
+				title: notebookDto.title,
+				author: notebookDto.author,
+				course: notebookDto.course,
+				description: notebookDto.description,
+				institution: notebookDto.institution,
+				creatorId: notebookDto.creatorId,
+				private: notebookDto.private,
+				tags: notebookDto.tags,
+				notebookId: notebookDto.notebookId,
+			},
+			httpOptions
+		);
+	}
+
+	/**
 	 * Get all the user's notebooks and note id's
 	 */
 	getUserNotebooks(): Observable<any> {
@@ -89,6 +120,7 @@ export class NotebookService {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -104,6 +136,7 @@ export class NotebookService {
 			notebookId: noteDto.notebookId,
 			noteId: noteDto.noteId,
 			name: noteDto.name,
+			description: noteDto.description,
 		});
 	}
 
@@ -220,46 +253,4 @@ export class NotebookService {
 			`${NOTEBOOK_API}/removeUserAccess/${checkAccessDto.userId}/${checkAccessDto.notebookId}`
 		);
 	}
-
-	// getUserNotebooks(userId: string): Observable<any> {
-	// getUserNotebooks(): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findAllUserNotebooks/`
-	// 	);
-	// }
-	//
-	// getNoteBookById(noteBookId: string): Observable<any> {
-	// 	return this.httpClient.request<any>(
-	// 		'get',
-	// 		`${NOTEBOOK_API}notebook/findNotebookById/${noteBookId}`
-	// 	);
-	// }
-	//
-	// createNotebook(notebookDto: NotebookDto) {
-	// 	return this.httpClient.request<any>(
-	// 		'post',
-	// 		`${NOTEBOOK_API}notebook/createNotebook/`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// updateNotebook(notebookDto: NotebookDto, Id: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'put',
-	// 		`${NOTEBOOK_API}notebook/updateNotebook/${Id}`,
-	// 		{
-	// 			body: notebookDto,
-	// 		}
-	// 	);
-	// }
-	//
-	// removeNotebook(noteBookId: string) {
-	// 	return this.httpClient.request<any>(
-	// 		'delete',
-	// 		`${NOTEBOOK_API}notebook/deleteNotebook/${noteBookId}`
-	// 	);
-	// }
 }
