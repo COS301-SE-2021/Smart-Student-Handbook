@@ -69,6 +69,7 @@ import { NgxLongPress2Module } from 'ngx-long-press2';
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AddNoteComponent } from './components/modals/add-note/add-note.component';
 
 @NgModule({
 	declarations: [
@@ -101,6 +102,7 @@ import { AppRoutingModule } from './app-routing.module';
 		LandingPageComponent,
 		ForgotPasswordComponent,
 		AddCollaboratorComponent,
+  AddNoteComponent,
 	],
 	imports: [
 		MaterialModule,
