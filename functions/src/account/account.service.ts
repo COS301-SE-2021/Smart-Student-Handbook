@@ -25,7 +25,24 @@ export class AccountService {
 	async registerUser(registerDto: RegisterDto): Promise<Account> {
 		// Check if user password and confirm passwords match before creating user
 		if (registerDto.password !== registerDto.passwordConfirm) {
-			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Passwords dont match',
+			};
+		}
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!emailRegex.test(registerDto.email) || !passwordRegex.test(registerDto.password)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Email or Password does not meet the requirements',
+			};
 		}
 
 		/**
@@ -84,7 +101,7 @@ export class AccountService {
 
 		let host;
 		// eslint-disable-next-line eqeqeq
-		if (registerDto.isLocalhost != undefined || registerDto.isLocalhost == true) {
+		if (registerDto.isLocalhost == undefined || registerDto.isLocalhost == true) {
 			host = 'localhost:5001/smartstudentnotebook/us-central1';
 		} else {
 			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
@@ -98,17 +115,12 @@ export class AccountService {
 
 		await this.notificationService.sendEmailNotification({
 			email: registerDto.email,
-			subject: 'Smart Student Handbook Email Verification',
-			body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
+			subject: 'Welcome to Smart Student Handbook',
+			// eslint-disable-next-line max-len
+			body: `Good day, ${registerDto.displayName}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
 		});
 
 		// send welcome email to new user
-		await this.notificationService.sendEmailNotification({
-			email: registerDto.email,
-			subject: 'Welcome to Smart Student Handbook',
-			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
-		});
-
 		return resp;
 	}
 
@@ -124,7 +136,7 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 		} catch (error) {
 			return {
-				success: true,
+				success: false,
 				user: null,
 				message: 'User does not exist',
 				error: error.message,
@@ -153,15 +165,30 @@ export class AccountService {
 				},
 				message: 'User is successfully registered!',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: false,
+				user: null,
+				message: `${error.message}`,
+			}));
 	}
 
 	/**
 	 * Login user.
 	 */
 	async loginUser(loginDto: LoginDto): Promise<Account> {
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully Logged in:',
+				error: 'Email or Password does not meet the requirements',
+			};
+		}
+
 		const userData = await admin
 			.auth()
 			.getUserByEmail(loginDto.email)
@@ -171,6 +198,15 @@ export class AccountService {
 			.catch(() => ({
 				uid: null,
 			}));
+
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully logged in.',
+				error: 'User does not exist',
+			};
+		}
 
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
@@ -217,9 +253,9 @@ export class AccountService {
 			.then(() => ({
 				message: 'Successfully signed out.',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-			});
+			.catch((error) => ({
+				message: `${error.message}`,
+			}));
 	}
 
 	/**
@@ -227,9 +263,10 @@ export class AccountService {
 	 */
 	async getCurrentUser(): Promise<Account> {
 		// Check if there is a current user else throw an exception
-		let user;
+		// let user;
 		try {
-			user = firebase.auth().currentUser;
+			// eslint-disable-next-line @typescript-eslint/no-shadow
+			const user = firebase.auth().currentUser;
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
@@ -283,10 +320,9 @@ export class AccountService {
 				.then(() => ({
 					message: 'Successfully deleted user.',
 				}))
-				.catch((error) => {
-					// eslint-disable-next-line max-len
-					throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-				});
+				.catch((error) => ({
+					message: error.message,
+				}));
 		} catch (error) {
 			throw new HttpException(
 				`Bad Request. User might not be signed in or does not exist.${error.message}`,
@@ -303,9 +339,19 @@ export class AccountService {
 				email: userRecord.email,
 				uid: userRecord.uid,
 			}))
-			.catch((error) => {
-				throw new HttpException(`Bad Request. User does not exist: ${error}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch(() => ({
+				email: null,
+				uid: null,
+			}));
+
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully logged in.',
+				error: 'User does not exist',
+			};
+		}
 
 		let host;
 		// eslint-disable-next-line eqeqeq
@@ -341,9 +387,9 @@ export class AccountService {
 			.then(() => ({
 				url: `${host}`,
 			}))
-			.catch((error) => {
-				throw new HttpException(`Error Verifying Email: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch(() => ({
+				url: `${host}`,
+			}));
 	}
 
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
@@ -379,7 +425,7 @@ export class AccountService {
 			email: resetPasswordDto.email,
 			subject: 'Smart Student Handbook Password Reset',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${userData.displayName}. You request to change your password. \nPlease do so with this link: \n${link}`,
+			body: `Good day, ${userData.displayName}. You requested to change your password. \nPlease do so with this link: \n${link}`,
 		});
 
 		return { message: `Request Send to ${resetPasswordDto.email}` };
@@ -424,22 +470,45 @@ export class AccountService {
 			return { url: `${host}` };
 		}
 
-		return { url: `http://${host}/account/resetPassword?email=${email}&code=${code}` };
+		return { url: `http://${host}/account/resetPassword/${email}/${code}` };
 	}
 
-	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
+	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto): Promise<Account> {
 		const { email, code, newPassword } = resetPasswordFinalizeDto;
+
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!passwordRegex.test(newPassword)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Email or Password does not meet the requirements',
+			};
+		}
 
 		// eslint-disable-next-line eqeqeq
 		if (code == undefined || newPassword == undefined) {
-			throw new HttpException('Bad Request. Not all parameters provided', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		const codeInterface = this.decodeSecureCode(code);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
-			throw new HttpException('Bad Request. Invalid Code:1', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		const userData = await admin
@@ -449,18 +518,38 @@ export class AccountService {
 				displayName: userRecord.displayName,
 				uid: userRecord.uid,
 			}))
-			.catch((error) => {
-				throw new HttpException(`Bad Request. User does not exist: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch(() => ({
+				displayName: null,
+				uid: null,
+			}));
+
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
+		}
 
 		const uid = userData.uid.substr(0, 8);
 		// eslint-disable-next-line eqeqeq,max-len
 		if (codeInterface.checksumPassed == false || codeInterface.email != email || codeInterface.uid != uid) {
-			throw new HttpException('Bad Request. Invalid Code:2', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		if (codeInterface.timeExpire < Date.now()) {
-			throw new HttpException('Bad Request. Invalid Code:3', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		return admin
@@ -469,15 +558,21 @@ export class AccountService {
 				password: newPassword,
 			})
 			.then((userCredential) => ({
-				uid: userCredential.uid,
-				email: userCredential.email,
-				emailVerified: userCredential.emailVerified,
-				displayName: userCredential.displayName,
-				message: 'User is successfully updated!',
+				success: true,
+				user: {
+					uid: userCredential.uid,
+					email: userCredential.email,
+					emailVerified: userCredential.emailVerified,
+					displayName: userCredential.displayName,
+				},
+				message: 'Password is updated!',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: error.message,
+			}));
 	}
 
 	encodeSecureCode(uid: string, email: string) {
