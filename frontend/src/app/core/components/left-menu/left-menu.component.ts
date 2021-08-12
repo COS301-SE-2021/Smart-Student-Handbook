@@ -39,6 +39,8 @@ export class LeftMenuComponent implements OnInit {
 
 	name: string = '';
 
+	userEmail: string = '';
+
 	program: string = '';
 
 	workstatus: string = '';
@@ -77,6 +79,7 @@ export class LeftMenuComponent implements OnInit {
 
 		this.username = this.user.name;
 		this.bio = this.user.bio;
+		this.userEmail = this.user.email;
 	}
 
 	onSinenavToggle() {
