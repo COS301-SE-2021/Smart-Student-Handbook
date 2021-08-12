@@ -1,5 +1,5 @@
 <div class="sidenav_container"  [@onSideNavChange]="sideNavState ? 'open' : 'close'">
-  <div fxLayout="column" fxLayoutGap="10px" style="height: calc(100vh - 140px); overflow-y: auto; overflow-x: hidden; border-bottom: 1px solid #ececec;">
+  <div fxLayout="column" fxLayoutGap="10px" style="height: calc(100vh - 140px); overflow-y: auto; overflow-x: hidden;">
 
     <div>
       <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0px 10px;">
@@ -9,8 +9,9 @@
         </button>
       </div>
 
-      <img src="../../assets/logo/SmartStudentHandbook.png" alt="image" style="width: 200px; padding-bottom: 10px; margin-top: -25px"  [@animateText]="linkText ? 'show' : 'hide'">
-      <div mat-card-avatar class="header-image align-self-center" [@animateText]="linkText ? 'hide' : 'show'"></div>
+      <a [routerLink]="['/home']"><img src="../../assets/logo/SmartStudentHandbook.png" alt="image"
+                                       style="width: 200px; padding-bottom: 10px; margin-top: -25px"  [@animateText]="linkText ? 'show' : 'hide'"></a>
+      <a [routerLink]="['/home']"><div mat-card-avatar class="logo-image align-self-center" [@animateText]="linkText ? 'hide' : 'show'"></div></a>
 
     </div>
 
@@ -41,26 +42,6 @@
         <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
           <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>
         </a>
-        <!--            <a mat-list-item  [routerLink]="['/notebook']">-->
-        <!--              <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>-->
-        <!--              <span [@animateText]="linkText ? 'show' : 'hide'">-->
-        <!--                My Notebooks-->
-        <!--                &lt;!&ndash;<app-tree-view #treeViewComponent id="treeViewComponent"></app-tree-view>&ndash;&gt;-->
-        <!--              </span>-->
-        <!--&lt;!&ndash;              <button mat-icon-button [matMenuTriggerFor]="NotebbokMenu" aria-label="Example icon-button with a menu" [@animateText]="linkText ? 'show' : 'hide'">&ndash;&gt;-->
-        <!--&lt;!&ndash;                <mat-icon>add</mat-icon>&ndash;&gt;-->
-        <!--&lt;!&ndash;              </button>&ndash;&gt;-->
-        <!--&lt;!&ndash;              <mat-menu #NotebbokMenu="matMenu">&ndash;&gt;-->
-        <!--&lt;!&ndash;                <button mat-menu-item >&ndash;&gt;-->
-        <!--&lt;!&ndash;                  <mat-icon>book</mat-icon>&ndash;&gt;-->
-        <!--&lt;!&ndash;                  <span>Note</span>&ndash;&gt;-->
-        <!--&lt;!&ndash;                </button>&ndash;&gt;-->
-        <!--&lt;!&ndash;                <button mat-menu-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;                  <mat-icon>create_new_folder</mat-icon>&ndash;&gt;-->
-        <!--&lt;!&ndash;                  <span>Notebook</span>&ndash;&gt;-->
-        <!--&lt;!&ndash;                </button>&ndash;&gt;-->
-        <!--&lt;!&ndash;              </mat-menu>&ndash;&gt;-->
-        <!--            </a>-->
 
         <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
 
@@ -78,54 +59,37 @@
           <mat-icon class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">notifications</mat-icon>
           <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notifications</span>
         </a>
-        <!--<a mat-list-item  (click)="updateProfile()">
-          <mat-icon class="menuIcon" matTooltip="Account" matTooltipPosition="right">account_circle</mat-icon>
-          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
-        </a>
-
-        <br/>
-        <mat-divider></mat-divider>
-        <br/>
-
-        <a mat-list-item  (click)="logout()">
-          <mat-icon class="menuIcon" matTooltip="Log Out" matTooltipPosition="right">exit_to_app</mat-icon>
-          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Logout</span>
-        </a>-->
       </mat-nav-list>
     </div>
 
-    <!--    <mat-divider></mat-divider>-->
-
     <span class="spacer"></span>
-    <!--    <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0px 10px;">-->
-    <!--      <button mat-icon-button (click)="onSinenavToggle()">-->
-    <!--        <mat-icon *ngIf="sideNavState" class="menuArrow">arrow_left</mat-icon>-->
-    <!--        <mat-icon *ngIf="!sideNavState" class="menuArrow">arrow_right</mat-icon>-->
-    <!--      </button>-->
-    <!--    </div>-->
 
-    <div mat-card-avatar id="profileMenuPic" [matMenuTriggerFor]="profileMenu" class="header-image margin align-self-center profileCard" [@animateText]="linkText ? 'hide' : 'show'"></div>
+<!--    <div mat-card-avatar id="profileMenuPic" [matMenuTriggerFor]="profileMenu" class="header-image margin align-self-center profileCard" [@animateText]="linkText ? 'hide' : 'show'"></div>-->
+    <img mat-card-avatar id="profileMenuPic" src="../../../../assets/images/defaultProfile.jpg" alt="User Avatar" [matMenuTriggerFor]="profileMenu"
+         class="align-self-center" [@animateText]="linkText ? 'hide' : 'show'">
+
 
     <mat-card class="profileCard" [@animateText]="linkText ? 'show' : 'hide'">
       <mat-card-header id="profileCardHeader">
-        <div mat-card-avatar class="header-image"></div>
+        <img mat-card-avatar src="../../../../assets/images/defaultProfile.jpg" alt="User Avatar" class="header-image">
         <mat-card-title id="username" [@animateText]="linkText ? 'show' : 'hide'">{{ username }}</mat-card-title>
-        <mat-card-subtitle id="subTitle" [@animateText]="linkText ? 'show' : 'hide'">users email</mat-card-subtitle>
-        <button mat-icon-button [matMenuTriggerFor]="profileMenu" aria-label="Example icon-button with a menu">
+        <mat-card-subtitle id="subTitle" [@animateText]="linkText ? 'show' : 'hide'">{{ userEmail }}</mat-card-subtitle>
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu"  aria-label="Example icon-button with a menu">
           <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #profileMenu="matMenu">
-          <button mat-menu-item (click)="updateProfile()">
-            <mat-icon>account_circle</mat-icon>
-            <span>Update Profile</span>
-          </button>
-          <button mat-menu-item (click)="logout()">
-            <mat-icon>exit_to_app</mat-icon>
-            <span>Logout</span>
-          </button>
-        </mat-menu>
       </mat-card-header>
     </mat-card>
+
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item (click)="updateProfile()">
+        <mat-icon>account_circle</mat-icon>
+        <span>Update Profile</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
 
   </div>
 </div>

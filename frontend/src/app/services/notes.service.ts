@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
+import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
+import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
 
 @Injectable({
 	providedIn: 'root',
@@ -42,10 +43,11 @@ export class NotesService {
 
 		return Observable.create((observer: any) => {
 			// Open dialog
-			const dialogRef = this.dialog.open(AddNotebookComponent, {
+			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
 				data: {
 					title: this.title,
+					message: 'Create New Note',
 					description: this.description,
 				},
 			});
@@ -93,7 +95,7 @@ export class NotesService {
 	 * @param notebookId
 	 * @param noteId
 	 */
-	editNotebook(notebookId: string, noteId: string): Observable<any> {
+	editNote(notebookId: string, noteId: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -108,10 +110,11 @@ export class NotesService {
 
 		return Observable.create((observer: any) => {
 			// Open dialog
-			const dialogRef = this.dialog.open(AddNotebookComponent, {
+			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
 				data: {
 					title: this.title,
+					message: 'Update Note',
 					description: this.description,
 				},
 			});

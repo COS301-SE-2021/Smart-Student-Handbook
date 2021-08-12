@@ -31,7 +31,8 @@ export class MessagingService {
 		this.messaging
 			.getToken({
 				vapidKey:
-					'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
+					'BLwI4ZLDPfp7e6LMr84u1ne7lwoO2v0NxrpM__JDztRSaHGcwjn7NhqpyNIsAH791DPyPTzjmdEU4Fv8CnvVUxY',
+				// 'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
 			})
 			.then((currentToken) => {
 				if (currentToken) {
