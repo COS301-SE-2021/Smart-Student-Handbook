@@ -15,13 +15,13 @@ exports.addNotebookIndex = functions.firestore.document('userNotebooks/{notebook
 	index.saveObject({ data, objectID });
 });
 
-exports.updateNotebookIndex = functions.firestore.document('userNotebooks/{userNotebookId}').onUpdate((change) => {
-	const newData = change.after.data();
+exports.updateNotebookIndex = functions.firestore.document('userNotebooks/{notebookId}').onUpdate((change) => {
+	const data = change.after.data();
 	const objectID = change.after.id;
 
-	index.saveObject({ newData, objectID });
+	index.saveObject({ data, objectID });
 });
 
 exports.deleteNotebookIndex = functions.firestore
-	.document('userNotebooks/{userNotebookId}')
+	.document('userNotebooks/{notebookId}')
 	.onDelete((snapshot) => index.deleteObject(snapshot.id));
