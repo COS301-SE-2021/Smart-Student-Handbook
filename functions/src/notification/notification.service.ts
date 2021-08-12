@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
+import * as functions from 'firebase-functions';
 import { EmailInterface } from './interfaces/email.interface';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -56,13 +57,13 @@ export class NotificationService {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
+				user: functions.config().email.user,
+				pass: functions.config().email.pass,
 			},
 		});
 
 		const mailOptions = {
-			from: process.env.EMAIL_USER,
+			from: functions.config().email.user,
 			to: email.email,
 			subject: email.subject,
 			text: email.body,
