@@ -188,7 +188,6 @@ export class NotificationService {
 				.doc(notificationId)
 				.set({
 					userID: userId,
-					userNotificationID: notificationDto.userNotificationID,
 					type: notificationDto.type,
 					body: notificationDto.body,
 					heading: notificationDto.heading,
