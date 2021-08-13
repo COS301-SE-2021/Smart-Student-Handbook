@@ -11,6 +11,7 @@ import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 require('firebase/auth');
 
@@ -143,7 +144,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Account> {
+	async updateUser(updateDto: UpdateDto): Promise<Account> {
 		let uid = '';
 
 		// Check if user is logged in
@@ -158,16 +159,39 @@ export class AccountService {
 			};
 		}
 
+		const userDetails = {
+			uid,
+			username: updateDto.username,
+			institution: updateDto.institution,
+			department: updateDto.department,
+			program: updateDto.program,
+			workStatus: updateDto.workStatus,
+			bio: updateDto.bio,
+			profilePic: updateDto.profilePicUrl,
+		};
+
+		const updated = await this.userService.updateUser(userDetails);
+
+		// eslint-disable-next-line eqeqeq
+		if (updated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User does not exist',
+				error: 'something went wrong along the way',
+			};
+		}
+
 		/**
 		 * Try to update user. If successful return success message else throw error
 		 */
 		return admin
 			.auth()
 			.updateUser(uid, {
-				email: registerDto.email,
+				email: updateDto.email,
 				emailVerified: false,
-				password: registerDto.password,
-				displayName: registerDto.displayName,
+				password: updateDto.password,
+				displayName: updateDto.displayName,
 				disabled: false,
 			})
 			.then((userCredential) => ({

@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-// import firebase from 'firebase/app';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { User, UserResponseDto } from './dto/userResponse.dto';
+import { UserByUsernameDto } from './dto/userByUsername.dto';
 
 @Injectable()
 export class UserService {
@@ -150,6 +150,34 @@ export class UserService {
 			.catch(() => {
 				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
+	}
+
+	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', userByUsernameDto.username)
+			.get()
+			.then((querySnapshot) => ({
+				success: true,
+				message: 'User was successfully found',
+				userInfo: {
+					uid: querySnapshot.docs[0].data().uid,
+					name: querySnapshot.docs[0].data().name,
+					institution: querySnapshot.docs[0].data().institution,
+					department: querySnapshot.docs[0].data().department,
+					program: querySnapshot.docs[0].data().program,
+					workStatus: querySnapshot.docs[0].data().workStatus,
+					bio: querySnapshot.docs[0].data().bio,
+					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
+					dateJoined: querySnapshot.docs[0].data().dateJoined,
+				},
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User was not successfully found',
+				userInfo: null,
+			}));
 	}
 
 	async doesUsernameExist(username: string): Promise<boolean> {
