@@ -64,16 +64,18 @@ export class UserService {
 	 * Takes a userID as input searches for the specific user in the firestore database in the user collection
 	 * once found the userProfile is deleted and a success message is returned
 	 * if the user is not found an error message is thrown
-	 * @param userID
+	 * @param user
 	 */
 	async createUser(user: UserRequestDto): Promise<UserResponseDto> {
 		const exist = await this.doesUsernameExist(user.username);
-		if (exist) {
+		// eslint-disable-next-line eqeqeq
+		if (exist == true) {
 			return {
 				success: false,
 				message: 'User unsuccessfully updated',
 			};
 		}
+
 		return admin
 			.firestore()
 			.collection('users')
@@ -91,7 +93,8 @@ export class UserService {
 
 	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
 		const exist = await this.doesUsernameExist(user.username);
-		if (exist) {
+		// eslint-disable-next-line eqeqeq
+		if (exist == true) {
 			return {
 				success: false,
 				message: 'User unsuccessfully updated',
@@ -187,12 +190,16 @@ export class UserService {
 	}
 
 	async doesUsernameExist(username: string): Promise<boolean> {
-		return admin
+		const count = await admin
 			.firestore()
 			.collection('users')
 			.where('username', '==', username)
 			.get()
-			.then(() => true)
-			.catch(() => false);
+			// eslint-disable-next-line eqeqeq
+			.then((querySnapshot) => querySnapshot.size)
+			.catch(() => -1);
+
+		// eslint-disable-next-line eqeqeq
+		return count != 0;
 	}
 }

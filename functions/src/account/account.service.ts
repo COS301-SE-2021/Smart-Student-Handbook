@@ -47,7 +47,8 @@ export class AccountService {
 		}
 
 		const exist = await this.userService.doesUsernameExist(registerDto.displayName);
-		if (exist) {
+		// eslint-disable-next-line eqeqeq
+		if (exist == true) {
 			return {
 				success: false,
 				user: null,
@@ -112,7 +113,12 @@ export class AccountService {
 
 		// eslint-disable-next-line eqeqeq
 		if (userCreated.success == false) {
-			return resp;
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Some error have occured!',
+			};
 		}
 
 		let host;
