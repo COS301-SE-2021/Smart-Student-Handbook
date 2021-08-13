@@ -28,12 +28,16 @@ export class NotebookService {
 				notebookIds.push(doc.id);
 			});
 
+			if (notebookIds.length === 0) {
+				return notebooks;
+			}
+
 			const notebookSnapshot = await admin
 				.firestore()
 				.collection('userNotebooks')
 				.where('notebookId', 'in', notebookIds)
 				.get();
-      
+
 			notebookSnapshot.forEach((doc) => {
 				notebooks.push({
 					title: doc.data().title,
@@ -49,8 +53,6 @@ export class NotebookService {
 					tags: doc.data().tags,
 				});
 			});
-			console.log('notebooks');
-			console.log(notebooks);
 
 			return notebooks;
 		} catch (e) {
@@ -249,7 +251,7 @@ export class NotebookService {
 					notes,
 				})
 				.then(() => ({
-					message: 'Creating a notebook was successful!',
+					message: 'Update a notebook was successful!',
 					notebookId,
 				}))
 				.catch(() => {
@@ -286,12 +288,14 @@ export class NotebookService {
 
 		const notes = await this.getNotes(notebookId);
 
-		notes.forEach((note: Note) => {
+		await notes.forEach((note: Note) => {
 			this.deleteNote({
 				notebookId,
 				noteId: note.noteId,
 			});
 		});
+
+		await this.deleteUserNotebook(notebookId, userId);
 
 		return admin
 			.firestore()
@@ -307,12 +311,12 @@ export class NotebookService {
 	}
 
 	async deleteNote(noteDto: NoteDto): Promise<Response> {
-		const userId = await this.getUserId();
-		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
+		// const userId = await this.getUserId();
+		// const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
-		if (!authorized) {
-			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
-		}
+		// if (!authorized) {
+		// 	throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
+		// }
 
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
 

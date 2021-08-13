@@ -1,8 +1,11 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { NotebookService, NotebookEventEmitterService } from '@app/services';
-import { NotesService } from '@app/services/notes.service';
+import {
+	NotebookService,
+	NotebookEventEmitterService,
+	NotesService,
+} from '@app/services';
 
 @Component({
 	selector: 'app-notes',
@@ -103,20 +106,18 @@ export class NotesComponent implements OnInit {
 	 * @param id the id of the notebook to be updated
 	 */
 	editNote(id: string) {
-		this.notesService
-			.editNotebook(this.notebookId, id)
-			.subscribe((data) => {
-				if (data) {
-					this.notes = this.notes.map((note: any) => {
-						if (note.noteId === id) {
-							note.description = data.description;
-							note.name = data.title;
-						}
+		this.notesService.editNote(this.notebookId, id).subscribe((data) => {
+			if (data) {
+				this.notes = this.notes.map((note: any) => {
+					if (note.noteId === id) {
+						note.description = data.description;
+						note.name = data.title;
+					}
 
-						return note;
-					});
-				}
-			});
+					return note;
+				});
+			}
+		});
 	}
 
 	deleteNote(id: string) {

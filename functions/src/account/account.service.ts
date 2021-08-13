@@ -637,4 +637,40 @@ export class AccountService {
 			checksumPassed: checkPassed,
 		};
 	}
+
+	async setUserNotificationToken(notificationID: string): Promise<Response> {
+		const userId: string = firebase.auth().currentUser.uid;
+
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(userId)
+			.update({
+				notificationId: notificationID,
+			})
+			.then(() => ({
+				message: 'Successfully set the notificationID.',
+			}));
+	}
+
+	async getUserId(): Promise<string> {
+		try {
+			return firebase.auth().currentUser.uid;
+		} catch (error) {
+			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	async getUserNotificationID(userId: string): Promise<string> {
+		try {
+			const userID = await admin.firestore().collection('users').doc(userId).get();
+
+			return userID.data().notificationID.value;
+		} catch (error) {
+			throw new HttpException(
+				`Something went wrong. Operation could not be executed.${error}`,
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
 }

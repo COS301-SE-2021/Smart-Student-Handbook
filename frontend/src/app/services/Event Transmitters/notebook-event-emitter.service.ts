@@ -7,6 +7,10 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class NotebookEventEmitterService {
 	loadEmitter = new EventEmitter();
 
+	closeNoteEmitter = new EventEmitter();
+
+	changePrivacyEmitter = new EventEmitter();
+
 	loadInfoEmitter = new EventEmitter();
 
 	getTitleEmitter = new EventEmitter();
@@ -21,5 +25,13 @@ export class NotebookEventEmitterService {
 
 	GetNoteTitle(title: string) {
 		this.getTitleEmitter.emit(title);
+	}
+
+	CloseNote() {
+		this.closeNoteEmitter.emit();
+	}
+
+	ChangePrivacy(privacy: boolean) {
+		this.changePrivacyEmitter.emit(privacy);
 	}
 }

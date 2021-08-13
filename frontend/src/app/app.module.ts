@@ -43,6 +43,7 @@ import {
 	RegisterComponent,
 	ResetPasswordComponent,
 	LandingPageComponent,
+	ForgotPasswordComponent,
 } from '@app/features/public';
 
 // Mobile
@@ -59,6 +60,7 @@ import {
 	AddNotebookComponent,
 	ConfirmDeleteComponent,
 	TreeViewComponent,
+	AddCollaboratorComponent,
 } from '@app/components';
 
 // Long press
@@ -67,8 +69,7 @@ import { NgxLongPress2Module } from 'ngx-long-press2';
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ForgotPasswordComponent } from './features/public/forgot-password/forgot-password.component';
-import { AddCollaboratorComponent } from './components/modals/add-collaborator/add-collaborator.component';
+import { AddNoteComponent } from './components/modals/add-note/add-note.component';
 
 @NgModule({
 	declarations: [
@@ -101,6 +102,7 @@ import { AddCollaboratorComponent } from './components/modals/add-collaborator/a
 		LandingPageComponent,
 		ForgotPasswordComponent,
 		AddCollaboratorComponent,
+  AddNoteComponent,
 	],
 	imports: [
 		MaterialModule,

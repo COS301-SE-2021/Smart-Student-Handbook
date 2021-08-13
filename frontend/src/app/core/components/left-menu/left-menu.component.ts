@@ -39,6 +39,8 @@ export class LeftMenuComponent implements OnInit {
 
 	name: string = '';
 
+	userEmail: string = '';
+
 	program: string = '';
 
 	workstatus: string = '';
@@ -75,8 +77,9 @@ export class LeftMenuComponent implements OnInit {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		this.username = this.user.displayName;
+		this.username = this.user.name;
 		this.bio = this.user.bio;
+		this.userEmail = this.user.email;
 	}
 
 	onSinenavToggle() {
@@ -189,11 +192,7 @@ export class LeftMenuComponent implements OnInit {
 	async logout() {
 		this.accountService.singOut().subscribe(
 			() => {
-				// this.router.navigateByUrl(`/account/login`);
-				localStorage.clear();
-				this.accountService.setLoginState = false;
-				this.router.navigate(['/account/login']);
-				localStorage.setItem('loginState', 'false');
+				this.router.navigate(['account/login']);
 			},
 			(err) => {
 				console.log(`Error: ${err.error.message}`);

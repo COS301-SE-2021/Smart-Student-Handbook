@@ -3,15 +3,16 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { NotebookEventEmitterService, AccountService } from '@app/services';
-import { LeftMenuComponent } from '@app/core';
+import {
+	NotebookEventEmitterService,
+	AccountService,
+	OpenNotebookPanelService,
+} from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
-import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
 
 @Component({
 	selector: 'app-notebook',
@@ -90,22 +91,22 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		// Open a note when one is selected from the mobile view and update the title
-		if (this.notebookEventEmitterService.subsVar === undefined) {
-			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEmitter.subscribe(
-					({ notebookId, noteId, title }) => {
-						this.loadEditor(notebookId, noteId, title);
-					}
-				);
-			// this.notebookEventEmitterService.getTitleEmitter.subscribe(
-			// 	(title: string) => {
-			// 		const noteTitle = document.getElementById(
-			// 			'mobileTitle'
-			// 		) as HTMLSpanElement;
-			// 		// noteTitle.innerHTML = title;
-			// 	}
-			// );
-		}
+		// if (this.notebookEventEmitterService.subsVar === undefined) {
+		// 	this.notebookEventEmitterService.subsVar =
+		// 		this.notebookEventEmitterService.loadEmitter.subscribe(
+		// 			({ notebookId, noteId, title }) => {
+		// 				this.loadEditor(notebookId, noteId, title);
+		// 			}
+		// 		);
+		// this.notebookEventEmitterService.getTitleEmitter.subscribe(
+		// 	(title: string) => {
+		// 		const noteTitle = document.getElementById(
+		// 			'mobileTitle'
+		// 		) as HTMLSpanElement;
+		// 		// noteTitle.innerHTML = title;
+		// 	}
+		// );
+		// }
 
 		// // Toggle the notePanelComponent when in desktop view and notebook is selected
 		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {

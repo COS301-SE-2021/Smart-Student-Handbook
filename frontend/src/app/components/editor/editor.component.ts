@@ -14,13 +14,12 @@ import {
 	NotebookService,
 	NotebookEventEmitterService,
 	ProfileService,
+	NotesService,
+	NoteMoreService,
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
-import { NotesService } from '@app/services/notes.service';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
-import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
-import { AddCollaboratorComponent } from '@app/components/modals/add-collaborator/add-collaborator.component';
-import { NoteMoreService } from '@app/services/note-more.service';
+import { MatExpansionPanel } from '@angular/material/expansion';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -38,7 +37,7 @@ export interface Collaborators {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit {
 	/**
     Get all plugins for notebook
    */
@@ -123,9 +122,15 @@ export class EditorComponent {
 
 	user: any;
 
+	private: boolean = true;
+
+	opened: boolean = false;
+
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
 	@ViewChild('progressBar') progressBar!: HTMLElement;
+
+	@ViewChild('noteInfoAccordion') noteInfoAccordion!: MatExpansionPanel;
 
 	/**
 	 * Editor component constructor
@@ -147,6 +152,29 @@ export class EditorComponent {
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
+	ngOnInit(): void {
+		if (this.notebookEventEmitterService.subsVar === undefined) {
+			this.notebookEventEmitterService.subsVar =
+				this.notebookEventEmitterService.loadEmitter.subscribe(
+					({ notebookId, noteId, title }) => {
+						this.loadEditor(notebookId, noteId, title);
+					}
+				);
+
+			this.notebookEventEmitterService.closeNoteEmitter.subscribe(() => {
+				this.showDefaultImage();
+				this.noteInfoAccordion.close();
+				this.opened = false;
+			});
+
+			this.notebookEventEmitterService.changePrivacyEmitter.subscribe(
+				(privacy: boolean) => {
+					this.private = privacy;
+				}
+			);
+		}
+	}
+
 	getNotebook(notebookId: string): void {
 		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
 			this.date = data.date;
@@ -154,6 +182,8 @@ export class EditorComponent {
 			this.tags = data.tags;
 			this.collaborators = data.collaborators;
 			this.creator = data.creator;
+			this.private = data.notebook.private;
+			this.opened = true;
 		});
 	}
 
@@ -391,7 +421,7 @@ export class EditorComponent {
 	removeNote() {
 		this.notesService
 			.removeNote(this.notebookID, this.noteId)
-			.subscribe((removed) => {
+			.subscribe((removed: any) => {
 				if (removed) {
 					const editor = this.Editor;
 					editor.clear();
@@ -459,6 +489,27 @@ export class EditorComponent {
 
 		// Clear the input value
 		event.chipInput!.clear();
+
+		this.updateTags();
+	}
+
+	updateTags() {
+		const tagList: string[] = [];
+		for (let i = 0; i < this.tags.length; i += 1) {
+			tagList.push(this.tags[i].name);
+		}
+
+		this.noteMore.updateNotebookTags({
+			title: this.notebook.title,
+			author: this.notebook.author,
+			course: this.notebook.course,
+			description: this.notebook.description,
+			institution: this.notebook.institution,
+			creatorId: this.notebook.creatorId,
+			private: this.notebook.private,
+			tags: tagList,
+			notebookId: this.notebook.notebookId,
+		});
 	}
 
 	/**
@@ -471,6 +522,8 @@ export class EditorComponent {
 		if (index >= 0) {
 			this.tags.splice(index, 1);
 		}
+
+		this.updateTags();
 	}
 
 	addCollaborator() {

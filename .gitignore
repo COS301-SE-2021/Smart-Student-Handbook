@@ -1606,4 +1606,11 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 *.tlog
 
+
+##Firebase ENV
+
+#functions/
+
+*.runtimeconfig.json
+
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,android,eclipse,intellij,intellij+all,emacs,vim,vscode,visualstudio,netbeans,java,node,angular,ionic3,maven,git,tortoisegit,webstorm,webstorm+all,webstorm+iml,intellij+iml,adobe,latex
