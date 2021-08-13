@@ -11,6 +11,7 @@ import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 require('firebase/auth');
 
@@ -42,6 +43,17 @@ export class AccountService {
 				user: null,
 				message: 'User is unsuccessfully registered:',
 				error: 'Email or Password does not meet the requirements',
+			};
+		}
+
+		const exist = await this.userService.doesUsernameExist(registerDto.displayName);
+		// eslint-disable-next-line eqeqeq
+		if (exist == true) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered',
+				error: 'Username already exists!!',
 			};
 		}
 
@@ -85,19 +97,29 @@ export class AccountService {
 			return resp;
 		}
 
-		await this.userService.createAndUpdateUser({
+		const userCreated = await this.userService.createUser({
 			uid: resp.user.uid,
-			name: resp.user.displayName,
-			institution: '',
-			department: '',
-			program: '',
-			workStatus: '',
-			bio: '',
+			username: resp.user.displayName,
+			institution: 'Unknown',
+			department: 'Unknown',
+			program: 'Unknown',
+			workStatus: 'Unknown',
+			bio: 'Unknown',
 			profilePicUrl:
 				// eslint-disable-next-line max-len
 				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
+
+		// eslint-disable-next-line eqeqeq
+		if (userCreated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Some error have occured!',
+			};
+		}
 
 		let host;
 		// eslint-disable-next-line eqeqeq
@@ -128,7 +150,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Account> {
+	async updateUser(updateDto: UpdateDto): Promise<Account> {
 		let uid = '';
 
 		// Check if user is logged in
@@ -143,16 +165,39 @@ export class AccountService {
 			};
 		}
 
+		const userDetails = {
+			uid,
+			username: updateDto.username,
+			institution: updateDto.institution,
+			department: updateDto.department,
+			program: updateDto.program,
+			workStatus: updateDto.workStatus,
+			bio: updateDto.bio,
+			profilePic: updateDto.profilePicUrl,
+		};
+
+		const updated = await this.userService.updateUser(userDetails);
+
+		// eslint-disable-next-line eqeqeq
+		if (updated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User does not exist',
+				error: 'something went wrong along the way',
+			};
+		}
+
 		/**
 		 * Try to update user. If successful return success message else throw error
 		 */
 		return admin
 			.auth()
 			.updateUser(uid, {
-				email: registerDto.email,
+				email: updateDto.email,
 				emailVerified: false,
-				password: registerDto.password,
-				displayName: registerDto.displayName,
+				password: updateDto.password,
+				displayName: updateDto.displayName,
 				disabled: false,
 			})
 			.then((userCredential) => ({

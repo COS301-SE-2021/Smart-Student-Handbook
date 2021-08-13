@@ -8,6 +8,7 @@ import { AccountService } from './account.service';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 @Controller('account')
 export class AccountController {
@@ -24,8 +25,8 @@ export class AccountController {
 	}
 
 	@Put('updateUser')
-	updateUser(@Body() registerDto: RegisterDto): Promise<Account> {
-		return this.accountService.updateUser(registerDto);
+	updateUser(@Body() updateDto: UpdateDto): Promise<Account> {
+		return this.accountService.updateUser(updateDto);
 	}
 
 	@Post('signOut')
