@@ -28,6 +28,14 @@ dotenv.config();
  * @return success
  */
 export class NotificationService {
+	/**
+	 * Takes as input an email object from the Email interface it sets up the nodemailer with
+	 * the correct host , port and auth. Then it sets the correct mail options it then sends the mail with
+	 * the correct mailOptions
+	 * after which a success message will be returned if it was successful else it will return an error message
+	 * @param email
+	 * @return success
+	 */
 	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
