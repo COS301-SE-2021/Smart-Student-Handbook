@@ -6,4 +6,6 @@ export class RegisterDto {
 	readonly password: string;
 
 	readonly passwordConfirm?: string;
+
+	readonly isLocalhost?: boolean;
 }

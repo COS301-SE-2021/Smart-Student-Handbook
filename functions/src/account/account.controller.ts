@@ -7,6 +7,7 @@ import { ResetPasswordFinalizeDto } from './dto/resetPasswordFinalize.dto';
 import { AccountService } from './account.service';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
+import { VerifyEmailDto } from './dto/verifyEmail.dto';
 
 @Controller('account')
 export class AccountController {
@@ -42,13 +43,19 @@ export class AccountController {
 		return this.accountService.deleteUser();
 	}
 
+	@Get('verifyEmail/:email/:local/:code')
+	@Redirect('https://smartstudenthandbook.co.za', 308)
+	verifyEmail(@Param() verifyEmailDto: VerifyEmailDto) {
+		return this.accountService.verifyEmail(verifyEmailDto);
+	}
+
 	@Post('requestResetPassword')
 	requestResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
 		return this.accountService.requestResetPassword(resetPasswordDto);
 	}
 
 	@Get('checkResetPassword/:email/:local/:code')
-	@Redirect('https://smartstudentnotebook.web.app', 308)
+	@Redirect('https://smartstudenthandbook.co.za', 308)
 	async checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
 		const url = await this.accountService.checkResetPassword(resetPasswordCodeDto);
 		return url;
