@@ -220,7 +220,6 @@ export class NotebookService {
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {
-		console.log(noteDto);
 		const userId = await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
@@ -289,12 +288,14 @@ export class NotebookService {
 
 		const notes = await this.getNotes(notebookId);
 
-		notes.forEach((note: Note) => {
+		await notes.forEach((note: Note) => {
 			this.deleteNote({
 				notebookId,
 				noteId: note.noteId,
 			});
 		});
+
+		await this.deleteUserNotebook(notebookId, userId);
 
 		return admin
 			.firestore()
@@ -310,12 +311,12 @@ export class NotebookService {
 	}
 
 	async deleteNote(noteDto: NoteDto): Promise<Response> {
-		const userId = await this.getUserId();
-		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
+		// const userId = await this.getUserId();
+		// const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
-		if (!authorized) {
-			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
-		}
+		// if (!authorized) {
+		// 	throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
+		// }
 
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
 
