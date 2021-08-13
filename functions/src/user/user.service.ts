@@ -54,8 +54,87 @@ export class UserService {
 	): Promise<UserResponseDto> {
 		const resp = await admin.firestore().collection('users').doc(user.uid).set(user);
 
-		if (resp) return { success: true, message: 'User was successfully added' };
+		if (resp) {
+			return { success: true, message: 'User was successfully added' };
+		}
 		throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
+	}
+
+	async createUser(user: UserRequestDto): Promise<UserResponseDto> {
+		const exist = await this.doesUsernameExist(user.username);
+		if (exist) {
+			return {
+				success: false,
+				message: 'User unsuccessfully updated',
+			};
+		}
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(user.uid)
+			.set(user)
+			.then(() => ({
+				success: true,
+				message: 'User successfully created',
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User unsuccessfully created',
+			}));
+	}
+
+	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
+		const exist = await this.doesUsernameExist(user.username);
+		if (exist) {
+			return {
+				success: false,
+				message: 'User unsuccessfully updated',
+			};
+		}
+
+		const updates: { [key: string]: string } = {};
+
+		if (user.username != null) {
+			updates.name = user.username;
+		}
+
+		if (user.institution != null) {
+			updates.institution = user.institution;
+		}
+
+		if (user.department != null) {
+			updates.department = user.department;
+		}
+
+		if (user.program != null) {
+			updates.program = user.program;
+		}
+
+		if (user.workStatus != null) {
+			updates.workStatus = user.workStatus;
+		}
+
+		if (user.bio != null) {
+			updates.bio = user.bio;
+		}
+
+		if (user.profilePicUrl != null) {
+			updates.profilePicUrl = user.profilePicUrl;
+		}
+
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(user.uid)
+			.update(updates)
+			.then(() => ({
+				success: true,
+				message: 'User successfully updated',
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User unsuccessfully updated',
+			}));
 	}
 
 	async deleteUserProfile(userId): Promise<UserResponseDto> {
@@ -71,5 +150,15 @@ export class UserService {
 			.catch(() => {
 				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
+	}
+
+	async doesUsernameExist(username: string): Promise<boolean> {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', username)
+			.get()
+			.then(() => true)
+			.catch(() => false);
 	}
 }

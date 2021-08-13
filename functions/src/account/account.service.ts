@@ -45,6 +45,16 @@ export class AccountService {
 			};
 		}
 
+		const exist = await this.userService.doesUsernameExist(registerDto.displayName);
+		if (exist) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered',
+				error: 'Username already exists!!',
+			};
+		}
+
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
@@ -85,19 +95,24 @@ export class AccountService {
 			return resp;
 		}
 
-		await this.userService.createAndUpdateUser({
+		const userCreated = await this.userService.createUser({
 			uid: resp.user.uid,
-			name: resp.user.displayName,
-			institution: '',
-			department: '',
-			program: '',
-			workStatus: '',
-			bio: '',
+			username: resp.user.displayName,
+			institution: 'Unknown',
+			department: 'Unknown',
+			program: 'Unknown',
+			workStatus: 'Unknown',
+			bio: 'Unknown',
 			profilePicUrl:
 				// eslint-disable-next-line max-len
 				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
+
+		// eslint-disable-next-line eqeqeq
+		if (userCreated.success == false) {
+			return resp;
+		}
 
 		let host;
 		// eslint-disable-next-line eqeqeq

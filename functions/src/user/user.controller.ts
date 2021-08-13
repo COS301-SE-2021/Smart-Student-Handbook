@@ -32,7 +32,7 @@ export class UserController {
 	 */
 	@Post('createUser')
 	async createUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createAndUpdateUser(user);
+		return this.userService.createUser(user);
 	}
 
 	/**
@@ -41,7 +41,7 @@ export class UserController {
 	 */
 	@Post('updateUser')
 	async updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createAndUpdateUser(user, true);
+		return this.userService.updateUser(user);
 	}
 
 	@Delete('deleteUserProfile/:userId')

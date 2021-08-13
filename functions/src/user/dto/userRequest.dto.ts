@@ -6,7 +6,7 @@ import * as admin from 'firebase-admin';
 export class UserRequestDto {
 	readonly uid: string;
 
-	readonly name?: string;
+	readonly username?: string;
 
 	readonly institution?: string;
 
