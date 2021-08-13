@@ -46,6 +46,6 @@ export const app = functions.https.onRequest(server);
 export const api = functions.https.onRequest((req, res) => {
 	res.send('Functions are Working!!');
 });
-
+//
 exports.notebookFunctions = require('./algoliaFunctions/notebook');
 exports.userFunctions = require('./algoliaFunctions/user');
