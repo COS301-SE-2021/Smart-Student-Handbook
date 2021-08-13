@@ -1,11 +1,11 @@
 import * as functions from 'firebase-functions';
 
-const algoliasearch = require('algoliasearch');
+const algoliaSearch = require('algoliasearch');
 
 const APP_ID = functions.config().algolia.app;
 const ADMIN_KEY = functions.config().algolia.key;
 
-const client = algoliasearch(APP_ID, ADMIN_KEY);
+const client = algoliaSearch(APP_ID, ADMIN_KEY);
 const index = client.initIndex('userNotebooks');
 
 exports.addNotebookIndex = functions.firestore.document('userNotebooks/{notebookId}').onCreate((snapshot) => {
