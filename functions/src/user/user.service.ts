@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-// import firebase from 'firebase/app';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { User, UserResponseDto } from './dto/userResponse.dto';
+import { UserByUsernameDto } from './dto/userByUsername.dto';
 
 @Injectable()
 export class UserService {
@@ -54,7 +54,9 @@ export class UserService {
 	): Promise<UserResponseDto> {
 		const resp = await admin.firestore().collection('users').doc(user.uid).set(user);
 
-		if (resp) return { success: true, message: 'User was successfully added' };
+		if (resp) {
+			return { success: true, message: 'User was successfully added' };
+		}
 		throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 	}
 
@@ -64,6 +66,83 @@ export class UserService {
 	 * if the user is not found an error message is thrown
 	 * @param userID
 	 */
+	async createUser(user: UserRequestDto): Promise<UserResponseDto> {
+		const exist = await this.doesUsernameExist(user.username);
+		if (exist) {
+			return {
+				success: false,
+				message: 'User unsuccessfully updated',
+			};
+		}
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(user.uid)
+			.set(user)
+			.then(() => ({
+				success: true,
+				message: 'User successfully created',
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User unsuccessfully created',
+			}));
+	}
+
+	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
+		const exist = await this.doesUsernameExist(user.username);
+		if (exist) {
+			return {
+				success: false,
+				message: 'User unsuccessfully updated',
+			};
+		}
+
+		const updates: { [key: string]: string } = {};
+
+		if (user.username != null) {
+			updates.name = user.username;
+		}
+
+		if (user.institution != null) {
+			updates.institution = user.institution;
+		}
+
+		if (user.department != null) {
+			updates.department = user.department;
+		}
+
+		if (user.program != null) {
+			updates.program = user.program;
+		}
+
+		if (user.workStatus != null) {
+			updates.workStatus = user.workStatus;
+		}
+
+		if (user.bio != null) {
+			updates.bio = user.bio;
+		}
+
+		if (user.profilePicUrl != null) {
+			updates.profilePicUrl = user.profilePicUrl;
+		}
+
+		return admin
+			.firestore()
+			.collection('users')
+			.doc(user.uid)
+			.update(updates)
+			.then(() => ({
+				success: true,
+				message: 'User successfully updated',
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User unsuccessfully updated',
+			}));
+	}
+
 	async deleteUserProfile(userId): Promise<UserResponseDto> {
 		return admin
 			.firestore()
@@ -77,5 +156,43 @@ export class UserService {
 			.catch(() => {
 				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
+	}
+
+	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', userByUsernameDto.username)
+			.get()
+			.then((querySnapshot) => ({
+				success: true,
+				message: 'User was successfully found',
+				userInfo: {
+					uid: querySnapshot.docs[0].data().uid,
+					name: querySnapshot.docs[0].data().name,
+					institution: querySnapshot.docs[0].data().institution,
+					department: querySnapshot.docs[0].data().department,
+					program: querySnapshot.docs[0].data().program,
+					workStatus: querySnapshot.docs[0].data().workStatus,
+					bio: querySnapshot.docs[0].data().bio,
+					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
+					dateJoined: querySnapshot.docs[0].data().dateJoined,
+				},
+			}))
+			.catch(() => ({
+				success: false,
+				message: 'User was not successfully found',
+				userInfo: null,
+			}));
+	}
+
+	async doesUsernameExist(username: string): Promise<boolean> {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', username)
+			.get()
+			.then(() => true)
+			.catch(() => false);
 	}
 }

@@ -12,6 +12,7 @@ import {
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UserService } from './user.service';
+import { UserByUsernameDto } from './dto/userByUsername.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +33,7 @@ export class UserController {
 	 */
 	@Post('createUser')
 	async createUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createAndUpdateUser(user);
+		return this.userService.createUser(user);
 	}
 
 	/**
@@ -41,11 +42,16 @@ export class UserController {
 	 */
 	@Post('updateUser')
 	async updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createAndUpdateUser(user, true);
+		return this.userService.updateUser(user);
 	}
 
 	@Delete('deleteUserProfile/:userId')
 	async deleteUserProfile(@Param('userId') userId): Promise<UserResponseDto> {
 		return this.userService.deleteUserProfile(userId);
+	}
+
+	@Post('getUserByUsername')
+	getUserByUsername(@Body() userByUsername: UserByUsernameDto) {
+		return this.userService.getUserByUsername(userByUsername);
 	}
 }
