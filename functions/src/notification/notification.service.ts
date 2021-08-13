@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
+import * as functions from 'firebase-functions';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import firebase from 'firebase';
 import { EmailInterface } from './interfaces/email.interface';
@@ -9,7 +10,7 @@ import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dt
 import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { Notification } from './interfaces/notification.interface';
-import { NotificationDto } from './dto/Notification.dto';
+import { CreateNotificationDto } from './dto/createNotification.dto';
 import { Response } from '../notebook/interfaces/response.interface';
 
 const nodemailer = require('nodemailer');
@@ -27,21 +28,25 @@ dotenv.config();
  * @return success
  */
 export class NotificationService {
+	/**
+	 * Takes as input an email object from the Email interface it sets up the nodemailer with
+	 * the correct host , port and auth. Then it sets the correct mail options it then sends the mail with
+	 * the correct mailOptions
+	 * after which a success message will be returned if it was successful else it will return an error message
+	 * @param email
+	 * @return success
+	 */
 	async sendEmailNotification(email: EmailInterface): Promise<EmailNotificationResponseDto> {
 		const transporter = nodemailer.createTransport({
-			host: process.env.EMAIL_HOST,
-			port: process.env.EMAIL_PORT,
+			service: 'gmail',
 			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
+				user: functions.config().email.user,
+				pass: functions.config().email.pass,
 			},
-			authMethod: 'PLAIN',
-
-			// secure: true,
 		});
 
 		const mailOptions = {
-			from: process.env.EMAIL_FROM,
+			from: functions.config().email.user,
 			to: email.email,
 			subject: email.subject,
 			text: email.body,
@@ -177,7 +182,7 @@ export class NotificationService {
 			});
 	}
 
-	async createNotification(notificationDto: NotificationDto): Promise<{ message: string } | void> {
+	async createNotification(createNotificationDto: CreateNotificationDto): Promise<{ message: string } | void> {
 		const userId: string = await this.getUserId();
 		const notificationId: string = randomStringGenerator();
 
@@ -188,10 +193,10 @@ export class NotificationService {
 				.doc(notificationId)
 				.set({
 					userID: userId,
-					type: notificationDto.type,
-					body: notificationDto.body,
-					heading: notificationDto.heading,
-					opened: notificationDto.opened,
+					type: createNotificationDto.type,
+					body: createNotificationDto.body,
+					heading: createNotificationDto.heading,
+					opened: createNotificationDto.opened,
 				})
 				.then(() => ({
 					message: 'Successfully created notification',

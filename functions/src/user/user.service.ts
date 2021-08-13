@@ -58,6 +58,12 @@ export class UserService {
 		throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 	}
 
+	/**
+	 * Takes a userID as input searches for the specific user in the firestore database in the user collection
+	 * once found the userProfile is deleted and a success message is returned
+	 * if the user is not found an error message is thrown
+	 * @param userID
+	 */
 	async deleteUserProfile(userId): Promise<UserResponseDto> {
 		return admin
 			.firestore()

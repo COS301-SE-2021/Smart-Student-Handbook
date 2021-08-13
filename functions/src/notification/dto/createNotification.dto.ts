@@ -1,4 +1,4 @@
-export class NotificationDto {
+export class CreateNotificationDto {
 	readonly userID: string;
 
 	readonly type: string;

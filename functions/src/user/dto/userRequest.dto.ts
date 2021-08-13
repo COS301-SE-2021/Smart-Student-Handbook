@@ -20,5 +20,5 @@ export class UserRequestDto {
 
 	readonly profilePicUrl?: string;
 
-	readonly dateJoined: admin.firestore.FieldValue;
+	readonly dateJoined?: admin.firestore.FieldValue;
 }
