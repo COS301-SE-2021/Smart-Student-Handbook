@@ -5,7 +5,7 @@ import { EmailInterface } from '../../../../functions/src/notification/interface
 import { SingleNotificationRequestDto } from '../../../../functions/src/notification/dto/singleNotificationRequest.dto';
 import { SendNotificationToGroupRequestDto } from '../../../../functions/src/notification/dto/sendNotificationToGroup.dto';
 import { SubscribeToTopicRequestDto } from '../../../../functions/src/notification/dto/subscribeToTopicRequest.dto';
-import { NotificationDto } from '../../../../functions/src/notification/dto/notification.dto';
+import { CreateNotificationDto } from '../../../../functions/src/notification/dto/createNotification.dto';
 
 let addr;
 if (window.location.host.includes('localhost')) {
@@ -85,7 +85,9 @@ export class NotificationService {
 		);
 	}
 
-	createNotification(notificationDto: NotificationDto): Observable<any> {
+	createNotification(
+		notificationDto: CreateNotificationDto
+	): Observable<any> {
 		return this.httpClient.post(
 			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
 			{

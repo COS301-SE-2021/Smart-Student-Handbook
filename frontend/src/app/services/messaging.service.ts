@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
+import { AccountService } from '@app/services/account.service';
 
 let addr;
 if (window.location.host.includes('localhost')) {
@@ -23,7 +24,7 @@ export class MessagingService {
 	constructor(
 		private angularFireMessaging: AngularFireMessaging,
 		private httpClient: HttpClient,
-		private notificationService: Notification
+		private accountService: AccountService
 	) {
 		firebase.initializeApp(environment.firebase);
 
@@ -38,6 +39,7 @@ export class MessagingService {
 			.then((currentToken) => {
 				if (currentToken) {
 					// Send the token to your server and update the UI if necessary
+					this.accountService.setUserNotificationToken(currentToken);
 					console.log(currentToken);
 					this.messaging.onMessage = this.messaging.onMessage.bind(
 						this.messaging
