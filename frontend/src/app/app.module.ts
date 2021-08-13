@@ -102,7 +102,7 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 		LandingPageComponent,
 		ForgotPasswordComponent,
 		AddCollaboratorComponent,
-  AddNoteComponent,
+		AddNoteComponent,
 	],
 	imports: [
 		MaterialModule,

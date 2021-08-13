@@ -1,17 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from '@app/models';
 
 /**
  * Data for the add notebook popup
  */
-export interface EditProfileDialogData {
-	bio: string;
-	department: string;
-	name: string;
-	institution: string;
-	program: string;
-	workstatus: string;
-}
 
 @Component({
 	selector: 'app-edit-profile',
@@ -19,12 +12,69 @@ export interface EditProfileDialogData {
 	styleUrls: ['./edit-profile.component.scss'],
 })
 export class EditProfileComponent {
+	image: any;
+
+	fileName: any;
+
+	fileType: any;
+
+	localUrl: any[] = [];
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: EditProfileDialogData
+		@Inject(MAT_DIALOG_DATA) public data: User
 	) {}
 
 	onNoClick(): void {
 		this.dialogRef.close();
+	}
+
+	//---------------------------------------------------------
+
+	// public imagePath: any;
+	//
+	// imgURL: any;
+	//
+	// public message: string;
+	//
+	// preview(files) {
+	// 	if (files.length === 0) return;
+	//
+	// 	const mimeType = files[0].type;
+	// 	if (mimeType.match(/image\/*/) == null) {
+	// 		this.message = 'Only images are supported.';
+	// 		return;
+	// 	}
+	//
+	// 	const reader = new FileReader();
+	// 	this.imagePath = files;
+	// 	reader.readAsDataURL(files[0]);
+	// 	reader.onload = (_event) => {
+	// 		this.imgURL = reader.result;
+	// 	};
+	// }
+
+	//---------------------------------------------------------
+
+	fileChangeEvent(event: any) {
+		// if (event.target.files && event.target.files[0]) {
+		// 	const reader = new FileReader();
+		// 	reader.onload = (e: any) => {
+		// 		this.localUrl = e.target.result;
+		// 	};
+		// 	reader.readAsDataURL(event.target.files[0]);
+		// 	console.log(this.localUrl);
+		// }
+		// console.log(event);
+		// const element = event.currentTarget as HTMLInputElement;
+		// const fileList: FileList | null = element.files;
+		// if (fileList) {
+		// 	console.log('FileUpload -> files', fileList);
+		// 	// eslint-disable-next-line prefer-destructuring
+		// 	this.fileName = fileList[0];
+		// 	this.fileType = this.fileName.type;
+		// 	this.image = document.getElementById('some_id') as HTMLImageElement;
+		// 	this.image.src = URL.createObjectURL(this.fileName);
+		// }
 	}
 }
