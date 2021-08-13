@@ -1,13 +1,16 @@
+import { Note } from './note.interface';
+import { Access } from './access.interface';
+
 export interface Notebook {
 	title: string;
 	author: string;
 	course: string;
 	description: string;
 	institution: string;
-	name: string;
-	surname: string;
+	creatorId: string;
 	private: boolean;
-	username: string;
-	notebookReference: string;
-	userId: string;
+	notebookId: string;
+	tags?: string[];
+	notes?: Note[];
+	access?: Access[];
 }

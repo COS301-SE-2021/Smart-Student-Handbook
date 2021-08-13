@@ -21,6 +21,8 @@
 			[expanded]="panelOpenState === true"
 			(opened)="openClosePanel()"
 			(closed)="openClosePanel()"
+      [disabled]="!opened"
+      #noteInfoAccordion
 		>
 			<mat-expansion-panel-header>
 				<mat-panel-title id="noteTitle">
@@ -41,7 +43,7 @@
 							<span>Share</span>
 						</button>
 
-						<button mat-menu-item (click)="removeNotebook()">
+						<button mat-menu-item (click)="removeNote()">
 							<mat-icon>clear</mat-icon>
 							<span>Delete</span>
 						</button>
@@ -57,7 +59,7 @@
 					<th id="tableTitles"></th>
 					<th id="tableContent"></th>
 				</tr>
-				<tr>
+				<tr *ngIf="creator.name !== ''">
 					<td class="noteInfo" headers="tableTitles">
 						<p>Created By:</p>
 					</td>
@@ -66,28 +68,42 @@
 							<mat-card-header>
 								<div mat-card-avatar class="header-image"></div>
 								<mat-card-title class="personName"
-									>Arno</mat-card-title
+									>{{creator.name}}</mat-card-title
 								>
 							</mat-card-header>
 						</mat-card>
 					</td>
 				</tr>
-				<tr>
+        <tr *ngIf="!private" style="height: 0px">
+          <td style="height: 0px"></td>
+          <td style="height: 0px">
+            <button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+              <mat-icon>group_add</mat-icon>
+            </button>
+          </td>
+        </tr>
+				<tr *ngIf="!private">
 					<td class="noteInfo" headers="tableTitles">
 						<p>Collaborators:</p>
 					</td>
 					<td headers="tableContent">
-						<mat-card class="card">
+
+						<mat-card class="card" *ngFor="let collaborator of collaborators">
 							<mat-card-header>
 								<div mat-card-avatar class="header-image"></div>
+
+                <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+                  remove_circle_outline
+                </mat-icon>
+
 								<mat-card-title class="personName"
-									>Arno</mat-card-title
+									>{{collaborator.name}}</mat-card-title
 								>
 							</mat-card-header>
 						</mat-card>
 					</td>
 				</tr>
-				<tr>
+				<tr *ngIf="date !== ''">
 					<td class="noteInfo" headers="tableTitles">
 						<p>Last Updated:</p>
 					</td>
@@ -95,7 +111,7 @@
 						<p>July 18, 2021 at 14:44</p>
 					</td>
 				</tr>
-				<tr>
+				<tr *ngIf="opened">
 					<td class="noteInfo" headers="tableTitles"><p>Tags:</p></td>
 					<td headers="tableContent">
 						<mat-form-field id="tags">

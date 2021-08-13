@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div class="row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
+    <div class="sidePanel" id="notePanelContainer" fxHide.lt-md>
+      <app-notes-panel #notePanelComponent></app-notes-panel>
+    </div>
+    <div class="col" align="end">
+      <app-editor #editorComponent></app-editor>
+    </div>
+    <div class="sidePanel" fxHide.lt-md>
+      <app-smart-assist-panel></app-smart-assist-panel>
+    </div>
+  </div>
+</div>

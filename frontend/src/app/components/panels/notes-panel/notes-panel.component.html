@@ -1,74 +1,61 @@
 <mat-sidenav-container
 	id="notes-container"
-	style="
-		height: 89vh;
-		width: 40px;
-		background-color: white;
-		margin-right: 0px !important;
-	"
-	><!--  -->
+	>
 	<mat-sidenav #sidenav mode="side" [(opened)]="open" id="sidenav">
-		<div id="panelContent" align="end">
-			<div align="center" class="text-left" style="margin-top: 15px">
+		<div id="panelContent">
+			<div class="text-center" style="margin-top: 15px">
 				<button
 					mat-icon-button
 					id="closeNotePanelBtn"
 					#closeNotePanelBtn
-					(click)="openedCloseToggle()"
+					(click)="closePanel()"
 				>
 					<mat-icon>keyboard_arrow_left</mat-icon>
 				</button>
 
-				<h2 style="display: inline">Notes</h2>
-				<button mat-icon-button (click)="createNewNotebook()">
+        <div style="display: inline-flex; width: min-content">
+          <h2 id="notebookPanelHeader">{{notebookTitle}}</h2>
+        </div>
+
+				<button id="addNoteButton" mat-icon-button (click)="createNewNote()">
 					<mat-icon>add_circle_outline</mat-icon>
 				</button>
 			</div>
 
-			<mat-card
-				align="start"
-				class="card text-left"
-				*ngFor="let notebook of notebooks"
-			>
-				<button
-					mat-icon-button
-					class="favorite-icon"
-					class="editNotebookBtn"
-					(click)="editNotebook(notebook.notebookReference)"
-				>
-					<mat-icon class="editNotebookIcon">edit</mat-icon>
-				</button>
+      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
 
-				<div (click)="openNotebook(notebook.notebookReference)">
-					<mat-card-header>
-						<mat-card-subtitle id="subTitle"
-							>JUNE 17 2021</mat-card-subtitle
-						>
-						<mat-card-title id="username">{{
-							notebook.title
-						}}</mat-card-title>
+      <div id="noteHolderDiv">
+        <mat-card
+          class="card text-left"
+          *ngFor="let note of notes"
+        >
+          <button
+            mat-icon-button
+            class="favorite-icon editNotebookBtn"
+            (click)="editNotebook(note.noteId)"
+          >
+            <mat-icon class="editNotebookIcon">edit</mat-icon>
+          </button>
 
-						<mat-card-title id="description">{{
-							notebook.description
-						}}</mat-card-title>
-					</mat-card-header>
-				</div>
-			</mat-card>
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name)">
+            <mat-card-header>
+              <mat-card-subtitle id="date">
+                JUNE 17 2021
+              </mat-card-subtitle>
 
-			<!--      <mat-card align="start" class="card text-left">-->
-			<!--        <mat-card-header>-->
-			<!--          <mat-card-subtitle id="subTitle">JUNE 3 2021</mat-card-subtitle>-->
-			<!--          <mat-card-title id="username">Capstone Demo 1</mat-card-title>-->
+              <mat-card-title id="noteCardTitle">
+                {{ note.name }}
+              </mat-card-title>
 
-			<!--          <mat-card-title id="description">The SRS document of Algorithmic Aces for demo 1 of capstone project</mat-card-title>-->
+              <mat-card-title id="description">
+                {{note.description}}
+<!--                Placeholder description-->
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+        </mat-card>
+      </div>
 
-			<!--        </mat-card-header>-->
-
-			<!--        <mat-chip-list aria-label="Fish selection">-->
-			<!--          <mat-chip color="primary" selected>SRS</mat-chip>-->
-			<!--          <mat-chip color="primary" selected>Demo</mat-chip>-->
-			<!--        </mat-chip-list>-->
-			<!--      </mat-card>-->
 		</div>
 	</mat-sidenav>
 
@@ -76,10 +63,17 @@
 		<!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
 		<button
 			mat-icon-button
-			id="openPanelBtn"
-			(click)="sidenav.toggle(); openedCloseToggle()"
+			class="openPanelBtn"
+			(click)="openPanelBtn()"
 		>
 			<mat-icon>keyboard_arrow_right</mat-icon>
 		</button>
+
+    <button
+      style="display: none"
+      id="openNotesPanelBtn"
+      (click)="openPanel()"
+    ></button>
+
 	</mat-sidenav-content>
 </mat-sidenav-container>

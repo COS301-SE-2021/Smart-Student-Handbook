@@ -12,7 +12,7 @@ import {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	mockWhere,
 } from 'firestore-jest-mock/mocks/firestore';
-
+import { HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserRequestDto } from './dto/userRequest.dto';
 
@@ -63,7 +63,8 @@ describe('UserService', () => {
 
 		describe('This should  not retrieve the user details with the current uid', () => {
 			it('if uid is not valid return error message', () =>
-				expect(service.getUserDetails('wrong ud ')).rejects.toThrow());
+				// eslint-disable-next-line
+				expect(service.getUserDetails('wrong ud ')).rejects.toThrow(HttpException));
 		});
 	});
 

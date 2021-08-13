@@ -1,24 +1,35 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 import firebase from 'firebase';
 import 'firebase/firestore';
-import { NotebookService } from 'src/app/services/notebook.service';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatProgressBar } from '@angular/material/progress-bar';
-import { NotebookBottomSheetComponent } from '../modals/notebook-bottom-sheet/notebook-bottom-sheet.component';
-import { ConfirmDeleteComponent } from '../modals/confirm-delete/confirm-delete.component';
-import { NotebookEventEmitterService } from '../../services/notebook-event-emitter.service';
+
+import {
+	NotebookService,
+	NotebookEventEmitterService,
+	ProfileService,
+	NotesService,
+	NoteMoreService,
+} from '@app/services';
+import { NotebookBottomSheetComponent } from '@app/mobile';
+import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
+import { MatExpansionPanel } from '@angular/material/expansion';
+// import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
 	name: string;
+}
+
+export interface Collaborators {
+	name: string;
+	url: string;
+	id: string;
 }
 
 @Component({
@@ -26,7 +37,7 @@ export interface Tag {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit {
 	/**
     Get all plugins for notebook
    */
@@ -79,45 +90,113 @@ export class EditorComponent {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	tags: Tag[] = [
-		{ name: 'tag1' },
-		{ name: 'tag2' },
-		{ name: 'tag3' },
-		{ name: 'tag4' },
-	];
+	tags: Tag[] = [];
 
-	notebookID!: string;
+	collaborators: Collaborators[] = [];
+
+	creator: Collaborators = {
+		name: '',
+		url: '',
+		id: '',
+	};
+
+	date: string = '';
+
+	notebookID: string = '';
+
+	noteId: string = '';
 
 	notebookTitle: string = 'Smart Student';
+
+	static staticNotebookID: string = '';
+
+	static staticNoteId: string = '';
+
+	static staticNotebookTitle: string = 'Smart Student';
 
 	panelOpenState = false;
 
 	showMore: boolean = false;
 
+	notebook: any;
+
+	user: any;
+
+	private: boolean = true;
+
+	opened: boolean = false;
+
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
 	@ViewChild('progressBar') progressBar!: HTMLElement;
+
+	@ViewChild('noteInfoAccordion') noteInfoAccordion!: MatExpansionPanel;
 
 	/**
 	 * Editor component constructor
 	 * @param notebookService To call methods that apply to the notebooks
 	 * @param dialog Show dialog when a user wants to delete a notebook for example
 	 * @param bottomSheet
+	 * @param notesService
+	 * @param profileService
+	 * @param noteMore
 	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
+		private notesService: NotesService,
+		private profileService: ProfileService,
+		private noteMore: NoteMoreService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
+	ngOnInit(): void {
+		if (this.notebookEventEmitterService.subsVar === undefined) {
+			this.notebookEventEmitterService.subsVar =
+				this.notebookEventEmitterService.loadEmitter.subscribe(
+					({ notebookId, noteId, title }) => {
+						this.loadEditor(notebookId, noteId, title);
+					}
+				);
+
+			this.notebookEventEmitterService.closeNoteEmitter.subscribe(() => {
+				this.showDefaultImage();
+				this.noteInfoAccordion.close();
+				this.opened = false;
+			});
+
+			this.notebookEventEmitterService.changePrivacyEmitter.subscribe(
+				(privacy: boolean) => {
+					this.private = privacy;
+				}
+			);
+		}
+	}
+
+	getNotebook(notebookId: string): void {
+		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
+			this.date = data.date;
+			this.notebook = data.notebook;
+			this.tags = data.tags;
+			this.collaborators = data.collaborators;
+			this.creator = data.creator;
+			this.private = data.notebook.private;
+			this.opened = true;
+		});
+	}
+
 	/**
 	 * Instantiate a new editor if one does not exist yet and load previously saved data
-	 * @param id the id of the notebook to load
+	 * @param notebookId
+	 * @param noteId
+	 * @param title
 	 */
-	async loadEditor(id: string) {
-		this.notebookID = id;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.getNotebook(notebookId);
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
@@ -126,6 +205,7 @@ export class EditorComponent {
 			const editor = new EditorJS({
 				holder: 'editor',
 				tools: {
+					snippet: AddTagsTool,
 					header: {
 						class: this.Header,
 						shortcut: 'CTRL+SHIFT+H',
@@ -229,55 +309,61 @@ export class EditorComponent {
 		/**
 		 * Get the specific notebook details with notebook id
 		 */
-		this.notebookService.getNoteBookById(id).subscribe((result) => {
-			this.notebookTitle = result.title;
-			this.notebookEventEmitterService.GetNoteTitle(result.title);
+		this.notebookTitle = title;
+		this.noteId = noteId;
+		this.notebookID = notebookId;
 
-			// call event transmitter
+		EditorComponent.staticNotebookID = notebookId;
+		EditorComponent.staticNoteId = noteId;
+		EditorComponent.staticNotebookTitle = title;
 
-			// Change the path to the correct notebook's path
-			const dbRefObject = firebase.database().ref(`notebook/${id}`);
+		this.notebookEventEmitterService.GetNoteTitle(title);
 
-			/**
-			 * Get the values from the realtime database and insert block if notebook is empty
-			 */
-			dbRefObject
-				.once('value', (snap) => {
-					if (snap.val() === null) {
-						firebase
-							.database()
-							.ref(`notebook/${id}`)
-							.set({
-								outputData: {
-									blocks: [
-										{
-											id: 'jTFbQOD8j3',
-											type: 'header',
-											data: {
-												text: `${this.notebookTitle} 🚀`,
-												level: 2,
-											},
+		// call event transmitter
+
+		// Change the path to the correct notebook's path
+		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
+
+		/**
+		 * Get the values from the realtime database and insert block if notebook is empty
+		 */
+		dbRefObject
+			.once('value', (snap) => {
+				if (snap.val() === null) {
+					firebase
+						.database()
+						.ref(`notebook/${noteId}`)
+						.set({
+							outputData: {
+								blocks: [
+									{
+										id: 'jTFbQOD8j3',
+										type: 'header',
+										data: {
+											text: `${this.notebookTitle} 🚀`,
+											level: 2,
 										},
-									],
-								},
-							});
-					}
-				})
-				.then(() => {
-					/**
-					 * Render output on Editor
-					 */
-					dbRefObject.once('value', (snap) => {
-						// console.log(snap.val());
-						editor.render(snap.val().outputData);
-					});
-
-					e = document.getElementById('editor') as HTMLElement;
-					e.style.overflowY = 'scroll';
-
-					if (progressbar) progressbar.style.display = 'none';
+									},
+								],
+							},
+						});
+				}
+			})
+			.then(() => {
+				/**
+				 * Render output on Editor
+				 */
+				dbRefObject.once('value', (snap) => {
+					// console.log(snap.val());
+					editor.render(snap.val().outputData);
 				});
-		});
+
+				e = document.getElementById('editor') as HTMLElement;
+				e.style.overflowY = 'scroll';
+
+				if (progressbar) progressbar.style.display = 'none';
+			});
+		// });
 	}
 
 	/**
@@ -319,7 +405,7 @@ export class EditorComponent {
 				// console.log(this.notebookID, outputData);
 
 				if (outputData.blocks.length > 0) {
-					firebase.database().ref(`notebook/${this.notebookID}`).set({
+					firebase.database().ref(`notebook/${this.noteId}`).set({
 						outputData,
 					});
 				}
@@ -332,39 +418,35 @@ export class EditorComponent {
 	/**
 	 * Delete a notebook
 	 */
-	removeNotebook() {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
-			// width: '50%',
-		});
+	removeNote() {
+		this.notesService
+			.removeNote(this.notebookID, this.noteId)
+			.subscribe((removed: any) => {
+				if (removed) {
+					const editor = this.Editor;
+					editor.clear();
 
-		// Get info and create notebook after dialog is closed
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				if (this.notebookID !== '') {
-					this.notebookService
-						.removeNotebook(this.notebookID)
-						.subscribe(
-							(data) => {
-								console.log(data);
+					this.notebookTitle = '';
 
-								const editor = this.Editor;
-								editor.clear();
+					this.removeNoteCard(this.noteId);
 
-								this.notebookTitle = '';
-
-								this.removeNotebookCard(this.notebookID);
-							},
-							(error) => {
-								console.log(error);
-							}
-						);
+					this.showDefaultImage();
 				}
-			}
-		});
+			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	removeNotebookCard(_id: string) {}
+	removeNoteCard(_id: string) {}
+
+	showDefaultImage() {
+		const e = document.getElementById('editor') as HTMLElement;
+		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
+
+		this.Editor.destroy();
+		// @ts-ignore
+		this.Editor = undefined;
+		this.notebookTitle = 'Smart Student';
+	}
 
 	/**
 	 * Show menu when user clicks on ellipsis
@@ -407,6 +489,27 @@ export class EditorComponent {
 
 		// Clear the input value
 		event.chipInput!.clear();
+
+		this.updateTags();
+	}
+
+	updateTags() {
+		const tagList: string[] = [];
+		for (let i = 0; i < this.tags.length; i += 1) {
+			tagList.push(this.tags[i].name);
+		}
+
+		this.noteMore.updateNotebookTags({
+			title: this.notebook.title,
+			author: this.notebook.author,
+			course: this.notebook.course,
+			description: this.notebook.description,
+			institution: this.notebook.institution,
+			creatorId: this.notebook.creatorId,
+			private: this.notebook.private,
+			tags: tagList,
+			notebookId: this.notebook.notebookId,
+		});
 	}
 
 	/**
@@ -419,11 +522,36 @@ export class EditorComponent {
 		if (index >= 0) {
 			this.tags.splice(index, 1);
 		}
+
+		this.updateTags();
+	}
+
+	addCollaborator() {
+		this.noteMore
+			.addCollaborator(this.notebookID)
+			.subscribe((collaborator: any) => {
+				this.collaborators.push(collaborator);
+			});
+	}
+
+	removeCollaborator(userId: string) {
+		this.noteMore
+			.removeCollaborator(userId, this.notebookID)
+			.subscribe((id: string) => {
+				this.collaborators = this.collaborators.filter(
+					(collaborator) => collaborator.id !== id
+				);
+			});
 	}
 
 	openBottomSheet(): void {
 		this.bottomSheet.open(NotebookBottomSheetComponent, {
 			panelClass: 'bottomPanelClass',
+			data: {
+				notebookID: EditorComponent.staticNotebookID,
+				noteId: EditorComponent.staticNoteId,
+				notebookTitle: EditorComponent.staticNotebookTitle,
+			},
 		});
 	}
 }
