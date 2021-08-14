@@ -14,7 +14,8 @@ export class NoteMoreService {
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private notificationService: NotebookService
 	) {}
 
 	addCollaborator(notebookID: string): Observable<any> {
