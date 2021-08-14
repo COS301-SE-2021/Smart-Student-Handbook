@@ -120,7 +120,7 @@ export class NoteMoreService {
 				};
 				// Get creator info
 				this.profileService
-					.getUserDetails(notebook.creatorId)
+					.getUserByUid(notebook.creatorId)
 					.subscribe((res) => {
 						creator = {
 							name: res.userInfo.name,

@@ -121,6 +121,46 @@ export class AccountService {
 	}
 
 	/**
+	 * Send a API request to the backend profile endPoint to update a user profile
+	 * User only has to enter information that they want to, its not required
+	 * @param uid - required parameter
+	 * @param name - optional
+	 * @param institution - optional
+	 * @param department - optional
+	 * @param program - optional
+	 * @param workStatus - optional
+	 * @param bio - optional
+	 * @param profilePicUrl - optional
+	 *
+	 */
+	updateUser(
+		uid: string,
+		name?: string,
+		institution?: string,
+		department?: string,
+		program?: string,
+		workStatus?: string,
+		bio?: string,
+		profilePicUrl?: string
+	): Observable<any> {
+		return this.http.post(
+			`${ACCOUNT_API}updateUser`,
+			{
+				uid,
+				name,
+				institution,
+				department,
+				program,
+				workStatus,
+				bio,
+				profilePicUrl,
+			},
+			httpOptions
+		);
+	}
+	// TODO after updateUser call the getCurrentUser to update the LocalStorage with the new users information
+
+	/**
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
 	 * Clear all the LocalStorage values that store the user information and loginState
 	 * Update the isUserLoggedIn Behavioural subject to false to indicate the user is no longer logged in

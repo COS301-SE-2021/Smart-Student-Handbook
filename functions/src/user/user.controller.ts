@@ -22,8 +22,8 @@ export class UserController {
 	 * Calls the user service to get a users details based on an ID passed in
 	 * @param userId
 	 */
-	@Get('getUserDetails/:userId')
-	async getUserDetails(@Param('userId') userId): Promise<UserResponseDto> {
+	@Get('getUserByUid/:userId')
+	async getUserByUid(@Param('userId') userId): Promise<UserResponseDto> {
 		return this.userService.getUserByUid(userId);
 	}
 
