@@ -5,7 +5,8 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
-import { NotebookDto } from '@app/models';
+import { createNotificationDto, NotebookDto } from '@app/models';
+import { NotificationService } from '@app/services/notification.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -15,8 +16,43 @@ export class NoteMoreService {
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
-		private notificationService: NotebookService
+		private notificationService: NotificationService
 	) {}
+
+	requestCollaborator(
+		requestUserID: string,
+		senderUserID: string
+	): Observable<any> {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		const dialogRef = this.dialog.open(AddCollaboratorComponent, {
+			width: screenWidth,
+			data: {
+				name: '',
+				profileUrl: '',
+				id: '',
+			},
+		});
+
+		return Observable.create((observer: any) => {
+			dialogRef.afterClosed().subscribe(() => {
+				this.notificationService.sendCollaborationRequest(
+					senderUserID,
+					requestUserID
+				);
+			});
+		});
+	}
 
 	addCollaborator(notebookID: string): Observable<any> {
 		let screenWidth = '';

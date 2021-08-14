@@ -351,8 +351,9 @@ export class NotificationService {
 		}
 	}
 
-	async sendUserToUserEmail(userSender: string, userReceiver: string, email: EmailInterface): Promise<Response> {
+	async sendCollaborationRequest(userSender: string, userReceiver: string): Promise<Response> {
 		const receiverEmail = await this.getUserEmail(userReceiver);
+		const notificationID = await this.getUserNotificationID(userReceiver);
 
 		const transporter = nodemailer.createTransport({
 			host: process.env.EMAIL_HOST,
@@ -363,13 +364,30 @@ export class NotificationService {
 			},
 			authMethod: 'PLAIN',
 		});
+		const senderEmail = await this.getUserEmail(userSender);
 
 		const mailOptions = {
-			from: process.env.EMAIL_FROM,
+			from: senderEmail,
 			to: receiverEmail,
-			subject: email.subject,
-			text: email.body,
+			subject: 'Collaboration request',
+			text: `You have received a collaboration request from ${userSender}`,
 		};
+		await this.createNotification({
+			userID: userReceiver,
+			body: 'You have received a collaboration request from ++add info here',
+			heading: 'Collaboration Request',
+			type: 'Request',
+			opened: false,
+		});
+
+		await this.sendUserToUserPushNotification(
+			{
+				token: notificationID,
+				title: 'Collaboration Request',
+				body: 'You have received a collaboration request from ++add info here',
+			},
+			userReceiver,
+		);
 
 		return transporter
 			.sendMail(mailOptions)

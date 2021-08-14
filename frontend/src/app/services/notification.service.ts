@@ -41,7 +41,7 @@ export class NotificationService {
 
 	sendEmailNotification(email: EmailInterface): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/sendEmailNotifications`,
 			{
 				email,
 			},
@@ -53,7 +53,7 @@ export class NotificationService {
 		singleNotificationRequest: SingleNotificationRequestDto
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/sendSinglePushNotification`,
 			{
 				singleNotificationRequest,
 			},
@@ -65,7 +65,7 @@ export class NotificationService {
 		sendNotificationToGroupRequest: SendNotificationToGroupRequestDto
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUserNotifications`,
+			`${NOTIFICATION_API}notifications/sendGroupPushNotifications`,
 			{
 				sendNotificationToGroupRequest,
 			},
@@ -77,7 +77,7 @@ export class NotificationService {
 		subscribeToTopicRequest: SubscribeToTopicRequestDto
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/subscribeToNotificationTopic`,
 			{
 				subscribeToTopicRequest,
 			},
@@ -89,7 +89,7 @@ export class NotificationService {
 		notificationDto: CreateNotificationDto
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/createNotification`,
 			{
 				notificationDto,
 			},
@@ -97,17 +97,15 @@ export class NotificationService {
 		);
 	}
 
-	sendUserToUserEmail(
+	sendCollaborationRequest(
 		userSender: string,
-		userReceiver: string,
-		email: EmailInterface
+		userReceiver: string
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/sendCollaborationRequest`,
 			{
 				userSender,
 				userReceiver,
-				email,
 			},
 			httpOptions
 		);
@@ -118,7 +116,7 @@ export class NotificationService {
 		receiverUserID: string
 	): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/sendUserToUserPushNotification`,
 			{
 				singleNotificationRequest,
 				receiverUserID,
@@ -129,7 +127,7 @@ export class NotificationService {
 
 	updateRead(notificationId: string): Observable<any> {
 		return this.httpClient.post(
-			`${NOTIFICATION_API}notifications/getUnreadNotifications`,
+			`${NOTIFICATION_API}notifications/updateRead`,
 			{
 				notificationId,
 			},
