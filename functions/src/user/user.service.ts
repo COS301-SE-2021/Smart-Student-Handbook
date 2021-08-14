@@ -40,6 +40,36 @@ export class UserService {
 		};
 	}
 
+	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', userByUsernameDto.username)
+			.get()
+			.then((querySnapshot) => ({
+				success: true,
+				message: 'User was successfully found',
+				user: {
+					uid: querySnapshot.docs[0].data().uid,
+					displayName: querySnapshot.docs[0].data().username, // TODO get the displayName of a user here
+					username: querySnapshot.docs[0].data().username,
+					institution: querySnapshot.docs[0].data().institution,
+					department: querySnapshot.docs[0].data().department,
+					program: querySnapshot.docs[0].data().program,
+					workStatus: querySnapshot.docs[0].data().workStatus,
+					bio: querySnapshot.docs[0].data().bio,
+					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
+					dateJoined: querySnapshot.docs[0].data().dateJoined,
+				},
+			}))
+			.catch((error) => ({
+				success: false,
+				message: 'User was not successfully found',
+				user: null,
+				error: error.message,
+			}));
+	}
+
 	/**
 	 * Sends a user profile object to firestore where it then creates a new document in the
 	 * users collection with the user object tha is passed through
@@ -151,36 +181,6 @@ export class UserService {
 			.catch(() => {
 				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
-	}
-
-	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
-		return admin
-			.firestore()
-			.collection('users')
-			.where('username', '==', userByUsernameDto.username)
-			.get()
-			.then((querySnapshot) => ({
-				success: true,
-				message: 'User was successfully found',
-				user: {
-					uid: querySnapshot.docs[0].data().uid,
-					displayName: querySnapshot.docs[0].data().username, // TODO get the displayName of a user here
-					username: querySnapshot.docs[0].data().username,
-					institution: querySnapshot.docs[0].data().institution,
-					department: querySnapshot.docs[0].data().department,
-					program: querySnapshot.docs[0].data().program,
-					workStatus: querySnapshot.docs[0].data().workStatus,
-					bio: querySnapshot.docs[0].data().bio,
-					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
-					dateJoined: querySnapshot.docs[0].data().dateJoined,
-				},
-			}))
-			.catch((error) => ({
-				success: false,
-				message: 'User was not successfully found',
-				user: null,
-				error: error.message,
-			}));
 	}
 
 	async doesUsernameExist(username: string): Promise<boolean> {

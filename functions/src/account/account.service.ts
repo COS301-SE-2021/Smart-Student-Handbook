@@ -240,7 +240,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully Logged in:',
+				message: 'Login failed, please try again !',
 				error: 'Email or Password does not meet the requirements',
 			};
 		}
@@ -259,7 +259,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully logged in.',
+				message: 'Login failed, please try again !',
 				error: 'User does not exist',
 			};
 		}
@@ -292,7 +292,7 @@ export class AccountService {
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully logged in.',
+				message: 'Login failed, please try again !',
 				error: error.message,
 			}));
 	}
@@ -317,16 +317,12 @@ export class AccountService {
 	 * GetCurrent user.
 	 */
 	async getCurrentUser(): Promise<Account> {
-		// Check if there is a current user else throw an exception
-		// let user;
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-shadow
 			const user = firebase.auth().currentUser;
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
 
-			// Return user object
 			return {
 				success: true,
 				user: {
@@ -366,6 +362,7 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 
 			await this.userService.deleteUserProfile(uid);
+			// TODO delete all the users notebooks !!
 
 			// Try to delete user else throw and exception if not possible
 			return await admin
