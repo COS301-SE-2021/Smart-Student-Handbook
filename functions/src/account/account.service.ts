@@ -46,7 +46,7 @@ export class AccountService {
 			};
 		}
 
-		const exist = await this.userService.doesUsernameExist(registerDto.displayName);
+		const exist = await this.userService.doesUsernameExist(registerDto.username);
 		// eslint-disable-next-line eqeqeq
 		if (exist == true) {
 			return {
@@ -67,7 +67,7 @@ export class AccountService {
 				email: registerDto.email,
 				emailVerified: false,
 				password: registerDto.password,
-				displayName: registerDto.displayName,
+				displayName: registerDto.username,
 				disabled: false,
 			})
 			.then(
@@ -139,7 +139,7 @@ export class AccountService {
 			email: registerDto.email,
 			subject: 'Welcome to Smart Student Handbook',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${registerDto.displayName}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
+			body: `Good day, ${registerDto.username}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
 		});
 
 		// send welcome email to new user
@@ -167,7 +167,6 @@ export class AccountService {
 
 		const userDetails = {
 			uid,
-			username: updateDto.username,
 			institution: updateDto.institution,
 			department: updateDto.department,
 			program: updateDto.program,
@@ -188,6 +187,9 @@ export class AccountService {
 			};
 		}
 
+		const userRef = admin.firestore().collection('users').doc(uid);
+		const doc = await userRef.get();
+
 		/**
 		 * Try to update user. If successful return success message else throw error
 		 */
@@ -207,13 +209,22 @@ export class AccountService {
 					email: userCredential.email,
 					emailVerified: userCredential.emailVerified,
 					displayName: userCredential.displayName,
+					username: doc.data().username,
+					institution: doc.data().institution,
+					department: doc.data().department,
+					program: doc.data().program,
+					workStatus: doc.data().workStatus,
+					bio: doc.data().bio,
+					profilePic: doc.data().profilePicUrl,
+					dateJoined: doc.data().dateJoined,
 				},
-				message: 'User is successfully registered!',
+				message: 'User is successfully Updated!',
 			}))
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: `${error.message}`,
+				message: 'Something went wrong, user was not updated!',
+				error: `${error.message}`,
 			}));
 	}
 
@@ -266,9 +277,8 @@ export class AccountService {
 					uid: userCredential.user.uid,
 					email: userCredential.user.email,
 					emailVerified: userCredential.user.emailVerified,
-					phoneNumber: userCredential.user.phoneNumber,
 					displayName: userCredential.user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,
@@ -323,9 +333,8 @@ export class AccountService {
 					uid: user.uid,
 					email: user.email,
 					emailVerified: user.emailVerified,
-					phoneNumber: user.phoneNumber,
 					displayName: user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,

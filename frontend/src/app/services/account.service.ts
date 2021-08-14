@@ -68,17 +68,19 @@ export class AccountService {
 	 */
 	registerUser(
 		email: string,
-		displayName: string,
+		username: string,
 		password: string,
-		passwordConfirm: string
+		passwordConfirm: string,
+		isLocalhost: boolean
 	): Observable<any> {
 		return this.http.post(
 			`${ACCOUNT_API}registerUser`,
 			{
 				email,
-				displayName,
+				username,
 				password,
 				passwordConfirm,
+				isLocalhost,
 			},
 			httpOptions
 		);

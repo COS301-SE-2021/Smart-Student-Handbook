@@ -8,7 +8,7 @@ export interface Account {
 		emailVerified: boolean;
 		phoneNumber?: string;
 		displayName: string;
-		name?: string;
+		username?: string;
 		institution?: string;
 		department?: string;
 		program?: string;

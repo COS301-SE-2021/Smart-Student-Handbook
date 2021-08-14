@@ -5,7 +5,7 @@
 export class User {
 	uid: string;
 
-	name?: string;
+	username?: string;
 
 	institution?: string;
 

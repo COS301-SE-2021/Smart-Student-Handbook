@@ -16,10 +16,12 @@ export class UserService {
 		const userRef = admin.firestore().collection('users').doc(uid);
 		const doc = await userRef.get();
 
+		// TODO get the display name here as well
+
 		if (doc.exists) {
 			requestedUser = {
 				uid,
-				name: doc.data().name,
+				username: doc.data().username,
 				institution: doc.data().institution,
 				department: doc.data().department,
 				program: doc.data().program,
@@ -92,15 +94,6 @@ export class UserService {
 	}
 
 	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
-		const exist = await this.doesUsernameExist(user.username);
-		// eslint-disable-next-line eqeqeq
-		if (exist == true) {
-			return {
-				success: false,
-				message: 'User unsuccessfully updated',
-			};
-		}
-
 		const updates: { [key: string]: string } = {};
 
 		if (user.username != null) {
