@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NoteMoreService, NotificationService } from '@app/services';
 
 @Component({
 	selector: 'app-notifications',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-	notificationList: Notifications[] = [
+	/* notificationList: Notifications[] = [
 		{
 			id: '1',
 			type: 'general',
@@ -29,24 +30,34 @@ export class NotificationsComponent implements OnInit {
 			content: 'more info on the notification',
 			read: true,
 		},
-	];
-	// constructor() {}
+	]; */
+	constructor(
+		private notificationService: NotificationService,
+		private noteMoreService: NoteMoreService
+	) {}
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.notificationService.getUnreadNotifications();
+	}
 
-	accept(id: string) {}
+	accept(id: string, notebookID: string) {
+		this.notificationService.updateRead(id);
+		this.noteMoreService.addCollaborator(notebookID);
+	}
 
-	decline(id: string) {}
+	decline(id: string) {
+		this.notificationService.updateRead(id);
+	}
 
-	markAsRead(id: string, index: number) {
-		this.notificationList[index].read = true;
+	markAsRead(notificationID: string) {
+		this.notificationService.updateRead(notificationID);
 	}
 }
-interface Notifications {
+/* interface Notifications {
 	id: string;
 	type: string;
 	title: string;
 	content: string;
 	read: boolean;
-}
+} */

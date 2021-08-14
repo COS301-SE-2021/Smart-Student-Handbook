@@ -44,7 +44,7 @@ export class NoteMoreService {
 			},
 		});
 
-		return Observable.create((observer: any) => {
+		return Observable.create(() => {
 			dialogRef.afterClosed().subscribe(() => {
 				this.notificationService.sendCollaborationRequest(
 					senderUserID,
