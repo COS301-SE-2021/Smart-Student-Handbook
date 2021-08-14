@@ -16,10 +16,21 @@ export class UserService {
 		const userRef = admin.firestore().collection('users').doc(uid);
 		const doc = await userRef.get();
 
+		let dn = '';
+		await admin
+			.auth()
+			.getUser(uid)
+			.then((userRecord) => {
+				dn = userRecord.displayName;
+			})
+			.catch((error) => {
+				console.log('Error fetching user data:', error);
+			});
+
 		if (doc.exists) {
 			requestedUser = {
 				uid,
-				displayName: doc.data().username, // TODO get the displayName of a user here
+				displayName: dn,
 				username: doc.data().username,
 				institution: doc.data().institution,
 				department: doc.data().department,
@@ -46,22 +57,30 @@ export class UserService {
 			.collection('users')
 			.where('username', '==', userByUsernameDto.username)
 			.get()
-			.then((querySnapshot) => ({
-				success: true,
-				message: 'User was successfully found',
-				user: {
-					uid: querySnapshot.docs[0].data().uid,
-					displayName: querySnapshot.docs[0].data().username, // TODO get the displayName of a user here
-					username: querySnapshot.docs[0].data().username,
-					institution: querySnapshot.docs[0].data().institution,
-					department: querySnapshot.docs[0].data().department,
-					program: querySnapshot.docs[0].data().program,
-					workStatus: querySnapshot.docs[0].data().workStatus,
-					bio: querySnapshot.docs[0].data().bio,
-					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
-					dateJoined: querySnapshot.docs[0].data().dateJoined,
-				},
-			}))
+			.then((querySnapshot) =>
+				admin
+				.auth()
+				.getUser(querySnapshot.docs[0].data().uid)
+				.then((userRecord) => ({
+					success: true,
+					message: 'User was successfully found',
+					user: {
+						uid: querySnapshot.docs[0].data().uid,
+						displayName: userRecord.displayName,
+						username: querySnapshot.docs[0].data().username,
+						institution: querySnapshot.docs[0].data().institution,
+						department: querySnapshot.docs[0].data().department,
+						program: querySnapshot.docs[0].data().program,
+						workStatus: querySnapshot.docs[0].data().workStatus,
+						bio: querySnapshot.docs[0].data().bio,
+						profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
+						dateJoined: querySnapshot.docs[0].data().dateJoined,
+					},
+				}))
+				.catch((error) => {
+					console.log('Error fetching user data:', error);
+				}),
+			)
 			.catch((error) => ({
 				success: false,
 				message: 'User was not successfully found',
