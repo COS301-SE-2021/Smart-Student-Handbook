@@ -163,9 +163,10 @@ export class UserService {
 			.then((querySnapshot) => ({
 				success: true,
 				message: 'User was successfully found',
-				userInfo: {
+				user: {
 					uid: querySnapshot.docs[0].data().uid,
-					name: querySnapshot.docs[0].data().name,
+					displayName: querySnapshot.docs[0].data().username, // TODO get the displayName of a user here
+					username: querySnapshot.docs[0].data().username,
 					institution: querySnapshot.docs[0].data().institution,
 					department: querySnapshot.docs[0].data().department,
 					program: querySnapshot.docs[0].data().program,
@@ -175,10 +176,11 @@ export class UserService {
 					dateJoined: querySnapshot.docs[0].data().dateJoined,
 				},
 			}))
-			.catch(() => ({
+			.catch((error) => ({
 				success: false,
 				message: 'User was not successfully found',
-				userInfo: null,
+				user: null,
+				error: error.message,
 			}));
 	}
 
