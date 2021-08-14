@@ -5,6 +5,8 @@
 export class User {
 	uid: string;
 
+	displayName?: string;
+
 	username?: string;
 
 	institution?: string;
@@ -27,5 +29,5 @@ export class UserResponseDto {
 
 	message?: string;
 
-	userInfo?: User;
+	user?: User;
 }

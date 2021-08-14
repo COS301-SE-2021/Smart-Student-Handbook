@@ -24,7 +24,7 @@ export class UserController {
 	 */
 	@Get('getUserDetails/:userId')
 	async getUserDetails(@Param('userId') userId): Promise<UserResponseDto> {
-		return this.userService.getUserDetails(userId);
+		return this.userService.getUserByUid(userId);
 	}
 
 	/**

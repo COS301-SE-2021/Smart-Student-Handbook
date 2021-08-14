@@ -11,16 +11,15 @@ export class UserService {
 	 * that contains that uid and returns it as a json object
 	 * @param uid
 	 */
-	async getUserDetails(uid: string): Promise<UserResponseDto> {
+	async getUserByUid(uid: string): Promise<UserResponseDto> {
 		let requestedUser: User;
 		const userRef = admin.firestore().collection('users').doc(uid);
 		const doc = await userRef.get();
 
-		// TODO get the display name here as well
-
 		if (doc.exists) {
 			requestedUser = {
 				uid,
+				displayName: doc.data().username, // TODO get the displayName of a user here
 				username: doc.data().username,
 				institution: doc.data().institution,
 				department: doc.data().department,
@@ -31,13 +30,13 @@ export class UserService {
 				dateJoined: doc.data().dateJoined,
 			};
 		} else {
-			throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+			throw new HttpException('User was not Found', HttpStatus.NOT_FOUND);
 		}
 
 		return {
 			success: true,
 			message: 'User was successfully found',
-			userInfo: requestedUser,
+			user: requestedUser,
 		};
 	}
 
