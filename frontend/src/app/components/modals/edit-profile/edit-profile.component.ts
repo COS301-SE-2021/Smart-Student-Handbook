@@ -20,10 +20,25 @@ export class EditProfileComponent {
 
 	localUrl: any[] = [];
 
+	date: any;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User
-	) {}
+	) {
+		// eslint-disable-next-line no-underscore-dangle
+		// @ts-ignore
+		// eslint-disable-next-line no-underscore-dangle
+		const milliseconds: number = data.dateJoined._seconds * 1000;
+		// eslint-disable-next-line no-underscore-dangle
+		const dateObject = new Date(milliseconds);
+		this.date = dateObject.toLocaleString('en-US', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		});
+	}
 
 	onNoClick(): void {
 		this.dialogRef.close();

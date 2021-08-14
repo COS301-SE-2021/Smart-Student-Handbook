@@ -64,9 +64,20 @@ export class RegisterComponent {
 			const password = this.form.get('password')?.value;
 			const passwordConfirm = this.form.get('passwordConfirm')?.value;
 
+			let isLocalHost = false;
+			if (window.location.host.includes('localhost')) {
+				isLocalHost = true;
+			}
+
 			// Call account service to register a new Account
 			this.accountService
-				.registerUser(email, displayName, password, passwordConfirm)
+				.registerUser(
+					email,
+					displayName,
+					password,
+					passwordConfirm,
+					isLocalHost
+				)
 				.subscribe(
 					(res: any) => {
 						if (res.success) {

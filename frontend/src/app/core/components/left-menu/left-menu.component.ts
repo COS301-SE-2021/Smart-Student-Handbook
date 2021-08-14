@@ -100,12 +100,9 @@ export class LeftMenuComponent implements OnInit {
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result !== undefined) {
-					// update the user profile information based on the entered values in the form
-					// TODO displayName needs to be updated with the user service, cant update the username !!!!
-					this.profileService
+					this.accountService
 						.updateUser(
-							this.user.uid,
-							result.name, // TODO this attribute needs to be removed as user cant change their username
+							result.displayName,
 							result.institution,
 							result.department,
 							result.program,
@@ -116,10 +113,7 @@ export class LeftMenuComponent implements OnInit {
 						.subscribe(
 							(res: any) => {
 								if (res.success) {
-									// update the localstorage with the new users options
-									this.accountService
-										.getCurrentUser()
-										.subscribe(() => {});
+									this.user = res.user;
 								}
 							},
 							(err) => {
