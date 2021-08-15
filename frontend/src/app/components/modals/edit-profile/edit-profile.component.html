@@ -1,3 +1,4 @@
+<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
 <h1>Update Profile</h1>
 
 <div class="container">
@@ -28,14 +29,14 @@
 <mat-dialog-content class="mat-typography">
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Display Name</mat-label>
-    <input matInput placeholder="Display Name" [(ngModel)]="data.displayName" cdkFocusInitial/>
-    <mat-hint>Your display name</mat-hint>
+    <input matInput placeholder="Display Name" [(ngModel)]="data.displayName" cdkFocusInitial autocomplete="off"/>
+    <mat-hint>This will not change your username</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Institution</mat-label>
-    <input matInput placeholder="Institution" [(ngModel)]="data.institution" />
-    <mat-hint>The institution where you study</mat-hint>
+    <input matInput placeholder="Institution" [(ngModel)]="data.institution" autocomplete="off"/>
+    <mat-hint>The institution where you are studying, learning or teaching</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
@@ -46,27 +47,27 @@
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Department</mat-label>
-    <input matInput placeholder="Department" [(ngModel)]="data.department"/>
+    <input matInput placeholder="Department" [(ngModel)]="data.department" autocomplete="off"/>
     <mat-hint>Your department, ex: Computer science</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Program</mat-label>
-    <input matInput placeholder="Program" [(ngModel)]="data.program" />
-    <mat-hint>The program that you are studying</mat-hint>
+    <input matInput placeholder="Program" [(ngModel)]="data.program" autocomplete="off"/>
+    <mat-hint>The program that you are studying or are involved in</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Work Status</mat-label>
-    <input matInput placeholder="Student" [(ngModel)]="data.workStatus" />
-    <mat-hint>Your work status</mat-hint>
+    <input matInput placeholder="Student" [(ngModel)]="data.workStatus" autocomplete="off"/>
+    <mat-hint>Are you a student, Teacher, working , etc ...</mat-hint>
   </mat-form-field>
 </mat-dialog-content>
 
-<button mat-raised-button (click)="onNoClick()" align="start"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
+<button mat-raised-button (click)="onNoClick()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data">Save</button>
+  <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
+  <button mat-button (click)="onSave()" [disabled]="isDisabled">Save</button>
 </div>
 

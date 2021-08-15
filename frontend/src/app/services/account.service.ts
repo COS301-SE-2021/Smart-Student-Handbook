@@ -142,7 +142,7 @@ export class AccountService {
 		profilePicUrl?: string
 	): Observable<any> {
 		return this.http
-			.post(
+			.put(
 				`${ACCOUNT_API}updateUser`,
 				{
 					displayName,

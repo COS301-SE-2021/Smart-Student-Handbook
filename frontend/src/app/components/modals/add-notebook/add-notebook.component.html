@@ -8,6 +8,7 @@
       placeholder="Notebook One"
       name="title"
       [(ngModel)]="data.title"
+      autocomplete="off"
     />
     <mat-hint>Notebook title</mat-hint>
   </mat-form-field>
@@ -19,6 +20,7 @@
   		placeholder="Course one"
   		name="course"
   		[(ngModel)]="data.course"
+      autocomplete="off"
   	/>
   	<mat-hint>Course</mat-hint>
   </mat-form-field>
@@ -30,6 +32,7 @@
       placeholder="My first notebook"
       name="description"
       [(ngModel)]="data.description"
+      autocomplete="off"
     ></textarea>
     <mat-hint>Description</mat-hint>
   </mat-form-field>

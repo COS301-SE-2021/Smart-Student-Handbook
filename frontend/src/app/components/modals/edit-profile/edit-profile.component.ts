@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '@app/models';
+import { AccountService } from '@app/services';
 
 /**
  * Data for the add notebook popup
@@ -22,9 +23,12 @@ export class EditProfileComponent {
 
 	date: any;
 
+	isDisabled: boolean = false;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: User
+		@Inject(MAT_DIALOG_DATA) public data: User,
+		private accountService: AccountService
 	) {
 		// eslint-disable-next-line no-underscore-dangle
 		// @ts-ignore
@@ -42,6 +46,39 @@ export class EditProfileComponent {
 
 	onNoClick(): void {
 		this.dialogRef.close();
+	}
+
+	onSave(): void {
+		const progressbar = document.getElementById(
+			'progressbar'
+		) as HTMLElement;
+		if (progressbar) progressbar.style.display = 'block';
+		this.isDisabled = true;
+
+		if (this.data !== undefined) {
+			this.accountService
+				.updateUser(
+					this.data.displayName,
+					this.data.institution,
+					this.data.department,
+					this.data.program,
+					this.data.workStatus,
+					this.data.bio,
+					this.data.profilePicUrl
+				)
+				.subscribe(
+					(res: any) => {
+						if (res.success) {
+							this.dialogRef.close();
+						}
+						if (progressbar) progressbar.style.display = 'none';
+						this.isDisabled = false;
+					},
+					(err) => {
+						console.log(`Error: ${err.error.message}`);
+					}
+				);
+		}
 	}
 
 	//---------------------------------------------------------

@@ -123,9 +123,9 @@ export class NoteMoreService {
 					.getUserByUid(notebook.creatorId)
 					.subscribe((res) => {
 						creator = {
-							name: res.userInfo.name,
+							name: res.user.username,
 							url: '',
-							id: res.userInfo.uid,
+							id: res.user.uid,
 						};
 
 						observer.next({

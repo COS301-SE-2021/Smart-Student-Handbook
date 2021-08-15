@@ -10,7 +10,6 @@ import {
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
-import { User } from '@app/models';
 
 @Component({
 	selector: 'app-left-menu',
@@ -98,29 +97,9 @@ export class LeftMenuComponent implements OnInit {
 			});
 
 			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe((result) => {
-				if (result !== undefined) {
-					this.accountService
-						.updateUser(
-							result.displayName,
-							result.institution,
-							result.department,
-							result.program,
-							result.workStatus,
-							result.bio,
-							result.profilePicUrl
-						)
-						.subscribe(
-							(res: any) => {
-								if (res.success) {
-									this.user = res.user;
-								}
-							},
-							(err) => {
-								console.log(`Error: ${err.error.message}`);
-							}
-						);
-				}
+			dialogRef.afterClosed().subscribe(() => {
+				// update the user object after the update
+				this.user = JSON.parse(<string>localStorage.getItem('user'));
 			});
 		}
 	}
