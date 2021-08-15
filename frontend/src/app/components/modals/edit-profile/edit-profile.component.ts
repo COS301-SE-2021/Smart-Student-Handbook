@@ -45,6 +45,8 @@ export class EditProfileComponent implements OnInit {
 
 	filteredOptions: Observable<string[]> | undefined;
 
+	imgFilePath: string = '../../../../assets/images/defaultProfile.jpg';
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -156,6 +158,17 @@ export class EditProfileComponent implements OnInit {
 		});
 	}
 
+	imagePreview(e: any) {
+		// @ts-ignore
+		const file = (e.target as HTMLInputElement).files[0];
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			this.imgFilePath = reader.result as string;
+		};
+		reader.readAsDataURL(file);
+	}
+
 	//---------------------------------------------------------
 
 	// public imagePath: any;
@@ -183,25 +196,25 @@ export class EditProfileComponent implements OnInit {
 
 	//---------------------------------------------------------
 
-	fileChangeEvent(event: any) {
-		// if (event.target.files && event.target.files[0]) {
-		// 	const reader = new FileReader();
-		// 	reader.onload = (e: any) => {
-		// 		this.localUrl = e.target.result;
-		// 	};
-		// 	reader.readAsDataURL(event.target.files[0]);
-		// 	console.log(this.localUrl);
-		// }
-		// console.log(event);
-		// const element = event.currentTarget as HTMLInputElement;
-		// const fileList: FileList | null = element.files;
-		// if (fileList) {
-		// 	console.log('FileUpload -> files', fileList);
-		// 	// eslint-disable-next-line prefer-destructuring
-		// 	this.fileName = fileList[0];
-		// 	this.fileType = this.fileName.type;
-		// 	this.image = document.getElementById('some_id') as HTMLImageElement;
-		// 	this.image.src = URL.createObjectURL(this.fileName);
-		// }
-	}
+	// fileChangeEvent(event: any) {
+	// if (event.target.files && event.target.files[0]) {
+	// 	const reader = new FileReader();
+	// 	reader.onload = (e: any) => {
+	// 		this.localUrl = e.target.result;
+	// 	};
+	// 	reader.readAsDataURL(event.target.files[0]);
+	// 	console.log(this.localUrl);
+	// }
+	// console.log(event);
+	// const element = event.currentTarget as HTMLInputElement;
+	// const fileList: FileList | null = element.files;
+	// if (fileList) {
+	// 	console.log('FileUpload -> files', fileList);
+	// 	// eslint-disable-next-line prefer-destructuring
+	// 	this.fileName = fileList[0];
+	// 	this.fileType = this.fileName.type;
+	// 	this.image = document.getElementById('some_id') as HTMLImageElement;
+	// 	this.image.src = URL.createObjectURL(this.fileName);
+	// }
+	// }
 }
