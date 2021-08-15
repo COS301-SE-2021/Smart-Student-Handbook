@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordService } from '@app/services';
+import { AccountService, ResetPasswordService } from '@app/services';
 import { MustMatch } from '@app/features/public/register/must-match.validator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,7 +20,8 @@ export class ResetPasswordComponent {
 		private resetPasswordService: ResetPasswordService,
 		private activeRoute: ActivatedRoute,
 		private router: Router,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private accountService: AccountService
 	) {
 		// setup the form and validation
 		this.form = this.fb.group(
@@ -32,6 +33,11 @@ export class ResetPasswordComponent {
 				validator: MustMatch('password', 'confirmPassword'),
 			}
 		);
+
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
 	}
 
 	onSubmit() {

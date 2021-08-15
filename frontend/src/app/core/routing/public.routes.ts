@@ -13,7 +13,10 @@ export const PUBLIC_ROUTES: Routes = [
 	{ path: 'account/login', component: LoginComponent },
 	{ path: 'account/register', component: RegisterComponent },
 	{ path: 'account/forgotPassword', component: ForgotPasswordComponent },
-	{ path: 'account/resetPassword', component: ResetPasswordComponent },
+	{
+		path: 'account/resetPassword/:email/:code',
+		component: ResetPasswordComponent,
+	},
 	{ path: 'welcome', component: LandingPageComponent },
 	{ path: 'page-not-found', component: P404Component },
 	// { path: 'e500', component: e500Component },

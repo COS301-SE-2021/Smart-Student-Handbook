@@ -65,15 +65,15 @@
     <span class="spacer"></span>
 
 <!--    <div mat-card-avatar id="profileMenuPic" [matMenuTriggerFor]="profileMenu" class="header-image margin align-self-center profileCard" [@animateText]="linkText ? 'hide' : 'show'"></div>-->
-    <img mat-card-avatar id="profileMenuPic" src="../../../../assets/images/defaultProfile.jpg" alt="User Avatar" [matMenuTriggerFor]="profileMenu"
+    <img mat-card-avatar id="profileMenuPic" [src]="user.profilePic"alt="User Avatar" [matMenuTriggerFor]="profileMenu"
          class="align-self-center" [@animateText]="linkText ? 'hide' : 'show'">
 
 
     <mat-card class="profileCard" [@animateText]="linkText ? 'show' : 'hide'">
       <mat-card-header id="profileCardHeader">
-        <img mat-card-avatar src="../../../../assets/images/defaultProfile.jpg" alt="User Avatar" class="header-image">
-        <mat-card-title id="username" [@animateText]="linkText ? 'show' : 'hide'">{{ username }}</mat-card-title>
-        <mat-card-subtitle id="subTitle" [@animateText]="linkText ? 'show' : 'hide'">{{ userEmail }}</mat-card-subtitle>
+        <img mat-card-avatar [src]="user.profilePic" alt="User Avatar" class="header-image">
+        <mat-card-title id="username" [@animateText]="linkText ? 'show' : 'hide'">{{ user.username }}</mat-card-title>
+        <mat-card-subtitle id="subTitle" [@animateText]="linkText ? 'show' : 'hide'">{{ user.email }}</mat-card-subtitle>
         <button mat-icon-button [matMenuTriggerFor]="profileMenu"  aria-label="Example icon-button with a menu">
           <mat-icon>more_vert</mat-icon>
         </button>

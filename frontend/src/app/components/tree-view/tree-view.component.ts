@@ -208,7 +208,7 @@ export class TreeViewComponent implements OnInit {
 		this.noteMore
 			.createNewNotebook({
 				title: '',
-				author: this.user.name,
+				author: this.user.username,
 				course: '',
 				description: '',
 				institution: this.user.institution,
