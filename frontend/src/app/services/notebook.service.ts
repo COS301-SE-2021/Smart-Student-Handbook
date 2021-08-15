@@ -94,7 +94,7 @@ export class NotebookService {
 	 */
 	getUserNotebooks(): Observable<any> {
 		return this.httpClient.get(
-			`http://localhost:5001/smartstudentnotebook/us-central1/app/notebook/getUserNotebooks`,
+			`${NOTEBOOK_API}/getUserNotebooks`,
 			httpOptions
 		);
 	}
