@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
 	MatDialogRef,
 	MAT_DIALOG_DATA,
@@ -8,6 +8,10 @@ import { User } from '@app/models';
 import { AccountService } from '@app/services';
 import { ConfirmDeleteComponent, MessageComponent } from '@app/components';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { institutions } from './InstitutionsList';
 
 /**
  * Data for the add notebook popup
@@ -18,7 +22,7 @@ import { Router } from '@angular/router';
 	templateUrl: './edit-profile.component.html',
 	styleUrls: ['./edit-profile.component.scss'],
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit {
 	image: any;
 
 	fileName: any;
@@ -34,6 +38,14 @@ export class EditProfileComponent {
 	updatedFailed: boolean = false;
 
 	errorMessage: string = '';
+
+	myControl = new FormControl();
+
+	options: string[] = institutions;
+
+	filteredOptions: Observable<string[]> | undefined;
+
+	imgFilePath: string = '../../../../assets/images/defaultProfile.jpg';
 
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
@@ -54,6 +66,21 @@ export class EditProfileComponent {
 			month: 'long',
 			day: 'numeric',
 		});
+	}
+
+	ngOnInit() {
+		this.filteredOptions = this.myControl.valueChanges.pipe(
+			startWith(''),
+			map((value) => this.filter(value))
+		);
+	}
+
+	private filter(value: string): string[] {
+		const filterValue = value.toLowerCase();
+
+		return this.options.filter((option) =>
+			option.toLowerCase().includes(filterValue)
+		);
 	}
 
 	onNoClick(): void {
@@ -131,6 +158,17 @@ export class EditProfileComponent {
 		});
 	}
 
+	imagePreview(e: any) {
+		// @ts-ignore
+		const file = (e.target as HTMLInputElement).files[0];
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			this.imgFilePath = reader.result as string;
+		};
+		reader.readAsDataURL(file);
+	}
+
 	//---------------------------------------------------------
 
 	// public imagePath: any;
@@ -158,25 +196,25 @@ export class EditProfileComponent {
 
 	//---------------------------------------------------------
 
-	fileChangeEvent(event: any) {
-		// if (event.target.files && event.target.files[0]) {
-		// 	const reader = new FileReader();
-		// 	reader.onload = (e: any) => {
-		// 		this.localUrl = e.target.result;
-		// 	};
-		// 	reader.readAsDataURL(event.target.files[0]);
-		// 	console.log(this.localUrl);
-		// }
-		// console.log(event);
-		// const element = event.currentTarget as HTMLInputElement;
-		// const fileList: FileList | null = element.files;
-		// if (fileList) {
-		// 	console.log('FileUpload -> files', fileList);
-		// 	// eslint-disable-next-line prefer-destructuring
-		// 	this.fileName = fileList[0];
-		// 	this.fileType = this.fileName.type;
-		// 	this.image = document.getElementById('some_id') as HTMLImageElement;
-		// 	this.image.src = URL.createObjectURL(this.fileName);
-		// }
-	}
+	// fileChangeEvent(event: any) {
+	// if (event.target.files && event.target.files[0]) {
+	// 	const reader = new FileReader();
+	// 	reader.onload = (e: any) => {
+	// 		this.localUrl = e.target.result;
+	// 	};
+	// 	reader.readAsDataURL(event.target.files[0]);
+	// 	console.log(this.localUrl);
+	// }
+	// console.log(event);
+	// const element = event.currentTarget as HTMLInputElement;
+	// const fileList: FileList | null = element.files;
+	// if (fileList) {
+	// 	console.log('FileUpload -> files', fileList);
+	// 	// eslint-disable-next-line prefer-destructuring
+	// 	this.fileName = fileList[0];
+	// 	this.fileType = this.fileName.type;
+	// 	this.image = document.getElementById('some_id') as HTMLImageElement;
+	// 	this.image.src = URL.createObjectURL(this.fileName);
+	// }
+	// }
 }
