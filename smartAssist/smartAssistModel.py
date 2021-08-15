@@ -72,7 +72,7 @@ class SmartAssistModel():
 
         print(name)
 
-        max_width = max([len(self.data.index_data[c]) for c in closest])
+        max_width = 25
 
         # Print the most similar and distances
         for c in reversed(closest):
@@ -110,7 +110,7 @@ class SmartAssistModel():
 
         # print(name)
 
-        max_width = max([len(self.data.index_data[c]) for c in closest])
+        max_width = 25
 
         # Print the most similar and distances
         for c in reversed(closest):

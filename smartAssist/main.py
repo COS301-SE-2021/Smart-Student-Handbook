@@ -9,9 +9,7 @@ data.generateFinalData(n_positive=1000)
 data.generateTrainTestData()
 
 smartmodel = SmartAssistModel(data=data)
-# smartmodel.buildModel()
-
-
+smartmodel.buildModel()
 
 xtrain = {
     'data': data.finalSetXTrain[:,0], 
@@ -33,10 +31,10 @@ xtest = {
 
 ytest = data.finalSetYTest
 
-# smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData=(xtest, ytest))
-# smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
+smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData=(xtest, ytest))
+smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
-smartmodel.loadSmartModel()
+# smartmodel.loadSmartModel()
 
 smartmodel.getRecommendations('Toy Story')
 
