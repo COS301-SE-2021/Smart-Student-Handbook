@@ -6,7 +6,6 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToAllRequestDto } from './dto/sendNotificationToAll.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { NotificationService } from './notification.service';
-import { EmailInterface } from './interfaces/email.interface';
 import { CreateNotificationDto } from './dto/createNotification.dto';
 
 @Controller('notification')
