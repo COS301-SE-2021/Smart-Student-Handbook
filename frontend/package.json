@@ -32,6 +32,7 @@
     "@editorjs/text-variant-tune": "^1.0.1",
     "@editorjs/underline": "^1.0.0",
     "angular-bootstrap-md": "^11.1.0",
+    "angular-instantsearch": "^2.3.0",
     "bootstrap": "^5.0.1",
     "editorjs-alert": "^1.0.3",
     "editorjs-paragraph-with-alignment": "^3.0.0",

@@ -67,9 +67,11 @@ import {
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { NgAisRootModule } from 'angular-instantsearch';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AddNoteComponent } from './components/modals/add-note/add-note.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
 	declarations: [
@@ -102,7 +104,8 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 		LandingPageComponent,
 		ForgotPasswordComponent,
 		AddCollaboratorComponent,
-  AddNoteComponent,
+		AddNoteComponent,
+		SearchComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -130,6 +133,7 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
+		NgAisRootModule,
 	],
 	providers: [
 		NotesPanelComponent,
