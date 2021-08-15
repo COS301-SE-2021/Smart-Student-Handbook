@@ -214,7 +214,6 @@ export class AccountService {
 				map((x) => {
 					localStorage.clear();
 					this.isUserLoggedIn.next(false);
-					this.router.navigate(['account/login']);
 					return x;
 				})
 			);

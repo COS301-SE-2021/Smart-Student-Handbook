@@ -1,7 +1,13 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+	MatDialogRef,
+	MAT_DIALOG_DATA,
+	MatDialog,
+} from '@angular/material/dialog';
 import { User } from '@app/models';
 import { AccountService } from '@app/services';
+import { ConfirmDeleteComponent, MessageComponent } from '@app/components';
+import { Router } from '@angular/router';
 
 /**
  * Data for the add notebook popup
@@ -32,7 +38,9 @@ export class EditProfileComponent {
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private dialog: MatDialog,
+		private router: Router
 	) {
 		// eslint-disable-next-line no-underscore-dangle
 		// @ts-ignore
@@ -87,6 +95,40 @@ export class EditProfileComponent {
 					}
 				);
 		}
+	}
+
+	deleteAccount(): void {
+		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+			data: {
+				message:
+					"Are you sure you want to delete your account. This action can't be reversed",
+			},
+		});
+
+		// Get info and create notebook after dialog is closed
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result === true) {
+				this.accountService.deleteUser().subscribe(
+					(res: any) => {
+						const confirm = this.dialog.open(MessageComponent, {
+							data: {
+								title: 'Successfully Deleted',
+								message1: res.message,
+								message2: '',
+							},
+						});
+						confirm.afterClosed().subscribe(() => {
+							this.dialogRef.close();
+							this.router.navigate(['account/login']);
+						});
+					},
+					(error) => {
+						this.errorMessage = error.message;
+						this.updatedFailed = true;
+					}
+				);
+			}
+		});
 	}
 
 	//---------------------------------------------------------

@@ -64,7 +64,7 @@
   </mat-form-field>
 </mat-dialog-content>
 
-<button mat-raised-button (click)="onNoClick()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
+<button mat-raised-button (click)="deleteAccount()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
 
 <div *ngIf="updatedFailed" class="text-center">
   <br/>

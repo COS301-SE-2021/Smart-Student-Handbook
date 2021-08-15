@@ -117,7 +117,13 @@ export class RegisterComponent {
 													this.dialog.open(
 														MessageComponent,
 														{
-															disableClose: true,
+															data: {
+																title: 'Welcome',
+																message1:
+																	'Welcome to the Smart Student Handbook',
+																message2:
+																	'Please kindly update your profile to help Smart Assist recommend relevant content and notes',
+															},
 														}
 													);
 
