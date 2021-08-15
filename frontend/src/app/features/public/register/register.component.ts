@@ -95,8 +95,7 @@ export class RegisterComponent {
 											this.isDisabled = false;
 										} else {
 											this.registerFailed = true;
-											this.errorMessage =
-												'An error occurred, please sign in manually!';
+											this.errorMessage = `${x.message} - ${x.error}`;
 											if (progressbar)
 												progressbar.style.display =
 													'none';
@@ -105,22 +104,22 @@ export class RegisterComponent {
 									},
 									(err) => {
 										this.registerFailed = true;
-										this.errorMessage = `Error: ${err.error.message}`;
+										this.errorMessage = `${err.message} - ${err.error}`;
 										if (progressbar)
 											progressbar.style.display = 'none';
 										this.isDisabled = false;
 									}
 								);
 						} else {
-							this.errorMessage = res.message;
-							// this.errorMessage = res.error;
+							this.registerFailed = true;
+							this.errorMessage = `${res.message} - ${res.error}`;
 							if (progressbar) progressbar.style.display = 'none';
 							this.isDisabled = false;
 						}
 					},
 					(err) => {
 						this.registerFailed = true;
-						this.errorMessage = `Error: ${err.error.message}`;
+						this.errorMessage = `${err.message} - ${err.error}`;
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
 					}

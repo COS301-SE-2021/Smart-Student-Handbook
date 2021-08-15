@@ -53,22 +53,18 @@ export class LoginComponent {
 					if (res.success) {
 						this.loginFailed = false;
 						this.router.navigate(['/home']);
-
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
 					} else {
 						this.loginFailed = true;
-						this.errorMessage =
-							'Username or Password was incorrect, Please try again!';
+						this.errorMessage = `${res.message} - ${res.error}`;
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
 					}
 				},
 				(err) => {
 					this.loginFailed = true;
-					// this.errorMessage = err.error.message;
-					this.errorMessage =
-						'Username or Password was incorrect, Please try again!';
+					this.errorMessage = `${err.message} - ${err.error}`;
 					if (progressbar) progressbar.style.display = 'none';
 					this.isDisabled = false;
 				}
@@ -76,6 +72,8 @@ export class LoginComponent {
 		} else {
 			if (progressbar) progressbar.style.display = 'none';
 			this.isDisabled = false;
+			this.loginFailed = true;
+			this.errorMessage = 'Form is invalid';
 		}
 	}
 }

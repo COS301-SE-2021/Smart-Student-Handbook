@@ -66,6 +66,14 @@
 
 <button mat-raised-button (click)="onNoClick()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
 
+<div *ngIf="updatedFailed" class="text-center">
+  <br/>
+  <mat-error >
+    {{ errorMessage }}
+  </mat-error>
+</div>
+
+
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
   <button mat-button (click)="onSave()" [disabled]="isDisabled">Save</button>

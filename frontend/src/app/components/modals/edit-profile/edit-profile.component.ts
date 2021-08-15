@@ -25,6 +25,10 @@ export class EditProfileComponent {
 
 	isDisabled: boolean = false;
 
+	updatedFailed: boolean = false;
+
+	errorMessage: string = '';
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -54,6 +58,7 @@ export class EditProfileComponent {
 		) as HTMLElement;
 		if (progressbar) progressbar.style.display = 'block';
 		this.isDisabled = true;
+		this.updatedFailed = false;
 
 		if (this.data !== undefined) {
 			this.accountService
@@ -70,6 +75,9 @@ export class EditProfileComponent {
 					(res: any) => {
 						if (res.success) {
 							this.dialogRef.close();
+						} else {
+							this.errorMessage = res.message;
+							this.updatedFailed = true;
 						}
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
