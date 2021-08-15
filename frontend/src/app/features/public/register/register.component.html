@@ -11,27 +11,38 @@
 			</mat-error>
 
 			<mat-form-field class="full-width-input">
-				<input type="email" autocomplete="off" matInput placeholder="Email" formControlName="email" required/>
+				<input type="email" autocomplete="off" matInput placeholder="Email" formControlName="email"
+               required pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+"/>
 				<mat-error> Please provide a valid email address </mat-error>
 			</mat-form-field>
 
-			<mat-form-field class="full-width-input">
-				<input type="text" autocomplete="off" matInput placeholder="Username" formControlName="displayName" required/>
-				<mat-error> Please provide a valid displayName </mat-error>
-			</mat-form-field>
+      <br/>
 
 			<mat-form-field class="full-width-input">
-				<input type="password" autocomplete="off" matInput placeholder="Password" formControlName="password" required/>
-				<mat-error> Please provide a valid password </mat-error>
+				<input type="text" autocomplete="off" matInput placeholder="Username" formControlName="displayName" required/>
+				<mat-error> Please provide a valid username </mat-error>
 			</mat-form-field>
+
+      <br/>
+
+			<mat-form-field class="full-width-input">
+				<input type="password" autocomplete="off" matInput placeholder="Password" formControlName="password" required
+               pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}"/>
+        <mat-hint>Minimum 8 characters including UPPER/lowercase, numbers and a special character</mat-hint>
+				<mat-error> Please provide a valid password </mat-error>
+				<mat-error> Minimum of 8 characters including UPPER/lowercase, numbers and a special character</mat-error>
+			</mat-form-field>
+
+      <br/>
 
 			<mat-form-field class="full-width-input">
 				<input type="password" autocomplete="off" matInput placeholder="Confirm Password" formControlName="passwordConfirm" required/>
 				<mat-error> Passwords dont match </mat-error>
-				<!--<mat-hint>Confirm your password (must match)</mat-hint>-->
 			</mat-form-field>
 
-			<button mat-raised-button type="submit" [disabled]="isDisabled">Register</button>
+      <br/>
+
+			<button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Register</button>
 		</form>
 	</mat-card-content>
 

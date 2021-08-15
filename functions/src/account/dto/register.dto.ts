@@ -1,7 +1,7 @@
 export class RegisterDto {
 	readonly email: string;
 
-	readonly displayName: string;
+	readonly username: string;
 
 	readonly password: string;
 

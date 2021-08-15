@@ -11,15 +11,27 @@ export class UserService {
 	 * that contains that uid and returns it as a json object
 	 * @param uid
 	 */
-	async getUserDetails(uid: string): Promise<UserResponseDto> {
+	async getUserByUid(uid: string): Promise<UserResponseDto> {
 		let requestedUser: User;
 		const userRef = admin.firestore().collection('users').doc(uid);
 		const doc = await userRef.get();
 
+		let dn = '';
+		await admin
+			.auth()
+			.getUser(uid)
+			.then((userRecord) => {
+				dn = userRecord.displayName;
+			})
+			.catch((error) => {
+				console.log('Error fetching user data:', error);
+			});
+
 		if (doc.exists) {
 			requestedUser = {
 				uid,
-				name: doc.data().name,
+				displayName: dn,
+				username: doc.data().username,
 				institution: doc.data().institution,
 				department: doc.data().department,
 				program: doc.data().program,
@@ -29,14 +41,52 @@ export class UserService {
 				dateJoined: doc.data().dateJoined,
 			};
 		} else {
-			throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+			throw new HttpException('User was not Found', HttpStatus.NOT_FOUND);
 		}
 
 		return {
 			success: true,
 			message: 'User was successfully found',
-			userInfo: requestedUser,
+			user: requestedUser,
 		};
+	}
+
+	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
+		return admin
+			.firestore()
+			.collection('users')
+			.where('username', '==', userByUsernameDto.username)
+			.get()
+			.then((querySnapshot) =>
+				admin
+				.auth()
+				.getUser(querySnapshot.docs[0].data().uid)
+				.then((userRecord) => ({
+					success: true,
+					message: 'User was successfully found',
+					user: {
+						uid: querySnapshot.docs[0].data().uid,
+						displayName: userRecord.displayName,
+						username: querySnapshot.docs[0].data().username,
+						institution: querySnapshot.docs[0].data().institution,
+						department: querySnapshot.docs[0].data().department,
+						program: querySnapshot.docs[0].data().program,
+						workStatus: querySnapshot.docs[0].data().workStatus,
+						bio: querySnapshot.docs[0].data().bio,
+						profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
+						dateJoined: querySnapshot.docs[0].data().dateJoined,
+					},
+				}))
+				.catch((error) => {
+					console.log('Error fetching user data:', error);
+				}),
+			)
+			.catch((error) => ({
+				success: false,
+				message: 'User was not successfully found',
+				user: null,
+				error: error.message,
+			}));
 	}
 
 	/**
@@ -92,15 +142,6 @@ export class UserService {
 	}
 
 	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
-		const exist = await this.doesUsernameExist(user.username);
-		// eslint-disable-next-line eqeqeq
-		if (exist == true) {
-			return {
-				success: false,
-				message: 'User unsuccessfully updated',
-			};
-		}
-
 		const updates: { [key: string]: string } = {};
 
 		if (user.username != null) {
@@ -159,34 +200,6 @@ export class UserService {
 			.catch(() => {
 				throw new HttpException('An unexpected Error Occurred', HttpStatus.BAD_REQUEST);
 			});
-	}
-
-	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
-		return admin
-			.firestore()
-			.collection('users')
-			.where('username', '==', userByUsernameDto.username)
-			.get()
-			.then((querySnapshot) => ({
-				success: true,
-				message: 'User was successfully found',
-				userInfo: {
-					uid: querySnapshot.docs[0].data().uid,
-					name: querySnapshot.docs[0].data().name,
-					institution: querySnapshot.docs[0].data().institution,
-					department: querySnapshot.docs[0].data().department,
-					program: querySnapshot.docs[0].data().program,
-					workStatus: querySnapshot.docs[0].data().workStatus,
-					bio: querySnapshot.docs[0].data().bio,
-					profilePicUrl: querySnapshot.docs[0].data().profilePicUrl,
-					dateJoined: querySnapshot.docs[0].data().dateJoined,
-				},
-			}))
-			.catch(() => ({
-				success: false,
-				message: 'User was not successfully found',
-				userInfo: null,
-			}));
 	}
 
 	async doesUsernameExist(username: string): Promise<boolean> {

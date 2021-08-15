@@ -6,9 +6,8 @@ export interface Account {
 		uid: string;
 		email: string;
 		emailVerified: boolean;
-		phoneNumber?: string;
 		displayName: string;
-		name?: string;
+		username?: string;
 		institution?: string;
 		department?: string;
 		program?: string;
