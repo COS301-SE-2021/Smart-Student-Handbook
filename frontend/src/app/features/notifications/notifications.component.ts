@@ -7,7 +7,7 @@ import { NoteMoreService, NotificationService } from '@app/services';
 	styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-	/* notificationList: Notifications[] = [
+	notificationList: Notifications[] = [
 		{
 			id: '1',
 			type: 'general',
@@ -30,7 +30,8 @@ export class NotificationsComponent implements OnInit {
 			content: 'more info on the notification',
 			read: true,
 		},
-	]; */
+	];
+
 	constructor(
 		private notificationService: NotificationService,
 		private noteMoreService: NoteMoreService
@@ -41,9 +42,9 @@ export class NotificationsComponent implements OnInit {
 		this.notificationService.getUnreadNotifications();
 	}
 
-	accept(id: string, notebookID: string) {
+	accept(id: string) {
 		this.notificationService.updateRead(id);
-		this.noteMoreService.addCollaborator(notebookID);
+		// this.noteMoreService.addCollaborator(notebookID);
 	}
 
 	decline(id: string) {
@@ -54,10 +55,10 @@ export class NotificationsComponent implements OnInit {
 		this.notificationService.updateRead(notificationID);
 	}
 }
-/* interface Notifications {
+interface Notifications {
 	id: string;
 	type: string;
 	title: string;
 	content: string;
 	read: boolean;
-} */
+}

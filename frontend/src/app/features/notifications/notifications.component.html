@@ -19,7 +19,7 @@
       <mat-list role="list" id="list">
         <mat-list-item *ngFor="let notification of notificationList; let i = index" class="notificationListItem"
                        [ngStyle]="{'background-color': (notification.read===true) ? '#e5e5e5' : '#ffffff'}"
-                       (click)="markAsRead(notification.id, i)">
+                       (click)="markAsRead(notification.id)">
 
           <div mat-line class="col-12 col-md-10">
             <div mat-line>{{notification.title}}</div>
