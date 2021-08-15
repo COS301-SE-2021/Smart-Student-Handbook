@@ -13,6 +13,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgAisModule, NgAisRootModule } from 'angular-instantsearch';
 
 // Core
 import {
@@ -67,7 +68,7 @@ import {
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
-import { NgAisRootModule } from 'angular-instantsearch';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AddNoteComponent } from './components/modals/add-note/add-note.component';
@@ -114,6 +115,7 @@ import { SearchComponent } from './components/search/search.component';
 		BrowserModule,
 		AppRoutingModule,
 		BrowserAnimationsModule,
+		NgAisModule.forRoot(),
 		MDBBootstrapModule.forRoot(),
 		AngularFireModule.initializeApp(
 			environment.firebase,
