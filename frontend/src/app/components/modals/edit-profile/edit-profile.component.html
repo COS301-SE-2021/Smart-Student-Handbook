@@ -35,9 +35,21 @@
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Institution</mat-label>
-    <input matInput placeholder="Institution" [(ngModel)]="data.institution" autocomplete="off"/>
+    <input type="text"
+           placeholder="Institution"
+           matInput
+           [formControl]="myControl"
+           [matAutocomplete]="auto"
+           [(ngModel)]="data.institution"
+           autocomplete="off">
     <mat-hint>The institution where you are studying, learning or teaching</mat-hint>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
+
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>About</mat-label>
@@ -78,4 +90,5 @@
   <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
   <button mat-button (click)="onSave()" [disabled]="isDisabled">Save</button>
 </div>
+
 

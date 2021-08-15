@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 // import {MatDatepickerModule} from '@angular/core/datepicker';
 // import {MatFormFieldModule} from '@angular/core/form-field';
 // import {MatRadioModule} from '@angular/core/radio';
-// import {MatSelectModule} from '@angular/core/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
@@ -72,6 +72,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 		DragDropModule,
 
 		// Material
+		MatSelectModule,
 		MatListModule,
 		MatTreeModule,
 		MatCommonModule,

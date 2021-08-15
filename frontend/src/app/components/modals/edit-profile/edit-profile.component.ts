@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
 	MatDialogRef,
 	MAT_DIALOG_DATA,
@@ -8,6 +8,10 @@ import { User } from '@app/models';
 import { AccountService } from '@app/services';
 import { ConfirmDeleteComponent, MessageComponent } from '@app/components';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { institutions } from './InstitutionsList';
 
 /**
  * Data for the add notebook popup
@@ -18,7 +22,7 @@ import { Router } from '@angular/router';
 	templateUrl: './edit-profile.component.html',
 	styleUrls: ['./edit-profile.component.scss'],
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit {
 	image: any;
 
 	fileName: any;
@@ -34,6 +38,12 @@ export class EditProfileComponent {
 	updatedFailed: boolean = false;
 
 	errorMessage: string = '';
+
+	myControl = new FormControl();
+
+	options: string[] = institutions;
+
+	filteredOptions: Observable<string[]> | undefined;
 
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
@@ -54,6 +64,21 @@ export class EditProfileComponent {
 			month: 'long',
 			day: 'numeric',
 		});
+	}
+
+	ngOnInit() {
+		this.filteredOptions = this.myControl.valueChanges.pipe(
+			startWith(''),
+			map((value) => this.filter(value))
+		);
+	}
+
+	private filter(value: string): string[] {
+		const filterValue = value.toLowerCase();
+
+		return this.options.filter((option) =>
+			option.toLowerCase().includes(filterValue)
+		);
 	}
 
 	onNoClick(): void {
