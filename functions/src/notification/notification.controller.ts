@@ -47,9 +47,9 @@ export class NotificationController {
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
 	}
 
-	@Post('sendUserToUserEmail')
-	async sendUserToUserEmail(@Body() userSender: string, userReceiver: string, email: EmailInterface) {
-		return this.notificationService.sendUserToUserEmail(userSender, userReceiver, email);
+	@Post('sendCollaborationRequest')
+	async sendUserToUserEmail(@Body() userSender: string, userReceiver: string) {
+		return this.notificationService.sendCollaborationRequest(userSender, userReceiver);
 	}
 
 	@Post('sendUserToUserPushNotification')
