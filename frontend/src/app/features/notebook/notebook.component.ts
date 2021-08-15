@@ -3,15 +3,16 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { NotebookEventEmitterService, AccountService } from '@app/services';
-import { LeftMenuComponent } from '@app/core';
+import {
+	NotebookEventEmitterService,
+	AccountService,
+	OpenNotebookPanelService,
+} from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
-import { OpenNotebookPanelService } from '@app/services/Event Transmitters/open-notebook-panel.service';
 
 @Component({
 	selector: 'app-notebook',
@@ -55,8 +56,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variable that holds the logged in user details
 	user: any;
 
-	profile: any;
-
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -72,6 +71,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * @param router
 	 * @param accountService
 	 * @param notebookEventEmitterService
+	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private router: Router,
@@ -89,26 +89,24 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		this.profile = this.profile.userInfo;
 
 		// Open a note when one is selected from the mobile view and update the title
-		if (this.notebookEventEmitterService.subsVar === undefined) {
-			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEmitter.subscribe(
-					(id: string) => {
-						this.loadEditor(id);
-					}
-				);
-			// this.notebookEventEmitterService.getTitleEmitter.subscribe(
-			// 	(title: string) => {
-			// 		const noteTitle = document.getElementById(
-			// 			'mobileTitle'
-			// 		) as HTMLSpanElement;
-			// 		// noteTitle.innerHTML = title;
-			// 	}
-			// );
-		}
+		// if (this.notebookEventEmitterService.subsVar === undefined) {
+		// 	this.notebookEventEmitterService.subsVar =
+		// 		this.notebookEventEmitterService.loadEmitter.subscribe(
+		// 			({ notebookId, noteId, title }) => {
+		// 				this.loadEditor(notebookId, noteId, title);
+		// 			}
+		// 		);
+		// this.notebookEventEmitterService.getTitleEmitter.subscribe(
+		// 	(title: string) => {
+		// 		const noteTitle = document.getElementById(
+		// 			'mobileTitle'
+		// 		) as HTMLSpanElement;
+		// 		// noteTitle.innerHTML = title;
+		// 	}
+		// );
+		// }
 
 		// // Toggle the notePanelComponent when in desktop view and notebook is selected
 		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
@@ -133,12 +131,16 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		// 	this.notePanelComponent.openedCloseToggle();
 		// };
 
-		this.notePanelComponent.openNotebook = (id: string) => {
-			this.editorComponent.loadEditor(id);
+		this.notePanelComponent.openNotebook = (
+			notebookId: string,
+			noteId: string,
+			title: string
+		) => {
+			this.editorComponent.loadEditor(notebookId, noteId, title);
 		};
 
-		this.editorComponent.removeNotebookCard = (id: string) => {
-			this.notePanelComponent.removeNotebook(id);
+		this.editorComponent.removeNoteCard = (id: string) => {
+			this.notePanelComponent.removeNote(id);
 		};
 	}
 
@@ -152,7 +154,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(id: string) {
-		await this.editorComponent.loadEditor(id);
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		await this.editorComponent.loadEditor(notebookId, noteId, title);
 	}
 }

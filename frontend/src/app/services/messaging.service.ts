@@ -5,6 +5,15 @@ import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 
+let addr;
+if (window.location.host.includes('localhost')) {
+	addr = 'http://localhost:5001/smartstudentnotebook/us-central1/app/';
+} else {
+	addr = 'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/';
+}
+
+const MESSAGE_API = addr;
+
 @Injectable()
 export class MessagingService {
 	currentMessage = new BehaviorSubject(null);
@@ -22,7 +31,8 @@ export class MessagingService {
 		this.messaging
 			.getToken({
 				vapidKey:
-					'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
+					'BLwI4ZLDPfp7e6LMr84u1ne7lwoO2v0NxrpM__JDztRSaHGcwjn7NhqpyNIsAH791DPyPTzjmdEU4Fv8CnvVUxY',
+				// 'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
 			})
 			.then((currentToken) => {
 				if (currentToken) {
@@ -85,7 +95,7 @@ export class MessagingService {
 	subscribeToTopic(currentToken: string) {
 		return this.httpClient.request<any>(
 			'post',
-			'http://localhost:5001/notification/subscribeToTopic',
+			`${MESSAGE_API}/notification/subscribeToTopic`,
 			{
 				body: {
 					token: currentToken,

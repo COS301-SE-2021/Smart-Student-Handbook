@@ -1,0 +1,36 @@
+<h3 mat-dialog-title>{{data.message}}</h3>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Notebook title</mat-label>
+    <input
+      matInput
+      placeholder="Notebook One"
+      name="title"
+      [(ngModel)]="data.title"
+      autocomplete="off"
+    />
+    <mat-hint>Notebook title</mat-hint>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      placeholder="My first notebook"
+      name="description"
+      [(ngModel)]="data.description"
+      autocomplete="off"
+    ></textarea>
+    <mat-hint>Description</mat-hint>
+  </mat-form-field>
+
+
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>
+
+</mat-dialog-content>

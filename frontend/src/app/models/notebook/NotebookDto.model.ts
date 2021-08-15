@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class NotebookDto {
+	readonly title?: string;
+
 	readonly author?: string;
 
 	readonly course?: string;
@@ -8,11 +10,13 @@ export class NotebookDto {
 
 	readonly institution?: string;
 
-	readonly name?: string;
-
-	readonly surname?: string;
+	readonly creatorId?: string;
 
 	readonly private?: boolean;
 
-	readonly username?: string;
+	readonly type?: string;
+
+	readonly tags?: string[];
+
+	readonly notebookId?: string;
 }

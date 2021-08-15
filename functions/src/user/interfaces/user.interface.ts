@@ -1,6 +1,5 @@
 export interface User {
 	uid: string;
-	name?: string;
 	username: string;
 	institution?: string;
 	department?: string;

@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 // import {MatDatepickerModule} from '@angular/core/datepicker';
 // import {MatFormFieldModule} from '@angular/core/form-field';
 // import {MatRadioModule} from '@angular/core/radio';
-// import {MatSelectModule} from '@angular/core/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
@@ -49,6 +49,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -70,6 +72,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		DragDropModule,
 
 		// Material
+		MatSelectModule,
 		MatListModule,
 		MatTreeModule,
 		MatCommonModule,
@@ -77,7 +80,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		// MatCheckboxModule,
 		MatButtonModule,
 		MatInputModule,
-		// MatAutocompleteModule,
+		MatAutocompleteModule,
 		// MatDatepickerModule,
 		// MatFormFieldModule,
 		// MatRadioModule,
@@ -100,9 +103,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 		MatProgressBarModule,
 		MatDialogModule,
 		MatTooltipModule,
-		// MatSnackBarModule,
+		MatSnackBarModule,
 		// MatTableModule,
 		// MatSortModule,
+		MatTooltipModule,
 		MatPaginatorModule,
 		MatBottomSheetModule,
 		MatDividerModule,

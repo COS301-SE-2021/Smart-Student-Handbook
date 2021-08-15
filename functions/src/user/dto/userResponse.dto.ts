@@ -5,7 +5,9 @@
 export class User {
 	uid: string;
 
-	name?: string;
+	displayName?: string;
+
+	username?: string;
 
 	institution?: string;
 
@@ -17,6 +19,8 @@ export class User {
 
 	bio?: string;
 
+	profilePicUrl?: string;
+
 	dateJoined: string;
 }
 
@@ -25,5 +29,5 @@ export class UserResponseDto {
 
 	message?: string;
 
-	userInfo?: User;
+	user?: User;
 }

@@ -10,31 +10,44 @@
 
 	<mat-divider></mat-divider>
 
+  <div>
+    <h2>Creator:</h2>
+
+    <div align="center" class="collaborators">
+      <div mat-card-avatar class="collaborator-image"></div>
+
+      <p class="personName">{{creator.name}}</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
 	<div>
-		<button color="primary" mat-icon-button id="addGroupBtn">
+		<button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
 			<mat-icon>group_add</mat-icon>
 		</button>
 
 		<h2>Collaborators:</h2>
 
-		<div align="center" class="collaborators">
+		<div align="center" class="collaborators" *ngFor="let collaborator of collaborators">
 			<div mat-card-avatar class="collaborator-image"></div>
 
-			<mat-icon class="removeCollaboratorIcon"
-				>remove_circle_outline</mat-icon
-			>
+			<mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+        remove_circle_outline
+      </mat-icon>
 
-			<p class="personName">Arno</p>
+			<p class="personName">{{collaborator.name}}</p>
 		</div>
-		<div align="center" class="collaborators">
-			<div mat-card-avatar class="collaborator-image"></div>
 
-			<mat-icon class="removeCollaboratorIcon"
-				>remove_circle_outline</mat-icon
-			>
+<!--		<div align="center" class="collaborators">-->
+<!--			<div mat-card-avatar class="collaborator-image"></div>-->
 
-			<p class="personName">Douglas van Reeuwyk</p>
-		</div>
+<!--			<mat-icon class="removeCollaboratorIcon"-->
+<!--				>remove_circle_outline</mat-icon-->
+<!--			>-->
+
+<!--			<p class="personName">Douglas van Reeuwyk</p>-->
+<!--		</div>-->
 	</div>
 
 	<mat-divider></mat-divider>

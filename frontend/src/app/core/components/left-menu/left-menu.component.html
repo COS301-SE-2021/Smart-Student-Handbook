@@ -1,83 +1,95 @@
 <div class="sidenav_container"  [@onSideNavChange]="sideNavState ? 'open' : 'close'">
-  <div fxLayout="column" fxLayoutGap="10px" style="height: 100%;">
+  <div fxLayout="column" fxLayoutGap="10px" style="height: calc(100vh - 140px); overflow-y: auto; overflow-x: hidden;">
 
-        <div>
-          <mat-nav-list>
-            <a mat-list-item [routerLink]="['/home']">
-              <mat-icon class="menuIcon">home</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Home</span>
-            </a>
-            <a mat-list-item  [routerLink]="['/explore']">
-              <mat-icon class="menuIcon">explore</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Explore</span>
-            </a>
+    <div>
+      <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0px 10px;">
+        <button id="showHideMenu" mat-icon-button (click)="onSinenavToggle()">
+          <mat-icon *ngIf="sideNavState" class="menuArrow">arrow_left</mat-icon>
+          <mat-icon *ngIf="!sideNavState" class="menuArrow">arrow_right</mat-icon>
+        </button>
+      </div>
 
-            <br/>
-            <mat-divider></mat-divider>
-            <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notes</span>
-            <br/>
+      <a [routerLink]="['/home']"><img src="../../assets/logo/SmartStudentHandbook.png" alt="image"
+                                       style="width: 200px; padding-bottom: 10px; margin-top: -25px"  [@animateText]="linkText ? 'show' : 'hide'"></a>
+      <a [routerLink]="['/home']"><div mat-card-avatar class="logo-image align-self-center" [@animateText]="linkText ? 'hide' : 'show'"></div></a>
 
-            <a mat-list-item  [routerLink]="['/recentNotes']">
-              <mat-icon sclass="menuIcon">av_timer</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Recent Notes</span>
-            </a>
-            <a mat-list-item  [routerLink]="['/notebook']">
-              <mat-icon class="menuIcon">book</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'">
-                My Notebooks
-                <!--<app-tree-view #treeViewComponent id="treeViewComponent"></app-tree-view>-->
-              </span>
-            </a>
+    </div>
 
-            <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
-
-            <a mat-list-item  [routerLink]="['/sharedWithMe']">
-              <mat-icon class="menuIcon">group</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>
-            </a>
-
-            <br/>
-            <mat-divider></mat-divider>
-            <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
-            <br/>
-
-            <a mat-list-item  [routerLink]="['/notifications']">
-              <mat-icon class="menuIcon">notifications</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notifications</span>
-            </a>
-            <a mat-list-item  (click)="updateProfile()">
-              <mat-icon class="menuIcon">account_circle</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
-            </a>
-
-            <br/>
-            <mat-divider></mat-divider>
-            <br/>
-
-            <a mat-list-item  (click)="logout()">
-              <mat-icon class="menuIcon">exit_to_app</mat-icon>
-              <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Logout</span>
-            </a>
-          </mat-nav-list>
-        </div>
 
     <mat-divider></mat-divider>
 
-    <!--<mat-card id="card">
-      <mat-card-header id="profileCard" (click)="updateProfile()">
-        <div mat-card-avatar class="header-image"></div>
-        <mat-card-title id="username">{{ username }}</mat-card-title>
-        <mat-card-subtitle id="subTitle">{{ bio }}</mat-card-subtitle>
+    <div>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/home']">
+          <mat-icon class="menuIcon" matTooltip="Home" matTooltipPosition="right">home</mat-icon>
+          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Home</span>
+        </a>
+        <a mat-list-item  [routerLink]="['/explore']">
+          <mat-icon class="menuIcon" matTooltip="Explore" matTooltipPosition="right">explore</mat-icon>
+          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Explore</span>
+        </a>
+
+        <br/>
+        <mat-divider></mat-divider>
+        <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notes</span>
+        <br/>
+
+        <a mat-list-item  [routerLink]="['/recentNotes']">
+          <mat-icon sclass="menuIcon" matTooltip="Recent notes" matTooltipPosition="right">av_timer</mat-icon>
+          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Recent Notes</span>
+        </a>
+
+        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
+          <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>
+        </a>
+
+        <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
+
+        <a mat-list-item  [routerLink]="['/sharedWithMe']">
+          <mat-icon class="menuIcon" matTooltip="Shared With Me" matTooltipPosition="right">group</mat-icon>
+          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>
+        </a>
+
+        <br/>
+        <mat-divider></mat-divider>
+        <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
+        <br/>
+
+        <a mat-list-item  [routerLink]="['/notifications']">
+          <mat-icon class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">notifications</mat-icon>
+          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notifications</span>
+        </a>
+      </mat-nav-list>
+    </div>
+
+    <span class="spacer"></span>
+
+<!--    <div mat-card-avatar id="profileMenuPic" [matMenuTriggerFor]="profileMenu" class="header-image margin align-self-center profileCard" [@animateText]="linkText ? 'hide' : 'show'"></div>-->
+    <img mat-card-avatar id="profileMenuPic" [src]="user.profilePic"alt="User Avatar" [matMenuTriggerFor]="profileMenu"
+         class="align-self-center" [@animateText]="linkText ? 'hide' : 'show'">
+
+
+    <mat-card class="profileCard" [@animateText]="linkText ? 'show' : 'hide'">
+      <mat-card-header id="profileCardHeader">
+        <img mat-card-avatar [src]="user.profilePic" alt="User Avatar" class="header-image">
+        <mat-card-title id="username" [@animateText]="linkText ? 'show' : 'hide'">{{ user.username }}</mat-card-title>
+        <mat-card-subtitle id="subTitle" [@animateText]="linkText ? 'show' : 'hide'">{{ user.email }}</mat-card-subtitle>
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu"  aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </mat-card-header>
-    </mat-card>-->
+    </mat-card>
 
-  </div>
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item (click)="updateProfile()">
+        <mat-icon>account_circle</mat-icon>
+        <span>Update Profile</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
 
-  <span class="spacer"></span>
-  <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0px 10px;">
-    <button mat-icon-button (click)="onSinenavToggle()">
-      <mat-icon *ngIf="sideNavState" class="menuArrow">arrow_left</mat-icon>
-      <mat-icon *ngIf="!sideNavState" class="menuArrow">arrow_right</mat-icon>
-    </button>
   </div>
 </div>

@@ -6,10 +6,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
  */
 export interface DialogData {
 	title: string;
-	course: string;
 	description: string;
-	institution: string;
+	course: string;
 	private: boolean;
+	header: string;
 }
 
 @Component({
@@ -21,7 +21,10 @@ export class AddNotebookComponent {
 	constructor(
 		public dialogRef: MatDialogRef<AddNotebookComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: DialogData
-	) {}
+	) {
+		// eslint-disable-next-line no-param-reassign
+		if (!data.private) data.private = false;
+	}
 
 	onNoClick(): void {
 		this.dialogRef.close();

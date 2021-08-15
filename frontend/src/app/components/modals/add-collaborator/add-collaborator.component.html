@@ -1,0 +1,28 @@
+<h3 mat-dialog-title>Add a collaborator</h3>
+
+<mat-dialog-content class="mat-typography">
+
+  <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete">
+    <mat-label>Enter user name</mat-label>
+    <input type="text"
+           placeholder="Add collaborator"
+           aria-label="collaborator"
+           autocomplete="off"
+           matInput
+           [formControl]="myControl"
+           [matAutocomplete]="auto" #input>
+    <mat-autocomplete #auto="matAutocomplete" >
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name" (onSelectionChange)="select(option)">
+        <div mat-card-avatar class="profile-image"></div>
+        <span>{{option.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="selectedUser" cdkFocusInitial>Ok</button>
+</div>
