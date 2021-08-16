@@ -51,6 +51,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatBadgeModule } from '@angular/material/badge';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -106,6 +107,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 		MatSnackBarModule,
 		// MatTableModule,
 		// MatSortModule,
+		MatBadgeModule,
 		MatTooltipModule,
 		MatPaginatorModule,
 		MatBottomSheetModule,

@@ -218,4 +218,18 @@ export class AccountService {
 				})
 			);
 	}
+
+	setUserNotificationToken(
+		userId: string,
+		notificationToken: string
+	): Observable<any> {
+		return this.http.post(
+			`${ACCOUNT_API}setUserNotificationToken`,
+			{
+				userId,
+				notificationToken,
+			},
+			httpOptions
+		);
+	}
 }

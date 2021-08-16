@@ -689,9 +689,10 @@ export class AccountService {
 		};
 	}
 
-	async setUserNotificationToken(notificationID: string): Promise<Response> {
-		const userId: string = firebase.auth().currentUser.uid;
+	async setUserNotificationToken(userId: string, notificationID: string): Promise<Response> {
+		// const userId: string = firebase.auth().currentUser.uid;
 
+		console.log('userId: ', userId, 'notificationID: ', notificationID);
 		return admin
 			.firestore()
 			.collection('users')

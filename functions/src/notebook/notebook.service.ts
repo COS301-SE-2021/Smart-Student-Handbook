@@ -427,13 +427,6 @@ export class NotebookService {
 	}
 
 	async addAccess(accessDto: AccessDto): Promise<Response> {
-		const userId = await this.getUserId();
-		const authorized = await this.checkCreator(accessDto.notebookId, userId);
-
-		if (!authorized) {
-			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
-		}
-
 		const access: Access[] = await this.getAccessList(accessDto.notebookId);
 
 		access.push({

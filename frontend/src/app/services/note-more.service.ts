@@ -5,7 +5,8 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
-import { NotebookDto } from '@app/models';
+import { createNotificationDto, NotebookDto } from '@app/models';
+import { NotificationService } from '@app/services/notification.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -14,10 +15,11 @@ export class NoteMoreService {
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private notificationService: NotificationService
 	) {}
 
-	addCollaborator(notebookID: string): Observable<any> {
+	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -41,20 +43,26 @@ export class NoteMoreService {
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				this.notebookService
-					.addAccess({
-						displayName: result.name,
-						userId: result.id,
-						profileUrl: result.profileUrl,
-						notebookId: notebookID,
-					})
-					.subscribe(() => {
-						observer.next({
-							name: result.name,
-							url: result.profileUrl,
-							id: result.id,
-						});
+				console.log(senderId, result.id);
+				this.notificationService
+					.sendCollaborationRequest(senderId, result.id, notebookID)
+					.subscribe((val) => {
+						console.log(val);
 					});
+				// this.notebookService
+				// 	.addAccess({
+				// 		displayName: result.name,
+				// 		userId: result.id,
+				// 		profileUrl: result.profileUrl,
+				// 		notebookId: notebookID,
+				// 	})
+				// 	.subscribe(() => {
+				// 		observer.next({
+				// 			name: result.name,
+				// 			url: result.profileUrl,
+				// 			id: result.id,
+				// 		});
+				// 	});
 			});
 		});
 	}
