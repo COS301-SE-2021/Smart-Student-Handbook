@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AccountService } from '@app/services';
+import { AccountService, MessagingService } from '@app/services';
 import { EditProfileComponent, MessageComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MustMatch } from './must-match.validator';
@@ -28,6 +28,7 @@ export class RegisterComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		private accountService: AccountService,
+		private messagingService: MessagingService,
 		private dialog: MatDialog
 	) {
 		// redirect to home if already logged in
@@ -109,6 +110,12 @@ export class RegisterComponent {
 													localStorage.getItem('user')
 												)
 											);
+
+											this.messagingService.saveNotificationToken(
+												x.user.uid
+											);
+											this.messagingService.requestPermission();
+											this.messagingService.receiveMessage();
 
 											// check if a user is not null
 											if (user) {

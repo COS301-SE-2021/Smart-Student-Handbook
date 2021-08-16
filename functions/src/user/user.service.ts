@@ -51,6 +51,7 @@ export class UserService {
 		};
 	}
 
+	/* eslint-disable */
 	getUserByUsername(userByUsernameDto: UserByUsernameDto) {
 		return admin
 			.firestore()
@@ -79,8 +80,7 @@ export class UserService {
 				}))
 				.catch((error) => {
 					console.log('Error fetching user data:', error);
-				}),
-			)
+				}))
 			.catch((error) => ({
 				success: false,
 				message: 'User was not successfully found',
@@ -88,6 +88,7 @@ export class UserService {
 				error: error.message,
 			}));
 	}
+	/* eslint-enable */
 
 	/**
 	 * Sends a user profile object to firestore where it then creates a new document in the

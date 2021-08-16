@@ -6,7 +6,6 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToAllRequestDto } from './dto/sendNotificationToAll.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { NotificationService } from './notification.service';
-import { EmailInterface } from './interfaces/email.interface';
 import { CreateNotificationDto } from './dto/createNotification.dto';
 
 @Controller('notification')
@@ -47,9 +46,13 @@ export class NotificationController {
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
 	}
 
-	@Post('sendUserToUserEmail')
-	async sendUserToUserEmail(@Body() userSender: string, userReceiver: string, email: EmailInterface) {
-		return this.notificationService.sendUserToUserEmail(userSender, userReceiver, email);
+	@Post('sendCollaborationRequest')
+	async sendUserToUserEmail(
+		@Body('userSender') userSender: string,
+		@Body('userReceiver') userReceiver: string,
+		@Body('notebookID') notebookID: string,
+	) {
+		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID);
 	}
 
 	@Post('sendUserToUserPushNotification')
