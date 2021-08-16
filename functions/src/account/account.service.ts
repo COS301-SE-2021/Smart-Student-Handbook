@@ -11,6 +11,7 @@ import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 require('firebase/auth');
 
@@ -45,6 +46,17 @@ export class AccountService {
 			};
 		}
 
+		const exist = await this.userService.doesUsernameExist(registerDto.username);
+		// eslint-disable-next-line eqeqeq
+		if (exist == true) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered',
+				error: 'Username already exists!!',
+			};
+		}
+
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
@@ -55,7 +67,7 @@ export class AccountService {
 				email: registerDto.email,
 				emailVerified: false,
 				password: registerDto.password,
-				displayName: registerDto.displayName,
+				displayName: registerDto.username,
 				disabled: false,
 			})
 			.then(
@@ -85,19 +97,29 @@ export class AccountService {
 			return resp;
 		}
 
-		await this.userService.createAndUpdateUser({
+		const userCreated = await this.userService.createUser({
 			uid: resp.user.uid,
-			name: resp.user.displayName,
-			institution: '',
-			department: '',
-			program: '',
-			workStatus: '',
-			bio: '',
+			username: resp.user.displayName,
+			institution: 'Unknown',
+			department: 'Unknown',
+			program: 'Unknown',
+			workStatus: 'Unknown',
+			bio: 'Unknown',
 			profilePicUrl:
 				// eslint-disable-next-line max-len
 				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
+
+		// eslint-disable-next-line eqeqeq
+		if (userCreated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Some error have occured!',
+			};
+		}
 
 		let host;
 		// eslint-disable-next-line eqeqeq
@@ -117,7 +139,7 @@ export class AccountService {
 			email: registerDto.email,
 			subject: 'Welcome to Smart Student Handbook',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${registerDto.displayName}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
+			body: `Good day, ${registerDto.username}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
 		});
 
 		// send welcome email to new user
@@ -128,7 +150,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Account> {
+	async updateUser(updateDto: UpdateDto): Promise<Account> {
 		let uid = '';
 
 		// Check if user is logged in
@@ -143,16 +165,41 @@ export class AccountService {
 			};
 		}
 
+		const userDetails = {
+			uid,
+			institution: updateDto.institution,
+			department: updateDto.department,
+			program: updateDto.program,
+			workStatus: updateDto.workStatus,
+			bio: updateDto.bio,
+			profilePic: updateDto.profilePicUrl,
+		};
+
+		const updated = await this.userService.updateUser(userDetails);
+
+		// eslint-disable-next-line eqeqeq
+		if (updated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User does not exist',
+				error: 'something went wrong along the way',
+			};
+		}
+
+		const userRef = admin.firestore().collection('users').doc(uid);
+		const doc = await userRef.get();
+
 		/**
 		 * Try to update user. If successful return success message else throw error
 		 */
 		return admin
 			.auth()
 			.updateUser(uid, {
-				email: registerDto.email,
+				email: updateDto.email,
 				emailVerified: false,
-				password: registerDto.password,
-				displayName: registerDto.displayName,
+				password: updateDto.password,
+				displayName: updateDto.displayName,
 				disabled: false,
 			})
 			.then((userCredential) => ({
@@ -162,13 +209,22 @@ export class AccountService {
 					email: userCredential.email,
 					emailVerified: userCredential.emailVerified,
 					displayName: userCredential.displayName,
+					username: doc.data().username,
+					institution: doc.data().institution,
+					department: doc.data().department,
+					program: doc.data().program,
+					workStatus: doc.data().workStatus,
+					bio: doc.data().bio,
+					profilePic: doc.data().profilePicUrl,
+					dateJoined: doc.data().dateJoined,
 				},
-				message: 'User is successfully registered!',
+				message: 'User is successfully Updated!',
 			}))
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: `${error.message}`,
+				message: 'Something went wrong, user was not updated!',
+				error: `${error.message}`,
 			}));
 	}
 
@@ -184,7 +240,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully Logged in:',
+				message: 'Login failed, please try again !',
 				error: 'Email or Password does not meet the requirements',
 			};
 		}
@@ -203,7 +259,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully logged in.',
+				message: 'Login failed, please try again !',
 				error: 'User does not exist',
 			};
 		}
@@ -221,9 +277,8 @@ export class AccountService {
 					uid: userCredential.user.uid,
 					email: userCredential.user.email,
 					emailVerified: userCredential.user.emailVerified,
-					phoneNumber: userCredential.user.phoneNumber,
 					displayName: userCredential.user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,
@@ -237,7 +292,7 @@ export class AccountService {
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully logged in.',
+				message: 'Login failed, please try again !',
 				error: error.message,
 			}));
 	}
@@ -262,25 +317,20 @@ export class AccountService {
 	 * GetCurrent user.
 	 */
 	async getCurrentUser(): Promise<Account> {
-		// Check if there is a current user else throw an exception
-		// let user;
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-shadow
 			const user = firebase.auth().currentUser;
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
 
-			// Return user object
 			return {
 				success: true,
 				user: {
 					uid: user.uid,
 					email: user.email,
 					emailVerified: user.emailVerified,
-					phoneNumber: user.phoneNumber,
 					displayName: user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,
@@ -312,6 +362,7 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 
 			await this.userService.deleteUserProfile(uid);
+			// TODO delete all the users notebooks !!
 
 			// Try to delete user else throw and exception if not possible
 			return await admin
