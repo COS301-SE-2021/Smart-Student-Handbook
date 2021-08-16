@@ -45,10 +45,11 @@
 
         <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
 
-        <a mat-list-item  [routerLink]="['/sharedWithMe']">
+        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
           <mat-icon class="menuIcon" matTooltip="Shared With Me" matTooltipPosition="right">group</mat-icon>
-          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>
+<!--          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>-->
         </a>
+        <app-shared-with-me [@animateText]="linkText ? 'show' : 'hide'"></app-shared-with-me>
 
         <br/>
         <mat-divider></mat-divider>
