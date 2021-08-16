@@ -1,165 +1,150 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { mockFirebase } from 'firestore-jest-mock';
+// import { mockCollection, mockDoc } from 'firestore-jest-mock/mocks/firestore';
+// import firebase from 'firebase';
 // import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin';
+import firebase from 'firebase';
+import { NotebookService } from './notebook.service';
+import { AccountService } from '../account/account.service';
+import { NotebookController } from './notebook.controller';
+import { UserService } from '../user/user.service';
+import { NotificationService } from '../notification/notification.service';
+
+mockFirebase({
+	database: {
+		userContent: [
+			{
+				id: 'LouwId',
+				Notebooks: [{ id: 'notebook1', notebookId: 'notebook1' }],
+			},
+		],
+		userNotebooks: [
+			{
+				id: 'docId1',
+				access: [],
+				course: 'COS301',
+				author: 'Louw',
+				creatorId: 'LouwId',
+				descriptions: 'Test notebook',
+				notebookId: 'notebook1',
+				notes: [
+					{
+						name: 'Introduction',
+						noteId: '53a7d82a-4ae1-4851-99d6-984fa32fe6e0',
+						description: 'My first note',
+						createDate: 1629059393668,
+					},
+				],
+				private: false,
+				tags: ['tag1', 'tag2'],
+				title: 'Louw Notebook',
+			},
+		],
+	},
+});
+
+// test('testing stuff', () => {
+// 	const mock = jest.fn();
+// 	mock.mockReturnValueOnce('test');
 //
-// import { Test, TestingModule } from '@nestjs/testing';
-// import {
-// 	mockCollection,
-// 	mockDelete,
-// 	mockDoc,
-// 	mockGet,
-// 	mockSet,
-// 	mockWhere,
-// } from 'firestore-jest-mock/mocks/firestore';
-// import { HttpException } from '@nestjs/common';
-// import firebase from 'firebase/app';
-// import { NotebookService } from './notebook.service';
-//
-// const firebaseConfig = {
-// 	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-// 	authDomain: 'smartstudentnotebook.firebaseapp.com',
-// 	databaseURL:
-// 		'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-// 	projectId: 'smartstudentnotebook',
-// 	storageBucket: 'smartstudentnotebook.appspot.com',
-// 	messagingSenderId: '254968215542',
-// 	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-// 	measurementId: 'G-YDRCWDT5QJ',
-// };
-// firebase.initializeApp(firebaseConfig);
-//
-// admin.initializeApp();
-//
-// const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
-// const NoteBookDTo = require('./dto/notebook.dto');
-//
-// mockGoogleCloudFirestore({
-// 	database: {
-// 		notebooks: [
-// 			{
-// 				id: 'TestID',
-// 				title: 'title',
-// 				author: 'author',
-// 				course: 'course',
-// 				description: 'description',
-// 				institution: 'institution',
-// 				name: 'name',
-// 				surname: 'surname',
-// 				private: 'private',
-// 				username: 'username',
-// 				notebookReference: 'TestID',
-// 				userId: 'UserIdTest',
-// 			},
-// 		],
-// 	},
+// 	// console.log(service.mock.getUserId());
 // });
+
+// describe('findAll', () => {
+// 	it('should return an array of cats', async () => {
+// 		// eslint-disable-next-line global-require,import/no-extraneous-dependencies
+// 		const { Firestore } = require('@google-cloud/firestore');
+// 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// 		const firestore = new Firestore();
 //
-// describe('NotebookService', () => {
-// 	let service: NotebookService;
-// 	beforeEach(async () => {
-// 		const module: TestingModule = await Test.createTestingModule({
-// 			providers: [NotebookService],
-// 		}).compile();
+// 		const result = 'LouwId1';
+// 		jest.spyOn(service, 'getUserId').mockImplementation(async () => result);
 //
-// 		service = module.get<NotebookService>(NotebookService);
-// 	});
+// 		await service.getNotebook('docId1');
 //
-// 	// Test the Find ALL USERS NOTEBOOK
-// 	describe('FindAllUserNoteBooks', () => {
-// 		describe('when a notebook matches a user id', () => {
-// 			it('Return the notebooks of the user with the user ID', async () => {
-// 				const authMock = jest.fn(() => ({
-// 					createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-// 						Promise.resolve(true),
-// 					),
-// 					sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
-// 					signInAndRetrieveDataWithEmailAndPassword: jest.fn(() =>
-// 						Promise.resolve(true),
-// 					),
-// 					fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
-// 					signOut: jest.fn(() => {
-// 						Promise.resolve(true);
-// 					}),
-// 					onAuthStateChanged: jest.fn(),
-// 					currentUser: {
-// 						sendEmailVerification: jest.fn(() => Promise.resolve(true)),
-// 					},
-// 				}));
-// 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// 				// @ts-ignore
-// 				firebase.auth = authMock;
-// 				await service.findAllUserNotebooks();
-// 				expect(mockCollection).toHaveBeenCalledWith('notebooks');
-// 				expect(mockWhere).toHaveBeenCalled();
-// 			});
-// 		});
-// 	});
-//
-// 	it('Note book service should be defined', () => {
-// 		expect(service).toBeDefined();
-// 	});
-//
-// 	// Test for the findNoteBookByID function
-//
-// 	describe('FindNoteBookByID', () => {
-// 		describe('when an ID matches a notebook', () => {
-// 			it('Return the notebook associated with the id', async () => {
-// 				await service.findNotebookById('TestID');
-// 				expect(mockCollection).toHaveBeenCalledWith('notebooks');
-// 				expect(mockGet).toBeCalled();
-// 			});
-// 		});
-//
-// 		describe('when an ID  does not match a notebook', () => {
-// 			it('Throw and error', () =>
-// 				expect(service.findNotebookById('TestID2')).rejects.toThrow(
-// 				HttpException,
-// 			));
-// 		});
-// 	});
-// 	// Test to delete a notebook
-// 	describe('DeleteNotebook', () => {
-// 		describe('when a notebook matches a notebookID', () => {
-// 			it('Delete the notebook', async () => {
-// 				await service.deleteNotebook('TestID');
-// 				expect(mockCollection).toHaveBeenCalledWith('notebooks');
-// 				expect(mockDelete).toHaveBeenCalled();
-// 			});
-// 		});
-// 	});
-//
-// 	// Test for createOrUpdateNotebook
-//
-// 	describe('createOrUpdateNotebook', () => {
-// 		describe('when a notebook matches a notebookID the it can ', () => {
-// 			it('Update the notebook ', async () => {
-// 				NoteBookDTo.NotebookDto = jest.fn(() => [
-// 					{
-// 						title: 'title',
-// 						author: 'author',
-// 						course: 'course',
-// 						description: 'description is updated now',
-// 						institution: 'institution',
-// 						name: 'name',
-// 						surname: 'surname',
-// 						private: 'private',
-// 						username: 'username',
-// 						notebookReference: 'TestID',
-// 						userId: 'UserIdTest',
-// 					},
-// 				]);
-// 				await service.createOrUpdateNotebook(NoteBookDTo, 'TestID');
-// 				expect(mockCollection).toHaveBeenCalledWith('notebooks');
-// 				expect(mockDoc).toHaveBeenCalledWith('TestID');
-// 				expect(mockSet).toHaveBeenCalled();
-// 			});
-// 		});
-//
-// 		describe('if no notebook id is provide ', () => {
-// 			it('Create a new Notebook ', async () => {
-// 				await service.createOrUpdateNotebook(NoteBookDTo, '');
-// 				expect(mockCollection).toHaveBeenCalledWith('notebooks');
-// 				expect(mockDoc).toHaveBeenCalled();
-// 				expect(mockSet).toHaveBeenCalled();
-// 			});
-// 		});
+// 		expect(await service.getUserId()).toBe(result);
+// 		expect(mockDoc).toHaveBeenCalledWith('docId1');
 // 	});
 // });
+
+admin.initializeApp({
+	credential: admin.credential.applicationDefault(),
+});
+
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	projectId: 'smartstudentnotebook',
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+describe('NotebookIntegrationTests', () => {
+	let notebookService: NotebookService;
+	let accountService: AccountService;
+
+	beforeEach(async () => {
+		const module: TestingModule = await Test.createTestingModule({
+			controllers: [NotebookController],
+			providers: [NotebookService, AccountService, NotificationService, UserService],
+		}).compile();
+
+		notebookService = module.get<NotebookService>(NotebookService);
+		accountService = module.get<AccountService>(AccountService);
+	});
+
+	describe('createUser', () => {
+		it('Test should register a user successfully', async () => {
+			const user = {
+				email: 'louwTest1@gmail.com',
+				password: 'TestPassword01!',
+				passwordConfirm: 'TestPassword01!',
+				username: 'louwTest1',
+				isLocalHost: true,
+			};
+
+			const result = await accountService.registerUser(user);
+
+			expect(result.message).toBe('User is successfully registered!');
+		});
+	});
+
+	describe('loginUser', () => {
+		it('Test should login a user', async () => {
+			const user = {
+				email: 'louwTest@gmail.com',
+				password: 'TestPassword01!',
+			};
+
+			const result = await accountService.loginUser(user);
+			console.log(result);
+
+			expect(result.message).toBe('User is successfully registered!');
+		});
+	});
+
+	describe('findAll', () => {
+		it('should return an array of cats', async () => {
+			const notebook = {
+				title: 'Notebook Title',
+				author: 'Notebook Author',
+				course: 'Course',
+				description: 'Description',
+				institution: 'Institution',
+				private: true,
+				tags: ['tag1', 'tag2'],
+			};
+
+			const result = await notebookService.createNotebook(notebook);
+			console.log(result);
+
+			expect(result).toThrowError('Error: Unable to complete request. User might not be signed in.');
+		});
+	});
+});

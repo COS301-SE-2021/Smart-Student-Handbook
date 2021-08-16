@@ -47,8 +47,7 @@ export class AccountService {
 		}
 
 		const exist = await this.userService.doesUsernameExist(registerDto.username);
-		// eslint-disable-next-line eqeqeq
-		if (exist == true) {
+		if (exist === true) {
 			return {
 				success: false,
 				user: null,
@@ -88,7 +87,7 @@ export class AccountService {
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully registered:',
+				message: 'User is unsuccessfully registered!',
 				error: error.message,
 			}));
 
@@ -240,7 +239,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: 'Email or Password does not meet the requirements',
 			};
 		}
@@ -259,7 +258,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: 'User does not exist',
 			};
 		}
@@ -287,12 +286,12 @@ export class AccountService {
 					profilePic: doc.data().profilePicUrl,
 					dateJoined: doc.data().dateJoined,
 				},
-				message: 'User is successfully logged in.',
+				message: 'User is successfully logged in!',
 			}))
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: error.message,
 			}));
 	}
