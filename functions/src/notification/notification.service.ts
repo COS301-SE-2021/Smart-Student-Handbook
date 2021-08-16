@@ -4,6 +4,8 @@ import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import * as functions from 'firebase-functions';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import firebase from 'firebase';
+import { error } from 'firebase-functions/lib/logger';
+import { async } from 'rxjs';
 import { EmailInterface } from './interfaces/email.interface';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -339,16 +341,16 @@ export class NotificationService {
 	}
 
 	async getUserEmail(userId: string): Promise<string> {
-		try {
-			const userEmail = await admin.firestore().collection('users').doc(userId).get();
-
-			return userEmail.data().email;
-		} catch (error) {
-			throw new HttpException(
-				`Something went wrong. Operation could not be executed.${error}`,
-				HttpStatus.INTERNAL_SERVER_ERROR,
-			);
-		}
+		return admin
+			.auth()
+			.getUser(userId)
+			.then((userRecord) => userRecord.email)
+			.catch((error: any) => {
+				throw new HttpException(
+					`Something went wrong. Operation could not be executed.${error}`,
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				);
+			});
 	}
 
 	async sendCollaborationRequest(userSender: string, userReceiver: string): Promise<Response> {

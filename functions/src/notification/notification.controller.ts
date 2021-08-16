@@ -47,7 +47,7 @@ export class NotificationController {
 	}
 
 	@Post('sendCollaborationRequest')
-	async sendUserToUserEmail(@Body() userSender: string, userReceiver: string) {
+	async sendUserToUserEmail(@Body('userSender') userSender: string, @Body('userReceiver') userReceiver: string) {
 		return this.notificationService.sendCollaborationRequest(userSender, userReceiver);
 	}
 
