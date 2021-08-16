@@ -81,7 +81,7 @@ export class TreeViewComponent implements OnInit {
 
 		this.dataSource.data = [
 			{
-				name: 'My notebooks',
+				name: 'My Notebooks',
 				id: '',
 				children: [
 					{
@@ -97,8 +97,9 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks().subscribe(
-			(notebooks) => {
+		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			(notebooks: any[]) => {
+				console.log(notebooks);
 				this.notebooks = notebooks;
 
 				const tree = [];
@@ -117,7 +118,7 @@ export class TreeViewComponent implements OnInit {
 				if (this.childrenSize > 0) {
 					this.dataSource.data = [
 						{
-							name: 'My notebooks',
+							name: 'My Notebooks',
 							id: '',
 							children: tree,
 						},
@@ -170,7 +171,7 @@ export class TreeViewComponent implements OnInit {
 
 				this.dataSource.data = [
 					{
-						name: 'My notebooks',
+						name: 'My Notebooks',
 						id: '',
 						children: tree,
 					},
@@ -236,7 +237,7 @@ export class TreeViewComponent implements OnInit {
 				if (this.childrenSize === 1) {
 					this.dataSource.data = [
 						{
-							name: 'My notebooks',
+							name: 'My Notebooks',
 							id: '',
 							children: [child],
 						},
@@ -292,7 +293,7 @@ export class TreeViewComponent implements OnInit {
 							if (this.childrenSize > 0) {
 								this.dataSource.data = [
 									{
-										name: 'My notebooks',
+										name: 'My Notebooks',
 										id: '',
 										children: tree,
 									},
@@ -304,7 +305,7 @@ export class TreeViewComponent implements OnInit {
 
 								this.dataSource.data = [
 									{
-										name: 'My notebooks',
+										name: 'My Notebooks',
 										id: '',
 										children: [
 											{
