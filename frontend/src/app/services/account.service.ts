@@ -219,11 +219,15 @@ export class AccountService {
 			);
 	}
 
-	setUserNotificationToken(notificationID: string): Observable<any> {
+	setUserNotificationToken(
+		userId: string,
+		notificationToken: string
+	): Observable<any> {
 		return this.http.post(
 			`${ACCOUNT_API}setUserNotificationToken`,
 			{
-				notificationID,
+				userId,
+				notificationToken,
 			},
 			httpOptions
 		);

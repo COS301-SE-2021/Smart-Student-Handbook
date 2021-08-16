@@ -29,7 +29,9 @@ export class MessagingService {
 		firebase.initializeApp(environment.firebase);
 
 		this.messaging = firebase.messaging();
+	}
 
+	saveNotificationToken(userId: string) {
 		this.messaging
 			.getToken({
 				vapidKey:
@@ -39,17 +41,22 @@ export class MessagingService {
 			.then((currentToken) => {
 				if (currentToken) {
 					// Send the token to your server and update the UI if necessary
-					this.accountService.setUserNotificationToken(currentToken);
-					console.log(currentToken);
-					this.messaging.onMessage = this.messaging.onMessage.bind(
-						this.messaging
-					);
-					this.messaging.onTokenRefresh =
-						this.messaging.onTokenRefresh.bind(this.messaging);
+					this.accountService
+						.setUserNotificationToken(userId, currentToken)
+						.subscribe(() => {
+							this.messaging.onMessage =
+								this.messaging.onMessage.bind(this.messaging);
+							this.messaging.onTokenRefresh =
+								this.messaging.onTokenRefresh.bind(
+									this.messaging
+								);
 
-					this.subscribeToTopic(currentToken).subscribe(() => {
-						// console.log(res);
-					});
+							this.subscribeToTopic(currentToken).subscribe(
+								() => {
+									// console.log(res);
+								}
+							);
+						});
 				} else {
 					// Show permission request UI
 					console.log(
@@ -60,26 +67,10 @@ export class MessagingService {
 			.catch((err) => {
 				console.log('An error occurred while retrieving token. ', err);
 			});
-
-		// this.angularFireMessaging.messaging.subscribe(
-		//   (_messaging) => {
-		//     _messaging.onMessage = _messaging.onMessage.bind(_messaging);
-		//     _messaging.onTokenRefresh = _messaging.onTokenRefresh.bind(_messaging);
-		//   }
-		// )
 	}
 
 	requestPermission() {
 		this.messaging.requestPermission();
-
-		// this.angularFireMessaging.requestToken.subscribe(
-		//   (token) => {
-		//     console.log(token);
-		//   },
-		//   (err) => {
-		//     console.error('Unable to get permission to notify.', err);
-		//   }
-		// );
 	}
 
 	receiveMessage() {

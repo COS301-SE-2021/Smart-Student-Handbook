@@ -68,7 +68,7 @@ export class AccountController {
 	}
 
 	@Post('setUserNotificationToken')
-	setUserNotificationToken(@Body() userId: string) {
-		return this.accountService.setUserNotificationToken(userId);
+	setUserNotificationToken(@Body('userId') userId: string, @Body('notificationToken') notificationToken: string) {
+		return this.accountService.setUserNotificationToken(userId, notificationToken);
 	}
 }

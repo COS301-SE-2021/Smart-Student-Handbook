@@ -16,6 +16,7 @@ import {
 	ProfileService,
 	NotesService,
 	NoteMoreService,
+	NotificationService,
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
@@ -140,6 +141,7 @@ export class EditorComponent implements OnInit {
 	 * @param notesService
 	 * @param profileService
 	 * @param noteMore
+	 * @param notificationService
 	 * @param notebookEventEmitterService
 	 */
 	constructor(
@@ -149,6 +151,7 @@ export class EditorComponent implements OnInit {
 		private notesService: NotesService,
 		private profileService: ProfileService,
 		private noteMore: NoteMoreService,
+		private notificationService: NotificationService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
 
@@ -527,10 +530,11 @@ export class EditorComponent implements OnInit {
 	}
 
 	addCollaborator() {
+		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.noteMore
-			.addCollaborator(this.notebookID)
+			.addCollaborator(this.user.uid, this.notebookID)
 			.subscribe((collaborator: any) => {
-				this.collaborators.push(collaborator);
+				// this.collaborators.push(collaborator);
 			});
 	}
 

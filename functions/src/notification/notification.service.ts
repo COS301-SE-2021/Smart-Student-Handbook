@@ -78,6 +78,7 @@ export class NotificationService {
 	 * @return error
 	 */
 	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
+		console.log(singleNotificationRequest);
 		// Send notification to single user
 		const message = {
 			token: singleNotificationRequest.token,
@@ -185,7 +186,6 @@ export class NotificationService {
 	}
 
 	async createNotification(createNotificationDto: CreateNotificationDto): Promise<{ message: string } | void> {
-		const userId: string = await this.getUserId();
 		const notificationId: string = randomStringGenerator();
 
 		try {
@@ -194,7 +194,7 @@ export class NotificationService {
 				.collection('notifications')
 				.doc(notificationId)
 				.set({
-					userID: userId,
+					userID: createNotificationDto.userID,
 					type: createNotificationDto.type,
 					body: createNotificationDto.body,
 					heading: createNotificationDto.heading,
@@ -329,9 +329,9 @@ export class NotificationService {
 
 	async getUserNotificationID(userId: string): Promise<string> {
 		try {
-			const userID = await admin.firestore().collection('users').doc(userId).get();
+			const user = await admin.firestore().collection('users').doc(userId).get();
 
-			return userID.data().notificationID.value;
+			return user.data().notificationId;
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
@@ -381,7 +381,6 @@ export class NotificationService {
 			type: 'Request',
 			opened: false,
 		});
-
 		await this.sendUserToUserPushNotification(
 			{
 				token: notificationID,
@@ -410,15 +409,15 @@ export class NotificationService {
 		receiverUserID: string,
 	) {
 		// Send notification to single user
-		const receiverToken = await this.getUserNotificationID(receiverUserID);
+		// const receiverToken = await this.getUserNotificationID(receiverUserID);
 		const message = {
-			token: receiverToken,
+			token: singleNotificationRequest.token,
 			notification: {
 				title: singleNotificationRequest.title,
 				body: singleNotificationRequest.body,
 			},
 			data: {
-				test: 'test data',
+				uid: receiverUserID,
 			},
 		};
 
