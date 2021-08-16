@@ -6,6 +6,7 @@ from collections import Counter, OrderedDict
 import random
 from sklearn.model_selection import train_test_split
 
+
 def count_items(l):
     counts = Counter(l)
     counts = sorted(counts.items(), key = lambda x: x[1], reverse = True)
@@ -17,8 +18,8 @@ class SmartAssistData:
     def __init__(self) -> None:
         pass
 
-    def loadData(self, count=100):
-        dataRaw = pd.read_csv("MovieDataset/MovieTrainingData.csv", low_memory=True)
+    def loadData(self, count=5000):
+        dataRaw = pd.read_csv("smartAssist/MovieDataset/MovieTrainingData.csv", low_memory=True)
         dataRaw = dataRaw.drop(columns=['index'])
 
         print("Column Names:",list(dataRaw.columns))
@@ -89,7 +90,7 @@ class SmartAssistData:
                         if self.data_index[name] < len(self.data_index):
                             self.dataSet.append(np.array([self.data_index[name], self.cast_index[cast], self.directors_index[director], self.keywords_index[keyword], self.genres_index[genre]]))
 
-        print(self.dataSet[:5])
+
         self.dataSet = np.array(self.dataSet)
         print(self.dataSet.shape)
         print(self.dataSet.T.shape)
@@ -101,7 +102,8 @@ class SmartAssistData:
             n_positive = len(self.dataSet)
 
         final_size = n_positive * (1 + negative_ratio)
-        print(final_size)
+
+        print("Final Size: ",final_size, "Available size: ", len(self.dataSet))
 
         np.random.shuffle(self.dataSet)
 
@@ -110,18 +112,20 @@ class SmartAssistData:
 
         for i in range(n_positive):
             finalSetX.append(self.dataSet[random.randrange(len(self.dataSet))].tolist())
-            finalSetY.append(1)
+            finalSetY.append([1 for i in range(5)])
         
 
 
         idx = 0
         while idx < int(n_positive*negative_ratio):
-            item = self.getRandomDataItem()
-            if item.tolist() not in self.dataSet.tolist():
-                finalSetX.append(item.tolist())
-                finalSetY.append(-1)
+            item, trueItem = self.getIncorrectDataItem()
+            
+            finalSetX.append(item)
+            finalSetY.append(trueItem)
 
-                idx +=1
+            idx +=1
+
+
 
         self.finalSet = list(zip(finalSetX, finalSetY))
         np.random.shuffle(self.finalSet)
@@ -147,6 +151,23 @@ class SmartAssistData:
         self.finalSetTest = np.array(self.finalSetTest)
 
         return self.finalSetTrain, self.finalSetTest
+
+    def getIncorrectDataItem(self):
+        item = self.dataSet[random.randrange(len(self.dataSet))].tolist()
+        randitem = self.getRandomDataItem().tolist()
+        trueArr = [1 for i in range(len(item))]
+    
+        num = random.randrange(1,len(item))
+
+        while item[num] == randitem[num]:
+            randitem = self.getRandomDataItem().tolist()
+        
+        item[num] = randitem[num]
+        trueArr[num] = -1
+
+        return item, trueArr
+
+
 
 
     def getRandomDataItem(self):
@@ -177,7 +198,17 @@ class SmartAssistData:
 # data = SmartAssistData()  
 
 # data.loadData()
-# print(data.getRandomDataItem())
+
+# item = data.getRandomDataItem()
+
+# print(item[0], len(data.index_data))
+
+# itemsList = [[i[1]==item[1], i[2]==item[2], i[3]==item[3], i[4]==item[4]]  for i in data.dataSet.tolist() if i[0] == item[0]]
+# print(itemsList)
+
+# itembool = [k for k in itemsList if k.count(True) == max([j.count(True) for j in itemsList])]
+# print(itembool[0])
+# item = np.array(itembool[0])*1
 
 # data.generateFinalData(n_positive=150)
 

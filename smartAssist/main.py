@@ -1,15 +1,16 @@
-from re import X
 from dataLoader import SmartAssistData
 from smartAssistModel import SmartAssistModel
 import numpy as np
 
 data = SmartAssistData()
-data.loadData(count=5000)
-data.generateFinalData(n_positive=1000)
+print("loading data")
+data.loadData(count=10000)
+print("generating final data")
+data.generateFinalData(n_positive=5000)
+print("generating test data")
 data.generateTrainTestData()
 
 smartmodel = SmartAssistModel(data=data)
-smartmodel.buildModel()
 
 xtrain = {
     'data': data.finalSetXTrain[:,0], 
@@ -31,17 +32,23 @@ xtest = {
 
 ytest = data.finalSetYTest
 
-smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData=(xtest, ytest))
+smartmodel.buildModel()
+
+# smartmodel.loadSmartModel()
+
+smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
 smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
 # smartmodel.loadSmartModel()
 
 smartmodel.getRecommendations('Toy Story')
+print()
+smartmodel.getRecommendations('The Jungle Book')
 
 itemData = data.getRandomDataItem()
 print(itemData)
 item = {
-    'data': np.array([itemData[0]]),
+    'data': np.array([9708]),
     'cast': np.array([itemData[1]]),
     'director': np.array([itemData[2]]),
     'keywords': np.array([itemData[3]]),
