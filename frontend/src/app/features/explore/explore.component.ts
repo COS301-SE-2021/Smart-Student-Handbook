@@ -17,6 +17,9 @@ export class ExploreComponent implements OnInit {
 		indexName: 'users',
 		routing: true,
 		searchClient,
+		searchParameters: {
+			hitsPerPage: 9,
+		},
 	};
 	// constructor() {}
 
