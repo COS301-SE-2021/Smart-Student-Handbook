@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NoteMoreService, NotificationService } from '@app/services';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-notifications',
@@ -7,35 +8,13 @@ import { NoteMoreService, NotificationService } from '@app/services';
 	styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-	notificationList: Notifications[] = [
-		{
-			id: '1',
-			type: 'general',
-			title: 'Notification One',
-			content: 'more info on the notification',
-			read: false,
-		},
-		{
-			id: '2',
-			type: 'collaboration',
-			title: 'Notification Two',
-			content:
-				'more info on the notification xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-			read: false,
-		},
-		{
-			id: '3',
-			type: 'general',
-			title: 'Notification Three',
-			content: 'more info on the notification',
-			read: true,
-		},
-	];
-
 	constructor(
 		private notificationService: NotificationService,
 		private noteMoreService: NoteMoreService
 	) {}
+
+	/* notificationList: Observable<any[]> =
+		this.notificationService.getUserNotifications(); */
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
@@ -56,9 +35,9 @@ export class NotificationsComponent implements OnInit {
 	}
 }
 interface Notifications {
-	id: string;
+	userid: string;
 	type: string;
-	title: string;
-	content: string;
-	read: boolean;
+	body: string;
+	heading: string;
+	opened: boolean;
 }

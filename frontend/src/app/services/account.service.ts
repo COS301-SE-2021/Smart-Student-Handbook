@@ -221,7 +221,7 @@ export class AccountService {
 
 	setUserNotificationToken(notificationID: string): Observable<any> {
 		return this.http.post(
-			`${ACCOUNT_API}registerUser`,
+			`${ACCOUNT_API}setUserNotificationToken`,
 			{
 				notificationID,
 			},

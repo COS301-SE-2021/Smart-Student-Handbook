@@ -66,4 +66,9 @@ export class AccountController {
 	finalizeResetPassword(@Body() resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
 		return this.accountService.finalizeResetPassword(resetPasswordFinalizeDto);
 	}
+
+	@Post('setUserNotificationToken')
+	setUserNotificationToken(@Body() userId: string) {
+		return this.accountService.setUserNotificationToken(userId);
+	}
 }
