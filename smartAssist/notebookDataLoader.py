@@ -14,22 +14,23 @@ def count_items(l):
     
     return counts
 
-class MovieData:
+class SmartAssistData:
     def __init__(self) -> None:
         pass
 
     def loadData(self, count=5000):
-        dataRaw = pd.read_csv("smartAssist/MovieDataset/MovieTrainingData.csv", low_memory=True)
-        dataRaw = dataRaw.drop(columns=['index'])
+        dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
 
         print("Column Names:",list(dataRaw.columns))
 
 
-        # metadata[['title', 'cast', 'director', 'keywords', 'genres', 'soup']].rename(columns=)
-        dataRaw['cast'] = dataRaw['cast'].apply(eval)
-        dataRaw['keywords'] = dataRaw['keywords'].apply(eval)
-        dataRaw['genres'] = dataRaw['genres'].apply(eval)
-        dataRaw['soup'] = dataRaw['soup'].apply(eval)
+        # metadata[['title', 'cast', 'director', 'keywords', 'institutions', 'soup']].rename(columns=)
+        dataRaw['noteId'] = dataRaw['noteId'].apply(eval)
+        dataRaw['name'] = dataRaw['name'].apply(eval)
+        dataRaw['tags'] = dataRaw['tags'].apply(eval)
+        dataRaw['author'] = dataRaw['author'].apply(eval)
+        dataRaw['institution'] = dataRaw['institution'].apply(eval)
+        dataRaw['course'] = dataRaw['course'].apply(eval)
         
         # dataRaw = dataRaw.drop([12892, 13542, 13689, 13696, 13750, 13854])
 
@@ -44,56 +45,56 @@ class MovieData:
         # print(remove)
         # dataRaw = dataRaw.drop(remove)
 
-        self.dataList = dataRaw[['title', 'cast', 'director', 'keywords', 'genres']][:count].to_numpy()
+        self.dataList = dataRaw[['noteId','name','tags','author','institution','course']][:count].to_numpy()
 
         self.data_index = {data[0]: idx for idx, data in enumerate(self.dataList)}
         self.index_data = {idx: data for data, idx in self.data_index.items()}
 
-        unique_casts = list(chain(*[list(set(data[1])) for data in self.dataList]))
-        cast_counts = count_items(unique_casts)
-        self.casts = [t[0] for t in cast_counts.items()]
-        self.cast_index = {cast: idx for idx, cast in enumerate(self.casts)}
-        self.index_cast = {idx: cast for cast, idx in self.cast_index.items()}
-
-        unique_directors = {data[2]: idx for idx, data in enumerate(self.dataList)}
-        directors_counts = count_items(unique_directors)
-        self.directors = [t[0] for t in directors_counts.items()]
-        self.directors_index = {directors: idx for idx, directors in enumerate(self.directors)}
-        self.index_directors = {idx: directors for directors, idx in self.directors_index.items()}
+        unique_name = {data[1]: idx for idx, data in self.dataList}
+        name_counts = count_items(unique_name)
+        self.names = [t[0] for t in name_counts.items()]
+        self.name_index = {name: idx for idx, name in enumerate(self.names)}
+        self.index_name = {idx: name for name, idx in self.name_index.items()}
         
-        unique_keywords = list(chain(*[list(set(data[3])) for data in self.dataList]))
-        keywords_counts = count_items(unique_keywords)
-        self.keywords = [t[0] for t in keywords_counts.items()]
-        self.keywords_index = {keywords: idx for idx, keywords in enumerate(self.keywords)}
-        self.index_keywords = {idx: keywords for keywords, idx in self.keywords_index.items()}
+        unique_tags = list(chain(*[list(set(data[2])) for data in self.dataList]))
+        tags_counts = count_items(unique_tags)
+        self.tags= [t[0] for t in tags_counts.items()]
+        self.tags_index = {tags: idx for idx, tags in enumerate(self.tags)}
+        self.index_tags = {idx: tags for tags, idx in self.tags_index.items()}
 
-        unique_genres = list(chain(*[list(set(data[4])) for data in self.dataList]))
-        genre_counts = count_items(unique_genres)
-        self.genres = [t[0] for t in genre_counts.items()]
-        self.genres_index = {genre: idx for idx, genre in enumerate(self.genres)}
-        self.index_genres = {idx: genre for genre, idx in self.genres_index.items()}
+        unique_authors = {data[3]: idx for idx, data in enumerate(self.dataList)}
+        author_counts = count_items(unique_authors)
+        self.authors = [t[0] for t in author_counts.items()]
+        self.authors_index = {authors: idx for idx, authors in enumerate(self.authors)}
+        self.index_authors = {idx: authors for authors, idx in self.authors_index.items()}
+
+        unique_institutions = {data[4]: idx for idx, data in self.dataList}
+        institutions_counts = count_items(unique_institutions)
+        self.institutions = [t[0] for t in institutions_counts.items()]
+        self.institutions_index = {institution: idx for idx, institution in enumerate(self.institutions)}
+        self.index_institutions = {idx: institution for institution, idx in self.institutions_index.items()}
+
+        unique_course = {data[5]: idx for idx, data in self.dataList}
+        course_counts = count_items(unique_course)
+        self.course = [t[0] for t in course_counts.items()]
+        self.course_index = {course: idx for idx, course in enumerate(self.course)}
+        self.index_course = {idx: course for course, idx in self.course_index.items()}
 
 
-        print(len(self.dataList), len(self.casts), len(self.directors), len(self.keywords), len(self.genres))
-        print(len(self.data_index), len(self.cast_index), len(self.directors_index), len(self.keywords_index), len(self.genres_index))
+        print(len(self.dataList), len(self.name), len(self.authors), len(self.tags), len(self.institutions), len(self.course_index))
+        print(len(self.data_index), len(self.name_index), len(self.authors_index), len(self.tags_index), len(self.institutions_index), len(self.course_index))
 
 
 
         self.dataSet = []
 
         for data in self.dataList:
-            name = data[0]
-            director = data[2]
-            for cast in data[1]:
-                for keyword in data[3]:
-                    for genre in data[4]:
-                        if self.data_index[name] < len(self.data_index):
-                            self.dataSet.append(np.array([self.data_index[name], self.cast_index[cast], self.directors_index[director], self.keywords_index[keyword], self.genres_index[genre]]))
+            for t in data[2]:
+                self.dataSet.append(np.array([self.data_index[data[0]], self.name_index[data[1]], self.tags_index[t], self.authors_index[data[3]], self.institutions_index[data[4]], self.course_index[data[5]]]))
 
 
         self.dataSet = np.array(self.dataSet)
         print(self.dataSet.shape)
-        print(self.dataSet.T.shape)
         return self.dataList, self.dataSet
 
 
@@ -112,7 +113,7 @@ class MovieData:
 
         for i in range(n_positive):
             finalSetX.append(self.dataSet[random.randrange(len(self.dataSet))].tolist())
-            finalSetY.append([1 for i in range(5)])
+            finalSetY.append([1 for i in range(6)])
         
 
 
@@ -167,32 +168,37 @@ class MovieData:
 
         return item, trueArr
 
-
-
-
     def getRandomDataItem(self):
         try:
             name = random.randrange(len(self.index_data))
             cast = random.randrange(len(self.index_cast))
-            director = random.randrange(len(self.index_directors))
+            director = random.randrange(len(self.index_authors))
             keyword = random.randrange(len(self.index_keywords))
-            genre = random.randrange(len(self.index_genres))
+            institution = random.randrange(len(self.index_institutions))
 
-            return np.array([name, cast, director, keyword, genre])
+            return np.array([name, cast, director, keyword, institution])
         except:
             name = random.randrange(len(self.index_data))
             cast = random.randrange(len(self.index_cast))
-            director = random.randrange(len(self.index_directors))
+            director = random.randrange(len(self.index_authors))
             keyword = random.randrange(len(self.index_keywords))
-            genre = random.randrange(len(self.index_genres))
+            institution = random.randrange(len(self.index_institutions))
 
             # name = self.data_index[self.index_data[random.randrange(len(self.index_data))]]
             # cast = self.cast_index[self.index_cast[random.randrange(len(self.index_cast))]]
-            # director = self.directors_index[self.index_directors[random.randrange(len(self.index_directors))]]
+            # director = self.authors_index[self.index_authors[random.randrange(len(self.index_authors))]]
             # keyword = self.keywords_index[self.index_keywords[random.randrange(len(self.index_keywords))]]
-            # genre = self.genres_index[self.index_genres[random.randrange(len(self.index_genres))]]
+            # institution = self.institutions_index[self.index_institutions[random.randrange(len(self.index_institutions))]]
 
-            return np.array([name, cast, director, keyword, genre])
+            return np.array([name, cast, director, keyword, institution])
+
+
+    def addData(self, dataFrame):
+        dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw.append(dataFrame)
+        dataRaw.to_csv("smartAssist/NotebookDataset/Notebooks.csv", index=False)
+
+
 
 
 # data = SmartAssistData()  
@@ -214,6 +220,8 @@ class MovieData:
 
 # data.generateTrainTestData()
 
+# noteb = pd.DataFrame({"noteId":[], "name":[], "tags":[], "author":[], "institution":[], "course":[]})
+# noteb.to_csv("smartAssist/NotebookDataset/Notebooks.csv", index=False)
 
 
 
