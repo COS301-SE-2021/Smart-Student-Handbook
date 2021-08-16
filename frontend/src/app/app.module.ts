@@ -69,6 +69,7 @@ import {
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
 import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { NgAisModule } from 'angular-instantsearch';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -110,6 +111,7 @@ import { AppRoutingModule } from './app-routing.module';
 		MaterialModule,
 		FormsModule,
 		ReactiveFormsModule,
+		NgAisModule.forRoot(),
 		BrowserModule,
 		AppRoutingModule,
 		BrowserAnimationsModule,
