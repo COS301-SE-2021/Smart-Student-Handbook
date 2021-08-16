@@ -36,13 +36,16 @@
                 <article>
                   <div class="post-content">
                     <div class="post-date">
+                      {{hit.data.course}}
+                      <br>
                       {{hit.data.institution}}
                     </div>
                     <h2 class="entry-title">
-                      {{hit.data.username}}
+                      {{hit.data.author}}
                     </h2>
                     <div class="post-excerpt" >
-                      {{hit.data.bio.value}}
+                      {{hit.data.description}}
+                      {{hit.data.notes.createDate}}
                     </div>
                   </div>
                 </article>

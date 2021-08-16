@@ -14,7 +14,7 @@ export class ExploreComponent implements OnInit {
 	config = {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
-		indexName: 'users',
+		indexName: 'userNotebooks',
 		routing: true,
 		searchClient,
 		searchParameters: {
