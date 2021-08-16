@@ -55,8 +55,14 @@
         <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
         <br/>
 
-        <a mat-list-item  [routerLink]="['/notifications']">
-          <mat-icon class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">notifications</mat-icon>
+        <a mat-list-item  [routerLink]="['/notifications']" (click)="markNotificationsAsRead()">
+          <mat-icon *ngIf="nrUnreadNotifications > 0" class="menuIcon" matTooltip="Notifications" matTooltipPosition="right"
+                    matBadge="{{nrUnreadNotifications}}" matBadgeColor="warn">
+            notifications
+          </mat-icon>
+          <mat-icon *ngIf="nrUnreadNotifications === 0" class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">
+            notifications
+          </mat-icon>
           <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notifications</span>
         </a>
       </mat-nav-list>

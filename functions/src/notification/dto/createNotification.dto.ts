@@ -8,4 +8,6 @@ export class CreateNotificationDto {
 	readonly body: string = '';
 
 	readonly opened: boolean = false;
+
+	readonly notebookID?: string;
 }

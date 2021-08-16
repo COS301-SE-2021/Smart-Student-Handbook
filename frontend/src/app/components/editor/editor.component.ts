@@ -532,7 +532,7 @@ export class EditorComponent implements OnInit {
 	addCollaborator() {
 		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.noteMore
-			.addCollaborator(this.user.uid, this.notebookID)
+			.requestCollaborator(this.user.uid, this.notebookID)
 			.subscribe((collaborator: any) => {
 				// this.collaborators.push(collaborator);
 			});

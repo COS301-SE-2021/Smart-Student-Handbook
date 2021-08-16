@@ -19,42 +19,7 @@ export class NoteMoreService {
 		private notificationService: NotificationService
 	) {}
 
-	requestCollaborator(
-		requestUserID: string,
-		senderUserID: string
-	): Observable<any> {
-		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			screenWidth = '100%';
-		} else {
-			screenWidth = '50%';
-		}
-
-		const dialogRef = this.dialog.open(AddCollaboratorComponent, {
-			width: screenWidth,
-			data: {
-				name: '',
-				profileUrl: '',
-				id: '',
-			},
-		});
-
-		return Observable.create(() => {
-			dialogRef.afterClosed().subscribe(() => {
-				this.notificationService.sendCollaborationRequest(
-					senderUserID,
-					requestUserID
-				);
-			});
-		});
-	}
-
-	addCollaborator(senderId: string, notebookID: string): Observable<any> {
+	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -80,7 +45,7 @@ export class NoteMoreService {
 			dialogRef.afterClosed().subscribe((result) => {
 				console.log(senderId, result.id);
 				this.notificationService
-					.sendCollaborationRequest(senderId, result.id)
+					.sendCollaborationRequest(senderId, result.id, notebookID)
 					.subscribe((val) => {
 						console.log(val);
 					});

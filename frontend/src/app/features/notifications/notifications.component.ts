@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NoteMoreService, NotificationService } from '@app/services';
+import {
+	NotebookService,
+	NoteMoreService,
+	NotificationService,
+} from '@app/services';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -8,9 +12,14 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
+	notifications: any[] = [];
+
+	user: any;
+
 	constructor(
 		private notificationService: NotificationService,
-		private noteMoreService: NoteMoreService
+		private noteMoreService: NoteMoreService,
+		private notebookService: NotebookService
 	) {}
 
 	/* notificationList: Observable<any[]> =
@@ -18,26 +27,36 @@ export class NotificationsComponent implements OnInit {
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
-		this.notificationService.getUnreadNotifications();
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.notificationService
+			.getUserNotifications()
+			.subscribe((notifications) => {
+				this.notifications = notifications;
+			});
 	}
 
-	accept(id: string) {
-		this.notificationService.updateRead(id);
+	accept(userId: string, notebookId: string) {
+		this.notebookService
+			.addAccess({
+				displayName: this.user.displayName,
+				userId: this.user.uid,
+				profileUrl: this.user.profilePic,
+				notebookId,
+			})
+			.subscribe((res) => {
+				console.log(res);
+			});
+		// this.notificationService.updateRead(id);
 		// this.noteMoreService.addCollaborator(notebookID);
 	}
 
-	decline(id: string) {
-		this.notificationService.updateRead(id);
+	decline(userId: string, notebookId: string) {
+		// this.notificationService.updateRead(id);
 	}
 
-	markAsRead(notificationID: string) {
-		this.notificationService.updateRead(notificationID);
+	markAsRead(notificationID: string, index: number) {
+		this.notifications[index].opened = true;
+		// this.notificationService.updateRead(notificationID);
 	}
-}
-interface Notifications {
-	userid: string;
-	type: string;
-	body: string;
-	heading: string;
-	opened: boolean;
 }

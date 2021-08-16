@@ -78,7 +78,6 @@ export class NotificationService {
 	 * @return error
 	 */
 	async sendSinglePushNotification(singleNotificationRequest: SingleNotificationRequestDto) {
-		console.log(singleNotificationRequest);
 		// Send notification to single user
 		const message = {
 			token: singleNotificationRequest.token,
@@ -189,6 +188,27 @@ export class NotificationService {
 		const notificationId: string = randomStringGenerator();
 
 		try {
+			if (createNotificationDto.notebookID) {
+				return await admin
+					.firestore()
+					.collection('notifications')
+					.doc(notificationId)
+					.set({
+						userID: createNotificationDto.userID,
+						type: createNotificationDto.type,
+						body: createNotificationDto.body,
+						heading: createNotificationDto.heading,
+						notebookID: createNotificationDto.notebookID,
+						opened: false,
+					})
+					.then(() => ({
+						message: 'Successfully created notification',
+					}))
+					.catch(() => {
+						throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+					});
+			}
+
 			return await admin
 				.firestore()
 				.collection('notifications')
@@ -198,7 +218,7 @@ export class NotificationService {
 					type: createNotificationDto.type,
 					body: createNotificationDto.body,
 					heading: createNotificationDto.heading,
-					opened: createNotificationDto.opened,
+					opened: false,
 				})
 				.then(() => ({
 					message: 'Successfully created notification',
@@ -223,7 +243,7 @@ export class NotificationService {
 	}
 
 	async getUserNotifications(): Promise<Notification[]> {
-		const userId: string = await this.getUserId();
+		const userID: string = await this.getUserId();
 		const notificationIds: string[] = [];
 		const notifications = [];
 
@@ -231,7 +251,7 @@ export class NotificationService {
 			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
 			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsIdSnapshot.forEach((doc) => {
-				notificationIds.push(doc.get(userId));
+				if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
 			});
 
 			if (notificationIds.length === 0) {
@@ -241,19 +261,32 @@ export class NotificationService {
 			const notificationsSnapshot = await admin
 				.firestore()
 				.collection('notifications')
-				.where('userId', 'in', notificationIds)
+				.where('userID', 'in', notificationIds)
 				.get();
 
+			const i = 0;
 			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsSnapshot.forEach((doc) => {
-				notifications.push({
-					userID: doc.data().userID,
-					userNotificationID: doc.data().userNotificationID,
-					type: doc.data().type,
-					body: doc.data().body,
-					heading: doc.data().heading,
-					opened: doc.data().opened,
-				});
+				if (doc.data().notebookID) {
+					notifications.push({
+						userID: doc.data().userID,
+						userNotificationID: doc.data().userNotificationID,
+						type: doc.data().type,
+						body: doc.data().body,
+						heading: doc.data().heading,
+						opened: doc.data().opened,
+						notebookID: doc.data().notebookID,
+					});
+				} else {
+					notifications.push({
+						userID: doc.data().userID,
+						userNotificationID: doc.data().userNotificationID,
+						type: doc.data().type,
+						body: doc.data().body,
+						heading: doc.data().heading,
+						opened: doc.data().opened,
+					});
+				}
 			});
 
 			return notifications;
@@ -263,15 +296,14 @@ export class NotificationService {
 	}
 
 	async getUnreadNotifications(): Promise<Notification[]> {
-		const userId: string = await this.getUserId();
+		const userID: string = await this.getUserId();
 		const notificationIds: string[] = [];
 		const notifications = [];
-
 		try {
 			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
 			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsIdSnapshot.forEach((doc) => {
-				notificationIds.push(doc.get(userId));
+				if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
 			});
 
 			if (notificationIds.length === 0) {
@@ -281,20 +313,35 @@ export class NotificationService {
 			const unreadSnapshot = await admin
 				.firestore()
 				.collection('notifications')
-				.where('type', '==', false)
+				.where('opened', '==', false)
 				.where('userID', 'in', notificationIds)
 				.get();
 
+			let i = 0;
 			// eslint-disable-next-line @typescript-eslint/no-shadow
 			unreadSnapshot.forEach((doc) => {
-				notifications.push({
-					userID: doc.data().userID,
-					userNotificationID: doc.data().userNotificationID,
-					type: doc.data().type,
-					body: doc.data().body,
-					heading: doc.data().heading,
-					opened: doc.data().opened,
-				});
+				if (doc.data().notebookID) {
+					notifications.push({
+						userID: doc.data().userID,
+						userNotificationID: doc.data().userNotificationID,
+						type: doc.data().type,
+						body: doc.data().body,
+						heading: doc.data().heading,
+						opened: doc.data().opened,
+						notebookID: doc.data().notebookID,
+						notificationID: notifications[(i += 1)],
+					});
+				} else {
+					notifications.push({
+						userID: doc.data().userID,
+						userNotificationID: doc.data().userNotificationID,
+						type: doc.data().type,
+						body: doc.data().body,
+						heading: doc.data().heading,
+						opened: doc.data().opened,
+						notificationID: notifications[(i += 1)],
+					});
+				}
 			});
 
 			return notifications;
@@ -353,55 +400,58 @@ export class NotificationService {
 			});
 	}
 
-	async sendCollaborationRequest(userSender: string, userReceiver: string): Promise<Response> {
+	async sendCollaborationRequest(
+		userSender: string,
+		userReceiver: string,
+		notebookID: string,
+	): Promise<{ success: boolean; message: string }> {
 		const receiverEmail = await this.getUserEmail(userReceiver);
 		const notificationID = await this.getUserNotificationID(userReceiver);
 
-		const transporter = nodemailer.createTransport({
-			host: process.env.EMAIL_HOST,
-			port: process.env.EMAIL_PORT,
-			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
-			},
-			authMethod: 'PLAIN',
-		});
 		const senderEmail = await this.getUserEmail(userSender);
 
-		const mailOptions = {
-			from: senderEmail,
-			to: receiverEmail,
+		await this.sendEmailNotification({
+			email: receiverEmail,
 			subject: 'Collaboration request',
-			text: `You have received a collaboration request from ${userSender}`,
-		};
+			// eslint-disable-next-line max-len
+			body: `You have received a collaboration request from ${senderEmail}`,
+		});
+
 		await this.createNotification({
 			userID: userReceiver,
-			body: 'You have received a collaboration request from ++add info here',
+			body: `You have received a collaboration request from ${senderEmail}`,
 			heading: 'Collaboration Request',
 			type: 'Request',
+			notebookID,
 			opened: false,
 		});
+
 		await this.sendUserToUserPushNotification(
 			{
 				token: notificationID,
 				title: 'Collaboration Request',
-				body: 'You have received a collaboration request from ++add info here',
+				body: `You have received a collaboration request from ${senderEmail}`,
 			},
 			userReceiver,
 		);
 
-		return transporter
-			.sendMail(mailOptions)
-			.then(
-				(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
-					success: true,
-					message: info.messageId,
-				}),
-			)
-			.catch(() => ({
-				success: false,
-				message: 'Something went wrong!',
-			}));
+		return {
+			success: true,
+			message: 'Successfully sent collaboration request',
+		};
+
+		// return transporter
+		// 	.sendMail(mailOptions)
+		// 	.then(
+		// 		(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
+		// 			success: true,
+		// 			message: info.messageId,
+		// 		}),
+		// 	)
+		// 	.catch(() => ({
+		// 		success: false,
+		// 		message: 'Something went wrong!',
+		// 	}));
 	}
 
 	async sendUserToUserPushNotification(

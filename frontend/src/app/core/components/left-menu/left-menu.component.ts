@@ -7,6 +7,7 @@ import {
 	ProfileService,
 	AccountService,
 	SideNavService,
+	NotificationService,
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
@@ -31,6 +32,8 @@ export class LeftMenuComponent implements OnInit {
 
 	width = 68.3;
 
+	nrUnreadNotifications = 0;
+
 	@ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
 
 	/**
@@ -39,6 +42,7 @@ export class LeftMenuComponent implements OnInit {
 	 * @param profileService call user profile related queries to the backend
 	 * @param dialog open a dialog when a user wants to edit their information
 	 * @param accountService
+	 * @param notificationService
 	 * @param router
 	 * @param sidenavService
 	 */
@@ -47,6 +51,7 @@ export class LeftMenuComponent implements OnInit {
 		private profileService: ProfileService,
 		private dialog: MatDialog,
 		private accountService: AccountService,
+		private notificationService: NotificationService,
 		private router: Router,
 		private sidenavService: SideNavService
 	) {}
@@ -58,6 +63,13 @@ export class LeftMenuComponent implements OnInit {
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.notificationService
+			.getUnreadNotifications()
+			.subscribe((unreadNotifications) => {
+				// console.log(unreadNotifications.length);
+				this.nrUnreadNotifications = unreadNotifications.length;
+			});
 	}
 
 	onSinenavToggle() {
@@ -102,6 +114,10 @@ export class LeftMenuComponent implements OnInit {
 				this.user = JSON.parse(<string>localStorage.getItem('user'));
 			});
 		}
+	}
+
+	markNotificationsAsRead() {
+		this.nrUnreadNotifications = 0;
 	}
 
 	/**
