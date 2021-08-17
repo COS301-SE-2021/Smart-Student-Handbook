@@ -1,14 +1,58 @@
-<div class="pt-5">
-  <article>
-    <h1>Notifications</h1>
-    <br/>
-    <h1><mat-icon id="announcementIcon">announcement</mat-icon>  &emsp; Under Construction</h1>
-    <br/>
-    <div>
-      <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always
-        <a href="mailto:algorithmicaces@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
-      <p>&mdash; The Team @ Smart Student Handbook</p>
+<!--<div class="pt-5">-->
+<!--  <article>-->
+<!--    <h1>Notifications</h1>-->
+<!--    <br/>-->
+<!--    <h1><mat-icon id="announcementIcon">announcement</mat-icon>  &emsp; Under Construction</h1>-->
+<!--    <br/>-->
+<!--    <div>-->
+<!--      <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always-->
+<!--        <a href="mailto:algorithmicaces@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>-->
+<!--      <p>&mdash; The Team @ Smart Student Handbook</p>-->
+<!--    </div>-->
+<!--    <a class="btn" [routerLink]="['']">Return Home</a>-->
+<!--  </article>-->
+<!--</div>-->
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <mat-list role="list" id="list">
+
+
+        <mat-list-item *ngFor="let notification of notifications; let i = index" class="notificationListItem"
+                       [ngStyle]="{'background-color': (notification.opened===true) ? '#e5e5e5' : '#f6f6f6',
+                       'box-shadow': '0px 0px 8px 2px rgb(216, 216, 216)'}"
+                       (click)="markAsRead(notification.userID, i)">
+
+          <div mat-line class="col-12 col-md-10">
+            <div mat-line>{{notification.heading}}</div>
+            <div mat-line>{{notification.body}}</div>
+          </div>
+
+<!--          Mobile collaboration request -->
+          <div mat-line class="d-block d-md-none">
+            <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
+              <mat-button-toggle-group class="collaborationBtnGroup float-left" name="fontStyle" aria-label="Font Style"
+                                       [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
+                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID)">Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault(); decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+
+<!--          Desktop collaboration request -->
+          <div class="d-none d-md-block">
+            <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
+              <mat-button-toggle-group class="collaborationBtnGroup" name="fontStyle" aria-label="Font Style"
+                                       [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
+                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID)">Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault(); decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+
+        </mat-list-item>
+      </mat-list>
     </div>
-    <a class="btn" [routerLink]="['']">Return Home</a>
-  </article>
+  </div>
 </div>

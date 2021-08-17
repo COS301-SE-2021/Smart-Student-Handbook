@@ -1,0 +1,26 @@
+#notebookTree{
+  width: 200px;
+}
+
+#notebookTree:nth-child(1){
+  color: red !important;
+}
+
+.bookIcon{
+  margin-right: -5px;
+  margin-left: 15px;
+}
+
+.notebookHead{
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.notebookNode{
+  width: 100px;
+  //min-width: max-content;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,1 +1,56 @@
 @import "src/app/styling/pageUnderConstruction";
+
+#list{
+  padding-bottom: 50px;
+  margin-bottom: 20px;
+}
+
+.notificationListItem{
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 5px;
+  height: fit-content !important;
+  padding: 15px 0 15px 0;
+}
+
+.buttonLine{
+  width: 100%;
+  display: block;
+}
+
+.buttonLine {
+  display: flex;
+  align-items: flex-end;
+
+  .collaborationBtnGroup {
+    border: none;
+    //position: absolute;
+    //right: 10px;
+    float: right;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    align-self: end;
+
+    .collaborationBtn {
+      color: white;
+      z-index: 3;
+    }
+
+    .accept {
+      background-color: mediumseagreen;
+    }
+
+    .decline {
+      background-color: indianred;
+    }
+  }
+}
+
+
+//mobile
+@media only screen and (max-width: 768px) {
+  .collaborationBtnGroup {
+    float: none !important;
+  }
+}

@@ -1,47 +1,37 @@
-<div class="container transparent">
-	<div class="p-5 mb-4">
-		<h1 class="display-1 fw-bold fs-1 text-center">
-			Smart Student Handbook
-		</h1>
-	</div>
-</div>
+<mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
 
-<mat-card>
+<img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" alt="Responsive image">
+
+<mat-card class="transparent">
 	<mat-card-content>
 		<form [formGroup]="form" (ngSubmit)="onSubmit()">
 			<h2>Log In</h2>
 			<mat-error *ngIf="loginFailed">
 				{{ errorMessage }}
 			</mat-error>
+
 			<mat-form-field class="full-width-input">
-				<input
-					autocomplete="off"
-					matInput
-					placeholder="Email"
-					formControlName="email"
-					required
-				/>
+				<input autocomplete="off" matInput placeholder="Email" formControlName="email" required
+               pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+"/>
 				<mat-error> Please provide a valid email address </mat-error>
 			</mat-form-field>
+
+      <br/>
+
 			<mat-form-field class="full-width-input">
-				<input
-					autocomplete="off"
-					matInput
-					type="Password"
-					placeholder="Password"
-					formControlName="password"
-					required
-				/>
+				<input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required
+               pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}"/>
 				<mat-error> Please provide a valid password </mat-error>
 			</mat-form-field>
-			<button mat-raised-button color="primary" type="submit">
-				Login
-			</button>
+
+      <br/>
+
+			<button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Login</button>
 		</form>
 	</mat-card-content>
 
   <p class="text-center">
-    <a [routerLink]="['/account/resetPassword']">Forgot Password?</a>
+    <a [routerLink]="['/account/forgotPassword']">Forgot Password?</a>
   </p>
 </mat-card>
 

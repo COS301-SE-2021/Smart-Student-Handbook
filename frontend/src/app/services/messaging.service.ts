@@ -4,6 +4,16 @@ import { BehaviorSubject } from 'rxjs';
 import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
+import { AccountService } from '@app/services/account.service';
+
+let addr;
+if (window.location.host.includes('localhost')) {
+	addr = 'http://localhost:5001/smartstudentnotebook/us-central1/app/';
+} else {
+	addr = 'https://us-central1-smartstudentnotebook.cloudfunctions.net/app/';
+}
+
+const MESSAGE_API = addr;
 
 @Injectable()
 export class MessagingService {
@@ -13,30 +23,40 @@ export class MessagingService {
 
 	constructor(
 		private angularFireMessaging: AngularFireMessaging,
-		private httpClient: HttpClient
+		private httpClient: HttpClient,
+		private accountService: AccountService
 	) {
 		firebase.initializeApp(environment.firebase);
 
 		this.messaging = firebase.messaging();
+	}
 
+	saveNotificationToken(userId: string) {
 		this.messaging
 			.getToken({
 				vapidKey:
-					'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
+					'BLwI4ZLDPfp7e6LMr84u1ne7lwoO2v0NxrpM__JDztRSaHGcwjn7NhqpyNIsAH791DPyPTzjmdEU4Fv8CnvVUxY',
+				// 'BDK2FLOOnbVACZrKC1Riy2a9vYLIKUJDwPHbMHOxzV3ZtNqlNE1faNKSU190PEQ-ef8ZvB_5aDjtfGDNguvoyXo',
 			})
 			.then((currentToken) => {
 				if (currentToken) {
 					// Send the token to your server and update the UI if necessary
-					// console.log(currentToken);
-					this.messaging.onMessage = this.messaging.onMessage.bind(
-						this.messaging
-					);
-					this.messaging.onTokenRefresh =
-						this.messaging.onTokenRefresh.bind(this.messaging);
+					this.accountService
+						.setUserNotificationToken(userId, currentToken)
+						.subscribe(() => {
+							this.messaging.onMessage =
+								this.messaging.onMessage.bind(this.messaging);
+							this.messaging.onTokenRefresh =
+								this.messaging.onTokenRefresh.bind(
+									this.messaging
+								);
 
-					this.subscribeToTopic(currentToken).subscribe(() => {
-						// console.log(res);
-					});
+							this.subscribeToTopic(currentToken).subscribe(
+								() => {
+									// console.log(res);
+								}
+							);
+						});
 				} else {
 					// Show permission request UI
 					console.log(
@@ -47,26 +67,10 @@ export class MessagingService {
 			.catch((err) => {
 				console.log('An error occurred while retrieving token. ', err);
 			});
-
-		// this.angularFireMessaging.messaging.subscribe(
-		//   (_messaging) => {
-		//     _messaging.onMessage = _messaging.onMessage.bind(_messaging);
-		//     _messaging.onTokenRefresh = _messaging.onTokenRefresh.bind(_messaging);
-		//   }
-		// )
 	}
 
 	requestPermission() {
 		this.messaging.requestPermission();
-
-		// this.angularFireMessaging.requestToken.subscribe(
-		//   (token) => {
-		//     console.log(token);
-		//   },
-		//   (err) => {
-		//     console.error('Unable to get permission to notify.', err);
-		//   }
-		// );
 	}
 
 	receiveMessage() {
@@ -85,7 +89,7 @@ export class MessagingService {
 	subscribeToTopic(currentToken: string) {
 		return this.httpClient.request<any>(
 			'post',
-			'http://localhost:5001/notification/subscribeToTopic',
+			`${MESSAGE_API}/notification/subscribeToTopic`,
 			{
 				body: {
 					token: currentToken,

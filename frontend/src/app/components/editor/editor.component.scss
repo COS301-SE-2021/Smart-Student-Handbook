@@ -1,7 +1,4 @@
 @media only screen and (max-width: 600px) {
-  body {
-    background-color: lightblue;
-  }
 
   #noteInfoAccordion{
     display: none;
@@ -17,6 +14,7 @@
   }
 }
 
+
 #progressbar{
   //position: absolute;
   //margin-top: -10px;
@@ -25,11 +23,12 @@
 
 #mobileMoreOptions{
   position: absolute;
-  top: 7px;
-  right: 15px;
+  top: 10px;
+  right: 20px;
+  z-index: 3;
 
   #mobileMoreIcon{
-    color: white;
+    color: black;
   }
 }
 
@@ -71,6 +70,7 @@
   display: inline-block;
   height: 35px;
   width: 35px;
+  margin: 0;
   // margin: 0px 0px -5px 10px;
 }
 
@@ -80,14 +80,18 @@
 }
 
 .card{
+  width: min-content;
   padding: 0px 0px 5px 0px;
   box-shadow: none;
   border: none;
   background-color: transparent;
+  display: inline-flex;
+  float: left;
 }
 
 .personName{
   padding-top: 2px;
+  padding-left: 5px;
   color: rgb(99, 99, 99);
   font-size: medium;
 }
@@ -108,7 +112,24 @@
   td:nth-child(2){
     width: 100%;
   }
+
+  td:nth-child(1){
+    min-width: max-content;
+  }
 }
+.removeCollaboratorIcon{
+  position: absolute;
+  font-size: large;
+  left: 35px;
+}
+
+#addGroupBtn{
+  display: inline-flex;
+  position: absolute;
+  right: 0;
+  //margin-top: 10px;
+}
+
 
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
   box-shadow: none !important;
@@ -122,12 +143,6 @@
   border: 10px black;
 }
 
-mat-spinner{
-  position: absolute;
-  top: 46%;
-  left: 47%;
-}
-
 #tags{
   width: 100%;
   margin-top: -15px;
@@ -135,7 +150,7 @@ mat-spinner{
 
 
 mat-expansion-panel{
-  background-color: rgb(246, 246, 246);
+  background-color: rgb(239, 239, 239);
   margin-bottom: 5px;
 }
 
@@ -143,6 +158,21 @@ mat-expansion-panel{
 .editorBackground{
   background-color: rgb(104, 104, 104) !important;
 }
+
+/************ Snippet Tool **************/
+::ng-deep .addTagsTool {
+  padding: 20px 0;
+}
+
+::ng-deep .addTagsTool input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e4e4e4;
+  border-radius: 3px;
+  outline: none;
+  font-size: 14px;
+}
+/************ Snippet Tool **************/
 
 
 /********* Scrollbar *********/

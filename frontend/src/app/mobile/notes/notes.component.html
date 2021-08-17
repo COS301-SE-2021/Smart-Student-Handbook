@@ -11,15 +11,25 @@
 		<div
 			class="col-6 col-sm-4 noteContainer"
 			*ngFor="let note of notes; let i = index"
-			(click)="openNote(note.notebookReference)"
 		>
-			<mat-card class="note">
-				<h3 class="title">{{ note.title }}</h3>
-				<h4 class="description">{{ note.description }}</h4>
-				<div
-					id="bottomColor"
-					[style.background-image]="colours[i % 6].colour"
-				></div>
+			<mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.noteId)">
+        <button
+          mat-icon-button
+          class="favorite-icon editNoteBtn"
+          (click)="editNote(note.noteId)"
+        >
+          <mat-icon class="editNotebookIcon">edit</mat-icon>
+        </button>
+        <div (click)="openNote(note.noteId, note.name)">
+          <h3 class="title">{{ note.name }}</h3>
+          <h4 class="description">{{ note.description }}</h4>
+
+          <div
+            id="bottomColor"
+            [style.background-image]="colours[i % 6].colour"
+          ></div>
+        </div>
+
 			</mat-card>
 		</div>
 	</div>
@@ -29,6 +39,7 @@
 		mat-fab
 		color="primary"
 		aria-label="Add note button"
+    (click)="createNewNotebook()"
 	>
 		<mat-icon>edit</mat-icon>
 	</button>

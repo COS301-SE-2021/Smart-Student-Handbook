@@ -63,9 +63,8 @@ describe('UserService', () => {
 
 		describe('This should  not retrieve the user details with the current uid', () => {
 			it('if uid is not valid return error message', () =>
-				expect(service.getUserDetails('wrong ud ')).rejects.toThrow(
-				HttpException,
-			));
+				// eslint-disable-next-line
+				expect(service.getUserByUid('wrong ud ')).rejects.toThrow(HttpException));
 		});
 	});
 

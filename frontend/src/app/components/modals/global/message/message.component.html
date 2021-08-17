@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content class="mat-typography">
+  <p>{{data.message1}}</p>
+  <p>{{data.message2}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    type="submit"
+    color="primary"
+    cdkFocusInitial
+    (click)="Confirm()"
+  >
+    Confirm
+  </button>
+</mat-dialog-actions>
