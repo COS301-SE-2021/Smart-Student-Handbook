@@ -53,6 +53,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
  * want to make use of one. this module should be injected into your app.module.ts file in order to work properly.
@@ -73,6 +75,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 		DragDropModule,
 
 		// Material
+		FlexLayoutModule,
 		MatSelectModule,
 		MatListModule,
 		MatTreeModule,
