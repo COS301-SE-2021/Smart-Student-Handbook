@@ -8,6 +8,7 @@ import {
 	AccountService,
 	SideNavService,
 	NotificationService,
+	MessagingService,
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
@@ -45,6 +46,7 @@ export class LeftMenuComponent implements OnInit {
 	 * @param notificationService
 	 * @param router
 	 * @param sidenavService
+	 * @param messagingService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -53,7 +55,8 @@ export class LeftMenuComponent implements OnInit {
 		private accountService: AccountService,
 		private notificationService: NotificationService,
 		private router: Router,
-		private sidenavService: SideNavService
+		private sidenavService: SideNavService,
+		private messagingService: MessagingService
 	) {}
 
 	/**
