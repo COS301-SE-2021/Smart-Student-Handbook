@@ -15,6 +15,8 @@ export class ResetPasswordComponent {
 
 	errorMessage: string = '';
 
+	user: any;
+
 	constructor(
 		private fb: FormBuilder,
 		private resetPasswordService: ResetPasswordService,
@@ -23,6 +25,8 @@ export class ResetPasswordComponent {
 		private snackBar: MatSnackBar,
 		private accountService: AccountService
 	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		// setup the form and validation
 		this.form = this.fb.group(
 			{
@@ -58,7 +62,13 @@ export class ResetPasswordComponent {
 				code = params.code;
 
 				this.resetPasswordService
-					.finalizeResetPassword(email, isLocalHost, password, code)
+					.finalizeResetPassword(
+						this.user.id,
+						email,
+						isLocalHost,
+						password,
+						code
+					)
 					.subscribe(() => {
 						this.snackBar
 							.open('Password successfully reset', 'Login')

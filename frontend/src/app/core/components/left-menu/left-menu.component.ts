@@ -65,7 +65,7 @@ export class LeftMenuComponent implements OnInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.notificationService
-			.getUnreadNotifications()
+			.getUnreadNotifications(this.user.uid)
 			.subscribe((unreadNotifications) => {
 				// console.log(unreadNotifications.length);
 				this.nrUnreadNotifications = unreadNotifications.length;

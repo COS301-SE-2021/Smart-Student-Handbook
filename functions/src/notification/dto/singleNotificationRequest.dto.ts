@@ -4,4 +4,6 @@ export class SingleNotificationRequestDto {
 	title = ' ';
 
 	body = ' ';
+
+	userId = '';
 }
