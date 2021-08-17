@@ -118,6 +118,7 @@ export class NotebookService {
 	 */
 	createNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
+			userId: noteDto.userId,
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
 			description: noteDto.description,
@@ -137,16 +138,18 @@ export class NotebookService {
 			noteId: noteDto.noteId,
 			name: noteDto.name,
 			description: noteDto.description,
+			userId: noteDto.userId,
 		});
 	}
 
 	/**
 	 * Delete a whole notebook
 	 * @param notebookID
+	 * @param userId
 	 */
-	deleteNotebook(notebookID: string): Observable<any> {
+	deleteNotebook(notebookID: string, userId: string): Observable<any> {
 		return this.httpClient.delete(
-			`${NOTEBOOK_API}/deleteNotebook/${notebookID}`,
+			`${NOTEBOOK_API}/deleteNotebook/${notebookID}/${userId}`,
 			httpOptions
 		);
 	}

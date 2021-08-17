@@ -6,4 +6,6 @@ export class NoteDto {
 	readonly noteId?: string;
 
 	readonly description?: string;
+
+	readonly userId?: string;
 }

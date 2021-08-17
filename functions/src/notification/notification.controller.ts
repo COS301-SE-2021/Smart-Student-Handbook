@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -36,6 +36,7 @@ export class NotificationController {
 			title: sendNotificationToAllRequest.title,
 			body: sendNotificationToAllRequest.body,
 			topic: 'general',
+			userId: sendNotificationToAllRequest.userId,
 		};
 
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
@@ -61,14 +62,14 @@ export class NotificationController {
 		return this.notificationService.sendUserToUserPushNotification(singleNotificationRequest, receiverUserID);
 	}
 
-	@Get('getUserNotifications')
-	async getUserNotifications() {
-		return this.notificationService.getUserNotifications();
+	@Get('getUserNotifications/:userId')
+	async getUserNotifications(@Param('userId') userId) {
+		return this.notificationService.getUserNotifications(userId);
 	}
 
-	@Get('getUnreadNotifications')
-	async getUnreadNotifications() {
-		return this.notificationService.getUnreadNotifications();
+	@Get('getUnreadNotifications/:userId')
+	async getUnreadNotifications(@Param('userId') userId) {
+		return this.notificationService.getUnreadNotifications(userId);
 	}
 
 	@Post('createNotification')
