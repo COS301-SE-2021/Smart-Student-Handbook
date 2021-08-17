@@ -363,12 +363,14 @@ export class AccountService {
 			await this.userService.deleteUserProfile(uid);
 			// TODO delete all the users notebooks !!
 
+			await admin.firestore().collection('users').doc(uid).delete();
+
 			// Try to delete user else throw and exception if not possible
 			return await admin
 				.auth()
 				.deleteUser(uid)
 				.then(() => ({
-					message: 'Successfully deleted user.',
+					message: 'Successfully deleted user!',
 				}))
 				.catch((error) => ({
 					message: error.message,
