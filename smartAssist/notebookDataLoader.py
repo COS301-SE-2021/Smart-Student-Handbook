@@ -81,7 +81,7 @@ class SmartAssistData:
         self.index_course = {idx: course for course, idx in self.course_index.items()}
 
 
-        print(len(self.dataList), len(self.name), len(self.authors), len(self.tags), len(self.institutions), len(self.course_index))
+        print(len(self.dataList), len(self.names), len(self.authors), len(self.tags), len(self.institutions), len(self.course_index))
         print(len(self.data_index), len(self.name_index), len(self.authors_index), len(self.tags_index), len(self.institutions_index), len(self.course_index))
 
 
@@ -170,11 +170,12 @@ class SmartAssistData:
 
     def getRandomDataItem(self):
         try:
-            name = random.randrange(len(self.index_data))
-            cast = random.randrange(len(self.index_cast))
-            director = random.randrange(len(self.index_authors))
-            keyword = random.randrange(len(self.index_keywords))
+            data = random.randrange(len(self.index_data))
+            name = random.randrange(len(self.index_name))
+            tags = random.randrange(len(self.tags))
+            author = random.randrange(len(self.index_authors))
             institution = random.randrange(len(self.index_institutions))
+            course =  random.randrange(len(self.course))
 
             return np.array([name, cast, director, keyword, institution])
         except:
