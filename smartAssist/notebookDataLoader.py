@@ -22,15 +22,16 @@ class SmartAssistData:
         dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
 
         print("Column Names:",list(dataRaw.columns))
+        print(dataRaw)
 
 
         # metadata[['title', 'cast', 'director', 'keywords', 'institutions', 'soup']].rename(columns=)
-        dataRaw['noteId'] = dataRaw['noteId'].apply(eval)
-        dataRaw['name'] = dataRaw['name'].apply(eval)
+        # dataRaw['noteId'] = dataRaw['noteId'].apply(eval)
+        # dataRaw['name'] = dataRaw['name'].apply(eval)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
-        dataRaw['author'] = dataRaw['author'].apply(eval)
-        dataRaw['institution'] = dataRaw['institution'].apply(eval)
-        dataRaw['course'] = dataRaw['course'].apply(eval)
+        # dataRaw['author'] = dataRaw['author'].apply(eval)
+        # dataRaw['institution'] = dataRaw['institution'].apply(eval)
+        # dataRaw['course'] = dataRaw['course'].apply(eval)
         
         # dataRaw = dataRaw.drop([12892, 13542, 13689, 13696, 13750, 13854])
 
@@ -46,6 +47,7 @@ class SmartAssistData:
         # dataRaw = dataRaw.drop(remove)
 
         self.dataList = dataRaw[['noteId','name','tags','author','institution','course']][:count].to_numpy()
+        print(self.dataList)
 
         self.data_index = {data[0]: idx for idx, data in enumerate(self.dataList)}
         self.index_data = {idx: data for data, idx in self.data_index.items()}
@@ -172,39 +174,37 @@ class SmartAssistData:
         try:
             data = random.randrange(len(self.index_data))
             name = random.randrange(len(self.index_name))
-            tags = random.randrange(len(self.tags))
+            tags = random.randrange(len(self.index_tags))
+            author = random.randrange(len(self.index_authors))
+            institution = random.randrange(len(self.index_institutions))
+            course =  random.randrange(len(self.index_course))
+
+            return np.array([data, name, tags, author, institution, course])
+        except:
+            data = random.randrange(len(self.index_data))
+            name = random.randrange(len(self.index_name))
+            tags = random.randrange(len(self.index_tags))
             author = random.randrange(len(self.index_authors))
             institution = random.randrange(len(self.index_institutions))
             course =  random.randrange(len(self.course))
 
-            return np.array([name, cast, director, keyword, institution])
-        except:
-            name = random.randrange(len(self.index_data))
-            cast = random.randrange(len(self.index_cast))
-            director = random.randrange(len(self.index_authors))
-            keyword = random.randrange(len(self.index_keywords))
-            institution = random.randrange(len(self.index_institutions))
-
-            # name = self.data_index[self.index_data[random.randrange(len(self.index_data))]]
-            # cast = self.cast_index[self.index_cast[random.randrange(len(self.index_cast))]]
-            # director = self.authors_index[self.index_authors[random.randrange(len(self.index_authors))]]
-            # keyword = self.keywords_index[self.index_keywords[random.randrange(len(self.index_keywords))]]
-            # institution = self.institutions_index[self.index_institutions[random.randrange(len(self.index_institutions))]]
-
-            return np.array([name, cast, director, keyword, institution])
+            return np.array([data, name, tags, author, institution, course])
 
 
     def addData(self, dataFrame):
-        dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
-        dataRaw.append(dataFrame)
+        # dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw = dataFrame
         dataRaw.to_csv("smartAssist/NotebookDataset/Notebooks.csv", index=False)
 
 
 
 
-# data = SmartAssistData()  
+data = SmartAssistData()  
 
-# data.loadData()
+d = pd.DataFrame({"noteId":['1asDS'], "name":["theoNotes"], "tags":[['Integration', "testing"]], "author":["TheoM"], "institution":["UP"], "course":["COS301"]})
+data.addData(d)
+
+data.loadData()
 
 # item = data.getRandomDataItem()
 
