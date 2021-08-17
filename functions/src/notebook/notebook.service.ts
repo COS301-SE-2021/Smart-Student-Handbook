@@ -86,7 +86,7 @@ export class NotebookService {
 	}
 
 	async createNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const { userId } = notebookDto; // await this.getUserId();
+		const { creatorId } = notebookDto; // await this.getUserId();
 		const notebookId: string = randomStringGenerator();
 
 		const note: Note = {
@@ -102,7 +102,7 @@ export class NotebookService {
 			course: notebookDto.course,
 			description: notebookDto.description,
 			institution: notebookDto.institution,
-			creatorId: userId,
+			creatorId,
 			private: notebookDto.private,
 			tags: notebookDto.tags,
 			notebookId,
@@ -121,7 +121,7 @@ export class NotebookService {
 					course: notebookDto.course,
 					description: notebookDto.description,
 					institution: notebookDto.institution,
-					creatorId: userId,
+					creatorId,
 					private: notebookDto.private,
 					tags: notebookDto.tags,
 					notebookId,
@@ -138,7 +138,7 @@ export class NotebookService {
 			);
 		}
 
-		const response = await this.addNotebookToUser(notebookId, userId);
+		const response = await this.addNotebookToUser(notebookId, creatorId);
 
 		if (response.message === 'Successfully added notebook to user account') {
 			return {
@@ -174,8 +174,8 @@ export class NotebookService {
 	}
 
 	async updateNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const { userId } = notebookDto; // await this.getUserId();
-		const authorized = await this.checkCreator(notebookDto.notebookId, userId);
+		const { creatorId } = notebookDto; // await this.getUserId();
+		const authorized = await this.checkCreator(notebookDto.notebookId, creatorId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -339,26 +339,21 @@ export class NotebookService {
 		// const userId = await this.getUserId();
 		// const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 		let updatedNotebook = false;
-
 		// if (!authorized) {
 		// 	throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
 		// }
 
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
-
 		await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
-
 		notes.forEach((item: Note, index: number) => {
 			if (item.noteId === noteDto.noteId) {
 				notes.splice(index, 1);
 				updatedNotebook = true;
 			}
 		});
-
-		if (updatedNotebook) {
+		if (!updatedNotebook) {
 			throw new HttpException('Note could not be found!', HttpStatus.BAD_REQUEST);
 		}
-
 		await this.updateNotes(noteDto.notebookId, notes);
 
 		return {
