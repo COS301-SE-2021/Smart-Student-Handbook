@@ -23,6 +23,8 @@ xtrain = {
     'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
     }
 
+print(xtrain['soup'].shape)
+
 ytrain = data.finalSetYTrain
 
 xtest = {
@@ -44,14 +46,9 @@ smartmodel.buildModel()
 smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
 smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
-# smartmodel.loadSmartModel()
-
-# smartmodel.getRecommendations('f9d30e4f-a5ed-4868-95e7-8823c5279bca')
-# print()
-# smartmodel.getRecommendations('The Jungle Book')
+smartmodel.loadSmartModel()
 
 itemData = data.getRandomDataItem()
-print(itemData[6].shape)
 item = {
     'data': np.array([itemData[0]]), 
     'name': np.array([itemData[1]]), 
@@ -60,21 +57,20 @@ item = {
     'institution': np.array([itemData[4]]),
     'course': np.array([itemData[5]]),
     'soup': np.array([itemData[6].tolist()])
-    }
+}
+# itemData = data.dataSet
+# print(itemData[6].shape)
+# item = {
+#     'data': np.array([itemData[:,0]],dtype='float32')[0], 
+#     'name': np.array([itemData[:,1]],dtype='float32')[0],
+#     'tags': np.array([itemData[:,2]],dtype='float32')[0], 
+#     'author': np.array([itemData[:,3]],dtype='float32')[0], 
+#     'institution': np.array([itemData[:,4]],dtype='float32')[0],
+#     'course': np.array([itemData[:,5]],dtype='float32')[0],
+#     'soup': np.array([itemData[:,6].tolist()])[0]
+#     }
    
-print(item)
-print(data.dataSet[6])
-item = {
-    'data': np.array([data.dataSet[:,0]], dtype='float32'), 
-    'name': np.array([data.dataSet[:,1]], dtype='float32'), 
-    'tags': np.array([data.dataSet[:,2]], dtype='float32'), 
-    'author': np.array([data.dataSet[:,3]], dtype='float32'), 
-    'institution': np.array([data.dataSet[:,4]], dtype='float32'),
-    'course': np.array([data.dataSet[:,5]], dtype='float32'),
-    'soup': np.array([data.dataSet[:,6].tolist()])
-    }
-print(item['data'].shape)
-print(item['soup'].shape)
-print(item)
-smartmodel.predict(item)
-
+# print(item['soup'].shape)
+# print(item['data'].shape)
+smartmodel.saveEmbeddingWeights()
+print(smartmodel.predict(item))

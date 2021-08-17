@@ -60,7 +60,7 @@ class SmartAssistData:
         self.maxLen = -1
 
         for data in self.dataList:
-            soupArr = [data[0], data[1], data[3], data[4], data[5].replace(" ", "")]
+            soupArr = [data[1], data[3], data[4], data[5].replace(" ", "")]
             for i in data[2]:
                 soupArr.append(i)
 
@@ -145,6 +145,10 @@ class SmartAssistData:
 
             for j in data[2]:
                 self.dataSet.append(np.array([self.data_index[data[0]], self.name_index[data[1]], self.tags_index[j], self.authors_index[data[3]], self.institutions_index[data[4]], self.course_index[data[5]], np.array(soupPadded[i])]))
+
+
+        self.dataSet_index = {data[0]: idx for idx, data in enumerate(self.dataSet)}
+        self.index_dataSet = {idx: data[0] for idx, data in enumerate(self.dataSet)}
 
         print(self.dataSet[:5])
         self.dataSet = np.array(self.dataSet)
@@ -232,12 +236,11 @@ class SmartAssistData:
         course =  random.randrange(len(self.course))
 
         sep = " "
-        soup = sep.join([self.index_data[data], self.index_name[name], self.index_tags[tags], self.index_authors[author], self.index_institutions[institution], self.index_course[course].replace(" ", "")])
+        soup = sep.join([self.index_name[name], self.index_tags[tags], self.index_authors[author], self.index_institutions[institution], self.index_course[course].replace(" ", "")])
 
         soupOH = [one_hot(soup, self.vocabSize)]
         soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
    
-
         return np.array([data, name, tags, author, institution, course, soupPadded[0]])
 
 
@@ -247,6 +250,17 @@ class SmartAssistData:
 
         combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
         combined.to_csv("smartAssist/NotebookDataset/Notebooks.csv", index=False)
+
+    def createSoup(self, name, tags, author, institution, course):
+        sep = " "
+        soup = sep.join([name, tags, author, institution, course].replace(" ", ""))
+
+        soupOH = [one_hot(soup, self.vocabSize)]
+        soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
+
+        data = len(self.index_data)
+   
+        return np.array([data, name, tags, author, institution, course, soupPadded[0]])
 
 
 
