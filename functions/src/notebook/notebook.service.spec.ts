@@ -30,6 +30,7 @@ describe('NotebookIntegrationTests', () => {
 	const randomNumber: number = Math.floor(Math.random() * 100000);
 	let notebookId = '';
 	let noteId = '';
+	let userId = '';
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -39,6 +40,7 @@ describe('NotebookIntegrationTests', () => {
 		//
 		notebookService = module.get<NotebookService>(NotebookService);
 		accountService = module.get<AccountService>(AccountService);
+
 		jest.setTimeout(30000);
 	});
 
@@ -53,6 +55,7 @@ describe('NotebookIntegrationTests', () => {
 			};
 
 			const result = await accountService.registerUser(user);
+			userId = result.user.uid;
 
 			expect(result.message).toBe('User is successfully registered!');
 		});
@@ -168,11 +171,103 @@ describe('NotebookIntegrationTests', () => {
 			};
 
 			const result = await notebookService.createNote(note);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			noteId = result.noteId;
 
 			expect(result.message).toBe('Creating a note was successful!');
 		});
+	});
+
+	describe('Get Notebook Notes', () => {
+		it('Test should return a list of notes that are contained in this notebook(thus 2 notes)', async () => {
+			const result = await notebookService.getNotes(notebookId);
+
+			expect(result.length).toBe(2);
+			expect(result[1].name).toBe('Test Note Title');
+			expect(result[1].description).toBe('Test Note Description');
+		});
+	});
+
+	describe('Update note', () => {
+		it('Test should update a note on a notebook', async () => {
+			const note = {
+				name: 'Update Note Title',
+				notebookId,
+				noteId,
+				description: 'Update Note Description',
+			};
+
+			const result = await notebookService.updateNote(note);
+
+			expect(result.message).toBe('Update a note successfully!');
+		});
+	});
+
+	describe('Get updated Notebook Notes', () => {
+		it('Test should return a list of notes that are contained in this notebook(thus 2 notes)', async () => {
+			const result = await notebookService.getNotes(notebookId);
+
+			expect(result.length).toBe(2);
+			expect(result[1].name).toBe('Update Note Title');
+			expect(result[1].description).toBe('Update Note Description');
+		});
+	});
+
+	describe('Try to delete notes', () => {
+		it('Test should delete note from notebook', async () => {
+			const note = {
+				notebookId,
+				noteId,
+			};
+
+			const result = await notebookService.deleteNote(note);
+
+			expect(result.message).toBe('Successfully delete note!');
+		});
+	});
+
+	describe('Get notes after deleting a note', () => {
+		it('Test should return 1 note since the other note was deleted in the previous test', async () => {
+			const result = await notebookService.getNotes(notebookId);
+
+			expect(result.length).toBe(1);
+		});
+	});
+
+	describe('Notebook Reviews', () => {
+		it('Add Reviews to a notebook', async () => {
+			const review = {
+				notebookId,
+				message: 'Test review message',
+				rating: 8,
+				displayName: `TestAccount${randomNumber}`,
+				userId,
+				profileUrl: 'Test Profile Url',
+			};
+			const result = await notebookService.addNotebookReview(review);
+
+			expect(result.message).toBe('Successfully added a review!');
+		});
+
+		// it('Should throw exception when trying to add a review to and invalid notebookId', async () => {
+		// 	let result;
+		// 	const review = {
+		// 		notebookId: 'Invalid notebookId',
+		// 		message: 'Test review message',
+		// 		rating: 8,
+		// 		displayName: `TestAccount${randomNumber}`,
+		// 		userId,
+		// 		profileUrl: 'Test Profile Url',
+		// 	};
+		//
+		// 	try {
+		// 		await notebookService.addNotebookReview(review);
+		// 	} catch (e) {
+		// 		result = e;
+		// 	}
+		//
+		// 	expect(result.message).toBe('Unable to complete request. User might not be signed in.');
+		// 	expect(result.status).toBe(400);
+		// });
 	});
 
 	describe('Delete Notebook', () => {
@@ -188,6 +283,78 @@ describe('NotebookIntegrationTests', () => {
 			const result = await accountService.deleteUser();
 
 			expect(result.message).toBe('Successfully deleted user!');
+		});
+	});
+
+	describe('Try to sign out', () => {
+		it('Sign out', async () => {
+			const result = await accountService.signOut();
+
+			expect(result.message).toBe('Successfully signed out.');
+		});
+	});
+
+	describe('Preforming actions when a user is not signed in', () => {
+		it('User not signed in test', async () => {
+			let result;
+			try {
+				await notebookService.getUserId();
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Unable to complete request. User might not be signed in.');
+			expect(result.status).toBe(400);
+		});
+	});
+
+	describe('Try to get a notebook  that does not exist', () => {
+		it('Should throw file not found error', async () => {
+			let result;
+			try {
+				await notebookService.getNotebook('impossible id');
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
+			expect(result.status).toBe(404);
+		});
+	});
+
+	describe('Try to delete notes', () => {
+		it('Should throw error when deleting a note that does not exist', async () => {
+			let result;
+			const note = {
+				notebookId: 'impossible note id',
+				noteId,
+			};
+
+			try {
+				await notebookService.deleteNote(note);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Notebook could not be found!');
+			expect(result.status).toBe(404);
+		});
+
+		it('Should throw error when deleting a note from a notebook that does not exist', async () => {
+			let result;
+			const note = {
+				notebookId,
+				noteId: 'impossible note id',
+			};
+
+			try {
+				await notebookService.deleteNote(note);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Could not find notebook');
+			expect(result.status).toBe(404);
 		});
 	});
 });

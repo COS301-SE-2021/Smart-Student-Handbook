@@ -78,7 +78,10 @@ export class NotebookService {
 				tags: notebook.data().tags,
 			};
 		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+			throw new HttpException(
+				'Could net retrieve notebook, it could be that the notebook does not exist',
+				HttpStatus.NOT_FOUND,
+			);
 		}
 	}
 
@@ -291,7 +294,11 @@ export class NotebookService {
 			}
 		});
 
-		return this.updateNotes(noteDto.notebookId, notes);
+		await this.updateNotes(noteDto.notebookId, notes);
+
+		return {
+			message: 'Update a note successfully!',
+		};
 	}
 
 	async updateNotes(notebookId: string, notes: Note[]): Promise<Response> {
@@ -319,21 +326,19 @@ export class NotebookService {
 	}
 
 	async getNotes(notebookId: string): Promise<Note[]> {
-		try {
-			const doc = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
+		const doc = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
-			if (doc.exists) {
-				return doc.data().notes;
-			}
-		} catch (e) {
-			throw new HttpException(`Bad Request${e}`, HttpStatus.BAD_REQUEST);
+		if (doc.exists) {
+			return doc.data().notes;
 		}
-		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
+
+		throw new HttpException('Documents does not seem to exist.', HttpStatus.NOT_FOUND);
 	}
 
 	async deleteNote(noteDto: NoteDto): Promise<Response> {
 		// const userId = await this.getUserId();
 		// const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
+		let updatedNotebook = false;
 
 		// if (!authorized) {
 		// 	throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -343,14 +348,15 @@ export class NotebookService {
 
 		await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
 
-		try {
-			notes.forEach((item: Note, index: number) => {
-				if (item.noteId === noteDto.noteId) {
-					notes.splice(index, 1);
-				}
-			});
-		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+		notes.forEach((item: Note, index: number) => {
+			if (item.noteId === noteDto.noteId) {
+				notes.splice(index, 1);
+				updatedNotebook = true;
+			}
+		});
+
+		if (updatedNotebook) {
+			throw new HttpException('Note could not be found!', HttpStatus.BAD_REQUEST);
 		}
 
 		await this.updateNotes(noteDto.notebookId, notes);
