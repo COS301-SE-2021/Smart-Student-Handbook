@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { Notebook } from './interfaces/notebook.interface';
 import { Review } from './interfaces/review.interface';
@@ -18,7 +18,7 @@ require('firebase/auth');
 @Injectable()
 export class NotebookService {
 	async getUserNotebooks(userId: string): Promise<Notebook[]> {
-		// const userId: string = await this.getUserId();
+		// const userId: string = await this.getUserId(token);
 		const notebookIds: string[] = [];
 		const notebooks = [];
 
@@ -86,7 +86,7 @@ export class NotebookService {
 	}
 
 	async createNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const userId: string = await this.getUserId();
+		const { userId } = notebookDto; // await this.getUserId();
 		const notebookId: string = randomStringGenerator();
 
 		const note: Note = {
@@ -174,7 +174,7 @@ export class NotebookService {
 	}
 
 	async updateNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const userId = await this.getUserId();
+		const { userId } = notebookDto; // await this.getUserId();
 		const authorized = await this.checkCreator(notebookDto.notebookId, userId);
 
 		if (!authorized) {
@@ -217,8 +217,8 @@ export class NotebookService {
 		}
 	}
 
-	async deleteNotebook(notebookId: string): Promise<Response> {
-		const userId = await this.getUserId();
+	async deleteNotebook(notebookId: string, userId: string): Promise<Response> {
+		// const userId = await this.getUserId();
 		const authorized = await this.checkCreator(notebookId, userId);
 
 		if (!authorized) {
@@ -250,7 +250,7 @@ export class NotebookService {
 	}
 
 	async createNote(noteDto: NoteDto): Promise<Response> {
-		const userId = await this.getUserId();
+		const { userId } = noteDto; // await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
 		if (!authorized) {
@@ -276,7 +276,7 @@ export class NotebookService {
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {
-		const userId = await this.getUserId();
+		const { userId } = noteDto; // await this.getUserId();
 		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
 
 		if (!authorized) {
@@ -368,7 +368,7 @@ export class NotebookService {
 
 	async addNotebookReview(reviewDto: ReviewDto): Promise<Response> {
 		const timestamp = new Date().getTime();
-		const userId: string = await this.getUserId();
+		const { userId } = reviewDto; // await this.getUserId();
 
 		try {
 			return await admin
@@ -425,8 +425,8 @@ export class NotebookService {
 		}
 	}
 
-	async deleteNotebookReview(notebookId: string): Promise<Response> {
-		const userId: string = await this.getUserId();
+	async deleteNotebookReview(notebookId: string, userId: string): Promise<Response> {
+		// const userId: string = await this.getUserId();
 
 		try {
 			return await admin
@@ -497,7 +497,7 @@ export class NotebookService {
 	}
 
 	async checkUserAccess(checkAccessDto: CheckAccessDto): Promise<boolean> {
-		const userId = await this.getUserId();
+		const { userId } = checkAccessDto; // await this.getUserId();
 		const access: Access[] = await this.getAccessList(checkAccessDto.notebookId);
 		let accessGranted = false;
 		const creator: boolean = await this.checkCreator(checkAccessDto.notebookId, userId);
@@ -516,7 +516,7 @@ export class NotebookService {
 	}
 
 	async removeUserAccess(checkAccessDto: CheckAccessDto): Promise<Response> {
-		const userId = await this.getUserId();
+		const { userId } = checkAccessDto; // await this.getUserId();
 		const authorized = await this.checkCreator(checkAccessDto.notebookId, userId);
 
 		if (!authorized) {
@@ -559,11 +559,11 @@ export class NotebookService {
 		}
 	}
 
-	async getUserId(): Promise<string> {
-		try {
-			return firebase.auth().currentUser.uid;
-		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-		}
-	}
+	// async getUserId(): Promise<string> {
+	// 	try {
+	// 		return firebase.auth().currentUser.uid;
+	// 	} catch (error) {
+	// 		throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+	// 	}
+	// }
 }
