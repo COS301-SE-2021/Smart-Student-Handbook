@@ -134,22 +134,3 @@ export class LeftMenuComponent implements OnInit {
 		);
 	}
 }
-
-/**
- * Tree structure
- */
-interface DirectoryNode {
-	name: string;
-	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	children?: DirectoryNode[];
-}
-
-/** Flat node with expandable and level information */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface ExampleFlatNode {
-	expandable: boolean;
-	name: string;
-	id: string;
-	level: number;
-}

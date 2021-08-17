@@ -4,7 +4,13 @@ import { MaterialModule } from '@app/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedWithMeComponent } from './shared-with-me.component';
+import { SharedWithMeComponent } from '@app/features';
+import {
+	NotebookEventEmitterService,
+	NotebookService,
+	NoteMoreService,
+	OpenNotebookPanelService,
+} from '@app/services';
 
 describe('SharedWithMeComponent', () => {
 	let component: SharedWithMeComponent;
@@ -18,7 +24,12 @@ describe('SharedWithMeComponent', () => {
 				RouterTestingModule.withRoutes([]),
 			],
 			declarations: [SharedWithMeComponent],
-			providers: [], // Some stubs used here
+			providers: [
+				NotebookService,
+				NoteMoreService,
+				OpenNotebookPanelService,
+				NotebookEventEmitterService,
+			], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});

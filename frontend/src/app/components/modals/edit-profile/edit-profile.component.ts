@@ -54,10 +54,12 @@ export class EditProfileComponent implements OnInit {
 		private dialog: MatDialog,
 		private router: Router
 	) {
-		// eslint-disable-next-line no-underscore-dangle
-		// @ts-ignore
-		// eslint-disable-next-line no-underscore-dangle
-		const milliseconds: number = data.dateJoined._seconds * 1000;
+		let milliseconds: number = 0;
+		if (data.dateJoined) {
+			// @ts-ignore
+			// eslint-disable-next-line no-underscore-dangle
+			milliseconds = data.dateJoined._seconds * 1000;
+		}
 		// eslint-disable-next-line no-underscore-dangle
 		const dateObject = new Date(milliseconds);
 		this.date = dateObject.toLocaleString('en-US', {

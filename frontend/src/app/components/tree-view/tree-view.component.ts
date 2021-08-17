@@ -97,39 +97,40 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks: any[]) => {
-				console.log(notebooks);
-				this.notebooks = notebooks;
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					// console.log(notebooks);
+					this.notebooks = notebooks;
 
-				const tree = [];
-				for (let i = 0; i < notebooks.length; i += 1) {
-					this.childrenSize += 1;
+					const tree = [];
+					for (let i = 0; i < notebooks.length; i += 1) {
+						this.childrenSize += 1;
 
-					const child = {
-						name: notebooks[i].title,
-						id: notebooks[i].notebookId,
-						// children: childArr,
-					};
+						const child = {
+							name: notebooks[i].title,
+							id: notebooks[i].notebookId,
+							// children: childArr,
+						};
 
-					tree.push(child);
+						tree.push(child);
+					}
+
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+				},
+				(error) => {
+					// eslint-disable-next-line no-console
+					console.log(error.message);
 				}
-
-				if (this.childrenSize > 0) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: tree,
-						},
-					];
-				}
-			},
-			(error) => {
-				// eslint-disable-next-line no-console
-				console.log(error.message);
-			}
-		);
+			);
 	}
 
 	updateNotebook(notebookId: string) {

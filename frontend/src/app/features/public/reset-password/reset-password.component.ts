@@ -23,6 +23,11 @@ export class ResetPasswordComponent {
 		private snackBar: MatSnackBar,
 		private accountService: AccountService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
+
 		// setup the form and validation
 		this.form = this.fb.group(
 			{
@@ -33,11 +38,6 @@ export class ResetPasswordComponent {
 				validator: MustMatch('password', 'confirmPassword'),
 			}
 		);
-
-		// redirect to home if already logged in
-		if (this.accountService.getLoginState) {
-			this.router.navigate(['/home']);
-		}
 	}
 
 	onSubmit() {

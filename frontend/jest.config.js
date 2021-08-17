@@ -3,6 +3,7 @@ module.exports = {
     '@core/(.*)': '<rootDir>/src/app/core/$1',
     "@app/services": "<rootDir>/src/app/services",
     "@app/components": "<rootDir>/src/app/components",
+    "@app/models": "<rootDir>/src/app/models",
     "@app/features": "<rootDir>/src/app/features",
     "@app/features/public": "<rootDir>/src/app/features/public",
     "@app/core": "<rootDir>/src/app/core",

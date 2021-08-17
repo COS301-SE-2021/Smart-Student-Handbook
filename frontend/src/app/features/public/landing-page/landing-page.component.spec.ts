@@ -5,6 +5,8 @@ import { MaterialModule } from '@app/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AccountService } from '@app/services';
 
 describe('LandingPageComponent', () => {
 	let component: LandingPageComponent;
@@ -15,10 +17,11 @@ describe('LandingPageComponent', () => {
 			imports: [
 				MaterialModule,
 				RouterModule,
+				HttpClientTestingModule,
 				RouterTestingModule.withRoutes([]),
 			],
 			declarations: [LandingPageComponent],
-			providers: [], // Some stubs used here
+			providers: [AccountService], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});

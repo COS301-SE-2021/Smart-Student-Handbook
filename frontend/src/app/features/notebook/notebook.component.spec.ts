@@ -6,6 +6,11 @@ import { RouterModule } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+	AccountService,
+	NotebookEventEmitterService,
+	OpenNotebookPanelService,
+} from '@app/services';
 
 describe('NotebookComponent', () => {
 	let component: NotebookComponent;
@@ -20,7 +25,11 @@ describe('NotebookComponent', () => {
 				RouterTestingModule.withRoutes([]),
 			],
 			declarations: [NotebookComponent],
-			providers: [], // Some stubs used here
+			providers: [
+				AccountService,
+				NotebookEventEmitterService,
+				OpenNotebookPanelService,
+			], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});

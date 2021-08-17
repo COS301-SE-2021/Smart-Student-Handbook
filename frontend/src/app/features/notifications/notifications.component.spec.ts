@@ -5,6 +5,11 @@ import { MaterialModule } from '@app/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+	NotebookService,
+	NoteMoreService,
+	NotificationService,
+} from '@app/services';
 
 describe('NotificationsComponent', () => {
 	let component: NotificationsComponent;
@@ -18,7 +23,7 @@ describe('NotificationsComponent', () => {
 				RouterTestingModule.withRoutes([]),
 			],
 			declarations: [NotificationsComponent],
-			providers: [], // Some stubs used here
+			providers: [NotificationService, NoteMoreService, NotebookService], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});

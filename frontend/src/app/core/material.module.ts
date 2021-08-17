@@ -52,6 +52,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatLabel } from '@angular/material/form-field';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
