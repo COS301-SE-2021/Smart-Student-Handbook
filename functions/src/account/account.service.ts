@@ -267,6 +267,16 @@ export class AccountService {
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
 
+		const token = await admin
+			.auth()
+			.createCustomToken(userData.uid)
+			.then((customToken) => ({
+				customToken,
+			}))
+			.catch((error) => {
+				console.log('Error creating custom token:', error);
+			});
+
 		// Login user. If successful return success message else throw Bad Request exception
 		return firebase
 			.auth()
@@ -286,6 +296,7 @@ export class AccountService {
 					bio: doc.data().bio,
 					profilePic: doc.data().profilePicUrl,
 					dateJoined: doc.data().dateJoined,
+					token,
 				},
 				message: 'User is successfully logged in.',
 			}))

@@ -10,4 +10,6 @@ export class ReviewDto {
 	readonly userId?: string;
 
 	readonly profileUrl?: string;
+
+	readonly token?: string;
 }

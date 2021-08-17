@@ -18,4 +18,6 @@ export class NotebookDto {
 	readonly tags: string[];
 
 	readonly notebookId?: string;
+
+	readonly token?: string;
 }
