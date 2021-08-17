@@ -36,6 +36,7 @@ export class NotificationController {
 			title: sendNotificationToAllRequest.title,
 			body: sendNotificationToAllRequest.body,
 			topic: 'general',
+			userId: sendNotificationToAllRequest.userId,
 		};
 
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);

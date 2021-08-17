@@ -445,6 +445,7 @@ export class NotificationService {
 				token: notificationID,
 				title: 'Collaboration Request',
 				body: `You have received a collaboration request from ${senderEmail}`,
+				userId: userSender,
 			},
 			userReceiver,
 		);

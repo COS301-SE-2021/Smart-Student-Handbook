@@ -3,5 +3,5 @@ export class SubscribeToTopicRequestDto {
 
 	topic = ' ';
 
-	userId = '';
+	userId? = '';
 }

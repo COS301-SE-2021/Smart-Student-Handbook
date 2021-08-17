@@ -5,5 +5,5 @@ export class SingleNotificationRequestDto {
 
 	body = ' ';
 
-	userId = '';
+	userId? = '';
 }
