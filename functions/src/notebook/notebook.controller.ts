@@ -18,9 +18,9 @@ export class NotebookController {
 		return this.notebookService.createNotebook(notebookDto);
 	}
 
-	@Get('getUserNotebooks')
-	getUserNotebooks(): Promise<Notebook[]> {
-		return this.notebookService.getUserNotebooks();
+	@Get('getUserNotebooks/:userId')
+	getUserNotebooks(@Param('userId') userId: string): Promise<Notebook[]> {
+		return this.notebookService.getUserNotebooks(userId);
 	}
 
 	@Get('getNotes/:noteId')

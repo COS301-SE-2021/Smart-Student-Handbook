@@ -17,8 +17,8 @@ require('firebase/auth');
 
 @Injectable()
 export class NotebookService {
-	async getUserNotebooks(): Promise<Notebook[]> {
-		const userId: string = await this.getUserId();
+	async getUserNotebooks(userId: string): Promise<Notebook[]> {
+		// const userId: string = await this.getUserId();
 		const notebookIds: string[] = [];
 		const notebooks = [];
 

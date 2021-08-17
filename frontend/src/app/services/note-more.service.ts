@@ -12,12 +12,16 @@ import { NotificationService } from '@app/services/notification.service';
 	providedIn: 'root',
 })
 export class NoteMoreService {
+	user: any;
+
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
 		private notificationService: NotificationService
-	) {}
+	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+	}
 
 	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
 		let screenWidth = '';
@@ -99,52 +103,54 @@ export class NoteMoreService {
 			const date = 'July 18, 2021 at 14:44';
 			let notebook: any;
 
-			this.notebookService.getUserNotebooks().subscribe((notebooks) => {
-				for (let i = 0; i < notebooks.length; i += 1) {
-					if (notebooks[i].notebookId === notebookId)
-						notebook = notebooks[i];
-				}
+			this.notebookService
+				.getUserNotebooks(this.user.uid)
+				.subscribe((notebooks) => {
+					for (let i = 0; i < notebooks.length; i += 1) {
+						if (notebooks[i].notebookId === notebookId)
+							notebook = notebooks[i];
+					}
 
-				// Push tags
-				const tags: any = [];
-				for (let i = 0; i < notebook.tags.length; i += 1) {
-					tags.push({ name: notebook.tags[i] });
-				}
+					// Push tags
+					const tags: any = [];
+					for (let i = 0; i < notebook.tags.length; i += 1) {
+						tags.push({ name: notebook.tags[i] });
+					}
 
-				// Get collaborator info
-				const collaborators: any = [];
-				for (let k = 0; k < notebook.access.length; k += 1) {
-					collaborators.push({
-						name: notebook.access[k].displayName,
-						url: notebook.access[k].profileUrl,
-						id: notebook.access[k].userId,
-					});
-				}
-
-				let creator = {
-					name: '',
-					url: '',
-					id: '',
-				};
-				// Get creator info
-				this.profileService
-					.getUserByUid(notebook.creatorId)
-					.subscribe((res) => {
-						creator = {
-							name: res.user.username,
-							url: '',
-							id: res.user.uid,
-						};
-
-						observer.next({
-							date,
-							notebook,
-							tags,
-							collaborators,
-							creator,
+					// Get collaborator info
+					const collaborators: any = [];
+					for (let k = 0; k < notebook.access.length; k += 1) {
+						collaborators.push({
+							name: notebook.access[k].displayName,
+							url: notebook.access[k].profileUrl,
+							id: notebook.access[k].userId,
 						});
-					});
-			});
+					}
+
+					let creator = {
+						name: '',
+						url: '',
+						id: '',
+					};
+					// Get creator info
+					this.profileService
+						.getUserByUid(notebook.creatorId)
+						.subscribe((res) => {
+							creator = {
+								name: res.user.username,
+								url: '',
+								id: res.user.uid,
+							};
+
+							observer.next({
+								date,
+								notebook,
+								tags,
+								collaborators,
+								creator,
+							});
+						});
+				});
 		});
 	}
 
