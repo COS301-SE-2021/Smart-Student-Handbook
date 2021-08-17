@@ -92,9 +92,9 @@ export class NotebookService {
 	/**
 	 * Get all the user's notebooks and note id's
 	 */
-	getUserNotebooks(): Observable<any> {
+	getUserNotebooks(userId: string): Observable<any> {
 		return this.httpClient.get(
-			`http://localhost:5001/smartstudentnotebook/us-central1/app/notebook/getUserNotebooks`,
+			`${NOTEBOOK_API}/getUserNotebooks/${userId}`,
 			httpOptions
 		);
 	}

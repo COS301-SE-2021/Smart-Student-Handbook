@@ -5,19 +5,25 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
-import { NotebookDto } from '@app/models';
+import { createNotificationDto, NotebookDto } from '@app/models';
+import { NotificationService } from '@app/services/notification.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class NoteMoreService {
+	user: any;
+
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
-		private dialog: MatDialog
-	) {}
+		private dialog: MatDialog,
+		private notificationService: NotificationService
+	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+	}
 
-	addCollaborator(notebookID: string): Observable<any> {
+	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -41,20 +47,26 @@ export class NoteMoreService {
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				this.notebookService
-					.addAccess({
-						displayName: result.name,
-						userId: result.id,
-						profileUrl: result.profileUrl,
-						notebookId: notebookID,
-					})
-					.subscribe(() => {
-						observer.next({
-							name: result.name,
-							url: result.profileUrl,
-							id: result.id,
-						});
+				console.log(senderId, result.id);
+				this.notificationService
+					.sendCollaborationRequest(senderId, result.id, notebookID)
+					.subscribe((val) => {
+						console.log(val);
 					});
+				// this.notebookService
+				// 	.addAccess({
+				// 		displayName: result.name,
+				// 		userId: result.id,
+				// 		profileUrl: result.profileUrl,
+				// 		notebookId: notebookID,
+				// 	})
+				// 	.subscribe(() => {
+				// 		observer.next({
+				// 			name: result.name,
+				// 			url: result.profileUrl,
+				// 			id: result.id,
+				// 		});
+				// 	});
 			});
 		});
 	}
@@ -91,52 +103,54 @@ export class NoteMoreService {
 			const date = 'July 18, 2021 at 14:44';
 			let notebook: any;
 
-			this.notebookService.getUserNotebooks().subscribe((notebooks) => {
-				for (let i = 0; i < notebooks.length; i += 1) {
-					if (notebooks[i].notebookId === notebookId)
-						notebook = notebooks[i];
-				}
+			this.notebookService
+				.getUserNotebooks(this.user.uid)
+				.subscribe((notebooks) => {
+					for (let i = 0; i < notebooks.length; i += 1) {
+						if (notebooks[i].notebookId === notebookId)
+							notebook = notebooks[i];
+					}
 
-				// Push tags
-				const tags: any = [];
-				for (let i = 0; i < notebook.tags.length; i += 1) {
-					tags.push({ name: notebook.tags[i] });
-				}
+					// Push tags
+					const tags: any = [];
+					for (let i = 0; i < notebook.tags.length; i += 1) {
+						tags.push({ name: notebook.tags[i] });
+					}
 
-				// Get collaborator info
-				const collaborators: any = [];
-				for (let k = 0; k < notebook.access.length; k += 1) {
-					collaborators.push({
-						name: notebook.access[k].displayName,
-						url: notebook.access[k].profileUrl,
-						id: notebook.access[k].userId,
-					});
-				}
-
-				let creator = {
-					name: '',
-					url: '',
-					id: '',
-				};
-				// Get creator info
-				this.profileService
-					.getUserByUid(notebook.creatorId)
-					.subscribe((res) => {
-						creator = {
-							name: res.user.username,
-							url: '',
-							id: res.user.uid,
-						};
-
-						observer.next({
-							date,
-							notebook,
-							tags,
-							collaborators,
-							creator,
+					// Get collaborator info
+					const collaborators: any = [];
+					for (let k = 0; k < notebook.access.length; k += 1) {
+						collaborators.push({
+							name: notebook.access[k].displayName,
+							url: notebook.access[k].profileUrl,
+							id: notebook.access[k].userId,
 						});
-					});
-			});
+					}
+
+					let creator = {
+						name: '',
+						url: '',
+						id: '',
+					};
+					// Get creator info
+					this.profileService
+						.getUserByUid(notebook.creatorId)
+						.subscribe((res) => {
+							creator = {
+								name: res.user.username,
+								url: '',
+								id: res.user.uid,
+							};
+
+							observer.next({
+								date,
+								notebook,
+								tags,
+								collaborators,
+								creator,
+							});
+						});
+				});
 		});
 	}
 

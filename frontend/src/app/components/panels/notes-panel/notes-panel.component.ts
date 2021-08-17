@@ -157,7 +157,7 @@ export class NotesPanelComponent implements OnInit {
 		sideNavContainer.style.width = '40px';
 
 		if (col) {
-			col.style.width = 'fit-content';
+			col.style.width = '40px';
 			col.style.minWidth = '0px';
 		}
 	}

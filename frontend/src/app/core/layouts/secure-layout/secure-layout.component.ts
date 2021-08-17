@@ -19,7 +19,7 @@ export class SecureLayoutComponent implements OnInit {
 	public onSideNavChange: boolean | undefined;
 
 	constructor(
-		private messagingService: MessagingService,
+		// private messagingService: MessagingService,
 		private sidenavService: SideNavService
 	) {
 		this.sidenavService.sideNavState$.subscribe((res) => {
@@ -28,9 +28,8 @@ export class SecureLayoutComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		// firebase.initializeApp(environment.firebase);
-		this.messagingService.requestPermission();
-		this.messagingService.receiveMessage();
-		this.message = this.messagingService.currentMessage;
+		// this.messagingService.requestPermission();
+		// this.messagingService.receiveMessage();
+		// this.message = this.messagingService.currentMessage;
 	}
 }

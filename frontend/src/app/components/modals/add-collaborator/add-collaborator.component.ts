@@ -19,9 +19,9 @@ export class AddCollaboratorComponent implements OnInit {
 	myControl = new FormControl();
 
 	options: CollaboratorData[] = [
-		{ name: 'Koos', profileUrl: '', id: 'zWR185YngYMuzSgxCqc9dESFoCv1' },
-		{ name: 'Jan', profileUrl: '', id: 'zWR185YngYMuzSgxCqc9dESFoCv1' },
-		{ name: 'Piet', profileUrl: '', id: 'zWR185YngYMuzSgxCqc9dESFoCv1' },
+		{ name: 'Arno', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
+		// { name: 'Jan', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
+		// { name: 'Piet', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
 	];
 
 	selectedUser?: CollaboratorData;

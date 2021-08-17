@@ -1,14 +1,86 @@
-<div class="pt-5">
-  <article>
-    <h1>Explore</h1>
-    <br/>
-    <h1><mat-icon id="announcementIcon">announcement</mat-icon>  &emsp; Under Construction</h1>
-    <br/>
-    <div>
-      <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always
-        <a href="mailto:algorithmicaces@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
-      <p>&mdash; The Team @ Smart Student Handbook</p>
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center mt-3">
+      <span class="display-3">Explore Notebooks</span>
     </div>
-    <a class="btn" [routerLink]="['']">Return Home</a>
-  </article>
+  </div>
 </div>
+<div class="container mt-5" style="overflow: auto;">
+  <div class="row">
+    <div class="col-12">
+      <ais-instantsearch [config]="config">
+        <main class="search-container">
+          <div class="right-panel">
+            <div id="hits">
+              <!-- Uncomment the following widget to add hits list -->
+              <div id="searchbox">
+                <!-- Uncomment the following widget to add a search bar -->
+                <ais-search-box placeholder="Search"></ais-search-box>
+              </div>
+              <div id="stats">
+                <!-- Uncomment the following widget to add search stats -->
+                <ais-stats>
+                  <ng-template let-state="state">
+                    <div *ngIf="state.nbHits > 0">
+                      <span role="img" aria-label="emoji">⚡️</span>
+                      <strong>{{state.nbHits}}</strong>
+                      results found
+                      <span *ngIf="state.query.trim().length > 0">
+                for
+                <strong>"{{state.query.trim()}}"</strong>
+              </span>
+                      in
+                      <strong>{{state.processingTimeMS}}ms</strong>
+                    </div>
+                  </ng-template>
+                </ais-stats>
+              </div>
+              <ais-hits >
+                <ng-template let-hits="hits" let-results="results">
+                  <div *ngIf="hits.length === 0">
+                    No results found for
+                    <strong>{{results.query}}</strong>.
+                  </div>
+                  <div class="ais-Hits-list">
+                    <div class="ais-Hits-item" *ngFor="let hit of hits">
+                      <article>
+                        <div class="post-content">
+                          <div class="post-date">
+                            {{hit.data.course}}
+                            <br>
+                            {{hit.data.institution}}
+                          </div>
+                          <h2 class="entry-title">
+                            {{hit.data.title}}
+                          </h2>
+                          <div class="post-excerpt" >
+                            {{hit.data.description}}
+                            <br>
+                            {{hit.data.author}}
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+                </ng-template>
+              </ais-hits>
+            </div>
+            <div id="pagination">
+              <!-- Uncomment the following widget to add pagination -->
+              <ais-pagination></ais-pagination>
+            </div>
+          </div>
+          <!--<div class="left-panel">
+            <div id="categories">
+               &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
+               <ais-panel header="Categories">
+                <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
+              </ais-panel>
+            </div>
+          </div>-->
+        </main>
+      </ais-instantsearch>
+    </div>
+  </div>
+</div>
+

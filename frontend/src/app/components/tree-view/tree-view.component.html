@@ -38,7 +38,7 @@
       <button mat-icon-button *ngIf="childrenSize === 0">
         <mat-icon class="menuIcon bookIcon" matTooltip="Notebooks" matTooltipPosition="right" [routerLink]="['/notebook']">book</mat-icon>
       </button>
-      <span class="notebookHead">{{ node.name }}</span>
+      <span class="notebookHead" [routerLink]="['/notebook']">{{ node.name }}</span>
 
       <button mat-icon-button aria-label="Add a new notebook" [matMenuTriggerFor]="NotebookMenu">
         <mat-icon>add</mat-icon>
