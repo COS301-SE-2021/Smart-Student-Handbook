@@ -23,6 +23,16 @@ export class NotebookController {
 		return this.notebookService.getUserNotebooks(userId);
 	}
 
+	@Put('updateNotebook')
+	updateNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
+		return this.notebookService.updateNotebook(notebookDto);
+	}
+
+	@Delete('deleteNotebook/:notebookId')
+	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
+		return this.notebookService.deleteNotebook(notebookId);
+	}
+
 	@Get('getNotes/:noteId')
 	getNotes(@Param('noteId') noteId): Promise<Note[]> {
 		return this.notebookService.getNotes(noteId);
@@ -36,16 +46,6 @@ export class NotebookController {
 	@Put('updateNote')
 	updateNote(@Body() noteDto: NoteDto): Promise<Response> {
 		return this.notebookService.updateNote(noteDto);
-	}
-
-	@Put('updateNotebook')
-	updateNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
-		return this.notebookService.updateNotebook(notebookDto);
-	}
-
-	@Delete('deleteNotebook/:notebookId')
-	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
-		return this.notebookService.deleteNotebook(notebookId);
 	}
 
 	@Delete('deleteNote/:notebookId/:noteId')
