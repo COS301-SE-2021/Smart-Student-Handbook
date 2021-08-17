@@ -4,8 +4,6 @@ import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import * as functions from 'firebase-functions';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import firebase from 'firebase';
-import { error } from 'firebase-functions/lib/logger';
-import { async } from 'rxjs';
 import { EmailInterface } from './interfaces/email.interface';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -90,24 +88,27 @@ export class NotificationService {
 			},
 		};
 
-		return admin
-			.messaging()
-			.send(message)
-			.then((response) => {
-				console.log('Successfully sent individual message:', response);
+		return (
+			admin
+				.messaging()
+				.send(message)
+				.then((response) => {
+					console.log('Successfully sent individual message:', response);
 
-				return {
-					status: 'successful',
-				};
-			})
-			.catch((error) => {
-				console.log('Error sending individual message:', error);
+					return {
+						status: 'successful',
+					};
+				})
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				.catch((error) => {
+					console.log('Error sending individual message:', error);
 
-				return {
-					status: 'unsuccessful',
-					error: error.errorInfo,
-				};
-			});
+					return {
+						status: 'unsuccessful',
+						error: error.errorInfo,
+					};
+				})
+		);
 	}
 
 	/**
@@ -127,23 +128,26 @@ export class NotificationService {
 			topic: sendNotificationToGroupRequest.topic,
 		};
 
-		return admin
-			.messaging()
-			.send(message)
-			.then((response) => {
-				console.log('Successfully sent notification to group:', response);
+		return (
+			admin
+				.messaging()
+				.send(message)
+				.then((response) => {
+					console.log('Successfully sent notification to group:', response);
 
-				return {
-					status: 'successful',
-				};
-			})
-			.catch((error) => {
-				console.log('Error sending notification to group:', error);
+					return {
+						status: 'successful',
+					};
+				})
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				.catch((error) => {
+					console.log('Error sending notification to group:', error);
 
-				return {
-					status: 'unsuccessful',
-				};
-			});
+					return {
+						status: 'unsuccessful',
+					};
+				})
+		);
 	}
 
 	/**
@@ -154,34 +158,37 @@ export class NotificationService {
 	 * @returns status
 	 */
 	async subscribeToNotificationTopic(subscribeToTopicRequest: SubscribeToTopicRequestDto) {
-		return admin
-			.messaging()
-			.subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
-			.then((response) => {
-				console.log('Successfully subscribed:', response);
+		return (
+			admin
+				.messaging()
+				.subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
+				.then((response) => {
+					console.log('Successfully subscribed:', response);
 
-				if (response.successCount === 1) {
-					return {
-						status: 'successful',
-					};
-				}
-				if (response.failureCount === 1) {
+					if (response.successCount === 1) {
+						return {
+							status: 'successful',
+						};
+					}
+					if (response.failureCount === 1) {
+						return {
+							status: 'unsuccessful',
+							error: response.errors,
+						};
+					}
 					return {
 						status: 'unsuccessful',
-						error: response.errors,
 					};
-				}
-				return {
-					status: 'unsuccessful',
-				};
-			})
-			.catch((error) => {
-				console.log('Error sending message:', error);
+				})
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				.catch((error) => {
+					console.log('Error sending message:', error);
 
-				return {
-					status: 'unsuccessful',
-				};
-			});
+					return {
+						status: 'unsuccessful',
+					};
+				})
+		);
 	}
 
 	async createNotification(createNotificationDto: CreateNotificationDto): Promise<{ message: string } | void> {
@@ -226,6 +233,7 @@ export class NotificationService {
 				.catch(() => {
 					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 				});
+			// eslint-disable-next-line @typescript-eslint/no-shadow
 		} catch (error) {
 			throw new HttpException(
 				'Something went wrong. Operation could not be executed.',
@@ -237,6 +245,7 @@ export class NotificationService {
 	async getUserId(): Promise<string> {
 		try {
 			return firebase.auth().currentUser.uid;
+			// eslint-disable-next-line @typescript-eslint/no-shadow
 		} catch (error) {
 			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
 		}
@@ -264,7 +273,7 @@ export class NotificationService {
 				.where('userID', 'in', notificationIds)
 				.get();
 
-			const i = 0;
+			// const i = 0;
 			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsSnapshot.forEach((doc) => {
 				if (doc.data().notebookID) {
@@ -366,6 +375,7 @@ export class NotificationService {
 				.catch(() => {
 					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 				});
+			// eslint-disable-next-line @typescript-eslint/no-shadow
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
@@ -379,6 +389,7 @@ export class NotificationService {
 			const user = await admin.firestore().collection('users').doc(userId).get();
 
 			return user.data().notificationId;
+			// eslint-disable-next-line @typescript-eslint/no-shadow
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
@@ -388,16 +399,19 @@ export class NotificationService {
 	}
 
 	async getUserEmail(userId: string): Promise<string> {
-		return admin
-			.auth()
-			.getUser(userId)
-			.then((userRecord) => userRecord.email)
-			.catch((error: any) => {
-				throw new HttpException(
-					`Something went wrong. Operation could not be executed.${error}`,
-					HttpStatus.INTERNAL_SERVER_ERROR,
-				);
-			});
+		return (
+			admin
+				.auth()
+				.getUser(userId)
+				.then((userRecord) => userRecord.email)
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				.catch((error: any) => {
+					throw new HttpException(
+						`Something went wrong. Operation could not be executed.${error}`,
+						HttpStatus.INTERNAL_SERVER_ERROR,
+					);
+				})
+		);
 	}
 
 	async sendCollaborationRequest(
@@ -471,23 +485,26 @@ export class NotificationService {
 			},
 		};
 
-		return admin
-			.messaging()
-			.send(message)
-			.then((response) => {
-				console.log('Successfully sent individual message:', response);
+		return (
+			admin
+				.messaging()
+				.send(message)
+				.then((response) => {
+					console.log('Successfully sent individual message:', response);
 
-				return {
-					status: 'successful',
-				};
-			})
-			.catch((error) => {
-				console.log('Error sending individual message:', error);
+					return {
+						status: 'successful',
+					};
+				})
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				.catch((error) => {
+					console.log('Error sending individual message:', error);
 
-				return {
-					status: 'unsuccessful',
-					error: error.errorInfo,
-				};
-			});
+					return {
+						status: 'unsuccessful',
+						error: error.errorInfo,
+					};
+				})
+		);
 	}
 }
