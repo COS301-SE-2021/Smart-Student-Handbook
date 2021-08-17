@@ -47,6 +47,8 @@ export class EditProfileComponent implements OnInit {
 
 	imgFilePath: string = '../../../../assets/images/defaultProfile.jpg';
 
+	user: any;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -54,6 +56,8 @@ export class EditProfileComponent implements OnInit {
 		private dialog: MatDialog,
 		private router: Router
 	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		// eslint-disable-next-line no-underscore-dangle
 		// @ts-ignore
 		// eslint-disable-next-line no-underscore-dangle
@@ -95,9 +99,10 @@ export class EditProfileComponent implements OnInit {
 		this.isDisabled = true;
 		this.updatedFailed = false;
 
-		if (this.data !== undefined) {
+		if (this.data !== undefined && this.user) {
 			this.accountService
 				.updateUser(
+					this.user.uid,
 					this.data.displayName,
 					this.data.institution,
 					this.data.department,
@@ -134,8 +139,8 @@ export class EditProfileComponent implements OnInit {
 
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
-			if (result === true) {
-				this.accountService.deleteUser().subscribe(
+			if (result === true && this.user) {
+				this.accountService.deleteUser(this.user.uid).subscribe(
 					(res: any) => {
 						const confirm = this.dialog.open(MessageComponent, {
 							data: {

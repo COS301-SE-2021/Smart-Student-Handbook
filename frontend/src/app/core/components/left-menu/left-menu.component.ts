@@ -124,14 +124,16 @@ export class LeftMenuComponent implements OnInit {
 	 * If a user is not logged in, redirect them to the login page
 	 */
 	async logout() {
-		this.accountService.singOut().subscribe(
-			() => {
-				this.router.navigate(['account/login']);
-			},
-			(err) => {
-				console.log(`Error: ${err.error.message}`);
-			}
-		);
+		if (this.user) {
+			this.accountService.singOut(this.user.uid).subscribe(
+				() => {
+					this.router.navigate(['account/login']);
+				},
+				(err) => {
+					console.log(`Error: ${err.error.message}`);
+				}
+			);
+		}
 	}
 }
 

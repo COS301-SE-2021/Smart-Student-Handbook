@@ -123,6 +123,7 @@ export class AccountService {
 	/**
 	 * Send a API request to the backend profile endPoint to update a user profile
 	 * User only has to enter information that they want to, its not required
+	 * @param userId
 	 * @param displayName - optional
 	 * @param institution - optional
 	 * @param department - optional
@@ -133,6 +134,7 @@ export class AccountService {
 	 *
 	 */
 	updateUser(
+		userId: string,
 		displayName?: string,
 		institution?: string,
 		department?: string,
@@ -145,6 +147,7 @@ export class AccountService {
 			.put(
 				`${ACCOUNT_API}updateUser`,
 				{
+					userId,
 					displayName,
 					institution,
 					department,
@@ -171,23 +174,25 @@ export class AccountService {
 	 * Clear all the LocalStorage values that store the user information and loginState
 	 * Update the isUserLoggedIn Behavioural subject to false to indicate the user is no longer logged in
 	 */
-	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions).pipe(
-			map((x) => {
-				localStorage.clear();
-				this.isUserLoggedIn.next(false);
-				return x;
-			})
-		);
+	singOut(userId: string): Observable<any> {
+		return this.http
+			.post(`${ACCOUNT_API}signOut`, { userId }, httpOptions)
+			.pipe(
+				map((x) => {
+					localStorage.clear();
+					this.isUserLoggedIn.next(false);
+					return x;
+				})
+			);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to get the current Lodged in user and return the result (User Object)
 	 * Update the Localstorage user object when user is returned
 	 */
-	getCurrentUser(): Observable<any> {
+	getCurrentUser(userId: string): Observable<any> {
 		return this.http
-			.get(`${ACCOUNT_API}getCurrentUser`, {
+			.get(`${ACCOUNT_API}getCurrentUser/${userId}`, {
 				responseType: 'json',
 			})
 			.pipe(
@@ -205,9 +210,9 @@ export class AccountService {
 	 * Delete all the LocalStorage Data of the user and set their LoginSate to false
 	 * Return the user to the Login Page
 	 */
-	deleteUser(): Observable<any> {
+	deleteUser(userId: string): Observable<any> {
 		return this.http
-			.delete(`${ACCOUNT_API}deleteUser`, {
+			.delete(`${ACCOUNT_API}deleteUser/${userId}`, {
 				responseType: 'json',
 			})
 			.pipe(
