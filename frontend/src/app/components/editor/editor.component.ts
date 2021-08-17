@@ -445,7 +445,7 @@ export class EditorComponent implements OnInit {
 		const e = document.getElementById('editor') as HTMLElement;
 		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
 
-		this.Editor.destroy();
+		if (this.Editor) this.Editor.destroy();
 		// @ts-ignore
 		this.Editor = undefined;
 		this.notebookTitle = 'Smart Student';
