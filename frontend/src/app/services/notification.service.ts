@@ -25,77 +25,81 @@ const NOTIFICATION_API = addr;
 export class NotificationService {
 	constructor(private httpClient: HttpClient) {}
 
-	getUserNotifications(): Observable<any> {
+	getUserNotifications(userId: string): Observable<any> {
 		return this.httpClient.get(
-			`${NOTIFICATION_API}notification/getUserNotifications`,
+			`${NOTIFICATION_API}notification/getUserNotifications/${userId}`,
 			httpOptions
 		);
 	}
 
-	getUnreadNotifications(): Observable<any> {
+	getUnreadNotifications(userId: string): Observable<any> {
 		return this.httpClient.get(
-			`${NOTIFICATION_API}notification/getUnreadNotifications`,
+			`${NOTIFICATION_API}notification/getUnreadNotifications/${userId}`,
 			httpOptions
 		);
 	}
 
-	sendEmailNotification(email: EmailInterface): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/sendEmailNotifications`,
-			{
-				email,
-			},
-			httpOptions
-		);
-	}
+	// sendEmailNotification(
+	// 	userId: string,
+	// 	email: EmailInterface
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/sendEmailNotifications`,
+	// 		{
+	// 			email,
+	// 			userId,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
-	sendSinglePushNotification(
-		singleNotificationRequest: SingleNotificationRequestDto
-	): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/sendSinglePushNotification`,
-			{
-				singleNotificationRequest,
-			},
-			httpOptions
-		);
-	}
+	// sendSinglePushNotification(
+	// 	singleNotificationRequest: SingleNotificationRequestDto
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/sendSinglePushNotification`,
+	// 		{
+	// 			singleNotificationRequest,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
-	sendGroupPushNotification(
-		sendNotificationToGroupRequest: SendNotificationToGroupRequestDto
-	): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/sendGroupPushNotifications`,
-			{
-				sendNotificationToGroupRequest,
-			},
-			httpOptions
-		);
-	}
+	// sendGroupPushNotification(
+	// 	sendNotificationToGroupRequest: SendNotificationToGroupRequestDto
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/sendGroupPushNotifications`,
+	// 		{
+	// 			sendNotificationToGroupRequest,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
-	subscribeToNotificationTopic(
-		subscribeToTopicRequest: SubscribeToTopicRequestDto
-	): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/subscribeToNotificationTopic`,
-			{
-				subscribeToTopicRequest,
-			},
-			httpOptions
-		);
-	}
+	// subscribeToNotificationTopic(
+	// 	subscribeToTopicRequest: SubscribeToTopicRequestDto
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/subscribeToNotificationTopic`,
+	// 		{
+	// 			subscribeToTopicRequest,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
-	createNotification(
-		notificationDto: CreateNotificationDto
-	): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/createNotification`,
-			{
-				notificationDto,
-			},
-			httpOptions
-		);
-	}
+	// createNotification(
+	// 	notificationDto: CreateNotificationDto
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/createNotification`,
+	// 		{
+	// 			notificationDto,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
 	sendCollaborationRequest(
 		userSender: string,
@@ -113,19 +117,19 @@ export class NotificationService {
 		);
 	}
 
-	sendUserToUserPushNotification(
-		singleNotificationRequest: SingleNotificationRequestDto,
-		receiverUserID: string
-	): Observable<any> {
-		return this.httpClient.post(
-			`${NOTIFICATION_API}notification/sendUserToUserPushNotification`,
-			{
-				singleNotificationRequest,
-				receiverUserID,
-			},
-			httpOptions
-		);
-	}
+	// sendUserToUserPushNotification(
+	// 	singleNotificationRequest: SingleNotificationRequestDto,
+	// 	receiverUserID: string
+	// ): Observable<any> {
+	// 	return this.httpClient.post(
+	// 		`${NOTIFICATION_API}notification/sendUserToUserPushNotification`,
+	// 		{
+	// 			singleNotificationRequest,
+	// 			receiverUserID,
+	// 		},
+	// 		httpOptions
+	// 	);
+	// }
 
 	updateRead(notificationId: string): Observable<any> {
 		return this.httpClient.post(

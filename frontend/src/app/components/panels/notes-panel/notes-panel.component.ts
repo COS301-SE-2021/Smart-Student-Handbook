@@ -10,11 +10,12 @@ import {
 	OpenNotebookPanelService,
 	NotesService,
 } from '@app/services';
+import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-notes-panel',
 	templateUrl: './notes-panel.component.html',
-	encapsulation: ViewEncapsulation.None,
+	// encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
 export class NotesPanelComponent implements OnInit {
@@ -49,12 +50,14 @@ export class NotesPanelComponent implements OnInit {
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
+	 * @param notebookData
 	 * @param openNotebookPanelService
 	 * @param notesService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
+		private notebookData: NotebookDataService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notesService: NotesService
 	) {}
@@ -64,6 +67,21 @@ export class NotesPanelComponent implements OnInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
+		this.notebookData.ids.subscribe((val: any) => {
+			if (val.title !== '') {
+				this.notebookTitle = val.title;
+				this.notes = [];
+				this.getUserNotebooks(val.notebookId);
+
+				// navigate to notebook if not on page
+				const button = document.getElementById(
+					'openNotesPanelBtn'
+				) as HTMLButtonElement;
+				if (button) button.click();
+			}
+		});
+		// }
+
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
@@ -73,21 +91,6 @@ export class NotesPanelComponent implements OnInit {
 
 		// Toggle the notePanelComponent when in desktop view and notebook is selected
 		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-			this.openNotebookPanelService.toggleSubscribe =
-				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					({ notebookId, notebookTitle }) => {
-						this.notebookTitle = notebookTitle;
-						this.notes = [];
-						this.getUserNotebooks(notebookId);
-
-						// navigate to notebook if not on page
-						const button = document.getElementById(
-							'openNotesPanelBtn'
-						) as HTMLButtonElement;
-						if (button) button.click();
-					}
-				);
-
 			this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
 				this.closePanel();
 				this.notes = [];
@@ -174,10 +177,12 @@ export class NotesPanelComponent implements OnInit {
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
+	 * @param title
+	 * @param description
 	 */
-	editNotebook(id: string) {
+	editNotebook(id: string, title: string, description: string) {
 		this.notesService
-			.editNote(this.notebookId, id)
+			.editNote(this.notebookId, id, title, description)
 			.subscribe((newNote: { description: any; title: any }) => {
 				this.notes = this.notes.map((notebook: any) => {
 					if (notebook.noteId === id) {

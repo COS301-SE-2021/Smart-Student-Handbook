@@ -251,8 +251,8 @@ export class NotificationService {
 		}
 	}
 
-	async getUserNotifications(): Promise<Notification[]> {
-		const userID: string = await this.getUserId();
+	async getUserNotifications(userId: string): Promise<Notification[]> {
+		const userID: string = userId; // await this.getUserId();
 		const notificationIds: string[] = [];
 		const notifications = [];
 
@@ -304,8 +304,8 @@ export class NotificationService {
 		}
 	}
 
-	async getUnreadNotifications(): Promise<Notification[]> {
-		const userID: string = await this.getUserId();
+	async getUnreadNotifications(userId: string): Promise<Notification[]> {
+		const userID: string = userId; // await this.getUserId();
 		const notificationIds: string[] = [];
 		const notifications = [];
 		try {
@@ -445,6 +445,7 @@ export class NotificationService {
 				token: notificationID,
 				title: 'Collaboration Request',
 				body: `You have received a collaboration request from ${senderEmail}`,
+				userId: userSender,
 			},
 			userReceiver,
 		);

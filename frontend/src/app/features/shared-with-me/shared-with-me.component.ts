@@ -12,6 +12,7 @@ import {
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -65,6 +66,7 @@ export class SharedWithMeComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private noteMore: NoteMoreService,
+		private notebookData: NotebookDataService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -96,7 +98,7 @@ export class SharedWithMeComponent implements OnInit {
 	 */
 	getUserNotebooks() {
 		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks) => {
+			(notebooks: any[]) => {
 				// console.log(notebooks);
 				let temp: any[] = [];
 				let index = 0;
@@ -122,6 +124,8 @@ export class SharedWithMeComponent implements OnInit {
 
 						tree.push(child);
 					}
+
+					index = 0;
 				});
 
 				if (this.childrenSize > 0) {
@@ -195,6 +199,7 @@ export class SharedWithMeComponent implements OnInit {
 	 * toggle the notesPanel component when using a desktop
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
+		this.notebookData.setID(notebookId, notebookTitle);
 		this.openedNotebookId = notebookId;
 
 		const screenType = navigator.userAgent;

@@ -77,6 +77,7 @@ describe('NotificationService', () => {
 			title: 'Test title',
 			body: 'Message body',
 			topic: 'general',
+			userId: '',
 		};
 
 		const response = await service.sendGroupPushNotification(request);

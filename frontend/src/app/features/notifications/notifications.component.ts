@@ -30,7 +30,7 @@ export class NotificationsComponent implements OnInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.notificationService
-			.getUserNotifications()
+			.getUserNotifications(this.user.uid)
 			.subscribe((notifications) => {
 				this.notifications = notifications;
 			});
