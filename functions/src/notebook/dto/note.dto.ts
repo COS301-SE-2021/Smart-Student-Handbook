@@ -7,5 +7,5 @@ export class NoteDto {
 
 	readonly description?: string;
 
-	readonly token?: string;
+	readonly userId?: string;
 }

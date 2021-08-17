@@ -17,5 +17,5 @@ export class NotebookDto {
 
 	readonly notebookId?: string;
 
-	readonly token?: string;
+	readonly userId?: string;
 }

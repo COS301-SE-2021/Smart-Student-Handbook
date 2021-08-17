@@ -6,6 +6,4 @@ export class AccessDto {
 	readonly profileUrl?: string;
 
 	readonly notebookId?: string;
-
-	readonly token?: string;
 }

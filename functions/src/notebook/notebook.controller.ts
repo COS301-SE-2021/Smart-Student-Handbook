@@ -28,9 +28,9 @@ export class NotebookController {
 		return this.notebookService.updateNotebook(notebookDto);
 	}
 
-	@Delete('deleteNotebook/:notebookId')
-	deleteNotebook(@Param('notebookId') notebookId): Promise<Response> {
-		return this.notebookService.deleteNotebook(notebookId);
+	@Delete('deleteNotebook/:notebookId/:userId')
+	deleteNotebook(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
+		return this.notebookService.deleteNotebook(notebookId, userId);
 	}
 
 	@Get('getNotes/:noteId')
@@ -63,9 +63,9 @@ export class NotebookController {
 		return this.notebookService.getNotebookReviews(notebookId);
 	}
 
-	@Delete('deleteNotebookReview/:notebookId')
-	deleteNotebookReview(@Param('notebookId') notebookId): Promise<Response> {
-		return this.notebookService.deleteNotebookReview(notebookId);
+	@Delete('deleteNotebookReview/:notebookId/:userId')
+	deleteNotebookReview(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
+		return this.notebookService.deleteNotebookReview(notebookId, userId);
 	}
 
 	@Post('addAccess')
