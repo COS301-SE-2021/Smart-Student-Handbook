@@ -20,10 +20,14 @@ export class NotesService {
 
 	private = false;
 
+	user: any;
+
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog
-	) {}
+	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+	}
 
 	/**
 	 * Create a new notebook
@@ -58,6 +62,7 @@ export class NotesService {
 				if (result !== undefined) {
 					// Create request object
 					const request = {
+						userId: this.user.uid,
 						notebookId,
 						name: result.title,
 						description: result.description,
@@ -70,6 +75,7 @@ export class NotesService {
 					this.notebookService.createNote(request).subscribe(
 						(data) => {
 							const newNotebook = {
+								userId: this.user.id,
 								name: request.name,
 								description: request.description,
 								noteId: data.noteId,
@@ -94,8 +100,15 @@ export class NotesService {
 	 * Edit the details of a notebook
 	 * @param notebookId
 	 * @param noteId
+	 * @param title
+	 * @param description
 	 */
-	editNote(notebookId: string, noteId: string): Observable<any> {
+	editNote(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		description: string
+	): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -113,9 +126,9 @@ export class NotesService {
 			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
 				data: {
-					title: this.title,
+					title,
 					message: 'Update Note',
-					description: this.description,
+					description,
 				},
 			});
 
@@ -128,6 +141,7 @@ export class NotesService {
 						noteId,
 						name: data.title,
 						description: data.description,
+						userId: this.user.uid,
 					};
 
 					// Call service and update notebook
