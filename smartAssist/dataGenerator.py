@@ -1,3 +1,5 @@
+from notebookDataLoader import SmartAssistData
+import pandas as pd
 import requests
 from faker import Faker
 import random
@@ -14,7 +16,8 @@ program = {
     }
 
 courses = [faker.bothify(text='??? ###', letters ="ABCDEFGHIJKLMNOPQRSTUVWXYZ") for i in range(15)]
-
+keywords = [faker.bs() for i in range(25)]
+userNames = [faker.user_name() for i in range(15)]
 
 def createUsersLive():
     num = 1
@@ -41,7 +44,7 @@ def createUsersLive():
         }
 
         l = requests.post("http://localhost:5001/smartstudentnotebook/us-central1/app/account/loginUser", data=userLoginData)
-        print(l, userLoginData)
+        print(l.text, l.json(), userLoginData)
 
         dep = random.choice(department)
         userUpdateData ={
@@ -63,11 +66,46 @@ def createUsersLive():
         print(u, userUpdateData)
     
 
-# def createNotebookData(num):
+def createNotebookData(num):
 
-#     notes = []
+    dataRaw = pd.read_csv("smartAssist/MovieDataset/MovieTrainingData.csv", low_memory=True)
+    dataRaw = dataRaw.drop(columns=['index'])
 
-#     for i in range(num):
-#         note = {
-#             "noteId": 5305b950-5454-451a-afcc-1b2760be06f9
-#         }
+    print("Column Names:",list(dataRaw.columns))
+
+
+    # metadata[['title', 'cast', 'director', 'keywords', 'genres', 'soup']].rename(columns=)
+    dataRaw['cast'] = dataRaw['cast'].apply(eval)
+    dataRaw['keywords'] = dataRaw['keywords'].apply(eval)
+    dataRaw['genres'] = dataRaw['genres'].apply(eval)
+    dataRaw['soup'] = dataRaw['soup'].apply(eval)
+        
+    dataList = dataRaw[['title', 'keywords']][:5000].to_numpy()
+
+    notes = []
+
+    for i in range(num):
+        dep = random.choice(department)
+        d = random.choice(dataList)
+        if len(d[1]) == 0:
+            continue
+
+        note = {
+            "noteId": faker.uuid4(),
+            "name": d[0],
+            "tags": d[1],
+            "author": random.choice(userNames),
+            "institution": random.choice(instutions),
+            "course": random.choice(courses)
+        }
+        notes.append(note)
+
+    return notes
+
+# createUsersLive()
+# nd = createNotebookData(30)
+# [print(i) for i in nd]
+
+# data = SmartAssistData()  
+# data.addData(nd)
+
