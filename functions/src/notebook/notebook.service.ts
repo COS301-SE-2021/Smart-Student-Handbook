@@ -264,13 +264,12 @@ export class NotebookService {
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
 		notes.push(note);
 
-		if ((await this.updateNotes(noteDto.notebookId, notes)).message === 'Creating a notebook was successful!') {
-			return {
-				message: 'Creating a notebook was successful!',
-				noteId: note.noteId,
-			};
-		}
-		throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+		await this.updateNotes(noteDto.notebookId, notes);
+
+		return {
+			message: 'Creating a note was successful!',
+			noteId: note.noteId,
+		};
 	}
 
 	async updateNote(noteDto: NoteDto): Promise<Response> {

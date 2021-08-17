@@ -1,71 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockFirebase } from 'firestore-jest-mock';
-// import { mockCollection, mockDoc } from 'firestore-jest-mock/mocks/firestore';
-// import firebase from 'firebase';
-// import * as admin from 'firebase-admin';
-// import * as admin from 'firebase-admin';
-import firebase from '@firebase/rules-unit-testing';
+import firebase from 'firebase';
+import * as admin from 'firebase-admin';
 import { NotebookService } from './notebook.service';
 import { AccountService } from '../account/account.service';
 import { NotebookController } from './notebook.controller';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
-mockFirebase({
-	database: {
-		userContent: [
-			{
-				id: 'LouwId',
-				Notebooks: [{ id: 'notebook1', notebookId: 'notebook1' }],
-			},
-		],
-		userNotebooks: [
-			{
-				id: 'docId1',
-				access: [],
-				course: 'COS301',
-				author: 'Louw',
-				creatorId: 'LouwId',
-				descriptions: 'Test notebook',
-				notebookId: 'notebook1',
-				notes: [
-					{
-						name: 'Introduction',
-						noteId: '53a7d82a-4ae1-4851-99d6-984fa32fe6e0',
-						description: 'My first note',
-						createDate: 1629059393668,
-					},
-				],
-				private: false,
-				tags: ['tag1', 'tag2'],
-				title: 'Louw Notebook',
-			},
-		],
-	},
+admin.initializeApp({
+	credential: admin.credential.applicationDefault(),
+	databaseURL: 'http://localhost:4000/',
 });
 
-firebase.initializeTestApp({
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 	projectId: 'smartstudentnotebook',
-	auth: { uid: 'louw707', email: 'louw707@gmail.com' },
-});
-
-firebase.initializeAdminApp({ projectId: 'smartstudentnotebook' });
-
-// const firebaseConfig = {
-// 	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-// 	authDomain: 'smartstudentnotebook.firebaseapp.com',
-// 	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-// 	projectId: 'smartstudentnotebook',
-// 	storageBucket: 'smartstudentnotebook.appspot.com',
-// 	messagingSenderId: '254968215542',
-// 	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-// 	measurementId: 'G-YDRCWDT5QJ',
-// };
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+firebase.initializeApp(firebaseConfig);
 
 describe('NotebookIntegrationTests', () => {
-	// let notebookService: NotebookService;
+	let notebookService: NotebookService;
 	let accountService: AccountService;
 	const randomNumber: number = Math.floor(Math.random() * 100000);
+	let notebookId = '';
+	let noteId = '';
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -73,8 +37,9 @@ describe('NotebookIntegrationTests', () => {
 			providers: [NotebookService, AccountService, NotificationService, UserService],
 		}).compile();
 		//
-		// notebookService = module.get<NotebookService>(NotebookService);
+		notebookService = module.get<NotebookService>(NotebookService);
 		accountService = module.get<AccountService>(AccountService);
+		jest.setTimeout(30000);
 	});
 
 	describe('createUser', () => {
@@ -106,44 +71,123 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	// describe('Create Notebook', () => {
-	// 	it('This function should create a new notebook and return the content of the created notebook', async () => {
-	// 		const notebook = {
-	// 			title: 'Test Title',
-	// 			author: 'Test Author',
-	// 			course: 'Test Course',
-	// 			description: 'Test Description',
-	// 			institution: 'Test Institution',
-	// 			private: true,
-	// 			tags: ['tag1', 'tag2'],
-	// 		};
-	//
-	// 		const result = await notebookService.createNotebook(notebook);
-	//
-	// 		expect(result.message).toBe('Successfully added notebook to user account');
-	// 		expect(result.notebook.title).toBe('Test Title');
-	// 		expect(result.notebook.author).toBe('Test Author');
-	// 		expect(result.notebook.course).toBe('Test Course');
-	// 		expect(result.notebook.description).toBe('Test Description');
-	// 		expect(result.notebook.institution).toBe('Test Institution');
-	// 		expect(result.notebook.private).toBe(true);
-	// 		expect(result.notebook.tags).toStrictEqual(['tag1', 'tag2']);
-	// 		expect(result.notebook.access).toStrictEqual([]);
-	// 	});
-	// });
-	//
-	// describe('Get a Users Notebooks', () => {
-	// 	it('This function should return al user notebooks(Only one notebook in this case)', async () => {
-	// 		const result = await notebookService.getUserNotebooks();
-	//
-	// 		expect(result[0].title).toBe('Test Title');
-	// 		expect(result[0].author).toBe('Test Author');
-	// 		expect(result[0].course).toBe('Test Course');
-	// 		expect(result[0].description).toBe('Test Description');
-	// 		expect(result[0].institution).toBe('Test Institution');
-	// 		expect(result[0].private).toBe(true);
-	// 		expect(result[0].tags).toStrictEqual(['tag1', 'tag2']);
-	// 		expect(result[0].access).toStrictEqual([]);
-	// 	});
-	// });
+	describe('Create Notebook', () => {
+		it('This function should create a new notebook and return the content of the created notebook', async () => {
+			const notebook = {
+				title: 'Test Title',
+				author: 'Test Author',
+				course: 'Test Course',
+				description: 'Test Description',
+				institution: 'Test Institution',
+				private: true,
+				tags: ['tag1', 'tag2'],
+			};
+
+			const result = await notebookService.createNotebook(notebook);
+
+			notebookId = result.notebook.notebookId;
+
+			expect(result.message).toBe('Successfully added notebook to user account');
+			expect(result.notebook.title).toBe('Test Title');
+			expect(result.notebook.author).toBe('Test Author');
+			expect(result.notebook.course).toBe('Test Course');
+			expect(result.notebook.description).toBe('Test Description');
+			expect(result.notebook.institution).toBe('Test Institution');
+			expect(result.notebook.private).toBe(true);
+			expect(result.notebook.tags).toStrictEqual(['tag1', 'tag2']);
+			expect(result.notebook.access).toStrictEqual([]);
+		});
+	});
+
+	describe('Get a Users Notebooks', () => {
+		it('This function should return al user notebooks(Only one notebook in this case)', async () => {
+			const result = await notebookService.getUserNotebooks();
+
+			expect(result[0].title).toBe('Test Title');
+			expect(result[0].author).toBe('Test Author');
+			expect(result[0].course).toBe('Test Course');
+			expect(result[0].description).toBe('Test Description');
+			expect(result[0].institution).toBe('Test Institution');
+			expect(result[0].notebookId).toBe(notebookId);
+			expect(result[0].private).toBe(true);
+			expect(result[0].tags).toStrictEqual(['tag1', 'tag2']);
+			expect(result[0].access).toStrictEqual([]);
+		});
+	});
+
+	describe('Get notebook', () => {
+		it('This function should return al user notebooks(Only one notebook in this case)', async () => {
+			const result = await notebookService.getNotebook(notebookId);
+
+			expect(result.title).toBe('Test Title');
+			expect(result.author).toBe('Test Author');
+			expect(result.course).toBe('Test Course');
+			expect(result.description).toBe('Test Description');
+			expect(result.institution).toBe('Test Institution');
+			expect(result.notebookId).toBe(notebookId);
+			expect(result.private).toBe(true);
+			expect(result.tags).toStrictEqual(['tag1', 'tag2']);
+			expect(result.access).toStrictEqual([]);
+		});
+	});
+
+	describe('Update Notebook Content', () => {
+		it('Test should update notebook content to new content', async () => {
+			const notebook = {
+				title: 'Updated Title',
+				author: 'Updated Author',
+				course: 'Updated Course',
+				description: 'Updated Description',
+				institution: 'Updated Institution',
+				notebookId,
+				private: false,
+				tags: ['update tag1', 'update tag2'],
+			};
+
+			const result = await notebookService.updateNotebook(notebook);
+
+			const updatedNotebook = await notebookService.getNotebook(notebookId);
+
+			expect(result.message).toBe('Updated notebook successful!');
+			expect(updatedNotebook.title).toBe('Updated Title');
+			expect(updatedNotebook.author).toBe('Updated Author');
+			expect(updatedNotebook.course).toBe('Updated Course');
+			expect(updatedNotebook.description).toBe('Updated Description');
+			expect(updatedNotebook.institution).toBe('Updated Institution');
+			expect(updatedNotebook.private).toBe(false);
+			expect(updatedNotebook.tags).toStrictEqual(['update tag1', 'update tag2']);
+		});
+	});
+
+	describe('Create a new Note', () => {
+		it('Test should create a new note on the specified notebook', async () => {
+			const note = {
+				name: 'Test Note Title',
+				notebookId,
+				description: 'Test Note Description',
+			};
+
+			const result = await notebookService.createNote(note);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			noteId = result.noteId;
+
+			expect(result.message).toBe('Creating a note was successful!');
+		});
+	});
+
+	describe('Delete Notebook', () => {
+		it('Test should delete all instances of the specified notebook', async () => {
+			const result = await notebookService.deleteNotebook(notebookId);
+
+			expect(result.message).toBe('Successfully delete notebook!');
+		});
+	});
+
+	describe('Delete User', () => {
+		it('Test should delete a user and all files relating to that user', async () => {
+			const result = await accountService.deleteUser();
+
+			expect(result.message).toBe('Successfully deleted user!');
+		});
+	});
 });
