@@ -97,18 +97,19 @@ export class SharedWithMeComponent implements OnInit {
 	getUserNotebooks() {
 		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
 			(notebooks) => {
-				console.log(notebooks);
-				let temp = [];
+				// console.log(notebooks);
+				let temp: any[] = [];
+				let index = 0;
 				const tree: { name: any; id: any }[] = [];
 
 				notebooks.forEach((notebook: any) => {
 					temp = notebook.access;
 
-					temp = temp.findIndex(
+					index = temp.findIndex(
 						(a: any) => a.userId === this.user.uid
 					);
 
-					if (temp >= 0) {
+					if (index >= 0) {
 						this.notebooks.push(notebook);
 
 						this.childrenSize += 1;
