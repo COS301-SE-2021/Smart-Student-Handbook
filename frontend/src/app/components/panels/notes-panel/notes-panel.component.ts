@@ -180,9 +180,19 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param _noteBookId
 	 * @param _noteId
 	 * @param _title
+	 * @param _notebookTitle
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_noteBookId: string, _noteId: string, _title: string) {}
+	openNotebook(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_noteBookId: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_noteId: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_title: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_notebookTitle: string
+	) {}
 
 	/**
 	 * Edit the details of a notebook
@@ -217,7 +227,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 				this.openNotebook(
 					this.notebookId,
 					newNote.id,
-					newNote.notebook.name
+					newNote.notebook.name,
+					this.notebookTitle
 				);
 			});
 	}

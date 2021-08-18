@@ -89,7 +89,8 @@ export class NotesComponent implements OnInit {
 		this.notebookEventEmitterService.LoadEditor(
 			this.notebookId,
 			noteId,
-			title
+			title,
+			''
 		);
 	}
 

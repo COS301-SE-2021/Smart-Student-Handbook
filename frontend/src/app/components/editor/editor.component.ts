@@ -107,7 +107,7 @@ export class EditorComponent implements OnInit {
 
 	noteId: string = '';
 
-	notebookTitle: string = 'Smart Student';
+	noteTitle: string = 'Smart Student';
 
 	static staticNotebookID: string = '';
 
@@ -126,6 +126,8 @@ export class EditorComponent implements OnInit {
 	private: boolean = true;
 
 	opened: boolean = false;
+
+	notebookTitle = '';
 
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
@@ -159,8 +161,14 @@ export class EditorComponent implements OnInit {
 		if (this.notebookEventEmitterService.subsVar === undefined) {
 			this.notebookEventEmitterService.subsVar =
 				this.notebookEventEmitterService.loadEmitter.subscribe(
-					({ notebookId, noteId, title }) => {
-						this.loadEditor(notebookId, noteId, title);
+					({ notebookId, noteId, title, notebookTitle }) => {
+						this.notebookTitle = notebookTitle;
+						this.loadEditor(
+							notebookId,
+							noteId,
+							title,
+							notebookTitle
+						);
 					}
 				);
 
@@ -179,6 +187,7 @@ export class EditorComponent implements OnInit {
 	}
 
 	getNotebook(notebookId: string): void {
+		console.log('----------------');
 		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
 			this.date = data.date;
 			this.notebook = data.notebook;
@@ -195,8 +204,15 @@ export class EditorComponent implements OnInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
+	 * @param notebookTitle
 	 */
-	async loadEditor(notebookId: string, noteId: string, title: string) {
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		this.notebookTitle = notebookTitle;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.getNotebook(notebookId);
@@ -312,7 +328,7 @@ export class EditorComponent implements OnInit {
 		/**
 		 * Get the specific notebook details with notebook id
 		 */
-		this.notebookTitle = title;
+		this.noteTitle = title;
 		this.noteId = noteId;
 		this.notebookID = notebookId;
 
@@ -343,7 +359,7 @@ export class EditorComponent implements OnInit {
 										id: 'jTFbQOD8j3',
 										type: 'header',
 										data: {
-											text: `${this.notebookTitle} 🚀`,
+											text: `${this.noteTitle} 🚀`,
 											level: 2,
 										},
 									},
@@ -429,7 +445,7 @@ export class EditorComponent implements OnInit {
 					const editor = this.Editor;
 					editor.clear();
 
-					this.notebookTitle = '';
+					this.noteTitle = '';
 
 					this.removeNoteCard(this.noteId);
 
@@ -448,7 +464,7 @@ export class EditorComponent implements OnInit {
 		if (this.Editor) this.Editor.destroy();
 		// @ts-ignore
 		this.Editor = undefined;
-		this.notebookTitle = 'Smart Student';
+		this.noteTitle = 'Smart Student';
 	}
 
 	/**
@@ -532,7 +548,12 @@ export class EditorComponent implements OnInit {
 	addCollaborator() {
 		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.noteMore
-			.requestCollaborator(this.user.uid, this.notebookID)
+			.requestCollaborator(
+				this.user.uid,
+				this.notebookID,
+				this.notebookTitle
+			)
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			.subscribe((collaborator: any) => {
 				// this.collaborators.push(collaborator);
 			});

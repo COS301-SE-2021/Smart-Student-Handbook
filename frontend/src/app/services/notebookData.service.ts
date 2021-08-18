@@ -30,6 +30,6 @@ export class NotebookDataService {
 
 		this.idState = this.ids.asObservable();
 
-		console.log('CHANGED');
+		// console.log('CHANGED');
 	}
 }

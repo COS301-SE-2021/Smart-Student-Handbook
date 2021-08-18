@@ -34,7 +34,7 @@
             <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
               <mat-button-toggle-group class="collaborationBtnGroup float-left" name="fontStyle" aria-label="Font Style"
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
-                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID)">Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID, notification.notebookTitle)">Accept</mat-button-toggle>
                 <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault(); decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
@@ -45,7 +45,7 @@
             <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
               <mat-button-toggle-group class="collaborationBtnGroup" name="fontStyle" aria-label="Font Style"
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
-                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID)">Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault(); accept(notification.userID, notification.notebookID, notification.notebookTitle)">Accept</mat-button-toggle>
                 <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault(); decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
               </mat-button-toggle-group>
             </div>

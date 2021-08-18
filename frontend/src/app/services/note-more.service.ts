@@ -14,6 +14,8 @@ import { NotificationService } from '@app/services/notification.service';
 export class NoteMoreService {
 	user: any;
 
+	title: string;
+
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
@@ -23,7 +25,11 @@ export class NoteMoreService {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 	}
 
-	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
+	requestCollaborator(
+		senderId: string,
+		notebookID: string,
+		notebookTitle: string
+	): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -47,9 +53,13 @@ export class NoteMoreService {
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				console.log(senderId, result.id);
 				this.notificationService
-					.sendCollaborationRequest(senderId, result.id, notebookID)
+					.sendCollaborationRequest(
+						senderId,
+						result.id,
+						notebookID,
+						notebookTitle
+					)
 					.subscribe((val) => {
 						console.log(val);
 					});
@@ -106,9 +116,12 @@ export class NoteMoreService {
 			this.notebookService
 				.getUserNotebooks(this.user.uid)
 				.subscribe((notebooks) => {
+					// console.log(notebooks);
 					for (let i = 0; i < notebooks.length; i += 1) {
-						if (notebooks[i].notebookId === notebookId)
+						if (notebooks[i].notebookId === notebookId) {
 							notebook = notebooks[i];
+							// console.log(notebooks);
+						}
 					}
 
 					// Push tags
