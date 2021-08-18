@@ -5,8 +5,9 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
-import { createNotificationDto, NotebookDto } from '@app/models';
+// import { createNotificationDto, NotebookDto } from '@app/models';
 import { NotificationService } from '@app/services/notification.service';
+import { NotebookDto } from '@app/models';
 
 @Injectable({
 	providedIn: 'root',
@@ -51,7 +52,8 @@ export class NoteMoreService {
 			},
 		});
 
-		return Observable.create((observer: any) => {
+		return Observable.create(() => {
+			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
 				this.notificationService
 					.sendCollaborationRequest(

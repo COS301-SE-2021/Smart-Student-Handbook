@@ -2,11 +2,11 @@
 /* eslint-disable no-param-reassign */
 import {
 	AfterContentInit,
-	AfterViewInit,
+	// AfterViewInit,
 	Component,
 	OnInit,
 	ViewChild,
-	ViewEncapsulation,
+	// ViewEncapsulation,
 } from '@angular/core';
 // import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';

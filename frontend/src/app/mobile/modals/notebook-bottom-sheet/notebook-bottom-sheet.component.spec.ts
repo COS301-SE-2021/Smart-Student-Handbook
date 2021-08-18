@@ -17,7 +17,7 @@ import {
 } from '@angular/material/bottom-sheet';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ConfirmDeleteComponent } from '@app/components';
+// import { ConfirmDeleteComponent } from '@app/components';
 import {
 	NotebookService,
 	NoteMoreService,

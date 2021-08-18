@@ -17,11 +17,14 @@ import { environment } from '@environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
 const FirestoreStub = {
-	collection: (name: string) => ({
-		doc: (_id: string) => ({
+	collection: () => ({
+		// name: string
+		doc: () => ({
+			// _id: string
 			valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
-			set: (_d: any) =>
-				new Promise<void>((resolve, _reject) => resolve()),
+			set: () =>
+				// _d: any
+				new Promise<void>((resolve) => resolve()), // , _reject
 		}),
 	}),
 };

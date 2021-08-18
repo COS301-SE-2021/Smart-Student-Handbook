@@ -4,7 +4,7 @@ import {
 	NoteMoreService,
 	NotificationService,
 } from '@app/services';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
@@ -55,7 +55,8 @@ export class NotificationsComponent implements OnInit {
 		// this.noteMoreService.addCollaborator(notebookID);
 	}
 
-	decline(userId: string, notebookId: string) {
+	decline() {
+		// userId: string, notebookId: string
 		// this.notificationService.updateRead(id);
 	}
 
