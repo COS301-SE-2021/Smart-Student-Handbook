@@ -125,6 +125,28 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		this.notebookService
 			.getNotes(notebookId) // this.user.uid
 			.subscribe((result) => {
+				const months = [
+					'Jan',
+					'Feb',
+					'Mar',
+					'Apr',
+					'May',
+					'Jun',
+					'Jul',
+					'Aug',
+					'Sep',
+					'Oct',
+					'Nov',
+					'Dec',
+				];
+				const dateTime = new Date(result[0].createDate);
+
+				const year = dateTime.getFullYear();
+				const month = months[dateTime.getMonth()];
+				const date = dateTime.getDate();
+				const time = `${month} ${date} ${year}`;
+
+				console.log(time);
 				// const noteHolderDiv = document.getElementById('noteHolderDiv');
 
 				for (let i = 0; i < result.length; i += 1) {

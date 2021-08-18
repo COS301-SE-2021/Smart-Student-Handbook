@@ -27,7 +27,7 @@
       <div id="noteHolderDiv">
         <mat-card
           class="card text-left"
-          *ngFor="let note of notes"
+          *ngFor="let note of notes; let i = index"
         >
           <button
             mat-icon-button
@@ -41,6 +41,7 @@
             <mat-card-header>
               <mat-card-subtitle id="date">
                 JUNE 17 2021
+<!--                {{dates[i]}}-->
               </mat-card-subtitle>
 
               <mat-card-title id="noteCardTitle">
