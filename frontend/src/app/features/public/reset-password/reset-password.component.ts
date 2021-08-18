@@ -25,6 +25,10 @@ export class ResetPasswordComponent {
 		private snackBar: MatSnackBar,
 		private accountService: AccountService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		// setup the form and validation
@@ -37,11 +41,6 @@ export class ResetPasswordComponent {
 				validator: MustMatch('password', 'confirmPassword'),
 			}
 		);
-
-		// redirect to home if already logged in
-		if (this.accountService.getLoginState) {
-			this.router.navigate(['/home']);
-		}
 	}
 
 	onSubmit() {

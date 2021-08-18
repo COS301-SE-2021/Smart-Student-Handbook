@@ -9,3 +9,4 @@ export * from './note-more.service';
 export * from './reset-password.service';
 export * from './notes.service';
 export * from './notification.service';
+export * from './notebookData.service';

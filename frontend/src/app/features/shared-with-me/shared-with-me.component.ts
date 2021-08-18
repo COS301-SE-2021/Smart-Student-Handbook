@@ -99,52 +99,53 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks: any[]) => {
-				// console.log(notebooks);
-				let temp: any[] = [];
-				let index = 0;
-				const tree: { name: any; id: any }[] = [];
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					// console.log(notebooks);
+					let temp: any[] = [];
+					let index = 0;
+					const tree: { name: any; id: any }[] = [];
 
-				notebooks.forEach((notebook: any) => {
-					temp = notebook.access;
+					notebooks.forEach((notebook: any) => {
+						temp = notebook.access;
 
-					index = temp.findIndex(
-						(a: any) => a.userId === this.user.uid
-					);
+						index = temp.findIndex(
+							(a: any) => a.userId === this.user.uid
+						);
 
-					if (index >= 0) {
-						this.notebooks.push(notebook);
+						if (index >= 0) {
+							this.notebooks.push(notebook);
 
-						this.childrenSize += 1;
+							this.childrenSize += 1;
 
-						const child = {
-							name: notebook.title,
-							id: notebook.notebookId,
-							// children: childArr,
-						};
+							const child = {
+								name: notebook.title,
+								id: notebook.notebookId,
+								// children: childArr,
+							};
 
-						tree.push(child);
+							tree.push(child);
+						}
+
+						index = 0;
+					});
+
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'Shared With Me',
+								id: '',
+								children: tree,
+							},
+						];
 					}
-
-					index = 0;
-				});
-
-				if (this.childrenSize > 0) {
-					this.dataSource.data = [
-						{
-							name: 'Shared With Me',
-							id: '',
-							children: tree,
-						},
-					];
+				},
+				(error) => {
+					// eslint-disable-next-line no-console
+					console.log(error.message);
 				}
-			},
-			(error) => {
-				// eslint-disable-next-line no-console
-				console.log(error.message);
-			}
-		);
+			);
 	}
 
 	updateNotebook(notebookId: string) {

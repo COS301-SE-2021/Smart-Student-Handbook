@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
 	MatTreeFlatDataSource,
 	MatTreeFlattener,
@@ -11,9 +11,8 @@ import {
 	NoteMoreService,
 	OpenNotebookPanelService,
 } from '@app/services';
-import { ConfirmDeleteComponent, NotesPanelComponent } from '@app/components';
+import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { not } from 'rxjs/internal-compatibility';
 import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
@@ -99,68 +98,69 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks: any[]) => {
-				let temp: any[] = [];
-				let index = 0;
-				const tree: { name: any; id: any }[] = [];
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					let temp: any[] = [];
+					let index = 0;
+					const tree: { name: any; id: any }[] = [];
 
-				notebooks.forEach((notebook: any) => {
-					temp = notebook.access;
+					notebooks.forEach((notebook: any) => {
+						temp = notebook.access;
 
-					if (temp.length > 0) {
-						index = temp.findIndex(
-							(a: any) => a.userId !== this.user.uid
-						);
+						if (temp.length > 0) {
+							index = temp.findIndex(
+								(a: any) => a.userId !== this.user.uid
+							);
+						}
+
+						if (index >= 0 || temp.length === 0) {
+							this.notebooks.push(notebook);
+
+							this.childrenSize += 1;
+
+							const child = {
+								name: notebook.title,
+								id: notebook.notebookId,
+								// children: childArr,
+							};
+
+							tree.push(child);
+						}
+
+						index = 0;
+					});
+					// console.log(notebooks);
+					// this.notebooks = notebooks;
+
+					// const tree = [];
+					// for (let i = 0; i < notebooks.length; i += 1) {
+					// 	this.childrenSize += 1;
+					//
+					// 	const child = {
+					// 		name: notebooks[i].title,
+					// 		id: notebooks[i].notebookId,
+					// 		// children: childArr,
+					// 	};
+					//
+					// 	tree.push(child);
+					// }
+
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: tree,
+							},
+						];
 					}
-
-					if (index >= 0 || temp.length === 0) {
-						this.notebooks.push(notebook);
-
-						this.childrenSize += 1;
-
-						const child = {
-							name: notebook.title,
-							id: notebook.notebookId,
-							// children: childArr,
-						};
-
-						tree.push(child);
-					}
-
-					index = 0;
-				});
-				// console.log(notebooks);
-				// this.notebooks = notebooks;
-
-				// const tree = [];
-				// for (let i = 0; i < notebooks.length; i += 1) {
-				// 	this.childrenSize += 1;
-				//
-				// 	const child = {
-				// 		name: notebooks[i].title,
-				// 		id: notebooks[i].notebookId,
-				// 		// children: childArr,
-				// 	};
-				//
-				// 	tree.push(child);
-				// }
-
-				if (this.childrenSize > 0) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: tree,
-						},
-					];
+				},
+				(error) => {
+					// eslint-disable-next-line no-console
+					console.log(error.message);
 				}
-			},
-			(error) => {
-				// eslint-disable-next-line no-console
-				console.log(error.message);
-			}
-		);
+			);
 	}
 
 	updateNotebook(notebookId: string) {
