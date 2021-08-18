@@ -6,7 +6,7 @@ from keras.saving.save import load_model
 import numpy as np
 from numpy.core.fromnumeric import ptp
 import pandas as pd
-import joblib
+
 
 
 class SmartAssistModel():
@@ -76,38 +76,66 @@ class SmartAssistModel():
         self.predict_model = Model(inputs= [data, name, tags, author, institution, course, soup], outputs= [merged_all, soup_flat])
 
 
-        self.model.compile(optimizer = 'Adam', loss = 'mse', loss_weights=[0.1,0.25,0.25,0.25,0.25,0.25])
+        self.model.compile(optimizer = 'Adam', loss = 'mse', loss_weights=[0.10, 0.20, 0.20, 0.10, 0.20, 0.20])
         self.predict_model.compile(optimizer = 'Adam', loss = 'mse')
 
-        
-        print(self.model.summary())
-
-
-        # [print(i.shape, i.dtype) for i in self.model.inputs]
-        # [print(o.shape, o.dtype) for o in self.model.outputs]
-        # [print(l.name, l.input_shape, l.dtype) for l in self.model.layers]
-        
         return self.model
 
     
-    def trainModel(self, dataX, dataY, validationData):
+    def train(self, n_positive=5000):
+        self.data.generateFinalData(n_positive=n_positive)
+        self.data.generateTrainTestData()
+
+        xtrain = {
+            'data': np.asarray(self.data.finalSetXTrain[:,0]).astype('float32'), 
+            'name': np.asarray(self.data.finalSetXTrain[:,1]).astype('float32'), 
+            'tags': np.asarray(self.data.finalSetXTrain[:,2]).astype('float32'), 
+            'author': np.asarray(self.data.finalSetXTrain[:,3]).astype('float32'), 
+            'institution': np.asarray(self.data.finalSetXTrain[:,4]).astype('float32'),
+            'course': np.asarray(self.data.finalSetXTrain[:,5]).astype('float32'),
+            'soup': np.asarray(self.data.finalSetXTrain[:,6].tolist()).astype('float32')
+        }
+
+        ytrain = self.data.finalSetYTrain
+
+        xtest = {
+            'data': np.asarray(self.data.finalSetXTest[:,0]).astype('float32'), 
+            'name': np.asarray(self.data.finalSetXTest[:,1]).astype('float32'), 
+            'tags': np.asarray(self.data.finalSetXTest[:,2]).astype('float32'), 
+            'author': np.asarray(self.data.finalSetXTest[:,3]).astype('float32'), 
+            'institution': np.asarray(self.data.finalSetXTest[:,4]).astype('float32'),
+            'course': np.asarray(self.data.finalSetXTest[:,5]).astype('float32'),
+            'soup': np.asarray(self.data.finalSetXTest[:,6].tolist()).astype('float32')
+        }
+
+        ytest = self.data.finalSetYTest
+
+        self.loadSmartModel()
+        self.trainModel(dataX=xtrain, dataY=ytrain, validationData=())
+        self.evaluteModel(dataX=xtest, dataY=ytest)
+
+
+    def trainModel(self, dataX, dataY, validationData, batch_size = 64, epochs = 16, steps_per_epoch = 8):
         if len(validationData) == 0:
-            embed_model = self.model.fit(dataX, dataY, batch_size = 128, epochs = 32, steps_per_epoch = 16, verbose = 2)
+            embed_model = self.model.fit(dataX, dataY, batch_size = batch_size, epochs = epochs, steps_per_epoch = steps_per_epoch, verbose = 2)
         else:
-            embed_model = self.model.fit(dataX, dataY, batch_size = 16, epochs = 16, steps_per_epoch = 8, validation_data=validationData, validation_freq=1, validation_batch_size=8, verbose = 2)
+            embed_model = self.model.fit(dataX, dataY, batch_size = batch_size, epochs = epochs, steps_per_epoch = steps_per_epoch, validation_data=validationData, validation_freq=1, validation_batch_size=8, verbose = 2)
             
-        self.model.save('smartAssist/models/smartAssistModel.h5')
-        self.predict_model.save('smartAssist/models/smartAssistPredictModel.h5')
+        self.model.save('models/smartAssistModel.h5')
+        self.predict_model.save('models/smartAssistPredictModel.h5')
         self.saveEmbeddingWeights()
 
-    def evaluteModel(self, dataX, dataY):
-        self.model.evaluate(dataX, dataY, batch_size=32)
+
+    def evaluteModel(self, dataX, dataY, batch_size=32):
+        self.model.evaluate(dataX, dataY, batch_size=batch_size)
+
 
     def loadSmartModel(self):
-        self.model = load_model('smartAssist/models/smartAssistModel.h5')
-        self.predict_model = load_model('smartAssist/models/smartAssistPredictModel.h5')
-        with open("smartAssist/models/embeddingWeights.npy", 'rb') as f:
+        self.model = load_model('models/smartAssistModel.h5')
+        self.predict_model = load_model('models/smartAssistPredictModel.h5')
+        with open("models/embeddingWeights.npy", 'rb') as f:
             self.weights = np.load(f)
+
 
     def getRecommendations(self, itemData):
         item = {
@@ -122,10 +150,10 @@ class SmartAssistModel():
 
         return self.predict(item)
 
+
     def predict(self, item):
         
         out = self.predict_model.predict(x=item)
-        print(out[1][0].shape)
         weight = out[1][0]
         weight = weight / np.linalg.norm(weight)
 
@@ -133,17 +161,9 @@ class SmartAssistModel():
 
 
     def getRecommendationsFromPrediction(self, predictweight):
-        # with open("smartAssist/models/embeddingWeights.npy", 'rb') as f:
-        #     weights = np.load(f)
-        
-        # weights = self.weight
-        print(self.weights.shape)
-
-
         dists = np.dot(self.weights, predictweight)
         sorted_dists = np.argsort(dists)
 
-        
         closest = sorted_dists[-10:]
 
         max_width = 48
@@ -151,10 +171,10 @@ class SmartAssistModel():
         ret = list(())
 
         for idx, c in enumerate(reversed(closest)):
-            print(f'{idx+1}\t{self.data.index_data[self.data.index_dataSet[c]]:{max_width}} Similarity: {dists[c]:.{2}}\n\t{self.data.data_soup[self.data.index_data[self.data.index_dataSet[c]]]}')#, [i.tolist() for i in self.data.dataList if i[0] == self.data.index_data[c]][0]
             ret.append(self.data.index_data[self.data.index_dataSet[c]])
 
         return ret
+
 
     def saveEmbeddingWeights(self):
         itemData = self.data.dataSet
@@ -172,7 +192,6 @@ class SmartAssistModel():
         weight = self.predict_model.predict(x=item)[1]
 
         self.weight = weight / np.linalg.norm(weight, axis = 1).reshape((-1, 1))
-        print(self.weight.shape)
 
-        with open("smartAssist/models/embeddingWeights.npy", 'wb') as f:
+        with open("models/embeddingWeights.npy", 'wb') as f:
             np.save(f, self.weight)

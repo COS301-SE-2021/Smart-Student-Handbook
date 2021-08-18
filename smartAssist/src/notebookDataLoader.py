@@ -24,37 +24,19 @@ class SmartAssistData:
         pass
 
     def loadData(self, count=5000):
-        dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+
+        if dataRaw.shape[0] == 0:
+            print("no items")
+            return
 
         print("Column Names:",list(dataRaw.columns))
-        # print(dataRaw)
 
-
-        # metadata[['title', 'cast', 'director', 'keywords', 'institutions', 'soup']].rename(columns=)
-        # dataRaw['noteId'] = dataRaw['noteId'].apply(eval)
-        # dataRaw['name'] = dataRaw['name'].apply(eval)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
-        # dataRaw['author'] = dataRaw['author'].apply(eval)
-        # dataRaw['institution'] = dataRaw['institution'].apply(eval)
-        # dataRaw['course'] = dataRaw['course'].apply(eval)
-        
-        # dataRaw = dataRaw.drop([12892, 13542, 13689, 13696, 13750, 13854])
 
-        # remove = []
-        # for index, row in dataRaw.iterrows():
-        #     try:
-        #         print(index,row['cast'])
-        #         if len(row['cast']) == 0 :
-        #             remove.append(index)
-        #     except:
-        #         remove.append(index)
-        # print(remove)
-        # dataRaw = dataRaw.drop(remove)
         dataRaw["soup"] = ""
 
         self.dataList = dataRaw[['noteId', 'name', 'tags', 'author', 'institution', 'course', 'soup']][:count].to_numpy()
-
-        # [print(d) for d in self.dataList]
 
         vocab = np.array([])
         self.maxLen = -1
@@ -72,10 +54,6 @@ class SmartAssistData:
                 self.maxLen = len(soup.split())
             
             vocab = np.unique(np.append(vocab, np.array(soup.split())))
-
-        
-        # [print(d) for d in self.dataList[:5]]
-
 
         self.data_index = {data[0]: idx for idx, data in enumerate(self.dataList)}
         self.index_data = {idx: data for data, idx in self.data_index.items()}
@@ -131,9 +109,6 @@ class SmartAssistData:
         soupOH = []
 
         for i,data in enumerate(self.dataList):
-            if soupTemp[i] != data[6]:
-                print("OH SHIT")
-
             soupOH.append(one_hot(data[6], self.vocabSize))
 
         soupPadded = pad_sequences(soupOH, padding='post',value=0.0)
@@ -150,9 +125,8 @@ class SmartAssistData:
         self.dataSet_index = {data[0]: idx for idx, data in enumerate(self.dataSet)}
         self.index_dataSet = {idx: data[0] for idx, data in enumerate(self.dataSet)}
 
-        print(self.dataSet[:5])
         self.dataSet = np.array(self.dataSet)
-        print(self.dataSet.shape)
+        print("Dataset Shape:", self.dataSet.shape)
         return self.dataList, self.dataSet
 
 
@@ -194,6 +168,7 @@ class SmartAssistData:
 
         return self.finalSet, self.finalSetX, self.finalSetY
         
+
     def generateTrainTestData(self, test_size=0.2):
         self.finalSetTrain, self.finalSetTest = train_test_split(self.finalSet, test_size=test_size, random_state=1)
 
@@ -211,6 +186,7 @@ class SmartAssistData:
 
         return self.finalSetTrain, self.finalSetTest
 
+
     def getIncorrectDataItem(self):
         item = self.dataSet[random.randrange(len(self.dataSet))].tolist()
         randitem = self.getRandomDataItem().tolist()
@@ -225,6 +201,7 @@ class SmartAssistData:
         trueArr[num] = -1
 
         return item, trueArr
+
 
     def getRandomDataItem(self):
         
@@ -245,11 +222,33 @@ class SmartAssistData:
 
 
     def addData(self, dataFrame):
-        dataRaw = pd.read_csv("smartAssist/NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
         combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
-        combined.to_csv("smartAssist/NotebookDataset/Notebooks.csv", index=False)
+        combined.to_csv("NotebookDataset/Notebooks.csv", index=False)
+
+
+    def removeData(self, dataFrame):
+        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw['tags'] = dataRaw['tags'].apply(eval)
+
+        indices = dataRaw[dataRaw["noteId"] == dataFrame["noteId"]].index
+        
+        dataRaw.drop(index=indices,inplace=True)
+        dataRaw.to_csv("NotebookDataset/Notebooks.csv", index=False)
+
+    def editData(self, dataFrame):
+        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw['tags'] = dataRaw['tags'].apply(eval)
+
+        indices = dataRaw[dataRaw["noteId"] == dataFrame["noteId"]].index
+        
+        dataRaw.drop(index=indices,inplace=True)
+
+        combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
+        combined.to_csv("NotebookDataset/Notebooks.csv", index=False)
+        
 
     def createSoup(self, name, tags, author, institution, course):
         sep = " "
@@ -265,9 +264,11 @@ class SmartAssistData:
 
 
 
-# data = SmartAssistData()  
+data = SmartAssistData()  
 
 # data.loadData()
+
+
 
 # item = data.getRandomDataItem()
 

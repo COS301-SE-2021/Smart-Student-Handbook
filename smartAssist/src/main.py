@@ -23,8 +23,6 @@ xtrain = {
     'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
     }
 
-print(xtrain['soup'].shape)
-
 ytrain = data.finalSetYTrain
 
 xtest = {
@@ -39,12 +37,12 @@ xtest = {
 
 ytest = data.finalSetYTest
 
-smartmodel.buildModel()
+# smartmodel.buildModel()
 
 # smartmodel.loadSmartModel()
 
-smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
-smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
+# smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
+# smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
 smartmodel.loadSmartModel()
 
@@ -72,5 +70,5 @@ item = {
    
 # print(item['soup'].shape)
 # print(item['data'].shape)
-smartmodel.saveEmbeddingWeights()
+# smartmodel.saveEmbeddingWeights()
 print(smartmodel.predict(item))
