@@ -4,7 +4,8 @@ import {
 	NoteMoreService,
 	NotificationService,
 } from '@app/services';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
+import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-notifications',
@@ -19,7 +20,8 @@ export class NotificationsComponent implements OnInit {
 	constructor(
 		private notificationService: NotificationService,
 		private noteMoreService: NoteMoreService,
-		private notebookService: NotebookService
+		private notebookService: NotebookService,
+		private sharedWithMeService: SharedWithMeService
 	) {}
 
 	/* notificationList: Observable<any[]> =
@@ -29,14 +31,16 @@ export class NotificationsComponent implements OnInit {
 	ngOnInit(): void {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		this.notificationService
-			.getUserNotifications()
-			.subscribe((notifications) => {
-				this.notifications = notifications;
-			});
+		if (this.user)
+			this.notificationService
+				.getUserNotifications(this.user.uid)
+				.subscribe((notifications) => {
+					this.notifications = notifications;
+				});
 	}
 
-	accept(userId: string, notebookId: string) {
+	accept(userId: string, notebookId: string, notebookTitle: string) {
+		this.sharedWithMeService.setNotebook(notebookId, notebookTitle);
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,
@@ -51,6 +55,7 @@ export class NotificationsComponent implements OnInit {
 		// this.noteMoreService.addCollaborator(notebookID);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	decline(userId: string, notebookId: string) {
 		// this.notificationService.updateRead(id);
 	}

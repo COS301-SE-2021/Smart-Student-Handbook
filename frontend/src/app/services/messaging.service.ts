@@ -28,6 +28,7 @@ export class MessagingService {
 	) {
 		firebase.initializeApp(environment.firebase);
 
+		// if (firebase.messaging.isSupported())
 		this.messaging = firebase.messaging();
 	}
 

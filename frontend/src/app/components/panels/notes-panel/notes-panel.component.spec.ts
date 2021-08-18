@@ -3,6 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NotesPanelComponent } from '@app/components';
+import { MaterialModule } from '@app/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('NotesPanelComponent', () => {
 	let component: NotesPanelComponent;
@@ -10,8 +13,15 @@ describe('NotesPanelComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [
+				MatSidenavModule,
+				BrowserAnimationsModule,
+				MaterialModule,
+				HttpClientTestingModule,
+			],
 			declarations: [NotesPanelComponent],
-			imports: [MatSidenavModule, BrowserAnimationsModule],
+			providers: [], // Some stubs used here
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
 	});
 

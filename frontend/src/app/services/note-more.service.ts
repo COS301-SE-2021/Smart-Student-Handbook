@@ -5,14 +5,17 @@ import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
-import { createNotificationDto, NotebookDto } from '@app/models';
+// import { createNotificationDto, NotebookDto } from '@app/models';
 import { NotificationService } from '@app/services/notification.service';
+import { NotebookDto } from '@app/models';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class NoteMoreService {
 	user: any;
+
+	title: string;
 
 	constructor(
 		private notebookService: NotebookService,
@@ -23,7 +26,11 @@ export class NoteMoreService {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 	}
 
-	requestCollaborator(senderId: string, notebookID: string): Observable<any> {
+	requestCollaborator(
+		senderId: string,
+		notebookID: string,
+		notebookTitle: string
+	): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -45,11 +52,16 @@ export class NoteMoreService {
 			},
 		});
 
-		return Observable.create((observer: any) => {
+		return Observable.create(() => {
+			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
-				console.log(senderId, result.id);
 				this.notificationService
-					.sendCollaborationRequest(senderId, result.id, notebookID)
+					.sendCollaborationRequest(
+						senderId,
+						result.id,
+						notebookID,
+						notebookTitle
+					)
 					.subscribe((val) => {
 						console.log(val);
 					});
@@ -106,9 +118,12 @@ export class NoteMoreService {
 			this.notebookService
 				.getUserNotebooks(this.user.uid)
 				.subscribe((notebooks) => {
+					// console.log(notebooks);
 					for (let i = 0; i < notebooks.length; i += 1) {
-						if (notebooks[i].notebookId === notebookId)
+						if (notebooks[i].notebookId === notebookId) {
 							notebook = notebooks[i];
+							// console.log(notebooks);
+						}
 					}
 
 					// Push tags
