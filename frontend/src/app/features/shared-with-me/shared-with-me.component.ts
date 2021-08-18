@@ -97,13 +97,13 @@ export class SharedWithMeComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		if(this.user)
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks: any[]) => {
-				// console.log(notebooks);
-				let temp: any[] = [];
-				let index = 0;
-				const tree: { name: any; id: any }[] = [];
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					// console.log(notebooks);
+					let temp: any[] = [];
+					let index = 0;
+					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
 						temp = notebook.access;
@@ -123,11 +123,11 @@ export class SharedWithMeComponent implements OnInit {
 								// children: childArr,
 							};
 
-						tree.push(child);
-					}
+							tree.push(child);
+						}
 
-					index = 0;
-				});
+						index = 0;
+					});
 
 					if (this.childrenSize > 0) {
 						this.dataSource.data = [

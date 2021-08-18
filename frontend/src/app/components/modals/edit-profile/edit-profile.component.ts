@@ -58,18 +58,20 @@ export class EditProfileComponent implements OnInit {
 	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		// eslint-disable-next-line no-underscore-dangle
-		// @ts-ignore
-		// eslint-disable-next-line no-underscore-dangle
-		const milliseconds: number = data.dateJoined._seconds * 1000;
-		// eslint-disable-next-line no-underscore-dangle
-		const dateObject = new Date(milliseconds);
-		this.date = dateObject.toLocaleString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		});
+		if (data.dateJoined) {
+			// eslint-disable-next-line no-underscore-dangle
+			// @ts-ignore
+			// eslint-disable-next-line no-underscore-dangle
+			const milliseconds: number = data.dateJoined._seconds * 1000;
+			// eslint-disable-next-line no-underscore-dangle
+			const dateObject = new Date(milliseconds);
+			this.date = dateObject.toLocaleString('en-US', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			});
+		}
 	}
 
 	ngOnInit() {

@@ -16,15 +16,17 @@ export class HomeComponent {
 	constructor(private router: Router, private dialog: MatDialog) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		// eslint-disable-next-line no-underscore-dangle
-		const milliseconds: number = this.user.dateJoined._seconds * 1000;
-		const dateObject = new Date(milliseconds);
-		this.date = dateObject.toLocaleString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		});
+		if (this.user) {
+			// eslint-disable-next-line no-underscore-dangle
+			const milliseconds: number = this.user.dateJoined._seconds * 1000;
+			const dateObject = new Date(milliseconds);
+			this.date = dateObject.toLocaleString('en-US', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			});
+		}
 	}
 
 	updateProfile(): void {

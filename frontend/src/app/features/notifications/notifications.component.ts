@@ -4,7 +4,6 @@ import {
 	NoteMoreService,
 	NotificationService,
 } from '@app/services';
-import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-notifications',
@@ -29,11 +28,12 @@ export class NotificationsComponent implements OnInit {
 	ngOnInit(): void {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		this.notificationService
-			.getUserNotifications(this.user.uid)
-			.subscribe((notifications) => {
-				this.notifications = notifications;
-			});
+		if (this.user)
+			this.notificationService
+				.getUserNotifications(this.user.uid)
+				.subscribe((notifications) => {
+					this.notifications = notifications;
+				});
 	}
 
 	accept(userId: string, notebookId: string) {

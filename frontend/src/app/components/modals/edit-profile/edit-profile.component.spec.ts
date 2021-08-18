@@ -13,7 +13,6 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AccountService } from '@app/services';
-import { User } from '@app/models';
 
 describe('EditProfileComponent', () => {
 	let component: EditProfileComponent;
@@ -50,7 +49,7 @@ describe('EditProfileComponent', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(EditProfileComponent);
 		component = fixture.componentInstance;
-		fixture.detectChanges();
+		// fixture.detectChanges();
 	});
 
 	it('should create', () => {

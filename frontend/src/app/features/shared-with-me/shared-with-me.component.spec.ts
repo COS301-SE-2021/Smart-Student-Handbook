@@ -11,6 +11,8 @@ import {
 	NoteMoreService,
 	OpenNotebookPanelService,
 } from '@app/services';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NotebookDataService } from '@app/services/notebookData.service';
 
 describe('SharedWithMeComponent', () => {
 	let component: SharedWithMeComponent;
@@ -22,6 +24,7 @@ describe('SharedWithMeComponent', () => {
 				MaterialModule,
 				HttpClientTestingModule,
 				RouterTestingModule.withRoutes([]),
+				MatDialogModule,
 			],
 			declarations: [SharedWithMeComponent],
 			providers: [
@@ -29,6 +32,7 @@ describe('SharedWithMeComponent', () => {
 				NoteMoreService,
 				OpenNotebookPanelService,
 				NotebookEventEmitterService,
+				NotebookDataService,
 			], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();
@@ -37,7 +41,7 @@ describe('SharedWithMeComponent', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(SharedWithMeComponent);
 		component = fixture.componentInstance;
-		fixture.detectChanges();
+		// fixture.detectChanges();
 	});
 
 	it('should create', () => {

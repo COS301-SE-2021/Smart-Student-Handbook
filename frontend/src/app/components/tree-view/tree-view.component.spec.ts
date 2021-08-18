@@ -6,6 +6,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+	NotebookDataService,
 	NotebookEventEmitterService,
 	NotebookService,
 	NoteMoreService,
@@ -31,6 +32,7 @@ describe('TreeViewComponent', () => {
 				NoteMoreService,
 				OpenNotebookPanelService,
 				NotebookEventEmitterService,
+				NotebookDataService,
 			], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],
 		}).compileComponents();

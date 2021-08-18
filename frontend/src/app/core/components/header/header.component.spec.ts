@@ -20,7 +20,7 @@ describe('HeaderComponent', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(HeaderComponent);
 		component = fixture.componentInstance;
-		fixture.detectChanges();
+		// fixture.detectChanges();
 	});
 
 	it('should create', () => {
