@@ -244,7 +244,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 				if (this.childrenSize === 1) {
 					this.dataSource.data = [
 						{
-							name: 'My Notebooks',
+							name: 'Shared With Me',
 							id: '',
 							children: [child],
 						},
@@ -254,7 +254,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 
 					this.dataSource.data = [
 						{
-							name: 'My notebooks',
+							name: 'Shared With Me',
 							id: '',
 							children: tree,
 						},
