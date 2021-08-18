@@ -9,7 +9,7 @@ import { NotificationService } from '../notification/notification.service';
 
 admin.initializeApp({
 	credential: admin.credential.applicationDefault(),
-	databaseURL: 'http://localhost:4000/',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 });
 
 const firebaseConfig = {
@@ -22,6 +22,7 @@ const firebaseConfig = {
 	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
 	measurementId: 'G-YDRCWDT5QJ',
 };
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 describe('NotebookIntegrationTests', () => {
