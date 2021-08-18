@@ -56,6 +56,7 @@ describe('NotebookIntegrationTests', () => {
 			};
 
 			const result = await accountService.registerUser(user);
+			console.log(result);
 			userId = result.user.uid;
 
 			expect(result.message).toBe('User is successfully registered!');
