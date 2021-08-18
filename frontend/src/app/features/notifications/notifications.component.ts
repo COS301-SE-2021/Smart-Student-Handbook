@@ -55,8 +55,8 @@ export class NotificationsComponent implements OnInit {
 		// this.noteMoreService.addCollaborator(notebookID);
 	}
 
-	decline() {
-		// userId: string, notebookId: string
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	decline(userId: string, notebookId: string) {
 		// this.notificationService.updateRead(id);
 	}
 
