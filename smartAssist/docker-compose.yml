@@ -1,7 +1,11 @@
-version: '3'
+version: '3.2'
 services: 
     smartassist:
-        build: .
+        build:
+            context: .
+            cache_from:
+                - u19002514/smartassist:latest
+        image: u19002514/smartassist
         ports: 
             - "6001:6001"
         volumes:

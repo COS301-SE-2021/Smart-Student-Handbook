@@ -131,9 +131,9 @@ class SmartAssistModel():
 
 
     def loadSmartModel(self):
-        self.model = load_model('smartAssist/src/models/smartAssistModel.h5')
-        self.predict_model = load_model('smartAssist/src/models/smartAssistPredictModel.h5')
-        with open("smartAssist/src/models/embeddingWeights.npy", 'rb') as f:
+        self.model = load_model('models/smartAssistModel.h5')
+        self.predict_model = load_model('models/smartAssistPredictModel.h5')
+        with open("models/embeddingWeights.npy", 'rb') as f:
             self.weights = np.load(f)
 
 

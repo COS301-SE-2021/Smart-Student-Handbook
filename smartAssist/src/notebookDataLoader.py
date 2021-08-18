@@ -24,7 +24,7 @@ class SmartAssistData:
         pass
 
     def loadData(self, count=5000):
-        dataRaw = pd.read_csv("smartAssist/src/NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
 
         if dataRaw.shape[0] == 0:
             print("no items")

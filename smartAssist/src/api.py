@@ -40,6 +40,9 @@ def getRecommendation():
             course = reqData['course']
         else:
             abort(400)
+
+        data.loadData(count=10000)
+        smartmodel.loadSmartModel()
             
         
         item = data.createSoup(name, tags, author, institution, course)
