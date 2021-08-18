@@ -54,6 +54,7 @@ describe('NotebookIntegrationTests', () => {
 				username: `TestAccount${randomNumber}`,
 				isLocalHost: true,
 			};
+			console.log(user);
 
 			const result = await accountService.registerUser(user);
 			console.log(result);
