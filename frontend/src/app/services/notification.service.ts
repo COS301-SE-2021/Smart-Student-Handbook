@@ -104,7 +104,8 @@ export class NotificationService {
 	sendCollaborationRequest(
 		userSender: string,
 		userReceiver: string,
-		notebookID: string
+		notebookID: string,
+		notebookTitle: string
 	): Observable<any> {
 		return this.httpClient.post(
 			`${NOTIFICATION_API}notification/sendCollaborationRequest`,
@@ -112,6 +113,7 @@ export class NotificationService {
 				userSender,
 				userReceiver,
 				notebookID,
+				notebookTitle,
 			},
 			httpOptions
 		);

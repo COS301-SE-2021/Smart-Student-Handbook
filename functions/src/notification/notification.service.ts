@@ -206,6 +206,7 @@ export class NotificationService {
 						body: createNotificationDto.body,
 						heading: createNotificationDto.heading,
 						notebookID: createNotificationDto.notebookID,
+						notebookTitle: createNotificationDto.notebookTitle,
 						opened: false,
 					})
 					.then(() => ({
@@ -225,6 +226,7 @@ export class NotificationService {
 					type: createNotificationDto.type,
 					body: createNotificationDto.body,
 					heading: createNotificationDto.heading,
+					notebookTitle: createNotificationDto.notebookTitle,
 					opened: false,
 				})
 				.then(() => ({
@@ -285,6 +287,7 @@ export class NotificationService {
 						heading: doc.data().heading,
 						opened: doc.data().opened,
 						notebookID: doc.data().notebookID,
+						notebookTitle: doc.data().notebookTitle,
 					});
 				} else {
 					notifications.push({
@@ -294,6 +297,7 @@ export class NotificationService {
 						body: doc.data().body,
 						heading: doc.data().heading,
 						opened: doc.data().opened,
+						notebookTitle: doc.data().notebookTitle,
 					});
 				}
 			});
@@ -339,6 +343,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notebookID: doc.data().notebookID,
 						notificationID: notifications[(i += 1)],
+						notebookTitle: doc.data().notebookTitle,
 					});
 				} else {
 					notifications.push({
@@ -349,6 +354,7 @@ export class NotificationService {
 						heading: doc.data().heading,
 						opened: doc.data().opened,
 						notificationID: notifications[(i += 1)],
+						notebookTitle: doc.data().notebookTitle,
 					});
 				}
 			});
@@ -418,6 +424,7 @@ export class NotificationService {
 		userSender: string,
 		userReceiver: string,
 		notebookID: string,
+		notebookTitle: string,
 	): Promise<{ success: boolean; message: string }> {
 		const receiverEmail = await this.getUserEmail(userReceiver);
 		const notificationID = await this.getUserNotificationID(userReceiver);
@@ -428,23 +435,24 @@ export class NotificationService {
 			email: receiverEmail,
 			subject: 'Collaboration request',
 			// eslint-disable-next-line max-len
-			body: `You have received a collaboration request from ${senderEmail}`,
+			body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 		});
 
 		await this.createNotification({
 			userID: userReceiver,
-			body: `You have received a collaboration request from ${senderEmail}`,
+			body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 			heading: 'Collaboration Request',
 			type: 'Request',
 			notebookID,
 			opened: false,
+			notebookTitle,
 		});
 
 		await this.sendUserToUserPushNotification(
 			{
 				token: notificationID,
 				title: 'Collaboration Request',
-				body: `You have received a collaboration request from ${senderEmail}`,
+				body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 				userId: userSender,
 			},
 			userReceiver,
