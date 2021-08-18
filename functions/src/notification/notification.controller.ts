@@ -52,8 +52,9 @@ export class NotificationController {
 		@Body('userSender') userSender: string,
 		@Body('userReceiver') userReceiver: string,
 		@Body('notebookID') notebookID: string,
+		@Body('notebookTitle') notebookTitle: string,
 	) {
-		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID);
+		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID, notebookTitle);
 	}
 
 	@Post('sendUserToUserPushNotification')

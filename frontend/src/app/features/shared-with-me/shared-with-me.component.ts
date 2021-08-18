@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
 	MatTreeFlatDataSource,
@@ -13,13 +13,14 @@ import {
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookDataService } from '@app/services/notebookData.service';
+import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-shared-with-me',
 	templateUrl: './shared-with-me.component.html',
 	styleUrls: ['./shared-with-me.component.scss'],
 })
-export class SharedWithMeComponent implements OnInit {
+export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	user: any;
 
 	childrenSize = 0;
@@ -67,6 +68,7 @@ export class SharedWithMeComponent implements OnInit {
 		private dialog: MatDialog,
 		private noteMore: NoteMoreService,
 		private notebookData: NotebookDataService,
+		private sharedWithMeService: SharedWithMeService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -217,6 +219,50 @@ export class SharedWithMeComponent implements OnInit {
 					notebookId,
 					notebookTitle
 				);
+			}
+		});
+	}
+
+	ngAfterContentInit(): void {
+		this.sharedWithMeService.notebook.subscribe((val: any) => {
+			if (val.id !== '') {
+				this.openedNotebookId = val.id;
+
+				const child = {
+					name: val.name,
+					id: val.id,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'My notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+
+				// this.openNotebookFolder(val.id, val.name);
 			}
 		});
 	}
