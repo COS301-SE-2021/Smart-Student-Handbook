@@ -73,6 +73,7 @@ describe('NotebookIntegrationTests', () => {
 
 			const result = await accountService.loginUser(user);
 			userId = result.user.uid;
+			console.log(userId);
 			expect(result.message).toBe('User is successfully logged in!');
 		});
 	});
