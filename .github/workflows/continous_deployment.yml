@@ -16,4 +16,4 @@ jobs:
         with:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           projectId: smartstudentnotebook
-          target: develop
+          channelId: live
