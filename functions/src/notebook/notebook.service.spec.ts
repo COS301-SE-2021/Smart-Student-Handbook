@@ -28,7 +28,7 @@ firebase.initializeApp(firebaseConfig);
 describe('NotebookIntegrationTests', () => {
 	let notebookService: NotebookService;
 	let accountService: AccountService;
-	const randomNumber: number = Math.floor(Math.random() * 100000);
+	// const randomNumber: number = Math.floor(Math.random() * 100000);
 	let notebookId = '';
 	let noteId = '';
 	let userId = '';
@@ -45,34 +45,34 @@ describe('NotebookIntegrationTests', () => {
 		jest.setTimeout(30000);
 	});
 
-	describe('createUser', () => {
-		it('Test should register a user successfully', async () => {
-			const user = {
-				email: `TestAccount${randomNumber}@gmail.com`,
-				password: 'TestPassword01!',
-				passwordConfirm: 'TestPassword01!',
-				username: `TestAccount${randomNumber}`,
-				isLocalHost: true,
-			};
-			console.log(user);
-
-			const result = await accountService.registerUser(user);
-			console.log(result);
-			userId = result.user.uid;
-
-			expect(result.message).toBe('User is successfully registered!');
-		});
-	});
+	// describe('createUser', () => {
+	// 	it('Test should register a user successfully', async () => {
+	// 		const user = {
+	// 			email: `TestAccount${randomNumber}@gmail.com`,
+	// 			password: 'TestPassword01!',
+	// 			passwordConfirm: 'TestPassword01!',
+	// 			username: `TestAccount${randomNumber}`,
+	// 			isLocalHost: true,
+	// 		};
+	// 		console.log(user);
+	//
+	// 		const result = await accountService.registerUser(user);
+	// 		console.log(result);
+	// 		userId = result.user.uid;
+	//
+	// 		expect(result.message).toBe('User is successfully registered!');
+	// 	});
+	// });
 
 	describe('loginUser', () => {
 		it('Test should login a user', async () => {
 			const user = {
-				email: `TestAccount${randomNumber}@gmail.com`,
+				email: 'louw@gmail.com',
 				password: 'TestPassword01!',
 			};
 
 			const result = await accountService.loginUser(user);
-
+			userId = result.user.uid;
 			expect(result.message).toBe('User is successfully logged in!');
 		});
 	});
@@ -242,7 +242,7 @@ describe('NotebookIntegrationTests', () => {
 				notebookId,
 				message: 'Test review message',
 				rating: 8,
-				displayName: `TestAccount${randomNumber}`,
+				displayName: 'TestAccount',
 				userId,
 				profileUrl: 'Test Profile Url',
 			};
@@ -281,13 +281,13 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	describe('Delete User', () => {
-		it('Test should delete a user and all files relating to that user', async () => {
-			const result = await accountService.deleteUser();
-
-			expect(result.message).toBe('Successfully deleted user!');
-		});
-	});
+	// describe('Delete User', () => {
+	// 	it('Test should delete a user and all files relating to that user', async () => {
+	// 		const result = await accountService.deleteUser();
+	//
+	// 		expect(result.message).toBe('Successfully deleted user!');
+	// 	});
+	// });
 
 	describe('Try to sign out', () => {
 		it('Sign out', async () => {
