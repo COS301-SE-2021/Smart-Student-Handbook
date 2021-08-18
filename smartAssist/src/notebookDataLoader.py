@@ -24,7 +24,7 @@ class SmartAssistData:
         pass
 
     def loadData(self, count=5000):
-        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dataRaw = pd.read_csv("smartAssist/src/NotebookDataset/Notebooks.csv", low_memory=True)
 
         if dataRaw.shape[0] == 0:
             print("no items")
@@ -251,20 +251,49 @@ class SmartAssistData:
         
 
     def createSoup(self, name, tags, author, institution, course):
+        soupArr = [name, author, institution, course.replace(" ", "")]
+        for t in tags:
+            soupArr.append(t)
+
         sep = " "
-        soup = sep.join([name, tags, author, institution, course].replace(" ", ""))
+        soup = sep.join(soupArr)
 
         soupOH = [one_hot(soup, self.vocabSize)]
         soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
 
         data = len(self.index_data)
+
+        try:
+            nameN = self.name_index[name]
+        except:
+            nameN = len(self.index_name)
+
+        try:
+            tagsN = self.name_index[tags[0]]
+        except:
+            tagsN = len(self.index_tags)
+
+        try:
+            authorsN = self.authors_index[author]
+        except:
+            authorsN = len(self.index_authors)
+
+        try:
+            institutionN = self.institutions_index[institution]
+        except:
+            institutionN = len(self.index_institutions)
+
+        try:
+            courseN = self.course_index[course]
+        except:
+            courseN = len(self.index_course)
    
-        return np.array([data, name, tags, author, institution, course, soupPadded[0]])
+        return np.array([data, nameN, tagsN, authorsN, institutionN, courseN, np.array(soupPadded)])
 
 
 
 
-data = SmartAssistData()  
+# data = SmartAssistData()  
 
 # data.loadData()
 

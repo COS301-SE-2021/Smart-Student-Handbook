@@ -131,9 +131,9 @@ class SmartAssistModel():
 
 
     def loadSmartModel(self):
-        self.model = load_model('models/smartAssistModel.h5')
-        self.predict_model = load_model('models/smartAssistPredictModel.h5')
-        with open("models/embeddingWeights.npy", 'rb') as f:
+        self.model = load_model('smartAssist/src/models/smartAssistModel.h5')
+        self.predict_model = load_model('smartAssist/src/models/smartAssistPredictModel.h5')
+        with open("smartAssist/src/models/embeddingWeights.npy", 'rb') as f:
             self.weights = np.load(f)
 
 
@@ -145,7 +145,7 @@ class SmartAssistModel():
             'author': np.array([itemData[3]]), 
             'institution': np.array([itemData[4]]),
             'course': np.array([itemData[5]]),
-            'soup': np.array([itemData[6].tolist()])
+            'soup': np.array([itemData[6].tolist()])[0]
         }
 
         return self.predict(item)
@@ -164,14 +164,24 @@ class SmartAssistModel():
         dists = np.dot(self.weights, predictweight)
         sorted_dists = np.argsort(dists)
 
-        closest = sorted_dists[-10:]
+        closest = sorted_dists[-20:]
 
         max_width = 48
 
         ret = list(())
 
         for idx, c in enumerate(reversed(closest)):
-            ret.append(self.data.index_data[self.data.index_dataSet[c]])
+            try:
+                if self.data.index_data[self.data.index_dataSet[c]] not in ret:
+                    ret.append(self.data.index_data[self.data.index_dataSet[c]])
+            except:
+                pass
+
+            if len(ret) == 10:
+                break
+            
+
+            
 
         return ret
 

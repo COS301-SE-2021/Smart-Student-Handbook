@@ -47,15 +47,19 @@ ytest = data.finalSetYTest
 smartmodel.loadSmartModel()
 
 itemData = data.getRandomDataItem()
-item = {
-    'data': np.array([itemData[0]]), 
-    'name': np.array([itemData[1]]), 
-    'tags': np.array([itemData[2]]), 
-    'author': np.array([itemData[3]]), 
-    'institution': np.array([itemData[4]]),
-    'course': np.array([itemData[5]]),
-    'soup': np.array([itemData[6].tolist()])
-}
+
+item = data.createSoup(data.index_name[itemData[1]], [data.index_tags[itemData[2]]], data.index_authors[itemData[3]], data.index_institutions[itemData[4]], data.index_course[itemData[5]])
+# print(item)
+print(smartmodel.getRecommendations(item))
+# item = {
+#     'data': np.array([itemData[0]]), 
+#     'name': np.array([itemData[1]]), 
+#     'tags': np.array([itemData[2]]), 
+#     'author': np.array([itemData[3]]), 
+#     'institution': np.array([itemData[4]]),
+#     'course': np.array([itemData[5]]),
+#     'soup': np.array([itemData[6].tolist()])
+# }
 # itemData = data.dataSet
 # print(itemData[6].shape)
 # item = {
@@ -71,4 +75,4 @@ item = {
 # print(item['soup'].shape)
 # print(item['data'].shape)
 # smartmodel.saveEmbeddingWeights()
-print(smartmodel.predict(item))
+# print(smartmodel.predict(item))
