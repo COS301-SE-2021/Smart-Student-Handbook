@@ -33,7 +33,24 @@
 //
 // 	};
 // }); */
-//
+describe('createUser', () => {
+	it('Test should register a user successfully', async () => {
+		// const user = {
+		// 	email: `TestAccount${randomNumber}@gmail.com`,
+		// 	password: 'TestPassword01!',
+		// 	passwordConfirm: 'TestPassword01!',
+		// 	username: `TestAccount${randomNumber}`,
+		// 	isLocalHost: true,
+		// };
+		// console.log(user);
+		//
+		// const result = await accountService.registerUser(user);
+		// console.log(result);
+		// userId = result.user.uid;
+		//
+		// expect(result.message).toBe('User is successfully registered!');
+	});
+});
 // describe('AccountService', () => {
 // 	let serviceAccount: AccountService;
 // 	let serviceNotification: NotificationService;
