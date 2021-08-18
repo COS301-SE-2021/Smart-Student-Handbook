@@ -47,8 +47,7 @@ export class AccountService {
 		}
 
 		const exist = await this.userService.doesUsernameExist(registerDto.username);
-		// eslint-disable-next-line eqeqeq
-		if (exist == true) {
+		if (exist === true) {
 			return {
 				success: false,
 				user: null,
@@ -88,7 +87,7 @@ export class AccountService {
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is unsuccessfully registered:',
+				message: 'User is unsuccessfully registered!',
 				error: error.message,
 			}));
 
@@ -240,7 +239,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: 'Email or Password does not meet the requirements',
 			};
 		}
@@ -259,13 +258,23 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: 'User does not exist',
 			};
 		}
 
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
+
+		const token = await admin
+			.auth()
+			.createCustomToken(userData.uid)
+			.then((customToken) => ({
+				customToken,
+			}))
+			.catch((error) => {
+				console.log('Error creating custom token:', error);
+			});
 
 		// Login user. If successful return success message else throw Bad Request exception
 		return firebase
@@ -286,13 +295,14 @@ export class AccountService {
 					bio: doc.data().bio,
 					profilePic: doc.data().profilePicUrl,
 					dateJoined: doc.data().dateJoined,
+					token,
 				},
-				message: 'User is successfully logged in.',
+				message: 'User is successfully logged in!',
 			}))
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'Login failed, please try again !',
+				message: 'Login failed, please try again!',
 				error: error.message,
 			}));
 	}
@@ -364,12 +374,14 @@ export class AccountService {
 			await this.userService.deleteUserProfile(uid);
 			// TODO delete all the users notebooks !!
 
+			await admin.firestore().collection('users').doc(uid).delete();
+
 			// Try to delete user else throw and exception if not possible
 			return await admin
 				.auth()
 				.deleteUser(uid)
 				.then(() => ({
-					message: 'Successfully deleted user.',
+					message: 'Successfully deleted user!',
 				}))
 				.catch((error) => ({
 					message: error.message,

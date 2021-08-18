@@ -19,8 +19,13 @@ export class NotebookEventEmitterService {
 
 	// constructor() {}
 
-	LoadEditor(notebookId: string, noteId: string, title: string) {
-		this.loadEmitter.emit({ notebookId, noteId, title });
+	LoadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		this.loadEmitter.emit({ notebookId, noteId, title, notebookTitle });
 	}
 
 	GetNoteTitle(title: string) {

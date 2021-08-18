@@ -12,6 +12,8 @@ const searchClient = algoliasearch(
 	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+	title: string = 'smart-student';
+
 	config = {
 		indexName: 'demo_ecommerce',
 		searchClient,

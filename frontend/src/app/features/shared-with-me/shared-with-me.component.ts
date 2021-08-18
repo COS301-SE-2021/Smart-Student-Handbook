@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
 	MatTreeFlatDataSource,
@@ -12,13 +12,15 @@ import {
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { NotebookDataService } from '@app/services/notebookData.service';
+import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-shared-with-me',
 	templateUrl: './shared-with-me.component.html',
 	styleUrls: ['./shared-with-me.component.scss'],
 })
-export class SharedWithMeComponent implements OnInit {
+export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	user: any;
 
 	childrenSize = 0;
@@ -65,6 +67,8 @@ export class SharedWithMeComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private noteMore: NoteMoreService,
+		private notebookData: NotebookDataService,
+		private sharedWithMeService: SharedWithMeService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -95,50 +99,53 @@ export class SharedWithMeComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks(this.user.uid).subscribe(
-			(notebooks) => {
-				// console.log(notebooks);
-				let temp: any[] = [];
-				let index = 0;
-				const tree: { name: any; id: any }[] = [];
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					// console.log(notebooks);
+					let temp: any[] = [];
+					let index = 0;
+					const tree: { name: any; id: any }[] = [];
 
-				notebooks.forEach((notebook: any) => {
-					temp = notebook.access;
+					notebooks.forEach((notebook: any) => {
+						temp = notebook.access;
 
-					index = temp.findIndex(
-						(a: any) => a.userId === this.user.uid
-					);
+						index = temp.findIndex(
+							(a: any) => a.userId === this.user.uid
+						);
 
-					if (index >= 0) {
-						this.notebooks.push(notebook);
+						if (index >= 0) {
+							this.notebooks.push(notebook);
 
-						this.childrenSize += 1;
+							this.childrenSize += 1;
 
-						const child = {
-							name: notebook.title,
-							id: notebook.notebookId,
-							// children: childArr,
-						};
+							const child = {
+								name: notebook.title,
+								id: notebook.notebookId,
+								// children: childArr,
+							};
 
-						tree.push(child);
+							tree.push(child);
+						}
+
+						index = 0;
+					});
+
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'Shared With Me',
+								id: '',
+								children: tree,
+							},
+						];
 					}
-				});
-
-				if (this.childrenSize > 0) {
-					this.dataSource.data = [
-						{
-							name: 'Shared With Me',
-							id: '',
-							children: tree,
-						},
-					];
+				},
+				(error) => {
+					// eslint-disable-next-line no-console
+					console.log(error.message);
 				}
-			},
-			(error) => {
-				// eslint-disable-next-line no-console
-				console.log(error.message);
-			}
-		);
+			);
 	}
 
 	updateNotebook(notebookId: string) {
@@ -195,23 +202,70 @@ export class SharedWithMeComponent implements OnInit {
 	 * toggle the notesPanel component when using a desktop
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
-		this.openedNotebookId = notebookId;
+		this.router.navigate(['notebook']).then(() => {
+			this.notebookData.setID(notebookId, notebookTitle);
+			this.openedNotebookId = notebookId;
 
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			localStorage.setItem('notebookId', notebookId);
+			const screenType = navigator.userAgent;
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+					screenType
+				)
+			) {
+				localStorage.setItem('notebookId', notebookId);
 
-			this.router.navigate(['notes']);
-		} else {
-			this.openNotebookPanelService.toggleNotePanel(
-				notebookId,
-				notebookTitle
-			);
-		}
+				this.router.navigate(['notes']);
+			} else {
+				this.openNotebookPanelService.toggleNotePanel(
+					notebookId,
+					notebookTitle
+				);
+			}
+		});
+	}
+
+	ngAfterContentInit(): void {
+		this.sharedWithMeService.notebook.subscribe((val: any) => {
+			if (val.id !== '') {
+				this.openedNotebookId = val.id;
+
+				const child = {
+					name: val.name,
+					id: val.id,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'Shared With Me',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'Shared With Me',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+
+				// this.openNotebookFolder(val.id, val.name);
+			}
+		});
 	}
 }
 

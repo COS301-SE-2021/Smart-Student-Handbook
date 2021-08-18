@@ -4,4 +4,6 @@ export class SendNotificationToGroupRequestDto {
 	body = ' ';
 
 	topic = ' ';
+
+	userId = '';
 }

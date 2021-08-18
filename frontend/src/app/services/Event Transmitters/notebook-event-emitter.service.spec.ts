@@ -6,7 +6,12 @@ describe('NotebookEventEmitterService', () => {
 	let service: NotebookEventEmitterService;
 
 	beforeEach(() => {
-		TestBed.configureTestingModule({});
+		TestBed.configureTestingModule({
+			imports: [],
+			declarations: [],
+			providers: [], // Some stubs used here
+			// schemas: []
+		});
 		service = TestBed.inject(NotebookEventEmitterService);
 	});
 

@@ -8,6 +8,7 @@ import {
 	AccountService,
 	SideNavService,
 	NotificationService,
+	MessagingService,
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
@@ -45,6 +46,7 @@ export class LeftMenuComponent implements OnInit {
 	 * @param notificationService
 	 * @param router
 	 * @param sidenavService
+	 * @param messagingService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -53,7 +55,8 @@ export class LeftMenuComponent implements OnInit {
 		private accountService: AccountService,
 		private notificationService: NotificationService,
 		private router: Router,
-		private sidenavService: SideNavService
+		private sidenavService: SideNavService,
+		private messagingService: MessagingService
 	) {}
 
 	/**
@@ -65,7 +68,7 @@ export class LeftMenuComponent implements OnInit {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.notificationService
-			.getUnreadNotifications()
+			.getUnreadNotifications(this.user.uid)
 			.subscribe((unreadNotifications) => {
 				// console.log(unreadNotifications.length);
 				this.nrUnreadNotifications = unreadNotifications.length;
@@ -124,32 +127,15 @@ export class LeftMenuComponent implements OnInit {
 	 * If a user is not logged in, redirect them to the login page
 	 */
 	async logout() {
-		this.accountService.singOut().subscribe(
-			() => {
-				this.router.navigate(['account/login']);
-			},
-			(err) => {
-				console.log(`Error: ${err.error.message}`);
-			}
-		);
+		if (this.user) {
+			this.accountService.singOut(this.user.uid).subscribe(
+				() => {
+					this.router.navigate(['account/login']);
+				},
+				(err) => {
+					console.log(`Error: ${err.error.message}`);
+				}
+			);
+		}
 	}
-}
-
-/**
- * Tree structure
- */
-interface DirectoryNode {
-	name: string;
-	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	children?: DirectoryNode[];
-}
-
-/** Flat node with expandable and level information */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface ExampleFlatNode {
-	expandable: boolean;
-	name: string;
-	id: string;
-	level: number;
 }

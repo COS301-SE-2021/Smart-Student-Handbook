@@ -89,7 +89,8 @@ export class NotesComponent implements OnInit {
 		this.notebookEventEmitterService.LoadEditor(
 			this.notebookId,
 			noteId,
-			title
+			title,
+			''
 		);
 	}
 
@@ -104,20 +105,24 @@ export class NotesComponent implements OnInit {
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
+	 * @param title
+	 * @param description
 	 */
-	editNote(id: string) {
-		this.notesService.editNote(this.notebookId, id).subscribe((data) => {
-			if (data) {
-				this.notes = this.notes.map((note: any) => {
-					if (note.noteId === id) {
-						note.description = data.description;
-						note.name = data.title;
-					}
+	editNote(id: string, title: string, description: string) {
+		this.notesService
+			.editNote(this.notebookId, id, title, description)
+			.subscribe((data) => {
+				if (data) {
+					this.notes = this.notes.map((note: any) => {
+						if (note.noteId === id) {
+							note.description = data.description;
+							note.name = data.title;
+						}
 
-					return note;
-				});
-			}
-		});
+						return note;
+					});
+				}
+			});
 	}
 
 	deleteNote(id: string) {
