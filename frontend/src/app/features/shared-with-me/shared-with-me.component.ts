@@ -199,24 +199,26 @@ export class SharedWithMeComponent implements OnInit {
 	 * toggle the notesPanel component when using a desktop
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
-		this.notebookData.setID(notebookId, notebookTitle);
-		this.openedNotebookId = notebookId;
+		this.router.navigate(['notebook']).then(() => {
+			this.notebookData.setID(notebookId, notebookTitle);
+			this.openedNotebookId = notebookId;
 
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			localStorage.setItem('notebookId', notebookId);
+			const screenType = navigator.userAgent;
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+					screenType
+				)
+			) {
+				localStorage.setItem('notebookId', notebookId);
 
-			this.router.navigate(['notes']);
-		} else {
-			this.openNotebookPanelService.toggleNotePanel(
-				notebookId,
-				notebookTitle
-			);
-		}
+				this.router.navigate(['notes']);
+			} else {
+				this.openNotebookPanelService.toggleNotePanel(
+					notebookId,
+					notebookTitle
+				);
+			}
+		});
 	}
 }
 

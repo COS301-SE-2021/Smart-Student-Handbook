@@ -1,6 +1,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	Component,
+	OnInit,
+	ViewChild,
+	ViewEncapsulation,
+} from '@angular/core';
 // import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -18,7 +25,7 @@ import { NotebookDataService } from '@app/services/notebookData.service';
 	// encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
-export class NotesPanelComponent implements OnInit {
+export class NotesPanelComponent implements OnInit, AfterContentInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
@@ -62,11 +69,7 @@ export class NotesPanelComponent implements OnInit {
 		private notesService: NotesService
 	) {}
 
-	/**
-	 * Get the logged in user's notebooks as well as
-	 * User information from localstorage
-	 */
-	ngOnInit(): void {
+	ngAfterContentInit(): void {
 		this.notebookData.ids.subscribe((val: any) => {
 			if (val.title !== '') {
 				this.notebookTitle = val.title;
@@ -80,6 +83,13 @@ export class NotesPanelComponent implements OnInit {
 				if (button) button.click();
 			}
 		});
+	}
+
+	/**
+	 * Get the logged in user's notebooks as well as
+	 * User information from localstorage
+	 */
+	ngOnInit(): void {
 		// }
 
 		// let userDeatils;
