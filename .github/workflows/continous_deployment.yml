@@ -2,14 +2,66 @@ name: Continous Deployment Develop
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
 jobs:
+  build-front:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: frontend
+        
+    strategy:
+      matrix:
+        node-version: [14.x]
+        
+    steps:
+      - uses: actions/checkout@v2
+     
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Setup Angular
+        run: npm install -g @angular/cli
+    
+      - name: Download Dependencies
+        
+        run: npm ci
+        
+  build-func:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: functions
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        
+    steps:
+      - uses: actions/checkout@v2
+     
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+    
+      - name: Download Dependencies
+        
+        run: npm ci
+
+
   firebase-deploy:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+        
     steps:
       - uses: actions/checkout@v2
      
@@ -22,6 +74,7 @@ jobs:
         run: npm install -g @angular/cli
     
       - name: Download Dependencies
+        
         run: npm ci
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
