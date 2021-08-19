@@ -1,12 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import MockDate from 'mockdate';
+import * as admin from 'firebase-admin';
+import firebase from 'firebase';
 import { AccountService } from './account.service';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 
 const registerDTO = require('./dto/register.dto');
 
-// admin.initializeApp();
+const serviceAccountKeys = require('../../service_account.json');
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccountKeys),
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+});
+
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	projectId: 'smartstudentnotebook',
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+firebase.initializeApp(firebaseConfig);
 
 jest.mock('firebase-admin');
 

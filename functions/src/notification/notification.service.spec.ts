@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
+import firebase from 'firebase';
 import { NotificationService } from './notification.service';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
@@ -8,8 +9,25 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
-admin.initializeApp();
 const { mock } = require('nodemailer');
+const serviceAccount = require('../../service_account.json');
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+});
+
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	projectId: 'smartstudentnotebook',
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+firebase.initializeApp(firebaseConfig);
 
 describe('NotificationService', () => {
 	let service: NotificationService;
