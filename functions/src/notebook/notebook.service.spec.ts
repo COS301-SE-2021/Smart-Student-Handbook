@@ -7,8 +7,10 @@ import { NotebookController } from './notebook.controller';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
+const serviceAccount = require('serviceAccountKey.json');
+
 admin.initializeApp({
-	credential: admin.credential.applicationDefault(),
+	credential: admin.credential.cert(serviceAccount),
 	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 });
 
