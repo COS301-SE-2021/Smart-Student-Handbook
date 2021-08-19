@@ -7,7 +7,7 @@ import { NotebookController } from './notebook.controller';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
-const serviceAccount = require('serviceAccountKey.json');
+const serviceAccount = require('service_account.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
