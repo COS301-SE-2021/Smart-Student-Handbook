@@ -7,7 +7,7 @@ import { NotebookController } from './notebook.controller';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
-const serviceAccount = require('service_account.json');
+const serviceAccount = require('../../service_account.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -385,38 +385,38 @@ describe('NotebookIntegrationTests', () => {
 			expect(result.message).toBe('Successfully signed out.');
 		});
 	});
-
-	describe('Try to get a notebook  that does not exist', () => {
-		it('Should throw file not found error', async () => {
-			let result;
-			try {
-				await notebookService.getNotebook('impossible id');
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
-			expect(result.status).toBe(404);
-		});
-	});
-
-	describe('Try to delete notes', () => {
-		it('Should throw error when deleting a note that does not exist', async () => {
-			let result;
-			const note = {
-				notebookId: 'impossible note id',
-				noteId,
-				userId,
-			};
-
-			try {
-				await notebookService.deleteNote(note);
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Documents does not seem to exist.');
-			expect(result.status).toBe(404);
-		});
-	});
+	//
+	// describe('Try to get a notebook  that does not exist', () => {
+	// 	it('Should throw file not found error', async () => {
+	// 		let result;
+	// 		try {
+	// 			await notebookService.getNotebook('impossible id');
+	// 		} catch (e) {
+	// 			result = e;
+	// 		}
+	//
+	// 		expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
+	// 		expect(result.status).toBe(404);
+	// 	});
+	// });
+	//
+	// describe('Try to delete notes', () => {
+	// 	it('Should throw error when deleting a note that does not exist', async () => {
+	// 		let result;
+	// 		const note = {
+	// 			notebookId: 'impossible note id',
+	// 			noteId,
+	// 			userId,
+	// 		};
+	//
+	// 		try {
+	// 			await notebookService.deleteNote(note);
+	// 		} catch (e) {
+	// 			result = e;
+	// 		}
+	//
+	// 		expect(result.message).toBe('Documents does not seem to exist.');
+	// 		expect(result.status).toBe(404);
+	// 	});
+	// });
 });
