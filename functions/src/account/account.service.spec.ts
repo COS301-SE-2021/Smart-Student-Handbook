@@ -98,20 +98,20 @@ describe('AccountService', () => {
 			expect(results.success).toEqual(true);
 		});
 
-		it('Should fail cannot double register a user', async () => {
-			const registerUser = {
-				email: 'TestUserAccount@gmail.com',
-				username: 'UserTestNameAccount',
-				password: 'TestPassword!0',
-				passwordConfirm: 'TestPassword!0',
-				isLocalhost: false,
-			};
-
-			const results = await serviceAccount.registerUser(registerUser);
-
-			expect(results.message).toEqual('User is unsuccessfully registered');
-			expect(results.success).toEqual(false);
-		});
+		// it('Should fail cannot double register a user', async () => {
+		// 	const registerUser = {
+		// 		email: 'TestUserAccount@gmail.com',
+		// 		username: 'UserTestNameAccount',
+		// 		password: 'TestPassword!0',
+		// 		passwordConfirm: 'TestPassword!0',
+		// 		isLocalhost: false,
+		// 	};
+		//
+		// 	const results = await serviceAccount.registerUser(registerUser);
+		//
+		// 	expect(results.message).toEqual('User is unsuccessfully registered');
+		// 	expect(results.success).toEqual(false);
+		// });
 	});
 
 	describe('loginUser', () => {
