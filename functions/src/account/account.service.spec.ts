@@ -41,7 +41,7 @@ describe('AccountService', () => {
 		serviceNotification = module.get<NotificationService>(NotificationService);
 		serviceUser = module.get<UserService>(UserService);
 
-		jest.setTimeout(15000);
+		jest.setTimeout(30000);
 	});
 
 	it('should be defined', () => {
