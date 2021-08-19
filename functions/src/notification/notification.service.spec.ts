@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
 import firebase from 'firebase';
 import { NotificationService } from './notification.service';
+// import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 // import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 // import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 // import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -148,5 +149,69 @@ describe('NotificationService', () => {
 		// const response = await service.subscribeToNotificationTopic(request);
 		//
 		// expect(response.status).toBe('unsuccessful');
+	});
+
+	it('sendEmailNotification', async () => {
+		const email = {
+			email: 'louw707@gmail.com',
+			subject: 'Test subject',
+			body: 'Test body',
+		};
+
+		await service.sendEmailNotification(email);
+	});
+
+	it('sendSinglePushNotification', async () => {
+		const pushNotification = {
+			token: 'RandomToken',
+			title: 'RandomTitle',
+			body: 'RandomBody',
+			userId: 'UserId',
+		};
+
+		await service.sendSinglePushNotification(pushNotification);
+	});
+
+	it('sendGroupPushNotification', async () => {
+		const pushNotification = {
+			topic: 'RandomTopic',
+			title: 'RandomTitle',
+			body: 'RandomBody',
+			userId: 'UserId',
+		};
+
+		await service.sendGroupPushNotification(pushNotification);
+	});
+
+	it('subscribeToNotificationTopic', async () => {
+		const pushNotification = {
+			token: 'RandomToken',
+			topic: 'RandomTopic',
+			userId: 'UserId',
+		};
+
+		await service.subscribeToNotificationTopic(pushNotification);
+	});
+
+	it('createNotificationo a topic', async () => {
+		const pushNotification = {
+			userID: 'userID',
+			type: 'type',
+			heading: 'heading',
+			body: 'body',
+			opened: false,
+			notebookID: 'notebookId',
+			notebookTitle: 'notebookTitle',
+		};
+
+		await service.createNotification(pushNotification);
+	});
+
+	it('getUserNotifications', async () => {
+		await service.getUserNotifications('userId');
+	});
+
+	it('getUnreadNotifications', async () => {
+		await service.getUnreadNotifications('userId');
 	});
 });
