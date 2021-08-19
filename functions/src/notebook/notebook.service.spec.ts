@@ -9,8 +9,6 @@ import { NotificationService } from '../notification/notification.service';
 
 const serviceAccount = require('../../service_account.json');
 
-console.log(serviceAccount);
-
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
