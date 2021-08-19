@@ -9,7 +9,7 @@ import { NotificationService } from '../notification/notification.service';
 
 admin.initializeApp({
 	credential: admin.credential.applicationDefault(),
-	databaseURL: 'http://localhost:4000/',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 });
 
 const firebaseConfig = {
@@ -44,31 +44,15 @@ describe('NotebookIntegrationTests', () => {
 		jest.setTimeout(30000);
 	});
 
-	describe('createUser', () => {
-		it('Test should register a user successfully', async () => {
-			const user = {
-				email: `TestAccount${randomNumber}@gmail.com`,
-				password: 'TestPassword01!',
-				passwordConfirm: 'TestPassword01!',
-				username: `TestAccount${randomNumber}`,
-				isLocalHost: true,
-			};
-
-			const result = await accountService.registerUser(user);
-			userId = result.user.uid;
-
-			expect(result.message).toBe('User is successfully registered!');
-		});
-	});
-
 	describe('loginUser', () => {
 		it('Test should login a user', async () => {
 			const user = {
-				email: `TestAccount${randomNumber}@gmail.com`,
+				email: 'TestAccount82982@gmail.com',
 				password: 'TestPassword01!',
 			};
 
 			const result = await accountService.loginUser(user);
+			userId = result.user.uid;
 
 			expect(result.message).toBe('User is successfully logged in!');
 		});
@@ -82,6 +66,7 @@ describe('NotebookIntegrationTests', () => {
 				course: 'Test Course',
 				description: 'Test Description',
 				institution: 'Test Institution',
+				creatorId: userId,
 				private: true,
 				tags: ['tag1', 'tag2'],
 				userId,
@@ -144,6 +129,7 @@ describe('NotebookIntegrationTests', () => {
 				description: 'Updated Description',
 				institution: 'Updated Institution',
 				notebookId,
+				creatorId: userId,
 				private: false,
 				tags: ['update tag1', 'update tag2'],
 				userId,
@@ -164,7 +150,7 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	describe('Create a new Note', () => {
+	describe('Create a New Note', () => {
 		it('Test should create a new note on the specified notebook', async () => {
 			const note = {
 				name: 'Test Note Title',
@@ -190,7 +176,7 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	describe('Update note', () => {
+	describe('Update Note', () => {
 		it('Test should update a note on a notebook', async () => {
 			const note = {
 				name: 'Update Note Title',
@@ -253,26 +239,133 @@ describe('NotebookIntegrationTests', () => {
 			expect(result.message).toBe('Successfully added a review!');
 		});
 
-		// it('Should throw exception when trying to add a review to and invalid notebookId', async () => {
-		// 	let result;
-		// 	const review = {
-		// 		notebookId: 'Invalid notebookId',
-		// 		message: 'Test review message',
-		// 		rating: 8,
-		// 		displayName: `TestAccount${randomNumber}`,
-		// 		userId,
-		// 		profileUrl: 'Test Profile Url',
-		// 	};
-		//
-		// 	try {
-		// 		await notebookService.addNotebookReview(review);
-		// 	} catch (e) {
-		// 		result = e;
-		// 	}
-		//
-		// 	expect(result.message).toBe('Unable to complete request. User might not be signed in.');
-		// 	expect(result.status).toBe(400);
-		// });
+		it('Get Notebook Reviews', async () => {
+			const result = await notebookService.getNotebookReviews(notebookId);
+
+			expect(result.length).toBe(1);
+			expect(result[0].message).toBe('Test review message');
+			expect(result[0].rating).toBe(8);
+			expect(result[0].displayName).toBe(`TestAccount${randomNumber}`);
+			expect(result[0].profileUrl).toBe('Test Profile Url');
+		});
+
+		it('Try to Access Invalid Notebook', async () => {
+			let result;
+			try {
+				result = await notebookService.getNotebookReviews('ImpossibleIdNumber');
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result).toStrictEqual([]);
+		});
+
+		it('Add Reviews to a notebook', async () => {
+			let result;
+			try {
+				result = await notebookService.deleteNotebookReview(notebookId, userId);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Deleted review successfully!');
+		});
+	});
+
+	describe('Notebook Access', () => {
+		it('Add Access to Notebook', async () => {
+			const access = {
+				displayName: 'Test Display Name',
+				userId: 'Test userId',
+				profileUrl: 'Test Profile Url',
+				notebookId,
+			};
+			const result = await notebookService.addAccess(access);
+
+			expect(result.message).toBe('Successfully added use to access list!');
+			expect(result.notebookId).toBe(notebookId);
+		});
+
+		it('Check User Access True', async () => {
+			const access = {
+				userId: 'Test userId',
+				notebookId,
+			};
+			const result = await notebookService.checkUserAccess(access);
+
+			expect(result).toBe(true);
+		});
+
+		it('Check User Access False', async () => {
+			const access = {
+				userId: 'Test userId False',
+				notebookId,
+			};
+			const result = await notebookService.checkUserAccess(access);
+
+			expect(result).toBe(false);
+		});
+
+		it('Check User Access Creator True', async () => {
+			const access = {
+				userId,
+				notebookId,
+			};
+			const result = await notebookService.checkUserAccess(access);
+
+			expect(result).toBe(true);
+		});
+
+		it('Get Access List', async () => {
+			const result = await notebookService.getAccessList(notebookId);
+
+			expect(result.length).toBe(1);
+			expect(result[0].displayName).toBe('Test Display Name');
+			expect(result[0].userId).toBe('Test userId');
+			expect(result[0].profileUrl).toBe('Test Profile Url');
+		});
+
+		it('Remove user Access', async () => {
+			const access = {
+				userId: 'Test userId',
+				creatorId: userId,
+				notebookId,
+			};
+			const result = await notebookService.removeUserAccess(access);
+
+			expect(result.message).toBe('Successfully removed user from access list!');
+		});
+
+		it('Remove user Access Not Authorized', async () => {
+			let result;
+			const access = {
+				userId,
+				creatorId: 'Test userId',
+				notebookId,
+			};
+
+			try {
+				result = await notebookService.removeUserAccess(access);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Not Authorized');
+		});
+	});
+
+	describe('Check Creator', () => {
+		it('Creator Check True', async () => {
+			const result = await notebookService.checkCreator(notebookId, userId);
+
+			expect(result).toBe(true);
+		});
+
+		it('Creator Check False', async () => {
+			const result = await notebookService.checkCreator(notebookId, 'noteAdminUser');
+
+			expect(result).toBe(false);
+		});
 	});
 
 	describe('Delete Notebook', () => {
@@ -283,14 +376,6 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	describe('Delete User', () => {
-		it('Test should delete a user and all files relating to that user', async () => {
-			const result = await accountService.deleteUser();
-
-			expect(result.message).toBe('Successfully deleted user!');
-		});
-	});
-
 	describe('Try to sign out', () => {
 		it('Sign out', async () => {
 			const result = await accountService.signOut();
@@ -298,20 +383,6 @@ describe('NotebookIntegrationTests', () => {
 			expect(result.message).toBe('Successfully signed out.');
 		});
 	});
-
-	// describe('Preforming actions when a user is not signed in', () => {
-	// 	it('User not signed in test', async () => {
-	// 		let result;
-	// 		try {
-	// 			await notebookService.getUserId();
-	// 		} catch (e) {
-	// 			result = e;
-	// 		}
-	//
-	// 		expect(result.message).toBe('Unable to complete request. User might not be signed in.');
-	// 		expect(result.status).toBe(400);
-	// 	});
-	// });
 
 	describe('Try to get a notebook  that does not exist', () => {
 		it('Should throw file not found error', async () => {
@@ -333,24 +404,6 @@ describe('NotebookIntegrationTests', () => {
 			const note = {
 				notebookId: 'impossible note id',
 				noteId,
-				userId,
-			};
-
-			try {
-				await notebookService.deleteNote(note);
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Documents does not seem to exist.');
-			expect(result.status).toBe(404);
-		});
-
-		it('Should throw error when deleting a note from a notebook that does not exist', async () => {
-			let result;
-			const note = {
-				notebookId,
-				noteId: 'impossible note id',
 				userId,
 			};
 

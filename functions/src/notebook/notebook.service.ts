@@ -133,7 +133,7 @@ export class NotebookService {
 				});
 		} catch (error) {
 			throw new HttpException(
-				'Something went wrong. Operation could not be executed.',
+				`Something went wrong. Operation could not be executed. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -319,7 +319,7 @@ export class NotebookService {
 				});
 		} catch (error) {
 			throw new HttpException(
-				`Something went wrong. Operation could not be executed error.${error}`,
+				`Something went wrong. Operation could not be executed error. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -344,7 +344,13 @@ export class NotebookService {
 		// }
 
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
-		await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
+
+		try {
+			await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
+		} catch (e) {
+			throw new HttpException('Firebase could not remove document.', HttpStatus.BAD_REQUEST);
+		}
+
 		notes.forEach((item: Note, index: number) => {
 			if (item.noteId === noteDto.noteId) {
 				notes.splice(index, 1);
@@ -354,7 +360,12 @@ export class NotebookService {
 		if (!updatedNotebook) {
 			throw new HttpException('Note could not be found!', HttpStatus.BAD_REQUEST);
 		}
-		await this.updateNotes(noteDto.notebookId, notes);
+
+		try {
+			await this.updateNotes(noteDto.notebookId, notes);
+		} catch (e) {
+			throw new HttpException('Firebase could not update document.', HttpStatus.BAD_REQUEST);
+		}
 
 		return {
 			message: 'Successfully delete note!',
@@ -416,7 +427,7 @@ export class NotebookService {
 
 			return reviews;
 		} catch (error) {
-			throw new HttpException('Bad Request.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could not retrieve notebook reviews', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -430,13 +441,13 @@ export class NotebookService {
 				.doc(userId)
 				.delete()
 				.then(() => ({
-					message: 'Deleted review was successful!',
+					message: 'Deleted review successfully!',
 				}))
 				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+					throw new HttpException('Notebook Not Found', HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
-			throw new HttpException('Bad Request.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could note delete notebook review.', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -486,7 +497,7 @@ export class NotebookService {
 				return doc.data().access;
 			}
 		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could not complete firebase request.', HttpStatus.BAD_REQUEST);
 		}
 		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
 	}
@@ -512,7 +523,12 @@ export class NotebookService {
 
 	async removeUserAccess(checkAccessDto: CheckAccessDto): Promise<Response> {
 		const { userId } = checkAccessDto; // await this.getUserId();
-		const authorized = await this.checkCreator(checkAccessDto.notebookId, userId);
+		let { creatorId } = checkAccessDto;
+		// TODO Fix if statement(TEMPORARLY SUCH THAT SYSTEM DOES NOT BREAK)
+		if (!creatorId) {
+			creatorId = userId;
+		}
+		const authorized = await this.checkCreator(checkAccessDto.notebookId, creatorId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -522,7 +538,7 @@ export class NotebookService {
 
 		try {
 			access.forEach((item: Access, index: number) => {
-				if (item.userId === checkAccessDto.userId) {
+				if (item.userId === userId) {
 					access.splice(index, 1);
 				}
 			});
