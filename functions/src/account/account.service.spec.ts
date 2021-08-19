@@ -10,30 +10,6 @@ const registerDTO = require('./dto/register.dto');
 
 jest.mock('firebase-admin');
 
-/* jest.mock('firebase-admin', () => {
-	return {
-		auth: jest.fn().mockImplementation(()=>{
-			return {
-				createUser: jest.fn().mockImplementation(()=>{
-					return{
-						then: jest.fn().mockImplementation(()=>{
-							return{
-								catch: jest.fn().mockImplementation(()=>{
-									return{
-										Promise: true
-									}
-								})
-							}
-						})
-
-					}
-				})
-			};
-		}),
-
-	};
-}); */
-
 describe('AccountService', () => {
 	let serviceAccount: AccountService;
 	let serviceNotification: NotificationService;
@@ -78,24 +54,9 @@ describe('AccountService', () => {
 					},
 				]);
 				const results = await serviceAccount.registerUser(registerDTO);
-				await expect(results).toEqual('true');
-			});
-		});
-
-		describe('The user will enter their details incorrectly', () => {
-			it('If all user details are entered incorrectly the user will not be registered', async () => {
-				registerDTO.RegisterDto = jest.fn(() => [
-					{
-						email: 'Test@gmail.com',
-						phoneNumber: '0721234567',
-						displayName: 'UserTestName',
-						password: 'TestWrPasswords',
-						passwordConfirm: 'TestPassword',
-					},
-				]);
-
-				// Todo This should fail
-				await expect(serviceAccount.registerUser(registerDTO)).rejects.toThrowError();
+				expect(results.error).toEqual('Email or Password does not meet the requirements');
+				expect(results.message).toEqual('User is unsuccessfully registered:');
+				expect(results.success).toEqual(false);
 			});
 		});
 	});

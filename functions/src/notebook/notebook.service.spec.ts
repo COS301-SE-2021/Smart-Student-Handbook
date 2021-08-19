@@ -60,6 +60,26 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
+	describe('Search notebooks', () => {
+		it('Should Return empty array', async () => {
+			const result = await notebookService.getUserNotebooks(userId);
+
+			expect(result).toStrictEqual([]);
+		});
+
+		it('Should Return empty array', async () => {
+			let result;
+			try {
+				result = await notebookService.getNotebook('NotebookDoesNotExist');
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
+			expect(result.status).toBe(404);
+		});
+	});
+
 	describe('Create Notebook', () => {
 		it('This function should create a new notebook and return the content of the created notebook', async () => {
 			const notebook = {
@@ -150,6 +170,32 @@ describe('NotebookIntegrationTests', () => {
 			expect(updatedNotebook.private).toBe(false);
 			expect(updatedNotebook.tags).toStrictEqual(['update tag1', 'update tag2']);
 		});
+
+		it('Should fail try to update notebook when user should not be able to', async () => {
+			const notebook = {
+				title: 'Updated Title',
+				author: 'Updated Author',
+				course: 'Updated Course',
+				description: 'Updated Description',
+				institution: 'Updated Institution',
+				notebookId,
+				creatorId: 'noAccessUser',
+				private: false,
+				tags: ['update tag1', 'update tag2'],
+				userId,
+			};
+
+			let result;
+
+			try {
+				result = await notebookService.updateNotebook(notebook);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Not Authorized');
+			expect(result.status).toBe(401);
+		});
 	});
 
 	describe('Create a New Note', () => {
@@ -204,25 +250,25 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	// describe('Try to delete notes', () => {
-	// 	it('Test should delete note from notebook', async () => {
-	// 		const note = {
-	// 			notebookId,
-	// 			noteId,
-	// 			userId,
-	// 		};
-	//
-	// 		const result = await notebookService.deleteNote(note);
-	//
-	// 		expect(result.message).toBe('Successfully delete note!');
-	// 	});
-	// });
+	describe('Try to delete notes', () => {
+		it('Test should delete note from notebook', async () => {
+			const note = {
+				notebookId,
+				noteId,
+				userId,
+			};
+
+			const result = await notebookService.deleteNote(note);
+
+			expect(result.message).toBe('Successfully delete note!');
+		});
+	});
 
 	describe('Get notes after deleting a note', () => {
 		it('Test should return 1 note since the other note was deleted in the previous test', async () => {
 			const result = await notebookService.getNotes(notebookId);
 
-			expect(result.length).toBe(2);
+			expect(result.length).toBe(1);
 		});
 	});
 

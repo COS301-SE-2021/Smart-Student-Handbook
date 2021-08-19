@@ -22,67 +22,63 @@ export class NotebookService {
 		const notebookIds: string[] = [];
 		const notebooks = [];
 
-		try {
-			const notebookIdSnapshot = await admin.firestore().collection(`userContent/${userId}/Notebooks`).get();
-			notebookIdSnapshot.forEach((doc) => {
-				notebookIds.push(doc.id);
-			});
+		const notebookIdSnapshot = await admin.firestore().collection(`userContent/${userId}/Notebooks`).get();
+		notebookIdSnapshot.forEach((doc) => {
+			notebookIds.push(doc.id);
+		});
 
-			if (notebookIds.length === 0) {
-				return notebooks;
-			}
-
-			const notebookSnapshot = await admin
-				.firestore()
-				.collection('userNotebooks')
-				.where('notebookId', 'in', notebookIds)
-				.get();
-
-			notebookSnapshot.forEach((doc) => {
-				notebooks.push({
-					title: doc.data().title,
-					author: doc.data().author,
-					course: doc.data().course,
-					description: doc.data().description,
-					institution: doc.data().institution,
-					creatorId: doc.data().creatorId,
-					private: doc.data().private,
-					notebookId: doc.data().notebookId,
-					notes: doc.data().notes,
-					access: doc.data().access,
-					tags: doc.data().tags,
-				});
-			});
-
+		if (notebookIds.length === 0) {
 			return notebooks;
-		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 		}
+
+		const notebookSnapshot = await admin
+			.firestore()
+			.collection('userNotebooks')
+			.where('notebookId', 'in', notebookIds)
+			.get();
+
+		notebookSnapshot.forEach((doc) => {
+			notebooks.push({
+				title: doc.data().title,
+				author: doc.data().author,
+				course: doc.data().course,
+				description: doc.data().description,
+				institution: doc.data().institution,
+				creatorId: doc.data().creatorId,
+				private: doc.data().private,
+				notebookId: doc.data().notebookId,
+				notes: doc.data().notes,
+				access: doc.data().access,
+				tags: doc.data().tags,
+			});
+		});
+
+		return notebooks;
 	}
 
 	async getNotebook(notebookId: string): Promise<Notebook> {
-		try {
-			const notebook = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
+		const notebook = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
-			return {
-				title: notebook.data().title,
-				author: notebook.data().author,
-				course: notebook.data().course,
-				description: notebook.data().description,
-				institution: notebook.data().institution,
-				creatorId: notebook.data().creatorId,
-				private: notebook.data().private,
-				notebookId: notebook.data().notebookId,
-				notes: notebook.data().notes,
-				access: notebook.data().access,
-				tags: notebook.data().tags,
-			};
-		} catch (e) {
+		if (!notebook.exists) {
 			throw new HttpException(
 				'Could net retrieve notebook, it could be that the notebook does not exist',
 				HttpStatus.NOT_FOUND,
 			);
 		}
+
+		return {
+			title: notebook.data().title,
+			author: notebook.data().author,
+			course: notebook.data().course,
+			description: notebook.data().description,
+			institution: notebook.data().institution,
+			creatorId: notebook.data().creatorId,
+			private: notebook.data().private,
+			notebookId: notebook.data().notebookId,
+			notes: notebook.data().notes,
+			access: notebook.data().access,
+			tags: notebook.data().tags,
+		};
 	}
 
 	async createNotebook(notebookDto: NotebookDto): Promise<Response> {
@@ -127,9 +123,6 @@ export class NotebookService {
 					notebookId,
 					notes: [note],
 					access: [],
-				})
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
 			throw new HttpException(
@@ -161,10 +154,10 @@ export class NotebookService {
 				})
 				.then(() => ({
 					message: 'Successfully added notebook to user account',
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
+			// .catch(() => {
+			// 	throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+			// });
 		} catch (error) {
 			throw new HttpException(
 				'Something went wrong. Operation could not be executed.',
@@ -197,10 +190,7 @@ export class NotebookService {
 				})
 				.then(() => ({
 					message: 'Updated notebook successful!',
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
 		} catch (error) {
 			throw new HttpException(
 				'Something went wrong. Operation could not be executed.',
@@ -313,10 +303,7 @@ export class NotebookService {
 				.then(() => ({
 					message: 'Update a notebook was successful!',
 					notebookId,
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed error. ${error}`,

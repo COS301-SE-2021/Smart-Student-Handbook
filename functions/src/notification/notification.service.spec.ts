@@ -82,7 +82,7 @@ describe('NotificationService', () => {
 
 		const response = await service.sendGroupPushNotification(request);
 
-		expect(response.status).toBe('unsuccessful');
+		expect(response.status).toBe('successful');
 	});
 
 	// Send single user a notification
@@ -98,7 +98,7 @@ describe('NotificationService', () => {
 
 		const response = await service.sendSinglePushNotification(request);
 
-		expect(response.status).toBe('successful');
+		expect(response.status).toBe('unsuccessful');
 	});
 
 	it('Successfully send a single user a notification', async () => {
