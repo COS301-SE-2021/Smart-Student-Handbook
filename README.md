@@ -2,7 +2,7 @@
 
 <a href="https://www.advance.io/">
     <p align="center">
-        <img  src="https://www.advance.io/wp-content/uploads/2020/02/advance-twitter-1.jpg" alt="Epi-Use logo">
+        <img  src="frontend/src/assets/logo/SmartStudentHandbook.png" alt="Epi-Use logo">
     </p>
 </a>
 
@@ -56,13 +56,15 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing">Software Requirements Specification - V1 </a>
-* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing">Software Requirements Specification - V2 </a>
-* <a href="#">Coding Standards </a>
-<!-- * <a href="#">Technical Installation Guide</a>
-* <a href="#">User Manual</a>
-* <a href="#">Testing Policy</a> -->
-    *<a href="https://drive.google.com/file/d/16bTgaYMy3zFQXpLFXHO8zvhXwf5d6hcE/view?usp=sharing">User Manual -V1</a>
+* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing">Software Requirements Specification - V1</a>
+* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing">Software Requirements Specification - V2</a>
+* <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing">Software Requirements Specification - V3</a>
+* <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing">Coding Standards</a>
+* <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing">User Manual</a>
+* <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing">Technical Installation Guide</a>
+
+<!-- * <a href="#">Testing Policy</a> -->
+
 
 </div>
 
@@ -74,9 +76,8 @@ to amount of other users using their notebook.
 - NestJS
 - Firebase
 ### Testing
-- Jest (Backend)
-- Jasmine (Frontend)
-- Karma (Frontend)
+- Jest Backend
+- Cypress (e2e testing)
 
 
 # Project Management
@@ -87,6 +88,9 @@ to amount of other users using their notebook.
 * <p>Github Actions: continuos integration and automated testing</p>
 * <p><a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.</p>
 * <p>Discord</p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/projects">GitHub Project Boards<a></p>
+* <p>Meeting Notes: <a href="https://github.com/orgs/COS301-SE-2021/teams/algorithmic-aces">GitHub Discussion</a></p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/issues">GitHub Issues:</a></P>
 
 
 <!-- * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
@@ -104,8 +108,8 @@ to amount of other users using their notebook.
 
 * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
 * <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing"> Demo 2 </a>
-<!-- * <a href="#"> Demo 3 </a>
-* <a href="#"> Demo 4 </a> -->
+* <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing"> Demo 3 </a>
+<!-- * <a href="#"> Demo 4 </a> -->
 
 </div>
 
