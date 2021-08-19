@@ -84,13 +84,13 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project :</a>  Progress tracking, project boards, issue tracking.</p>
-* <p>Github Actions: continuos integration and automated testing</p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/">GitHub project </a>  Progress tracking, project boards, issue tracking.</p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/actions">Github Actions</a> continuos integration and automated testing</p>
 * <p><a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.</p>
 * <p>Discord</p>
 * <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/projects">GitHub Project Boards<a></p>
-* <p>Meeting Notes: <a href="https://github.com/orgs/COS301-SE-2021/teams/algorithmic-aces">GitHub Discussion</a></p>
-* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/issues">GitHub Issues:</a></P>
+* <p><a href="https://github.com/orgs/COS301-SE-2021/teams/algorithmic-aces">Meeting Notes with GitHub Discussion</a></p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/issues">GitHub Issues</a></P>
 
 
 <!-- * <a href="https://meet.google.com/">Google Meets:</a> Formal team meetings and communication between stakeholders.
@@ -127,82 +127,7 @@ The Development Team
 https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd5493008f41d1cca5ea65&v=4&s=200
 
 </div> -->
-
 <!-- # Contributions -->
-##Arno 
-Demo 2
-Updated use case diagrams
-Updated domain model
-Updated the editor component 
-Updated general front end styling
-Updated
-Notebook service
-Created 
-Modals
-Messaging service
-Notebook
-Updated ‘My notebook’ treeview
-Add notebook
-Notespanel
-Updated general styling
-Updated Add, edit, delete notes
-Editor
-Updated editor view
-Smart assist panel
-Updated styling
-Added testing content
-
-
-Demo 3
-Collaborated with notification development - front and back end.
-Updated menu styling
-Updated
-Messaging service
-Notebook service
-Created 
-Note-more service
-Mobile notes view
-NotebookData service
-Forgot password view
-Reset Password view
-Notes service
-Shared with me service
-Notebook
-Updated ‘My notebook’ treeview
-Add, edit, delete notebook
-Updated ‘Shared with me’ treeview
-Retrieve notebooks that are shared with the logged in user
-Update notebook
-Notepanel
-Updated header
-Updated general styling
-Add, edit, delete notes
-Editor
-Display notebook information - creator, collaborators etc.
-Add, remove tags
-Add, remove collaborators
-Created custom Editorjs snippet tool
-Smart assist panel
-Made content draggable
-Drag & drop functionality into a note
-Added snippet preview
-Updated styling
-
-##Louw
-Backend NotebookService, NoteService, AccessService, ReviewService, Integration Testing, Cloud function for algolia backend setup to index created, updated and delete records
-
-##Luca Explore page , backend notifications , research AI , User manual. SRS documentation
-Acount backend. Users backedn. 
-
-##Theo 
-Smart Assist, backend Account and User service
-
-
-##Douglas
- Linting, structuring Angular, Menu, Auth guards and rooting, Home , Login - Register - Updated user profile - Front end testing with jest, Coding standard document, technical installation manual
-
-
-
 
 # Group Members
 
@@ -223,9 +148,15 @@ I am currently a Computer Science Student at The University of Pretoria
   - Documentation on the SRS document.
  </details>
  <details><summary> What I did for Demo 2</summary>
-
-  - a
-  - b
+  
+  - Backend Testing
+  - Account, Notebook and User service
+</details>
+<details><summary> What I did for Demo 3</summary>
+  
+  - Backend Note, Note, Access, Review services
+  - Integration Testing
+  - Technical Installation Manual, updated SRS, Architecture Design
 </details>
   
 <hr/>
@@ -247,9 +178,15 @@ I am currently a Computer Science Student at The University of Pretoria
   - Implemented  the SRS document
  </details>
  <details><summary> What I did for Demo 2</summary>
-
-  - a
-  - b
+ 
+  - Testing
+  - Comments
+</details>
+<details><summary> What I did for Demo 3</summary>
+  
+  - Explore Page
+  - Backend Notification service
+  - User Manual, updated SRS
 </details>
 
 <hr/>
@@ -262,7 +199,6 @@ I am currently a Information and Knowledge Systems student at The University of 
 
 - [GitHub Profile](https://github.com/Arno-Moller)
 - [LinkedIn](https://www.linkedin.com/in/arno-m%C3%B6ller-a96a8920b/)
- 
 
 </details>
 
@@ -272,9 +208,18 @@ I am currently a Information and Knowledge Systems student at The University of 
   - Implemented the SRS document
 </details>
 <details><summary> What I did for Demo 2</summary>
-
-  - a
-  - b
+  
+  - Front end Notebook and notes (create, edit, update, delete)
+  - Smart Assist and Notes Panel
+</details>
+<details><summary> What I did for Demo 3</summary>
+  
+  - Front end notebooks, notes, editor, Notifications, shared with me
+  - Entire Notebook feature
+  - Mobile view
+  - Reset Password
+  - Front end testing
+  - Technical Installation  Manual, Updated SRS
 </details>
 
 <hr/>
@@ -292,14 +237,20 @@ I am currently a Computer Science Student at The University of Pretoria
 </details>
 
 <details><summary> What I did for Demo 1</summary>
-
+  
   - Implemented firebase functionality
   - Implemented SRS documentation
 </details>
 <details><summary> What I did for Demo 2</summary>
-
-  - a
-  - b
+  
+  - Continuos Integration
+  - Account service
+</details>
+<details><summary> What I did for Demo 3</summary>
+  
+  - Smart Assist AI
+  - Backend Account, User Service, email verification and reset password
+  - Deployment
 </details>
 
 <hr/>
@@ -321,9 +272,18 @@ I am currently a Information and Knowledge Systems student at The University of 
   - Implemented the SRS document
 </details>
 <details><summary> What I did for Demo 2</summary>
-
-  - a
-  - b
+  
+  - User Login and Register
+  - Angular front end
+  - User case diagrams and general SRS
+</details>
+<details><summary> What I did for Demo 3</summary>
+  
+  - Linting and Angular structure
+  - Menu, rooting and auth guards
+  - Home, Login, register and Update User
+  - Front end testing
+  - Coding standard and technical installation manual
 </details>
 
   <hr/>
@@ -332,4 +292,3 @@ I am currently a Information and Knowledge Systems student at The University of 
 
 - Team Email:  algorithmicaces@gmail.com
 - Client email: arne.schreuder@advance.io
-
