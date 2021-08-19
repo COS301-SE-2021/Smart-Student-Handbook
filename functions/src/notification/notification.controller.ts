@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -6,7 +6,6 @@ import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { SendNotificationToAllRequestDto } from './dto/sendNotificationToAll.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { NotificationService } from './notification.service';
-import { EmailInterface } from './interfaces/email.interface';
 import { CreateNotificationDto } from './dto/createNotification.dto';
 
 @Controller('notification')
@@ -37,6 +36,7 @@ export class NotificationController {
 			title: sendNotificationToAllRequest.title,
 			body: sendNotificationToAllRequest.body,
 			topic: 'general',
+			userId: sendNotificationToAllRequest.userId,
 		};
 
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
@@ -47,9 +47,14 @@ export class NotificationController {
 		return this.notificationService.sendGroupPushNotification(sendNotificationToGroupRequest);
 	}
 
-	@Post('sendUserToUserEmail')
-	async sendUserToUserEmail(@Body() userSender: string, userReceiver: string, email: EmailInterface) {
-		return this.notificationService.sendUserToUserEmail(userSender, userReceiver, email);
+	@Post('sendCollaborationRequest')
+	async sendUserToUserEmail(
+		@Body('userSender') userSender: string,
+		@Body('userReceiver') userReceiver: string,
+		@Body('notebookID') notebookID: string,
+		@Body('notebookTitle') notebookTitle: string,
+	) {
+		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID, notebookTitle);
 	}
 
 	@Post('sendUserToUserPushNotification')
@@ -58,14 +63,14 @@ export class NotificationController {
 		return this.notificationService.sendUserToUserPushNotification(singleNotificationRequest, receiverUserID);
 	}
 
-	@Get('getUserNotifications')
-	async getUserNotifications() {
-		return this.notificationService.getUserNotifications();
+	@Get('getUserNotifications/:userId')
+	async getUserNotifications(@Param('userId') userId) {
+		return this.notificationService.getUserNotifications(userId);
 	}
 
-	@Get('getUnreadNotifications')
-	async getUnreadNotifications() {
-		return this.notificationService.getUnreadNotifications();
+	@Get('getUnreadNotifications/:userId')
+	async getUnreadNotifications(@Param('userId') userId) {
+		return this.notificationService.getUnreadNotifications(userId);
 	}
 
 	@Post('createNotification')

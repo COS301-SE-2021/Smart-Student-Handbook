@@ -13,7 +13,7 @@ import {
 } from '@app/services';
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { not } from 'rxjs/internal-compatibility';
+import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -66,6 +66,7 @@ export class TreeViewComponent implements OnInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
+		private notebookData: NotebookDataService,
 		private noteMore: NoteMoreService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
@@ -81,7 +82,7 @@ export class TreeViewComponent implements OnInit {
 
 		this.dataSource.data = [
 			{
-				name: 'My notebooks',
+				name: 'My Notebooks',
 				id: '',
 				children: [
 					{
@@ -97,38 +98,69 @@ export class TreeViewComponent implements OnInit {
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
-		this.notebookService.getUserNotebooks().subscribe(
-			(notebooks) => {
-				this.notebooks = notebooks;
+		if (this.user)
+			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+				(notebooks: any[]) => {
+					let temp: any[] = [];
+					let index = 0;
+					const tree: { name: any; id: any }[] = [];
 
-				const tree = [];
-				for (let i = 0; i < notebooks.length; i += 1) {
-					this.childrenSize += 1;
+					notebooks.forEach((notebook: any) => {
+						temp = notebook.access;
 
-					const child = {
-						name: notebooks[i].title,
-						id: notebooks[i].notebookId,
-						// children: childArr,
-					};
+						if (temp.length > 0) {
+							index = temp.findIndex(
+								(a: any) => a.userId !== this.user.uid
+							);
+						}
 
-					tree.push(child);
+						if (index >= 0 || temp.length === 0) {
+							this.notebooks.push(notebook);
+
+							this.childrenSize += 1;
+
+							const child = {
+								name: notebook.title,
+								id: notebook.notebookId,
+								// children: childArr,
+							};
+
+							tree.push(child);
+						}
+
+						index = 0;
+					});
+					// console.log(notebooks);
+					// this.notebooks = notebooks;
+
+					// const tree = [];
+					// for (let i = 0; i < notebooks.length; i += 1) {
+					// 	this.childrenSize += 1;
+					//
+					// 	const child = {
+					// 		name: notebooks[i].title,
+					// 		id: notebooks[i].notebookId,
+					// 		// children: childArr,
+					// 	};
+					//
+					// 	tree.push(child);
+					// }
+
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+				},
+				(error) => {
+					// eslint-disable-next-line no-console
+					console.log(error.message);
 				}
-
-				if (this.childrenSize > 0) {
-					this.dataSource.data = [
-						{
-							name: 'My notebooks',
-							id: '',
-							children: tree,
-						},
-					];
-				}
-			},
-			(error) => {
-				// eslint-disable-next-line no-console
-				console.log(error.message);
-			}
-		);
+			);
 	}
 
 	updateNotebook(notebookId: string) {
@@ -170,7 +202,7 @@ export class TreeViewComponent implements OnInit {
 
 				this.dataSource.data = [
 					{
-						name: 'My notebooks',
+						name: 'My Notebooks',
 						id: '',
 						children: tree,
 					},
@@ -185,23 +217,27 @@ export class TreeViewComponent implements OnInit {
 	 * toggle the notesPanel component when using a desktop
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
-		this.openedNotebookId = notebookId;
+		this.router.navigate(['notebook']).then(() => {
+			this.openedNotebookId = notebookId;
 
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			localStorage.setItem('notebookId', notebookId);
+			const screenType = navigator.userAgent;
+			if (
+				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+					screenType
+				)
+			) {
+				localStorage.setItem('notebookId', notebookId);
 
-			this.router.navigate(['notes']);
-		} else {
-			this.openNotebookPanelService.toggleNotePanel(
-				notebookId,
-				notebookTitle
-			);
-		}
+				this.router.navigate(['notes']);
+			} else {
+				this.openNotebookPanelService.toggleNotePanel(
+					notebookId,
+					notebookTitle
+				);
+			}
+
+			this.notebookData.setID(notebookId, notebookTitle);
+		});
 	}
 
 	createNewNotebook() {
@@ -236,7 +272,7 @@ export class TreeViewComponent implements OnInit {
 				if (this.childrenSize === 1) {
 					this.dataSource.data = [
 						{
-							name: 'My notebooks',
+							name: 'My Notebooks',
 							id: '',
 							children: [child],
 						},
@@ -276,7 +312,7 @@ export class TreeViewComponent implements OnInit {
 				);
 
 				this.notebookService
-					.deleteNotebook(notebookId)
+					.deleteNotebook(notebookId, this.user.uid)
 					.subscribe(() => {
 						this.childrenSize -= 1;
 
@@ -292,7 +328,7 @@ export class TreeViewComponent implements OnInit {
 							if (this.childrenSize > 0) {
 								this.dataSource.data = [
 									{
-										name: 'My notebooks',
+										name: 'My Notebooks',
 										id: '',
 										children: tree,
 									},
@@ -304,7 +340,7 @@ export class TreeViewComponent implements OnInit {
 
 								this.dataSource.data = [
 									{
-										name: 'My notebooks',
+										name: 'My Notebooks',
 										id: '',
 										children: [
 											{

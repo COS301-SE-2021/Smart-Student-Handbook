@@ -7,6 +7,8 @@ import {
 	ProfileService,
 	AccountService,
 	SideNavService,
+	NotificationService,
+	MessagingService,
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
@@ -31,6 +33,8 @@ export class LeftMenuComponent implements OnInit {
 
 	width = 68.3;
 
+	nrUnreadNotifications = 0;
+
 	@ViewChild('treeViewComponent') treeViewComponent!: TreeViewComponent;
 
 	/**
@@ -39,16 +43,20 @@ export class LeftMenuComponent implements OnInit {
 	 * @param profileService call user profile related queries to the backend
 	 * @param dialog open a dialog when a user wants to edit their information
 	 * @param accountService
+	 * @param notificationService
 	 * @param router
 	 * @param sidenavService
+	 * @param messagingService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
 		private accountService: AccountService,
+		private notificationService: NotificationService,
 		private router: Router,
-		private sidenavService: SideNavService
+		private sidenavService: SideNavService,
+		private messagingService: MessagingService
 	) {}
 
 	/**
@@ -58,6 +66,13 @@ export class LeftMenuComponent implements OnInit {
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.notificationService
+			.getUnreadNotifications(this.user.uid)
+			.subscribe((unreadNotifications) => {
+				// console.log(unreadNotifications.length);
+				this.nrUnreadNotifications = unreadNotifications.length;
+			});
 	}
 
 	onSinenavToggle() {
@@ -104,36 +119,23 @@ export class LeftMenuComponent implements OnInit {
 		}
 	}
 
+	markNotificationsAsRead() {
+		this.nrUnreadNotifications = 0;
+	}
+
 	/**
 	 * If a user is not logged in, redirect them to the login page
 	 */
 	async logout() {
-		this.accountService.singOut().subscribe(
-			() => {
-				this.router.navigate(['account/login']);
-			},
-			(err) => {
-				console.log(`Error: ${err.error.message}`);
-			}
-		);
+		if (this.user) {
+			this.accountService.singOut(this.user.uid).subscribe(
+				() => {
+					this.router.navigate(['account/login']);
+				},
+				(err) => {
+					console.log(`Error: ${err.error.message}`);
+				}
+			);
+		}
 	}
-}
-
-/**
- * Tree structure
- */
-interface DirectoryNode {
-	name: string;
-	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	children?: DirectoryNode[];
-}
-
-/** Flat node with expandable and level information */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface ExampleFlatNode {
-	expandable: boolean;
-	name: string;
-	id: string;
-	level: number;
 }

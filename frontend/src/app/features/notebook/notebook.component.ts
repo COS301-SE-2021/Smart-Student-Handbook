@@ -89,54 +89,21 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
-		// Open a note when one is selected from the mobile view and update the title
-		// if (this.notebookEventEmitterService.subsVar === undefined) {
-		// 	this.notebookEventEmitterService.subsVar =
-		// 		this.notebookEventEmitterService.loadEmitter.subscribe(
-		// 			({ notebookId, noteId, title }) => {
-		// 				this.loadEditor(notebookId, noteId, title);
-		// 			}
-		// 		);
-		// this.notebookEventEmitterService.getTitleEmitter.subscribe(
-		// 	(title: string) => {
-		// 		const noteTitle = document.getElementById(
-		// 			'mobileTitle'
-		// 		) as HTMLSpanElement;
-		// 		// noteTitle.innerHTML = title;
-		// 	}
-		// );
-		// }
-
-		// // Toggle the notePanelComponent when in desktop view and notebook is selected
-		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-		// 	this.openNotebookPanelService.toggleSubscribe =
-		// 		this.openNotebookPanelService.togglePanelEmitter.subscribe(
-		// 			() => {
-		// 				console.log('openClose');
-		// 				this.notePanelComponent.openedCloseToggle();
-		// 			}
-		// 		);
-		// }
 	}
 
 	ngAfterViewInit() {
-		// this.menuPanelComponent.treeViewComponent.openNotebookFolder = () => {
-		// 	alert();
-		// 	// 	this.notePanelComponent.openedCloseToggle();
-		// };
-
-		// this.treeComponent.openNotebookFolder = () => {
-		// 	// this.router.navigate(['notes']);
-		// 	this.notePanelComponent.openedCloseToggle();
-		// };
-
 		this.notePanelComponent.openNotebook = (
 			notebookId: string,
 			noteId: string,
-			title: string
+			title: string,
+			notebookTitle: string
 		) => {
-			this.editorComponent.loadEditor(notebookId, noteId, title);
+			this.editorComponent.loadEditor(
+				notebookId,
+				noteId,
+				title,
+				notebookTitle
+			);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {
@@ -154,7 +121,17 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(notebookId: string, noteId: string, title: string) {
-		await this.editorComponent.loadEditor(notebookId, noteId, title);
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		await this.editorComponent.loadEditor(
+			notebookId,
+			noteId,
+			title,
+			notebookTitle
+		);
 	}
 }

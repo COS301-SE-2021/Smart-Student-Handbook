@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { MessagingService, SideNavService } from '@app/services';
+import { SideNavService } from '@app/services';
 import { onMainContentChange } from '@app/styling/animations';
 
 @Component({
@@ -9,7 +9,7 @@ import { onMainContentChange } from '@app/styling/animations';
 	styleUrls: ['./secure-layout.component.scss'],
 	animations: [onMainContentChange],
 })
-export class SecureLayoutComponent implements OnInit {
+export class SecureLayoutComponent {
 	@ViewChild('sidenav') sidenav: MatSidenav | undefined;
 
 	title = 'smart-student';
@@ -19,18 +19,11 @@ export class SecureLayoutComponent implements OnInit {
 	public onSideNavChange: boolean | undefined;
 
 	constructor(
-		private messagingService: MessagingService,
+		// private messagingService: MessagingService,
 		private sidenavService: SideNavService
 	) {
 		this.sidenavService.sideNavState$.subscribe((res) => {
 			this.onSideNavChange = res;
 		});
-	}
-
-	ngOnInit() {
-		// firebase.initializeApp(environment.firebase);
-		this.messagingService.requestPermission();
-		this.messagingService.receiveMessage();
-		this.message = this.messagingService.currentMessage;
 	}
 }

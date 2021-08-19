@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OpenNotebookPanelService } from './open-notebook-panel.service';
+import { OpenNotebookPanelService } from '@app/services';
 
 describe('OpenNotebookPanelService', () => {
 	let service: OpenNotebookPanelService;
 
 	beforeEach(() => {
-		TestBed.configureTestingModule({});
+		TestBed.configureTestingModule({
+			imports: [],
+			declarations: [],
+			providers: [], // Some stubs used here
+			// schemas: []
+		});
 		service = TestBed.inject(OpenNotebookPanelService);
 	});
 

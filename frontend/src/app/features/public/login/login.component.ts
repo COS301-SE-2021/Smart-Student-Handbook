@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountService } from '@app/services';
+import { AccountService, MessagingService } from '@app/services';
 
 @Component({
 	selector: 'app-login',
@@ -21,7 +21,8 @@ export class LoginComponent {
 		private fb: FormBuilder,
 		private route: ActivatedRoute,
 		private router: Router,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private messagingService: MessagingService
 	) {
 		// redirect to home if already logged in
 		if (this.accountService.getLoginState) {
@@ -55,6 +56,13 @@ export class LoginComponent {
 						this.router.navigate(['/home']);
 						if (progressbar) progressbar.style.display = 'none';
 						this.isDisabled = false;
+
+						this.messagingService.saveNotificationToken(
+							res.user.uid
+						);
+						this.messagingService.requestPermission();
+						this.messagingService.receiveMessage();
+						// this.message = this.messagingService.currentMessage;
 					} else {
 						this.loginFailed = true;
 						this.errorMessage = `${res.message} - ${res.error}`;

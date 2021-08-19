@@ -45,6 +45,8 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 	notebook: any;
 
+	user: any;
+
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
@@ -55,6 +57,8 @@ export class NotebookBottomSheetComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		this.notebookId = this.data.notebookID;
 		this.noteId = this.data.noteId;
 		this.title = this.data.notebookTitle;
@@ -121,9 +125,10 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 	addCollaborator() {
 		this.noteMore
-			.addCollaborator(this.notebookId)
-			.subscribe((collaborator: any) => {
-				this.collaborators.push(collaborator);
+			.requestCollaborator(this.user.uid, this.notebookId, '')
+			.subscribe(() => {
+				// collaborator: any
+				// this.collaborators.push(collaborator);
 			});
 	}
 

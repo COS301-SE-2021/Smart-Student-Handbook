@@ -45,18 +45,25 @@
 
         <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
 
-        <a mat-list-item  [routerLink]="['/sharedWithMe']">
+        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
           <mat-icon class="menuIcon" matTooltip="Shared With Me" matTooltipPosition="right">group</mat-icon>
-          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>
+<!--          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>-->
         </a>
+        <app-shared-with-me [@animateText]="linkText ? 'show' : 'hide'"></app-shared-with-me>
 
         <br/>
         <mat-divider></mat-divider>
         <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Account</span>
         <br/>
 
-        <a mat-list-item  [routerLink]="['/notifications']">
-          <mat-icon class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">notifications</mat-icon>
+        <a mat-list-item  [routerLink]="['/notifications']" (click)="markNotificationsAsRead()">
+          <mat-icon *ngIf="nrUnreadNotifications > 0" class="menuIcon" matTooltip="Notifications" matTooltipPosition="right"
+                    matBadge="{{nrUnreadNotifications}}" matBadgeColor="warn">
+            notifications
+          </mat-icon>
+          <mat-icon *ngIf="nrUnreadNotifications === 0" class="menuIcon" matTooltip="Notifications" matTooltipPosition="right">
+            notifications
+          </mat-icon>
           <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notifications</span>
         </a>
       </mat-nav-list>

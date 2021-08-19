@@ -1,5 +1,7 @@
 export class SubscribeToTopicRequestDto {
-	token: string;
+	token = ' ';
 
-	topic: string;
+	topic = ' ';
+
+	userId? = '';
 }

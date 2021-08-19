@@ -1,4 +1,4 @@
-@import "src/app/styling/pageUnderConstruction";
+@import '/src/app/styling/global';
 
 #list{
   padding-bottom: 50px;
@@ -6,7 +6,8 @@
 }
 
 .notificationListItem{
-  border-bottom: 1px solid #a7a7a7;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 5px;
   height: fit-content !important;
   padding: 15px 0 15px 0;
 }
