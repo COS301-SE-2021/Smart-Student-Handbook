@@ -62,6 +62,7 @@ to amount of other users using their notebook.
 <!-- * <a href="#">Technical Installation Guide</a>
 * <a href="#">User Manual</a>
 * <a href="#">Testing Policy</a> -->
+    *<a href="https://drive.google.com/file/d/16bTgaYMy3zFQXpLFXHO8zvhXwf5d6hcE/view?usp=sharing">User Manual -V1</a>
 
 </div>
 
@@ -124,6 +125,80 @@ https://avatars0.githubusercontent.com/u/40039774?s=400&u=dfacc43e5d1cb9a50ccd54
 </div> -->
 
 <!-- # Contributions -->
+##Arno 
+Demo 2
+Updated use case diagrams
+Updated domain model
+Updated the editor component 
+Updated general front end styling
+Updated
+Notebook service
+Created 
+Modals
+Messaging service
+Notebook
+Updated ‘My notebook’ treeview
+Add notebook
+Notespanel
+Updated general styling
+Updated Add, edit, delete notes
+Editor
+Updated editor view
+Smart assist panel
+Updated styling
+Added testing content
+
+
+Demo 3
+Collaborated with notification development - front and back end.
+Updated menu styling
+Updated
+Messaging service
+Notebook service
+Created 
+Note-more service
+Mobile notes view
+NotebookData service
+Forgot password view
+Reset Password view
+Notes service
+Shared with me service
+Notebook
+Updated ‘My notebook’ treeview
+Add, edit, delete notebook
+Updated ‘Shared with me’ treeview
+Retrieve notebooks that are shared with the logged in user
+Update notebook
+Notepanel
+Updated header
+Updated general styling
+Add, edit, delete notes
+Editor
+Display notebook information - creator, collaborators etc.
+Add, remove tags
+Add, remove collaborators
+Created custom Editorjs snippet tool
+Smart assist panel
+Made content draggable
+Drag & drop functionality into a note
+Added snippet preview
+Updated styling
+
+##Louw
+Backend NotebookService, NoteService, AccessService, ReviewService, Integration Testing, Cloud function for algolia backend setup to index created, updated and delete records
+
+##Luca Explore page , backend notifications , research AI , User manual. SRS documentation
+Acount backend. Users backedn. 
+
+##Theo 
+Smart Assist, backend Account and User service
+
+
+##Douglas
+ Linting, structuring Angular, Menu, Auth guards and rooting, Home , Login - Register - Updated user profile - Front end testing with jest, Coding standard document, technical installation manual
+
+
+
 
 # Group Members
 
@@ -183,6 +258,7 @@ I am currently a Information and Knowledge Systems student at The University of 
 
 - [GitHub Profile](https://github.com/Arno-Moller)
 - [LinkedIn](https://www.linkedin.com/in/arno-m%C3%B6ller-a96a8920b/)
+ 
 
 </details>
 
