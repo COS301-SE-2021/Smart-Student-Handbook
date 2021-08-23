@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ConfirmDeleteComponent } from '@app/components';
+import {
+	AddCollaboratorComponent,
+	AddNotebookComponent,
+	ConfirmDeleteComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
 import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
+import { NotificationService, ProfileService } from '@app/services';
+import { NotebookDto } from '@app/models';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class NotesService {
+export class NoteOperationsService {
 	// Variables for add notebook popup dialog
 	title = '';
 
@@ -24,7 +30,9 @@ export class NotesService {
 
 	constructor(
 		private notebookService: NotebookService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private profileService: ProfileService,
+		private notificationService: NotificationService
 	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 	}
@@ -68,7 +76,7 @@ export class NotesService {
 						description: result.description,
 					};
 
-					console.log(request);
+					// console.log(request);
 					// this.notebookTitle = result.title;
 
 					// Call service and create notebook
@@ -182,8 +190,9 @@ export class NotesService {
 								() => {
 									observer.next(true);
 								},
-								(error) => {
-									console.log(error);
+								() => {
+									observer.next(false);
+									// console.log(error);
 								}
 							);
 					}

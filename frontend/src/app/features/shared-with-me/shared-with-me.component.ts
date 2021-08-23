@@ -6,14 +6,13 @@ import {
 } from '@angular/material/tree';
 import {
 	NotebookEventEmitterService,
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NoteMoreService,
 	OpenNotebookPanelService,
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
-import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -66,9 +65,8 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
-		private noteMore: NoteMoreService,
-		private notebookData: NotebookDataService,
-		private sharedWithMeService: SharedWithMeService,
+		private notebookOperations: NotebookOperationsService,
+		private notebookObservables: NotebookObservablesService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -96,7 +94,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Get the logged in user's notebooks to add to the treeview
+	 * Get the logged in user's notebooks to add to the tree view
 	 */
 	getUserNotebooks() {
 		if (this.user)
@@ -153,7 +151,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 			(noteb) => noteb.notebookId === notebookId
 		);
 
-		this.noteMore
+		this.notebookOperations
 			.updateNotebook({
 				title: notebook[0].title,
 				author: notebook[0].author,
@@ -203,7 +201,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
 		this.router.navigate(['notebook']).then(() => {
-			this.notebookData.setID(notebookId, notebookTitle);
+			this.notebookObservables.setOpenNotebook(notebookId, notebookTitle);
 			this.openedNotebookId = notebookId;
 
 			const screenType = navigator.userAgent;
@@ -225,7 +223,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	}
 
 	ngAfterContentInit(): void {
-		this.sharedWithMeService.notebook.subscribe((val: any) => {
+		this.notebookObservables.sharedNotebook.subscribe((val: any) => {
 			if (val.id !== '') {
 				this.openedNotebookId = val.id;
 

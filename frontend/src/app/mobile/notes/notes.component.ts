@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import {
 	NotebookService,
 	NotebookEventEmitterService,
-	NotesService,
+	NoteOperationsService,
 } from '@app/services';
 
 @Component({
@@ -43,7 +43,7 @@ export class NotesComponent implements OnInit {
 
 	constructor(
 		private router: Router,
-		private notesService: NotesService,
+		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}

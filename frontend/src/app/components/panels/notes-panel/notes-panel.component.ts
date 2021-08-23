@@ -15,9 +15,9 @@ import { MatSidenav } from '@angular/material/sidenav';
 import {
 	NotebookService,
 	OpenNotebookPanelService,
-	NotesService,
+	NoteOperationsService,
+	NotebookObservablesService,
 } from '@app/services';
-import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-notes-panel',
@@ -57,20 +57,20 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
-	 * @param notebookData
+	 * @param notebookObservables
 	 * @param openNotebookPanelService
 	 * @param notesService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
-		private notebookData: NotebookDataService,
+		private notebookObservables: NotebookObservablesService,
 		private openNotebookPanelService: OpenNotebookPanelService,
-		private notesService: NotesService
+		private notesService: NoteOperationsService
 	) {}
 
 	ngAfterContentInit(): void {
-		this.notebookData.ids.subscribe((val: any) => {
+		this.notebookObservables.openNotebookId.subscribe((val: any) => {
 			if (val.title !== '') {
 				this.notebookTitle = val.title;
 				this.notes = [];

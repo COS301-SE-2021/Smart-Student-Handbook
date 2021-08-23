@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	NotebookObservablesService,
 	NotebookService,
-	NoteMoreService,
 	NotificationService,
 } from '@app/services';
 // import { Observable } from 'rxjs';
-import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-notifications',
@@ -19,9 +18,8 @@ export class NotificationsComponent implements OnInit {
 
 	constructor(
 		private notificationService: NotificationService,
-		private noteMoreService: NoteMoreService,
 		private notebookService: NotebookService,
-		private sharedWithMeService: SharedWithMeService
+		private notebookObservables: NotebookObservablesService
 	) {}
 
 	/* notificationList: Observable<any[]> =
@@ -40,7 +38,7 @@ export class NotificationsComponent implements OnInit {
 	}
 
 	accept(userId: string, notebookId: string, notebookTitle: string) {
-		this.sharedWithMeService.setNotebook(notebookId, notebookTitle);
+		this.notebookObservables.setNotebook(notebookId, notebookTitle);
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,

@@ -11,16 +11,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
-	NotebookService,
 	NotebookEventEmitterService,
-	ProfileService,
-	NotesService,
-	NoteMoreService,
+	NotebookOperationsService,
+	NotebookService,
+	NoteOperationsService,
 	NotificationService,
+	ProfileService,
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
+
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -142,7 +143,7 @@ export class EditorComponent implements OnInit {
 	 * @param bottomSheet
 	 * @param notesService
 	 * @param profileService
-	 * @param noteMore
+	 * @param notebookOperations
 	 * @param notificationService
 	 * @param notebookEventEmitterService
 	 */
@@ -150,9 +151,9 @@ export class EditorComponent implements OnInit {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
-		private notesService: NotesService,
+		private notesService: NoteOperationsService,
 		private profileService: ProfileService,
-		private noteMore: NoteMoreService,
+		private notebookOperations: NotebookOperationsService,
 		private notificationService: NotificationService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -187,16 +188,24 @@ export class EditorComponent implements OnInit {
 	}
 
 	getNotebook(notebookId: string): void {
-		console.log('----------------');
-		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
-			this.date = data.date;
-			this.notebook = data.notebook;
-			this.tags = data.tags;
-			this.collaborators = data.collaborators;
-			this.creator = data.creator;
-			this.private = data.notebook.private;
-			this.opened = true;
-		});
+		// console.log('----------------');
+		this.notebookOperations
+			.getNotebookInfo(notebookId)
+			.subscribe((data) => {
+				this.date = data.date;
+				this.notebook = data.notebook;
+				this.tags = data.tags;
+				this.collaborators = data.collaborators;
+				this.creator = data.creator;
+				this.private = data.notebook.private;
+				this.opened = true;
+
+				const progressbar = document.getElementById(
+					'progressbar'
+				) as HTMLElement;
+
+				if (progressbar) progressbar.style.display = 'none';
+			});
 	}
 
 	/**
@@ -215,13 +224,19 @@ export class EditorComponent implements OnInit {
 		this.notebookTitle = notebookTitle;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
+		this.noteTitle = title;
+		this.noteId = noteId;
+		this.notebookID = notebookId;
+		this.opened = false;
+
 		this.getNotebook(notebookId);
 
 		if (this.Editor === undefined || window.outerWidth <= 600) {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			const editor = new EditorJS({
+			// const editor = new EditorJS({
+			this.Editor = new EditorJS({
 				holder: 'editor',
 				tools: {
 					snippet: AddTagsTool,
@@ -299,7 +314,7 @@ export class EditorComponent implements OnInit {
 				},
 			});
 
-			this.Editor = editor;
+			// this.Editor = editor;
 
 			const e = document.getElementById('editor') as HTMLElement;
 			e.style.display = 'none';
@@ -324,17 +339,6 @@ export class EditorComponent implements OnInit {
 		const editor = this.Editor;
 
 		editor.clear();
-
-		/**
-		 * Get the specific notebook details with notebook id
-		 */
-		this.noteTitle = title;
-		this.noteId = noteId;
-		this.notebookID = notebookId;
-
-		EditorComponent.staticNotebookID = notebookId;
-		EditorComponent.staticNoteId = noteId;
-		EditorComponent.staticNotebookTitle = title;
 
 		this.notebookEventEmitterService.GetNoteTitle(title);
 
@@ -380,7 +384,7 @@ export class EditorComponent implements OnInit {
 				e = document.getElementById('editor') as HTMLElement;
 				e.style.overflowY = 'scroll';
 
-				if (progressbar) progressbar.style.display = 'none';
+				// if (progressbar) progressbar.style.display = 'none';
 			});
 		// });
 	}
@@ -429,8 +433,8 @@ export class EditorComponent implements OnInit {
 					});
 				}
 			})
-			.catch((error) => {
-				console.log('Saving failed: ', error);
+			.catch(() => {
+				// console.log('Saving failed: ', error);
 			});
 	}
 
@@ -486,11 +490,9 @@ export class EditorComponent implements OnInit {
 		const vh = window.innerHeight;
 
 		if (this.panelOpenState) {
-			const p = `${vh - 402}px`;
-			editor.style.height = p;
+			editor.style.height = `${vh - 402}px`;
 		} else {
-			const p = `${vh - 160}px`;
-			editor.style.height = p;
+			editor.style.height = `${vh - 160}px`;
 		}
 	}
 
@@ -518,17 +520,21 @@ export class EditorComponent implements OnInit {
 			tagList.push(this.tags[i].name);
 		}
 
-		this.noteMore.updateNotebookTags({
-			title: this.notebook.title,
-			author: this.notebook.author,
-			course: this.notebook.course,
-			description: this.notebook.description,
-			institution: this.notebook.institution,
-			creatorId: this.notebook.creatorId,
-			private: this.notebook.private,
-			tags: tagList,
-			notebookId: this.notebook.notebookId,
-		});
+		console.log(tagList);
+
+		this.notebookOperations
+			.updateNotebookTags({
+				title: this.notebook.title,
+				author: this.notebook.author,
+				course: this.notebook.course,
+				description: this.notebook.description,
+				institution: this.notebook.institution,
+				creatorId: this.notebook.creatorId,
+				private: this.notebook.private,
+				tags: tagList,
+				notebookId: this.notebook.notebookId,
+			})
+			.subscribe(() => {});
 	}
 
 	/**
@@ -547,20 +553,20 @@ export class EditorComponent implements OnInit {
 
 	addCollaborator() {
 		// this.notificationService.sendCollaborationRequest(this.user.uid, )
-		this.noteMore
+		this.notebookOperations
 			.requestCollaborator(
 				this.user.uid,
 				this.notebookID,
 				this.notebookTitle
 			)
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.subscribe((collaborator: any) => {
+			.subscribe(() => {
 				// this.collaborators.push(collaborator);
 			});
 	}
 
 	removeCollaborator(userId: string) {
-		this.noteMore
+		this.notebookOperations
 			.removeCollaborator(userId, this.notebookID)
 			.subscribe((id: string) => {
 				this.collaborators = this.collaborators.filter(

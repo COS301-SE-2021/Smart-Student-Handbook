@@ -1,22 +1,31 @@
 import { Injectable } from '@angular/core';
-import { AddCollaboratorComponent } from '@app/components/modals/add-collaborator/add-collaborator.component';
-import { AddNotebookComponent, ConfirmDeleteComponent } from '@app/components';
+import { NotebookService } from '@app/services/notebook.service';
 import { ProfileService } from '@app/services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookService } from '@app/services/notebook.service';
-import { Observable } from 'rxjs';
-// import { createNotificationDto, NotebookDto } from '@app/models';
 import { NotificationService } from '@app/services/notification.service';
+import { Observable } from 'rxjs';
+import {
+	AddCollaboratorComponent,
+	AddNotebookComponent,
+	ConfirmDeleteComponent,
+} from '@app/components';
 import { NotebookDto } from '@app/models';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class NoteMoreService {
+export class NotebookOperationsService {
 	user: any;
 
 	title: string;
 
+	/**
+	 * A service to be used for by components all notebook operations
+	 * @param notebookService
+	 * @param profileService
+	 * @param dialog
+	 * @param notificationService
+	 */
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
@@ -26,6 +35,13 @@ export class NoteMoreService {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 	}
 
+	/**
+	 * Send a collaboration request to another user
+	 * to partake in a notebook
+	 * @param senderId
+	 * @param notebookID
+	 * @param notebookTitle
+	 */
 	requestCollaborator(
 		senderId: string,
 		notebookID: string,
@@ -52,7 +68,7 @@ export class NoteMoreService {
 			},
 		});
 
-		return Observable.create(() => {
+		return Observable.create((observer) => {
 			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
 				this.notificationService
@@ -62,27 +78,24 @@ export class NoteMoreService {
 						notebookID,
 						notebookTitle
 					)
-					.subscribe((val) => {
-						console.log(val);
-					});
-				// this.notebookService
-				// 	.addAccess({
-				// 		displayName: result.name,
-				// 		userId: result.id,
-				// 		profileUrl: result.profileUrl,
-				// 		notebookId: notebookID,
-				// 	})
-				// 	.subscribe(() => {
-				// 		observer.next({
-				// 			name: result.name,
-				// 			url: result.profileUrl,
-				// 			id: result.id,
-				// 		});
-				// 	});
+					.subscribe(
+						() => {
+							// console.log(val);
+							observer.next(true);
+						},
+						() => {
+							observer.next(false);
+						}
+					);
 			});
 		});
 	}
 
+	/**
+	 * Remove a user from collaborating on a notebook
+	 * @param userId
+	 * @param notebookID
+	 */
 	removeCollaborator(userId: string, notebookID: string): Observable<any> {
 		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
 			data: {
@@ -99,17 +112,24 @@ export class NoteMoreService {
 							userId,
 							notebookId: notebookID,
 						})
-						.subscribe(() => {
-							observer.next(userId);
-							// this.collaborators = this.collaborators.filter(
-							//   (collaborator) => collaborator.id !== userId
-							// );
-						});
+						.subscribe(
+							() => {
+								observer.next(userId);
+							},
+							() => {
+								observer.next(false);
+							}
+						);
 				}
 			});
 		});
 	}
 
+	/**
+	 * Get the information of a notebook
+	 * @param notebookId
+	 * @return date, notebook, tags, collaborators, creator
+	 */
 	getNotebookInfo(notebookId: string): Observable<any> {
 		return Observable.create((observer: any) => {
 			const date = 'July 18, 2021 at 14:44';
@@ -169,6 +189,11 @@ export class NoteMoreService {
 		});
 	}
 
+	/**
+	 * Create a new notebook
+	 * @param notebookDto
+	 * @return create notebook response
+	 */
 	createNewNotebook(notebookDto: NotebookDto): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
@@ -215,24 +240,37 @@ export class NoteMoreService {
 		});
 	}
 
+	/**
+	 * Update a notebook's tags
+	 * @param notebookDto
+	 */
 	updateNotebookTags(notebookDto: NotebookDto) {
-		this.notebookService
-			.updateNotebook({
-				title: notebookDto.title,
-				author: notebookDto.author,
-				course: notebookDto.course,
-				description: notebookDto.description,
-				institution: notebookDto.institution,
-				creatorId: notebookDto.creatorId,
-				private: notebookDto.private,
-				tags: notebookDto.tags,
-				notebookId: notebookDto.notebookId,
-			})
-			.subscribe(() => {
-				// console.log(res);
-			});
+		const dto: NotebookDto = {
+			title: notebookDto.title,
+			author: notebookDto.author,
+			course: notebookDto.course,
+			description: notebookDto.description,
+			institution: notebookDto.institution,
+			creatorId: notebookDto.creatorId,
+			private: notebookDto.private,
+			tags: notebookDto.tags,
+			notebookId: notebookDto.notebookId,
+		};
+
+		return Observable.create((observer: any) => {
+			this.notebookService.updateNotebook(dto).subscribe(
+				() => {
+					observer.next(dto);
+				},
+				() => observer.next(false)
+			);
+		});
 	}
 
+	/**
+	 * Update a notebook's details
+	 * @param notebookDto
+	 */
 	updateNotebook(notebookDto: NotebookDto): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
@@ -259,32 +297,22 @@ export class NoteMoreService {
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
+				const dto: NotebookDto = {
+					title: result.title,
+					author: notebookDto.author,
+					course: notebookDto.course,
+					description: result.description,
+					institution: notebookDto.institution,
+					creatorId: notebookDto.creatorId,
+					private: result.private,
+					tags: notebookDto.tags,
+					notebookId: notebookDto.notebookId,
+				};
+
 				if (result) {
-					this.notebookService
-						.updateNotebook({
-							title: result.title,
-							author: notebookDto.author,
-							course: notebookDto.course,
-							description: result.description,
-							institution: notebookDto.institution,
-							creatorId: notebookDto.creatorId,
-							private: result.private,
-							tags: notebookDto.tags,
-							notebookId: notebookDto.notebookId,
-						})
-						.subscribe(() => {
-							observer.next({
-								title: result.title,
-								author: notebookDto.author,
-								course: result.course,
-								description: result.description,
-								institution: notebookDto.institution,
-								creatorId: notebookDto.creatorId,
-								private: result.private,
-								tags: notebookDto.tags,
-								notebookId: notebookDto.notebookId,
-							});
-						});
+					this.updateNotebookTags(dto).subscribe((notebookResult) => {
+						observer.next(notebookResult);
+					});
 				}
 			});
 		});

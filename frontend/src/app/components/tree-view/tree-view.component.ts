@@ -7,13 +7,13 @@ import {
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
 	NotebookEventEmitterService,
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NoteMoreService,
 	OpenNotebookPanelService,
 } from '@app/services';
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -66,8 +66,8 @@ export class TreeViewComponent implements OnInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
-		private notebookData: NotebookDataService,
-		private noteMore: NoteMoreService,
+		private notebookObservables: NotebookObservablesService,
+		private notebookOperations: NotebookOperationsService,
 		private openNotebookPanelService: OpenNotebookPanelService,
 		private notebookEventEmitterService: NotebookEventEmitterService
 	) {}
@@ -168,7 +168,7 @@ export class TreeViewComponent implements OnInit {
 			(noteb) => noteb.notebookId === notebookId
 		);
 
-		this.noteMore
+		this.notebookOperations
 			.updateNotebook({
 				title: notebook[0].title,
 				author: notebook[0].author,
@@ -236,12 +236,12 @@ export class TreeViewComponent implements OnInit {
 				);
 			}
 
-			this.notebookData.setID(notebookId, notebookTitle);
+			this.notebookObservables.setOpenNotebook(notebookId, notebookTitle);
 		});
 	}
 
 	createNewNotebook() {
-		this.noteMore
+		this.notebookOperations
 			.createNewNotebook({
 				title: '',
 				author: this.user.username,
