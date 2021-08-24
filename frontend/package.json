@@ -49,6 +49,7 @@
     "jquery": "^3.6.0",
     "ngx-long-press2": "^1.0.0",
     "rxjs": "~6.6.0",
+    "search-insights": "^2.0.2",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
   },
