@@ -1,50 +1,36 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import MockDate from 'mockdate';
+import * as admin from 'firebase-admin';
+import firebase from 'firebase';
 import { AccountService } from './account.service';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
+//
+// const registerDTO = require('./dto/register.dto');
 
-const registerDTO = require('./dto/register.dto');
+const serviceAccountKeys = require('../../service_account.json');
 
-// admin.initializeApp();
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccountKeys),
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+});
 
-jest.mock('firebase-admin');
-
-/* jest.mock('firebase-admin', () => {
-	return {
-		auth: jest.fn().mockImplementation(()=>{
-			return {
-				createUser: jest.fn().mockImplementation(()=>{
-					return{
-						then: jest.fn().mockImplementation(()=>{
-							return{
-								catch: jest.fn().mockImplementation(()=>{
-									return{
-										Promise: true
-									}
-								})
-							}
-						})
-
-					}
-				})
-			};
-		}),
-
-	};
-}); */
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	projectId: 'smartstudentnotebook',
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+firebase.initializeApp(firebaseConfig);
 
 describe('AccountService', () => {
 	let serviceAccount: AccountService;
 	let serviceNotification: NotificationService;
 	let serviceUser: UserService;
-	/* const mockFirestoreProperty = admin => {
-		const auth = jest.fn();
-		Object.defineProperty(admin, 'auth', {
-			get: jest.fn(() => auth),
-			configurable: true
-		});
-	}; */
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -54,8 +40,8 @@ describe('AccountService', () => {
 		serviceAccount = module.get<AccountService>(AccountService);
 		serviceNotification = module.get<NotificationService>(NotificationService);
 		serviceUser = module.get<UserService>(UserService);
-		// mockFirestoreProperty(admin);
-		// admin.auth=jest.fn();
+
+		jest.setTimeout(30000);
 	});
 
 	it('should be defined', () => {
@@ -64,39 +50,113 @@ describe('AccountService', () => {
 		expect(serviceUser).toBeDefined();
 	});
 
-	// test registerUser
-	describe('registerUser', () => {
-		describe('The user will enter their details', () => {
-			it('If all user details are entered correctly the user will be registered', async () => {
-				registerDTO.RegisterDto = jest.fn(() => [
-					{
-						email: 'Test@gmail.com',
-						phoneNumber: '0721234567',
-						displayName: 'UserTestName',
-						password: 'TestPassword',
-						passwordConfirm: 'TestPassword',
-					},
-				]);
-				const results = await serviceAccount.registerUser(registerDTO);
-				await expect(results).toEqual('true');
-			});
+	describe('Register User', () => {
+		it('Should fail password do not match', async () => {
+			const registerUser = {
+				email: 'Test@gmail.com',
+				username: 'UserTestName',
+				password: 'TestPassword!0',
+				passwordConfirm: 'TestPasswor',
+				isLocalhost: false,
+			};
+
+			const results = await serviceAccount.registerUser(registerUser);
+
+			expect(results.error).toEqual('Passwords dont match');
+			expect(results.message).toEqual('User is unsuccessfully registered:');
+			expect(results.success).toEqual(false);
 		});
 
-		describe('The user will enter their details incorrectly', () => {
-			it('If all user details are entered incorrectly the user will not be registered', async () => {
-				registerDTO.RegisterDto = jest.fn(() => [
-					{
-						email: 'Test@gmail.com',
-						phoneNumber: '0721234567',
-						displayName: 'UserTestName',
-						password: 'TestWrPasswords',
-						passwordConfirm: 'TestPassword',
-					},
-				]);
+		it('Should fail invalid email', async () => {
+			const registerUser = {
+				email: 'TestGmail.com',
+				username: 'UserTestName',
+				password: 'TestPassword!0',
+				passwordConfirm: 'TestPassword!0',
+				isLocalhost: false,
+			};
 
-				// Todo This should fail
-				await expect(serviceAccount.registerUser(registerDTO)).rejects.toThrowError();
-			});
+			const results = await serviceAccount.registerUser(registerUser);
+
+			expect(results.error).toEqual('Email or Password does not meet the requirements');
+			expect(results.message).toEqual('User is unsuccessfully registered:');
+			expect(results.success).toEqual(false);
+		});
+
+		it('Should register user', async () => {
+			const registerUser = {
+				email: 'TestUserAccount@gmail.com',
+				username: 'UserTestNameAccount',
+				password: 'TestPassword!0',
+				passwordConfirm: 'TestPassword!0',
+				isLocalhost: false,
+			};
+
+			const results = await serviceAccount.registerUser(registerUser);
+
+			expect(results.message).toEqual('User is successfully registered!');
+			expect(results.success).toEqual(true);
+		});
+
+		// it('Should fail cannot double register a user', async () => {
+		// 	const registerUser = {
+		// 		email: 'TestUserAccount@gmail.com',
+		// 		username: 'UserTestNameAccount',
+		// 		password: 'TestPassword!0',
+		// 		passwordConfirm: 'TestPassword!0',
+		// 		isLocalhost: false,
+		// 	};
+		//
+		// 	const results = await serviceAccount.registerUser(registerUser);
+		//
+		// 	expect(results.message).toEqual('User is unsuccessfully registered');
+		// 	expect(results.success).toEqual(false);
+		// });
+	});
+
+	describe('loginUser', () => {
+		it('Test should login a user', async () => {
+			const user = {
+				email: 'TestUserAccount@gmail.com',
+				password: 'TestPassword!0',
+			};
+
+			const result = await serviceAccount.loginUser(user);
+
+			expect(result.message).toBe('User is successfully logged in!');
+		});
+	});
+
+	describe('Update User', () => {
+		it('It should decode the code correctly', async () => {
+			const updateUser = {
+				email: 'TestUserAccount@gmail.com',
+				displayName: 'UserTestName',
+				password: 'TestPassword!0',
+				passwordConfirm: 'TestPassword!0',
+				isLocalhost: false,
+				username: 'UserTestName',
+				institution: 'Test Institution',
+				department: 'Test Department',
+				program: 'Test Program',
+				workStatus: 'Test WorkStatus',
+				bio: 'Test bio',
+				profilePicUrl: 'TestUrl',
+			};
+
+			const results = await serviceAccount.updateUser(updateUser);
+
+			expect(results.message).toEqual('User is successfully Updated!');
+			expect(results.success).toEqual(true);
+		});
+	});
+
+	describe('Get Current User', () => {
+		it('This should return the user that is currently logged in', async () => {
+			const results = await serviceAccount.getCurrentUser();
+
+			expect(results.message).toEqual('User is successfully logged in.');
+			expect(results.success).toEqual(true);
 		});
 	});
 
@@ -151,6 +211,14 @@ describe('AccountService', () => {
 			expect(code.timeExpire).toBe(974853000000);
 			expect(code.uid).toBe('iHTCHLd8');
 			expect(code.checksumPassed).toBe(true);
+		});
+	});
+
+	describe('Delete User', () => {
+		it('This should delete the currently logged in user', async () => {
+			const results = await serviceAccount.deleteUser();
+
+			expect(results.message).toEqual('Successfully deleted user!');
 		});
 	});
 });

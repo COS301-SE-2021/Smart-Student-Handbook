@@ -25,7 +25,7 @@ export class AccountService {
 	 */
 	async registerUser(registerDto: RegisterDto): Promise<Account> {
 		// Check if user password and confirm passwords match before creating user
-		if (registerDto.password !== registerDto.passwordConfirm) {
+		if (!(registerDto.password === registerDto.passwordConfirm)) {
 			return {
 				success: false,
 				user: null,
@@ -272,8 +272,8 @@ export class AccountService {
 			.then((customToken) => ({
 				customToken,
 			}))
-			.catch((error) => {
-				console.log('Error creating custom token:', error);
+			.catch(() => {
+				// console.log('Error creating custom token:', error);
 			});
 
 		// Login user. If successful return success message else throw Bad Request exception

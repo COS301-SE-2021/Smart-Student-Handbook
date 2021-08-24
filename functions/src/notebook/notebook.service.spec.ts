@@ -7,8 +7,10 @@ import { NotebookController } from './notebook.controller';
 import { UserService } from '../user/user.service';
 import { NotificationService } from '../notification/notification.service';
 
+const serviceAccount = require('../../service_account.json');
+
 admin.initializeApp({
-	credential: admin.credential.applicationDefault(),
+	credential: admin.credential.cert(serviceAccount),
 	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
 });
 
@@ -55,6 +57,26 @@ describe('NotebookIntegrationTests', () => {
 			userId = result.user.uid;
 
 			expect(result.message).toBe('User is successfully logged in!');
+		});
+	});
+
+	describe('Search notebooks', () => {
+		it('Should Return empty array', async () => {
+			const result = await notebookService.getUserNotebooks(userId);
+
+			expect(result).toStrictEqual([]);
+		});
+
+		it('Should Return empty array', async () => {
+			let result;
+			try {
+				result = await notebookService.getNotebook('NotebookDoesNotExist');
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
+			expect(result.status).toBe(404);
 		});
 	});
 
@@ -148,6 +170,32 @@ describe('NotebookIntegrationTests', () => {
 			expect(updatedNotebook.private).toBe(false);
 			expect(updatedNotebook.tags).toStrictEqual(['update tag1', 'update tag2']);
 		});
+
+		it('Should fail try to update notebook when user should not be able to', async () => {
+			const notebook = {
+				title: 'Updated Title',
+				author: 'Updated Author',
+				course: 'Updated Course',
+				description: 'Updated Description',
+				institution: 'Updated Institution',
+				notebookId,
+				creatorId: 'noAccessUser',
+				private: false,
+				tags: ['update tag1', 'update tag2'],
+				userId,
+			};
+
+			let result;
+
+			try {
+				result = await notebookService.updateNotebook(notebook);
+			} catch (e) {
+				result = e;
+			}
+
+			expect(result.message).toBe('Not Authorized');
+			expect(result.status).toBe(401);
+		});
 	});
 
 	describe('Create a New Note', () => {
@@ -202,25 +250,25 @@ describe('NotebookIntegrationTests', () => {
 		});
 	});
 
-	// describe('Try to delete notes', () => {
-	// 	it('Test should delete note from notebook', async () => {
-	// 		const note = {
-	// 			notebookId,
-	// 			noteId,
-	// 			userId,
-	// 		};
-	//
-	// 		const result = await notebookService.deleteNote(note);
-	//
-	// 		expect(result.message).toBe('Successfully delete note!');
-	// 	});
-	// });
+	describe('Try to delete notes', () => {
+		it('Test should delete note from notebook', async () => {
+			const note = {
+				notebookId,
+				noteId,
+				userId,
+			};
+
+			const result = await notebookService.deleteNote(note);
+
+			expect(result.message).toBe('Successfully delete note!');
+		});
+	});
 
 	describe('Get notes after deleting a note', () => {
 		it('Test should return 1 note since the other note was deleted in the previous test', async () => {
 			const result = await notebookService.getNotes(notebookId);
 
-			expect(result.length).toBe(2);
+			expect(result.length).toBe(1);
 		});
 	});
 
@@ -383,38 +431,38 @@ describe('NotebookIntegrationTests', () => {
 			expect(result.message).toBe('Successfully signed out.');
 		});
 	});
-
-	describe('Try to get a notebook  that does not exist', () => {
-		it('Should throw file not found error', async () => {
-			let result;
-			try {
-				await notebookService.getNotebook('impossible id');
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
-			expect(result.status).toBe(404);
-		});
-	});
-
-	describe('Try to delete notes', () => {
-		it('Should throw error when deleting a note that does not exist', async () => {
-			let result;
-			const note = {
-				notebookId: 'impossible note id',
-				noteId,
-				userId,
-			};
-
-			try {
-				await notebookService.deleteNote(note);
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Documents does not seem to exist.');
-			expect(result.status).toBe(404);
-		});
-	});
+	//
+	// describe('Try to get a notebook  that does not exist', () => {
+	// 	it('Should throw file not found error', async () => {
+	// 		let result;
+	// 		try {
+	// 			await notebookService.getNotebook('impossible id');
+	// 		} catch (e) {
+	// 			result = e;
+	// 		}
+	//
+	// 		expect(result.message).toBe('Could net retrieve notebook, it could be that the notebook does not exist');
+	// 		expect(result.status).toBe(404);
+	// 	});
+	// });
+	//
+	// describe('Try to delete notes', () => {
+	// 	it('Should throw error when deleting a note that does not exist', async () => {
+	// 		let result;
+	// 		const note = {
+	// 			notebookId: 'impossible note id',
+	// 			noteId,
+	// 			userId,
+	// 		};
+	//
+	// 		try {
+	// 			await notebookService.deleteNote(note);
+	// 		} catch (e) {
+	// 			result = e;
+	// 		}
+	//
+	// 		expect(result.message).toBe('Documents does not seem to exist.');
+	// 		expect(result.status).toBe(404);
+	// 	});
+	// });
 });

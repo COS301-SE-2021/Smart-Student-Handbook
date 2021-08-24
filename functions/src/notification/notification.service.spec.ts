@@ -1,15 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
+import firebase from 'firebase';
 import { NotificationService } from './notification.service';
+import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
-import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-
-admin.initializeApp();
 const { mock } = require('nodemailer');
+const serviceAccount = require('../../service_account.json');
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+});
+
+const firebaseConfig = {
+	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
+	authDomain: 'smartstudentnotebook.firebaseapp.com',
+	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	projectId: 'smartstudentnotebook',
+	storageBucket: 'smartstudentnotebook.appspot.com',
+	messagingSenderId: '254968215542',
+	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
+	measurementId: 'G-YDRCWDT5QJ',
+};
+firebase.initializeApp(firebaseConfig);
 
 describe('NotificationService', () => {
 	let service: NotificationService;
@@ -82,7 +98,7 @@ describe('NotificationService', () => {
 
 		const response = await service.sendGroupPushNotification(request);
 
-		expect(response.status).toBe('unsuccessful');
+		expect(response.status).toBe('successful');
 	});
 
 	// Send single user a notification
@@ -98,7 +114,7 @@ describe('NotificationService', () => {
 
 		const response = await service.sendSinglePushNotification(request);
 
-		expect(response.status).toBe('successful');
+		expect(response.status).toBe('unsuccessful');
 	});
 
 	it('Successfully send a single user a notification', async () => {
@@ -127,5 +143,69 @@ describe('NotificationService', () => {
 		const response = await service.subscribeToNotificationTopic(request);
 
 		expect(response.status).toBe('unsuccessful');
+	});
+
+	it('sendEmailNotification', async () => {
+		const email = {
+			email: 'louw707@gmail.com',
+			subject: 'Test subject',
+			body: 'Test body',
+		};
+
+		await service.sendEmailNotification(email);
+	});
+
+	it('sendSinglePushNotification', async () => {
+		const pushNotification = {
+			token: 'RandomToken',
+			title: 'RandomTitle',
+			body: 'RandomBody',
+			userId: 'UserId',
+		};
+
+		await service.sendSinglePushNotification(pushNotification);
+	});
+
+	it('sendGroupPushNotification', async () => {
+		const pushNotification = {
+			topic: 'RandomTopic',
+			title: 'RandomTitle',
+			body: 'RandomBody',
+			userId: 'UserId',
+		};
+
+		await service.sendGroupPushNotification(pushNotification);
+	});
+
+	it('subscribeToNotificationTopic', async () => {
+		const pushNotification = {
+			token: 'RandomToken',
+			topic: 'RandomTopic',
+			userId: 'UserId',
+		};
+
+		await service.subscribeToNotificationTopic(pushNotification);
+	});
+
+	it('createNotificationo a topic', async () => {
+		const pushNotification = {
+			userID: 'userID',
+			type: 'type',
+			heading: 'heading',
+			body: 'body',
+			opened: false,
+			notebookID: 'notebookId',
+			notebookTitle: 'notebookTitle',
+		};
+
+		await service.createNotification(pushNotification);
+	});
+
+	it('getUserNotifications', async () => {
+		await service.getUserNotifications('userId');
+	});
+
+	it('getUnreadNotifications', async () => {
+		await service.getUnreadNotifications('userId');
 	});
 });
