@@ -23,8 +23,8 @@ export class UserService {
 			.then((userRecord) => {
 				dn = userRecord.displayName;
 			})
-			.catch((error) => {
-				console.log('Error fetching user data:', error);
+			.catch(() => {
+				// console.log('Error fetching user data:', error);
 			});
 
 		if (doc.exists) {
@@ -78,8 +78,8 @@ export class UserService {
 						dateJoined: querySnapshot.docs[0].data().dateJoined,
 					},
 				}))
-				.catch((error) => {
-					console.log('Error fetching user data:', error);
+				.catch(() => {
+					// console.log('Error fetching user data:', error);
 				}))
 			.catch((error) => ({
 				success: false,
