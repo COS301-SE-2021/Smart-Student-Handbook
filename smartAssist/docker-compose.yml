@@ -1,0 +1,20 @@
+version: '3.2'
+services: 
+    smartassist:
+        build:
+            context: .
+            cache_from:
+                - u19002514/smartassist:latest
+        image: u19002514/smartassist
+        ports: 
+            - "6001:6001"
+        volumes:
+            - models:/app/models
+            - NotebookDataset:/app/NotebookDataset
+
+
+
+volumes: 
+    models:
+
+    NotebookDataset:
