@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
-// import aa from 'search-insights';
+import aa from 'search-insights';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -19,6 +19,7 @@ export class ExploreComponent implements OnInit {
 		indexName: 'userNotebooks',
 		routing: true,
 		searchClient,
+		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
 		},

@@ -9,6 +9,8 @@
   <div class="row">
     <div class="col-12">
       <ais-instantsearch [config]="config">
+        <ais-configure [searchParameters]="{ clickAnalytics: true }"></ais-configure>
+      </ais-instantsearch>
         <main class="search-container">
           <div class="right-panel">
             <div id="hits">
