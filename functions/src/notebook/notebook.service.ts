@@ -18,7 +18,6 @@ require('firebase/auth');
 @Injectable()
 export class NotebookService {
 	async getUserNotebooks(userId: string): Promise<Notebook[]> {
-		// const userId: string = await this.getUserId(token);
 		const notebookIds: string[] = [];
 		const notebooks = [];
 
@@ -81,8 +80,8 @@ export class NotebookService {
 		};
 	}
 
-	async createNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const { creatorId } = notebookDto; // await this.getUserId();
+	async createNotebook(notebookDto: NotebookDto, userId: string): Promise<Response> {
+		// const { creatorId } = notebookDto; // await this.getUserId();
 		const notebookId: string = randomStringGenerator();
 
 		const note: Note = {
@@ -98,7 +97,7 @@ export class NotebookService {
 			course: notebookDto.course,
 			description: notebookDto.description,
 			institution: notebookDto.institution,
-			creatorId,
+			creatorId: userId,
 			private: notebookDto.private,
 			tags: notebookDto.tags,
 			notebookId,
@@ -117,7 +116,7 @@ export class NotebookService {
 					course: notebookDto.course,
 					description: notebookDto.description,
 					institution: notebookDto.institution,
-					creatorId,
+					creatorId: userId,
 					private: notebookDto.private,
 					tags: notebookDto.tags,
 					notebookId,
@@ -131,7 +130,7 @@ export class NotebookService {
 			);
 		}
 
-		const response = await this.addNotebookToUser(notebookId, creatorId);
+		const response = await this.addNotebookToUser(notebookId, userId);
 
 		if (response.message === 'Successfully added notebook to user account') {
 			return {
@@ -166,9 +165,8 @@ export class NotebookService {
 		}
 	}
 
-	async updateNotebook(notebookDto: NotebookDto): Promise<Response> {
-		const { creatorId } = notebookDto; // await this.getUserId();
-		const authorized = await this.checkCreator(notebookDto.notebookId, creatorId);
+	async updateNotebook(notebookDto: NotebookDto, userId: string): Promise<Response> {
+		const authorized = await this.checkCreator(notebookDto.notebookId, userId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -239,9 +237,9 @@ export class NotebookService {
 			});
 	}
 
-	async createNote(noteDto: NoteDto): Promise<Response> {
-		const { userId } = noteDto; // await this.getUserId();
-		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
+	async createNote(noteDto: NoteDto, userId: string): Promise<Response> {
+		// const { userId } = noteDto; // await this.getUserId();
+		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId }, userId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -265,9 +263,9 @@ export class NotebookService {
 		};
 	}
 
-	async updateNote(noteDto: NoteDto): Promise<Response> {
-		const { userId } = noteDto; // await this.getUserId();
-		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId });
+	async updateNote(noteDto: NoteDto, userId: string): Promise<Response> {
+		// const { userId } = noteDto; // await this.getUserId();
+		const authorized = await this.checkUserAccess({ notebookId: noteDto.notebookId, userId }, userId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -359,9 +357,9 @@ export class NotebookService {
 		};
 	}
 
-	async addNotebookReview(reviewDto: ReviewDto): Promise<Response> {
+	async addNotebookReview(reviewDto: ReviewDto, userId: string): Promise<Response> {
 		const timestamp = new Date().getTime();
-		const { userId } = reviewDto; // await this.getUserId();
+		// const { userId } = reviewDto; // await this.getUserId();
 
 		try {
 			return await admin
@@ -438,16 +436,16 @@ export class NotebookService {
 		}
 	}
 
-	async addAccess(accessDto: AccessDto): Promise<Response> {
+	async addAccess(accessDto: AccessDto, userId: string): Promise<Response> {
 		const access: Access[] = await this.getAccessList(accessDto.notebookId);
 
 		access.push({
 			displayName: accessDto.displayName,
-			userId: accessDto.userId,
+			userId,
 			profileUrl: accessDto.profileUrl,
 		});
 
-		await this.addNotebookToUser(accessDto.notebookId, accessDto.userId);
+		await this.addNotebookToUser(accessDto.notebookId, userId);
 
 		return this.updateAccess(accessDto.notebookId, access);
 	}
@@ -489,8 +487,8 @@ export class NotebookService {
 		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
 	}
 
-	async checkUserAccess(checkAccessDto: CheckAccessDto): Promise<boolean> {
-		const { userId } = checkAccessDto; // await this.getUserId();
+	async checkUserAccess(checkAccessDto: CheckAccessDto, userId: string): Promise<boolean> {
+		// const { userId } = checkAccessDto; // await this.getUserId();
 		const access: Access[] = await this.getAccessList(checkAccessDto.notebookId);
 		let accessGranted = false;
 		const creator: boolean = await this.checkCreator(checkAccessDto.notebookId, userId);
@@ -508,10 +506,10 @@ export class NotebookService {
 		return accessGranted;
 	}
 
-	async removeUserAccess(checkAccessDto: CheckAccessDto): Promise<Response> {
-		const { userId } = checkAccessDto; // await this.getUserId();
+	async removeUserAccess(checkAccessDto: CheckAccessDto, userId: string): Promise<Response> {
+		// const { userId } = checkAccessDto; // await this.getUserId();
 		let { creatorId } = checkAccessDto;
-		// TODO Fix if statement(TEMPORARLY SUCH THAT SYSTEM DOES NOT BREAK)
+		// TODO Fix if statement(TEMPORARILY SUCH THAT SYSTEM DOES NOT BREAK)
 		if (!creatorId) {
 			creatorId = userId;
 		}

@@ -94,7 +94,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 			};
 
-			const result = await notebookService.createNotebook(notebook);
+			const result = await notebookService.createNotebook(notebook, userId);
 
 			notebookId = result.notebook.notebookId;
 
@@ -157,7 +157,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 			};
 
-			const result = await notebookService.updateNotebook(notebook);
+			const result = await notebookService.updateNotebook(notebook, userId);
 
 			const updatedNotebook = await notebookService.getNotebook(notebookId);
 
@@ -188,7 +188,7 @@ describe('NotebookIntegrationTests', () => {
 			let result;
 
 			try {
-				result = await notebookService.updateNotebook(notebook);
+				result = await notebookService.updateNotebook(notebook, userId);
 			} catch (e) {
 				result = e;
 			}
@@ -207,7 +207,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 			};
 
-			const result = await notebookService.createNote(note);
+			const result = await notebookService.createNote(note, userId);
 			noteId = result.noteId;
 
 			expect(result.message).toBe('Creating a note was successful!');
@@ -234,7 +234,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 			};
 
-			const result = await notebookService.updateNote(note);
+			const result = await notebookService.updateNote(note, userId);
 
 			expect(result.message).toBe('Update a note successfully!');
 		});
@@ -282,7 +282,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 				profileUrl: 'Test Profile Url',
 			};
-			const result = await notebookService.addNotebookReview(review);
+			const result = await notebookService.addNotebookReview(review, userId);
 
 			expect(result.message).toBe('Successfully added a review!');
 		});
@@ -328,7 +328,7 @@ describe('NotebookIntegrationTests', () => {
 				profileUrl: 'Test Profile Url',
 				notebookId,
 			};
-			const result = await notebookService.addAccess(access);
+			const result = await notebookService.addAccess(access, userId);
 
 			expect(result.message).toBe('Successfully added use to access list!');
 			expect(result.notebookId).toBe(notebookId);
@@ -339,7 +339,7 @@ describe('NotebookIntegrationTests', () => {
 				userId: 'Test userId',
 				notebookId,
 			};
-			const result = await notebookService.checkUserAccess(access);
+			const result = await notebookService.checkUserAccess(access, userId);
 
 			expect(result).toBe(true);
 		});
@@ -349,7 +349,7 @@ describe('NotebookIntegrationTests', () => {
 				userId: 'Test userId False',
 				notebookId,
 			};
-			const result = await notebookService.checkUserAccess(access);
+			const result = await notebookService.checkUserAccess(access, userId);
 
 			expect(result).toBe(false);
 		});
@@ -359,7 +359,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 				notebookId,
 			};
-			const result = await notebookService.checkUserAccess(access);
+			const result = await notebookService.checkUserAccess(access, userId);
 
 			expect(result).toBe(true);
 		});
@@ -379,7 +379,7 @@ describe('NotebookIntegrationTests', () => {
 				creatorId: userId,
 				notebookId,
 			};
-			const result = await notebookService.removeUserAccess(access);
+			const result = await notebookService.removeUserAccess(access, userId);
 
 			expect(result.message).toBe('Successfully removed user from access list!');
 		});
@@ -393,7 +393,7 @@ describe('NotebookIntegrationTests', () => {
 			};
 
 			try {
-				result = await notebookService.removeUserAccess(access);
+				result = await notebookService.removeUserAccess(access, userId);
 			} catch (e) {
 				result = e;
 			}
