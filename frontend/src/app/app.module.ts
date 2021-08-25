@@ -31,7 +31,6 @@ import {
 	NotebookComponent,
 	HomeComponent,
 	ExploreComponent,
-	RecentNotesComponent,
 	SharedWithMeComponent,
 	NotificationsComponent,
 } from '@app/features';
@@ -92,7 +91,6 @@ import { AppRoutingModule } from './app-routing.module';
 		HomeComponent,
 		ExploreComponent,
 		P404Component,
-		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
 		HeaderComponent,
