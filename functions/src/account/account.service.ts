@@ -234,6 +234,7 @@ export class AccountService {
 		// eslint-disable-next-line
 		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+		let authToken = '';
 
 		if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
 			return {
@@ -254,26 +255,38 @@ export class AccountService {
 				uid: null,
 			}));
 
-		if (userData.uid == null) {
-			return {
-				success: false,
-				user: null,
-				message: 'Login failed, please try again!',
-				error: 'User does not exist',
-			};
-		}
+		// await admin
+		// 	.auth()
+		// 	.createCustomToken(userData.uid)
+		// 	.then((customToken) => {
+		// 		authToken = customToken;
+		// 	})
+		// 	.catch(() => {});
+		//
+		// if (userData.uid == null) {
+		// 	return {
+		// 		success: false,
+		// 		user: null,
+		// 		message: 'Login failed, please try again!',
+		// 		error: 'User does not exist',
+		// 	};
+		// }
 
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
 
-		const token = await admin
+		await firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password);
+
+		await firebase
 			.auth()
-			.createCustomToken(userData.uid)
-			.then((customToken) => ({
-				customToken,
-			}))
-			.catch(() => {
-				// console.log('Error creating custom token:', error);
+			.currentUser.getIdToken(true)
+			.then((idToken) => {
+				if (idToken) {
+					authToken = idToken;
+				}
+			})
+			.catch((error) => {
+				throw new HttpException(`Could not get user token. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
 		// Login user. If successful return success message else throw Bad Request exception
@@ -295,9 +308,9 @@ export class AccountService {
 					bio: doc.data().bio,
 					profilePic: doc.data().profilePicUrl,
 					dateJoined: doc.data().dateJoined,
-					token,
 				},
 				message: 'User is successfully logged in!',
+				authToken,
 			}))
 			.catch((error) => ({
 				success: false,
