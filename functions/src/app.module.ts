@@ -9,11 +9,12 @@ import { NotebookController } from './notebook/notebook.controller';
 import { NotebookService } from './notebook/notebook.service';
 import { AccountController } from './account/account.controller';
 import { AccountService } from './account/account.service';
+import { AuthService } from './auth/auth.service';
 
 @Module({
 	imports: [],
 	controllers: [AppController, NotificationController, UserController, NotebookController, AccountController],
-	providers: [AppService, NotificationService, UserService, NotebookService, AccountService],
+	providers: [AppService, NotificationService, UserService, NotebookService, AccountService, AuthService],
 	exports: [AppService, NotificationService, UserService, NotebookService, AccountService],
 })
 export class AppModule {}
