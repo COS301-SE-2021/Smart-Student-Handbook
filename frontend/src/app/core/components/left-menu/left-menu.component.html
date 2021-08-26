@@ -34,11 +34,6 @@
         <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notes</span>
         <br/>
 
-        <a mat-list-item  [routerLink]="['/recentNotes']">
-          <mat-icon sclass="menuIcon" matTooltip="Recent notes" matTooltipPosition="right">av_timer</mat-icon>
-          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Recent Notes</span>
-        </a>
-
         <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
           <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>
         </a>

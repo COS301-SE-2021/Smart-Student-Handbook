@@ -132,21 +132,13 @@ export class NotificationService {
 			admin
 				.messaging()
 				.send(message)
-				.then((response) => {
-					console.log('Successfully sent notification to group:', response);
-
-					return {
-						status: 'successful',
-					};
-				})
+				.then(() => ({
+					status: 'successful',
+				}))
 				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending notification to group:', error);
-
-					return {
-						status: 'unsuccessful',
-					};
-				})
+				.catch(() => ({
+					status: 'unsuccessful',
+				}))
 		);
 	}
 
@@ -163,8 +155,6 @@ export class NotificationService {
 				.messaging()
 				.subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
 				.then((response) => {
-					console.log('Successfully subscribed:', response);
-
 					if (response.successCount === 1) {
 						return {
 							status: 'successful',
@@ -181,13 +171,9 @@ export class NotificationService {
 					};
 				})
 				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending message:', error);
-
-					return {
-						status: 'unsuccessful',
-					};
-				})
+				.catch(() => ({
+					status: 'unsuccessful',
+				}))
 		);
 	}
 
@@ -440,6 +426,7 @@ export class NotificationService {
 
 		await this.createNotification({
 			userID: userReceiver,
+			// eslint-disable-next-line max-len
 			body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 			heading: 'Collaboration Request',
 			type: 'Request',
@@ -452,6 +439,7 @@ export class NotificationService {
 			{
 				token: notificationID,
 				title: 'Collaboration Request',
+				// eslint-disable-next-line max-len
 				body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 				userId: userSender,
 			},
@@ -498,22 +486,14 @@ export class NotificationService {
 			admin
 				.messaging()
 				.send(message)
-				.then((response) => {
-					console.log('Successfully sent individual message:', response);
-
-					return {
-						status: 'successful',
-					};
-				})
+				.then(() => ({
+					status: 'successful',
+				}))
 				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending individual message:', error);
-
-					return {
-						status: 'unsuccessful',
-						error: error.errorInfo,
-					};
-				})
+				.catch((error) => ({
+					status: 'unsuccessful',
+					error: error.errorInfo,
+				}))
 		);
 	}
 }
