@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
 import aa from 'search-insights';
 
+const userToken = 'testToken'; // Get the user token (synchronously or asynchronously).
+// The `insights` middleware receives a notification
+// and attaches the `userToken` to search calls onwards.
+aa('setUserToken', userToken);
+
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
 	'589f047ba9ac7fa58796f394427d7f35'
@@ -17,6 +22,8 @@ export class ExploreComponent implements OnInit {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
 		indexName: 'userNotebooks',
+		analytics: true,
+		clickAnalytics: true,
 		routing: true,
 		searchClient,
 		insightsClient: (window as any).aa,

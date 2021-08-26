@@ -10,14 +10,13 @@
     <div class="col-12">
       <ais-instantsearch [config]="config">
         <ais-configure [searchParameters]="{ clickAnalytics: true }"></ais-configure>
-      </ais-instantsearch>
         <main class="search-container">
           <div class="right-panel">
             <div id="hits">
               <!-- Uncomment the following widget to add hits list -->
               <div id="searchbox">
                 <!-- Uncomment the following widget to add a search bar -->
-                <ais-search-box placeholder="Search"></ais-search-box>
+                <ais-search-box placeholder="Search" ></ais-search-box>
               </div>
               <div id="stats">
                 <!-- Uncomment the following widget to add search stats -->
@@ -38,14 +37,14 @@
                 </ais-stats>
               </div>
               <ais-hits >
-                <ng-template let-hits="hits" let-results="results">
+                <ng-template let-hits="hits" let-results="results" let-insights="insights">
                   <div *ngIf="hits.length === 0">
                     No results found for
                     <strong>{{results.query}}</strong>.
                   </div>
                   <div class="ais-Hits-list">
                     <div class="ais-Hits-item" *ngFor="let hit of hits">
-                      <article>
+                      <article >
                         <div class="post-content">
                           <div class="post-date">
                             {{hit.data.course}}
@@ -58,7 +57,9 @@
                           <div class="post-excerpt" >
                             {{hit.data.description}}
                             <br>
+                            <br>
                             {{hit.data.author}}
+                            <mat-button-toggle (click)="insights('clickedObjectIDsAfterSearch', { eventName: 'Product Clicked', objectIDs: [hit.data.objectID] })">Click Here </mat-button-toggle>
                           </div>
                         </div>
                       </article>
