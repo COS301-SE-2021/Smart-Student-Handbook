@@ -61,6 +61,7 @@ import {
 	AddCollaboratorComponent,
 	MessageComponent,
 	AddNoteComponent,
+	ViewProfileComponent,
 } from '@app/components';
 
 // Long press
@@ -104,6 +105,7 @@ import { AppRoutingModule } from './app-routing.module';
 		AddCollaboratorComponent,
 		AddNoteComponent,
 		MessageComponent,
+		ViewProfileComponent,
 	],
 	imports: [
 		MaterialModule,

@@ -1,0 +1,31 @@
+<mat-progress-bar mode="indeterminate" id="viewProfileProgressbar"></mat-progress-bar>
+<mat-dialog-content class="mat-typography">
+  <h1>View Profile</h1>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <div class="profile-pic">
+          <img [src]="profilePicURL" alt="User Profile Image" id="output" width="200" />
+        </div>
+      </div>
+      <div class="col-9">
+        <div><span>Username: </span> <span class="h6">{{data.username}}</span></div>
+        <div><span>Display Name: </span> <span class="h6">{{data.displayName}}</span></div>
+        <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
+        <div><span>Institution: </span> <span class="h6">{{data.institution}}</span></div>
+        <div><span>Program: </span> <span class="h6">{{data.program}}</span></div>
+        <div><span>Work Status: </span> <span class="h6">{{data.workStatus}}</span></div>
+      </div>
+    </div>
+  </div>
+  <br/>
+
+</mat-dialog-content>
+
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="dismiss()">Dismiss</button>
+</div>
+
+

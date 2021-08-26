@@ -58,7 +58,9 @@ export class EditProfileComponent implements OnInit {
 	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		if (data.dateJoined) {
+		if (data) {
+			this.imgFilePath = data.profilePic;
+
 			// eslint-disable-next-line no-underscore-dangle
 			// @ts-ignore
 			// eslint-disable-next-line no-underscore-dangle
@@ -95,7 +97,7 @@ export class EditProfileComponent implements OnInit {
 
 	onSave(): void {
 		const progressbar = document.getElementById(
-			'progressbar'
+			'updateProfileProgressbar'
 		) as HTMLElement;
 		if (progressbar) progressbar.style.display = 'block';
 		this.isDisabled = true;
@@ -111,7 +113,7 @@ export class EditProfileComponent implements OnInit {
 					this.data.program,
 					this.data.workStatus,
 					this.data.bio,
-					this.data.profilePicUrl
+					this.data.profilePic
 				)
 				.subscribe(
 					(res: any) => {
