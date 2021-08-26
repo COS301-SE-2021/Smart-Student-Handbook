@@ -22,67 +22,63 @@ export class NotebookService {
 		const notebookIds: string[] = [];
 		const notebooks = [];
 
-		try {
-			const notebookIdSnapshot = await admin.firestore().collection(`userContent/${userId}/Notebooks`).get();
-			notebookIdSnapshot.forEach((doc) => {
-				notebookIds.push(doc.id);
-			});
+		const notebookIdSnapshot = await admin.firestore().collection(`userContent/${userId}/Notebooks`).get();
+		notebookIdSnapshot.forEach((doc) => {
+			notebookIds.push(doc.id);
+		});
 
-			if (notebookIds.length === 0) {
-				return notebooks;
-			}
-
-			const notebookSnapshot = await admin
-				.firestore()
-				.collection('userNotebooks')
-				.where('notebookId', 'in', notebookIds)
-				.get();
-
-			notebookSnapshot.forEach((doc) => {
-				notebooks.push({
-					title: doc.data().title,
-					author: doc.data().author,
-					course: doc.data().course,
-					description: doc.data().description,
-					institution: doc.data().institution,
-					creatorId: doc.data().creatorId,
-					private: doc.data().private,
-					notebookId: doc.data().notebookId,
-					notes: doc.data().notes,
-					access: doc.data().access,
-					tags: doc.data().tags,
-				});
-			});
-
+		if (notebookIds.length === 0) {
 			return notebooks;
-		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 		}
+
+		const notebookSnapshot = await admin
+			.firestore()
+			.collection('userNotebooks')
+			.where('notebookId', 'in', notebookIds)
+			.get();
+
+		notebookSnapshot.forEach((doc) => {
+			notebooks.push({
+				title: doc.data().title,
+				author: doc.data().author,
+				course: doc.data().course,
+				description: doc.data().description,
+				institution: doc.data().institution,
+				creatorId: doc.data().creatorId,
+				private: doc.data().private,
+				notebookId: doc.data().notebookId,
+				notes: doc.data().notes,
+				access: doc.data().access,
+				tags: doc.data().tags,
+			});
+		});
+
+		return notebooks;
 	}
 
 	async getNotebook(notebookId: string): Promise<Notebook> {
-		try {
-			const notebook = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
+		const notebook = await admin.firestore().collection('userNotebooks').doc(notebookId).get();
 
-			return {
-				title: notebook.data().title,
-				author: notebook.data().author,
-				course: notebook.data().course,
-				description: notebook.data().description,
-				institution: notebook.data().institution,
-				creatorId: notebook.data().creatorId,
-				private: notebook.data().private,
-				notebookId: notebook.data().notebookId,
-				notes: notebook.data().notes,
-				access: notebook.data().access,
-				tags: notebook.data().tags,
-			};
-		} catch (e) {
+		if (!notebook.exists) {
 			throw new HttpException(
 				'Could net retrieve notebook, it could be that the notebook does not exist',
 				HttpStatus.NOT_FOUND,
 			);
 		}
+
+		return {
+			title: notebook.data().title,
+			author: notebook.data().author,
+			course: notebook.data().course,
+			description: notebook.data().description,
+			institution: notebook.data().institution,
+			creatorId: notebook.data().creatorId,
+			private: notebook.data().private,
+			notebookId: notebook.data().notebookId,
+			notes: notebook.data().notes,
+			access: notebook.data().access,
+			tags: notebook.data().tags,
+		};
 	}
 
 	async createNotebook(notebookDto: NotebookDto): Promise<Response> {
@@ -127,13 +123,10 @@ export class NotebookService {
 					notebookId,
 					notes: [note],
 					access: [],
-				})
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
 			throw new HttpException(
-				'Something went wrong. Operation could not be executed.',
+				`Something went wrong. Operation could not be executed. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -161,10 +154,10 @@ export class NotebookService {
 				})
 				.then(() => ({
 					message: 'Successfully added notebook to user account',
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
+			// .catch(() => {
+			// 	throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+			// });
 		} catch (error) {
 			throw new HttpException(
 				'Something went wrong. Operation could not be executed.',
@@ -197,10 +190,7 @@ export class NotebookService {
 				})
 				.then(() => ({
 					message: 'Updated notebook successful!',
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
 		} catch (error) {
 			throw new HttpException(
 				'Something went wrong. Operation could not be executed.',
@@ -313,13 +303,10 @@ export class NotebookService {
 				.then(() => ({
 					message: 'Update a notebook was successful!',
 					notebookId,
-				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-				});
+				}));
 		} catch (error) {
 			throw new HttpException(
-				`Something went wrong. Operation could not be executed error.${error}`,
+				`Something went wrong. Operation could not be executed error. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -344,7 +331,13 @@ export class NotebookService {
 		// }
 
 		const notes: Note[] = await this.getNotes(noteDto.notebookId);
-		await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
+
+		try {
+			await admin.database().ref(`notebook/${noteDto.noteId}`).remove();
+		} catch (e) {
+			throw new HttpException('Firebase could not remove document.', HttpStatus.BAD_REQUEST);
+		}
+
 		notes.forEach((item: Note, index: number) => {
 			if (item.noteId === noteDto.noteId) {
 				notes.splice(index, 1);
@@ -354,7 +347,12 @@ export class NotebookService {
 		if (!updatedNotebook) {
 			throw new HttpException('Note could not be found!', HttpStatus.BAD_REQUEST);
 		}
-		await this.updateNotes(noteDto.notebookId, notes);
+
+		try {
+			await this.updateNotes(noteDto.notebookId, notes);
+		} catch (e) {
+			throw new HttpException('Firebase could not update document.', HttpStatus.BAD_REQUEST);
+		}
 
 		return {
 			message: 'Successfully delete note!',
@@ -416,7 +414,7 @@ export class NotebookService {
 
 			return reviews;
 		} catch (error) {
-			throw new HttpException('Bad Request.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could not retrieve notebook reviews', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -430,13 +428,13 @@ export class NotebookService {
 				.doc(userId)
 				.delete()
 				.then(() => ({
-					message: 'Deleted review was successful!',
+					message: 'Deleted review successfully!',
 				}))
 				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+					throw new HttpException('Notebook Not Found', HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
-			throw new HttpException('Bad Request.', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could note delete notebook review.', HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -486,7 +484,7 @@ export class NotebookService {
 				return doc.data().access;
 			}
 		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Could not complete firebase request.', HttpStatus.BAD_REQUEST);
 		}
 		throw new HttpException('Document Could not be found!', HttpStatus.NOT_FOUND);
 	}
@@ -512,7 +510,12 @@ export class NotebookService {
 
 	async removeUserAccess(checkAccessDto: CheckAccessDto): Promise<Response> {
 		const { userId } = checkAccessDto; // await this.getUserId();
-		const authorized = await this.checkCreator(checkAccessDto.notebookId, userId);
+		let { creatorId } = checkAccessDto;
+		// TODO Fix if statement(TEMPORARLY SUCH THAT SYSTEM DOES NOT BREAK)
+		if (!creatorId) {
+			creatorId = userId;
+		}
+		const authorized = await this.checkCreator(checkAccessDto.notebookId, creatorId);
 
 		if (!authorized) {
 			throw new HttpException('Not Authorized', HttpStatus.UNAUTHORIZED);
@@ -522,7 +525,7 @@ export class NotebookService {
 
 		try {
 			access.forEach((item: Access, index: number) => {
-				if (item.userId === checkAccessDto.userId) {
+				if (item.userId === userId) {
 					access.splice(index, 1);
 				}
 			});
