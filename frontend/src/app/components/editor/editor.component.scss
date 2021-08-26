@@ -125,9 +125,10 @@
 
 .removeCollaboratorIcon{
   position: absolute;
-  top: 0;
+  top: -10px;
   left: 0;
   font-size: larger;
+  color: transparent;
 }
 
 #addGroupBtn{

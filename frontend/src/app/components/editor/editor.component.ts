@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
-	NotebookEventEmitterService,
+	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
 	NoteOperationsService,
@@ -39,7 +39,7 @@ export interface Collaborators {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterContentInit {
 	/**
     Get all plugins for notebook
    */
@@ -143,9 +143,9 @@ export class EditorComponent implements OnInit {
 	 * @param bottomSheet
 	 * @param notesService
 	 * @param profileService
+	 * @param notebookObservables
 	 * @param notebookOperations
 	 * @param notificationService
-	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -153,38 +153,36 @@ export class EditorComponent implements OnInit {
 		private bottomSheet: MatBottomSheet,
 		private notesService: NoteOperationsService,
 		private profileService: ProfileService,
+		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
-		private notificationService: NotificationService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notificationService: NotificationService
 	) {}
 
-	ngOnInit(): void {
-		if (this.notebookEventEmitterService.subsVar === undefined) {
-			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEmitter.subscribe(
-					({ notebookId, noteId, title, notebookTitle }) => {
-						this.notebookTitle = notebookTitle;
-						this.loadEditor(
-							notebookId,
-							noteId,
-							title,
-							notebookTitle
-						);
-					}
-				);
-
-			this.notebookEventEmitterService.closeNoteEmitter.subscribe(() => {
+	ngAfterContentInit(): void {
+		this.notebookObservables.closeEditor.subscribe((close: any) => {
+			if (close.close) {
 				this.showDefaultImage();
 				this.noteInfoAccordion.close();
 				this.opened = false;
-			});
+				this.notebookObservables.setCloseEditor(false);
+			}
+		});
+	}
 
-			this.notebookEventEmitterService.changePrivacyEmitter.subscribe(
-				(privacy: boolean) => {
-					this.private = privacy;
-				}
-			);
-		}
+	ngOnInit(): void {
+		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
+			// this.notebookTitle = notebookTitle;
+			if (noteInfo.notebookId !== '')
+				this.loadEditor(
+					noteInfo.notebookId,
+					noteInfo.noteId,
+					noteInfo.title
+				);
+		});
+
+		this.notebookObservables.notebookPrivacy.subscribe((privacy: any) => {
+			this.private = privacy.private;
+		});
 	}
 
 	getNotebook(notebookId: string): void {
@@ -213,15 +211,8 @@ export class EditorComponent implements OnInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
-	 * @param notebookTitle
 	 */
-	async loadEditor(
-		notebookId: string,
-		noteId: string,
-		title: string,
-		notebookTitle: string
-	) {
-		this.notebookTitle = notebookTitle;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.noteTitle = title;
@@ -340,7 +331,7 @@ export class EditorComponent implements OnInit {
 
 		editor.clear();
 
-		this.notebookEventEmitterService.GetNoteTitle(title);
+		// this.notebookEventEmitterService.GetNoteTitle(title);
 
 		// call event transmitter
 
@@ -387,6 +378,11 @@ export class EditorComponent implements OnInit {
 				// if (progressbar) progressbar.style.display = 'none';
 			});
 		// });
+
+		editor.on('focus', () => {
+			alert(editor.blocks.getCurrentBlockIndex());
+		});
+		// alert(editor.caret.focus().valueOf());
 	}
 
 	/**
@@ -423,6 +419,8 @@ export class EditorComponent implements OnInit {
 	 * Method to call when notebook content should be saved
 	 */
 	saveContent() {
+		// this.editorFocussed();
+
 		this.Editor.save()
 			.then((outputData) => {
 				// console.log(this.notebookID, outputData);
@@ -436,6 +434,34 @@ export class EditorComponent implements OnInit {
 			.catch(() => {
 				// console.log('Saving failed: ', error);
 			});
+	}
+
+	/**
+	 * Highlight the block where a user is busy editing the note
+	 */
+	editorFocussed() {
+		const index = this.Editor.blocks.getCurrentBlockIndex();
+
+		const blocks = document.getElementById('editor').children[0].children[0]
+			.children as HTMLCollection;
+
+		let block = blocks[index] as HTMLElement;
+
+		let nBlock = null;
+		for (let i = 0; i < blocks.length; i += 1) {
+			nBlock = blocks[i].children[0] as HTMLElement;
+			if (i !== index) {
+				if (nBlock.style.backgroundColor === 'rgba(8, 85, 116, 0.2)') {
+					nBlock.style.backgroundColor = 'transparent';
+				}
+			}
+		}
+
+		if (block) {
+			block = block.children[0] as HTMLElement;
+			block.style.backgroundColor = 'rgba(8,85,116,0.2)';
+			block.style.borderRadius = '5px';
+		}
 	}
 
 	/**
@@ -461,6 +487,9 @@ export class EditorComponent implements OnInit {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeNoteCard(_id: string) {}
 
+	/**
+	 * Display a default image and hide the editor when no note is opened
+	 */
 	showDefaultImage() {
 		const e = document.getElementById('editor') as HTMLElement;
 		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';

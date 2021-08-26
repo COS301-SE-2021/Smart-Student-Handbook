@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
+import { NotebookService } from '@app/services';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -10,7 +13,7 @@ const searchClient = algoliasearch(
 	templateUrl: './explore.component.html',
 	styleUrls: ['./explore.component.scss'],
 })
-export class ExploreComponent implements OnInit {
+export class ExploreComponent {
 	config = {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
@@ -21,8 +24,9 @@ export class ExploreComponent implements OnInit {
 			hitsPerPage: 9,
 		},
 	};
-	// constructor() {}
 
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	constructor(
+		private notebookService: NotebookService,
+		private ngZone: NgZone
+	) {}
 }

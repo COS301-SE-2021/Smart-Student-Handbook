@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 
 import {
 	NotebookService,
-	NotebookEventEmitterService,
 	NoteOperationsService,
+	NotebookObservablesService,
 } from '@app/services';
 
 @Component({
@@ -45,7 +45,7 @@ export class NotesComponent implements OnInit {
 		private router: Router,
 		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookObservables: NotebookObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -83,15 +83,7 @@ export class NotesComponent implements OnInit {
 	async openNote(noteId: string, title: string) {
 		await this.router.navigate(['notebook']);
 
-		// setTimeout(() => {
-		//   this.notebook.loadEditor(id);
-		// }, 2000)
-		this.notebookEventEmitterService.LoadEditor(
-			this.notebookId,
-			noteId,
-			title,
-			''
-		);
+		this.notebookObservables.setLoadEditor(this.notebookId, noteId, title);
 	}
 
 	createNewNotebook() {

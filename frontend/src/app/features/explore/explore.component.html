@@ -22,7 +22,7 @@
                 <ais-stats>
                   <ng-template let-state="state">
                     <div *ngIf="state.nbHits > 0">
-                      <span role="img" aria-label="emoji">⚡️</span>
+<!--                      <span role="img" aria-label="emoji">⚡️</span>-->
                       <strong>{{state.nbHits}}</strong>
                       results found
                       <span *ngIf="state.query.trim().length > 0">
@@ -42,7 +42,8 @@
                     <strong>{{results.query}}</strong>.
                   </div>
                   <div class="ais-Hits-list">
-                    <div class="ais-Hits-item" *ngFor="let hit of hits">
+                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index">
+
                       <article>
                         <div class="post-content">
                           <div class="post-date">

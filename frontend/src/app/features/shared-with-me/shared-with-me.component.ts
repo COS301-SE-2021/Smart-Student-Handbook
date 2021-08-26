@@ -5,11 +5,9 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import {
-	NotebookEventEmitterService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
-	OpenNotebookPanelService,
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,9 +64,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private notebookOperations: NotebookOperationsService,
-		private notebookObservables: NotebookObservablesService,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookObservables: NotebookObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -191,7 +187,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 					},
 				];
 				this.treeControl.expandAll();
-				this.notebookEventEmitterService.ChangePrivacy(val.private);
+				this.notebookObservables.setNotebookPrivacy(val.private);
 			});
 	}
 
@@ -213,11 +209,6 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 				localStorage.setItem('notebookId', notebookId);
 
 				this.router.navigate(['notes']);
-			} else {
-				this.openNotebookPanelService.toggleNotePanel(
-					notebookId,
-					notebookTitle
-				);
 			}
 		});
 	}

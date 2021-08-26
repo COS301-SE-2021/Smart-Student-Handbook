@@ -143,6 +143,8 @@ em {
 
 .ais-Hits-item {
   margin-bottom: 24px;
+  cursor: pointer;
+  overflow: auto;
 }
 
 .ais-Hits-item article {
@@ -306,10 +308,3 @@ footer {
   font-size: 12px;
   color: #999;
 }
-
-
-
-
-
-
-

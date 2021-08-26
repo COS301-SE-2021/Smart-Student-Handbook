@@ -14,7 +14,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 import {
 	NotebookService,
-	OpenNotebookPanelService,
 	NoteOperationsService,
 	NotebookObservablesService,
 } from '@app/services';
@@ -65,7 +64,6 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private openNotebookPanelService: OpenNotebookPanelService,
 		private notesService: NoteOperationsService
 	) {}
 
@@ -100,12 +98,19 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		this.open = false;
 
 		// Toggle the notePanelComponent when in desktop view and notebook is selected
-		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-			this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
+		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
+		// 	this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
+		// 		this.closePanel();
+		// 		this.notes = [];
+		// 	});
+		// }
+		this.notebookObservables.closePanel.subscribe((close) => {
+			if (close.close) {
 				this.closePanel();
 				this.notes = [];
-			});
-		}
+				this.notebookObservables.setClosePanel(false);
+			}
+		});
 	}
 
 	/**
