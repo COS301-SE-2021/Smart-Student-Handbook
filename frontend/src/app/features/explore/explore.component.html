@@ -1,13 +1,13 @@
-<div class="container">
+<div class="container" style="height: 105px;">
   <div class="row">
-    <div class="col-12 text-center mt-3">
+    <div class="col-12 text-center mt-3" id="exploreHeader">
       <span class="display-3">Explore Notebooks</span>
     </div>
   </div>
 </div>
-<div class="container mt-5" style="overflow: auto;">
+<div class="container mt-5" style="overflow: auto; margin-top: 30px !important; padding-bottom: 50px;">
   <div class="row">
-    <div class="col-12">
+    <div class="col">
       <ais-instantsearch [config]="config">
         <main class="search-container">
           <div class="right-panel">
@@ -42,7 +42,7 @@
                     <strong>{{results.query}}</strong>.
                   </div>
                   <div class="ais-Hits-list">
-                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index">
+                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" (click)="openNotes(hit)">
 
                       <article>
                         <div class="post-content">
@@ -81,6 +81,16 @@
           </div>-->
         </main>
       </ais-instantsearch>
+    </div>
+    <div class="col-0 notesHidden" id="notesSideDiv">
+      <div id="notebookNotesContainer">
+        <button mat-icon-button class="hidden" (click)="closeNotes()" id="closeNotesPanelBtn">
+          <mat-icon>close</mat-icon>
+        </button>
+        <h2 class="hidden" id="notesHeading">{{title}}</h2>
+        <app-note-cards class="hidden" id="noteCardsComponent"></app-note-cards>
+      </div>
+
     </div>
   </div>
 </div>

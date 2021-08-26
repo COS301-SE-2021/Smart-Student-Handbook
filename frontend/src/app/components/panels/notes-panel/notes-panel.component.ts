@@ -57,7 +57,6 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
 	 * @param notebookObservables
-	 * @param openNotebookPanelService
 	 * @param notesService
 	 */
 	constructor(

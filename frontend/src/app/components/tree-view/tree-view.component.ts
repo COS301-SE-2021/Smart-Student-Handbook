@@ -225,10 +225,20 @@ export class TreeViewComponent implements OnInit {
 			) {
 				localStorage.setItem('notebookId', notebookId);
 
-				this.router.navigate(['notes']);
+				this.router.navigate(['notes']).then(() => {
+					this.notebookObservables.setOpenNotebook(
+						notebookId,
+						notebookTitle,
+						false
+					);
+				});
+			} else {
+				this.notebookObservables.setOpenNotebook(
+					notebookId,
+					notebookTitle,
+					false
+				);
 			}
-
-			this.notebookObservables.setOpenNotebook(notebookId, notebookTitle);
 		});
 	}
 

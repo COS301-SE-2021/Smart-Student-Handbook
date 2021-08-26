@@ -197,7 +197,6 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
 		this.router.navigate(['notebook']).then(() => {
-			this.notebookObservables.setOpenNotebook(notebookId, notebookTitle);
 			this.openedNotebookId = notebookId;
 
 			const screenType = navigator.userAgent;
@@ -208,7 +207,19 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 			) {
 				localStorage.setItem('notebookId', notebookId);
 
-				this.router.navigate(['notes']);
+				this.router.navigate(['notes']).then(() => {
+					this.notebookObservables.setOpenNotebook(
+						notebookId,
+						notebookTitle,
+						false
+					);
+				});
+			} else {
+				this.notebookObservables.setOpenNotebook(
+					notebookId,
+					notebookTitle,
+					false
+				);
 			}
 		});
 	}

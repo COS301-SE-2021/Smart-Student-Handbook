@@ -1,0 +1,23 @@
+<div id="topDividerContainer">
+  <hr id="topDivider" (click)="closeSheet($event)" />
+</div>
+
+<mat-toolbar>
+  <mat-toolbar-row>
+    <h2>{{title}}</h2>
+
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button (click)="closeSheet($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+<div id="notebookNotesContainer">
+<!--  <button mat-icon-button class="hidden" [mat-dialog-close] id="closeNotesPanelBtn">-->
+<!--    <mat-icon>close</mat-icon>-->
+<!--  </button>-->
+<!--  <h2 class="hidden" id="notesHeading">{{title}}</h2>-->
+  <app-note-cards class="hidden" id="noteCardsComponent"></app-note-cards>
+</div>

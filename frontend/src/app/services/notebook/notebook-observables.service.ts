@@ -40,6 +40,7 @@ export class NotebookObservablesService {
 		this.openNotebookId = new BehaviorSubject<any>({
 			notebookId: '',
 			title: '',
+			readonly: false,
 		});
 
 		this.openNotebookIdState = this.openNotebookId.asObservable();
@@ -92,11 +93,13 @@ export class NotebookObservablesService {
 	 * Set the id an title of the notebook to be opened
 	 * @param notebookID
 	 * @param title
+	 * @param readonly
 	 */
-	setOpenNotebook(notebookID: string, title: string) {
+	setOpenNotebook(notebookID: string, title: string, readonly: boolean) {
 		this.openNotebookId.next({
 			notebookId: notebookID,
 			title,
+			readonly,
 		});
 
 		this.openNotebookIdState = this.openNotebookId.asObservable();
@@ -132,12 +135,19 @@ export class NotebookObservablesService {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
+	 * @param readonly
 	 */
-	setLoadEditor(notebookId: string, noteId: string, title: string) {
+	setLoadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		readonly: boolean
+	) {
 		this.loadEditor.next({
 			notebookId,
 			noteId,
 			title,
+			readonly,
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();

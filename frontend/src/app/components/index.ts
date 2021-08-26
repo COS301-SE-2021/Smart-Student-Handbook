@@ -10,3 +10,5 @@ export * from './modals/add-note/add-note.component';
 export * from './panels/notes-panel/notes-panel.component';
 export * from './panels/smart-assist-panel/smart-assist-panel.component';
 export * from './tree-view/tree-view.component';
+export * from './note-cards/note-cards.component';
+export * from './modals/explore-notes/explore-notes.component';
