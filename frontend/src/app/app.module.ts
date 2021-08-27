@@ -62,16 +62,20 @@ import {
 	MessageComponent,
 	AddNoteComponent,
 	ViewProfileComponent,
+	NoteCardsComponent,
+	ExploreNotesComponent,
 } from '@app/components';
 
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ExploreNoteListComponent } from './components/modals/explore-note-list/explore-note-list.component';
+import { ExploreNotesBottomSheetComponent } from './components/modals/explore-notes-bottom-sheet/explore-notes-bottom-sheet.component';
 
 @NgModule({
 	declarations: [
@@ -106,6 +110,10 @@ import { AppRoutingModule } from './app-routing.module';
 		AddNoteComponent,
 		MessageComponent,
 		ViewProfileComponent,
+		NoteCardsComponent,
+		ExploreNotesComponent,
+		ExploreNoteListComponent,
+		ExploreNotesBottomSheetComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -141,7 +149,6 @@ import { AppRoutingModule } from './app-routing.module';
 		AsyncPipe,
 		LeftMenuComponent,
 		MaterialModule,
-		NotebookEventEmitterService,
 	],
 	bootstrap: [AppComponent],
 })
