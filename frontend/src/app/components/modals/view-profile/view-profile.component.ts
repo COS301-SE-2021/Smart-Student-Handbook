@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {
 	MAT_DIALOG_DATA,
 	MatDialog,
 	MatDialogRef,
 } from '@angular/material/dialog';
-import { User } from '@app/models';
-import { AccountService } from '@app/services';
+import { AccountService, NotebookService, ProfileService } from '@app/services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,30 +15,62 @@ import { Router } from '@angular/router';
 export class ViewProfileComponent {
 	date: any;
 
-	profilePicURL: string = '../../../../assets/images/defaultProfile.jpg';
+	userProfile: any;
+
+	userNotebooks: any;
+
+	isLoadComplete: boolean = false;
+
+	viewProfileFailed: boolean = false;
+
+	errorMessage: string = '';
 
 	constructor(
 		public dialogRef: MatDialogRef<ViewProfileComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: User,
+		@Inject(MAT_DIALOG_DATA) public data: any,
 		private accountService: AccountService,
 		private dialog: MatDialog,
-		private router: Router
+		private router: Router,
+		private profileService: ProfileService,
+		private notebookService: NotebookService
 	) {
+		this.isLoadComplete = false;
 		if (data) {
-			this.profilePicURL = data.profilePic;
+			this.notebookService.getUserNotebooks(data.uid).subscribe(
+				(userNotebooks) => {
+					this.userNotebooks = userNotebooks;
+					this.profileService.getUserByUid(data.uid).subscribe(
+						(res) => {
+							this.userProfile = res.user;
+							this.isLoadComplete = true;
 
-			// eslint-disable-next-line no-underscore-dangle
-			// @ts-ignore
-			// eslint-disable-next-line no-underscore-dangle
-			const milliseconds: number = data.dateJoined._seconds * 1000;
-			// eslint-disable-next-line no-underscore-dangle
-			const dateObject = new Date(milliseconds);
-			this.date = dateObject.toLocaleString('en-US', {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			});
+							// eslint-disable-next-line no-underscore-dangle
+							// @ts-ignore
+							const milliseconds: number =
+								// eslint-disable-next-line no-underscore-dangle
+								res.user.dateJoined._seconds * 1000;
+							// eslint-disable-next-line no-underscore-dangle
+							const dateObject = new Date(milliseconds);
+							this.date = dateObject.toLocaleString('en-US', {
+								weekday: 'long',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							});
+						},
+						(err) => {
+							this.isLoadComplete = true;
+							this.viewProfileFailed = true;
+							this.errorMessage = err.message;
+						}
+					);
+				},
+				(err) => {
+					this.isLoadComplete = true;
+					this.viewProfileFailed = true;
+					this.errorMessage = err.message;
+				}
+			);
 		}
 	}
 
@@ -49,5 +80,9 @@ export class ViewProfileComponent {
 
 	dismiss(): void {
 		this.dialogRef.close();
+	}
+
+	viewNotebook(): void {
+		alert('Display Notebooks notes');
 	}
 }

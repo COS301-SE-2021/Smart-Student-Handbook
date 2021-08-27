@@ -1,27 +1,44 @@
-<mat-progress-bar mode="indeterminate" id="viewProfileProgressbar"></mat-progress-bar>
-<mat-dialog-content class="mat-typography">
-  <h1>View Profile</h1>
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoadComplete"></mat-progress-bar>
+<mat-dialog-content class="mat-typography" *ngIf="isLoadComplete">
+  <h1>{{userProfile.displayName}}</h1>
 
   <div class="container">
     <div class="row">
       <div class="col-3">
         <div class="profile-pic">
-          <img [src]="profilePicURL" alt="User Profile Image" id="output" width="200" />
+          <img [src]="userProfile.profilePicUrl" alt="User Profile Image" id="output" width="200" />
         </div>
       </div>
       <div class="col-9">
-        <div><span>Username: </span> <span class="h6">{{data.username}}</span></div>
-        <div><span>Display Name: </span> <span class="h6">{{data.displayName}}</span></div>
+        <div><span>Username: </span> <span class="h6">{{userProfile.username}}</span></div>
         <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
-        <div><span>Institution: </span> <span class="h6">{{data.institution}}</span></div>
-        <div><span>Program: </span> <span class="h6">{{data.program}}</span></div>
-        <div><span>Work Status: </span> <span class="h6">{{data.workStatus}}</span></div>
+        <div *ngIf="userProfile.institution"><span>Institution: </span> <span class="h6">{{userProfile.institution}}</span></div>
+        <div *ngIf="userProfile.program"><span>Program: </span> <span class="h6">{{userProfile.program}}</span></div>
+        <div *ngIf="userProfile.workStatus"><span>Work Status: </span> <span class="h6">{{userProfile.workStatus}}</span></div>
       </div>
     </div>
   </div>
   <br/>
+  <hr/>
+
+  <h3><b>{{userProfile.displayName}}'s Notebooks</b></h3>
+
+  <mat-selection-list #notebooks [multiple]="false">
+    <mat-list-option *ngFor="let notebook of userNotebooks" [value]="notebook.notebookId"
+    (click)="viewNotebook()">
+      {{notebook.title}}
+    </mat-list-option>
+  </mat-selection-list>
+
 
 </mat-dialog-content>
+
+<div *ngIf="viewProfileFailed" class="text-center">
+  <br/>
+  <mat-error >
+    {{ errorMessage }}
+  </mat-error>
+</div>
 
 
 <div mat-dialog-actions align="end">

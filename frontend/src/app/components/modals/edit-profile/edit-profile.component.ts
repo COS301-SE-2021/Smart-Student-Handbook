@@ -49,6 +49,8 @@ export class EditProfileComponent implements OnInit {
 
 	user: any;
 
+	isLoadComplete: boolean = true;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -96,10 +98,7 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const progressbar = document.getElementById(
-			'updateProfileProgressbar'
-		) as HTMLElement;
-		if (progressbar) progressbar.style.display = 'block';
+		this.isLoadComplete = false;
 		this.isDisabled = true;
 		this.updatedFailed = false;
 
@@ -123,10 +122,11 @@ export class EditProfileComponent implements OnInit {
 							this.errorMessage = res.message;
 							this.updatedFailed = true;
 						}
-						if (progressbar) progressbar.style.display = 'none';
+						this.isLoadComplete = true;
 						this.isDisabled = false;
 					},
 					(err) => {
+						this.isLoadComplete = true;
 						console.log(`Error: ${err.error.message}`);
 					}
 				);
@@ -134,6 +134,8 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	deleteAccount(): void {
+		this.isLoadComplete = false;
+
 		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
 			data: {
 				message:
@@ -154,16 +156,19 @@ export class EditProfileComponent implements OnInit {
 							},
 						});
 						confirm.afterClosed().subscribe(() => {
+							this.isLoadComplete = true;
 							this.dialogRef.close();
 							this.router.navigate(['account/login']);
 						});
+						this.isLoadComplete = true;
 					},
 					(error) => {
+						this.isLoadComplete = true;
 						this.errorMessage = error.message;
 						this.updatedFailed = true;
 					}
 				);
-			}
+			} else this.isLoadComplete = true;
 		});
 	}
 

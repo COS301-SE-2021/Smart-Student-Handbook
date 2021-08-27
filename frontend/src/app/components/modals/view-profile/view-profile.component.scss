@@ -16,15 +16,6 @@ $shadow: 0 0 10px 0 rgba(255,255,255,.35);
 $fontColor: rgb(250,250,250);
 
 .profile-pic {
-  color: transparent;
-  transition: all .3s ease;
-  @include object-center;
-  position: relative;
-  transition: all .3s ease;
-
-  input {
-    display: none;
-  }
 
   img {
     position: absolute;
@@ -34,30 +25,6 @@ $fontColor: rgb(250,250,250);
     box-shadow: $shadow;
     border-radius: $radius;
     z-index: 0;
-  }
-
-  .-label {
-    cursor: pointer;
-    height: $circleSize;
-    width: $circleSize;
-  }
-
-  &:hover {
-    .-label {
-      @include object-center;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 10000;
-      color: $fontColor;
-      transition: background-color .2s ease-in-out;
-      border-radius: $radius;
-      margin-bottom: 0;
-    }
-  }
-
-  span {
-    display: inline-flex;
-    padding: .2em;
-    height: 2em;
   }
 }
 

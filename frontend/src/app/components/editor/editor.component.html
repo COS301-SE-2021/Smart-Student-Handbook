@@ -66,8 +66,8 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
-								<mat-card-title class="personName"
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id)"></div>
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id)"
 									>{{creator.name}}</mat-card-title
 								>
 							</mat-card-header>
@@ -90,13 +90,13 @@
 
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id)"></div>
 
-                <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+                <mat-icon class="removeCollaboratorIcon pointerCursor" (click)="removeCollaborator(collaborator.id)">
                   remove_circle_outline
                 </mat-icon>
 
-								<mat-card-title class="personName"
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id)"
 									>{{collaborator.name}}</mat-card-title
 								>
 							</mat-card-header>

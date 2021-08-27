@@ -1,4 +1,4 @@
-<mat-progress-bar mode="indeterminate" id="updateProfileProgressbar"></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoadComplete"></mat-progress-bar>
 <mat-dialog-content class="mat-typography">
   <h1>Update Profile</h1>
 
@@ -26,7 +26,7 @@
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Display Name</mat-label>
-    <input matInput placeholder="Display Name" [(ngModel)]="data.displayName" cdkFocusInitial autocomplete="off"/>
+    <input matInput placeholder="Display Name" [(ngModel)]="data.displayName" cdkFocusInitial autocomplete="off" required/>
     <mat-hint>This will not change your username</mat-hint>
   </mat-form-field>
 
@@ -38,7 +38,8 @@
            [formControl]="myControl"
            [matAutocomplete]="auto"
            [(ngModel)]="data.institution"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-hint>The institution where you are studying, learning or teaching</mat-hint>
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
@@ -56,19 +57,19 @@
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Department</mat-label>
-    <input matInput placeholder="Department" [(ngModel)]="data.department" autocomplete="off"/>
+    <input matInput placeholder="Department" [(ngModel)]="data.department" autocomplete="off" required/>
     <mat-hint>Your department, ex: Computer science</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Program</mat-label>
-    <input matInput placeholder="Program" [(ngModel)]="data.program" autocomplete="off"/>
+    <input matInput placeholder="Program" [(ngModel)]="data.program" autocomplete="off" required/>
     <mat-hint>The program that you are studying or are involved in</mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Work Status</mat-label>
-    <input matInput placeholder="Student" [(ngModel)]="data.workStatus" autocomplete="off"/>
+    <input matInput placeholder="Student" [(ngModel)]="data.workStatus" autocomplete="off" required/>
     <mat-hint>Are you a student, Teacher, working , etc ...</mat-hint>
   </mat-form-field>
 
