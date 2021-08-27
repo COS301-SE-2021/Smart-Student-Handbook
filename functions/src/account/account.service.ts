@@ -255,23 +255,6 @@ export class AccountService {
 				uid: null,
 			}));
 
-		// await admin
-		// 	.auth()
-		// 	.createCustomToken(userData.uid)
-		// 	.then((customToken) => {
-		// 		authToken = customToken;
-		// 	})
-		// 	.catch(() => {});
-		//
-		// if (userData.uid == null) {
-		// 	return {
-		// 		success: false,
-		// 		user: null,
-		// 		message: 'Login failed, please try again!',
-		// 		error: 'User does not exist',
-		// 	};
-		// }
-
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
 
@@ -717,7 +700,6 @@ export class AccountService {
 	async setUserNotificationToken(userId: string, notificationID: string): Promise<Response> {
 		// const userId: string = firebase.auth().currentUser.uid;
 
-		console.log('userId: ', userId, 'notificationID: ', notificationID);
 		return admin
 			.firestore()
 			.collection('users')
