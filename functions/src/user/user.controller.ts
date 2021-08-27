@@ -1,29 +1,17 @@
-import {
-	Controller,
-	Get,
-	Post,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	Put,
-	Delete,
-	Body,
-	Param,
-} from '@nestjs/common';
-// import { User } from './models/user.interface';
+import { Controller, Get, Post, Delete, Body, Param, Headers } from '@nestjs/common';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UserService } from './user.service';
 import { UserByUsernameDto } from './dto/userByUsername.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService) {}
+	constructor(private userService: UserService, private readonly authService: AuthService) {}
 
-	/**
-	 * Calls the user service to get a users details based on an ID passed in
-	 * @param userId
-	 */
-	@Get('getUserByUid/:userId')
-	async getUserByUid(@Param('userId') userId): Promise<UserResponseDto> {
+	@Get('getUserByUid')
+	async getUserByUid(@Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.userService.getUserByUid(userId);
 	}
 
@@ -46,7 +34,8 @@ export class UserController {
 	}
 
 	@Delete('deleteUserProfile/:userId')
-	async deleteUserProfile(@Param('userId') userId): Promise<UserResponseDto> {
+	async deleteUserProfile(@Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.userService.deleteUserProfile(userId);
 	}
 
