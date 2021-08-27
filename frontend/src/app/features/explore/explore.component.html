@@ -59,7 +59,7 @@
                             <br>
                             <br>
                             {{hit.data.author}}
-                            <mat-button-toggle (click)="insights('clickedObjectIDsAfterSearch', { eventName: 'Product Clicked', objectIDs: [hit.data.objectID] })">Click Here </mat-button-toggle>
+                            <button (click)="insights('clickedObjectIDsAfterSearch', { eventName: 'Product Clicked', objectIDs: [hit.data.title] })">Click Here </button>
                           </div>
                         </div>
                       </article>

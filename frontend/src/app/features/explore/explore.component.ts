@@ -31,7 +31,8 @@ export class ExploreComponent implements OnInit {
 			hitsPerPage: 9,
 		},
 	};
-	// constructor() {}
+
+	// constructor() {
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {}
