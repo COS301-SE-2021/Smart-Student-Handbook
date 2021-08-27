@@ -117,10 +117,18 @@
     min-width: max-content;
   }
 }
-.removeCollaboratorIcon{
+.removeCollaboratorBtn{
   position: absolute;
   font-size: large;
   left: 35px;
+}
+
+.removeCollaboratorIcon{
+  position: absolute;
+  top: -10px;
+  left: 0;
+  font-size: larger;
+  color: transparent;
 }
 
 #addGroupBtn{

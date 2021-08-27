@@ -1,0 +1,12 @@
+#exploreBottomSheetEditor{
+  text-align: left;
+  padding: 7px;
+  height: calc(100vh - 155px);
+  margin-top: 5px;
+}
+
+@import "src/app/components/editor/editor.component";
+
+.example-spacer {
+  flex: 1 1 auto;
+}

@@ -3,11 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import {
-	NotebookEventEmitterService,
-	AccountService,
-	OpenNotebookPanelService,
-} from '@app/services';
+import { AccountService } from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
@@ -70,14 +66,10 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * Include the notebook service
 	 * @param router
 	 * @param accountService
-	 * @param notebookEventEmitterService
-	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private router: Router,
-		private accountService: AccountService,
-		private notebookEventEmitterService: NotebookEventEmitterService,
-		private openNotebookPanelService: OpenNotebookPanelService
+		private accountService: AccountService
 	) {}
 
 	/**
@@ -95,15 +87,9 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		this.notePanelComponent.openNotebook = (
 			notebookId: string,
 			noteId: string,
-			title: string,
-			notebookTitle: string
+			title: string
 		) => {
-			this.editorComponent.loadEditor(
-				notebookId,
-				noteId,
-				title,
-				notebookTitle
-			);
+			this.editorComponent.loadEditor(notebookId, noteId, title);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {
@@ -121,17 +107,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(
-		notebookId: string,
-		noteId: string,
-		title: string,
-		notebookTitle: string
-	) {
-		await this.editorComponent.loadEditor(
-			notebookId,
-			noteId,
-			title,
-			notebookTitle
-		);
+	async loadEditor(notebookId: string, noteId: string, title: string) {
+		await this.editorComponent.loadEditor(notebookId, noteId, title);
 	}
 }

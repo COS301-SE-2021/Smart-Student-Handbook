@@ -6,14 +6,12 @@ import {
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
-	NotebookEventEmitterService,
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NoteMoreService,
-	OpenNotebookPanelService,
 } from '@app/services';
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -66,10 +64,8 @@ export class TreeViewComponent implements OnInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
-		private notebookData: NotebookDataService,
-		private noteMore: NoteMoreService,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookObservables: NotebookObservablesService,
+		private notebookOperations: NotebookOperationsService
 	) {}
 
 	ngOnInit(): void {
@@ -168,7 +164,7 @@ export class TreeViewComponent implements OnInit {
 			(noteb) => noteb.notebookId === notebookId
 		);
 
-		this.noteMore
+		this.notebookOperations
 			.updateNotebook({
 				title: notebook[0].title,
 				author: notebook[0].author,
@@ -208,7 +204,8 @@ export class TreeViewComponent implements OnInit {
 					},
 				];
 				this.treeControl.expandAll();
-				this.notebookEventEmitterService.ChangePrivacy(val.private);
+				// this.notebookEventEmitterService.ChangePrivacy(val.private);
+				this.notebookObservables.setNotebookPrivacy(val.private);
 			});
 	}
 
@@ -228,20 +225,25 @@ export class TreeViewComponent implements OnInit {
 			) {
 				localStorage.setItem('notebookId', notebookId);
 
-				this.router.navigate(['notes']);
+				this.router.navigate(['notes']).then(() => {
+					this.notebookObservables.setOpenNotebook(
+						notebookId,
+						notebookTitle,
+						false
+					);
+				});
 			} else {
-				this.openNotebookPanelService.toggleNotePanel(
+				this.notebookObservables.setOpenNotebook(
 					notebookId,
-					notebookTitle
+					notebookTitle,
+					false
 				);
 			}
-
-			this.notebookData.setID(notebookId, notebookTitle);
 		});
 	}
 
 	createNewNotebook() {
-		this.noteMore
+		this.notebookOperations
 			.createNewNotebook({
 				title: '',
 				author: this.user.username,
@@ -353,8 +355,9 @@ export class TreeViewComponent implements OnInit {
 							}
 
 							if (this.openedNotebookId === notebookId) {
-								this.openNotebookPanelService.closePanel();
-								this.notebookEventEmitterService.CloseNote();
+								// this.openNotebookPanelService.closePanel();
+								this.notebookObservables.setClosePanel(true);
+								this.notebookObservables.setCloseEditor(true);
 							}
 						}
 					});

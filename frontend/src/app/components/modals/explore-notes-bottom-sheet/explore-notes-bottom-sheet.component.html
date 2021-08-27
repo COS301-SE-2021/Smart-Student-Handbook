@@ -1,0 +1,33 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <h2>{{noteTitle}}</h2>
+
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button [matMenuTriggerFor]="cloneMenu">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+
+    <mat-menu #cloneMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>note_add</mat-icon>
+        <span>Clone Note</span>
+      </button>
+      <!--      <button mat-menu-item>-->
+      <!--        <mat-icon>exit_to_app</mat-icon>-->
+      <!--        <span>Logout</span>-->
+      <!--      </button>-->
+    </mat-menu>
+
+
+    <button mat-icon-button (click)="closeSheet($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" id="exploreNoteLoader" *ngIf="!isCompleted"></mat-progress-bar>
+
+
+<div id="exploreBottomSheetEditor" class="editor"></div>

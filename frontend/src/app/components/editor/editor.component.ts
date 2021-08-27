@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -11,16 +11,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NotebookEventEmitterService,
-	ProfileService,
-	NotesService,
-	NoteMoreService,
+	NoteOperationsService,
 	NotificationService,
+	ProfileService,
 } from '@app/services';
 import { NotebookBottomSheetComponent } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
+
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -38,7 +39,7 @@ export interface Collaborators {
 	templateUrl: './editor.component.html',
 	styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterContentInit {
 	/**
     Get all plugins for notebook
    */
@@ -142,61 +143,67 @@ export class EditorComponent implements OnInit {
 	 * @param bottomSheet
 	 * @param notesService
 	 * @param profileService
-	 * @param noteMore
+	 * @param notebookObservables
+	 * @param notebookOperations
 	 * @param notificationService
-	 * @param notebookEventEmitterService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private bottomSheet: MatBottomSheet,
-		private notesService: NotesService,
+		private notesService: NoteOperationsService,
 		private profileService: ProfileService,
-		private noteMore: NoteMoreService,
-		private notificationService: NotificationService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookObservables: NotebookObservablesService,
+		private notebookOperations: NotebookOperationsService,
+		private notificationService: NotificationService
 	) {}
 
-	ngOnInit(): void {
-		if (this.notebookEventEmitterService.subsVar === undefined) {
-			this.notebookEventEmitterService.subsVar =
-				this.notebookEventEmitterService.loadEmitter.subscribe(
-					({ notebookId, noteId, title, notebookTitle }) => {
-						this.notebookTitle = notebookTitle;
-						this.loadEditor(
-							notebookId,
-							noteId,
-							title,
-							notebookTitle
-						);
-					}
-				);
-
-			this.notebookEventEmitterService.closeNoteEmitter.subscribe(() => {
+	ngAfterContentInit(): void {
+		this.notebookObservables.closeEditor.subscribe((close: any) => {
+			if (close.close) {
 				this.showDefaultImage();
 				this.noteInfoAccordion.close();
 				this.opened = false;
-			});
+				this.notebookObservables.setCloseEditor(false);
+			}
+		});
+	}
 
-			this.notebookEventEmitterService.changePrivacyEmitter.subscribe(
-				(privacy: boolean) => {
-					this.private = privacy;
-				}
-			);
-		}
+	ngOnInit(): void {
+		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
+			// this.notebookTitle = notebookTitle;
+			if (noteInfo.notebookId !== '')
+				this.loadEditor(
+					noteInfo.notebookId,
+					noteInfo.noteId,
+					noteInfo.title
+				);
+		});
+
+		this.notebookObservables.notebookPrivacy.subscribe((privacy: any) => {
+			this.private = privacy.private;
+		});
 	}
 
 	getNotebook(notebookId: string): void {
-		console.log('----------------');
-		this.noteMore.getNotebookInfo(notebookId).subscribe((data) => {
-			this.date = data.date;
-			this.notebook = data.notebook;
-			this.tags = data.tags;
-			this.collaborators = data.collaborators;
-			this.creator = data.creator;
-			this.private = data.notebook.private;
-			this.opened = true;
-		});
+		// console.log('----------------');
+		this.notebookOperations
+			.getNotebookInfo(notebookId)
+			.subscribe((data) => {
+				this.date = data.date;
+				this.notebook = data.notebook;
+				this.tags = data.tags;
+				this.collaborators = data.collaborators;
+				this.creator = data.creator;
+				this.private = data.notebook.private;
+				this.opened = true;
+
+				const progressbar = document.getElementById(
+					'progressbar'
+				) as HTMLElement;
+
+				if (progressbar) progressbar.style.display = 'none';
+			});
 	}
 
 	/**
@@ -204,16 +211,14 @@ export class EditorComponent implements OnInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
-	 * @param notebookTitle
 	 */
-	async loadEditor(
-		notebookId: string,
-		noteId: string,
-		title: string,
-		notebookTitle: string
-	) {
-		this.notebookTitle = notebookTitle;
+	async loadEditor(notebookId: string, noteId: string, title: string) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.noteTitle = title;
+		this.noteId = noteId;
+		this.notebookID = notebookId;
+		this.opened = false;
 
 		this.getNotebook(notebookId);
 
@@ -221,7 +226,8 @@ export class EditorComponent implements OnInit {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			const editor = new EditorJS({
+			// const editor = new EditorJS({
+			this.Editor = new EditorJS({
 				holder: 'editor',
 				tools: {
 					snippet: AddTagsTool,
@@ -299,7 +305,7 @@ export class EditorComponent implements OnInit {
 				},
 			});
 
-			this.Editor = editor;
+			// this.Editor = editor;
 
 			const e = document.getElementById('editor') as HTMLElement;
 			e.style.display = 'none';
@@ -325,18 +331,7 @@ export class EditorComponent implements OnInit {
 
 		editor.clear();
 
-		/**
-		 * Get the specific notebook details with notebook id
-		 */
-		this.noteTitle = title;
-		this.noteId = noteId;
-		this.notebookID = notebookId;
-
-		EditorComponent.staticNotebookID = notebookId;
-		EditorComponent.staticNoteId = noteId;
-		EditorComponent.staticNotebookTitle = title;
-
-		this.notebookEventEmitterService.GetNoteTitle(title);
+		// this.notebookEventEmitterService.GetNoteTitle(title);
 
 		// call event transmitter
 
@@ -380,9 +375,14 @@ export class EditorComponent implements OnInit {
 				e = document.getElementById('editor') as HTMLElement;
 				e.style.overflowY = 'scroll';
 
-				if (progressbar) progressbar.style.display = 'none';
+				// if (progressbar) progressbar.style.display = 'none';
 			});
 		// });
+
+		editor.on('focus', () => {
+			alert(editor.blocks.getCurrentBlockIndex());
+		});
+		// alert(editor.caret.focus().valueOf());
 	}
 
 	/**
@@ -419,6 +419,8 @@ export class EditorComponent implements OnInit {
 	 * Method to call when notebook content should be saved
 	 */
 	saveContent() {
+		// this.editorFocussed();
+
 		this.Editor.save()
 			.then((outputData) => {
 				// console.log(this.notebookID, outputData);
@@ -429,9 +431,37 @@ export class EditorComponent implements OnInit {
 					});
 				}
 			})
-			.catch((error) => {
-				console.log('Saving failed: ', error);
+			.catch(() => {
+				// console.log('Saving failed: ', error);
 			});
+	}
+
+	/**
+	 * Highlight the block where a user is busy editing the note
+	 */
+	editorFocussed() {
+		const index = this.Editor.blocks.getCurrentBlockIndex();
+
+		const blocks = document.getElementById('editor').children[0].children[0]
+			.children as HTMLCollection;
+
+		let block = blocks[index] as HTMLElement;
+
+		let nBlock = null;
+		for (let i = 0; i < blocks.length; i += 1) {
+			nBlock = blocks[i].children[0] as HTMLElement;
+			if (i !== index) {
+				if (nBlock.style.backgroundColor === 'rgba(8, 85, 116, 0.2)') {
+					nBlock.style.backgroundColor = 'transparent';
+				}
+			}
+		}
+
+		if (block) {
+			block = block.children[0] as HTMLElement;
+			block.style.backgroundColor = 'rgba(8,85,116,0.2)';
+			block.style.borderRadius = '5px';
+		}
 	}
 
 	/**
@@ -457,6 +487,9 @@ export class EditorComponent implements OnInit {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeNoteCard(_id: string) {}
 
+	/**
+	 * Display a default image and hide the editor when no note is opened
+	 */
 	showDefaultImage() {
 		const e = document.getElementById('editor') as HTMLElement;
 		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
@@ -486,11 +519,9 @@ export class EditorComponent implements OnInit {
 		const vh = window.innerHeight;
 
 		if (this.panelOpenState) {
-			const p = `${vh - 402}px`;
-			editor.style.height = p;
+			editor.style.height = `${vh - 402}px`;
 		} else {
-			const p = `${vh - 160}px`;
-			editor.style.height = p;
+			editor.style.height = `${vh - 160}px`;
 		}
 	}
 
@@ -518,17 +549,21 @@ export class EditorComponent implements OnInit {
 			tagList.push(this.tags[i].name);
 		}
 
-		this.noteMore.updateNotebookTags({
-			title: this.notebook.title,
-			author: this.notebook.author,
-			course: this.notebook.course,
-			description: this.notebook.description,
-			institution: this.notebook.institution,
-			creatorId: this.notebook.creatorId,
-			private: this.notebook.private,
-			tags: tagList,
-			notebookId: this.notebook.notebookId,
-		});
+		console.log(tagList);
+
+		this.notebookOperations
+			.updateNotebookTags({
+				title: this.notebook.title,
+				author: this.notebook.author,
+				course: this.notebook.course,
+				description: this.notebook.description,
+				institution: this.notebook.institution,
+				creatorId: this.notebook.creatorId,
+				private: this.notebook.private,
+				tags: tagList,
+				notebookId: this.notebook.notebookId,
+			})
+			.subscribe(() => {});
 	}
 
 	/**
@@ -547,20 +582,20 @@ export class EditorComponent implements OnInit {
 
 	addCollaborator() {
 		// this.notificationService.sendCollaborationRequest(this.user.uid, )
-		this.noteMore
+		this.notebookOperations
 			.requestCollaborator(
 				this.user.uid,
 				this.notebookID,
 				this.notebookTitle
 			)
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.subscribe((collaborator: any) => {
+			.subscribe(() => {
 				// this.collaborators.push(collaborator);
 			});
 	}
 
 	removeCollaborator(userId: string) {
-		this.noteMore
+		this.notebookOperations
 			.removeCollaborator(userId, this.notebookID)
 			.subscribe((id: string) => {
 				this.collaborators = this.collaborators.filter(

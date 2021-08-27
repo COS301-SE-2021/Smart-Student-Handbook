@@ -17,7 +17,8 @@ em {
   flex-grow: 1;
   display: flex;
   flex-direction: row-reverse;
-  width: 960px;
+  //width: 960px;
+  width: auto;
   min-height: 100%;
   margin: 0 auto;
 }
@@ -143,6 +144,8 @@ em {
 
 .ais-Hits-item {
   margin-bottom: 24px;
+  cursor: pointer;
+  overflow: auto;
 }
 
 .ais-Hits-item article {
@@ -307,9 +310,58 @@ footer {
   color: #999;
 }
 
+//----------------------------------
+#notebookNotesContainer{
+  position: fixed;
+  bottom: 0;
+  width: 45%;
+  height: calc(100vh - 107px - 60px);
+  overflow: auto;
+  padding: 15px 5px 15px 5px;
+  //padding: 50px;
+  //font-size: 20px;
+}
 
+#notesHeading{
+  display: inline-block;
+  width: 80%;
+}
 
+.notesDisplayed{
+  padding: 10px;
+  height: inherit;
+}
 
+.notesHidden{
+  width: 0;
+  padding: 0;
+  box-shadow: none;
+}
 
+#notesSideDiv{
+  transition: all .1s linear;
+  overflow: hidden;
+}
 
+.boxShadow{
+  box-shadow: 0px 0px 8px 2px #d8d8d8;
+  background-color: white;
+}
 
+.hidden{
+  visibility: hidden;
+}
+
+#exploreHeader{
+  position: fixed;
+  top: 60px;
+  background-color: #fcfcfc;
+  z-index: 3;
+  margin-bottom: 20px;
+  margin-top: 0 !important;
+  padding: 20px 0 20px 0;
+  left: 0;
+  width: 100%;
+  height: 105px;
+  border-bottom: 1px solid #d9d9d9;
+}
