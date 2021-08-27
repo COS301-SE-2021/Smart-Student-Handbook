@@ -32,8 +32,9 @@ export class NotebookController {
 		return this.notebookService.updateNotebook(notebookDto, userId);
 	}
 
-	@Delete('deleteNotebook/:notebookId/:userId')
-	deleteNotebook(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
+	@Delete('deleteNotebook/:notebookId')
+	async deleteNotebook(@Param('notebookId') notebookId, @Headers() headers): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.notebookService.deleteNotebook(notebookId, userId);
 	}
 
