@@ -21,12 +21,12 @@
   <br/>
   <hr/>
 
-  <h3><b>{{userProfile.displayName}}'s Notebooks</b></h3>
+  <h3><strong>{{userProfile.displayName}}'s Notebooks</strong></h3>
 
-  <mat-selection-list #notebooks [multiple]="false">
+  <mat-selection-list #notebooks [multiple]="false" id="notebookList">
     <mat-list-option *ngFor="let notebook of userNotebooks" [value]="notebook.notebookId"
     (click)="viewNotebook()">
-      {{notebook.title}}
+      <p><mat-icon>book</mat-icon> {{notebook.title}}</p>
     </mat-list-option>
   </mat-selection-list>
 

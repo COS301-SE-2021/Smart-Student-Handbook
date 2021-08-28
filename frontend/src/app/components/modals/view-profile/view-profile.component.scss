@@ -2,6 +2,10 @@
   display: none;
 }
 
+#notebookList{
+  overflow: auto;
+}
+
 //---------------------------------------
 
 @mixin object-center {
