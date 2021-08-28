@@ -1,4 +1,4 @@
-<mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" id="noteCardProgressbar"></mat-progress-bar>
+<mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" ></mat-progress-bar>
 <div
   class="col-6 col-sm-4 noteContainer"
   *ngFor="let note of notes; let i = index"
@@ -23,7 +23,7 @@
 
   </mat-card>
 
-  <mat-card class="note" ngxLongPress2 *ngIf="readonly">
+  <mat-card class="note" *ngIf="readonly">
     <div (click)="openNoteModal(note.noteId, note.name)">
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>

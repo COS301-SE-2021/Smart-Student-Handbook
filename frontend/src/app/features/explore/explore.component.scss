@@ -313,9 +313,9 @@ footer {
 //----------------------------------
 #notebookNotesContainer{
   position: fixed;
-  bottom: 0;
+  bottom: 8px;
   width: 45%;
-  height: calc(100vh - 107px - 60px);
+  height: calc(100vh - 118px - 60px);
   overflow: auto;
   padding: 15px 5px 15px 5px;
   //padding: 50px;

@@ -3,10 +3,16 @@ import algoliasearch from 'algoliasearch/lite';
 import { NotebookObservablesService, NotebookService } from '@app/services';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AddNoteComponent, ExploreNotesComponent } from '@app/components';
+import {
+	AddNoteComponent,
+	ExploreNoteListBottomsheetComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -29,6 +35,8 @@ export class ExploreComponent {
 		},
 	};
 
+	hide: boolean = true;
+
 	title: string = '';
 
 	constructor(
@@ -36,49 +44,30 @@ export class ExploreComponent {
 		private dialog: MatDialog,
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService,
 		private ngZone: NgZone
 	) {}
 
 	openNotes(hit: any) {
-		if (window.innerWidth <= 991) {
-			this.bottomSheet.open(ExploreNoteListComponent, {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(ExploreNoteListBottomsheetComponent, {
+				data: {
+					title: hit.data.title,
+				},
+			});
+		} else if (window.innerWidth <= 991) {
+			this.dialog.open(ExploreNoteListComponent, {
 				data: {
 					title: hit.data.title,
 				},
 			});
 		} else {
-			const notesDiv = document.getElementById(
-				'notesSideDiv'
-			) as HTMLDivElement;
-			notesDiv.classList.remove('notesHidden');
-			notesDiv.classList.remove('col-0');
-			notesDiv.classList.add('col-6');
-			notesDiv.classList.add('notesDisplayed');
-
-			const notesBoxShadow = document.getElementById(
-				'notebookNotesContainer'
-			) as HTMLDivElement;
-			notesBoxShadow.classList.add('boxShadow');
-
-			const closeNotesPanelBtn = document.getElementById(
-				'closeNotesPanelBtn'
-			) as HTMLDivElement;
-			closeNotesPanelBtn.classList.remove('hidden');
-
-			const notesHeading = document.getElementById(
-				'notesHeading'
-			) as HTMLDivElement;
-			notesHeading.classList.remove('hidden');
-
-			const noteCardsComponent = document.getElementById(
-				'noteCardsComponent'
-			) as HTMLDivElement;
-			noteCardsComponent.classList.remove('hidden');
+			this.hide = false;
 
 			this.title = hit.data.title;
 		}
 
-		this.notebookObservables.setOpenNotebook(
+		this.exploreObservables.setOpenExploreNotebook(
 			hit.objectID,
 			hit.data.title,
 			true
@@ -86,32 +75,6 @@ export class ExploreComponent {
 	}
 
 	closeNotes() {
-		const notesDiv = document.getElementById(
-			'notesSideDiv'
-		) as HTMLDivElement;
-		notesDiv.classList.add('notesHidden');
-		notesDiv.classList.add('col-0');
-		notesDiv.classList.remove('col-6');
-		notesDiv.classList.remove('notesDisplayed');
-
-		const notesBoxShadow = document.getElementById(
-			'notebookNotesContainer'
-		) as HTMLDivElement;
-		notesBoxShadow.classList.remove('boxShadow');
-
-		const closeNotesPanelBtn = document.getElementById(
-			'closeNotesPanelBtn'
-		) as HTMLDivElement;
-		closeNotesPanelBtn.classList.add('hidden');
-
-		const notesHeading = document.getElementById(
-			'notesHeading'
-		) as HTMLDivElement;
-		notesHeading.classList.add('hidden');
-
-		const noteCardsComponent = document.getElementById(
-			'noteCardsComponent'
-		) as HTMLDivElement;
-		noteCardsComponent.classList.add('hidden');
+		this.hide = true;
 	}
 }
