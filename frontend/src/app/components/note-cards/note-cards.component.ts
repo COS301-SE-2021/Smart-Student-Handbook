@@ -1,25 +1,15 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	Component,
-	OnInit,
-	ViewChild,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
 	NotebookObservablesService,
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import {
-	ExploreNoteListComponent,
-	ExploreNotesEditorComponent,
-} from '@app/components';
+import { ExploreNotesEditorComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreNotesEditorBottomSheetComponent } from '@app/components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
-import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-note-cards',

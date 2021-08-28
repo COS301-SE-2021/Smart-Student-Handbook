@@ -5,11 +5,13 @@
 	(cdkDropListDropped)="drop($event)"
 	#editorContainer
 >
+  <h2 fxHide.gt-sm>{{noteTitle}}</h2>
 	<div id="mobileMoreOptions" align="right" fxHide.gt-sm>
 		<button
 			mat-icon-button
 			class="favorite-icon"
 			(click)="openBottomSheet()"
+      [disabled]="!doneLoading"
 		>
 			<mat-icon id="mobileMoreIcon">more_vert</mat-icon>
 		</button>

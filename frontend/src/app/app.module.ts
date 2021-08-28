@@ -66,6 +66,8 @@ import {
 	ExploreNoteListComponent,
 	ExploreNotesEditorBottomSheetComponent,
 	ExploreNoteListBottomsheetComponent,
+	NoteInfoComponent,
+	SmartAssistComponent,
 } from '@app/components';
 
 // Long press
@@ -114,6 +116,8 @@ import { AppRoutingModule } from './app-routing.module';
 		ExploreNoteListComponent,
 		ExploreNotesEditorBottomSheetComponent,
 		ExploreNoteListBottomsheetComponent,
+		NoteInfoComponent,
+		SmartAssistComponent,
 	],
 	imports: [
 		MaterialModule,
