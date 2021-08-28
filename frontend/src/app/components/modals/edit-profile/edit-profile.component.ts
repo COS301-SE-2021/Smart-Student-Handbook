@@ -49,6 +49,8 @@ export class EditProfileComponent implements OnInit {
 
 	user: any;
 
+	doneLoading: boolean = true;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -75,6 +77,8 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.doneLoading = true;
+
 		this.filteredOptions = this.myControl.valueChanges.pipe(
 			startWith(''),
 			map((value) => this.filter(value))
@@ -94,10 +98,7 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const progressbar = document.getElementById(
-			'progressbar'
-		) as HTMLElement;
-		if (progressbar) progressbar.style.display = 'block';
+		this.doneLoading = false;
 		this.isDisabled = true;
 		this.updatedFailed = false;
 
@@ -121,7 +122,7 @@ export class EditProfileComponent implements OnInit {
 							this.errorMessage = res.message;
 							this.updatedFailed = true;
 						}
-						if (progressbar) progressbar.style.display = 'none';
+						this.doneLoading = true;
 						this.isDisabled = false;
 					},
 					(err) => {

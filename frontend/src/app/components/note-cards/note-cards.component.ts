@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreNotesEditorBottomSheetComponent } from '@app/components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
+import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
 
 @Component({
 	selector: 'app-note-cards',
@@ -64,7 +65,8 @@ export class NoteCardsComponent implements OnInit {
 		private bottomSheet: MatBottomSheet,
 		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -74,17 +76,7 @@ export class NoteCardsComponent implements OnInit {
 		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		this.notebookObservables.openExploreNotebookId.subscribe((notebook) => {
-			this.readonly = true;
-			this.isCompleted = false;
-
-			if (notebook.notebookId !== '') {
-				this.notebookId = notebook.notebookId;
-				this.getUserNotebooks();
-			}
-		});
-
-		this.notebookObservables.openNotebookId.subscribe((notebook) => {
+		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;
 			this.isCompleted = false;
 
@@ -93,6 +85,16 @@ export class NoteCardsComponent implements OnInit {
 				this.getUserNotebooks();
 			}
 		});
+
+		// this.notebookObservables.openNotebookId.subscribe((notebook) => {
+		// 	this.readonly = notebook.readonly;
+		// 	this.isCompleted = false;
+		//
+		// 	if (notebook.notebookId !== '') {
+		// 		this.notebookId = notebook.notebookId;
+		// 		this.getUserNotebooks();
+		// 	}
+		// });
 	}
 
 	/**

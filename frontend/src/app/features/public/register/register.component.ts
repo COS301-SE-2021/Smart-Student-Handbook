@@ -145,6 +145,7 @@ export class RegisterComponent {
 																	EditProfileComponent,
 																	{
 																		width: screenWidth,
+																		height: '90vh',
 																		data: user,
 																	}
 																);

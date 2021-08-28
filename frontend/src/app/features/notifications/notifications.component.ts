@@ -16,17 +16,18 @@ export class NotificationsComponent implements OnInit {
 
 	user: any;
 
+	isCompleted: boolean = true;
+
 	constructor(
 		private notificationService: NotificationService,
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService
 	) {}
 
-	/* notificationList: Observable<any[]> =
-		this.notificationService.getUserNotifications(); */
-
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
+		this.isCompleted = false;
+
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		if (this.user)
@@ -34,6 +35,8 @@ export class NotificationsComponent implements OnInit {
 				.getUserNotifications(this.user.uid)
 				.subscribe((notifications) => {
 					this.notifications = notifications;
+
+					this.isCompleted = true;
 				});
 	}
 

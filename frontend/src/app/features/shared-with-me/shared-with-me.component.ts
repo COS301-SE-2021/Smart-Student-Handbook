@@ -11,6 +11,7 @@ import {
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -64,6 +65,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private notebookOperations: NotebookOperationsService,
+		private exploreObservablesOperations: ExploreObservablesService,
 		private notebookObservables: NotebookObservablesService
 	) {}
 
@@ -208,7 +210,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 				localStorage.setItem('notebookId', notebookId);
 
 				this.router.navigate(['notes']).then(() => {
-					this.notebookObservables.setOpenNotebook(
+					this.exploreObservablesOperations.setOpenExploreNotebook(
 						notebookId,
 						notebookTitle,
 						false

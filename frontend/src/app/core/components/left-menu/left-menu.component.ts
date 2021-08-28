@@ -108,6 +108,7 @@ export class LeftMenuComponent implements OnInit {
 			// Open dialog and populate the data attributes of the form fields
 			const dialogRef = this.dialog.open(EditProfileComponent, {
 				width: screenWidth,
+				height: '90vh',
 				data: this.user,
 			});
 

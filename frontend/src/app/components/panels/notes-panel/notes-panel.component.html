@@ -22,7 +22,7 @@
 				</button>
 			</div>
 
-      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
       <div id="noteHolderDiv">
         <mat-card

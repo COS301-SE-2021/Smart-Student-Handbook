@@ -12,6 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -43,6 +44,7 @@ export class ExploreComponent {
 		private dialog: MatDialog,
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService,
 		private ngZone: NgZone
 	) {}
 
@@ -65,9 +67,10 @@ export class ExploreComponent {
 			this.title = hit.data.title;
 		}
 
-		this.notebookObservables.setOpenExploreNotebook(
+		this.exploreObservables.setOpenExploreNotebook(
 			hit.objectID,
-			hit.data.title
+			hit.data.title,
+			true
 		);
 	}
 

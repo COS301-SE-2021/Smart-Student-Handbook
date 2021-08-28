@@ -92,7 +92,7 @@
 							<mat-card-header>
 								<div mat-card-avatar class="header-image"></div>
 
-                <button class="removeCollaboratorBtn" mat-icon-button [disabled]="!opened" (click)="removeCollaborator(collaborator.id)">
+                <button class="removeCollaboratorBtn" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
                   <mat-icon class="removeCollaboratorIcon">
                     remove_circle_outline
                   </mat-icon>
@@ -149,7 +149,7 @@
 		</mat-expansion-panel>
 	</mat-accordion>
 
-	<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
+	<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
 	<div id="editor" #editor class="editor"></div>
 </div>
