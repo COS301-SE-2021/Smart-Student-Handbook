@@ -11,7 +11,10 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import { ExploreNotesEditorComponent } from '@app/components';
+import {
+	ExploreNoteListComponent,
+	ExploreNotesEditorComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -161,10 +164,8 @@ export class NoteCardsComponent implements OnInit {
 	}
 
 	openNoteModal(noteId: string, title: string) {
-		if (window.innerWidth > 991) {
-			this.dialog.open(ExploreNotesEditorComponent, {
-				width: '100%',
-				height: '80%',
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(ExploreNotesEditorBottomSheetComponent, {
 				data: {
 					title,
 					noteId,
@@ -172,7 +173,9 @@ export class NoteCardsComponent implements OnInit {
 				},
 			});
 		} else {
-			this.bottomSheet.open(ExploreNotesEditorBottomSheetComponent, {
+			this.dialog.open(ExploreNotesEditorComponent, {
+				width: '100%',
+				height: '80%',
 				data: {
 					title,
 					noteId,

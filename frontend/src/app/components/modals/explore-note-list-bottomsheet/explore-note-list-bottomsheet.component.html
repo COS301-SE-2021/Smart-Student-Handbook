@@ -1,5 +1,5 @@
 <div id="topDividerContainer">
-  <hr id="topDivider" [mat-dialog-close] />
+  <hr id="topDivider" (click)="closeSheet($event)" />
 </div>
 
 <mat-toolbar>
@@ -8,7 +8,7 @@
 
     <span class="example-spacer"></span>
 
-    <button mat-icon-button [mat-dialog-close]>
+    <button mat-icon-button (click)="closeSheet($event)">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>
@@ -19,5 +19,5 @@
   <!--    <mat-icon>close</mat-icon>-->
   <!--  </button>-->
   <!--  <h2 class="hidden" id="notesHeading">{{title}}</h2>-->
-  <app-note-cards class="hidden" id="noteCardsComponent"></app-note-cards>
+  <app-note-cards></app-note-cards>
 </div>

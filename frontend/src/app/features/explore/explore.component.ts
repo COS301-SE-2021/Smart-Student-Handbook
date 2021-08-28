@@ -3,7 +3,12 @@ import algoliasearch from 'algoliasearch/lite';
 import { NotebookObservablesService, NotebookService } from '@app/services';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AddNoteComponent, ExploreNotesEditorComponent } from '@app/components';
+import {
+	AddNoteComponent,
+	ExploreNoteListBottomsheetComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -42,8 +47,14 @@ export class ExploreComponent {
 	) {}
 
 	openNotes(hit: any) {
-		if (window.innerWidth <= 991) {
-			this.bottomSheet.open(ExploreNoteListComponent, {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(ExploreNoteListBottomsheetComponent, {
+				data: {
+					title: hit.data.title,
+				},
+			});
+		} else if (window.innerWidth <= 991) {
+			this.dialog.open(ExploreNoteListComponent, {
 				data: {
 					title: hit.data.title,
 				},
