@@ -4,11 +4,6 @@
   margin-bottom: 15px;
 }
 
-
-#progressbar{
-  display: none;
-}
-
 //---------------------------------------
 
 @mixin object-center {
@@ -67,18 +62,4 @@ $fontColor: rgb(250,250,250);
     height: 2em;
   }
 }
-
-/////////////////////////
-// Body styling 🐾
-/////////---------->
-
-//body {
-//  height: 100vh;
-//  background-color: rgb(25, 24, 21);
-//  @include object-center;
-//
-//  a:hover {
-//    text-decoration: none;
-//  }
-//}
 
