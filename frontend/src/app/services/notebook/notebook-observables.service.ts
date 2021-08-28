@@ -35,6 +35,11 @@ export class NotebookObservablesService {
 
 	public closePanelState: Observable<any>;
 
+	/** id of notebook to be opened on explore page */
+	public openExploreNotebookId: BehaviorSubject<any>;
+
+	public openExploreNotebookIdState: Observable<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -82,6 +87,15 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
+
+		/** id of notebook to be opened if one is selected from tree view */
+		this.openExploreNotebookId = new BehaviorSubject<any>({
+			notebookId: '',
+			title: '',
+		});
+
+		this.openExploreNotebookIdState =
+			this.openExploreNotebookId.asObservable();
 	}
 
 	// /** @return id & title of the notebook to be opened */
@@ -192,5 +206,20 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
+	}
+
+	/**
+	 * Set the id an title of the notebook to be opened on the explore page
+	 * @param notebookID
+	 * @param title
+	 */
+	setOpenExploreNotebook(notebookID: string, title: string) {
+		this.openExploreNotebookId.next({
+			notebookId: notebookID,
+			title,
+		});
+
+		this.openExploreNotebookIdState =
+			this.openExploreNotebookId.asObservable();
 	}
 }

@@ -11,11 +11,11 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import { ExploreNotesComponent } from '@app/components';
+import { ExploreNotesEditorComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ExploreNotesBottomSheetComponent } from '@app/components/modals/explore-notes-bottom-sheet/explore-notes-bottom-sheet.component';
+import { ExploreNotesEditorBottomSheetComponent } from '@app/components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
 
 @Component({
 	selector: 'app-note-cards',
@@ -70,6 +70,16 @@ export class NoteCardsComponent implements OnInit {
 		this.isCompleted = false;
 		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		this.notebookObservables.openExploreNotebookId.subscribe((notebook) => {
+			this.readonly = true;
+			this.isCompleted = false;
+
+			if (notebook.notebookId !== '') {
+				this.notebookId = notebook.notebookId;
+				this.getUserNotebooks();
+			}
+		});
 
 		this.notebookObservables.openNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;
@@ -152,7 +162,7 @@ export class NoteCardsComponent implements OnInit {
 
 	openNoteModal(noteId: string, title: string) {
 		if (window.innerWidth > 991) {
-			this.dialog.open(ExploreNotesComponent, {
+			this.dialog.open(ExploreNotesEditorComponent, {
 				width: '100%',
 				height: '80%',
 				data: {
@@ -162,7 +172,7 @@ export class NoteCardsComponent implements OnInit {
 				},
 			});
 		} else {
-			this.bottomSheet.open(ExploreNotesBottomSheetComponent, {
+			this.bottomSheet.open(ExploreNotesEditorBottomSheetComponent, {
 				data: {
 					title,
 					noteId,

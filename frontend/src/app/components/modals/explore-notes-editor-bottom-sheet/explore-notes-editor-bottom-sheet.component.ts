@@ -13,10 +13,10 @@ import {
 
 @Component({
 	selector: 'app-explore-notes-bottom-sheet',
-	templateUrl: './explore-notes-bottom-sheet.component.html',
-	styleUrls: ['./explore-notes-bottom-sheet.component.scss'],
+	templateUrl: './explore-notes-editor-bottom-sheet.component.html',
+	styleUrls: ['./explore-notes-editor-bottom-sheet.component.scss'],
 })
-export class ExploreNotesBottomSheetComponent implements OnInit {
+export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 	Header = require('@editorjs/header');
 
 	LinkTool = require('@editorjs/link');
@@ -105,7 +105,7 @@ export class ExploreNotesBottomSheetComponent implements OnInit {
 
 	constructor(
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-		private bottomSheetRef: MatBottomSheetRef<ExploreNotesBottomSheetComponent>
+		private bottomSheetRef: MatBottomSheetRef<ExploreNotesEditorBottomSheetComponent>
 	) {}
 
 	ngOnInit(): void {

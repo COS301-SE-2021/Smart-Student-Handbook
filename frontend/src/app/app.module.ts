@@ -62,7 +62,7 @@ import {
 	MessageComponent,
 	AddNoteComponent,
 	NoteCardsComponent,
-	ExploreNotesComponent,
+	ExploreNotesEditorComponent,
 } from '@app/components';
 
 // Long press
@@ -74,7 +74,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ExploreNoteListComponent } from './components/modals/explore-note-list/explore-note-list.component';
-import { ExploreNotesBottomSheetComponent } from './components/modals/explore-notes-bottom-sheet/explore-notes-bottom-sheet.component';
+import { ExploreNotesEditorBottomSheetComponent } from './components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
+import { ExploreNoteListBottomsheetComponent } from './components/modals/explore-note-list-bottomsheet/explore-note-list-bottomsheet.component';
 
 @NgModule({
 	declarations: [
@@ -109,9 +110,10 @@ import { ExploreNotesBottomSheetComponent } from './components/modals/explore-no
 		AddNoteComponent,
 		MessageComponent,
 		NoteCardsComponent,
-		ExploreNotesComponent,
+		ExploreNotesEditorComponent,
 		ExploreNoteListComponent,
-		ExploreNotesBottomSheetComponent,
+		ExploreNotesEditorBottomSheetComponent,
+  ExploreNoteListBottomsheetComponent,
 	],
 	imports: [
 		MaterialModule,
