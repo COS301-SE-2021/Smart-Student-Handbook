@@ -4,18 +4,25 @@
 	cdkDropListConnectedTo="panelContent"
 	(cdkDropListDropped)="drop($event)"
 	#editorContainer
+  ngStyle.lt-md="background-color: #f8f8f8;"
 >
-  <h2 fxHide.gt-sm>{{noteTitle}}</h2>
-	<div id="mobileMoreOptions" align="right" fxHide.gt-sm>
-		<button
-			mat-icon-button
-			class="favorite-icon"
-			(click)="openBottomSheet()"
-      [disabled]="!doneLoading"
-		>
-			<mat-icon id="mobileMoreIcon">more_vert</mat-icon>
-		</button>
-	</div>
+  <mat-toolbar id="smallNoteHeader" fxHide.gt-sm>
+    <h2>{{noteTitle}}</h2>
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      (click)="openSmartAssist()"
+      [disabled]="!doneLoading || noteTitle === 'Smart Student'">
+      <mat-icon>bubble_chart</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="openBottomSheet()"
+      [disabled]="!doneLoading || noteTitle === 'Smart Student'">
+      <mat-icon id="mobileMoreIcon">more_vert</mat-icon><!-- bubble_chart -->
+    </button>
+  </mat-toolbar>
+
 
 	<mat-accordion fxHide.lt-md>
 		<mat-expansion-panel

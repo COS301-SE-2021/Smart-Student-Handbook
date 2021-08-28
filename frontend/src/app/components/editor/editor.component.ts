@@ -18,10 +18,13 @@ import {
 	NotificationService,
 	ProfileService,
 } from '@app/services';
-import { NotebookBottomSheetComponent } from '@app/mobile';
+import {
+	NotebookBottomSheetComponent,
+	SmartAssistBottomSheetComponent,
+} from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { NoteInfoComponent } from '@app/components';
+import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
 
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
@@ -169,6 +172,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	ngOnInit(): void {
+		this.nrOfNotesLoaded = 0;
 		this.doneLoading = true;
 		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
 			this.nrOfNotesLoaded += 1;
@@ -584,6 +588,18 @@ export class EditorComponent implements OnInit, AfterContentInit {
 					(collaborator) => collaborator.id !== id
 				);
 			});
+	}
+
+	openSmartAssist() {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(SmartAssistBottomSheetComponent, {
+				panelClass: 'smartAssistBottomSheet',
+			});
+		} else {
+			this.dialog.open(SmartAssistModalComponent, {
+				width: '70%',
+			});
+		}
 	}
 
 	openBottomSheet(): void {

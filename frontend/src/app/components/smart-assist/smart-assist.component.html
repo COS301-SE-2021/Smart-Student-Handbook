@@ -5,27 +5,31 @@
   (mouseleave)="hidePreview(0)"
 >
   <mat-card-header class="snippetContentHeader">
-    <mat-card-subtitle class="date"
-    >JUNE 3 2021</mat-card-subtitle
-    >
+    <mat-card-subtitle class="date">
+      JUNE 3 2021
+    </mat-card-subtitle>
 
-    <mat-icon class="preview" (click)="showPreview(0)"
-    >crop_free</mat-icon
-    >
+    <mat-icon class="preview" fxHide.gt-sm>
+      note_add
+    </mat-icon>
+    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
+      aspect_ratio
+    </mat-icon>
 
-    <mat-card-title class="snippetTitle" data-type="header"
-    >Functional Requirements</mat-card-title
-    >
+    <mat-card-title class="snippetTitle" data-type="header">
+      Functional Requirements
+    </mat-card-title>
 
-    <mat-card-title class="snippetContent" data-type="paragraph"
-    >R1:The system should allow users to manage their
-      Profile and Account.</mat-card-title
-    >
-    <mat-card-title class="snippetContent" data-type="paragraph"
-    >R2:The system should allow users to create notes and
+    <mat-card-title class="snippetContent" data-type="paragraph">
+      R1:The system should allow users to manage their
+      Profile and Account.
+    </mat-card-title>
+
+    <mat-card-title class="snippetContent" data-type="paragraph">
+      R2:The system should allow users to create notes and
       add content to it then add appropriate tags to their
-      content.</mat-card-title
-    >
+      content.
+    </mat-card-title>
   </mat-card-header>
 
   <div class="tags">
@@ -51,16 +55,19 @@
   (mouseleave)="hidePreview(1)"
 >
   <mat-card-header class="snippetContentHeader">
-    <mat-card-subtitle class="date"
-    >JUNE 3 2021</mat-card-subtitle
-    >
-    <mat-card-title class="snippetTitle" data-type="header"
-    >Functional Requirements</mat-card-title
-    >
+    <mat-card-subtitle class="date">
+      JUNE 3 2021
+    </mat-card-subtitle>
+    <mat-card-title class="snippetTitle" data-type="header">
+      Functional Requirements
+    </mat-card-title>
 
-    <mat-icon class="preview" (click)="showPreview(1)"
-    >crop_free</mat-icon
-    >
+    <mat-icon class="preview" fxHide.gt-sm>
+      note_add
+    </mat-icon>
+    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
+      aspect_ratio
+    </mat-icon>
 
     <mat-card-title class="snippetContent" data-type="image">
       <img
