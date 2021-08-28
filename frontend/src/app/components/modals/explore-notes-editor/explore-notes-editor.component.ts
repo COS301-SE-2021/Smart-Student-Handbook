@@ -10,10 +10,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-explore-notes',
-	templateUrl: './explore-notes.component.html',
-	styleUrls: ['./explore-notes.component.scss'],
+	templateUrl: './explore-notes-editor.component.html',
+	styleUrls: ['./explore-notes-editor.component.scss'],
 })
-export class ExploreNotesComponent implements OnInit {
+export class ExploreNotesEditorComponent implements OnInit {
 	Header = require('@editorjs/header');
 
 	LinkTool = require('@editorjs/link');

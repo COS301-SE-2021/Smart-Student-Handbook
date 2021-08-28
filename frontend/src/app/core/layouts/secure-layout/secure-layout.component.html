@@ -2,7 +2,7 @@
   <app-header [sidenav]="leftSidenav"></app-header>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #leftSidenav id="leftSidenav" mode="push" opened>
+    <mat-sidenav #leftSidenav id="leftSidenav" mode="side" opened>
       <app-left-menu></app-left-menu>
     </mat-sidenav>
     <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">

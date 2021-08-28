@@ -1,10 +1,14 @@
+<div id="topDividerContainer">
+  <hr id="topDivider" (click)="closeSheet($event)" />
+</div>
+
 <mat-toolbar>
   <mat-toolbar-row>
     <h2>{{title}}</h2>
 
     <span class="example-spacer"></span>
 
-    <button mat-icon-button [mat-dialog-close]>
+    <button mat-icon-button (click)="closeSheet($event)">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>

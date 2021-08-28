@@ -82,13 +82,13 @@
         </main>
       </ais-instantsearch>
     </div>
-    <div class="col-0 notesHidden" id="notesSideDiv">
-      <div id="notebookNotesContainer">
-        <button mat-icon-button class="hidden" (click)="closeNotes()" id="closeNotesPanelBtn">
+    <div [ngClass]="{'notesHidden' : hide, 'notesDisplayed': !hide, 'col-0' : hide, 'col-6': !hide}"  id="notesSideDiv">
+      <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
+        <button mat-icon-button [ngClass]="{'hidden' : hide}" (click)="closeNotes()" id="closeNotesPanelBtn">
           <mat-icon>close</mat-icon>
         </button>
-        <h2 class="hidden" id="notesHeading">{{title}}</h2>
-        <app-note-cards class="hidden" id="noteCardsComponent"></app-note-cards>
+        <h2 [ngClass]="{'hidden' : hide}" id="notesHeading">{{title}}</h2>
+        <app-note-cards [ngClass]="{'hidden' : hide}" id="noteCardsComponent"></app-note-cards>
       </div>
 
     </div>

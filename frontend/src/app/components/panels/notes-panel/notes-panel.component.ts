@@ -36,10 +36,6 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	notebookId = '';
 
-	// institution = '';
-
-	// private = false;
-
 	// Variable that holds the logged in user details
 	user: any;
 
@@ -51,6 +47,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	public notes: any = [];
 
 	notebookTitle = 'Notes';
+
+	doneLoading: boolean = true;
 
 	/**
 	 * Notes panel constructor
@@ -67,6 +65,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	) {}
 
 	ngAfterContentInit(): void {
+		this.doneLoading = true;
+
 		this.notebookObservables.openNotebookId.subscribe((val: any) => {
 			if (val.title !== '') {
 				this.notebookTitle = val.title;
@@ -91,18 +91,9 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		// this.profile = this.profile.userInfo;
 
 		this.open = false;
 
-		// Toggle the notePanelComponent when in desktop view and notebook is selected
-		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-		// 	this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
-		// 		this.closePanel();
-		// 		this.notes = [];
-		// 	});
-		// }
 		this.notebookObservables.closePanel.subscribe((close) => {
 			if (close.close) {
 				this.closePanel();
@@ -116,15 +107,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * Retrieve the logged in user's notebooks
 	 */
 	getUserNotebooks(notebookId: string) {
+		this.doneLoading = false;
+
 		this.notebookId = notebookId;
 
 		this.notes = [];
-
-		const progressbar = document.getElementById(
-			'notesProgressbar'
-		) as HTMLElement;
-
-		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
 			.getNotes(notebookId) // this.user.uid
@@ -135,7 +122,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					this.notes.push(result[i]);
 				}
 
-				if (progressbar) progressbar.style.display = 'none';
+				this.doneLoading = true;
 			});
 	}
 
@@ -220,7 +207,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Create a new notebook
+	 * Create a new note
 	 */
 	createNewNote() {
 		this.notesService

@@ -12,6 +12,7 @@ import {
 } from '@app/services';
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
+import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -65,6 +66,7 @@ export class TreeViewComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService,
 		private notebookOperations: NotebookOperationsService
 	) {}
 
@@ -126,21 +128,6 @@ export class TreeViewComponent implements OnInit {
 
 						index = 0;
 					});
-					// console.log(notebooks);
-					// this.notebooks = notebooks;
-
-					// const tree = [];
-					// for (let i = 0; i < notebooks.length; i += 1) {
-					// 	this.childrenSize += 1;
-					//
-					// 	const child = {
-					// 		name: notebooks[i].title,
-					// 		id: notebooks[i].notebookId,
-					// 		// children: childArr,
-					// 	};
-					//
-					// 	tree.push(child);
-					// }
 
 					if (this.childrenSize > 0) {
 						this.dataSource.data = [
@@ -226,7 +213,7 @@ export class TreeViewComponent implements OnInit {
 				localStorage.setItem('notebookId', notebookId);
 
 				this.router.navigate(['notes']).then(() => {
-					this.notebookObservables.setOpenNotebook(
+					this.exploreObservables.setOpenExploreNotebook(
 						notebookId,
 						notebookTitle,
 						false

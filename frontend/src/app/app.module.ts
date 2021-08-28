@@ -62,7 +62,10 @@ import {
 	MessageComponent,
 	AddNoteComponent,
 	NoteCardsComponent,
-	ExploreNotesComponent,
+	ExploreNotesEditorComponent,
+	ExploreNoteListComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNoteListBottomsheetComponent,
 } from '@app/components';
 
 // Long press
@@ -73,8 +76,6 @@ import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ExploreNoteListComponent } from './components/modals/explore-note-list/explore-note-list.component';
-import { ExploreNotesBottomSheetComponent } from './components/modals/explore-notes-bottom-sheet/explore-notes-bottom-sheet.component';
 
 @NgModule({
 	declarations: [
@@ -109,9 +110,10 @@ import { ExploreNotesBottomSheetComponent } from './components/modals/explore-no
 		AddNoteComponent,
 		MessageComponent,
 		NoteCardsComponent,
-		ExploreNotesComponent,
+		ExploreNotesEditorComponent,
 		ExploreNoteListComponent,
-		ExploreNotesBottomSheetComponent,
+		ExploreNotesEditorBottomSheetComponent,
+		ExploreNoteListBottomsheetComponent,
 	],
 	imports: [
 		MaterialModule,

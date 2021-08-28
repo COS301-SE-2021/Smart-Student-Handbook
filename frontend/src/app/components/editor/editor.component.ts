@@ -130,6 +130,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	notebookTitle = '';
 
+	doneLoading: boolean = false;
+
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
 	@ViewChild('progressBar') progressBar!: HTMLElement;
@@ -170,6 +172,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	ngOnInit(): void {
+		this.doneLoading = true;
 		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
 			// this.notebookTitle = notebookTitle;
 			if (noteInfo.notebookId !== '')
@@ -198,11 +201,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.private = data.notebook.private;
 				this.opened = true;
 
-				const progressbar = document.getElementById(
-					'progressbar'
-				) as HTMLElement;
-
-				if (progressbar) progressbar.style.display = 'none';
+				this.doneLoading = true;
 			});
 	}
 
@@ -213,6 +212,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param title
 	 */
 	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.doneLoading = false;
+
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.noteTitle = title;
@@ -313,14 +314,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		await this.Editor.isReady;
 
-		const progressbar = document.getElementById(
-			'progressbar'
-		) as HTMLElement;
-
-		if (progressbar) progressbar.style.display = 'block';
-
-		this.Editor.styles.loader = 'mat-spinner';
-
 		let e = document.getElementById('editor') as HTMLElement;
 		e.style.overflowY = 'none';
 		e.style.display = 'block';
@@ -330,10 +323,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		const editor = this.Editor;
 
 		editor.clear();
-
-		// this.notebookEventEmitterService.GetNoteTitle(title);
-
-		// call event transmitter
 
 		// Change the path to the correct notebook's path
 		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
@@ -377,12 +366,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 				// if (progressbar) progressbar.style.display = 'none';
 			});
-		// });
-
-		editor.on('focus', () => {
-			alert(editor.blocks.getCurrentBlockIndex());
-		});
-		// alert(editor.caret.focus().valueOf());
 	}
 
 	/**

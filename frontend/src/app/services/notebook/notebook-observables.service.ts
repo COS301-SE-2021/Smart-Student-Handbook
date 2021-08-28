@@ -40,7 +40,7 @@ export class NotebookObservablesService {
 		this.openNotebookId = new BehaviorSubject<any>({
 			notebookId: '',
 			title: '',
-			readonly: false,
+			readonly: true,
 		});
 
 		this.openNotebookIdState = this.openNotebookId.asObservable();
