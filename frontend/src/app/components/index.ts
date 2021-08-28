@@ -7,6 +7,7 @@ export * from './modals/global/global-confirm/global-confirm.component';
 export * from './modals/global/message/message.component';
 export * from './modals/add-collaborator/add-collaborator.component';
 export * from './modals/add-note/add-note.component';
+export * from './modals/view-profile/view-profile.component';
 export * from './modals/explore-notes-editor/explore-notes-editor.component';
 export * from './modals/explore-note-list/explore-note-list.component';
 export * from './modals/explore-note-list-bottomsheet/explore-note-list-bottomsheet.component';

@@ -26,6 +26,7 @@ import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
 
+import { ViewProfileComponent } from '@app/components';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -634,5 +635,27 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				},
 			});
 		}
+	}
+
+	viewUserProfile(uid: any) {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		// Open dialog and populate the data attributes of the form fields
+		this.dialog.open(ViewProfileComponent, {
+			width: screenWidth,
+			data: {
+				uid,
+			},
+		});
 	}
 }
