@@ -11,7 +11,7 @@
     >
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
-    <div (click)="openNote(note.noteId, note.name)">
+    <div class="pointerCursor" (click)="openNote(note.noteId, note.name)">
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>
 
@@ -23,8 +23,8 @@
 
   </mat-card>
 
-  <mat-card class="note" *ngIf="readonly">
-    <div (click)="openNoteModal(note.noteId, note.name)">
+  <mat-card class="note pointerCursor" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
+    <div>
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>
 
