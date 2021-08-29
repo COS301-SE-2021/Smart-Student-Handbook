@@ -7,3 +7,213 @@
 #notebookNotesContainer{
   margin-top: 12px;
 }
+
+
+//.pointerCursor{
+//  cursor: pointer;
+//}
+//
+//@media only screen and (max-width: 600px) {
+//
+//  #noteInfoAccordion{
+//    display: none;
+//  }
+//
+//  #editorContainer{
+//    height: calc(100vh - 58px) !important;
+//    box-shadow: none !important;
+//
+//    #editor{
+//      height: calc(100vh - 100px);
+//    }
+//  }
+//}
+//
+//
+//#mobileMoreOptions{
+//  position: absolute;
+//  top: 10px;
+//  right: 20px;
+//  z-index: 3;
+//
+//  #mobileMoreIcon{
+//    color: black;
+//  }
+//}
+//
+//#editorContainer{
+//  //margin-top: 10px;
+//  padding: 15px 20px 7px 20px;
+//  box-shadow: 0px 0px 8px 2px rgb(216, 216, 216);
+//  text-align: left;
+//  //height: calc(100vh - 70px);
+//  height: 100vh;
+//  overflow: hidden;
+//}
+//
+//#editor{
+//  text-align: left;
+//  padding: 7px;
+//  height: calc(100vh - 155px);
+//  margin-top: 5px;
+//  background-image: url("src/assets/images/notebook-placeholder-background.png");
+//  background-position: center;
+//  background-repeat: no-repeat;
+//  background-size: auto;
+//  background-clip: border-box;
+//}
+//
+//#noteTitle{
+//  font-size: large;
+//  margin-top: 12px;
+//}
+//
+//.favorite-icon{
+//  padding-left: 15px;
+//  color: rgb(85, 85, 85);
+//}
+//
+//.header-image {
+//  background-image: url("src/assets/images/defaultProfile.jpg");
+//  background-size: cover;
+//  display: inline-block;
+//  height: 35px;
+//  width: 35px;
+//  margin: 0;
+//  // margin: 0px 0px -5px 10px;
+//}
+//
+//.noteInfo{
+//  color: rgb(151, 151, 151);
+//  display: inline-block;
+//}
+//
+//.card{
+//  width: min-content;
+//  padding: 0px 0px 5px 0px;
+//  box-shadow: none;
+//  border: none;
+//  background-color: transparent;
+//  display: inline-flex;
+//  float: left;
+//}
+//
+//.personName{
+//  padding-top: 2px;
+//  padding-left: 5px;
+//  color: rgb(99, 99, 99);
+//  font-size: medium;
+//}
+//
+//#noteInfoTable{
+//  tr{
+//    width: max-content;
+//    align-items: center;
+//    line-height: 30px;
+//  }
+//
+//  td{
+//    // width: min-content;
+//    align-items: center;
+//    margin-right: 20px;
+//  }
+//
+//  td:nth-child(2){
+//    width: 100%;
+//  }
+//
+//  td:nth-child(1){
+//    min-width: max-content;
+//  }
+//}
+//.removeCollaboratorBtn{
+//  position: absolute;
+//  font-size: large;
+//  left: 35px;
+//}
+//
+//.removeCollaboratorIcon{
+//  position: absolute;
+//  top: -10px;
+//  left: 0;
+//  font-size: larger;
+//  //color: transparent;
+//}
+//
+//#addGroupBtn{
+//  display: inline-flex;
+//  position: absolute;
+//  right: 0;
+//  //margin-top: 10px;
+//}
+//
+//
+//.mat-expansion-panel:not([class*=mat-elevation-z]) {
+//  box-shadow: none !important;
+//}
+//
+//.mat-expansion-panel-header-description{
+//  flex-grow: 0;
+//}
+//
+//#noteInfoAccordion{
+//  border: 10px black;
+//}
+//
+//#tags{
+//  width: 100%;
+//  margin-top: -15px;
+//}
+//
+//
+//mat-expansion-panel{
+//  background-color: rgb(239, 239, 239);
+//  margin-bottom: 5px;
+//}
+//
+//
+//.editorBackground{
+//  background-color: rgb(104, 104, 104) !important;
+//}
+//
+///************ Snippet Tool **************/
+//::ng-deep .addTagsTool {
+//  padding: 20px 0;
+//}
+//
+//::ng-deep .addTagsTool input {
+//  width: 100%;
+//  padding: 10px;
+//  border: 1px solid #e4e4e4;
+//  border-radius: 3px;
+//  outline: none;
+//  font-size: 14px;
+//}
+///************ Snippet Tool **************/
+//
+//
+///********* Scrollbar *********/
+//
+///* width */
+//::-webkit-scrollbar {
+//  width: 5px;
+//  height: 5px;
+//}
+//
+///* Track */
+//::-webkit-scrollbar-track {
+//  background: #f1f1f1;
+//  border-radius: 3px;
+//}
+//
+///* Handle */
+//::-webkit-scrollbar-thumb {
+//  background: #888;
+//  border-radius: 3px;
+//}
+//
+///* Handle on hover */
+//::-webkit-scrollbar-thumb:hover {
+//  background: #555;
+//}
+//

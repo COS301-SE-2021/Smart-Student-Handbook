@@ -1,3 +1,124 @@
+<mat-accordion fxHide.lt-md>
+  <mat-expansion-panel
+    id="noteInfoAccordion"
+    [expanded]="panelOpenState === true"
+    (opened)="openClosePanel()"
+    (closed)="openClosePanel()"
+    [disabled]="!opened"
+    #noteInfoAccordion
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title id="noteTitle">
+        {{ noteTitle }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <button
+          mat-icon-button
+          class="favorite-icon"
+          (click)="showMoreOptions($event)"
+          [matMenuTriggerFor]="menu"
+        >
+          <mat-icon>more_horiz</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>share</mat-icon>
+            <span>Share</span>
+          </button>
+
+        </mat-menu>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <table
+      id="noteInfoTable"
+      aria-label="Extra information on opened notebook"
+    >
+      <tr>
+        <th id="tableTitles"></th>
+        <th id="tableContent"></th>
+      </tr>
+      <tr *ngIf="creator.name !== ''">
+        <td class="noteInfo" headers="tableTitles">
+          <p>Created By:</p>
+        </td>
+        <td headers="tableContent">
+          <mat-card class="card">
+            <mat-card-header>
+              <div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"></div>
+              <mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"
+              >{{creator.name}}</mat-card-title
+              >
+            </mat-card-header>
+          </mat-card>
+        </td>
+      </tr>
+      <tr *ngIf="!private" style="height: 0px">
+        <td style="height: 0px"></td>
+        <td style="height: 0px">
+          <button color="primary" mat-icon-button id="addGroupBtn" [disabled]="!opened">
+            <mat-icon>group_add</mat-icon>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="!private">
+        <td class="noteInfo" headers="tableTitles">
+          <p>Collaborators:</p>
+        </td>
+        <td headers="tableContent">
+
+          <mat-card class="card" *ngFor="let collaborator of collaborators">
+            <mat-card-header>
+              <div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
+
+              <button class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" >
+                <mat-icon class="removeCollaboratorIcon">
+                  remove_circle_outline
+                </mat-icon>
+              </button>
+
+
+              <mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"
+              >{{collaborator.name}}</mat-card-title
+              >
+            </mat-card-header>
+          </mat-card>
+        </td>
+      </tr>
+      <tr *ngIf="opened">
+        <td class="noteInfo" headers="tableTitles"><p>Tags:</p></td>
+        <td headers="tableContent">
+          <mat-form-field id="tags">
+            <mat-label></mat-label>
+            <mat-chip-list
+              #chipList
+              aria-label="Fruit selection"
+            >
+              <mat-chip
+                *ngFor="let tag of tags"
+                [selectable]="true"
+                [removable]="false"
+              >
+                {{ tag.name }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="Add tag..."
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="
+                  separatorKeysCodes
+                "
+                [matChipInputAddOnBlur]="true"
+              />
+            </mat-chip-list>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </mat-expansion-panel>
+</mat-accordion>
+
+
 <mat-toolbar>
   <mat-toolbar-row>
     <h2>{{title}}</h2>
@@ -14,3 +135,5 @@
 <div id="notebookNotesContainer">
   <app-note-cards></app-note-cards>
 </div>
+
+
