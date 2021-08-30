@@ -7,4 +7,4 @@ export * from './reset-password.service';
 export * from './notification.service';
 export * from './notebook/notebook-operations.service';
 export * from './notebook/note-operations.service';
-export * from './notebook/notebook-observables.service';
+export * from './notebook/observables/notebook-observables.service';

@@ -11,7 +11,7 @@ import {
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -201,12 +201,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		this.router.navigate(['notebook']).then(() => {
 			this.openedNotebookId = notebookId;
 
-			const screenType = navigator.userAgent;
-			if (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-					screenType
-				)
-			) {
+			if (window.innerWidth <= 960) {
 				localStorage.setItem('notebookId', notebookId);
 
 				this.router.navigate(['notes']).then(() => {

@@ -18,9 +18,14 @@ import {
 	NotificationService,
 	ProfileService,
 } from '@app/services';
-import { NotebookBottomSheetComponent } from '@app/mobile';
+import {
+	NotebookBottomSheetComponent,
+	SmartAssistBottomSheetComponent,
+} from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
+
 import { ViewProfileComponent } from '@app/components';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
@@ -110,12 +115,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	noteTitle: string = 'Smart Student';
 
-	static staticNotebookID: string = '';
-
-	static staticNoteId: string = '';
-
-	static staticNotebookTitle: string = 'Smart Student';
-
 	panelOpenState = false;
 
 	showMore: boolean = false;
@@ -131,6 +130,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	notebookTitle = '';
 
 	doneLoading: boolean = false;
+
+	nrOfNotesLoaded = 0;
 
 	@ViewChild('editorContainer') editorContainer!: HTMLDivElement;
 
@@ -172,15 +173,21 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	ngOnInit(): void {
+		this.nrOfNotesLoaded = 0;
 		this.doneLoading = true;
 		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
-			// this.notebookTitle = notebookTitle;
-			if (noteInfo.notebookId !== '')
+			this.nrOfNotesLoaded += 1;
+			if (noteInfo.notebookId !== '' && this.nrOfNotesLoaded === 1) {
+				this.noteTitle = noteInfo.title;
+				this.noteId = noteInfo.noteId;
+				this.notebookID = noteInfo.notebookId;
+
 				this.loadEditor(
 					noteInfo.notebookId,
 					noteInfo.noteId,
 					noteInfo.title
 				);
+			}
 		});
 
 		this.notebookObservables.notebookPrivacy.subscribe((privacy: any) => {
@@ -212,13 +219,12 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param title
 	 */
 	async loadEditor(notebookId: string, noteId: string, title: string) {
+		this.noteTitle = title;
+
 		this.doneLoading = false;
 
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		this.noteTitle = title;
-		this.noteId = noteId;
-		this.notebookID = notebookId;
 		this.opened = false;
 
 		this.getNotebook(notebookId);
@@ -532,8 +538,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			tagList.push(this.tags[i].name);
 		}
 
-		console.log(tagList);
-
 		this.notebookOperations
 			.updateNotebookTags({
 				title: this.notebook.title,
@@ -587,15 +591,50 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			});
 	}
 
+	openSmartAssist() {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(SmartAssistBottomSheetComponent, {
+				panelClass: 'smartAssistBottomSheet',
+			});
+		} else {
+			this.dialog.open(SmartAssistModalComponent, {
+				width: '70%',
+			});
+		}
+	}
+
 	openBottomSheet(): void {
-		this.bottomSheet.open(NotebookBottomSheetComponent, {
-			panelClass: 'bottomPanelClass',
-			data: {
-				notebookID: EditorComponent.staticNotebookID,
-				noteId: EditorComponent.staticNoteId,
-				notebookTitle: EditorComponent.staticNotebookTitle,
-			},
-		});
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(NotebookBottomSheetComponent, {
+				panelClass: 'bottomPanelClass',
+				data: {
+					notebookID: this.notebookID,
+					noteId: this.noteId,
+					notebookTitle: this.noteTitle,
+					user: this.user,
+					date: this.date,
+					notebook: this.notebook,
+					tags: this.tags,
+					collaborators: this.collaborators,
+					creator: this.creator,
+				},
+			});
+		} else {
+			this.dialog.open(NoteInfoComponent, {
+				width: '100%',
+				data: {
+					notebookID: this.notebookID,
+					noteId: this.noteId,
+					notebookTitle: this.noteTitle,
+					user: this.user,
+					date: this.date,
+					notebook: this.notebook,
+					tags: this.tags,
+					collaborators: this.collaborators,
+					creator: this.creator,
+				},
+			});
+		}
 	}
 
 	viewUserProfile(uid: any) {

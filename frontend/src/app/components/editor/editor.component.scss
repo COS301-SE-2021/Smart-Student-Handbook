@@ -14,14 +14,19 @@
 
     #editor{
       height: calc(100vh - 100px);
+      //color: #f8f8f8;
     }
   }
+}
+
+.spacer{
+  flex: 1 1 auto;
 }
 
 
 #mobileMoreOptions{
   position: absolute;
-  top: 10px;
+  top: 22px;
   right: 20px;
   z-index: 3;
 
@@ -165,6 +170,17 @@ mat-expansion-panel{
   background-color: rgb(104, 104, 104) !important;
 }
 
+#smallNoteHeader{
+  background-color: white;
+  padding: 10px;
+  height: max-content;
+  border-radius: 5px;
+  overflow: hidden;
+  white-space: normal;
+  box-shadow: 0px 0px 8px 0.5px rgb(229, 229, 229);
+}
+
+
 /************ Snippet Tool **************/
 ::ng-deep .addTagsTool {
   padding: 20px 0;
@@ -204,4 +220,9 @@ mat-expansion-panel{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+
+.smartAssistBottomSheet{
+  max-height: 60vh;
 }

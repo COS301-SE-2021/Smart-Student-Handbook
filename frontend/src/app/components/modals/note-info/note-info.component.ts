@@ -1,28 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-	MAT_BOTTOM_SHEET_DATA,
-	MatBottomSheetRef,
-} from '@angular/material/bottom-sheet';
 import { Collaborators } from '@app/components';
-import {
-	NotebookService,
-	ProfileService,
-	NoteOperationsService,
-	NotebookOperationsService,
-} from '@app/services';
-
-export interface Tag {
-	name: string;
-}
+import { NotebookOperationsService } from '@app/services';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Tag } from '@app/mobile';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-	selector: 'app-notebook-bottom-sheet',
-	templateUrl: './notebook-bottom-sheet.component.html',
-	styleUrls: ['./notebook-bottom-sheet.component.scss'],
+	selector: 'app-note-info',
+	templateUrl: './note-info.component.html',
+	styleUrls: ['./note-info.component.scss'],
 })
-export class NotebookBottomSheetComponent implements OnInit {
+export class NoteInfoComponent implements OnInit {
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
 	collaborators: Collaborators[] = [];
@@ -48,8 +37,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 	user: any;
 
 	constructor(
-		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
-		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+		@Inject(MAT_DIALOG_DATA) public data: any,
 		private notebookOperations: NotebookOperationsService
 	) {}
 
@@ -135,10 +123,5 @@ export class NotebookBottomSheetComponent implements OnInit {
 					(collaborator) => collaborator.id !== id
 				);
 			});
-	}
-
-	closeSheet(event: MouseEvent): void {
-		this.bottomSheetRef.dismiss();
-		event.preventDefault();
 	}
 }
