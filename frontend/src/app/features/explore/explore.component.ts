@@ -11,7 +11,6 @@ aa('init', {
 	appId: 'AD2K8AK74A',
 	apiKey: '589f047ba9ac7fa58796f394427d7f35',
 });
-aa('setUserToken', 'USER-98765');
 
 @Component({
 	selector: 'app-explore',
@@ -29,7 +28,7 @@ export class ExploreComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
+		aa('setUserToken', this.user);
 		aa('clickedObjectIDsAfterSearch', {
 			index: 'userNotebooks',
 			eventName: 'Click item',
