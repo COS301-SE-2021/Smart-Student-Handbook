@@ -8,11 +8,12 @@ import {
 	ExploreNoteListBottomsheetComponent,
 	ExploreNotesEditorBottomSheetComponent,
 	ExploreNotesEditorComponent,
+	RateNotebookComponent,
 } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -37,15 +38,17 @@ export class ExploreComponent {
 
 	hide: boolean = true;
 
+	hideNotes: boolean = true;
+
+	hideReviews: boolean = true;
+
 	title: string = '';
 
 	constructor(
 		private bottomSheet: MatBottomSheet,
 		private dialog: MatDialog,
-		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService,
-		private ngZone: NgZone
+		private exploreObservables: ExploreObservablesService
 	) {}
 
 	openNotes(hit: any) {
@@ -63,6 +66,8 @@ export class ExploreComponent {
 			});
 		} else {
 			this.hide = false;
+			this.hideNotes = false;
+			this.hideReviews = true;
 
 			this.title = hit.data.title;
 		}
@@ -76,5 +81,23 @@ export class ExploreComponent {
 
 	closeNotes() {
 		this.hide = true;
+		this.hideNotes = true;
+		this.hideReviews = true;
+	}
+
+	openReviews(hit: any) {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(RateNotebookComponent);
+		} else if (window.innerWidth <= 991) {
+			this.dialog.open(RateNotebookComponent);
+		} else {
+			this.title = hit.data.title;
+
+			this.hideNotes = true;
+			this.hide = false;
+			this.hideReviews = false;
+		}
+
+		this.notebookObservables.setReviewNotebook(hit.objectID);
 	}
 }

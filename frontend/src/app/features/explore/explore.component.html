@@ -26,9 +26,9 @@
                       <strong>{{state.nbHits}}</strong>
                       results found
                       <span *ngIf="state.query.trim().length > 0">
-                for
-                <strong>"{{state.query.trim()}}"</strong>
-              </span>
+                        for
+                        <strong>"{{state.query.trim()}}"</strong>
+                      </span>
                       in
                       <strong>{{state.processingTimeMS}}ms</strong>
                     </div>
@@ -42,22 +42,27 @@
                     <strong>{{results.query}}</strong>.
                   </div>
                   <div class="ais-Hits-list">
-                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" (click)="openNotes(hit)">
-
+                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" >
                       <article>
                         <div class="post-content">
                           <div class="post-date">
                             {{hit.data.course}}
-                            <br>
+                            <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
+                              <mat-icon>
+                                chat_bubble_outline
+                              </mat-icon>
+                            </button>
+                          </div>
+                          <div class="post-date" (click)="openNotes(hit)">
                             {{hit.data.institution}}
                           </div>
-                          <h2 class="entry-title">
+                          <h2 class="entry-title" (click)="openNotes(hit)">
                             {{hit.data.title}}
                           </h2>
-                          <div class="post-excerpt" >
-                            {{hit.data.description}}
+                          <div class="post-excerpt" (click)="openNotes(hit)">
+                            <p>{{hit.data.description}}</p>
                             <br>
-                            {{hit.data.author}}
+                            <p>{{hit.data.author}}</p>
                           </div>
                         </div>
                       </article>
@@ -82,13 +87,14 @@
         </main>
       </ais-instantsearch>
     </div>
-    <div [ngClass]="{'notesHidden' : hide, 'notesDisplayed': !hide, 'col-0' : hide, 'col-6': !hide}"  id="notesSideDiv">
+    <div [ngClass]="{'notesDisplayed col-6': !hide, 'col-0 notesHidden' : hide}"  id="notesSideDiv">
       <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
         <button mat-icon-button [ngClass]="{'hidden' : hide}" (click)="closeNotes()" id="closeNotesPanelBtn">
           <mat-icon>close</mat-icon>
         </button>
         <h2 [ngClass]="{'hidden' : hide}" id="notesHeading">{{title}}</h2>
-        <app-note-cards [ngClass]="{'hidden' : hide}" id="noteCardsComponent"></app-note-cards>
+        <app-note-cards [ngClass]="{'hidden' : hideNotes}" id="noteCardsComponent"></app-note-cards>
+        <app-rate-notebook [ngClass]="{'hidden' : hideReviews}"></app-rate-notebook>
       </div>
 
     </div>

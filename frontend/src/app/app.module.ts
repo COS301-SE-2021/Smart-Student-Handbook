@@ -45,7 +45,11 @@ import {
 } from '@app/features/public';
 
 // Mobile
-import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
+import {
+	NotebookBottomSheetComponent,
+	NotesComponent,
+	SmartAssistBottomSheetComponent,
+} from '@app/mobile';
 
 // Components
 import {
@@ -67,6 +71,10 @@ import {
 	ExploreNoteListComponent,
 	ExploreNotesEditorBottomSheetComponent,
 	ExploreNoteListBottomsheetComponent,
+	NoteInfoComponent,
+	SmartAssistComponent,
+	SmartAssistModalComponent,
+	RateNotebookComponent,
 } from '@app/components';
 
 // Long press
@@ -116,6 +124,11 @@ import { AppRoutingModule } from './app-routing.module';
 		ExploreNoteListComponent,
 		ExploreNotesEditorBottomSheetComponent,
 		ExploreNoteListBottomsheetComponent,
+		NoteInfoComponent,
+		SmartAssistComponent,
+		SmartAssistBottomSheetComponent,
+		SmartAssistModalComponent,
+		RateNotebookComponent,
 	],
 	imports: [
 		MaterialModule,

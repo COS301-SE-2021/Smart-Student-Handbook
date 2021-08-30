@@ -1,0 +1,81 @@
+.card{
+  width: 100%;
+  padding-bottom: 5px;
+  // box-shadow: none !important;
+  transition: all .2s linear;
+  margin-bottom: 5px;
+  cursor: move;
+  // margin: 0px 10px 5px 0px;
+}
+
+#smartAssistHeader{
+  box-shadow: none !important;
+  border: none;
+  cursor: auto;
+  text-align: center;
+  font-size: medium;
+  padding-top: 8px;
+}
+
+.date{
+  font-size: small;
+}
+
+.snippetTitle{
+  font-size: medium;
+}
+
+.snippetContentHeader{
+  max-height: 200px;
+  // white-space: nowrap;
+  overflow: hidden;
+  //text-overflow: clip;
+  //text-overflow: ellipsis ellipsis;
+  text-overflow: ellipsis " [..]";
+  margin-bottom: 10px;
+}
+
+.snippetContent{
+  font-weight: 400;
+  font-size: small;
+}
+
+.preview{
+  cursor: pointer;
+}
+
+.tags {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-bottom: 7px;
+
+  .tag {
+    display: inline-block;
+  }
+}
+
+/********* Scrollbar *********/
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
