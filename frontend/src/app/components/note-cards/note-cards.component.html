@@ -23,8 +23,8 @@
 
   </mat-card>
 
-  <mat-card class="note" *ngIf="readonly">
-    <div (click)="openNoteModal(note.noteId, note.name)">
+  <mat-card class="note" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
+    <div>
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>
 

@@ -324,6 +324,7 @@ footer {
 
 #notesHeading{
   display: inline-block;
+  margin: 10px 0 0 0;
   width: 80%;
 }
 
@@ -349,7 +350,8 @@ footer {
 }
 
 .hidden{
-  visibility: hidden;
+  //visibility: hidden;
+  display: none !important;
 }
 
 #exploreHeader{

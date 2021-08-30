@@ -10,15 +10,15 @@ export class NotebookObservablesService {
 
 	public openNotebookIdState: Observable<any>;
 
-	/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
-	public sharedNotebook: BehaviorSubject<any>;
-
-	public sharedNotebookState: Observable<any>;
-
 	/** Load a note on the editor */
 	public loadEditor: BehaviorSubject<any>;
 
 	public loadEditorState: Observable<any>;
+
+	/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
+	public sharedNotebook: BehaviorSubject<any>;
+
+	public sharedNotebookState: Observable<any>;
 
 	/** close a note on the editor */
 	public closeEditor: BehaviorSubject<any>;
@@ -35,6 +35,11 @@ export class NotebookObservablesService {
 
 	public closePanelState: Observable<any>;
 
+	/** id of notebook to review */
+	public reviewNotebook: BehaviorSubject<any>;
+
+	public reviewNotebookState: Observable<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -45,14 +50,6 @@ export class NotebookObservablesService {
 
 		this.openNotebookIdState = this.openNotebookId.asObservable();
 
-		/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
-		this.sharedNotebook = new BehaviorSubject<any>({
-			id: '',
-			name: '',
-		});
-
-		this.sharedNotebookState = this.sharedNotebook.asObservable();
-
 		/** notebookId, noteId and title of note to be opened in the editor */
 		this.loadEditor = new BehaviorSubject<any>({
 			notebookId: '',
@@ -61,6 +58,14 @@ export class NotebookObservablesService {
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
+
+		/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
+		this.sharedNotebook = new BehaviorSubject<any>({
+			id: '',
+			name: '',
+		});
+
+		this.sharedNotebookState = this.sharedNotebook.asObservable();
 
 		/** Close the note open on the editor */
 		this.closeEditor = new BehaviorSubject<any>({
@@ -82,12 +87,14 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
-	}
 
-	// /** @return id & title of the notebook to be opened */
-	// get getOpenNotebookIds(): any {
-	// 	return this.openNotebookId.value;
-	// }
+		/** id of notebook to review */
+		this.reviewNotebook = new BehaviorSubject<any>({
+			id: '',
+		});
+
+		this.reviewNotebookState = this.reviewNotebook.asObservable();
+	}
 
 	/**
 	 * Set the id an title of the notebook to be opened
@@ -104,31 +111,6 @@ export class NotebookObservablesService {
 
 		this.openNotebookIdState = this.openNotebookId.asObservable();
 	}
-
-	// /** @return name & id of the new notebook to be added to the shared-with-me tree view */
-	// get getNewSharedWithMe(): any {
-	// 	return this.sharedNotebook.value;
-	// }
-
-	/**
-	 * Set the name and id of the notebook to be added to the shared-with-me notebook list
-	 * as well as the notebook to be loaded when a user clicks on a notebook in the menu tree views
-	 * @param notebookID
-	 * @param notebookTitle
-	 */
-	setNotebook(notebookID: string, notebookTitle: string) {
-		this.sharedNotebook.next({
-			id: notebookID,
-			name: notebookTitle,
-		});
-
-		this.sharedNotebookState = this.sharedNotebook.asObservable();
-	}
-
-	// /** @return notebookId, noteId, title, and notebookTitle that will be used to open the note on the editor */
-	// get getLoadEditor(): any {
-	// 	return this.loadEditor.value;
-	// }
 
 	/**
 	 * Set the notebookId, noteId, title, and notebookTitle that the editor will use to open a note
@@ -153,10 +135,20 @@ export class NotebookObservablesService {
 		this.loadEditorState = this.loadEditor.asObservable();
 	}
 
-	// /** @return close boolean - true: close, false, don't close  */
-	// get getCloseEditor(): any {
-	// 	return this.closeEditor.value;
-	// }
+	/**
+	 * Set the name and id of the notebook to be added to the shared-with-me notebook list
+	 * as well as the notebook to be loaded when a user clicks on a notebook in the menu tree views
+	 * @param notebookID
+	 * @param notebookTitle
+	 */
+	setNotebook(notebookID: string, notebookTitle: string) {
+		this.sharedNotebook.next({
+			id: notebookID,
+			name: notebookTitle,
+		});
+
+		this.sharedNotebookState = this.sharedNotebook.asObservable();
+	}
 
 	/**
 	 * Set the notebookId, noteId, title, and notebookTitle that the editor will use to open a note
@@ -192,5 +184,17 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
+	}
+
+	/**
+	 * id of notebook to review
+	 * @param id
+	 */
+	setReviewNotebook(id: string) {
+		this.reviewNotebook.next({
+			id,
+		});
+
+		this.reviewNotebookState = this.reviewNotebook.asObservable();
 	}
 }

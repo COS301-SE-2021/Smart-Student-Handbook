@@ -71,22 +71,24 @@ export class NotebookOperationsService {
 		return Observable.create((observer) => {
 			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
-				this.notificationService
-					.sendCollaborationRequest(
-						senderId,
-						result.id,
-						notebookID,
-						notebookTitle
-					)
-					.subscribe(
-						() => {
-							// console.log(val);
-							observer.next(true);
-						},
-						() => {
-							observer.next(false);
-						}
-					);
+				if (result) {
+					this.notificationService
+						.sendCollaborationRequest(
+							senderId,
+							result.id,
+							notebookID,
+							notebookTitle
+						)
+						.subscribe(
+							() => {
+								// console.log(val);
+								observer.next(true);
+							},
+							() => {
+								observer.next(false);
+							}
+						);
+				}
 			});
 		});
 	}
