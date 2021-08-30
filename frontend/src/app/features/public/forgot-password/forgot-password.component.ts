@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordService } from '@app/services';
+import { AccountService, ResetPasswordService } from '@app/services';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-forgot-password',
@@ -12,14 +13,25 @@ export class ForgotPasswordComponent {
 
 	errorMessage: string = '';
 
+	user: any;
+
 	constructor(
 		private fb: FormBuilder,
-		private resetPasswordService: ResetPasswordService
+		private resetPasswordService: ResetPasswordService,
+		private accountService: AccountService,
+		private router: Router
 	) {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		// setup the form and validation
 		this.form = this.fb.group({
 			email: ['', Validators.email],
 		});
+
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
 	}
 
 	onSubmit() {
@@ -33,7 +45,7 @@ export class ForgotPasswordComponent {
 			}
 
 			this.resetPasswordService
-				.requestResetPassword(email, isLocalHost)
+				.requestResetPassword(this.user.uid, email, isLocalHost)
 				.subscribe(() => {
 					const resetPassword = document.getElementById(
 						'resetPassword'

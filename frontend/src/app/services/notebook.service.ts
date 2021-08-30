@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { NotebookDto } from '@app/models';
 import { NoteDto } from '@app/models/notebook/NoteDto.model';
 import { CheckAccessDto } from '@app/models/notebook/CheckAccessDto.model';
+import { map } from 'rxjs/operators';
 import { ReviewDto } from '../../../../functions/src/notebook/dto/review.dto';
 import { AccessDto } from '../../../../functions/src/notebook/dto/access.dto';
 
@@ -92,9 +93,9 @@ export class NotebookService {
 	/**
 	 * Get all the user's notebooks and note id's
 	 */
-	getUserNotebooks(): Observable<any> {
+	getUserNotebooks(userId: string): Observable<any> {
 		return this.httpClient.get(
-			`http://localhost:5001/smartstudentnotebook/us-central1/app/notebook/getUserNotebooks`,
+			`${NOTEBOOK_API}/getUserNotebooks/${userId}`,
 			httpOptions
 		);
 	}
@@ -118,6 +119,7 @@ export class NotebookService {
 	 */
 	createNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
+			userId: noteDto.userId,
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
 			description: noteDto.description,
@@ -137,16 +139,18 @@ export class NotebookService {
 			noteId: noteDto.noteId,
 			name: noteDto.name,
 			description: noteDto.description,
+			userId: noteDto.userId,
 		});
 	}
 
 	/**
 	 * Delete a whole notebook
 	 * @param notebookID
+	 * @param userId
 	 */
-	deleteNotebook(notebookID: string): Observable<any> {
+	deleteNotebook(notebookID: string, userId: string): Observable<any> {
 		return this.httpClient.delete(
-			`${NOTEBOOK_API}/deleteNotebook/${notebookID}`,
+			`${NOTEBOOK_API}/deleteNotebook/${notebookID}/${userId}`,
 			httpOptions
 		);
 	}

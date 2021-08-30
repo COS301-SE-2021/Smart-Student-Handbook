@@ -13,9 +13,9 @@ export class NotebookDto {
 
 	readonly private: boolean;
 
-	readonly type: string;
-
 	readonly tags: string[];
 
 	readonly notebookId?: string;
+
+	readonly userId?: string;
 }

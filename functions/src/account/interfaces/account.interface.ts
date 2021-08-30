@@ -6,9 +6,8 @@ export interface Account {
 		uid: string;
 		email: string;
 		emailVerified: boolean;
-		phoneNumber?: string;
 		displayName: string;
-		name?: string;
+		username?: string;
 		institution?: string;
 		department?: string;
 		program?: string;
@@ -16,6 +15,7 @@ export interface Account {
 		bio?: string;
 		profilePicUrl?: string;
 		dateJoined?: admin.firestore.FieldValue;
+		token?: any;
 	};
 	message?: string;
 	error?: string;

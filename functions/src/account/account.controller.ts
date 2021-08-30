@@ -7,6 +7,8 @@ import { ResetPasswordFinalizeDto } from './dto/resetPasswordFinalize.dto';
 import { AccountService } from './account.service';
 import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
+import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 @Controller('account')
 export class AccountController {
@@ -23,8 +25,8 @@ export class AccountController {
 	}
 
 	@Put('updateUser')
-	updateUser(@Body() registerDto: RegisterDto): Promise<Account> {
-		return this.accountService.updateUser(registerDto);
+	updateUser(@Body() updateDto: UpdateDto): Promise<Account> {
+		return this.accountService.updateUser(updateDto);
 	}
 
 	@Post('signOut')
@@ -42,13 +44,19 @@ export class AccountController {
 		return this.accountService.deleteUser();
 	}
 
+	@Get('verifyEmail/:email/:local/:code')
+	@Redirect('https://smartstudenthandbook.co.za', 308)
+	verifyEmail(@Param() verifyEmailDto: VerifyEmailDto) {
+		return this.accountService.verifyEmail(verifyEmailDto);
+	}
+
 	@Post('requestResetPassword')
 	requestResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
 		return this.accountService.requestResetPassword(resetPasswordDto);
 	}
 
 	@Get('checkResetPassword/:email/:local/:code')
-	@Redirect('https://smartstudentnotebook.web.app', 308)
+	@Redirect('https://smartstudenthandbook.co.za', 308)
 	async checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
 		const url = await this.accountService.checkResetPassword(resetPasswordCodeDto);
 		return url;
@@ -57,5 +65,10 @@ export class AccountController {
 	@Post('finalizeResetPassword')
 	finalizeResetPassword(@Body() resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
 		return this.accountService.finalizeResetPassword(resetPasswordFinalizeDto);
+	}
+
+	@Post('setUserNotificationToken')
+	setUserNotificationToken(@Body('userId') userId: string, @Body('notificationToken') notificationToken: string) {
+		return this.accountService.setUserNotificationToken(userId, notificationToken);
 	}
 }

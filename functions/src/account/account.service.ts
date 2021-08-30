@@ -10,6 +10,8 @@ import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
+import { VerifyEmailDto } from './dto/verifyEmail.dto';
+import { UpdateDto } from './dto/update.dto';
 
 require('firebase/auth');
 
@@ -23,29 +25,37 @@ export class AccountService {
 	 */
 	async registerUser(registerDto: RegisterDto): Promise<Account> {
 		// Check if user password and confirm passwords match before creating user
-		if (registerDto.password !== registerDto.passwordConfirm) {
-			throw new HttpException('Passwords do not match!', HttpStatus.BAD_REQUEST);
+		if (!(registerDto.password === registerDto.passwordConfirm)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Passwords dont match',
+			};
+		}
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!emailRegex.test(registerDto.email) || !passwordRegex.test(registerDto.password)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Email or Password does not meet the requirements',
+			};
 		}
 
-		const actionCodeSettings = {
-			// URL you want to redirect back to. The domain (www.example.com) for this
-			// URL must be in the authorized domains list in the Firebase Console.
-			url: 'https://smartstudentnotebook.web.app/home',
-		};
+		const exist = await this.userService.doesUsernameExist(registerDto.username);
+		if (exist === true) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered',
+				error: 'Username already exists!!',
+			};
+		}
 
-		// send welcome email to new user
-		await this.notificationService.sendEmailNotification({
-			email: registerDto.email,
-			subject: 'Welcome to Smart Student Handbook',
-			body: `Good day, ${registerDto.displayName}. We are very exited to see all your amazing notebooks!!!`,
-		});
-
-		const bucket = admin.storage().bucket('smartstudentnotebook.appspot.com');
-
-		const defualtPic = bucket.file('UserProfilePictures/default.jpg');
-		defualtPic.makePublic(() => {});
-
-		const defualtPicLink = defualtPic.publicUrl();
 		/**
 		 * Create user.
 		 * If successful return success message else throw Bad Request exception
@@ -56,7 +66,7 @@ export class AccountService {
 				email: registerDto.email,
 				emailVerified: false,
 				password: registerDto.password,
-				displayName: registerDto.displayName,
+				displayName: registerDto.username,
 				disabled: false,
 			})
 			.then(
@@ -67,47 +77,71 @@ export class AccountService {
 						email: userCredential.email,
 						emailVerified: userCredential.emailVerified,
 						displayName: userCredential.displayName,
-						profilePicUrl: defualtPicLink,
+						profilePicUrl:
+							// eslint-disable-next-line max-len
+							'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 					},
 					message: 'User is successfully registered!',
 				}),
 			)
 			.catch((error) => ({
-				success: true,
+				success: false,
 				user: null,
-				message: 'User is unsuccessfully registered:',
+				message: 'User is unsuccessfully registered!',
 				error: error.message,
 			}));
 
-		await this.userService.createAndUpdateUser({
+		// eslint-disable-next-line eqeqeq
+		if (resp.success == false) {
+			return resp;
+		}
+
+		const userCreated = await this.userService.createUser({
 			uid: resp.user.uid,
-			name: resp.user.displayName,
-			institution: '',
-			department: '',
-			program: '',
-			workStatus: '',
-			bio: '',
-			profilePicUrl: defualtPicLink,
+			username: resp.user.displayName,
+			institution: 'Unknown',
+			department: 'Unknown',
+			program: 'Unknown',
+			workStatus: 'Unknown',
+			bio: 'Unknown',
+			profilePicUrl:
+				// eslint-disable-next-line max-len
+				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
 			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
 		});
 
-		admin
-			.auth()
-			.generateEmailVerificationLink(registerDto.email, actionCodeSettings)
-			.then(async (link) => {
-				await this.notificationService.sendEmailNotification({
-					email: registerDto.email,
-					subject: 'Smart Student Handbook Email Verification',
-					body: `Good day, ${registerDto.displayName}. Please Verify your Email with this link: ${link}`,
-				});
-			})
-			.catch((error) => ({
-				success: true,
+		// eslint-disable-next-line eqeqeq
+		if (userCreated.success == false) {
+			return {
+				success: false,
 				user: null,
-				message: 'Email Verification unsuccessful',
-				error: error.message,
-			}));
+				message: 'User is unsuccessfully registered:',
+				error: 'Some error have occured!',
+			};
+		}
 
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (registerDto.isLocalhost == undefined || registerDto.isLocalhost == true) {
+			host = 'localhost:5001/smartstudentnotebook/us-central1';
+		} else {
+			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
+		}
+
+		const path = '/app/account/verifyEmail';
+		const encodedCode = this.encodeSecureCode(resp.user.uid, resp.user.email);
+		let link = 'http://';
+		// eslint-disable-next-line max-len
+		link = link.concat(host, path, '/', resp.user.email, '/', String(registerDto.isLocalhost), '/', encodedCode);
+
+		await this.notificationService.sendEmailNotification({
+			email: registerDto.email,
+			subject: 'Welcome to Smart Student Handbook',
+			// eslint-disable-next-line max-len
+			body: `Good day, ${registerDto.username}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
+		});
+
+		// send welcome email to new user
 		return resp;
 	}
 
@@ -115,7 +149,7 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(registerDto: RegisterDto): Promise<Account> {
+	async updateUser(updateDto: UpdateDto): Promise<Account> {
 		let uid = '';
 
 		// Check if user is logged in
@@ -123,12 +157,37 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 		} catch (error) {
 			return {
-				success: true,
+				success: false,
 				user: null,
 				message: 'User does not exist',
 				error: error.message,
 			};
 		}
+
+		const userDetails = {
+			uid,
+			institution: updateDto.institution,
+			department: updateDto.department,
+			program: updateDto.program,
+			workStatus: updateDto.workStatus,
+			bio: updateDto.bio,
+			profilePic: updateDto.profilePicUrl,
+		};
+
+		const updated = await this.userService.updateUser(userDetails);
+
+		// eslint-disable-next-line eqeqeq
+		if (updated.success == false) {
+			return {
+				success: false,
+				user: null,
+				message: 'User does not exist',
+				error: 'something went wrong along the way',
+			};
+		}
+
+		const userRef = admin.firestore().collection('users').doc(uid);
+		const doc = await userRef.get();
 
 		/**
 		 * Try to update user. If successful return success message else throw error
@@ -136,10 +195,10 @@ export class AccountService {
 		return admin
 			.auth()
 			.updateUser(uid, {
-				email: registerDto.email,
+				email: updateDto.email,
 				emailVerified: false,
-				password: registerDto.password,
-				displayName: registerDto.displayName,
+				password: updateDto.password,
+				displayName: updateDto.displayName,
 				disabled: false,
 			})
 			.then((userCredential) => ({
@@ -149,18 +208,42 @@ export class AccountService {
 					email: userCredential.email,
 					emailVerified: userCredential.emailVerified,
 					displayName: userCredential.displayName,
+					username: doc.data().username,
+					institution: doc.data().institution,
+					department: doc.data().department,
+					program: doc.data().program,
+					workStatus: doc.data().workStatus,
+					bio: doc.data().bio,
+					profilePic: doc.data().profilePicUrl,
+					dateJoined: doc.data().dateJoined,
 				},
-				message: 'User is successfully registered!',
+				message: 'User is successfully Updated!',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: false,
+				user: null,
+				message: 'Something went wrong, user was not updated!',
+				error: `${error.message}`,
+			}));
 	}
 
 	/**
 	 * Login user.
 	 */
 	async loginUser(loginDto: LoginDto): Promise<Account> {
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+			return {
+				success: false,
+				user: null,
+				message: 'Login failed, please try again!',
+				error: 'Email or Password does not meet the requirements',
+			};
+		}
+
 		const userData = await admin
 			.auth()
 			.getUserByEmail(loginDto.email)
@@ -171,8 +254,27 @@ export class AccountService {
 				uid: null,
 			}));
 
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'Login failed, please try again!',
+				error: 'User does not exist',
+			};
+		}
+
 		const userRef = admin.firestore().collection('users').doc(userData.uid);
 		const doc = await userRef.get();
+
+		const token = await admin
+			.auth()
+			.createCustomToken(userData.uid)
+			.then((customToken) => ({
+				customToken,
+			}))
+			.catch(() => {
+				// console.log('Error creating custom token:', error);
+			});
 
 		// Login user. If successful return success message else throw Bad Request exception
 		return firebase
@@ -184,9 +286,8 @@ export class AccountService {
 					uid: userCredential.user.uid,
 					email: userCredential.user.email,
 					emailVerified: userCredential.user.emailVerified,
-					phoneNumber: userCredential.user.phoneNumber,
 					displayName: userCredential.user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,
@@ -194,13 +295,14 @@ export class AccountService {
 					bio: doc.data().bio,
 					profilePic: doc.data().profilePicUrl,
 					dateJoined: doc.data().dateJoined,
+					token,
 				},
-				message: 'User is successfully logged in.',
+				message: 'User is successfully logged in!',
 			}))
 			.catch((error) => ({
 				success: false,
 				user: null,
-				message: 'User is successfully logged in.',
+				message: 'Login failed, please try again!',
 				error: error.message,
 			}));
 	}
@@ -216,33 +318,29 @@ export class AccountService {
 			.then(() => ({
 				message: 'Successfully signed out.',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-			});
+			.catch((error) => ({
+				message: `${error.message}`,
+			}));
 	}
 
 	/**
 	 * GetCurrent user.
 	 */
 	async getCurrentUser(): Promise<Account> {
-		// Check if there is a current user else throw an exception
-		let user;
 		try {
-			user = firebase.auth().currentUser;
+			const user = firebase.auth().currentUser;
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
 
-			// Return user object
 			return {
 				success: true,
 				user: {
 					uid: user.uid,
 					email: user.email,
 					emailVerified: user.emailVerified,
-					phoneNumber: user.phoneNumber,
 					displayName: user.displayName,
-					name: doc.data().name,
+					username: doc.data().username,
 					institution: doc.data().institution,
 					department: doc.data().department,
 					program: doc.data().program,
@@ -274,24 +372,87 @@ export class AccountService {
 			uid = firebase.auth().currentUser.uid;
 
 			await this.userService.deleteUserProfile(uid);
+			// TODO delete all the users notebooks !!
+
+			await admin.firestore().collection('users').doc(uid).delete();
 
 			// Try to delete user else throw and exception if not possible
 			return await admin
 				.auth()
 				.deleteUser(uid)
 				.then(() => ({
-					message: 'Successfully deleted user.',
+					message: 'Successfully deleted user!',
 				}))
-				.catch((error) => {
-					// eslint-disable-next-line max-len
-					throw new HttpException(`Internal Service Error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
-				});
+				.catch((error) => ({
+					message: error.message,
+				}));
 		} catch (error) {
 			throw new HttpException(
 				`Bad Request. User might not be signed in or does not exist.${error.message}`,
 				HttpStatus.BAD_REQUEST,
 			);
 		}
+	}
+
+	async verifyEmail(verifyEmailDto: VerifyEmailDto) {
+		const userData = await admin
+			.auth()
+			.getUserByEmail(verifyEmailDto.email)
+			.then((userRecord) => ({
+				email: userRecord.email,
+				uid: userRecord.uid,
+			}))
+			.catch(() => ({
+				email: null,
+				uid: null,
+			}));
+
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully logged in.',
+				error: 'User does not exist',
+			};
+		}
+
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (verifyEmailDto.local == 'true') {
+			host = 'localhost:5000';
+		} else {
+			host = 'smartstudenthandbook.co.za';
+		}
+
+		const codeInterface = this.decodeSecureCode(verifyEmailDto.code);
+
+		// eslint-disable-next-line eqeqeq
+		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
+			return { url: `${host}` };
+		}
+
+		const uid = userData.uid.substr(0, 8);
+
+		// eslint-disable-next-line eqeqeq,max-len
+		if (codeInterface.checksumPassed == false || codeInterface.email != userData.email || codeInterface.uid != uid) {
+			return { url: `${host}` };
+		}
+
+		if (codeInterface.timeExpire < Date.now()) {
+			return { url: `${host}` };
+		}
+
+		return admin
+			.auth()
+			.updateUser(userData.uid, {
+				emailVerified: true,
+			})
+			.then(() => ({
+				url: `${host}`,
+			}))
+			.catch(() => ({
+				url: `${host}`,
+			}));
 	}
 
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
@@ -318,7 +479,7 @@ export class AccountService {
 
 		const path = '/app/account/checkResetPassword';
 		const { email } = userData;
-		const encodedCode = this.encodeResetCode(userData.uid, userData.email);
+		const encodedCode = this.encodeSecureCode(userData.uid, userData.email);
 		let link = 'http://';
 		// eslint-disable-next-line max-len
 		link = link.concat(host, path, '/', email, '/', String(resetPasswordDto.isLocalhost), '/', encodedCode);
@@ -327,7 +488,7 @@ export class AccountService {
 			email: resetPasswordDto.email,
 			subject: 'Smart Student Handbook Password Reset',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${userData.displayName}. You request to change your password. \nPlease do so with this link: \n${link}`,
+			body: `Good day, ${userData.displayName}. You requested to change your password. \nPlease do so with this link: \n${link}`,
 		});
 
 		return { message: `Request Send to ${resetPasswordDto.email}` };
@@ -341,10 +502,10 @@ export class AccountService {
 		if (local == 'true') {
 			host = 'localhost:5000';
 		} else {
-			host = 'smartstudentnotebook.web.app';
+			host = 'smartstudenthandbook.co.za';
 		}
 
-		const codeInterface = this.decodeResetCode(code);
+		const codeInterface = this.decodeSecureCode(code);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
@@ -372,22 +533,45 @@ export class AccountService {
 			return { url: `${host}` };
 		}
 
-		return { url: `http://${host}/account/resetPassword?email=${email}&code=${code}` };
+		return { url: `http://${host}/account/resetPassword/${email}/${code}` };
 	}
 
-	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto) {
+	async finalizeResetPassword(resetPasswordFinalizeDto: ResetPasswordFinalizeDto): Promise<Account> {
 		const { email, code, newPassword } = resetPasswordFinalizeDto;
+
+		// eslint-disable-next-line
+		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+
+		if (!passwordRegex.test(newPassword)) {
+			return {
+				success: false,
+				user: null,
+				message: 'User is unsuccessfully registered:',
+				error: 'Email or Password does not meet the requirements',
+			};
+		}
 
 		// eslint-disable-next-line eqeqeq
 		if (code == undefined || newPassword == undefined) {
-			throw new HttpException('Bad Request. Not all parameters provided', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
-		const codeInterface = this.decodeResetCode(code);
+		const codeInterface = this.decodeSecureCode(code);
 
 		// eslint-disable-next-line eqeqeq
 		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
-			throw new HttpException('Bad Request. Invalid Code:1', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		const userData = await admin
@@ -397,18 +581,38 @@ export class AccountService {
 				displayName: userRecord.displayName,
 				uid: userRecord.uid,
 			}))
-			.catch((error) => {
-				throw new HttpException(`Bad Request. User does not exist: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch(() => ({
+				displayName: null,
+				uid: null,
+			}));
+
+		if (userData.uid == null) {
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
+		}
 
 		const uid = userData.uid.substr(0, 8);
 		// eslint-disable-next-line eqeqeq,max-len
 		if (codeInterface.checksumPassed == false || codeInterface.email != email || codeInterface.uid != uid) {
-			throw new HttpException('Bad Request. Invalid Code:2', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		if (codeInterface.timeExpire < Date.now()) {
-			throw new HttpException('Bad Request. Invalid Code:3', HttpStatus.BAD_REQUEST);
+			return {
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: 'Bad Request',
+			};
 		}
 
 		return admin
@@ -417,18 +621,24 @@ export class AccountService {
 				password: newPassword,
 			})
 			.then((userCredential) => ({
-				uid: userCredential.uid,
-				email: userCredential.email,
-				emailVerified: userCredential.emailVerified,
-				displayName: userCredential.displayName,
-				message: 'User is successfully updated!',
+				success: true,
+				user: {
+					uid: userCredential.uid,
+					email: userCredential.email,
+					emailVerified: userCredential.emailVerified,
+					displayName: userCredential.displayName,
+				},
+				message: 'Password is updated!',
 			}))
-			.catch((error) => {
-				throw new HttpException(`Error updating user: ${error.message}`, HttpStatus.BAD_REQUEST);
-			});
+			.catch((error) => ({
+				success: false,
+				user: null,
+				message: 'Password is not updated!',
+				error: error.message,
+			}));
 	}
 
-	encodeResetCode(uid: string, email: string) {
+	encodeSecureCode(uid: string, email: string) {
 		const timeExpire = Date.now() + 1800000;
 
 		let randNum = '';
@@ -454,7 +664,7 @@ export class AccountService {
 		return Buffer.from(code).toString('base64');
 	}
 
-	decodeResetCode(code: string) {
+	decodeSecureCode(code: string) {
 		const decodedCode = Buffer.from(code, 'base64').toString();
 
 		const codeSplit = decodedCode.split('.');
@@ -491,9 +701,10 @@ export class AccountService {
 		};
 	}
 
-	async setUserNotificationToken(notificationID: string): Promise<Response> {
-		const userId: string = firebase.auth().currentUser.uid;
+	async setUserNotificationToken(userId: string, notificationID: string): Promise<Response> {
+		// const userId: string = firebase.auth().currentUser.uid;
 
+		console.log('userId: ', userId, 'notificationID: ', notificationID);
 		return admin
 			.firestore()
 			.collection('users')

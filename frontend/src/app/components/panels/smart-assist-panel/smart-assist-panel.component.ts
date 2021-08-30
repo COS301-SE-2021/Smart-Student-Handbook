@@ -52,7 +52,8 @@ export class SmartAssistPanelComponent implements OnInit {
 			sideNav.style.width = '40px';
 
 			if (col) {
-				col.style.width = 'fit-content';
+				col.style.width = '40px';
+				col.style.minWidth = '0px';
 			}
 		} else {
 			sideNav.style.width = '100%';

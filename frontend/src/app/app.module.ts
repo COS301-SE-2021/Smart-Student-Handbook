@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -32,7 +31,6 @@ import {
 	NotebookComponent,
 	HomeComponent,
 	ExploreComponent,
-	RecentNotesComponent,
 	SharedWithMeComponent,
 	NotificationsComponent,
 } from '@app/features';
@@ -61,15 +59,24 @@ import {
 	ConfirmDeleteComponent,
 	TreeViewComponent,
 	AddCollaboratorComponent,
+	MessageComponent,
+	AddNoteComponent,
+	ViewProfileComponent,
+	NoteCardsComponent,
+	ExploreNotesEditorComponent,
+	ExploreNoteListComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNoteListBottomsheetComponent,
 } from '@app/components';
 
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { MessagingService } from '@app/services';
+import { NgAisModule } from 'angular-instantsearch';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AddNoteComponent } from './components/modals/add-note/add-note.component';
 
 @NgModule({
 	declarations: [
@@ -90,7 +97,6 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 		HomeComponent,
 		ExploreComponent,
 		P404Component,
-		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
 		HeaderComponent,
@@ -102,12 +108,20 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 		LandingPageComponent,
 		ForgotPasswordComponent,
 		AddCollaboratorComponent,
-  AddNoteComponent,
+		AddNoteComponent,
+		MessageComponent,
+		ViewProfileComponent,
+		NoteCardsComponent,
+		ExploreNotesEditorComponent,
+		ExploreNoteListComponent,
+		ExploreNotesEditorBottomSheetComponent,
+		ExploreNoteListBottomsheetComponent,
 	],
 	imports: [
 		MaterialModule,
 		FormsModule,
 		ReactiveFormsModule,
+		NgAisModule.forRoot(),
 		BrowserModule,
 		AppRoutingModule,
 		BrowserAnimationsModule,
@@ -137,7 +151,6 @@ import { AddNoteComponent } from './components/modals/add-note/add-note.componen
 		AsyncPipe,
 		LeftMenuComponent,
 		MaterialModule,
-		NotebookEventEmitterService,
 	],
 	bootstrap: [AppComponent],
 })

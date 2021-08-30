@@ -22,7 +22,7 @@
 				</button>
 			</div>
 
-      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
       <div id="noteHolderDiv">
         <mat-card
@@ -32,12 +32,12 @@
           <button
             mat-icon-button
             class="favorite-icon editNotebookBtn"
-            (click)="editNotebook(note.noteId)"
+            (click)="editNotebook(note.noteId, note.name, note.description)"
           >
             <mat-icon class="editNotebookIcon">edit</mat-icon>
           </button>
 
-          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name)">
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name, notebookTitle)">
             <mat-card-header>
               <mat-card-subtitle id="date">
                 JUNE 17 2021

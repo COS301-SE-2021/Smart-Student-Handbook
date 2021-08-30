@@ -4,3 +4,4 @@ export * from './notebook/NoteDto.model';
 export * from './notebook/CheckAccessDto.model';
 export * from './notebook/ReviewDto.model';
 export * from './User.model';
+export * from './Notification/createNotificationDto.model';

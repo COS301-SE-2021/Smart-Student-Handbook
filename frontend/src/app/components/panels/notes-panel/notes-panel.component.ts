@@ -1,23 +1,30 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+	AfterContentInit,
+	// AfterViewInit,
+	Component,
+	OnInit,
+	ViewChild,
+	// ViewEncapsulation,
+} from '@angular/core';
 // import { MatSidenav } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 
 import {
 	NotebookService,
-	OpenNotebookPanelService,
-	NotesService,
+	NoteOperationsService,
+	NotebookObservablesService,
 } from '@app/services';
 
 @Component({
 	selector: 'app-notes-panel',
 	templateUrl: './notes-panel.component.html',
-	encapsulation: ViewEncapsulation.None,
+	// encapsulation: ViewEncapsulation.None,
 	styleUrls: ['./notes-panel.component.scss'],
 })
-export class NotesPanelComponent implements OnInit {
+export class NotesPanelComponent implements OnInit, AfterContentInit {
 	// Variables for add notebook popup dialog
 	title = '';
 
@@ -28,10 +35,6 @@ export class NotesPanelComponent implements OnInit {
 	date = '';
 
 	notebookId = '';
-
-	// institution = '';
-
-	// private = false;
 
 	// Variable that holds the logged in user details
 	user: any;
@@ -45,69 +48,70 @@ export class NotesPanelComponent implements OnInit {
 
 	notebookTitle = 'Notes';
 
+	doneLoading: boolean = true;
+
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
-	 * @param openNotebookPanelService
+	 * @param notebookObservables
 	 * @param notesService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notesService: NotesService
+		private notebookObservables: NotebookObservablesService,
+		private notesService: NoteOperationsService
 	) {}
+
+	ngAfterContentInit(): void {
+		this.doneLoading = true;
+
+		this.notebookObservables.openNotebookId.subscribe((val: any) => {
+			if (val.title !== '') {
+				this.notebookTitle = val.title;
+				this.notes = [];
+				this.getUserNotebooks(val.notebookId);
+
+				// navigate to notebook if not on page
+				const button = document.getElementById(
+					'openNotesPanelBtn'
+				) as HTMLButtonElement;
+				if (button) button.click();
+			}
+		});
+	}
 
 	/**
 	 * Get the logged in user's notebooks as well as
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
+		// }
+
 		// let userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		// this.profile = this.profile.userInfo;
 
 		this.open = false;
 
-		// Toggle the notePanelComponent when in desktop view and notebook is selected
-		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-			this.openNotebookPanelService.toggleSubscribe =
-				this.openNotebookPanelService.togglePanelEmitter.subscribe(
-					({ notebookId, notebookTitle }) => {
-						this.notebookTitle = notebookTitle;
-						this.notes = [];
-						this.getUserNotebooks(notebookId);
-
-						// navigate to notebook if not on page
-						const button = document.getElementById(
-							'openNotesPanelBtn'
-						) as HTMLButtonElement;
-						if (button) button.click();
-					}
-				);
-
-			this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
+		this.notebookObservables.closePanel.subscribe((close) => {
+			if (close.close) {
 				this.closePanel();
 				this.notes = [];
-			});
-		}
+				this.notebookObservables.setClosePanel(false);
+			}
+		});
 	}
 
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
 	getUserNotebooks(notebookId: string) {
+		this.doneLoading = false;
+
 		this.notebookId = notebookId;
 
 		this.notes = [];
-
-		const progressbar = document.getElementById(
-			'notesProgressbar'
-		) as HTMLElement;
-
-		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
 			.getNotes(notebookId) // this.user.uid
@@ -118,7 +122,7 @@ export class NotesPanelComponent implements OnInit {
 					this.notes.push(result[i]);
 				}
 
-				if (progressbar) progressbar.style.display = 'none';
+				this.doneLoading = true;
 			});
 	}
 
@@ -157,7 +161,7 @@ export class NotesPanelComponent implements OnInit {
 		sideNavContainer.style.width = '40px';
 
 		if (col) {
-			col.style.width = 'fit-content';
+			col.style.width = '40px';
 			col.style.minWidth = '0px';
 		}
 	}
@@ -167,17 +171,29 @@ export class NotesPanelComponent implements OnInit {
 	 * @param _noteBookId
 	 * @param _noteId
 	 * @param _title
+	 * @param _notebookTitle
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	openNotebook(_noteBookId: string, _noteId: string, _title: string) {}
+	openNotebook(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_noteBookId: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_noteId: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_title: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_notebookTitle: string
+	) {}
 
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
+	 * @param title
+	 * @param description
 	 */
-	editNotebook(id: string) {
+	editNotebook(id: string, title: string, description: string) {
 		this.notesService
-			.editNote(this.notebookId, id)
+			.editNote(this.notebookId, id, title, description)
 			.subscribe((newNote: { description: any; title: any }) => {
 				this.notes = this.notes.map((notebook: any) => {
 					if (notebook.noteId === id) {
@@ -191,7 +207,7 @@ export class NotesPanelComponent implements OnInit {
 	}
 
 	/**
-	 * Create a new notebook
+	 * Create a new note
 	 */
 	createNewNote() {
 		this.notesService
@@ -202,7 +218,8 @@ export class NotesPanelComponent implements OnInit {
 				this.openNotebook(
 					this.notebookId,
 					newNote.id,
-					newNote.notebook.name
+					newNote.notebook.name,
+					this.notebookTitle
 				);
 			});
 	}

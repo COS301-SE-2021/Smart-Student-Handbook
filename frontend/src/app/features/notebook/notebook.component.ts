@@ -3,11 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import {
-	NotebookEventEmitterService,
-	AccountService,
-	OpenNotebookPanelService,
-} from '@app/services';
+import { AccountService } from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
@@ -70,14 +66,10 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * Include the notebook service
 	 * @param router
 	 * @param accountService
-	 * @param notebookEventEmitterService
-	 * @param openNotebookPanelService
 	 */
 	constructor(
 		private router: Router,
-		private accountService: AccountService,
-		private notebookEventEmitterService: NotebookEventEmitterService,
-		private openNotebookPanelService: OpenNotebookPanelService
+		private accountService: AccountService
 	) {}
 
 	/**
@@ -89,48 +81,9 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 		// get userDeatils;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
-		// Open a note when one is selected from the mobile view and update the title
-		// if (this.notebookEventEmitterService.subsVar === undefined) {
-		// 	this.notebookEventEmitterService.subsVar =
-		// 		this.notebookEventEmitterService.loadEmitter.subscribe(
-		// 			({ notebookId, noteId, title }) => {
-		// 				this.loadEditor(notebookId, noteId, title);
-		// 			}
-		// 		);
-		// this.notebookEventEmitterService.getTitleEmitter.subscribe(
-		// 	(title: string) => {
-		// 		const noteTitle = document.getElementById(
-		// 			'mobileTitle'
-		// 		) as HTMLSpanElement;
-		// 		// noteTitle.innerHTML = title;
-		// 	}
-		// );
-		// }
-
-		// // Toggle the notePanelComponent when in desktop view and notebook is selected
-		// if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-		// 	this.openNotebookPanelService.toggleSubscribe =
-		// 		this.openNotebookPanelService.togglePanelEmitter.subscribe(
-		// 			() => {
-		// 				console.log('openClose');
-		// 				this.notePanelComponent.openedCloseToggle();
-		// 			}
-		// 		);
-		// }
 	}
 
 	ngAfterViewInit() {
-		// this.menuPanelComponent.treeViewComponent.openNotebookFolder = () => {
-		// 	alert();
-		// 	// 	this.notePanelComponent.openedCloseToggle();
-		// };
-
-		// this.treeComponent.openNotebookFolder = () => {
-		// 	// this.router.navigate(['notes']);
-		// 	this.notePanelComponent.openedCloseToggle();
-		// };
-
 		this.notePanelComponent.openNotebook = (
 			notebookId: string,
 			noteId: string,

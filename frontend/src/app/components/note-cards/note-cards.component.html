@@ -1,0 +1,38 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" ></mat-progress-bar>
+<div
+  class="col-6 col-sm-4 noteContainer"
+  *ngFor="let note of notes; let i = index"
+>
+  <mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.noteId)" *ngIf="!readonly">
+    <button
+      mat-icon-button
+      class="favorite-icon editNoteBtn"
+      (click)="editNote(note.noteId, note.name, note.description)"
+    >
+      <mat-icon class="editNotebookIcon">edit</mat-icon>
+    </button>
+    <div (click)="openNote(note.noteId, note.name)">
+      <h3 class="title">{{ note.name }}</h3>
+      <h4 class="description">{{ note.description }}</h4>
+
+      <div
+        class="bottomColor"
+        [style.background-image]="colours[i % 6].colour"
+      ></div>
+    </div>
+
+  </mat-card>
+
+  <mat-card class="note" *ngIf="readonly">
+    <div (click)="openNoteModal(note.noteId, note.name)">
+      <h3 class="title">{{ note.name }}</h3>
+      <h4 class="description">{{ note.description }}</h4>
+
+      <div
+        class="bottomColor"
+        [style.background-image]="colours[i % 6].colour"
+      ></div>
+    </div>
+
+  </mat-card>
+</div>

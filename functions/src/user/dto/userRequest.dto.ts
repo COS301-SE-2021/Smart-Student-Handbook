@@ -4,9 +4,9 @@
 import * as admin from 'firebase-admin';
 
 export class UserRequestDto {
-	readonly uid: string;
+	readonly uid?: string;
 
-	readonly name?: string;
+	readonly username?: string;
 
 	readonly institution?: string;
 
@@ -20,5 +20,5 @@ export class UserRequestDto {
 
 	readonly profilePicUrl?: string;
 
-	readonly dateJoined: admin.firestore.FieldValue;
+	readonly dateJoined?: admin.firestore.FieldValue;
 }

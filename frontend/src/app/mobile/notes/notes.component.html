@@ -1,37 +1,6 @@
-<!--<mat-toolbar color="primary">-->
-<!--	<button mat-icon-button aria-label="Back button" (click)="navigateBack()">-->
-<!--		<mat-icon>arrow_back</mat-icon>-->
-<!--	</button>-->
-<!--	<span>Notes</span>-->
-<!--	<span class="example-spacer"></span>-->
-<!--</mat-toolbar>-->
-
 <div class="container">
 	<div class="row">
-		<div
-			class="col-6 col-sm-4 noteContainer"
-			*ngFor="let note of notes; let i = index"
-		>
-			<mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.noteId)">
-        <button
-          mat-icon-button
-          class="favorite-icon editNoteBtn"
-          (click)="editNote(note.noteId)"
-        >
-          <mat-icon class="editNotebookIcon">edit</mat-icon>
-        </button>
-        <div (click)="openNote(note.noteId, note.name)">
-          <h3 class="title">{{ note.name }}</h3>
-          <h4 class="description">{{ note.description }}</h4>
-
-          <div
-            id="bottomColor"
-            [style.background-image]="colours[i % 6].colour"
-          ></div>
-        </div>
-
-			</mat-card>
-		</div>
+		<app-note-cards></app-note-cards>
 	</div>
 
 	<button
@@ -43,8 +12,4 @@
 	>
 		<mat-icon>edit</mat-icon>
 	</button>
-</div>
-
-<div id="mobileOverlay">
-	<mat-spinner id="noteSpinner"></mat-spinner>
 </div>

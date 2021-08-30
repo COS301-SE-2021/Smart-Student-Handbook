@@ -61,24 +61,26 @@ export class AccountService {
 	 * Send a API request to the backend account endPoint to register a user and return the result (User Object)
 	 * If Register was successful then set the appropriate localstorage and Login Sate and return the user object
 	 * @param email
-	 * @param phoneNumber
-	 * @param displayName
+	 * @param username
 	 * @param password
 	 * @param passwordConfirm
+	 * @param isLocalhost - if the request is coming from localhost or on live server (deployed)
 	 */
 	registerUser(
 		email: string,
-		displayName: string,
+		username: string,
 		password: string,
-		passwordConfirm: string
+		passwordConfirm: string,
+		isLocalhost: boolean
 	): Observable<any> {
 		return this.http.post(
 			`${ACCOUNT_API}registerUser`,
 			{
 				email,
-				displayName,
+				username,
 				password,
 				passwordConfirm,
+				isLocalhost,
 			},
 			httpOptions
 		);
@@ -119,27 +121,78 @@ export class AccountService {
 	}
 
 	/**
+	 * Send a API request to the backend profile endPoint to update a user profile
+	 * User only has to enter information that they want to, its not required
+	 * @param userId
+	 * @param displayName - optional
+	 * @param institution - optional
+	 * @param department - optional
+	 * @param program - optional
+	 * @param workStatus - optional
+	 * @param bio - optional
+	 * @param profilePicUrl - optional
+	 *
+	 */
+	updateUser(
+		userId: string,
+		displayName?: string,
+		institution?: string,
+		department?: string,
+		program?: string,
+		workStatus?: string,
+		bio?: string,
+		profilePicUrl?: string
+	): Observable<any> {
+		return this.http
+			.put(
+				`${ACCOUNT_API}updateUser`,
+				{
+					userId,
+					displayName,
+					institution,
+					department,
+					program,
+					workStatus,
+					bio,
+					profilePicUrl,
+				},
+				httpOptions
+			)
+			.pipe(
+				map((user: any) => {
+					if (user.success) {
+						// update the localStorage with the new users information if updated successfully
+						localStorage.setItem('user', JSON.stringify(user.user));
+					}
+					return user;
+				})
+			);
+	}
+
+	/**
 	 * Send a API request to the backend account endPoint to Sign out the current signed in in user
 	 * Clear all the LocalStorage values that store the user information and loginState
 	 * Update the isUserLoggedIn Behavioural subject to false to indicate the user is no longer logged in
 	 */
-	singOut(): Observable<any> {
-		return this.http.post(`${ACCOUNT_API}signOut`, {}, httpOptions).pipe(
-			map((x) => {
-				localStorage.clear();
-				this.isUserLoggedIn.next(false);
-				return x;
-			})
-		);
+	singOut(userId: string): Observable<any> {
+		return this.http
+			.post(`${ACCOUNT_API}signOut`, { userId }, httpOptions)
+			.pipe(
+				map((x) => {
+					localStorage.clear();
+					this.isUserLoggedIn.next(false);
+					return x;
+				})
+			);
 	}
 
 	/**
 	 * Send a API request to the backend account endPoint to get the current Lodged in user and return the result (User Object)
 	 * Update the Localstorage user object when user is returned
 	 */
-	getCurrentUser(): Observable<any> {
+	getCurrentUser(userId: string): Observable<any> {
 		return this.http
-			.get(`${ACCOUNT_API}getCurrentUser`, {
+			.get(`${ACCOUNT_API}getCurrentUser/${userId}`, {
 				responseType: 'json',
 			})
 			.pipe(
@@ -156,22 +209,32 @@ export class AccountService {
 	 * Send a API request to the backend account endPoint to Delete the current Lodged in user
 	 * Delete all the LocalStorage Data of the user and set their LoginSate to false
 	 * Return the user to the Login Page
-	 * @param EmailAddress
-	 * @param Password
 	 */
-	// deleteUser(EmailAddress: string, Password: string): Observable<any> {
-	deleteUser(): Observable<any> {
+	deleteUser(userId: string): Observable<any> {
 		return this.http
-			.delete(`${ACCOUNT_API}deleteUser`, {
+			.delete(`${ACCOUNT_API}deleteUser/${userId}`, {
 				responseType: 'json',
 			})
 			.pipe(
 				map((x) => {
 					localStorage.clear();
 					this.isUserLoggedIn.next(false);
-					this.router.navigate(['account/login']);
 					return x;
 				})
 			);
+	}
+
+	setUserNotificationToken(
+		userId: string,
+		notificationToken: string
+	): Observable<any> {
+		return this.http.post(
+			`${ACCOUNT_API}setUserNotificationToken`,
+			{
+				userId,
+				notificationToken,
+			},
+			httpOptions
+		);
 	}
 }

@@ -9,15 +9,24 @@
 			<mat-error *ngIf="loginFailed">
 				{{ errorMessage }}
 			</mat-error>
+
 			<mat-form-field class="full-width-input">
-				<input autocomplete="off" matInput placeholder="Email" formControlName="email" required/>
+				<input autocomplete="off" matInput placeholder="Email" formControlName="email" required
+               pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+"/>
 				<mat-error> Please provide a valid email address </mat-error>
 			</mat-form-field>
+
+      <br/>
+
 			<mat-form-field class="full-width-input">
-				<input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required/>
+				<input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required
+               pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}"/>
 				<mat-error> Please provide a valid password </mat-error>
 			</mat-form-field>
-			<button mat-raised-button type="submit" [disabled]="isDisabled">Login</button>
+
+      <br/>
+
+			<button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Login</button>
 		</form>
 	</mat-card-content>
 

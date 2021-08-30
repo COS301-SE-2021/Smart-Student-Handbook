@@ -1,7 +1,9 @@
 export class SingleNotificationRequestDto {
-	token: string;
+	token = ' ';
 
-	title: string;
+	title = ' ';
 
-	body: string;
+	body = ' ';
+
+	userId? = '';
 }

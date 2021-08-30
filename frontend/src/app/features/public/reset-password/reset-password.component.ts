@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordService } from '@app/services';
+import { AccountService, ResetPasswordService } from '@app/services';
 import { MustMatch } from '@app/features/public/register/must-match.validator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,13 +15,22 @@ export class ResetPasswordComponent {
 
 	errorMessage: string = '';
 
+	user: any;
+
 	constructor(
 		private fb: FormBuilder,
 		private resetPasswordService: ResetPasswordService,
 		private activeRoute: ActivatedRoute,
 		private router: Router,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private accountService: AccountService
 	) {
+		// redirect to home if already logged in
+		if (this.accountService.getLoginState) {
+			this.router.navigate(['/home']);
+		}
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		// setup the form and validation
 		this.form = this.fb.group(
 			{
@@ -52,7 +61,13 @@ export class ResetPasswordComponent {
 				code = params.code;
 
 				this.resetPasswordService
-					.finalizeResetPassword(email, isLocalHost, password, code)
+					.finalizeResetPassword(
+						this.user.id,
+						email,
+						isLocalHost,
+						password,
+						code
+					)
 					.subscribe(() => {
 						this.snackBar
 							.open('Password successfully reset', 'Login')

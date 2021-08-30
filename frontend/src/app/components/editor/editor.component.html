@@ -26,7 +26,7 @@
 		>
 			<mat-expansion-panel-header>
 				<mat-panel-title id="noteTitle">
-					{{ notebookTitle }}
+					{{ noteTitle }}
 				</mat-panel-title>
 				<mat-panel-description>
 					<button
@@ -66,8 +66,8 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
-								<mat-card-title class="personName"
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id)"></div>
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id)"
 									>{{creator.name}}</mat-card-title
 								>
 							</mat-card-header>
@@ -77,7 +77,7 @@
         <tr *ngIf="!private" style="height: 0px">
           <td style="height: 0px"></td>
           <td style="height: 0px">
-            <button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+            <button color="primary" mat-icon-button id="addGroupBtn" [disabled]="!opened" (click)="addCollaborator()">
               <mat-icon>group_add</mat-icon>
             </button>
           </td>
@@ -90,13 +90,16 @@
 
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id)"></div>
 
-                <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
-                  remove_circle_outline
-                </mat-icon>
+                <button class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
+                  <mat-icon class="removeCollaboratorIcon">
+                    remove_circle_outline
+                  </mat-icon>
+                </button>
 
-								<mat-card-title class="personName"
+
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id)"
 									>{{collaborator.name}}</mat-card-title
 								>
 							</mat-card-header>
@@ -146,7 +149,7 @@
 		</mat-expansion-panel>
 	</mat-accordion>
 
-	<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
+	<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
 	<div id="editor" #editor class="editor"></div>
 </div>

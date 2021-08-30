@@ -9,8 +9,8 @@ import { Collaborators } from '@app/components';
 import {
 	NotebookService,
 	ProfileService,
-	NotesService,
-	NoteMoreService,
+	NoteOperationsService,
+	NotebookOperationsService,
 } from '@app/services';
 
 export interface Tag {
@@ -45,27 +45,33 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 	notebook: any;
 
+	user: any;
+
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-		private noteMore: NoteMoreService,
-		private notesService: NotesService,
+		private notebookOperations: NotebookOperationsService,
+		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
 		private profileService: ProfileService
 	) {}
 
 	ngOnInit(): void {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
 		this.notebookId = this.data.notebookID;
 		this.noteId = this.data.noteId;
 		this.title = this.data.notebookTitle;
 
-		this.noteMore.getNotebookInfo(this.notebookId).subscribe((data) => {
-			this.date = data.date;
-			this.notebook = data.notebook;
-			this.tags = data.tags;
-			this.collaborators = data.collaborators;
-			this.creator = data.creator;
-		});
+		this.notebookOperations
+			.getNotebookInfo(this.notebookId)
+			.subscribe((data) => {
+				this.date = data.date;
+				this.notebook = data.notebook;
+				this.tags = data.tags;
+				this.collaborators = data.collaborators;
+				this.creator = data.creator;
+			});
 	}
 
 	/**
@@ -106,7 +112,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 			tagList.push(this.tags[i].name);
 		}
 
-		this.noteMore.updateNotebook({
+		this.notebookOperations.updateNotebook({
 			title: this.notebook.title,
 			author: this.notebook.author,
 			course: this.notebook.course,
@@ -120,15 +126,16 @@ export class NotebookBottomSheetComponent implements OnInit {
 	}
 
 	addCollaborator() {
-		this.noteMore
-			.addCollaborator(this.notebookId)
-			.subscribe((collaborator: any) => {
-				this.collaborators.push(collaborator);
+		this.notebookOperations
+			.requestCollaborator(this.user.uid, this.notebookId, '')
+			.subscribe(() => {
+				// collaborator: any
+				// this.collaborators.push(collaborator);
 			});
 	}
 
 	removeCollaborator(userId: string) {
-		this.noteMore
+		this.notebookOperations
 			.removeCollaborator(userId, this.notebookId)
 			.subscribe((id: string) => {
 				this.collaborators = this.collaborators.filter(
