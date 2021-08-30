@@ -276,7 +276,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notebookID: doc.data().notebookID,
 						notebookTitle: doc.data().notebookTitle,
-						notificationId: doc.data().notifcationId,
+						notificationId: doc.data().notificationId,
 					});
 				} else {
 					notifications.push({
@@ -287,7 +287,7 @@ export class NotificationService {
 						heading: doc.data().heading,
 						opened: doc.data().opened,
 						notebookTitle: doc.data().notebookTitle,
-						notificationId: doc.data().notifcationId,
+						notificationId: doc.data().notificationId,
 					});
 				}
 			});
@@ -334,7 +334,7 @@ export class NotificationService {
 						notebookID: doc.data().notebookID,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
-						notificationId: doc.data().notifcationId,
+						notificationId: doc.data().notificationId,
 					});
 				} else {
 					notifications.push({
@@ -346,7 +346,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
-						notificationId: doc.data().notifcationId,
+						notificationId: doc.data().notificationId,
 					});
 				}
 			});
