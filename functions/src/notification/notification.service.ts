@@ -189,6 +189,7 @@ export class NotificationService {
 					body: createNotificationDto.body,
 					heading: createNotificationDto.heading,
 					opened: createNotificationDto.opened,
+					notificationId,
 				})
 				.then(() => ({
 					message: 'Successfully created notification',
@@ -213,28 +214,16 @@ export class NotificationService {
 	}
 
 	async getUserNotifications(): Promise<Notification[]> {
-		const userId: string = await this.getUserId();
-		const notificationIds: string[] = [];
+		const userId = await this.getUserId();
 		const notifications = [];
 
 		try {
-			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
-			// eslint-disable-next-line @typescript-eslint/no-shadow
-			notificationsIdSnapshot.forEach((doc) => {
-				notificationIds.push(doc.get(userId));
-			});
-
-			if (notificationIds.length === 0) {
-				return notifications;
-			}
-
 			const notificationsSnapshot = await admin
 				.firestore()
 				.collection('notifications')
-				.where('userId', 'in', notificationIds)
+				.where('userID', '==', userId)
 				.get();
 
-			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsSnapshot.forEach((doc) => {
 				notifications.push({
 					userID: doc.data().userID,
@@ -243,12 +232,13 @@ export class NotificationService {
 					body: doc.data().body,
 					heading: doc.data().heading,
 					opened: doc.data().opened,
+					notificationId: doc.data().notificationId,
 				});
 			});
 
 			return notifications;
 		} catch (e) {
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+			throw new HttpException(`Bad Request. ${e}`, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -284,6 +274,7 @@ export class NotificationService {
 					body: doc.data().body,
 					heading: doc.data().heading,
 					opened: doc.data().opened,
+					notificationId: doc.data().notificationId,
 				});
 			});
 
