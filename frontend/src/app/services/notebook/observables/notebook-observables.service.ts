@@ -35,6 +35,11 @@ export class NotebookObservablesService {
 
 	public closePanelState: Observable<any>;
 
+	/** id of notebook to review */
+	public reviewNotebook: BehaviorSubject<any>;
+
+	public reviewNotebookState: Observable<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -82,6 +87,13 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
+
+		/** id of notebook to review */
+		this.reviewNotebook = new BehaviorSubject<any>({
+			id: '',
+		});
+
+		this.reviewNotebookState = this.reviewNotebook.asObservable();
 	}
 
 	/**
@@ -172,5 +184,17 @@ export class NotebookObservablesService {
 		});
 
 		this.closePanelState = this.closePanel.asObservable();
+	}
+
+	/**
+	 * id of notebook to review
+	 * @param id
+	 */
+	setReviewNotebook(id: string) {
+		this.reviewNotebook.next({
+			id,
+		});
+
+		this.reviewNotebookState = this.reviewNotebook.asObservable();
 	}
 }

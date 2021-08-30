@@ -19,3 +19,4 @@ export * from './panels/smart-assist-panel/smart-assist-panel.component';
 export * from './tree-view/tree-view.component';
 export * from './note-cards/note-cards.component';
 export * from './smart-assist/smart-assist.component';
+export * from './rate-notebook/rate-notebook.component';

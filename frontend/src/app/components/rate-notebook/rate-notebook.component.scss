@@ -1,0 +1,29 @@
+#reviewInput{
+  width: 100%;
+}
+
+#reviews{
+  height: max-content;
+  padding: 7px;
+  width: 100%;
+}
+
+.reviewContainer{
+  height: max-content;
+  width: 100%;
+  border: 1px solid #e2e2e2;
+  border-radius: 2px;
+  padding: 10px;
+  color: #535353;
+  margin-bottom: 7px;
+  box-shadow: 0px 0px 4px 1px #c7c7c7;
+}
+
+.reviewUser{
+  //position: absolute;
+  //right: 30px;
+  //margin-top: -20px;
+  float: right;
+  margin-top: -15px;
+  color: #a09f9f;
+}
