@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import algoliasearch from 'algoliasearch/lite';
-import aa from 'search-insights';
+import * as algoliasearch from 'algoliasearch/lite';
 
-const userToken = 'testToken'; // Get the user token (synchronously or asynchronously).
-// The `insights` middleware receives a notification
-// and attaches the `userToken` to search calls onwards.
-aa('setUserToken', userToken);
+const aa = require('search-insights');
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
 	'589f047ba9ac7fa58796f394427d7f35'
 );
+aa('init', {
+	appId: 'AD2K8AK74A',
+	apiKey: '589f047ba9ac7fa58796f394427d7f35',
+});
+aa('setUserToken', 'USER-98765');
 
 @Component({
 	selector: 'app-explore',
@@ -19,21 +20,26 @@ const searchClient = algoliasearch(
 })
 export class ExploreComponent implements OnInit {
 	config = {
-		apiKey: '589f047ba9ac7fa58796f394427d7f35',
-		appId: 'AD2K8AK74A',
 		indexName: 'userNotebooks',
-		analytics: true,
-		clickAnalytics: true,
-		routing: true,
 		searchClient,
 		insightsClient: (window as any).aa,
-		searchParameters: {
-			hitsPerPage: 9,
-		},
 	};
 
-	// constructor() {
+	private user: any;
 
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.user = JSON.parse(<string>localStorage.getItem('user'));
+
+		aa('clickedObjectIDsAfterSearch', {
+			index: 'userNotebooks',
+			eventName: 'Click item',
+			queryID: '43b15df305339e827f0ac0bdc5ebcaa7',
+			objectIDs: ['oject'],
+			positions: [42],
+		});
+
+		aa('onUserTokenChange', (userToken) => {
+			console.log('userToken has changed: ', userToken);
+		});
+	}
 }

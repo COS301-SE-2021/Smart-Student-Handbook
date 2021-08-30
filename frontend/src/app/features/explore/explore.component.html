@@ -1,3 +1,4 @@
+<!--
 <div class="container">
   <div class="row">
     <div class="col-12 text-center mt-3">
@@ -13,13 +14,13 @@
         <main class="search-container">
           <div class="right-panel">
             <div id="hits">
-              <!-- Uncomment the following widget to add hits list -->
+              &lt;!&ndash; Uncomment the following widget to add hits list &ndash;&gt;
               <div id="searchbox">
-                <!-- Uncomment the following widget to add a search bar -->
+                &lt;!&ndash; Uncomment the following widget to add a search bar &ndash;&gt;
                 <ais-search-box placeholder="Search" ></ais-search-box>
               </div>
               <div id="stats">
-                <!-- Uncomment the following widget to add search stats -->
+                &lt;!&ndash; Uncomment the following widget to add search stats &ndash;&gt;
                 <ais-stats>
                   <ng-template let-state="state">
                     <div *ngIf="state.nbHits > 0">
@@ -69,21 +70,90 @@
               </ais-hits>
             </div>
             <div id="pagination">
-              <!-- Uncomment the following widget to add pagination -->
+              &lt;!&ndash; Uncomment the following widget to add pagination &ndash;&gt;
               <ais-pagination></ais-pagination>
             </div>
           </div>
-          <!--<div class="left-panel">
+          &lt;!&ndash;<div class="left-panel">
             <div id="categories">
                &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
                <ais-panel header="Categories">
                 <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
               </ais-panel>
             </div>
-          </div>-->
+          </div>&ndash;&gt;
         </main>
       </ais-instantsearch>
     </div>
   </div>
 </div>
+-->
+<script>
+  const aa = require('search-insights');
 
+
+  aa('init', {
+    appId: 'AD2K8AK74A',
+    apiKey: '589f047ba9ac7fa58796f394427d7f35',
+  });
+
+  let userToken = '';
+  window.aa('getUserToken', null, (err, algoliaUserToken) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    userToken = algoliaUserToken;
+  });
+  aa('clickedObjectIDs', {
+    userToken: userToken,
+    // ...
+  });
+</script>
+
+<div class="ais-InstantSearch">
+  <h1>Angular InstantSearch e-commerce demo</h1>
+  <ais-instantsearch [config]="config">
+    <ais-pagination></ais-pagination>
+    <div class="left-panel">
+      <ais-configure [searchParameters]="{ hitsPerPage: 10 , clickAnalytics: true }"></ais-configure>
+    </div>
+    <div class="right-panel">
+      <ais-search-box></ais-search-box>
+      <ais-hits>
+        <ng-template let-hits="hits" let-results="results" let-insights="insights">
+          <div *ngIf="hits.length === 0">
+            No results found for
+            <strong>{{results.query}}</strong>.
+          </div>
+          <div class="ais-Hits-list">
+            <div class="ais-Hits-item" *ngFor="let hit of hits">
+              <article >
+                <div class="post-content">
+                  <div class="post-date">
+                    {{hit.data.course}}
+                    <br>
+                    {{hit.data.institution}}
+                  </div>
+                  <h2 class="entry-title">
+                    {{hit.data.title}}
+                  </h2>
+                  <div class="post-excerpt" >
+                    {{hit.data.description}}
+                    <br>
+                    <br>
+                    {{hit.data.author}}
+                    <mat-button-toggle  (click)="$event.preventDefault();
+                    insights('clickedObjectIDsAfterSearch', { eventName: 'Product Clicked', objectIDs: [hit.objectID] })">Decline</mat-button-toggle>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </ng-template>
+      </ais-hits>
+
+    </div>
+  </ais-instantsearch>
+</div>
