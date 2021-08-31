@@ -34,6 +34,7 @@ export class NotificationsComponent implements OnInit {
 			this.notificationService
 				.getUserNotifications(this.user.uid)
 				.subscribe((notifications) => {
+					console.log(notifications);
 					this.notifications = notifications;
 
 					this.isCompleted = true;
@@ -49,11 +50,7 @@ export class NotificationsComponent implements OnInit {
 				profileUrl: this.user.profilePic,
 				notebookId,
 			})
-			.subscribe((res) => {
-				console.log(res);
-			});
-		// this.notificationService.updateRead(id);
-		// this.noteMoreService.addCollaborator(notebookID);
+			.subscribe();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,8 +58,11 @@ export class NotificationsComponent implements OnInit {
 		// this.notificationService.updateRead(id);
 	}
 
-	markAsRead(notificationID: string, index: number) {
-		this.notifications[index].opened = true;
-		// this.notificationService.updateRead(notificationID);
+	markAsRead(index: number, notificationId: string, isRead: boolean) {
+		if (!isRead) {
+			this.notifications[index].opened = true;
+
+			this.notificationService.updateRead(notificationId).subscribe();
+		}
 	}
 }

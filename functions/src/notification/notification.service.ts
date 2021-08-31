@@ -357,12 +357,12 @@ export class NotificationService {
 		}
 	}
 
-	async updateRead(notificationId: string): Promise<Response> {
+	async updateRead(notificationId: any): Promise<Response> {
 		try {
 			return await admin
 				.firestore()
 				.collection('notifications')
-				.doc(notificationId)
+				.doc(notificationId.notificationId)
 				.update({
 					opened: true,
 				})

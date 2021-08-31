@@ -24,9 +24,12 @@ import {
 } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
+import {
+	NoteInfoComponent,
+	SmartAssistModalComponent,
+	ViewProfileComponent,
+} from '@app/components';
 
-import { ViewProfileComponent } from '@app/components';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -181,11 +184,13 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.noteTitle = noteInfo.title;
 				this.noteId = noteInfo.noteId;
 				this.notebookID = noteInfo.notebookId;
+				this.notebookTitle = noteInfo.notebookTitle;
 
 				this.loadEditor(
 					noteInfo.notebookId,
 					noteInfo.noteId,
-					noteInfo.title
+					noteInfo.title,
+					noteInfo.notebookTitle
 				);
 			}
 		});
@@ -196,7 +201,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	getNotebook(notebookId: string): void {
-		// console.log('----------------');
 		this.notebookOperations
 			.getNotebookInfo(notebookId)
 			.subscribe((data) => {
@@ -207,7 +211,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.creator = data.creator;
 				this.private = data.notebook.private;
 				this.opened = true;
-
+				this.notebookID = notebookId;
 				this.doneLoading = true;
 			});
 	}
@@ -217,8 +221,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
+	 * @param notebookTitle
 	 */
-	async loadEditor(notebookId: string, noteId: string, title: string) {
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		this.notebookTitle = notebookTitle;
+
 		this.noteTitle = title;
 
 		this.doneLoading = false;
@@ -568,11 +580,10 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	addCollaborator() {
-		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.notebookOperations
 			.requestCollaborator(
 				this.user.uid,
-				this.notebookID,
+				this.notebook.notebookId,
 				this.notebookTitle
 			)
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars

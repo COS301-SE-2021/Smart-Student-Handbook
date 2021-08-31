@@ -40,7 +40,7 @@ export class NoteOperationsService {
 	/**
 	 * Create a new notebook
 	 */
-	createNewNote(notebookId: string): Observable<any> {
+	createNewNote(notebookId: string, notebookTitle: string): Observable<any> {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -87,6 +87,7 @@ export class NoteOperationsService {
 								name: request.name,
 								description: request.description,
 								noteId: data.noteId,
+								notebookTitle,
 							};
 
 							observer.next({
