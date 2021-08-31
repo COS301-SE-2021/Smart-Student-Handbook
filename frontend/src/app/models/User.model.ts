@@ -9,7 +9,7 @@ export interface User {
 	program?: string;
 	workStatus?: string;
 	bio?: string;
-	profilePicUrl?: string;
+	profilePic?: string;
 	dateJoined: DateJoined;
 }
 

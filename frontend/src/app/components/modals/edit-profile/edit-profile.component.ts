@@ -49,6 +49,8 @@ export class EditProfileComponent implements OnInit {
 
 	user: any;
 
+	doneLoading: boolean = true;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
@@ -58,7 +60,9 @@ export class EditProfileComponent implements OnInit {
 	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
-		if (data.dateJoined) {
+		if (data) {
+			this.imgFilePath = data.profilePic;
+
 			// eslint-disable-next-line no-underscore-dangle
 			// @ts-ignore
 			// eslint-disable-next-line no-underscore-dangle
@@ -75,6 +79,8 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.doneLoading = true;
+
 		this.filteredOptions = this.myControl.valueChanges.pipe(
 			startWith(''),
 			map((value) => this.filter(value))
@@ -94,10 +100,7 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const progressbar = document.getElementById(
-			'progressbar'
-		) as HTMLElement;
-		if (progressbar) progressbar.style.display = 'block';
+		this.doneLoading = false;
 		this.isDisabled = true;
 		this.updatedFailed = false;
 
@@ -111,7 +114,7 @@ export class EditProfileComponent implements OnInit {
 					this.data.program,
 					this.data.workStatus,
 					this.data.bio,
-					this.data.profilePicUrl
+					this.data.profilePic
 				)
 				.subscribe(
 					(res: any) => {
@@ -121,10 +124,11 @@ export class EditProfileComponent implements OnInit {
 							this.errorMessage = res.message;
 							this.updatedFailed = true;
 						}
-						if (progressbar) progressbar.style.display = 'none';
+						this.doneLoading = true;
 						this.isDisabled = false;
 					},
 					(err) => {
+						this.doneLoading = true;
 						console.log(`Error: ${err.error.message}`);
 					}
 				);
@@ -132,6 +136,8 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	deleteAccount(): void {
+		this.doneLoading = false;
+
 		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
 			data: {
 				message:
@@ -152,16 +158,19 @@ export class EditProfileComponent implements OnInit {
 							},
 						});
 						confirm.afterClosed().subscribe(() => {
+							this.doneLoading = true;
 							this.dialogRef.close();
 							this.router.navigate(['account/login']);
 						});
+						this.doneLoading = true;
 					},
 					(error) => {
+						this.doneLoading = true;
 						this.errorMessage = error.message;
 						this.updatedFailed = true;
 					}
 				);
-			}
+			} else this.doneLoading = true;
 		});
 	}
 

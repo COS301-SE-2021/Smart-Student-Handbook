@@ -1,5 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
+import { NotebookObservablesService, NotebookService } from '@app/services';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+	AddNoteComponent,
+	ExploreNoteListBottomsheetComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
+	RateNotebookComponent,
+} from '@app/components';
+import { MatDialog } from '@angular/material/dialog';
+import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -10,7 +24,7 @@ const searchClient = algoliasearch(
 	templateUrl: './explore.component.html',
 	styleUrls: ['./explore.component.scss'],
 })
-export class ExploreComponent implements OnInit {
+export class ExploreComponent {
 	config = {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
@@ -21,8 +35,69 @@ export class ExploreComponent implements OnInit {
 			hitsPerPage: 9,
 		},
 	};
-	// constructor() {}
 
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	hide: boolean = true;
+
+	hideNotes: boolean = true;
+
+	hideReviews: boolean = true;
+
+	title: string = '';
+
+	constructor(
+		private bottomSheet: MatBottomSheet,
+		private dialog: MatDialog,
+		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService
+	) {}
+
+	openNotes(hit: any) {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(ExploreNoteListBottomsheetComponent, {
+				data: {
+					title: hit.data.title,
+				},
+			});
+		} else if (window.innerWidth <= 991) {
+			this.dialog.open(ExploreNoteListComponent, {
+				data: {
+					title: hit.data.title,
+				},
+			});
+		} else {
+			this.hide = false;
+			this.hideNotes = false;
+			this.hideReviews = true;
+
+			this.title = hit.data.title;
+		}
+
+		this.exploreObservables.setOpenExploreNotebook(
+			hit.objectID,
+			hit.data.title,
+			true
+		);
+	}
+
+	closeNotes() {
+		this.hide = true;
+		this.hideNotes = true;
+		this.hideReviews = true;
+	}
+
+	openReviews(hit: any) {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(RateNotebookComponent);
+		} else if (window.innerWidth <= 991) {
+			this.dialog.open(RateNotebookComponent);
+		} else {
+			this.title = hit.data.title;
+
+			this.hideNotes = true;
+			this.hide = false;
+			this.hideReviews = false;
+		}
+
+		this.notebookObservables.setReviewNotebook(hit.objectID);
+	}
 }

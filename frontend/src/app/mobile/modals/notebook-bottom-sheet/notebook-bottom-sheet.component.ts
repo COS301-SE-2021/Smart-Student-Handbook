@@ -9,8 +9,8 @@ import { Collaborators } from '@app/components';
 import {
 	NotebookService,
 	ProfileService,
-	NotesService,
-	NoteMoreService,
+	NoteOperationsService,
+	NotebookOperationsService,
 } from '@app/services';
 
 export interface Tag {
@@ -50,26 +50,19 @@ export class NotebookBottomSheetComponent implements OnInit {
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-		private noteMore: NoteMoreService,
-		private notesService: NotesService,
-		private notebookService: NotebookService,
-		private profileService: ProfileService
+		private notebookOperations: NotebookOperationsService
 	) {}
 
 	ngOnInit(): void {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
+		this.user = this.data.user;
 		this.notebookId = this.data.notebookID;
 		this.noteId = this.data.noteId;
 		this.title = this.data.notebookTitle;
-
-		this.noteMore.getNotebookInfo(this.notebookId).subscribe((data) => {
-			this.date = data.date;
-			this.notebook = data.notebook;
-			this.tags = data.tags;
-			this.collaborators = data.collaborators;
-			this.creator = data.creator;
-		});
+		this.date = this.data.date;
+		this.notebook = this.data.notebook;
+		this.tags = this.data.tags;
+		this.collaborators = this.data.collaborators;
+		this.creator = this.data.creator;
 	}
 
 	/**
@@ -110,21 +103,23 @@ export class NotebookBottomSheetComponent implements OnInit {
 			tagList.push(this.tags[i].name);
 		}
 
-		this.noteMore.updateNotebook({
-			title: this.notebook.title,
-			author: this.notebook.author,
-			course: this.notebook.course,
-			description: this.notebook.description,
-			institution: this.notebook.institution,
-			creatorId: this.notebook.creatorId,
-			private: this.notebook.private,
-			tags: tagList,
-			notebookId: this.notebook.notebookId,
-		});
+		this.notebookOperations
+			.updateNotebookTags({
+				title: this.notebook.title,
+				author: this.notebook.author,
+				course: this.notebook.course,
+				description: this.notebook.description,
+				institution: this.notebook.institution,
+				creatorId: this.notebook.creatorId,
+				private: this.notebook.private,
+				tags: tagList,
+				notebookId: this.notebook.notebookId,
+			})
+			.subscribe(() => {});
 	}
 
 	addCollaborator() {
-		this.noteMore
+		this.notebookOperations
 			.requestCollaborator(this.user.uid, this.notebookId, '')
 			.subscribe(() => {
 				// collaborator: any
@@ -133,7 +128,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 	}
 
 	removeCollaborator(userId: string) {
-		this.noteMore
+		this.notebookOperations
 			.removeCollaborator(userId, this.notebookId)
 			.subscribe((id: string) => {
 				this.collaborators = this.collaborators.filter(

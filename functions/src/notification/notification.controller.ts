@@ -79,4 +79,9 @@ export class NotificationController {
 	async createNotification(@Body() createNotificationDto: CreateNotificationDto) {
 		return this.notificationService.createNotification(createNotificationDto);
 	}
+
+	@Post('updateRead/:notificationId')
+	async updateRead(@Param() notificationId: string) {
+		return this.notificationService.updateRead(notificationId);
+	}
 }

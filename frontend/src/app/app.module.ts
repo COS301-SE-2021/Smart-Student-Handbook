@@ -32,7 +32,6 @@ import {
 	NotebookComponent,
 	HomeComponent,
 	ExploreComponent,
-	RecentNotesComponent,
 	SharedWithMeComponent,
 	NotificationsComponent,
 } from '@app/features';
@@ -47,7 +46,11 @@ import {
 } from '@app/features/public';
 
 // Mobile
-import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
+import {
+	NotebookBottomSheetComponent,
+	NotesComponent,
+	SmartAssistBottomSheetComponent,
+} from '@app/mobile';
 
 // Components
 import {
@@ -63,12 +66,22 @@ import {
 	AddCollaboratorComponent,
 	MessageComponent,
 	AddNoteComponent,
+	ViewProfileComponent,
+	NoteCardsComponent,
+	ExploreNotesEditorComponent,
+	ExploreNoteListComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNoteListBottomsheetComponent,
+	NoteInfoComponent,
+	SmartAssistComponent,
+	SmartAssistModalComponent,
+	RateNotebookComponent,
 } from '@app/components';
 
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -93,7 +106,6 @@ import { AppRoutingModule } from './app-routing.module';
 		HomeComponent,
 		ExploreComponent,
 		P404Component,
-		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
 		HeaderComponent,
@@ -107,6 +119,17 @@ import { AppRoutingModule } from './app-routing.module';
 		AddCollaboratorComponent,
 		AddNoteComponent,
 		MessageComponent,
+		ViewProfileComponent,
+		NoteCardsComponent,
+		ExploreNotesEditorComponent,
+		ExploreNoteListComponent,
+		ExploreNotesEditorBottomSheetComponent,
+		ExploreNoteListBottomsheetComponent,
+		NoteInfoComponent,
+		SmartAssistComponent,
+		SmartAssistBottomSheetComponent,
+		SmartAssistModalComponent,
+		RateNotebookComponent,
 	],
 	imports: [
 		MaterialModule,

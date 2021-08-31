@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
 	NotebookEventEmitterService,
 	NotebookService,
-	NotesService,
+	NoteOperationsService,
 } from '@app/services';
 
 describe('NotesComponent', () => {
@@ -24,7 +24,7 @@ describe('NotesComponent', () => {
 			],
 			declarations: [NotesComponent],
 			providers: [
-				NotesService,
+				NoteOperationsService,
 				NotebookService,
 				NotebookEventEmitterService,
 			], // Some stubs used here

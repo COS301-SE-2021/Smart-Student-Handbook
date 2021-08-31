@@ -1,0 +1,34 @@
+#viewProfileProgressbar{
+  display: none;
+}
+
+#notebookList{
+  overflow: auto;
+}
+
+//---------------------------------------
+
+@mixin object-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+$circleSize: 100px;
+$radius: 100px;
+$shadow: 0 0 10px 0 rgba(255,255,255,.35);
+$fontColor: rgb(250,250,250);
+
+.profile-pic {
+
+  img {
+    position: absolute;
+    object-fit: cover;
+    width: $circleSize;
+    height: $circleSize;
+    box-shadow: $shadow;
+    border-radius: $radius;
+    z-index: 0;
+  }
+}
+

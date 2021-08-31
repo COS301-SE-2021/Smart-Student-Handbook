@@ -5,15 +5,13 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import {
-	NotebookEventEmitterService,
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NoteMoreService,
-	OpenNotebookPanelService,
 } from '@app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
-import { SharedWithMeService } from '@app/services/shared-with-me.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -66,11 +64,9 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
-		private noteMore: NoteMoreService,
-		private notebookData: NotebookDataService,
-		private sharedWithMeService: SharedWithMeService,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookOperations: NotebookOperationsService,
+		private exploreObservablesOperations: ExploreObservablesService,
+		private notebookObservables: NotebookObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -96,7 +92,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Get the logged in user's notebooks to add to the treeview
+	 * Get the logged in user's notebooks to add to the tree view
 	 */
 	getUserNotebooks() {
 		if (this.user)
@@ -153,7 +149,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 			(noteb) => noteb.notebookId === notebookId
 		);
 
-		this.noteMore
+		this.notebookOperations
 			.updateNotebook({
 				title: notebook[0].title,
 				author: notebook[0].author,
@@ -193,7 +189,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 					},
 				];
 				this.treeControl.expandAll();
-				this.notebookEventEmitterService.ChangePrivacy(val.private);
+				this.notebookObservables.setNotebookPrivacy(val.private);
 			});
 	}
 
@@ -203,29 +199,30 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	 */
 	openNotebookFolder(notebookId: string, notebookTitle: string) {
 		this.router.navigate(['notebook']).then(() => {
-			this.notebookData.setID(notebookId, notebookTitle);
 			this.openedNotebookId = notebookId;
 
-			const screenType = navigator.userAgent;
-			if (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-					screenType
-				)
-			) {
+			if (window.innerWidth <= 960) {
 				localStorage.setItem('notebookId', notebookId);
 
-				this.router.navigate(['notes']);
+				this.router.navigate(['notes']).then(() => {
+					this.exploreObservablesOperations.setOpenExploreNotebook(
+						notebookId,
+						notebookTitle,
+						false
+					);
+				});
 			} else {
-				this.openNotebookPanelService.toggleNotePanel(
+				this.notebookObservables.setOpenNotebook(
 					notebookId,
-					notebookTitle
+					notebookTitle,
+					false
 				);
 			}
 		});
 	}
 
 	ngAfterContentInit(): void {
-		this.sharedWithMeService.notebook.subscribe((val: any) => {
+		this.notebookObservables.sharedNotebook.subscribe((val: any) => {
 			if (val.id !== '') {
 				this.openedNotebookId = val.id;
 
