@@ -22,6 +22,10 @@ exports.updateUserIndex = functions.firestore.document('users/{uid}').onUpdate((
 	index.saveObject({ data, objectID });
 });
 
-exports.deleteUserIndex = functions.firestore
-	.document('users/{uid}')
-	.onDelete((snapshot) => index.deleteObject(snapshot.id));
+exports.deleteUserIndex = functions.firestore.document('users/{uid}').onDelete((snapshot) => {
+	const { id } = snapshot;
+	functions.logger.log('User Object ID: ', id);
+	functions.logger.log('User Object: ', snapshot);
+
+	index.deleteObject(id);
+});
