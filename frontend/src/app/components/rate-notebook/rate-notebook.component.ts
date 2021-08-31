@@ -53,7 +53,6 @@ export class RateNotebookComponent implements OnInit {
 
 			if (this.notebookId !== '') this.getReviews(this.notebookId);
 
-			console.log('ssssssssssss');
 			if (this.stepper) this.stepper.reset();
 		});
 
