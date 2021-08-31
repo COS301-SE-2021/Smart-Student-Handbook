@@ -234,7 +234,12 @@ class SmartAssistData:
         dataRaw = pd.read_csv(filename, low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
-        combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
+        newData = pd.DataFrame.from_dict(dataFrame)
+
+        if newData.noteId in dataRaw.noteId:
+            print(True, flush=True)
+
+        combined = pd.concat([dataRaw, newData])
         combined.to_csv(filename, index=False)
 
 

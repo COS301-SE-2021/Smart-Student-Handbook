@@ -58,13 +58,15 @@ def addData():
     global data
     global smartmodel
 
+    print(request.get_json(),flush=True)
+
     if request.method == 'POST':
         reqData = request.get_json()
 
-        if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
+        if set(['noteId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
-            tags = reqData['tags']
+            tags = [reqData['tags']]
             author = reqData['author']
             institution = reqData['institution']
             course = reqData['course']
@@ -97,7 +99,7 @@ def removeData():
         if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
-            tags = reqData['tags']
+            tags = [reqData['tags']]
             author = reqData['author']
             institution = reqData['institution']
             course = reqData['course']
@@ -129,7 +131,7 @@ def editData():
         if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
-            tags = reqData['tags']
+            tags = [reqData['tags']]
             author = reqData['author']
             institution = reqData['institution']
             course = reqData['course']
@@ -144,6 +146,7 @@ def editData():
             "institution": institution,
             "course": course
         }
+        print(note, flush=True)
         
         data.editData(note)
 
@@ -165,5 +168,5 @@ if __name__ == "__main__":
 
     app.app_context()
 
-    app.run(debug=True,host="0.0.0.0", port=int(os.environ.get("PORT", 6001)))
+    app.run(debug=True,host="localhost", port=int(os.environ.get("PORT", 6001)))
 
