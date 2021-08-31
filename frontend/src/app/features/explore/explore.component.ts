@@ -99,9 +99,69 @@ export class ExploreComponent {
 			objectIDs: [hit.objectID],
 		});
 
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
 			eventName: 'View object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebooks',
+			eventName: 'Check out',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebooks',
+			eventName: 'Check out',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebooks',
+			eventName: 'Check out',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebooks',
+			eventName: 'Check out',
 			objectIDs: [hit.objectID],
 		});
 	}
