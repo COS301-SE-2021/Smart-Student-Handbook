@@ -7,6 +7,7 @@ import numpy as np
 from numpy.core.fromnumeric import ptp
 import pandas as pd
 
+import os
 
 
 class SmartAssistModel():
@@ -121,8 +122,12 @@ class SmartAssistModel():
         else:
             embed_model = self.model.fit(dataX, dataY, batch_size = batch_size, epochs = epochs, steps_per_epoch = steps_per_epoch, validation_data=validationData, validation_freq=1, validation_batch_size=8, verbose = 2)
             
-        self.model.save('models/smartAssistModel.h5')
-        self.predict_model.save('models/smartAssistPredictModel.h5')
+        dirname = os.path.dirname(__file__)
+        filenameModel = os.path.join(dirname, 'models/smartAssistModel.h5')
+        filenamePredictModel = os.path.join(dirname, 'models/smartAssistPredictModel.h5')
+
+        self.model.save(filenameModel)
+        self.predict_model.save(filenamePredictModel)
         self.saveEmbeddingWeights()
 
 
@@ -131,9 +136,15 @@ class SmartAssistModel():
 
 
     def loadSmartModel(self):
-        self.model = load_model('models/smartAssistModel.h5')
-        self.predict_model = load_model('models/smartAssistPredictModel.h5')
-        with open("models/embeddingWeights.npy", 'rb') as f:
+        dirname = os.path.dirname(__file__)
+        filenameModel = os.path.join(dirname, 'models/smartAssistModel.h5')
+        filenamePredictModel = os.path.join(dirname, 'models/smartAssistPredictModel.h5')
+        filenameEmbeddingWeights = os.path.join(dirname, "models/embeddingWeights.npy")
+
+
+        self.model = load_model(filenameModel)
+        self.predict_model = load_model(filenamePredictModel)
+        with open(filenameEmbeddingWeights, 'rb') as f:
             self.weights = np.load(f)
 
 
@@ -203,5 +214,8 @@ class SmartAssistModel():
 
         self.weight = weight / np.linalg.norm(weight, axis = 1).reshape((-1, 1))
 
-        with open("models/embeddingWeights.npy", 'wb') as f:
+        dirname = os.path.dirname(__file__)
+        filenameEmbeddingWeights = os.path.join(dirname, "models/embeddingWeights.npy")
+
+        with open(filenameEmbeddingWeights, 'wb') as f:
             np.save(f, self.weight)

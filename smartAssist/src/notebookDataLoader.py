@@ -11,6 +11,9 @@ from keras.preprocessing.sequence import pad_sequences
 import warnings
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
 
+import os
+
+
 
 def count_items(l):
     counts = Counter(l)
@@ -24,7 +27,10 @@ class SmartAssistData:
         pass
 
     def loadData(self, count=5000):
-        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
 
         if dataRaw.shape[0] == 0:
             print("no items")
@@ -222,24 +228,33 @@ class SmartAssistData:
 
 
     def addData(self, dataFrame):
-        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
         combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
-        combined.to_csv("NotebookDataset/Notebooks.csv", index=False)
+        combined.to_csv(filename, index=False)
 
 
     def removeData(self, dataFrame):
-        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
         indices = dataRaw[dataRaw["noteId"] == dataFrame["noteId"]].index
         
         dataRaw.drop(index=indices,inplace=True)
-        dataRaw.to_csv("NotebookDataset/Notebooks.csv", index=False)
+        dataRaw.to_csv(filename, index=False)
 
     def editData(self, dataFrame):
-        dataRaw = pd.read_csv("NotebookDataset/Notebooks.csv", low_memory=True)
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
         indices = dataRaw[dataRaw["noteId"] == dataFrame["noteId"]].index
@@ -247,7 +262,7 @@ class SmartAssistData:
         dataRaw.drop(index=indices,inplace=True)
 
         combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
-        combined.to_csv("NotebookDataset/Notebooks.csv", index=False)
+        combined.to_csv(filename, index=False)
         
 
     def createSoup(self, name, tags, author, institution, course):
