@@ -23,6 +23,8 @@ def trainModel():
     global smartmodel
 
     smartmodel.train()
+    
+    return jsonify(success = True)
 
 @app.route("/getReccommendation", methods=['GET', 'POST'])
 def getRecommendation():
@@ -160,8 +162,6 @@ def editData():
 
 
 if __name__ == "__main__":
-
-    # data, smartmodel = get_data_smartmode()
 
     data.loadData(count=10000)
     smartmodel.loadSmartModel()

@@ -236,10 +236,10 @@ class SmartAssistData:
 
         newData = pd.DataFrame.from_dict(dataFrame)
 
-        if newData.noteId in dataRaw.noteId:
-            print(True, flush=True)
-
         combined = pd.concat([dataRaw, newData])
+
+        combined = combined.drop_duplicates(subset=["noteId"])
+
         combined.to_csv(filename, index=False)
 
 

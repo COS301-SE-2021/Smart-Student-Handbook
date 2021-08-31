@@ -7,39 +7,41 @@ data = SmartAssistData()
 
 data.loadData(count=10000)
 
-data.generateFinalData(n_positive=5000)
+# data.generateFinalData(n_positive=5000)
 
-data.generateTrainTestData()
+# data.generateTrainTestData()
 
 smartmodel = SmartAssistModel(data=data)
 
-xtrain = {
-    'data': np.asarray(data.finalSetXTrain[:,0]).astype('float32'), 
-    'name': np.asarray(data.finalSetXTrain[:,1]).astype('float32'), 
-    'tags': np.asarray(data.finalSetXTrain[:,2]).astype('float32'), 
-    'author': np.asarray(data.finalSetXTrain[:,3]).astype('float32'), 
-    'institution': np.asarray(data.finalSetXTrain[:,4]).astype('float32'),
-    'course': np.asarray(data.finalSetXTrain[:,5]).astype('float32'),
-    'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
-    }
+# xtrain = {
+#     'data': np.asarray(data.finalSetXTrain[:,0]).astype('float32'), 
+#     'name': np.asarray(data.finalSetXTrain[:,1]).astype('float32'), 
+#     'tags': np.asarray(data.finalSetXTrain[:,2]).astype('float32'), 
+#     'author': np.asarray(data.finalSetXTrain[:,3]).astype('float32'), 
+#     'institution': np.asarray(data.finalSetXTrain[:,4]).astype('float32'),
+#     'course': np.asarray(data.finalSetXTrain[:,5]).astype('float32'),
+#     'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
+#     }
 
-ytrain = data.finalSetYTrain
+# ytrain = data.finalSetYTrain
 
-xtest = {
-    'data': np.asarray(data.finalSetXTest[:,0]).astype('float32'), 
-    'name': np.asarray(data.finalSetXTest[:,1]).astype('float32'), 
-    'tags': np.asarray(data.finalSetXTest[:,2]).astype('float32'), 
-    'author': np.asarray(data.finalSetXTest[:,3]).astype('float32'), 
-    'institution': np.asarray(data.finalSetXTest[:,4]).astype('float32'),
-    'course': np.asarray(data.finalSetXTest[:,5]).astype('float32'),
-    'soup': np.asarray(data.finalSetXTest[:,6].tolist()).astype('float32')
-    }
+# xtest = {
+#     'data': np.asarray(data.finalSetXTest[:,0]).astype('float32'), 
+#     'name': np.asarray(data.finalSetXTest[:,1]).astype('float32'), 
+#     'tags': np.asarray(data.finalSetXTest[:,2]).astype('float32'), 
+#     'author': np.asarray(data.finalSetXTest[:,3]).astype('float32'), 
+#     'institution': np.asarray(data.finalSetXTest[:,4]).astype('float32'),
+#     'course': np.asarray(data.finalSetXTest[:,5]).astype('float32'),
+#     'soup': np.asarray(data.finalSetXTest[:,6].tolist()).astype('float32')
+#     }
 
-ytest = data.finalSetYTest
+# ytest = data.finalSetYTest
+
+smartmodel.train()
 
 # smartmodel.buildModel()
 
-# smartmodel.loadSmartModel()
+# # smartmodel.loadSmartModel()
 
 # smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
 # smartmodel.evaluteModel(dataX= xtest, dataY= ytest)

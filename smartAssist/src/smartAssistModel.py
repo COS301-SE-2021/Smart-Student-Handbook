@@ -83,7 +83,7 @@ class SmartAssistModel():
         return self.model
 
     
-    def train(self, n_positive=5000):
+    def train(self, n_positive=500):
         self.data.generateFinalData(n_positive=n_positive)
         self.data.generateTrainTestData()
 
@@ -112,8 +112,10 @@ class SmartAssistModel():
         ytest = self.data.finalSetYTest
 
         self.loadSmartModel()
-        self.trainModel(dataX=xtrain, dataY=ytrain, validationData=())
+        self.trainModel(dataX=xtrain, dataY=ytrain, validationData=(), batch_size = 32, epochs = 8, steps_per_epoch = 8)
         self.evaluteModel(dataX=xtest, dataY=ytest)
+
+        return
 
 
     def trainModel(self, dataX, dataY, validationData, batch_size = 64, epochs = 16, steps_per_epoch = 8):
