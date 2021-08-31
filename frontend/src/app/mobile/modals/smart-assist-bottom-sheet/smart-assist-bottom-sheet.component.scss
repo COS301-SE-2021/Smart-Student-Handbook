@@ -1,0 +1,11 @@
+@import "src/app/components/panels/smart-assist-panel/smart-assist-panel.component";
+@import "src/app/components/modals/note-info/note-info.component";
+
+.smartAssistBottomSheet{
+  max-height: 60vh;
+}
+
+h2{
+  font-weight: 500;
+  font-size: large;
+}

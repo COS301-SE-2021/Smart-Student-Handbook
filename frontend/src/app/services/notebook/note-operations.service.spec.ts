@@ -4,10 +4,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NotebookService } from '@app/services/notebook.service';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NotesService } from './notes.service';
+import { NoteOperationsService } from './note-operations.service';
 
 describe('NotesService', () => {
-	let service: NotesService;
+	let service: NoteOperationsService;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('NotesService', () => {
 			declarations: [],
 			providers: [NotebookService],
 		});
-		service = TestBed.inject(NotesService);
+		service = TestBed.inject(NoteOperationsService);
 	});
 
 	it('should be created', () => {

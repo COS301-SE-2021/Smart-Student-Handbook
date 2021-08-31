@@ -1,8 +1,9 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <mat-list role="list" id="list">
+      <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin-top: 20px;"></mat-progress-bar>
 
+      <mat-list role="list" id="list">
 
         <mat-list-item *ngFor="let notification of notifications; let i = index" class="notificationListItem"
                        [ngStyle]="{'background-color': (notification.opened===true) ? '#e5e5e5' : '#f6f6f6',

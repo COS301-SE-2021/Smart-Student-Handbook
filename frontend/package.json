@@ -27,7 +27,7 @@
     "@angular/platform-browser-dynamic": "~12.0.2",
     "@angular/router": "~12.0.2",
     "@angular/service-worker": "~12.0.2",
-    "@briebug/jest-schematic": "^3.1.0",
+    "@briebug/jest-schematic": "^2.1.1",
     "@editorjs/editorjs": "^2.22.0",
     "@editorjs/list": "^1.6.2",
     "@editorjs/nested-list": "^1.0.1",

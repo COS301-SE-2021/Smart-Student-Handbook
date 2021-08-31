@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { NotebookDto } from '@app/models';
 import { NoteDto } from '@app/models/notebook/NoteDto.model';
 import { CheckAccessDto } from '@app/models/notebook/CheckAccessDto.model';
+import { map } from 'rxjs/operators';
 import { ReviewDto } from '../../../../functions/src/notebook/dto/review.dto';
 import { AccessDto } from '../../../../functions/src/notebook/dto/access.dto';
 

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	NotebookObservablesService,
 	NotebookService,
-	NoteMoreService,
 	NotificationService,
 } from '@app/services';
 // import { Observable } from 'rxjs';
-import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-notifications',
@@ -17,18 +16,18 @@ export class NotificationsComponent implements OnInit {
 
 	user: any;
 
+	isCompleted: boolean = true;
+
 	constructor(
 		private notificationService: NotificationService,
-		private noteMoreService: NoteMoreService,
 		private notebookService: NotebookService,
-		private sharedWithMeService: SharedWithMeService
+		private notebookObservables: NotebookObservablesService
 	) {}
-
-	/* notificationList: Observable<any[]> =
-		this.notificationService.getUserNotifications(); */
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
+		this.isCompleted = false;
+
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		if (this.user)
@@ -36,11 +35,13 @@ export class NotificationsComponent implements OnInit {
 				.getUserNotifications(this.user.uid)
 				.subscribe((notifications) => {
 					this.notifications = notifications;
+
+					this.isCompleted = true;
 				});
 	}
 
 	accept(userId: string, notebookId: string, notebookTitle: string) {
-		this.sharedWithMeService.setNotebook(notebookId, notebookTitle);
+		this.notebookObservables.setNotebook(notebookId, notebookTitle);
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,
