@@ -15,6 +15,14 @@ import { ExploreNoteListComponent } from '@app/components/modals/explore-note-li
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
+// algolia events sender
+const aa = require('search-insights');
+
+aa('init', {
+	appId: 'AD2K8AK74A',
+	apiKey: '589f047ba9ac7fa58796f394427d7f35',
+});
+
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
 	'589f047ba9ac7fa58796f394427d7f35'
@@ -29,8 +37,10 @@ export class ExploreComponent {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
 		indexName: 'userNotebooks',
+		clickAnalytics: true,
 		routing: true,
 		searchClient,
+		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
 		},
@@ -43,6 +53,8 @@ export class ExploreComponent {
 	hideReviews: boolean = true;
 
 	title: string = '';
+
+	user: any = JSON.parse(<string>localStorage.getItem('user'));
 
 	constructor(
 		private bottomSheet: MatBottomSheet,
@@ -77,6 +89,21 @@ export class ExploreComponent {
 			hit.data.title,
 			true
 		);
+
+		// event send when user clicks object
+		aa('setUserToken', this.user.uid);
+
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			objectIDs: [hit.objectID],
+		});
 	}
 
 	closeNotes() {
