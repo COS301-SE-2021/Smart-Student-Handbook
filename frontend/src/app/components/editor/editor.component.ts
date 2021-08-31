@@ -332,7 +332,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		await this.Editor.isReady;
 
-		let e = document.getElementById('editor') as HTMLElement;
+		const e = document.getElementById('editor') as HTMLElement;
 		e.style.overflowY = 'none';
 		e.style.display = 'block';
 		e.style.backgroundImage = 'none';
@@ -342,9 +342,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		editor.clear();
 
-		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
+		this.noteId = noteId;
 
+		console.log(noteId);
+
+		// Change the path to the correct notebook's path
+		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
+		// dbRefObject.once('value', (res) => {
+		// 	console.log(res.val());
+		// });
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
 		 */
@@ -353,7 +359,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notebook/${noteId}`)
+						.ref(`notebook/${this.noteId}`)
 						.set({
 							outputData: {
 								blocks: [
@@ -378,11 +384,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
-
-				e = document.getElementById('editor') as HTMLElement;
-				e.style.overflowY = 'scroll';
-
-				// if (progressbar) progressbar.style.display = 'none';
 			});
 	}
 

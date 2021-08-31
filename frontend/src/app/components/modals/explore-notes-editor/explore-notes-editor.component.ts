@@ -121,7 +121,6 @@ export class ExploreNotesEditorComponent implements OnInit {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			// const editor = new EditorJS({
 			this.Editor = new EditorJS({
 				holder: 'exploreEditor',
 				tools: {
@@ -231,6 +230,5 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 				this.isCompleted = true;
 			});
-		// });
 	}
 }
