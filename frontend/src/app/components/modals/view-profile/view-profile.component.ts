@@ -7,7 +7,7 @@ import {
 import { AccountService, NotebookService, ProfileService } from '@app/services';
 import { Router } from '@angular/router';
 import { ExploreNoteListComponent } from '@app/components';
-import { ExploreObservablesService } from '@app/services/notebook/explore-observables.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-view-profile',
