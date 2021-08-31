@@ -224,7 +224,6 @@ export class ExploreNotesEditorComponent implements OnInit {
 				 * Render output on Editor
 				 */
 				dbRefObject.once('value', (snap) => {
-					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
 

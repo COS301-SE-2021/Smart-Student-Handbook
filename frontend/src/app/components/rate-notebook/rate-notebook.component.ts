@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotebookObservablesService, NotebookService } from '@app/services';
-import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
 	selector: 'app-rate-notebook',
@@ -35,10 +35,12 @@ export class RateNotebookComponent implements OnInit {
 
 	array = [];
 
+	@ViewChild('stepper') stepper: MatStepper;
+
 	constructor(
 		private formBuilder: FormBuilder,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService // private bottomSheetRef: MatBottomSheetRef<RateNotebookComponent>
+		private notebookObservables: NotebookObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -50,6 +52,9 @@ export class RateNotebookComponent implements OnInit {
 			this.notebookId = id.id;
 
 			if (this.notebookId !== '') this.getReviews(this.notebookId);
+
+			console.log('ssssssssssss');
+			if (this.stepper) this.stepper.reset();
 		});
 
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
