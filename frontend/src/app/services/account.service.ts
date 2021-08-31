@@ -108,6 +108,10 @@ export class AccountService {
 				map((user: any) => {
 					if (user.success) {
 						localStorage.setItem('loginState', 'true');
+						localStorage.setItem(
+							'authToken',
+							JSON.stringify(user.authToken)
+						);
 						localStorage.setItem('user', JSON.stringify(user.user));
 						this.isUserLoggedIn.next(true);
 					} else {

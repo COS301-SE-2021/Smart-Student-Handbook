@@ -9,7 +9,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { AsyncPipe } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -21,6 +21,7 @@ import {
 	HeaderComponent,
 	SecureLayoutComponent,
 	PublicLayoutComponent,
+	InterceptorInterceptor,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -142,6 +143,11 @@ import { AppRoutingModule } from './app-routing.module';
 		LeftMenuComponent,
 		MaterialModule,
 		NotebookEventEmitterService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: InterceptorInterceptor,
+			multi: true,
+		},
 	],
 	bootstrap: [AppComponent],
 })
