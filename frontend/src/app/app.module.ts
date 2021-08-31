@@ -165,7 +165,6 @@ import { AppRoutingModule } from './app-routing.module';
 		AsyncPipe,
 		LeftMenuComponent,
 		MaterialModule,
-		NotebookEventEmitterService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: InterceptorInterceptor,

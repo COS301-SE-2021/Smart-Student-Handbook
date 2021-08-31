@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Post, Headers, Param } from '@nestjs/common';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
