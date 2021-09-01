@@ -649,7 +649,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		}
 	}
 
-	viewUserProfile(uid: any) {
+	viewUserProfile(uid: any, displayName: string) {
 		let screenWidth = '';
 		const screenType = navigator.userAgent;
 		if (
@@ -667,6 +667,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			width: screenWidth,
 			data: {
 				uid,
+				displayName,
 			},
 		});
 	}

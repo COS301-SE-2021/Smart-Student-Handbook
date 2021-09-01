@@ -11,7 +11,7 @@
     >
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
-    <div style="height: 110%;" (click)="openNote(note.noteId, note.name)">
+    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name)">
       <h3 class="title">{{ note.name }}</h3>
 
       <label class="description" fxHide.gt-xs>{{ note.description.substring(0, 50).substring(0, note.description.substring(0, 50).lastIndexOf(" ")) + "..." }}</label>
@@ -26,7 +26,7 @@
 
   </mat-card>
 
-  <mat-card class="note" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
+  <mat-card class="note pointerCursor" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
     <div>
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>
