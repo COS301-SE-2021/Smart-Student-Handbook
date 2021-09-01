@@ -63,7 +63,7 @@ export class NotebookController {
 	@Post('addNotebookReview')
 	async addNotebookReview(@Body() reviewDto: ReviewDto, @Headers() headers): Promise<Response> {
 		const userId: string = await this.authService.verifyUser(headers.token);
-		return this.notebookService.addNotebookReview(reviewDto, userId);
+		return this.notebookService.addNotebookReview(reviewDto);
 	}
 
 	@Get('getNotebookReviews/:notebookId')
