@@ -194,6 +194,7 @@ export class NotificationService {
 						notebookID: createNotificationDto.notebookID,
 						notebookTitle: createNotificationDto.notebookTitle,
 						opened: false,
+						notificationId,
 					})
 					.then(() => ({
 						message: 'Successfully created notification',
@@ -214,6 +215,7 @@ export class NotificationService {
 					heading: createNotificationDto.heading,
 					notebookTitle: createNotificationDto.notebookTitle,
 					opened: false,
+					notificationId,
 				})
 				.then(() => ({
 					message: 'Successfully created notification',
@@ -240,25 +242,25 @@ export class NotificationService {
 	}
 
 	async getUserNotifications(userId: string): Promise<Notification[]> {
-		const userID: string = userId; // await this.getUserId();
-		const notificationIds: string[] = [];
+		// const userID: string = userId; // await this.getUserId();
+		// const notificationIds: string[] = [];
 		const notifications = [];
 
 		try {
-			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
-			// eslint-disable-next-line @typescript-eslint/no-shadow
-			notificationsIdSnapshot.forEach((doc) => {
-				if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
-			});
-
-			if (notificationIds.length === 0) {
-				return notifications;
-			}
+			// const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
+			// // eslint-disable-next-line @typescript-eslint/no-shadow
+			// notificationsIdSnapshot.forEach((doc) => {
+			// 	if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
+			// });
+			//
+			// if (notificationIds.length === 0) {
+			// 	return notifications;
+			// }
 
 			const notificationsSnapshot = await admin
 				.firestore()
 				.collection('notifications')
-				.where('userID', 'in', notificationIds)
+				.where('userID', '==', userId)
 				.get();
 
 			// const i = 0;
@@ -274,6 +276,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notebookID: doc.data().notebookID,
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				} else {
 					notifications.push({
@@ -284,6 +287,7 @@ export class NotificationService {
 						heading: doc.data().heading,
 						opened: doc.data().opened,
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				}
 			});
@@ -330,6 +334,7 @@ export class NotificationService {
 						notebookID: doc.data().notebookID,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				} else {
 					notifications.push({
@@ -341,6 +346,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				}
 			});
@@ -351,12 +357,12 @@ export class NotificationService {
 		}
 	}
 
-	async updateRead(notificationId: string): Promise<Response> {
+	async updateRead(notificationId: any): Promise<Response> {
 		try {
 			return await admin
 				.firestore()
 				.collection('notifications')
-				.doc(notificationId)
+				.doc(notificationId.notificationId)
 				.update({
 					opened: true,
 				})

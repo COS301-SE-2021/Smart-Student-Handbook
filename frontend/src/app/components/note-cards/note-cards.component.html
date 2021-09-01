@@ -11,9 +11,12 @@
     >
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
-    <div class="pointerCursor" (click)="openNote(note.noteId, note.name)">
+    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name)">
       <h3 class="title">{{ note.name }}</h3>
-      <h4 class="description">{{ note.description }}</h4>
+
+      <label class="description" fxHide.gt-xs>{{ note.description.substring(0, 50).substring(0, note.description.substring(0, 50).lastIndexOf(" ")) + "..." }}</label>
+      <label class="description" fxHide.gt-sm fxHide.lt-sm>{{ note.description.substring(0, 100).substring(0, note.description.substring(0, 100).lastIndexOf(" ")) + "..." }}</label>
+      <label class="description" fxHide.lt-md>{{ note.description.substring(0, 200).substring(0, note.description.substring(0, 200).lastIndexOf(" ")) + "..." }}</label>
 
       <div
         class="bottomColor"
