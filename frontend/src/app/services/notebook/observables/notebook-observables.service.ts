@@ -55,6 +55,7 @@ export class NotebookObservablesService {
 			notebookId: '',
 			noteId: '',
 			title: '',
+			notebookTitle: '',
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
@@ -117,19 +118,19 @@ export class NotebookObservablesService {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
-	 * @param readonly
+	 * @param notebookTitle
 	 */
 	setLoadEditor(
 		notebookId: string,
 		noteId: string,
 		title: string,
-		readonly: boolean
+		notebookTitle: string
 	) {
 		this.loadEditor.next({
 			notebookId,
 			noteId,
 			title,
-			readonly,
+			notebookTitle,
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();

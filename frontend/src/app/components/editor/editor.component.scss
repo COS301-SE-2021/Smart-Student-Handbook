@@ -11,6 +11,8 @@
   #editorContainer{
     height: calc(100vh - 58px) !important;
     box-shadow: none !important;
+    min-width: 80vw;
+    max-width: 100vw;
 
     #editor{
       height: calc(100vh - 100px);
@@ -42,6 +44,7 @@
   text-align: left;
   //height: calc(100vh - 70px);
   height: 100vh;
+  width: auto;
   overflow: hidden;
 }
 

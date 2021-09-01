@@ -120,11 +120,12 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 	addCollaborator() {
 		this.notebookOperations
-			.requestCollaborator(this.user.uid, this.notebookId, '')
-			.subscribe(() => {
-				// collaborator: any
-				// this.collaborators.push(collaborator);
-			});
+			.requestCollaborator(
+				this.user.uid,
+				this.notebookId,
+				this.notebook.title
+			)
+			.subscribe();
 	}
 
 	removeCollaborator(userId: string) {

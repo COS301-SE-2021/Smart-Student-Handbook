@@ -24,9 +24,12 @@ import {
 } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
+import {
+	NoteInfoComponent,
+	SmartAssistModalComponent,
+	ViewProfileComponent,
+} from '@app/components';
 
-import { ViewProfileComponent } from '@app/components';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -181,11 +184,13 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.noteTitle = noteInfo.title;
 				this.noteId = noteInfo.noteId;
 				this.notebookID = noteInfo.notebookId;
+				this.notebookTitle = noteInfo.notebookTitle;
 
 				this.loadEditor(
 					noteInfo.notebookId,
 					noteInfo.noteId,
-					noteInfo.title
+					noteInfo.title,
+					noteInfo.notebookTitle
 				);
 			}
 		});
@@ -196,7 +201,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	getNotebook(notebookId: string): void {
-		// console.log('----------------');
 		this.notebookOperations
 			.getNotebookInfo(notebookId)
 			.subscribe((data) => {
@@ -207,7 +211,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.creator = data.creator;
 				this.private = data.notebook.private;
 				this.opened = true;
-
+				this.notebookID = notebookId;
 				this.doneLoading = true;
 			});
 	}
@@ -217,8 +221,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
+	 * @param notebookTitle
 	 */
-	async loadEditor(notebookId: string, noteId: string, title: string) {
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		this.notebookTitle = notebookTitle;
+
 		this.noteTitle = title;
 
 		this.doneLoading = false;
@@ -320,7 +332,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		await this.Editor.isReady;
 
-		let e = document.getElementById('editor') as HTMLElement;
+		const e = document.getElementById('editor') as HTMLElement;
 		e.style.overflowY = 'none';
 		e.style.display = 'block';
 		e.style.backgroundImage = 'none';
@@ -330,9 +342,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		editor.clear();
 
-		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
+		this.noteId = noteId;
 
+		console.log(noteId);
+
+		// Change the path to the correct notebook's path
+		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
+		// dbRefObject.once('value', (res) => {
+		// 	console.log(res.val());
+		// });
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
 		 */
@@ -341,7 +359,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notebook/${noteId}`)
+						.ref(`notebook/${this.noteId}`)
 						.set({
 							outputData: {
 								blocks: [
@@ -366,11 +384,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
-
-				e = document.getElementById('editor') as HTMLElement;
-				e.style.overflowY = 'scroll';
-
-				// if (progressbar) progressbar.style.display = 'none';
 			});
 	}
 
@@ -568,11 +581,10 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	addCollaborator() {
-		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.notebookOperations
 			.requestCollaborator(
 				this.user.uid,
-				this.notebookID,
+				this.notebook.notebookId,
 				this.notebookTitle
 			)
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars

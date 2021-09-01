@@ -121,7 +121,6 @@ export class ExploreNotesEditorComponent implements OnInit {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			// const editor = new EditorJS({
 			this.Editor = new EditorJS({
 				holder: 'exploreEditor',
 				tools: {
@@ -225,12 +224,10 @@ export class ExploreNotesEditorComponent implements OnInit {
 				 * Render output on Editor
 				 */
 				dbRefObject.once('value', (snap) => {
-					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
 
 				this.isCompleted = true;
 			});
-		// });
 	}
 }
