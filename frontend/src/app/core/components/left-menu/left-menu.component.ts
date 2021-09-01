@@ -129,7 +129,7 @@ export class LeftMenuComponent implements OnInit {
 	 */
 	async logout() {
 		if (this.user) {
-			this.accountService.singOut(this.user.uid).subscribe(
+			this.accountService.singOut().subscribe(
 				() => {
 					this.router.navigate(['account/login']);
 				},
