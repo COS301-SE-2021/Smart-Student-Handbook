@@ -87,9 +87,15 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		this.notePanelComponent.openNotebook = (
 			notebookId: string,
 			noteId: string,
-			title: string
+			title: string,
+			notebookTitle: string
 		) => {
-			this.editorComponent.loadEditor(notebookId, noteId, title);
+			this.editorComponent.loadEditor(
+				notebookId,
+				noteId,
+				title,
+				notebookTitle
+			);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {
@@ -107,7 +113,17 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(notebookId: string, noteId: string, title: string) {
-		await this.editorComponent.loadEditor(notebookId, noteId, title);
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string
+	) {
+		await this.editorComponent.loadEditor(
+			notebookId,
+			noteId,
+			title,
+			notebookTitle
+		);
 	}
 }

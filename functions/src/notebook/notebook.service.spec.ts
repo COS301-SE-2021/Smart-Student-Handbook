@@ -282,7 +282,7 @@ describe('NotebookIntegrationTests', () => {
 				userId,
 				profileUrl: 'Test Profile Url',
 			};
-			const result = await notebookService.addNotebookReview(review, userId);
+			const result = await notebookService.addNotebookReview(review);
 
 			expect(result.message).toBe('Successfully added a review!');
 		});

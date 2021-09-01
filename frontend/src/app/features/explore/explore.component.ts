@@ -1,17 +1,12 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
-import { NotebookObservablesService, NotebookService } from '@app/services';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { NotebookObservablesService } from '@app/services';
 import {
-	AddNoteComponent,
 	ExploreNoteListBottomsheetComponent,
-	ExploreNotesEditorBottomSheetComponent,
-	ExploreNotesEditorComponent,
+	ExploreNoteListComponent,
 	RateNotebookComponent,
 } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { ExploreNoteListComponent } from '@app/components/modals/explore-note-list/explore-note-list.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 

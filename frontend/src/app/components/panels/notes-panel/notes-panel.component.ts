@@ -211,7 +211,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 */
 	createNewNote() {
 		this.notesService
-			.createNewNote(this.notebookId)
+			.createNewNote(this.notebookId, this.notebookTitle)
 			.subscribe((newNote) => {
 				this.notes.push(newNote.notebook);
 

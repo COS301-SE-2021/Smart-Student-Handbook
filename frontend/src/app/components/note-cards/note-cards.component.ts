@@ -5,10 +5,12 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import { ExploreNotesEditorComponent } from '@app/components';
+import {
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ExploreNotesEditorBottomSheetComponent } from '@app/components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
@@ -45,6 +47,8 @@ export class NoteCardsComponent implements OnInit {
 
 	notebookId: string = '';
 
+	notebookTitle: string = '';
+
 	readonly: boolean = false;
 
 	isCompleted: boolean = false;
@@ -72,19 +76,10 @@ export class NoteCardsComponent implements OnInit {
 
 			if (notebook.notebookId !== '') {
 				this.notebookId = notebook.notebookId;
+				this.notebookTitle = notebook.title;
 				this.getUserNotebooks();
 			}
 		});
-
-		// this.notebookObservables.openNotebookId.subscribe((notebook) => {
-		// 	this.readonly = notebook.readonly;
-		// 	this.isCompleted = false;
-		//
-		// 	if (notebook.notebookId !== '') {
-		// 		this.notebookId = notebook.notebookId;
-		// 		this.getUserNotebooks();
-		// 	}
-		// });
 	}
 
 	/**
@@ -114,7 +109,7 @@ export class NoteCardsComponent implements OnInit {
 			this.notebookId,
 			noteId,
 			title,
-			this.readonly
+			this.notebookTitle
 		);
 	}
 

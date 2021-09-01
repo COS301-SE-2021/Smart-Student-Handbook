@@ -75,8 +75,8 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id)"></div>
-								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id)"
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"></div>
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"
 									>{{creator.name}}</mat-card-title
 								>
 							</mat-card-header>
@@ -99,7 +99,7 @@
 
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id)"></div>
+								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
 
                 <button class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
                   <mat-icon class="removeCollaboratorIcon">
@@ -108,19 +108,11 @@
                 </button>
 
 
-								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id)"
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"
 									>{{collaborator.name}}</mat-card-title
 								>
 							</mat-card-header>
 						</mat-card>
-					</td>
-				</tr>
-				<tr *ngIf="date !== ''">
-					<td class="noteInfo" headers="tableTitles">
-						<p>Last Updated:</p>
-					</td>
-					<td headers="tableContent">
-						<p>July 18, 2021 at 14:44</p>
 					</td>
 				</tr>
 				<tr *ngIf="opened">
