@@ -26,8 +26,9 @@ export class AccountController {
 	}
 
 	@Put('updateUser')
-	updateUser(@Body() updateDto: UpdateDto): Promise<Account> {
-		return this.accountService.updateUser(updateDto);
+	async updateUser(@Body() updateDto: UpdateDto, @Headers() headers): Promise<Account> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.updateUser(updateDto, userId);
 	}
 
 	@Post('signOut')
@@ -36,13 +37,15 @@ export class AccountController {
 	}
 
 	@Get('getCurrentUser')
-	getCurrentUser(): Promise<Account> {
-		return this.accountService.getCurrentUser();
+	async getCurrentUser(@Headers() headers): Promise<Account> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.getCurrentUser(userId);
 	}
 
 	@Delete('deleteUser')
-	deleteUser(): Promise<Response> {
-		return this.accountService.deleteUser();
+	async deleteUser(@Headers() headers): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.deleteUser(userId);
 	}
 
 	@Get('verifyEmail/:email/:local/:code')

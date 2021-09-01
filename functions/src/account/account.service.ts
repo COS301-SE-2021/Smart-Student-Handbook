@@ -149,20 +149,18 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(updateDto: UpdateDto): Promise<Account> {
-		let uid = '';
-
+	async updateUser(updateDto: UpdateDto, uid: string): Promise<Account> {
 		// Check if user is logged in
-		try {
-			uid = firebase.auth().currentUser.uid;
-		} catch (error) {
-			return {
-				success: false,
-				user: null,
-				message: 'User does not exist',
-				error: error.message,
-			};
-		}
+		// try {
+		// 	uid = firebase.auth().currentUser.uid;
+		// } catch (error) {
+		// 	return {
+		// 		success: false,
+		// 		user: null,
+		// 		message: 'User does not exist',
+		// 		error: error.message,
+		// 	};
+		// }
 
 		const userDetails = {
 			uid,
@@ -308,23 +306,27 @@ export class AccountService {
 	 */
 	async signOut(): Promise<Response> {
 		// SignOut user. If successful return success message else throw Bad Request exception
-		return firebase
-			.auth()
-			.signOut()
-			.then(() => ({
-				message: 'Successfully signed out.',
-			}))
-			.catch((error) => ({
-				message: `${error.message}`,
-			}));
+
+		// return firebase
+		// 	.auth()
+		// 	.signOut()
+		// 	.then(() => ({
+		// 		message: 'Successfully signed out.',
+		// 	}))
+		// 	.catch((error) => ({
+		// 		message: `${error.message}`,
+		// 	}));
+		return {
+			message: 'Successfully signed out.',
+		};
 	}
 
 	/**
 	 * GetCurrent user.
 	 */
-	async getCurrentUser(): Promise<Account> {
+	async getCurrentUser(userId: string): Promise<Account> {
 		try {
-			const user = firebase.auth().currentUser;
+			const user = await admin.auth().getUser(userId);
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
@@ -360,13 +362,9 @@ export class AccountService {
 	/**
 	 * DeleteUser user.
 	 */
-	async deleteUser(): Promise<Response> {
-		let uid = '';
-
+	async deleteUser(uid: string): Promise<Response> {
 		// Check if there is a current user else throw an exception
 		try {
-			uid = firebase.auth().currentUser.uid;
-
 			await this.userService.deleteUserProfile(uid);
 			// TODO delete all the users notebooks !!
 
@@ -712,13 +710,13 @@ export class AccountService {
 			}));
 	}
 
-	async getUserId(): Promise<string> {
-		try {
-			return firebase.auth().currentUser.uid;
-		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-		}
-	}
+	// async getUserId(): Promise<string> {
+	// 	try {
+	// 		return firebase.auth().currentUser.uid;
+	// 	} catch (error) {
+	// 		throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
+	// 	}
+	// }
 
 	async getUserNotificationID(userId: string): Promise<string> {
 		try {
