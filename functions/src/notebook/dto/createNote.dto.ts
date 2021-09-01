@@ -1,7 +1,7 @@
-export class NoteDto {
+export class CreateNoteDto {
 	readonly name: string;
 
-	readonly noteId: string;
+	readonly notebookId: string;
 
 	readonly description: string;
 }
