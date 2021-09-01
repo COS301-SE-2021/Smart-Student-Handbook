@@ -38,11 +38,10 @@ export class ProfileService {
 	/**
 	 * Returns the appropriate user information of the user with the username equal to the username passed in
 	 * @param username
-	 * @param userId
 	 */
-	getUserByUsername(username: string, userId: string): Observable<any> {
+	getUserByUsername(username: string): Observable<any> {
 		return this.http.post(
-			`${PROFILE_API}getUserByUsername/${userId}`,
+			`${PROFILE_API}getUserByUsername`,
 			{ username },
 			httpOptions
 		);

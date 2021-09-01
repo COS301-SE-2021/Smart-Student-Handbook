@@ -22,6 +22,10 @@ exports.updateNotebookIndex = functions.firestore.document('userNotebooks/{noteb
 	index.saveObject({ data, objectID });
 });
 
-exports.deleteNotebookIndex = functions.firestore
-	.document('userNotebooks/{notebookId}')
-	.onDelete((snapshot) => index.deleteObject(snapshot.id));
+exports.deleteNotebookIndex = functions.firestore.document('userNotebooks/{notebookId}').onDelete((snapshot) => {
+	const { id } = snapshot;
+	functions.logger.log('Notebook Object ID: ', id);
+	functions.logger.log('Notebook Object: ', snapshot);
+
+	index.deleteObject(id);
+});

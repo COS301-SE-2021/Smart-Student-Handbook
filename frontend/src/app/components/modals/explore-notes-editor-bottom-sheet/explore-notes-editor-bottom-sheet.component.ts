@@ -125,7 +125,6 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			// const editor = new EditorJS({
 			this.Editor = new EditorJS({
 				holder: 'exploreBottomSheetEditor',
 				tools: {

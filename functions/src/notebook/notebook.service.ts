@@ -357,32 +357,32 @@ export class NotebookService {
 		};
 	}
 
-	async addNotebookReview(reviewDto: ReviewDto, userId: string): Promise<Response> {
-		const timestamp = new Date().getTime();
-		// const { userId } = reviewDto; // await this.getUserId();
+	async addNotebookReview(reviewDto: ReviewDto): Promise<Response> {
+		const timestamp = Date.now();
+		const { userId } = reviewDto; // await this.getUserId();
 
 		try {
 			return await admin
 				.firestore()
-				.collection(`userNotebooks/${reviewDto.notebookId}/review`)
-				.doc(userId)
-				.set({
+				.collection('notebookReviews')
+				.add({
 					message: reviewDto.message,
 					rating: reviewDto.rating,
 					displayName: reviewDto.displayName,
 					profileUrl: reviewDto.profileUrl,
 					userId,
 					timestamp,
+					notebookId: reviewDto.notebookId,
 				})
 				.then(() => ({
 					message: 'Successfully added a review!',
 				}))
-				.catch(() => {
-					throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+				.catch((e) => {
+					throw new HttpException(`Not Found${e}`, HttpStatus.NOT_FOUND);
 				});
 		} catch (error) {
 			throw new HttpException(
-				'Something went wrong. Operation could not be executed.',
+				`Something went wrong. Operation could not be executed. ${error}`,
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -394,9 +394,8 @@ export class NotebookService {
 		try {
 			const snapshot = await admin
 				.firestore()
-				.collection(`userNotebooks/${notebookId}/review`)
-				.orderBy('timestamp', 'asc')
-				.limit(15)
+				.collection('notebookReviews')
+				.where('notebookId', '==', notebookId)
 				.get();
 
 			snapshot.forEach((doc) => {
@@ -407,12 +406,13 @@ export class NotebookService {
 					userId: doc.data().userId,
 					profileUrl: doc.data().profileUrl,
 					timestamp: doc.data().timestamp,
+					notebookId: doc.data().notebookId,
 				});
 			});
 
 			return reviews;
 		} catch (error) {
-			throw new HttpException('Could not retrieve notebook reviews', HttpStatus.BAD_REQUEST);
+			throw new HttpException(`Could not retrieve notebook reviews${error}`, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -554,12 +554,4 @@ export class NotebookService {
 			throw new HttpException(`Bad Request${e}`, HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	// async getUserId(): Promise<string> {
-	// 	try {
-	// 		return firebase.auth().currentUser.uid;
-	// 	} catch (error) {
-	// 		throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-	// 	}
-	// }
 }

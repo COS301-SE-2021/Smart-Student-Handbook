@@ -80,8 +80,8 @@ export class NotificationController {
 		return this.notificationService.createNotification(createNotificationDto);
 	}
 
-	@Post('updateRead/:notificationId')
-	async updateRead(@Param() notificationId: string) {
+	@Post('updateRead')
+	async updateRead(@Body() notificationId: any) {
 		return this.notificationService.updateRead(notificationId);
 	}
 }
