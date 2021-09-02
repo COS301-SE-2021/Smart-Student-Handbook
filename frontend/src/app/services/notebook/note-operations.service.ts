@@ -4,11 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
 import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
-import {
-	NotebookObservablesService,
-	NotificationService,
-	ProfileService,
-} from '@app/services';
+import { ProfileService } from '@app/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -188,7 +184,10 @@ export class NoteOperationsService {
 	 * Clone a note and it's contents
 	 */
 	cloneNote(options: any[]) {
-		const screenWidth = this.getScreenSize();
+		let screenWidth = '65%';
+		if (window.innerWidth <= 576) {
+			screenWidth = '100%';
+		}
 
 		// Open dialog
 		const dialogRef = this.dialog.open(CloneNoteComponent, {
@@ -199,7 +198,7 @@ export class NoteOperationsService {
 			},
 		});
 
-		const noteId = new Observable((observer) => {
+		return new Observable((observer) => {
 			// Get info and create notebook after dialog is closed
 			dialogRef
 				.afterClosed()
@@ -237,8 +236,25 @@ export class NoteOperationsService {
 					}
 				});
 		});
+	}
 
-		return noteId;
+	getUserNotebooks() {
+		// Get the users notebooks
+		return new Observable((observable) => {
+			const options: any[] = [];
+			this.notebookService
+				.getUserNotebooks(this.user.uid)
+				.subscribe((notebooks: any[]) => {
+					notebooks.forEach((notebook) => {
+						options.push({
+							title: notebook.title,
+							notebookId: notebook.notebookId,
+						});
+					});
+
+					observable.next(options);
+				});
+		});
 	}
 
 	/**

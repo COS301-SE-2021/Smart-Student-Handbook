@@ -222,32 +222,18 @@ export class ExploreNotesEditorComponent implements OnInit {
 	cloneNote() {
 		this.isCompleted = false;
 
-		// Get the users notebooks
-		const options: any[] = [];
+		this.noteOperations.getUserNotebooks().subscribe((options: any) => {
+			// console.log(options);
 
-		this.notebookService
-			.getUserNotebooks(this.user.uid)
-			.subscribe((notebooks: any[]) => {
-				notebooks.forEach((notebook) => {
-					options.push({
-						title: notebook.title,
-						notebookId: notebook.notebookId,
+			this.isCompleted = true;
+
+			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
+				this.Editor.save().then((outputData) => {
+					firebase.database().ref(`notebook/${newNoteId}`).set({
+						outputData,
 					});
 				});
-				this.isCompleted = true;
-
-				this.noteOperations
-					.cloneNote(options)
-					.subscribe((newNoteId) => {
-						this.Editor.save().then((outputData) => {
-							firebase
-								.database()
-								.ref(`notebook/${newNoteId}`)
-								.set({
-									outputData,
-								});
-						});
-					});
 			});
+		});
 	}
 }
