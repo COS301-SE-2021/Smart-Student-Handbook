@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-	AddCollaboratorComponent,
-	AddNotebookComponent,
-	ConfirmDeleteComponent,
-} from '@app/components';
+import { CloneNoteComponent, ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
 import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
-import { NotificationService, ProfileService } from '@app/services';
-import { NotebookDto } from '@app/models';
+import { ProfileService } from '@app/services';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,7 +28,7 @@ export class NoteOperationsService {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private profileService: ProfileService,
-		private notificationService: NotificationService
+		private snackBar: MatSnackBar
 	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 	}
@@ -41,19 +37,9 @@ export class NoteOperationsService {
 	 * Create a new notebook
 	 */
 	createNewNote(notebookId: string, notebookTitle: string): Observable<any> {
-		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			screenWidth = '100%';
-		} else {
-			screenWidth = '50%';
-		}
-
 		return Observable.create((observer: any) => {
+			const screenWidth = this.getScreenSize();
+
 			// Open dialog
 			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
@@ -118,17 +104,7 @@ export class NoteOperationsService {
 		title: string,
 		description: string
 	): Observable<any> {
-		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
-			screenWidth = '100%';
-		} else {
-			screenWidth = '50%';
-		}
+		const screenWidth = this.getScreenSize();
 
 		return Observable.create((observer: any) => {
 			// Open dialog
@@ -202,5 +178,97 @@ export class NoteOperationsService {
 				}
 			});
 		});
+	}
+
+	/**
+	 * Clone a note and it's contents
+	 */
+	cloneNote(options: any[]) {
+		let screenWidth = '65%';
+		if (window.innerWidth <= 576) {
+			screenWidth = '100%';
+		}
+
+		// Open dialog
+		const dialogRef = this.dialog.open(CloneNoteComponent, {
+			width: screenWidth,
+			hasBackdrop: false,
+			data: {
+				options,
+			},
+		});
+
+		return new Observable((observer) => {
+			// Get info and create notebook after dialog is closed
+			dialogRef
+				.afterClosed()
+				.subscribe(({ notebookId, title, description }) => {
+					if (
+						notebookId !== undefined &&
+						title !== undefined &&
+						description !== undefined
+					) {
+						// console.log(notebookId, title, description);
+
+						const request = {
+							userId: this.user.uid,
+							notebookId,
+							name: title,
+							description,
+						};
+
+						this.notebookService
+							.createNote(request)
+							.subscribe((newNote) => {
+								// console.log(newNote);
+
+								if (newNote.noteId) {
+									this.snackBar.open(
+										'Note successfully cloned!',
+										'',
+										{
+											duration: 2000,
+										}
+									);
+									observer.next(newNote.noteId);
+								}
+							});
+					}
+				});
+		});
+	}
+
+	getUserNotebooks() {
+		// Get the users notebooks
+		return new Observable((observable) => {
+			const options: any[] = [];
+			this.notebookService
+				.getUserNotebooks(this.user.uid)
+				.subscribe((notebooks: any[]) => {
+					notebooks.forEach((notebook) => {
+						options.push({
+							title: notebook.title,
+							notebookId: notebook.notebookId,
+						});
+					});
+
+					observable.next(options);
+				});
+		});
+	}
+
+	/**
+	 * If the current device is mobile, make the modals width 100%, otherwise 50%
+	 */
+	getScreenSize(): string {
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			return '100%';
+		}
+		return '80%';
 	}
 }

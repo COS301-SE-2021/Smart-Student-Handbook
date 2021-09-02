@@ -20,8 +20,6 @@ export class AddCollaboratorComponent implements OnInit {
 
 	options: CollaboratorData[] = [
 		{ name: 'Arno', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
-		// { name: 'Jan', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
-		// { name: 'Piet', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
 	];
 
 	selectedUser?: CollaboratorData;

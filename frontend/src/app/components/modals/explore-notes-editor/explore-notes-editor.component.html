@@ -4,19 +4,13 @@
 
     <span class="example-spacer"></span>
 
-    <button mat-icon-button [matMenuTriggerFor]="cloneMenu">
-      <mat-icon>more_horiz</mat-icon>
+    <button mat-icon-button (click)="cloneNote()">
+      <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
     </button>
 
-    <mat-menu #cloneMenu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>note_add</mat-icon>
-        <span>Clone Note</span>
-      </button>
-    </mat-menu>
 
 
-    <button mat-icon-button [mat-dialog-close]>
+    <button mat-icon-button [mat-dialog-close] matTooltip="Close" matTooltipPosition="below">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>

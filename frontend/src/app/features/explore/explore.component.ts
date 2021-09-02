@@ -55,6 +55,7 @@ export class ExploreComponent {
 			});
 		} else if (window.innerWidth <= 991) {
 			this.dialog.open(ExploreNoteListComponent, {
+				width: '100%',
 				data: {
 					title: hit.data.title,
 				},

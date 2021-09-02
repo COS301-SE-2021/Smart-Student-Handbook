@@ -75,6 +75,7 @@ import {
 	SmartAssistComponent,
 	SmartAssistModalComponent,
 	RateNotebookComponent,
+	CloneNoteComponent,
 } from '@app/components';
 
 // Long press
@@ -129,6 +130,7 @@ import { AppRoutingModule } from './app-routing.module';
 		SmartAssistBottomSheetComponent,
 		SmartAssistModalComponent,
 		RateNotebookComponent,
+		CloneNoteComponent,
 	],
 	imports: [
 		MaterialModule,
