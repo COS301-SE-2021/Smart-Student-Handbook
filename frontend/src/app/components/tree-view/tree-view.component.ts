@@ -97,7 +97,7 @@ export class TreeViewComponent implements OnInit {
 	 */
 	getUserNotebooks() {
 		if (this.user)
-			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
 					let temp: any[] = [];
 					let index = 0;
@@ -296,7 +296,7 @@ export class TreeViewComponent implements OnInit {
 				);
 
 				this.notebookService
-					.deleteNotebook(notebookId, this.user.uid)
+					.deleteNotebook(notebookId)
 					.subscribe(() => {
 						this.childrenSize -= 1;
 
