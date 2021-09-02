@@ -10,6 +10,7 @@ import {
 	MAT_BOTTOM_SHEET_DATA,
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
+import { NotebookService, NoteOperationsService } from '@app/services';
 
 @Component({
 	selector: 'app-explore-notes-bottom-sheet',
@@ -105,7 +106,9 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 
 	constructor(
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-		private bottomSheetRef: MatBottomSheetRef<ExploreNotesEditorBottomSheetComponent>
+		private bottomSheetRef: MatBottomSheetRef<ExploreNotesEditorBottomSheetComponent>,
+		private notebookService: NotebookService,
+		private noteOperations: NoteOperationsService
 	) {}
 
 	ngOnInit(): void {
@@ -115,6 +118,11 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		this.user = this.data.user;
 	}
 
+	/**
+	 * Load the editor and render all content
+	 * @param noteId
+	 * @param title
+	 */
 	async loadReadonly(noteId: string, title: string) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
@@ -237,8 +245,47 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		// });
 	}
 
+	/**
+	 * Close this bottom sheet
+	 * @param event
+	 */
 	closeSheet(event: MouseEvent): void {
 		this.bottomSheetRef.dismiss();
 		event.preventDefault();
+	}
+
+	/**
+	 * Clone a note
+	 */
+	cloneNote() {
+		this.isCompleted = false;
+
+		// Get the users notebooks
+		const options: any[] = [];
+
+		this.notebookService
+			.getUserNotebooks(this.user.uid)
+			.subscribe((notebooks: any[]) => {
+				notebooks.forEach((notebook) => {
+					options.push({
+						title: notebook.title,
+						notebookId: notebook.notebookId,
+					});
+				});
+				this.isCompleted = true;
+
+				this.noteOperations
+					.cloneNote(options)
+					.subscribe((newNoteId) => {
+						this.Editor.save().then((outputData) => {
+							firebase
+								.database()
+								.ref(`notebook/${newNoteId}`)
+								.set({
+									outputData,
+								});
+						});
+					});
+			});
 	}
 }
