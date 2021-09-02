@@ -63,7 +63,7 @@ export class NotebookController {
 	@Post('addNotebookReview')
 	async addNotebookReview(@Body() reviewDto: ReviewDto, @Headers() headers): Promise<Response> {
 		const userId: string = await this.authService.verifyUser(headers.token);
-		return this.notebookService.addNotebookReview(reviewDto);
+		return this.notebookService.addNotebookReview(reviewDto, userId);
 	}
 
 	@Get('getNotebookReviews/:notebookId')
@@ -71,8 +71,9 @@ export class NotebookController {
 		return this.notebookService.getNotebookReviews(notebookId);
 	}
 
-	@Delete('deleteNotebookReview/:notebookId/:userId')
-	deleteNotebookReview(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
+	@Delete('deleteNotebookReview/:notebookId')
+	async deleteNotebookReview(@Param('notebookId') notebookId, @Headers() headers): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.notebookService.deleteNotebookReview(notebookId, userId);
 	}
 

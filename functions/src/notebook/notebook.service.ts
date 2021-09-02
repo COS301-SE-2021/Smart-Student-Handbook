@@ -357,9 +357,9 @@ export class NotebookService {
 		};
 	}
 
-	async addNotebookReview(reviewDto: ReviewDto): Promise<Response> {
+	async addNotebookReview(reviewDto: ReviewDto, userId: string): Promise<Response> {
 		const timestamp = Date.now();
-		const { userId } = reviewDto; // await this.getUserId();
+		// const { userId } = reviewDto; // await this.getUserId();
 
 		try {
 			return await admin
