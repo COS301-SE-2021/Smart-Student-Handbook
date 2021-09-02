@@ -1,6 +1,7 @@
 export interface Note {
 	name: string;
 	noteId: string;
-	description?: string;
-	createDate?: any;
+	description: string;
+	notebookId: string;
+	createDate: any;
 }
