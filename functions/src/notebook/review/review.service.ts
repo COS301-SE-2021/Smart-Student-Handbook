@@ -1,22 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { Response } from '../interfaces/response.interface';
 import { Review } from '../interfaces/review.interface';
 import { AddNotebookReview } from '../dto/addNotebookReview';
-import { RemoveReviewDto } from '../dto/removeReview.dto';
 
 @Injectable()
 export class ReviewService {
 	async addNotebookReview(addNotebookReview: AddNotebookReview, userId: string): Promise<Response> {
+		const reviewId = randomStringGenerator();
 		const timestamp = Date.now();
 
 		return admin
 			.firestore()
 			.collection('notebookReviews')
-			.add({
+			.doc(reviewId)
+			.set({
 				...addNotebookReview,
 				userId,
 				timestamp,
+				reviewId,
 			})
 			.then(() => ({
 				message: 'Successfully added a review!',
@@ -36,15 +39,9 @@ export class ReviewService {
 				.where('notebookId', '==', notebookId)
 				.get();
 
-			snapshot.forEach((doc) => {
+			snapshot.forEach((review) => {
 				reviews.push({
-					message: doc.data().message,
-					rating: doc.data().rating,
-					displayName: doc.data().displayName,
-					userId: doc.data().userId,
-					profileUrl: doc.data().profileUrl,
-					timestamp: doc.data().timestamp,
-					notebookId: doc.data().notebookId,
+					...review,
 				});
 			});
 
@@ -54,35 +51,44 @@ export class ReviewService {
 		}
 	}
 
-	async deleteNotebookReview(removeReviewDto: RemoveReviewDto): Promise<Response> {
-		// TODO ADD AUTH
-		let removeDocId: string | null = null;
-
-		const accessSnapshot = await admin
+	async deleteNotebookReview(reviewId, userId: string): Promise<Response> {
+		const review = await admin
 			.firestore()
 			.collection('notebookReviews')
-			.where('notebookId', '==', removeReviewDto.notebookId)
+			.doc(reviewId)
 			.get()
+			.then((doc) => doc.data())
 			.catch((error) => {
-				throw new HttpException(`Was unable to remove users review. ${error}`, HttpStatus.BAD_REQUEST);
+				throw new HttpException(`Could not find notebook review. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
-		accessSnapshot.forEach((accessUser) => {
-			if (accessUser.data().userId === removeReviewDto.userId) {
-				removeDocId = accessUser.id;
+		if (!(review.userId === userId)) {
+			throw new HttpException('User does not have access to delete specified review.', HttpStatus.UNAUTHORIZED);
+		}
+
+		return await admin
+			.firestore()
+			.collection('notebookReviews')
+			.doc(reviewId)
+			.delete()
+			.then(() => ({
+				message: 'Successfully delete a review!',
+			}))
+			.catch((error) => {
+				throw new HttpException(`Was unable to delete users review. ${error}`, HttpStatus.BAD_REQUEST);
+			});
+	}
+
+	async checkReviewCreator(notebookId: string, userId: string): Promise<boolean> {
+		let creatorStatus = false;
+		const reviewList: Review[] = await this.getNotebookReviews(notebookId);
+
+		reviewList.forEach((review) => {
+			if (review.userId === userId) {
+				creatorStatus = true;
 			}
 		});
 
-		return admin
-			.firestore()
-			.collection('notebookReviews')
-			.doc(removeDocId)
-			.delete()
-			.then(() => ({
-				message: "Successfully removed user's review.",
-			}))
-			.catch((error) => {
-				throw new HttpException(`Was unable to remove users review. ${error}`, HttpStatus.BAD_REQUEST);
-			});
+		return creatorStatus;
 	}
 }

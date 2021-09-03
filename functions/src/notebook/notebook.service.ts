@@ -39,8 +39,30 @@ export class NotebookService {
 		const user = await this.userService.getUserByUid(userId);
 
 		/**
-		 * Add Access to the current notebook. This should be done first since the user will not be able to add a note
-		 * if they do not have access to the notebook
+		 * Create notebook instance to be saved and to be returned
+		 */
+		const notebook: Notebook = {
+			...createNotebookDto,
+			creatorId: userId,
+			notebookId,
+		};
+
+		/**
+		 * Save notebook to firebase
+		 */
+		await admin
+			.firestore()
+			.collection('userNotebooks')
+			.doc(notebookId)
+			.set({
+				...notebook,
+			})
+			.catch((error) => {
+				throw new HttpException(`Could not create new notebook. ${error}`, HttpStatus.BAD_REQUEST);
+			});
+
+		/**
+		 * Add Access to the current notebook.
 		 */
 		await this.accessService.addAccess(
 			{
@@ -66,33 +88,10 @@ export class NotebookService {
 		);
 
 		/**
-		 * Create notebook instance to be saved and to be returned
-		 */
-		const notebook: Notebook = {
-			...createNotebookDto,
-			creatorId: userId,
-			notebookId,
-		};
-
-		/**
-		 * Get access list and notes list to return with notebook
+		 * Get access and notes
 		 */
 		const access = await this.accessService.getAccessList(notebookId);
 		const notes = await this.noteService.getNotes(notebookId);
-
-		/**
-		 * Save notebook to firebase
-		 */
-		await admin
-			.firestore()
-			.collection('userNotebooks')
-			.doc(notebookId)
-			.set({
-				...notebook,
-			})
-			.catch((error) => {
-				throw new HttpException(`Could not create new notebook. ${error}`, HttpStatus.BAD_REQUEST);
-			});
 
 		/**
 		 * Return notebook instance
@@ -151,7 +150,9 @@ export class NotebookService {
 		 * Add all the snapshot's notebooks into the notebook array to return to the user
 		 */
 		notebookSnapshot.forEach((notebook) => {
-			notebooks.push(notebook.data());
+			notebooks.push({
+				...notebook.data(),
+			});
 		});
 
 		return notebooks;
@@ -202,13 +203,7 @@ export class NotebookService {
 			.collection('userNotebooks')
 			.doc(updateNotebookDto.notebookId)
 			.update({
-				title: updateNotebookDto.title,
-				author: updateNotebookDto.author,
-				course: updateNotebookDto.course,
-				description: updateNotebookDto.description,
-				institution: updateNotebookDto.institution,
-				private: updateNotebookDto.private,
-				tags: updateNotebookDto.tags,
+				...updateNotebookDto,
 			})
 			.then(() => ({
 				message: 'Updated notebook successful!',
@@ -236,7 +231,7 @@ export class NotebookService {
 		/**
 		 * Remove user access from notebook
 		 */
-		await this.accessService.removeUserAccess({ notebookId, userId });
+		await this.accessService.removeUserAccess({ notebookId, userId }, userId);
 
 		/**
 		 * Delete notebook content on firebase
