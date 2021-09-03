@@ -51,7 +51,7 @@ export class NotebookService {
 				course: notebookDto.course,
 				description: notebookDto.description,
 				institution: notebookDto.institution,
-				creatorId: notebookDto.creatorId,
+				// creatorId: notebookDto.creatorId,
 				private: notebookDto.private,
 				tags: notebookDto.tags,
 			},
@@ -81,7 +81,7 @@ export class NotebookService {
 				course: notebookDto.course,
 				description: notebookDto.description,
 				institution: notebookDto.institution,
-				creatorId: notebookDto.creatorId,
+				// creatorId: notebookDto.creatorId,
 				private: notebookDto.private,
 				tags: notebookDto.tags,
 				notebookId: notebookDto.notebookId,
@@ -93,9 +93,9 @@ export class NotebookService {
 	/**
 	 * Get all the user's notebooks and note id's
 	 */
-	getUserNotebooks(userId: string): Observable<any> {
+	getUserNotebooks(): Observable<any> {
 		return this.httpClient.get(
-			`${NOTEBOOK_API}/getUserNotebooks/${userId}`,
+			`${NOTEBOOK_API}/getUserNotebooks`,
 			httpOptions
 		);
 	}
@@ -119,7 +119,7 @@ export class NotebookService {
 	 */
 	createNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
-			userId: noteDto.userId,
+			// userId: noteDto.userId,
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
 			description: noteDto.description,
@@ -139,18 +139,17 @@ export class NotebookService {
 			noteId: noteDto.noteId,
 			name: noteDto.name,
 			description: noteDto.description,
-			userId: noteDto.userId,
+			// userId: noteDto.userId,
 		});
 	}
 
 	/**
 	 * Delete a whole notebook
 	 * @param notebookID
-	 * @param userId
 	 */
-	deleteNotebook(notebookID: string, userId: string): Observable<any> {
+	deleteNotebook(notebookID: string): Observable<any> {
 		return this.httpClient.delete(
-			`${NOTEBOOK_API}/deleteNotebook/${notebookID}/${userId}`,
+			`${NOTEBOOK_API}/deleteNotebook/${notebookID}`,
 			httpOptions
 		);
 	}
@@ -184,7 +183,7 @@ export class NotebookService {
 				message: reviewDto.message,
 				rating: reviewDto.rating,
 				displayName: reviewDto.displayName,
-				userId: reviewDto.userId,
+				// userId: reviewDto.userId,
 				profileUrl: reviewDto.profileUrl,
 			},
 			httpOptions
@@ -226,7 +225,7 @@ export class NotebookService {
 			`${NOTEBOOK_API}/addAccess`,
 			{
 				displayName: accessDto.displayName,
-				userId: accessDto.userId,
+				// userId: accessDto.userId,
 				profileUrl: accessDto.profileUrl,
 				notebookId: accessDto.notebookId,
 			},

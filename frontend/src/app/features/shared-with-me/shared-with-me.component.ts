@@ -96,7 +96,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 	 */
 	getUserNotebooks() {
 		if (this.user)
-			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
 					// console.log(notebooks);
 					let temp: any[] = [];
