@@ -158,6 +158,19 @@ def editData():
     else:
         abort(400)
 
+@app.route("/listData", methods=['GET'])
+def listData():
+    global data
+    global smartmodel
+
+    return data.listData()
+
+@app.route("/clearAllData", methods=['GET'])
+def clearAllData():
+    global data
+    global smartmodel
+
+    return jsonify(success = data.clearAllData())
 
 
 
