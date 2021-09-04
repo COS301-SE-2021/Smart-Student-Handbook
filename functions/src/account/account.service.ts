@@ -96,19 +96,22 @@ export class AccountService {
 			return resp;
 		}
 
-		const userCreated = await this.userService.createUser({
-			uid: resp.user.uid,
-			username: resp.user.displayName,
-			institution: 'Unknown',
-			department: 'Unknown',
-			program: 'Unknown',
-			workStatus: 'Unknown',
-			bio: 'Unknown',
-			profilePicUrl:
-				// eslint-disable-next-line max-len
-				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
-			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
-		});
+		const userCreated = await this.userService.createUser(
+			{
+				uid: resp.user.uid,
+				username: resp.user.displayName,
+				institution: 'Unknown',
+				department: 'Unknown',
+				program: 'Unknown',
+				workStatus: 'Unknown',
+				bio: 'Unknown',
+				profilePicUrl:
+					// eslint-disable-next-line max-len
+					'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
+				dateJoined: admin.firestore.FieldValue.serverTimestamp(),
+			},
+			resp.user.uid,
+		);
 
 		// eslint-disable-next-line eqeqeq
 		if (userCreated.success == false) {
@@ -172,7 +175,7 @@ export class AccountService {
 			profilePic: updateDto.profilePicUrl,
 		};
 
-		const updated = await this.userService.updateUser(userDetails);
+		const updated = await this.userService.updateUser(userDetails, uid);
 
 		// eslint-disable-next-line eqeqeq
 		if (updated.success == false) {
