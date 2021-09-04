@@ -84,6 +84,7 @@ class SmartAssistModel():
 
     
     def train(self, n_positive=500):
+        self.data.loadData()
         self.data.generateFinalData(n_positive=n_positive)
         self.data.generateTrainTestData()
 
