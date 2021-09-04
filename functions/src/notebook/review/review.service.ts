@@ -41,7 +41,7 @@ export class ReviewService {
 
 			snapshot.forEach((review) => {
 				reviews.push({
-					...review,
+					...review.data(),
 				});
 			});
 
