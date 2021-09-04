@@ -3,12 +3,18 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import algoliasearch from 'algoliasearch/lite';
 
 export interface CollaboratorData {
 	name: string;
 	profileUrl?: string;
 	id: string;
 }
+
+const searchClient = algoliasearch(
+	'AD2K8AK74A',
+	'589f047ba9ac7fa58796f394427d7f35'
+);
 
 @Component({
 	selector: 'app-add-collaborator',
@@ -17,6 +23,14 @@ export interface CollaboratorData {
 })
 export class AddCollaboratorComponent implements OnInit {
 	myControl = new FormControl();
+
+	config = {
+		apiKey: '589f047ba9ac7fa58796f394427d7f35',
+		appId: 'AD2K8AK74A',
+		indexName: 'users',
+		routing: true,
+		searchClient,
+	};
 
 	options: CollaboratorData[] = [
 		{ name: 'Arno', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
