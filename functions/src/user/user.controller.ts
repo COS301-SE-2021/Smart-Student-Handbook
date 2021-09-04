@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Headers, Param } from '@nestjs/common';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UserService } from './user.service';
@@ -9,9 +9,8 @@ import { AuthService } from '../auth/auth.service';
 export class UserController {
 	constructor(private userService: UserService, private readonly authService: AuthService) {}
 
-	@Get('getUserByUid')
-	async getUserByUid(@Headers() headers): Promise<UserResponseDto> {
-		const userId: string = await this.authService.verifyUser(headers.token);
+	@Get('getUserByUid/:userId')
+	async getUserByUid(@Param('userId') userId: string): Promise<UserResponseDto> {
 		return this.userService.getUserByUid(userId);
 	}
 

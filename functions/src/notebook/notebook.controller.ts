@@ -93,7 +93,7 @@ export class NotebookController {
 		return this.accessService.getAccessList(notebookId);
 	}
 
-	@Delete('deleteNotebookReview/:notebookId/')
+	@Delete('deleteNotebookReview/:notebookId')
 	async deleteNotebookReview(@Param('notebookId') notebookId, @Headers() header): Promise<Response> {
 		const userId: string = await this.authService.verifyUser(header.token);
 		return this.reviewService.deleteNotebookReview(notebookId, userId);
