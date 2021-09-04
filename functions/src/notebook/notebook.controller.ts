@@ -5,18 +5,16 @@ import { NotebookService } from './notebook.service';
 import { AuthService } from '../auth/auth.service';
 import { Response } from './interfaces/response.interface';
 import { Note } from './interfaces/note.interface';
-// import { ReviewDto } from './dto/review.dto';
-// import { AccessDto } from './dto/access.dto';
 import { UpdateNotebookDto } from './dto/updateNotebook.dto';
 import { CreateNotebookDto } from './dto/createNotebook.dto';
 import { CreateNoteDto } from './dto/createNote.dto';
 import { NoteService } from './note/note.service';
 import { ReviewService } from './review/review.service';
-// import { AccessService } from './access/access.service';
 import { UpdateNoteDto } from './dto/updateNote.dto';
 import { AddNotebookReview } from './dto/addNotebookReview';
 import { AccessService } from './access/access.service';
 import { Access } from './interfaces/access.interface';
+import { AddAccessDto } from './dto/addAccess.dto';
 
 @Controller('notebook')
 export class NotebookController {
@@ -76,7 +74,7 @@ export class NotebookController {
 
 	@Delete('deleteNote/:notebookId/:noteId')
 	deleteNote(@Param('notebookId') notebookId, @Param('noteId') noteId): Promise<Response> {
-		return this.noteService.deleteNote(noteId);
+		return this.noteService.deleteNote(notebookId, noteId);
 	}
 
 	@Post('addNotebookReview')
@@ -94,32 +92,32 @@ export class NotebookController {
 	getAccessList(@Param('notebookId') notebookId): Promise<Access[]> {
 		return this.accessService.getAccessList(notebookId);
 	}
-}
-//
-// @Delete('deleteNotebookReview/:notebookId/:userId')
-// deleteNotebookReview(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
-// 	return this.reviewService.deleteNotebookReview(notebookId);
-// }
-//
-// @Post('addAccess')
-// async addAccess(@Body() accessDto: AccessDto, @Headers() header): Promise<Response> {
-// 	const userId: string = await this.authService.verifyUser(header.token);
-// 	return this.accessService.addAccess(accessDto);
-// }
 
-// @Get('checkUserAccess/:userId/:notebookId')
-// async checkUserAccess(@Param('userId') userId, @Param('notebookId') notebookId,
-// @Headers() header): Promise<boolean> {
-// 	const userId: string = await this.authService.verifyUser(header.token);
-// 	return this.notebookService.checkUserAccess({ userId, notebookId });
-// }
-//
-// @Delete('removeUserAccess/:userId/:notebookId')
-// async removeUserAccess(
-// 	@Param('userId') userId,
-// 	@Param('notebookId') notebookId,
-// 	@Headers() header,
-// ): Promise<Response> {
-// 	const userId: string = await this.authService.verifyUser(header.token);
-// 	return this.notebookService.removeUserAccess({ userId, notebookId });
-// }
+	@Delete('deleteNotebookReview/:notebookId/')
+	async deleteNotebookReview(@Param('notebookId') notebookId, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.deleteNotebookReview(notebookId, userId);
+	}
+
+	@Post('addAccess')
+	async addAccess(@Body() accessDto: AddAccessDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.addAccess(accessDto, userId);
+	}
+
+	@Get('checkUserAccess/:userId/:notebookId')
+	async checkUserAccess(@Param('notebookId') notebookId, @Headers() header): Promise<boolean> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.checkUserAccess(notebookId, userId);
+	}
+
+	@Delete('removeUserAccess/:notebookId/:accessId')
+	async removeUserAccess(
+		@Param('accessId') accessId,
+		@Param('notebookId') notebookId,
+		@Headers() header,
+	): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.removeUserAccess({ accessId, notebookId }, userId);
+	}
+}

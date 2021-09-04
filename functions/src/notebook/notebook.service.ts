@@ -70,7 +70,6 @@ export class NotebookService {
 				userId,
 				profileUrl: user.user.displayName,
 				notebookId,
-				creator: true,
 			},
 			userId,
 		);
@@ -231,7 +230,8 @@ export class NotebookService {
 		/**
 		 * Remove user access from notebook
 		 */
-		await this.accessService.removeUserAccess({ notebookId, userId }, userId);
+		const accessId = await this.accessService.getUserAccessId(notebookId, userId);
+		await this.accessService.removeUserAccess({ notebookId, accessId }, userId);
 
 		/**
 		 * Delete notebook content on firebase

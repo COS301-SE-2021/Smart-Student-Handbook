@@ -44,9 +44,7 @@ export class NoteService {
 				throw new HttpException(`Could not create note. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
-		const notes = await this.getNotes(createNoteDto.notebookId);
-
-		await this.updateNotebookNotes(createNoteDto.notebookId, notes);
+		await this.updateNotebookNotes(createNoteDto.notebookId);
 
 		return {
 			message: 'Successfully created note',
@@ -72,19 +70,22 @@ export class NoteService {
 		/**
 		 * Update note in firebase
 		 */
-		return admin
+		await admin
 			.firestore()
 			.collection('userNotes')
 			.doc(updateNoteDto.noteId)
 			.update({
 				...updateNoteDto,
 			})
-			.then(() => ({
-				message: 'Successfully created note',
-			}))
 			.catch((error) => {
 				throw new HttpException(`Could not create note. ${error}`, HttpStatus.BAD_REQUEST);
 			});
+
+		await this.updateNotebookNotes(updateNoteDto.notebookId);
+
+		return {
+			message: 'Successfully updated note',
+		};
 	}
 
 	/**
@@ -119,10 +120,10 @@ export class NoteService {
 
 	/**
 	 * Delete a note from a notebook
+	 * @param notebookId
 	 * @param noteId
 	 */
-	async deleteNote(noteId: string): Promise<Response> {
-		// TODO AUTH!!!
+	async deleteNote(notebookId: string, noteId: string): Promise<Response> {
 		/**
 		 * Delete note instance in the real time data base if it exists
 		 */
@@ -137,17 +138,20 @@ export class NoteService {
 		/**
 		 * Delete note in firestore
 		 */
-		return await admin
+		await admin
 			.firestore()
 			.collection('userNotes')
 			.doc(noteId)
 			.delete()
-			.then(() => ({
-				message: 'Successfully delete note for notebook',
-			}))
 			.catch((error) => {
 				throw new HttpException(`Could not retrieve notebook notes. ${error}`, HttpStatus.BAD_REQUEST);
 			});
+
+		await this.updateNotebookNotes(notebookId);
+
+		return {
+			message: 'Successfully delete note for notebook',
+		};
 	}
 
 	/**
@@ -164,16 +168,16 @@ export class NoteService {
 		 * Delete each note one by one
 		 */
 		await notes.forEach((note: Note) => {
-			this.deleteNote(note.noteId);
+			this.deleteNote(notebookId, note.noteId);
 		});
 	}
 
 	/**
 	 * Update the content of a notebook
 	 * @param notebookId
-	 * @param notes
 	 */
-	async updateNotebookNotes(notebookId: string, notes: Note[]): Promise<void> {
+	async updateNotebookNotes(notebookId: string): Promise<void> {
+		const notes = await this.getNotes(notebookId);
 		/**
 		 * Update notes in notebook on firebase.
 		 */
