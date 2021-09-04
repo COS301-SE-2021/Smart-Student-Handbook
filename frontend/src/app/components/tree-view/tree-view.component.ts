@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import {
 	MatTreeFlatDataSource,
 	MatTreeFlattener,
@@ -19,7 +19,7 @@ import { ExploreObservablesService } from '@app/services/notebook/observables/ex
 	templateUrl: './tree-view.component.html',
 	styleUrls: ['./tree-view.component.scss'],
 })
-export class TreeViewComponent implements OnInit {
+export class TreeViewComponent implements OnInit, AfterContentInit {
 	user: any;
 
 	childrenSize = 0;
@@ -90,6 +90,51 @@ export class TreeViewComponent implements OnInit {
 				],
 			},
 		];
+	}
+
+	/**
+	 * Add a new notebook to your notebooks when the user clones a note into a new notebook
+	 */
+	ngAfterContentInit(): void {
+		this.notebookObservables.clonedNotebook.subscribe((val: any) => {
+			if (val.id !== '') {
+				this.openedNotebookId = val.id;
+
+				const child = {
+					name: val.name,
+					id: val.id,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+			}
+		});
 	}
 
 	/**

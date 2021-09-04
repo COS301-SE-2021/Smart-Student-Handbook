@@ -14,6 +14,7 @@ export * from './modals/explore-note-list-bottomsheet/explore-note-list-bottomsh
 export * from './modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
 export * from './modals/smart-assist-modal/smart-assist-modal.component';
 export * from './modals/note-info/note-info.component';
+export * from './modals/clone-note/clone-note.component';
 export * from './panels/notes-panel/notes-panel.component';
 export * from './panels/smart-assist-panel/smart-assist-panel.component';
 export * from './tree-view/tree-view.component';
