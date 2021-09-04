@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Headers, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -53,8 +53,16 @@ export class NotificationController {
 		@Body('userReceiver') userReceiver: string,
 		@Body('notebookID') notebookID: string,
 		@Body('notebookTitle') notebookTitle: string,
+		@Headers() headers,
 	) {
-		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID, notebookTitle);
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.notificationService.sendCollaborationRequest(
+			userSender,
+			userReceiver,
+			notebookID,
+			notebookTitle,
+			userId,
+		);
 	}
 
 	@Post('sendUserToUserPushNotification')
@@ -76,8 +84,9 @@ export class NotificationController {
 	}
 
 	@Post('createNotification')
-	async createNotification(@Body() createNotificationDto: CreateNotificationDto) {
-		return this.notificationService.createNotification(createNotificationDto);
+	async createNotification(@Body() createNotificationDto: CreateNotificationDto, @Headers() headers) {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.notificationService.createNotification(createNotificationDto, userId);
 	}
 
 	@Post('updateRead')
