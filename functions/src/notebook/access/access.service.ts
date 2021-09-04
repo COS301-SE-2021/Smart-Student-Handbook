@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { Response } from '../interfaces/response.interface';
 import { Access } from '../interfaces/access.interface';
 import { AddAccessDto } from '../dto/addAccess.dto';
@@ -39,6 +40,7 @@ export class AccessService {
 	 * @param userId
 	 */
 	async addAccess(addAccessDto: AddAccessDto, userId: string): Promise<Response> {
+		const accessId: string = randomStringGenerator();
 		/**
 		 * Check to see if user is the creator of the notebook
 		 */
@@ -48,16 +50,20 @@ export class AccessService {
 		/**
 		 * Return success message if notebook was successfully added else throw exception
 		 */
-		return admin
+		await admin
 			.firestore()
 			.collection('notebookAccess')
-			.add({ ...addAccessDto, userId })
-			.then(() => ({
-				message: 'Successfully added notebook to user account',
-			}))
+			.doc(accessId)
+			.set({ ...addAccessDto, userId, accessId })
 			.catch((error) => {
 				throw new HttpException(error, HttpStatus.BAD_REQUEST);
 			});
+
+		await this.updateNotebookAccess(addAccessDto.notebookId);
+
+		return {
+			message: 'Successfully added notebook to user account',
+		};
 	}
 
 	/**
@@ -66,8 +72,6 @@ export class AccessService {
 	 * @param userId
 	 */
 	async removeUserAccess(removeUserAccessDto: RemoveUserAccessDto, userId: string): Promise<Response> {
-		let removeDocId: string | null = null;
-
 		/**
 		 * Check to see if user is the creator of the notebook
 		 */
@@ -79,40 +83,25 @@ export class AccessService {
 		}
 
 		/**
-		 * Get all users that have access to the specified notebook
-		 */
-		const accessSnapshot = await admin
-			.firestore()
-			.collection('notebookAccess')
-			.where('notebookId', '==', removeUserAccessDto.notebookId)
-			.get();
-
-		/**
-		 * Search for the doc id of the user to be removed
-		 */
-		accessSnapshot.forEach((accessUser) => {
-			if (accessUser.data().userId === removeUserAccessDto.userId) {
-				removeDocId = accessUser.id;
-			}
-		});
-
-		/**
 		 * Remove the user from form having access to the notebook or throw an exception in the case of failure
 		 */
-		return admin
+		await admin
 			.firestore()
 			.collection('notebookAccess')
-			.doc(removeDocId)
+			.doc(removeUserAccessDto.accessId)
 			.delete()
-			.then(() => ({
-				message: "Successfully revoked user's access to the current notebook",
-			}))
 			.catch((error) => {
 				throw new HttpException(
 					`Was unable to revoked the specified user's access to the current notebook. ${error}`,
 					HttpStatus.BAD_REQUEST,
 				);
 			});
+
+		await this.updateNotebookAccess(removeUserAccessDto.notebookId);
+
+		return {
+			message: "Successfully revoked user's access to the current notebook",
+		};
 	}
 
 	/**
@@ -160,5 +149,43 @@ export class AccessService {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Update the content of a notebook
+	 * @param notebookId
+	 */
+	async updateNotebookAccess(notebookId: string): Promise<void> {
+		const access = await this.getAccessList(notebookId);
+		/**
+		 * Update notes in notebook on firebase.
+		 */
+		await admin.firestore().collection('userNotebooks').doc(notebookId).update({
+			access,
+		});
+	}
+
+	/**
+	 * Check to see if a user has permission to access the specified notebook
+	 * @param notebookId
+	 * @param userId
+	 */
+	async getUserAccessId(notebookId: string, userId: string): Promise<string> {
+		/**
+		 * Get the list of all users that have access to the notebook
+		 */
+		const access: Access[] = await this.getAccessList(notebookId);
+		let accessId = '';
+
+		/**
+		 * Search to see the user making the request is contained inside the list. If so change access status to true
+		 */
+		access.forEach((user: Access) => {
+			if (user.userId === userId) {
+				accessId = user.accessId;
+			}
+		});
+
+		return accessId;
 	}
 }

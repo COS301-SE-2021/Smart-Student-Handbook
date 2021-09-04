@@ -6,6 +6,4 @@ export class AddAccessDto {
 	readonly profileUrl: string;
 
 	readonly notebookId: string;
-
-	readonly creator: boolean;
 }

@@ -4,4 +4,5 @@ export interface Access {
 	profileUrl: string;
 	notebookId: string;
 	creator: boolean;
+	accessId: string;
 }
