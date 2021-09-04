@@ -92,7 +92,6 @@ export class CloneNoteComponent implements OnInit {
 			.createNewNotebook({
 				author: this.user.displayName,
 				institution: this.user.institution,
-				creatorId: this.user.uid,
 				tags: [],
 			})
 			.subscribe((res: any) => {

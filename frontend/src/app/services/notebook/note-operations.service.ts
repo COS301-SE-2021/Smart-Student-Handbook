@@ -56,7 +56,7 @@ export class NoteOperationsService {
 				if (result !== undefined) {
 					// Create request object
 					const request = {
-						userId: this.user.uid,
+						// userId: this.user.uid,
 						notebookId,
 						name: result.title,
 						description: result.description,
@@ -126,7 +126,7 @@ export class NoteOperationsService {
 						noteId,
 						name: data.title,
 						description: data.description,
-						userId: this.user.uid,
+						// userId: this.user.uid,
 					};
 
 					// Call service and update notebook
@@ -211,7 +211,7 @@ export class NoteOperationsService {
 						// console.log(notebookId, title, description);
 
 						const request = {
-							userId: this.user.uid,
+							// userId: this.user.uid,
 							notebookId,
 							name: title,
 							description,

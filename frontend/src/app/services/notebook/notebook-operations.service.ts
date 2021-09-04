@@ -227,7 +227,6 @@ export class NotebookOperationsService {
 							course: result.course,
 							description: result.description,
 							institution: notebookDto.institution,
-							creatorId: notebookDto.creatorId,
 							private: result.private,
 							tags: notebookDto.tags,
 						})
@@ -251,7 +250,6 @@ export class NotebookOperationsService {
 			course: notebookDto.course,
 			description: notebookDto.description,
 			institution: notebookDto.institution,
-			creatorId: notebookDto.creatorId,
 			private: notebookDto.private,
 			tags: notebookDto.tags,
 			notebookId: notebookDto.notebookId,
@@ -303,7 +301,6 @@ export class NotebookOperationsService {
 					course: notebookDto.course,
 					description: result.description,
 					institution: notebookDto.institution,
-					creatorId: notebookDto.creatorId,
 					private: result.private,
 					tags: notebookDto.tags,
 					notebookId: notebookDto.notebookId,

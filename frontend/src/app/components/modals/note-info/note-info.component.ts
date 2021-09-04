@@ -98,7 +98,6 @@ export class NoteInfoComponent implements OnInit {
 				course: this.notebook.course,
 				description: this.notebook.description,
 				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
 				private: this.notebook.private,
 				tags: tagList,
 				notebookId: this.notebook.notebookId,

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -6,8 +6,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 	templateUrl: './smart-assist-modal.component.html',
 	styleUrls: ['./smart-assist-modal.component.scss'],
 })
-export class SmartAssistModalComponent implements OnInit {
+export class SmartAssistModalComponent {
 	constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-
-	ngOnInit(): void {}
 }

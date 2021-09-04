@@ -94,7 +94,7 @@ export class RateNotebookComponent implements OnInit {
 			message: this.review,
 			rating: this.ratingValue,
 			displayName: this.user.displayName,
-			userId: this.user.uid,
+			// userId: this.user.uid,
 			profileUrl: this.user.profilePic,
 		};
 
@@ -108,7 +108,7 @@ export class RateNotebookComponent implements OnInit {
 						rating: review.rating,
 					});
 				},
-				(error) => {
+				() => {
 					// console.log(error);
 				}
 			);

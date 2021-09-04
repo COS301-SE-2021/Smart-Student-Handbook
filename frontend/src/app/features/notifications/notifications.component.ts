@@ -32,7 +32,7 @@ export class NotificationsComponent implements OnInit {
 
 		if (this.user)
 			this.notificationService
-				.getUserNotifications(this.user.uid)
+				.getUserNotifications()
 				.subscribe((notifications) => {
 					console.log(notifications);
 					this.notifications = notifications;

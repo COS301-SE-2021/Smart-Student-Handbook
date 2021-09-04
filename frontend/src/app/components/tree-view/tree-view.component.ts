@@ -144,20 +144,16 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 		if (this.user)
 			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
-					let temp: any[] = [];
-					let index = 0;
+					let temp: string = '';
 					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
-						temp = notebook.access;
+						temp = notebook.creatorId;
 
-						if (temp.length > 0) {
-							index = temp.findIndex(
-								(a: any) => a.userId !== this.user.uid
-							);
-						}
+						console.log(notebook);
 
-						if (index >= 0 || temp.length === 0) {
+						// If the user is the creator
+						if (temp === this.user.uid) {
 							this.notebooks.push(notebook);
 
 							this.childrenSize += 1;
@@ -170,8 +166,6 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 
 							tree.push(child);
 						}
-
-						index = 0;
 					});
 
 					if (this.childrenSize > 0) {
@@ -203,7 +197,7 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				course: notebook[0].course,
 				description: notebook[0].description,
 				institution: notebook[0].institution,
-				creatorId: notebook[0].creatorId,
+				// creatorId: notebook[0].creatorId,
 				private: notebook[0].private,
 				tags: notebook[0].tags,
 				notebookId: notebook[0].notebookId,
@@ -277,7 +271,7 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				course: '',
 				description: '',
 				institution: this.user.institution,
-				creatorId: this.user.uid,
+				// creatorId: this.user.uid,
 				private: false,
 				tags: [],
 			})

@@ -25,16 +25,16 @@ const NOTIFICATION_API = addr;
 export class NotificationService {
 	constructor(private httpClient: HttpClient) {}
 
-	getUserNotifications(userId: string): Observable<any> {
+	getUserNotifications(): Observable<any> {
 		return this.httpClient.get(
-			`${NOTIFICATION_API}notification/getUserNotifications/${userId}`,
+			`${NOTIFICATION_API}notification/getUserNotifications`,
 			httpOptions
 		);
 	}
 
-	getUnreadNotifications(userId: string): Observable<any> {
+	getUnreadNotifications(): Observable<any> {
 		return this.httpClient.get(
-			`${NOTIFICATION_API}notification/getUnreadNotifications/${userId}`,
+			`${NOTIFICATION_API}notification/getUnreadNotifications`,
 			httpOptions
 		);
 	}
