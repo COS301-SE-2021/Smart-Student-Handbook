@@ -13,7 +13,7 @@ exports.addNotebook = functions.firestore.document('userNotebooks/{notebookId}')
 		course: data.course,
 	};
 
-	fetch('https://smartassit-nii4biypla-uc.a.run.app/addData', {
+	fetch('https://smartassist-nii4biypla-uc.a.run.app/addData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ exports.updateNotebook = functions.firestore.document('userNotebooks/{notebookId
 		course: data.course,
 	};
 
-	fetch('https://smartassit-nii4biypla-uc.a.run.app/editData', {
+	fetch('https://smartassist-nii4biypla-uc.a.run.app/editData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ exports.deleteNotebook = functions.firestore.document('userNotebooks/{notebookId
 		course: data.course,
 	};
 
-	fetch('https://smartassit-nii4biypla-uc.a.run.app/removeData', {
+	fetch('https://smartassist-nii4biypla-uc.a.run.app/removeData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

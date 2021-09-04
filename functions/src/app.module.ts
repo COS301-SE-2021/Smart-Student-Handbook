@@ -10,10 +10,9 @@ import { NotebookService } from './notebook/notebook.service';
 import { AccountController } from './account/account.controller';
 import { AccountService } from './account/account.service';
 import { RecommendationsController } from './recommendations/recommendations.controller';
-import { RecommendationsModule } from './recommendations/recommendations.module';
+import { RecommendationsService } from './recommendations/recommendations.service';
 
 @Module({
-	imports: [RecommendationsModule],
 	controllers: [
 		AppController,
 		NotificationController,
@@ -22,7 +21,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
 		AccountController,
 		RecommendationsController,
 	],
-	providers: [AppService, NotificationService, UserService, NotebookService, AccountService],
-	exports: [AppService, NotificationService, UserService, NotebookService, AccountService],
+	providers: [AppService, NotificationService, UserService, NotebookService, AccountService, RecommendationsService],
+	exports: [AppService, NotificationService, UserService, NotebookService, AccountService, RecommendationsService],
 })
 export class AppModule {}
