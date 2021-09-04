@@ -696,8 +696,6 @@ export class AccountService {
 	}
 
 	async setUserNotificationToken(userId: string, notificationID: string): Promise<Response> {
-		// const userId: string = firebase.auth().currentUser.uid;
-
 		return admin
 			.firestore()
 			.collection('users')
@@ -710,19 +708,11 @@ export class AccountService {
 			}));
 	}
 
-	// async getUserId(): Promise<string> {
-	// 	try {
-	// 		return firebase.auth().currentUser.uid;
-	// 	} catch (error) {
-	// 		throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-	// 	}
-	// }
-
 	async getUserNotificationID(userId: string): Promise<string> {
 		try {
-			const userID = await admin.firestore().collection('users').doc(userId).get();
+			const notificationId = await admin.firestore().collection('users').doc(userId).get();
 
-			return userID.data().notificationID.value;
+			return notificationId.data().notificationID.value;
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
