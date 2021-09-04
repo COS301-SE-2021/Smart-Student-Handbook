@@ -18,22 +18,26 @@ export class UserController {
 	/**
 	 * Calls the user service to create a new user profile
 	 * @param user - user object is sent through with all the information to create a user
+	 * @param headers
 	 */
 	@Post('createUser')
-	async createUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createUser(user);
+	async createUser(@Body() user: UserRequestDto, @Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.userService.createUser(user, userId);
 	}
 
 	/**
 	 * Calls the user service to update a user profile
 	 * @param user - user object is sent through with all the information to update a user
+	 * @param headers
 	 */
 	@Post('updateUser')
-	async updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.updateUser(user);
+	async updateUser(@Body() user: UserRequestDto, @Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.userService.updateUser(user, userId);
 	}
 
-	@Delete('deleteUserProfile/:userId')
+	@Delete('deleteUserProfile')
 	async deleteUserProfile(@Headers() headers): Promise<UserResponseDto> {
 		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.userService.deleteUserProfile(userId);
