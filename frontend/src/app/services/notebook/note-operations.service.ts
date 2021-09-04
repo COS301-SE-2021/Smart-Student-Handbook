@@ -243,7 +243,7 @@ export class NoteOperationsService {
 		return new Observable((observable) => {
 			const options: any[] = [];
 			this.notebookService
-				.getUserNotebooks(this.user.uid)
+				.getUserNotebooks()
 				.subscribe((notebooks: any[]) => {
 					notebooks.forEach((notebook) => {
 						options.push({
