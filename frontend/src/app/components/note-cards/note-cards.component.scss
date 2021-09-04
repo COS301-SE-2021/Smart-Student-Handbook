@@ -1,5 +1,9 @@
 @import "src/app/mobile/notes/notes.component";
 
+.pointerCursor{
+  cursor: pointer;
+}
+
 
 .noteContainer{
   display: inline-block;
@@ -20,12 +24,13 @@
 }
 
 .description{
-  font-size: medium;
+  //font-size: medium;
   color: #878787;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 20px;
-  max-height: 170px;
+  //max-height: calc();
+  max-height: inherit;
 }
 
 #noteCardProgressbar{

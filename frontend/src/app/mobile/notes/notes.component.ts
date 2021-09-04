@@ -6,6 +6,7 @@ import {
 	NoteOperationsService,
 	NotebookObservablesService,
 } from '@app/services';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-notes',
@@ -20,31 +21,38 @@ export class NotesComponent {
 
 	notebookId: string = '';
 
+	notebookTitle: '';
+
 	constructor(
 		private router: Router,
 		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService
 	) {
 		this.notebookObservables.openNotebookId.subscribe((notebook) => {
 			if (notebook.notebookId !== '') {
 				this.notebookId = notebook.notebookId;
+				this.notebookTitle = notebook.title;
 			}
+		});
+
+		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
+			this.notebookTitle = notebook.title;
 		});
 	}
 
 	createNewNotebook() {
 		this.notesService
-			.createNewNote(this.notebookId)
+			.createNewNote(this.notebookId, this.notebookTitle)
 			.subscribe(async (data) => {
 				await this.router.navigate(['notebook']);
 
-				console.log('ADD EDITOR');
 				this.notebookObservables.setLoadEditor(
 					this.notebookId,
 					data.id,
 					data.notebook.name,
-					false
+					data.notebook.name
 				);
 			});
 	}

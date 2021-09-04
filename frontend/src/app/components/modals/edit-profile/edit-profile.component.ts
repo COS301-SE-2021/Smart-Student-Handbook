@@ -107,7 +107,6 @@ export class EditProfileComponent implements OnInit {
 		if (this.data !== undefined && this.user) {
 			this.accountService
 				.updateUser(
-					this.user.uid,
 					this.data.displayName,
 					this.data.institution,
 					this.data.department,
@@ -148,7 +147,7 @@ export class EditProfileComponent implements OnInit {
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true && this.user) {
-				this.accountService.deleteUser(this.user.uid).subscribe(
+				this.accountService.deleteUser().subscribe(
 					(res: any) => {
 						const confirm = this.dialog.open(MessageComponent, {
 							data: {

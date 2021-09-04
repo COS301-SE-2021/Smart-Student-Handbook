@@ -1,0 +1,73 @@
+<div>
+  <button mat-icon-button style="float: right">
+    <mat-icon [mat-dialog-close]="true">close</mat-icon>
+  </button>
+
+  <h2>Clone Note</h2>
+
+  <label class="mr-2">Select a notebook or create a</label>
+  <button mat-stroked-button (click)="createNewNotebook()">
+    New Notebook
+  </button>
+  <br>
+
+  <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete" [formGroup]="form">
+    <mat-label>Select a notebook</mat-label>
+    <input type="text"
+           placeholder="Select a notebook"
+           aria-label="collaborator"
+           matInput
+           required
+           id="notebookInput"
+           [formControl]="myControl"
+           [matAutocomplete]="auto"
+           #notebookInput>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (onSelectionChange)="selected(option.notebookId)">
+        <span>{{option.title}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-divider class="mb-2"></mat-divider>
+
+  <h3>New Note Information</h3>
+
+  <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
+    <mat-label>Note title</mat-label>
+    <input
+      matInput
+      placeholder="Notebook One"
+      name="title"
+      required
+      autocomplete="off"
+      formControlName="title"
+      [(ngModel)]="title"
+    />
+    <mat-hint>Note title</mat-hint>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
+    <mat-label>Note Description</mat-label>
+    <textarea
+      matInput
+      placeholder="My first note"
+      name="description"
+      required
+      autocomplete="off"
+      formControlName="description"
+      [(ngModel)]="description"
+    ></textarea>
+
+    <mat-hint>Note Description</mat-hint>
+  </mat-form-field>
+
+
+
+  <div mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="true">Cancel</button><!-- (click)="onNoClick()" -->
+    <button mat-button *ngIf="!form.valid || notebookId === ''">Ok</button>
+    <button mat-button *ngIf="form.valid && notebookId !== ''" [mat-dialog-close]="{notebookId: notebookId, title: title, description: description}">Ok</button>
+  </div>
+</div>

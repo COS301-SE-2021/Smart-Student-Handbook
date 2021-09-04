@@ -7,7 +7,7 @@
 <hr style="width: 90%; margin: 15px auto 15px auto;" *ngIf="smallScreen">
 
 <h2 style="margin-top: 10px;">Add a review</h2>
-<mat-stepper [linear]="true" #stepper>
+<mat-stepper [linear]="true" #stepper >
   <mat-step [stepControl]="firstFormGroup" [editable]="false">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Rate</ng-template>
