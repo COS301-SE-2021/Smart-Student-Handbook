@@ -204,7 +204,7 @@
 //
 // 	describe('Reset Password Decode Code', () => {
 // 		it('It should decode the code correctly', () => {
-// 			// eslint-disable-next-line max-len
+// eslint-disable-next-line max-len
 // 			const code = serviceAccount.decodeSecureCode('OTc0ODUzMDAwMDAwLmlIVENITGQ4LnRlc3RAZ21haWwuY29tLjg1MzE3NTMy');
 //
 // 			expect(code.email).toBe('test@gmail.com');

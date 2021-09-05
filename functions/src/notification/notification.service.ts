@@ -92,6 +92,7 @@ export class NotificationService {
 				.messaging()
 				.send(message)
 				.then((response) => {
+					// eslint-disable-next-line no-console
 					console.log('Successfully sent individual message:', response);
 
 					return {
@@ -100,6 +101,7 @@ export class NotificationService {
 				})
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				.catch((error) => {
+					// eslint-disable-next-line no-console
 					console.log('Error sending individual message:', error);
 
 					return {

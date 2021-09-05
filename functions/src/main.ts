@@ -38,7 +38,9 @@ export async function createNestServer(server: Express) {
 }
 
 createNestServer(server)
+	// eslint-disable-next-line no-console
 	.then(() => console.log('Nest Ready'))
+	// eslint-disable-next-line no-console
 	.catch((err) => console.error('Nest broken', err));
 
 export const app = functions.https.onRequest(server);
