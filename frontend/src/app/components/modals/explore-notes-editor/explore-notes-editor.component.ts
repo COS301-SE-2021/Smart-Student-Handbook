@@ -4,18 +4,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-	AddNoteComponent,
-	CollaboratorData,
-	Collaborators,
-	Tag,
-} from '@app/components';
+import { Tag } from '@app/components';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotebookService, NoteOperationsService } from '@app/services';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-explore-notes',
@@ -229,6 +220,8 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
 				this.Editor.save().then((outputData) => {
+					// console.log(newNoteId);
+					// console.log(outputData);
 					firebase.database().ref(`notebook/${newNoteId}`).set({
 						outputData,
 					});

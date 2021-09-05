@@ -48,6 +48,7 @@ export class NoteService {
 
 		return {
 			message: 'Successfully created note',
+			noteId,
 		};
 	}
 

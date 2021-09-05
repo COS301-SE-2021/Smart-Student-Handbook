@@ -99,18 +99,13 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
 					// console.log(notebooks);
-					let temp: any[] = [];
-					let index = 0;
+					let temp: string = '';
 					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
-						temp = notebook.access;
+						temp = notebook.creatorId;
 
-						index = temp.findIndex(
-							(a: any) => a.userId === this.user.uid
-						);
-
-						if (index >= 0) {
+						if (temp !== this.user.uid) {
 							this.notebooks.push(notebook);
 
 							this.childrenSize += 1;
@@ -123,8 +118,6 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 
 							tree.push(child);
 						}
-
-						index = 0;
 					});
 
 					if (this.childrenSize > 0) {
@@ -156,7 +149,6 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 				course: notebook[0].course,
 				description: notebook[0].description,
 				institution: notebook[0].institution,
-				creatorId: notebook[0].creatorId,
 				private: notebook[0].private,
 				tags: notebook[0].tags,
 				notebookId: notebook[0].notebookId,

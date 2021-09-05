@@ -558,7 +558,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				course: this.notebook.course,
 				description: this.notebook.description,
 				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
 				private: this.notebook.private,
 				tags: tagList,
 				notebookId: this.notebook.notebookId,

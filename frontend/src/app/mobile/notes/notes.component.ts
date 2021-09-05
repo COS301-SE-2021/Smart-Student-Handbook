@@ -21,7 +21,7 @@ export class NotesComponent {
 
 	notebookId: string = '';
 
-	notebookTitle: '';
+	notebookTitle: string = '';
 
 	constructor(
 		private router: Router,
@@ -34,11 +34,18 @@ export class NotesComponent {
 			if (notebook.notebookId !== '') {
 				this.notebookId = notebook.notebookId;
 				this.notebookTitle = notebook.title;
+			} else {
+				this.notebookTitle = 'No notebook selected';
 			}
 		});
 
 		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
-			this.notebookTitle = notebook.title;
+			if (notebook.title !== '') {
+				this.notebookId = notebook.notebookId;
+				this.notebookTitle = notebook.title;
+			} else {
+				this.notebookTitle = 'No notebook selected';
+			}
 		});
 	}
 

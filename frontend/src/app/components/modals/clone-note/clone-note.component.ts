@@ -37,6 +37,8 @@ export class CloneNoteComponent implements OnInit {
 
 	notebookId: string = '';
 
+	isCompleted: boolean = false;
+
 	constructor(
 		private notebookService: NotebookOperationsService,
 		private notebookObservables: NotebookObservablesService,
@@ -60,6 +62,8 @@ export class CloneNoteComponent implements OnInit {
 			startWith(''),
 			map((value) => this.filter(value))
 		);
+
+		this.isCompleted = true;
 	}
 
 	/**
@@ -87,36 +91,43 @@ export class CloneNoteComponent implements OnInit {
 	 * Create and add a new notebook to the user's My Notebooks list
 	 */
 	createNewNotebook() {
+		this.isCompleted = false;
+
 		// console.log(this.user);
 		this.notebookService
 			.createNewNotebook({
 				author: this.user.displayName,
 				institution: this.user.institution,
-				creatorId: this.user.uid,
 				tags: [],
 			})
-			.subscribe((res: any) => {
-				if (res) {
-					this.options.push({
-						title: res.notebook.title,
-						notebookId: res.notebook.notebookId,
-					});
+			.subscribe(
+				(res: any) => {
+					if (res) {
+						this.options.push({
+							title: res.notebook.title,
+							notebookId: res.notebook.notebookId,
+						});
 
-					// console.log(res);
-					const notebookInput = document.getElementById(
-						'notebookInput'
-					) as HTMLInputElement;
-					notebookInput.value = res.notebook.title;
+						// console.log(res);
+						const notebookInput = document.getElementById(
+							'notebookInput'
+						) as HTMLInputElement;
+						notebookInput.value = res.notebook.title;
 
-					this.myControl.setValue(res.notebook.title);
+						this.myControl.setValue(res.notebook.title);
 
-					this.notebookId = res.notebook.notebookId;
+						this.notebookId = res.notebook.notebookId;
 
-					this.notebookObservables.setClonedNotebook(
-						res.notebook.notebookId,
-						res.notebook.title
-					);
+						this.notebookObservables.setClonedNotebook(
+							res.notebook.notebookId,
+							res.notebook.title
+						);
+					}
+					this.isCompleted = true;
+				},
+				() => {
+					this.isCompleted = true;
 				}
-			});
+			);
 	}
 }

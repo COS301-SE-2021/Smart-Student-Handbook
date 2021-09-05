@@ -6,12 +6,7 @@ import {
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
 import { Collaborators } from '@app/components';
-import {
-	NotebookService,
-	ProfileService,
-	NoteOperationsService,
-	NotebookOperationsService,
-} from '@app/services';
+import { NotebookOperationsService } from '@app/services';
 
 export interface Tag {
 	name: string;
@@ -110,7 +105,6 @@ export class NotebookBottomSheetComponent implements OnInit {
 				course: this.notebook.course,
 				description: this.notebook.description,
 				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
 				private: this.notebook.private,
 				tags: tagList,
 				notebookId: this.notebook.notebookId,

@@ -2,7 +2,7 @@
 
 <mat-dialog-content class="mat-typography">
 
-  <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete">
+ <!-- <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete">
     <mat-label>Enter user name</mat-label>
     <input type="text"
            placeholder="Add collaborator"
@@ -17,7 +17,44 @@
         <span>{{option.name}}</span>
       </mat-option>
     </mat-autocomplete>
-  </mat-form-field>
+  </mat-form-field>-->
+
+  <ais-instantsearch [config]="config">
+    <main class="search-container">
+      <div class="right-panel">
+        <div id="hits">
+          <div id="searchbox">
+            <ais-search-box placeholder="Search"></ais-search-box>
+          </div>
+          <ais-hits >
+            <ng-template let-hits="hits" let-results="results">
+              <div *ngIf="hits.length === 0">
+                No results found for
+                <strong>{{results.query}}</strong>.
+              </div>
+              <div class="ais-Hits-list">
+                <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" >
+                  <article>
+                    <div class="post-content">
+                      <div class="picture" >
+                        {{hit.data.profilePicUrl}}
+                      </div>
+                      <h2 class="entry-title" >
+                        {{hit.data.username}}
+                      </h2>
+                      <div class="post-excerpt" >
+                        <p>{{hit.data.institution}}</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </ng-template>
+          </ais-hits>
+        </div>
+      </div>
+    </main>
+  </ais-instantsearch>
 
 
 </mat-dialog-content>

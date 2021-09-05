@@ -10,3 +10,31 @@
 #collabAutocomplete{
   width: 100%;
 }
+
+ais-instantsearch {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+em {
+  font-style: normal;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.search-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  //width: 960px;
+  width: auto;
+  min-height: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1007px) {
+  .search-container {
+    width: 100%;
+  }
+}

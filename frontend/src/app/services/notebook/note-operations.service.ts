@@ -56,7 +56,7 @@ export class NoteOperationsService {
 				if (result !== undefined) {
 					// Create request object
 					const request = {
-						userId: this.user.uid,
+						// userId: this.user.uid,
 						notebookId,
 						name: result.title,
 						description: result.description,
@@ -126,7 +126,7 @@ export class NoteOperationsService {
 						noteId,
 						name: data.title,
 						description: data.description,
-						userId: this.user.uid,
+						// userId: this.user.uid,
 					};
 
 					// Call service and update notebook
@@ -200,9 +200,8 @@ export class NoteOperationsService {
 
 		return new Observable((observer) => {
 			// Get info and create notebook after dialog is closed
-			dialogRef
-				.afterClosed()
-				.subscribe(({ notebookId, title, description }) => {
+			dialogRef.afterClosed().subscribe(
+				({ notebookId, title, description }) => {
 					if (
 						notebookId !== undefined &&
 						title !== undefined &&
@@ -211,15 +210,14 @@ export class NoteOperationsService {
 						// console.log(notebookId, title, description);
 
 						const request = {
-							userId: this.user.uid,
+							// userId: this.user.uid,
 							notebookId,
 							name: title,
 							description,
 						};
 
-						this.notebookService
-							.createNote(request)
-							.subscribe((newNote) => {
+						this.notebookService.createNote(request).subscribe(
+							(newNote) => {
 								// console.log(newNote);
 
 								if (newNote.noteId) {
@@ -231,10 +229,22 @@ export class NoteOperationsService {
 										}
 									);
 									observer.next(newNote.noteId);
+								} else {
+									observer.next(false);
 								}
-							});
+							},
+							() => {
+								observer.next(false);
+							}
+						);
+					} else {
+						observer.next(false);
 					}
-				});
+				},
+				() => {
+					observer.next(false);
+				}
+			);
 		});
 	}
 

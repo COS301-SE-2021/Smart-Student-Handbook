@@ -51,7 +51,7 @@ export class NoteCardsComponent implements OnInit {
 
 	readonly: boolean = false;
 
-	isCompleted: boolean = false;
+	isCompleted: boolean = true;
 
 	constructor(
 		private router: Router,
@@ -66,15 +66,15 @@ export class NoteCardsComponent implements OnInit {
 	ngOnInit(): void {
 		this.notes = [];
 
-		this.isCompleted = false;
 		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;
-			this.isCompleted = false;
 
 			if (notebook.notebookId !== '') {
+				this.isCompleted = false;
+
 				this.notebookId = notebook.notebookId;
 				this.notebookTitle = notebook.title;
 				this.getUserNotebooks();
@@ -91,14 +91,21 @@ export class NoteCardsComponent implements OnInit {
 		if (this.notebookId !== null) {
 			this.notebookService
 				.getNotes(this.notebookId) // this.user.uid
-				.subscribe((result) => {
-					this.notes = [];
+				.subscribe(
+					(result) => {
+						this.notes = [];
 
-					for (let i = 0; i < result.length; i += 1) {
-						this.notes.push(result[i]);
+						for (let i = 0; i < result.length; i += 1) {
+							this.notes.push(result[i]);
+						}
+						this.isCompleted = true;
+					},
+					() => {
+						this.isCompleted = true;
 					}
-					this.isCompleted = true;
-				});
+				);
+		} else {
+			this.isCompleted = true;
 		}
 	}
 
@@ -125,12 +132,13 @@ export class NoteCardsComponent implements OnInit {
 			.subscribe((data) => {
 				if (data) {
 					this.notes = this.notes.map((note: any) => {
-						if (note.noteId === id) {
-							note.description = data.description;
-							note.name = data.title;
+						const temp = note;
+						if (temp.noteId === id) {
+							temp.description = data.description;
+							temp.name = data.title;
 						}
 
-						return note;
+						return temp;
 					});
 				}
 			});
@@ -145,6 +153,7 @@ export class NoteCardsComponent implements OnInit {
 						if (notebook.noteId !== id) {
 							return notebook;
 						}
+						return null;
 					});
 				}
 			});
@@ -170,5 +179,37 @@ export class NoteCardsComponent implements OnInit {
 				},
 			});
 		}
+	}
+
+	/**
+	 * substring the description of a note on a small screen
+	 * @param description
+	 */
+	substringSmallDescription(description: string) {
+		if (description.length >= 50) {
+			return `${description
+				.substring(0, 100)
+				.substring(
+					0,
+					description.substring(0, 50).lastIndexOf(' ')
+				)}...`;
+		}
+		return description;
+	}
+
+	/**
+	 * substring the description of a note on a medium screen
+	 * @param description
+	 */
+	substringMediumDescription(description: string) {
+		if (description.length >= 100) {
+			return `${description
+				.substring(0, 100)
+				.substring(
+					0,
+					description.substring(0, 100).lastIndexOf(' ')
+				)}...`;
+		}
+		return description;
 	}
 }
