@@ -12,12 +12,17 @@ import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
 import { UpdateDto } from './dto/update.dto';
+import { AuthService } from '../auth/auth.service';
 
 require('firebase/auth');
 
 @Injectable()
 export class AccountService {
-	constructor(private notificationService: NotificationService, private userService: UserService) {}
+	constructor(
+		private notificationService: NotificationService,
+		private userService: UserService,
+		private authService: AuthService,
+	) {}
 
 	/**
 	 * Register a new user
@@ -723,4 +728,17 @@ export class AccountService {
 			);
 		}
 	}
+
+	// async refreshIdToken(userId: string): Promise<string> {
+	// 	try {
+	// 		const notificationId = await admin.firestore().collection('users').doc(userId).get();
+	//
+	// 		return notificationId.data().notificationID.value;
+	// 	} catch (error) {
+	// 		throw new HttpException(
+	// 			`Something went wrong. Operation could not be executed.${error}`,
+	// 			HttpStatus.INTERNAL_SERVER_ERROR,
+	// 		);
+	// 	}
+	// }
 }
