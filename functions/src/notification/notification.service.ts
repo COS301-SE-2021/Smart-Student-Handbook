@@ -189,12 +189,13 @@ export class NotificationService {
 					.collection('notifications')
 					.doc(notificationId)
 					.set({
-						userID: userId,
+						userID: createNotificationDto.userID,
 						type: createNotificationDto.type,
 						body: createNotificationDto.body,
 						heading: createNotificationDto.heading,
 						notebookID: createNotificationDto.notebookID,
 						notebookTitle: createNotificationDto.notebookTitle,
+						creatorId: userId,
 						opened: false,
 						notificationId,
 					})
@@ -258,6 +259,7 @@ export class NotificationService {
 						notebookID: doc.data().notebookID,
 						notebookTitle: doc.data().notebookTitle,
 						notificationId: doc.data().notificationId,
+						creatorId: doc.data().creatorId,
 					});
 				} else {
 					notifications.push({
@@ -269,6 +271,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notebookTitle: doc.data().notebookTitle,
 						notificationId: doc.data().notificationId,
+						creatorId: doc.data().creatorId,
 					});
 				}
 			});

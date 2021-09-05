@@ -344,13 +344,9 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		this.noteId = noteId;
 
-		console.log(noteId);
-
 		// Change the path to the correct notebook's path
 		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
-		// dbRefObject.once('value', (res) => {
-		// 	console.log(res.val());
-		// });
+
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
 		 */
@@ -586,10 +582,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebook.notebookId,
 				this.notebookTitle
 			)
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.subscribe(() => {
-				// this.collaborators.push(collaborator);
-			});
+			.subscribe(
+				(status) => {
+					console.log(status);
+					this.doneLoading = true;
+				},
+				() => {
+					this.doneLoading = true;
+				}
+			);
 	}
 
 	removeCollaborator(userId: string) {

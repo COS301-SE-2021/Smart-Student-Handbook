@@ -150,8 +150,6 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 					notebooks.forEach((notebook: any) => {
 						temp = notebook.creatorId;
 
-						console.log(notebook);
-
 						// If the user is the creator
 						if (temp === this.user.uid) {
 							this.notebooks.push(notebook);

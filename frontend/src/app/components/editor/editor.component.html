@@ -86,7 +86,7 @@
         <tr *ngIf="!private" style="height: 0px">
           <td style="height: 0px"></td>
           <td style="height: 0px">
-            <button color="primary" mat-icon-button id="addGroupBtn" [disabled]="!opened" (click)="addCollaborator()">
+            <button color="primary" mat-icon-button id="addGroupBtn" *ngIf="collaborators.length !== 1" [disabled]="!opened" (click)="addCollaborator()">
               <mat-icon>group_add</mat-icon>
             </button>
           </td>
@@ -97,21 +97,28 @@
 					</td>
 					<td headers="tableContent">
 
+            <button mat-stroked-button *ngIf="collaborators.length === 1" (click)="addCollaborator()">
+              Add Collaborator
+            </button>
+
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
-							<mat-card-header>
-								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
+              <ng-template [ngIf]="collaborator.id !== creator.id">
+                <mat-card-header>
+                  <div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
 
-                <button class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
-                  <mat-icon class="removeCollaboratorIcon">
-                    remove_circle_outline
-                  </mat-icon>
-                </button>
+                  <button *ngIf="user.uid === creator.id" class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
+                    <mat-icon class="removeCollaboratorIcon">
+                      remove_circle_outline
+                    </mat-icon>
+                  </button>
 
 
-								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"
-									>{{collaborator.name}}</mat-card-title
-								>
-							</mat-card-header>
+                  <mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"
+                  >{{collaborator.name}}</mat-card-title
+                  >
+                </mat-card-header>
+              </ng-template>
+
 						</mat-card>
 					</td>
 				</tr>

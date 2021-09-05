@@ -148,8 +148,10 @@ export class NotebookOperationsService {
 
 				// Push tags
 				const tags: any = [];
-				for (let i = 0; i < notebook.tags.length; i += 1) {
-					tags.push({ name: notebook.tags[i] });
+				if (notebook.tags) {
+					for (let i = 0; i < notebook.tags.length; i += 1) {
+						tags.push({ name: notebook.tags[i] });
+					}
 				}
 
 				// Get collaborator info

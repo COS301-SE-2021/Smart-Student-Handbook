@@ -1,7 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import algoliasearch from 'algoliasearch/lite';
 
@@ -21,7 +19,7 @@ const searchClient = algoliasearch(
 	templateUrl: './add-collaborator.component.html',
 	styleUrls: ['./add-collaborator.component.scss'],
 })
-export class AddCollaboratorComponent implements OnInit {
+export class AddCollaboratorComponent {
 	myControl = new FormControl();
 
 	config = {
@@ -32,39 +30,24 @@ export class AddCollaboratorComponent implements OnInit {
 		searchClient,
 	};
 
-	options: CollaboratorData[] = [
-		{ name: 'Arno', profileUrl: '', id: 'gRX5LNVNIcUgK0R8qC2DSHFZ5My2' },
-	];
-
-	selectedUser?: CollaboratorData;
-
-	filteredOptions!: Observable<CollaboratorData[]>;
+	selectedUser?: any;
 
 	constructor(
 		public dialogRef: MatDialogRef<AddCollaboratorComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: CollaboratorData
 	) {}
 
-	ngOnInit(): void {
-		this.filteredOptions = this.myControl.valueChanges.pipe(
-			startWith(''),
-			map((value) => this.filter(value))
-		);
-	}
-
-	private filter(value: string): CollaboratorData[] {
-		const filterValue = value.toLowerCase();
-
-		return this.options.filter((option) =>
-			option.name.toLowerCase().includes(filterValue)
-		);
-	}
-
 	onNoClick(): void {
 		this.dialogRef.close();
 	}
 
-	select(user: CollaboratorData): void {
-		this.selectedUser = user;
+	select(user: any): void {
+		this.selectedUser = {
+			name: user.data.username,
+			profileUrl: user.data.profilePicUrl,
+			id: user.data.uid,
+		};
+
+		this.dialogRef.close(this.selectedUser);
 	}
 }

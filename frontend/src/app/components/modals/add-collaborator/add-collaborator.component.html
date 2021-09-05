@@ -20,31 +20,32 @@
   </mat-form-field>-->
 
   <ais-instantsearch [config]="config">
-    <main class="search-container">
+    <main class="container">
       <div class="right-panel">
+        <div id="searchbox">
+          <ais-search-box placeholder="Search"></ais-search-box>
+        </div>
         <div id="hits">
-          <div id="searchbox">
-            <ais-search-box placeholder="Search"></ais-search-box>
-          </div>
-          <ais-hits >
+          <ais-hits>
             <ng-template let-hits="hits" let-results="results">
               <div *ngIf="hits.length === 0">
                 No results found for
                 <strong>{{results.query}}</strong>.
               </div>
               <div class="ais-Hits-list">
-                <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" >
+                <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" (click)="select(hit)">
                   <article>
                     <div class="post-content">
-                      <div class="picture" >
-                        {{hit.data.profilePicUrl}}
+                      <div class="picture" [ngStyle]="{'background-image': 'url('+hit.data.profilePicUrl+')'}">
+
                       </div>
-                      <h2 class="entry-title" >
-                        {{hit.data.username}}
-                      </h2>
-                      <div class="post-excerpt" >
-                        <p>{{hit.data.institution}}</p>
+                      <div class="userDescriptionContainer">
+                        <h3 class="personInstitution">
+                          {{hit.data.username}}
+                        </h3>
+                        <sub>{{hit.data.institution}}</sub>
                       </div>
+
                     </div>
                   </article>
                 </div>

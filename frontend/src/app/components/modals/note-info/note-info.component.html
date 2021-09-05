@@ -22,20 +22,29 @@
   <mat-divider></mat-divider>
 
   <div>
-    <button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+    <button color="primary" *ngIf="collaborators.length !== 1" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
       <mat-icon>group_add</mat-icon>
     </button>
 
     <h2>Collaborators:</h2>
 
+    <button mat-stroked-button *ngIf="collaborators.length === 1" (click)="addCollaborator()">
+      Add Collaborator
+    </button>
+
+
     <div align="center" class="collaborators" *ngFor="let collaborator of collaborators">
-      <div mat-card-avatar class="collaborator-image"></div>
 
-      <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
-        remove_circle_outline
-      </mat-icon>
+      <ng-template [ngIf]="collaborator.id !== creator.id">
+        <div mat-card-avatar class="collaborator-image"></div>
 
-      <p class="personName">{{collaborator.name}}</p>
+        <mat-icon *ngIf="user.uid === creator.id" class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+          remove_circle_outline
+        </mat-icon>
+
+        <p class="personName">{{collaborator.name}}</p>
+      </ng-template>
+
     </div>
 
   </div>
