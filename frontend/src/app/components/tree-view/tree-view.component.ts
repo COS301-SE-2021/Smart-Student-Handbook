@@ -201,21 +201,24 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
+				console.log(val);
 				this.notebooks = this.notebooks.map((nb: any) => {
-					if (nb.notebookId === notebookId) {
-						nb.title = val.title;
-						nb.course = val.course;
-						nb.description = val.description;
-						nb.private = val.private;
+					const temp = nb;
+					if (temp.notebookId === notebookId) {
+						temp.title = val.title;
+						temp.course = val.course;
+						temp.description = val.description;
+						temp.private = val.private;
 					}
-					return nb;
+					return temp;
 				});
 
 				let tree = this.dataSource.data[0].children;
 				if (tree)
 					tree = tree.map((node) => {
-						if (node.id === notebookId) {
-							node.name = val.title;
+						const temp = node;
+						if (temp.id === notebookId) {
+							temp.name = val.title;
 						}
 						return node;
 					});
@@ -274,48 +277,50 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				tags: [],
 			})
 			.subscribe((val: any) => {
-				this.openedNotebookId = val.notebook.notebookId;
+				if (val) {
+					this.openedNotebookId = val.notebook.notebookId;
 
-				this.notebooks.push(val.notebook);
+					this.notebooks.push(val.notebook);
 
-				const child = {
-					name: val.notebook.title,
-					id: val.notebook.notebookId,
-					// children: childArr,
-				};
+					const child = {
+						name: val.notebook.title,
+						id: val.notebook.notebookId,
+						// children: childArr,
+					};
 
-				this.childrenSize += 1;
+					this.childrenSize += 1;
 
-				let tree: any;
-				if (this.dataSource.data[0].children)
-					tree = this.dataSource.data[0].children;
+					let tree: any;
+					if (this.dataSource.data[0].children)
+						tree = this.dataSource.data[0].children;
 
-				if (this.childrenSize === 1) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: [child],
-						},
-					];
-				} else {
-					tree.push(child);
+					if (this.childrenSize === 1) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [child],
+							},
+						];
+					} else {
+						tree.push(child);
 
-					this.dataSource.data = [
-						{
-							name: 'My notebooks',
-							id: '',
-							children: tree,
-						},
-					];
+						this.dataSource.data = [
+							{
+								name: 'My notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+
+					this.treeControl.expandAll();
+
+					this.openNotebookFolder(
+						val.notebook.notebookId,
+						val.notebook.title
+					);
 				}
-
-				this.treeControl.expandAll();
-
-				this.openNotebookFolder(
-					val.notebook.notebookId,
-					val.notebook.title
-				);
 			});
 	}
 

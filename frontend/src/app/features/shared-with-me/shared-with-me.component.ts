@@ -154,34 +154,39 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
-				this.notebooks = this.notebooks.map((nb: any) => {
-					if (nb.notebookId === notebookId) {
-						nb.title = val.title;
-						nb.course = val.course;
-						nb.description = val.description;
-						nb.private = val.private;
-					}
-					return nb;
-				});
-
-				let tree = this.dataSource.data[0].children;
-				if (tree)
-					tree = tree.map((node) => {
-						if (node.id === notebookId) {
-							node.name = val.title;
+				console.log(val);
+				if (val) {
+					this.notebooks = this.notebooks.map((nb: any) => {
+						const t = nb;
+						if (t.notebookId === notebookId) {
+							t.title = val.title;
+							t.course = val.course;
+							t.description = val.description;
+							t.private = val.private;
 						}
-						return node;
+						return t;
 					});
 
-				this.dataSource.data = [
-					{
-						name: 'Shared With Me',
-						id: '',
-						children: tree,
-					},
-				];
-				this.treeControl.expandAll();
-				this.notebookObservables.setNotebookPrivacy(val.private);
+					let tree = this.dataSource.data[0].children;
+					if (tree)
+						tree = tree.map((node) => {
+							const t = node;
+							if (t.id === notebookId) {
+								t.name = val.title;
+							}
+							return t;
+						});
+
+					this.dataSource.data = [
+						{
+							name: 'Shared With Me',
+							id: '',
+							children: tree,
+						},
+					];
+					this.treeControl.expandAll();
+					this.notebookObservables.setNotebookPrivacy(val.private);
+				}
 			});
 	}
 

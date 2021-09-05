@@ -224,13 +224,13 @@ export class NotebookOperationsService {
 				if (result) {
 					this.notebookService
 						.createNotebook({
-							title: result.title,
+							title: result.data.title,
 							author: notebookDto.author,
-							course: result.course,
-							description: result.description,
+							course: result.data.course,
+							description: result.data.description,
 							institution: notebookDto.institution,
-							private: result.private,
-							tags: notebookDto.tags,
+							private: result.data.private,
+							tags: result.tags,
 						})
 						.subscribe((data: any) => {
 							// console.log(data);
@@ -295,26 +295,31 @@ export class NotebookOperationsService {
 				description: notebookDto.description,
 				private: notebookDto.private,
 				header: 'Update Notebook',
+				tags: notebookDto.tags,
 			},
 		});
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				const dto: NotebookDto = {
-					title: result.title,
-					author: notebookDto.author,
-					course: notebookDto.course,
-					description: result.description,
-					institution: notebookDto.institution,
-					private: result.private,
-					tags: notebookDto.tags,
-					notebookId: notebookDto.notebookId,
-				};
-
 				if (result) {
-					this.updateNotebookTags(dto).subscribe((notebookResult) => {
-						observer.next(notebookResult);
-					});
+					const dto: NotebookDto = {
+						title: result.data.title,
+						author: notebookDto.author,
+						course: notebookDto.course,
+						description: result.data.description,
+						institution: notebookDto.institution,
+						private: result.data.private,
+						tags: result.tags,
+						notebookId: notebookDto.notebookId,
+					};
+
+					if (result) {
+						this.updateNotebookTags(dto).subscribe(
+							(notebookResult) => {
+								observer.next(notebookResult);
+							}
+						);
+					}
 				}
 			});
 		});

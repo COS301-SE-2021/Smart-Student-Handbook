@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Tag } from '@app/components';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -25,7 +24,7 @@ export class AddNoteComponent {
 		public dialogRef: MatDialogRef<AddNoteComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: AddNoteData
 	) {
-		this.tags = this.data.tags;
+		if (this.data.tags) this.tags = this.data.tags;
 	}
 
 	onNoClick(): void {
