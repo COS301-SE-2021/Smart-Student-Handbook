@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { EditProfileComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
+import { AccountService } from '@app/services';
 
 @Component({
 	selector: 'app-home',
@@ -13,7 +14,11 @@ export class HomeComponent {
 
 	date: any;
 
-	constructor(private router: Router, private dialog: MatDialog) {
+	constructor(
+		private router: Router,
+		private dialog: MatDialog,
+		private accountService: AccountService
+	) {
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		if (this.user) {
@@ -31,12 +36,8 @@ export class HomeComponent {
 
 	updateProfile(): void {
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
@@ -50,7 +51,7 @@ export class HomeComponent {
 			// Open dialog and populate the data attributes of the form fields
 			const dialogRef = this.dialog.open(EditProfileComponent, {
 				width: screenWidth,
-				height: '90vh',
+				// height: '90vh',
 				data: this.user,
 			});
 
@@ -59,6 +60,19 @@ export class HomeComponent {
 				// update the user object after the update
 				this.user = JSON.parse(<string>localStorage.getItem('user'));
 			});
+		}
+	}
+
+	async logout() {
+		if (this.user) {
+			this.accountService.singOut().subscribe(
+				() => {
+					this.router.navigate(['account/login']);
+				},
+				(err) => {
+					console.log(`Error: ${err.error.message}`);
+				}
+			);
 		}
 	}
 }
