@@ -234,6 +234,8 @@ export class NotebookOperationsService {
 							// console.log(data);
 							observer.next(data);
 						});
+				} else {
+					observer.next(false);
 				}
 			});
 		});

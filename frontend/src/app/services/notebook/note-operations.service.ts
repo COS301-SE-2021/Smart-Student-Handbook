@@ -200,9 +200,8 @@ export class NoteOperationsService {
 
 		return new Observable((observer) => {
 			// Get info and create notebook after dialog is closed
-			dialogRef
-				.afterClosed()
-				.subscribe(({ notebookId, title, description }) => {
+			dialogRef.afterClosed().subscribe(
+				({ notebookId, title, description }) => {
 					if (
 						notebookId !== undefined &&
 						title !== undefined &&
@@ -217,9 +216,8 @@ export class NoteOperationsService {
 							description,
 						};
 
-						this.notebookService
-							.createNote(request)
-							.subscribe((newNote) => {
+						this.notebookService.createNote(request).subscribe(
+							(newNote) => {
 								// console.log(newNote);
 
 								if (newNote.noteId) {
@@ -231,10 +229,22 @@ export class NoteOperationsService {
 										}
 									);
 									observer.next(newNote.noteId);
+								} else {
+									observer.next(false);
 								}
-							});
+							},
+							() => {
+								observer.next(false);
+							}
+						);
+					} else {
+						observer.next(false);
 					}
-				});
+				},
+				() => {
+					observer.next(false);
+				}
+			);
 		});
 	}
 

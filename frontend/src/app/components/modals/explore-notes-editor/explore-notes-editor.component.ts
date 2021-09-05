@@ -220,6 +220,8 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
 				this.Editor.save().then((outputData) => {
+					// console.log(newNoteId);
+					// console.log(outputData);
 					firebase.database().ref(`notebook/${newNoteId}`).set({
 						outputData,
 					});
