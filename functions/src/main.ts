@@ -49,3 +49,4 @@ export const api = functions.https.onRequest((req, res) => {
 //
 exports.notebookFunctions = require('./algoliaFunctions/notebook');
 exports.userFunctions = require('./algoliaFunctions/user');
+exports.noteFunctions = require('./algoliaFunctions/note');
