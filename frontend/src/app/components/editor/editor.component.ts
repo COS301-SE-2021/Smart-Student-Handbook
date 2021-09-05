@@ -572,19 +572,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		// console.log(request);
 		this.notebookService.updateNote(request).subscribe();
-		// this.notebookOperations
-		// 	.updateNotebookTags({
-		// 		creatorId: this.creator.id,
-		// 		title: this.notebook.title,
-		// 		author: this.notebook.author,
-		// 		course: this.notebook.course,
-		// 		description: this.notebook.description,
-		// 		institution: this.notebook.institution,
-		// 		private: this.notebook.private,
-		// 		tags: tagList,
-		// 		notebookId: this.notebook.notebookId,
-		// 	})
-		// 	.subscribe(() => {});
 	}
 
 	/**

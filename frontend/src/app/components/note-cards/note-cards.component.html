@@ -1,6 +1,6 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" ></mat-progress-bar>
 
-<label *ngIf="notes.length === 0">No notes could be found</label>
+<label *ngIf="isCompleted && notes.length === 0">No notes could be found</label>
 
 <div
   class="col-6 col-sm-4 noteContainer"

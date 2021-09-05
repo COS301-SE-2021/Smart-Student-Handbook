@@ -97,7 +97,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	ngOnInit(): void {
 		// }
 
-		// let userDeatils;
+		// let userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.open = false;
@@ -250,6 +250,20 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					newNote.notebook.description,
 					newNote.notebook.tags
 				);
+			});
+	}
+
+	/**
+	 * Delete a note
+	 * @param noteId
+	 */
+	deleteNote(noteId: string) {
+		this.notesService
+			.removeNote(this.notebookId, noteId)
+			.subscribe((removed: any) => {
+				if (removed) {
+					this.removeNote(noteId);
+				}
 			});
 	}
 
