@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '@app/services';
 import { map } from 'rxjs/operators';
+import { User } from '@app/models';
 
 // API URL for the account endpoint on the backend
 let addr;
@@ -30,6 +31,10 @@ export class AccountService {
 
 	public userLoggedInState: Observable<boolean>;
 
+	public userSubject: BehaviorSubject<User>;
+
+	public user: Observable<User>;
+
 	/**
 	 * Inside the constructor it is first checked if the LoginState localstorage has been set and if so then set the behavioral subject
 	 *  keep it persistent as other wise it will reset every time the user refreshes the page
@@ -51,10 +56,23 @@ export class AccountService {
 			this.isUserLoggedIn = new BehaviorSubject<boolean>(false);
 		}
 		this.userLoggedInState = this.isUserLoggedIn.asObservable();
+
+		this.userSubject = new BehaviorSubject<User>(
+			JSON.parse(localStorage.getItem('user'))
+		);
+		this.user = this.userSubject.asObservable();
 	}
 
 	get getLoginState(): boolean {
 		return this.isUserLoggedIn.value;
+	}
+
+	public get userValue(): User {
+		return this.userSubject.value;
+	}
+
+	public get getUserSubject(): BehaviorSubject<User> {
+		return this.userSubject;
 	}
 
 	/**
@@ -160,6 +178,7 @@ export class AccountService {
 					if (user.success) {
 						// update the localStorage with the new users information if updated successfully
 						localStorage.setItem('user', JSON.stringify(user.user));
+						this.userSubject.next(user.user);
 					}
 					return user;
 				})
