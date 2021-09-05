@@ -7,6 +7,8 @@ export class UpdateNotebookDto {
 
 	readonly description: string;
 
+	readonly creatorId?: string;
+
 	readonly institution: string;
 
 	readonly private: boolean;

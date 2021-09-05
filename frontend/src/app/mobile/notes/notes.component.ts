@@ -59,7 +59,9 @@ export class NotesComponent {
 					this.notebookId,
 					data.id,
 					data.notebook.name,
-					data.notebook.name
+					data.notebook.name,
+					data.notebook.description,
+					data.notebook.tags
 				);
 			});
 	}

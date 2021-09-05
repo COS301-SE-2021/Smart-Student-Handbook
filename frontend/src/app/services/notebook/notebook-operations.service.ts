@@ -249,6 +249,7 @@ export class NotebookOperationsService {
 	 */
 	updateNotebookTags(notebookDto: NotebookDto) {
 		const dto: NotebookDto = {
+			creatorId: notebookDto.creatorId,
 			title: notebookDto.title,
 			author: notebookDto.author,
 			course: notebookDto.course,

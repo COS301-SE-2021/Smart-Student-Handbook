@@ -82,6 +82,7 @@ export class NotebookService {
 				name: 'Introduction',
 				description: 'My first note',
 				notebookId,
+				tags: [],
 			},
 			userId,
 		);
@@ -186,11 +187,15 @@ export class NotebookService {
 	 * @param userId
 	 */
 	async updateNotebook(updateNotebookDto: UpdateNotebookDto, userId: string): Promise<Response> {
+		let testId = userId;
+		if (updateNotebookDto.creatorId) {
+			testId = updateNotebookDto.creatorId;
+		}
 		/**
 		 * Check if a user has access to edit the current notebook. If a user does not have access to edit the
 		 * current notebook throw an Unauthorized exception
 		 */
-		if (!(await this.accessService.checkCreator(updateNotebookDto.notebookId, userId))) {
+		if (!(await this.accessService.checkCreator(updateNotebookDto.notebookId, testId))) {
 			throw new HttpException('User is not authorized to update this notebook.', HttpStatus.UNAUTHORIZED);
 		}
 

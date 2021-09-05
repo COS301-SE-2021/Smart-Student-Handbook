@@ -40,6 +40,8 @@ export class NoteCardsComponent implements OnInit {
 		},
 	];
 
+	tags: string[];
+
 	// Variable that holds the logged in user details
 	user: any;
 
@@ -52,6 +54,8 @@ export class NoteCardsComponent implements OnInit {
 	readonly: boolean = false;
 
 	isCompleted: boolean = true;
+
+	creatorId: string = '';
 
 	constructor(
 		private router: Router,
@@ -69,6 +73,7 @@ export class NoteCardsComponent implements OnInit {
 		// get userDetails;
 		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
+		// if notes are displayed from the explore page
 		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;
 
@@ -80,6 +85,12 @@ export class NoteCardsComponent implements OnInit {
 				this.getUserNotebooks();
 			}
 		});
+
+		this.notebookService
+			.getNotebook(this.notebookId)
+			.subscribe((notebook) => {
+				this.creatorId = notebook.creatorId;
+			});
 	}
 
 	/**
@@ -109,14 +120,21 @@ export class NoteCardsComponent implements OnInit {
 		}
 	}
 
-	async openNote(noteId: string, title: string) {
+	async openNote(
+		noteId: string,
+		title: string,
+		description: string,
+		tags: string[]
+	) {
 		await this.router.navigate(['notebook']);
 
 		this.notebookObservables.setLoadEditor(
 			this.notebookId,
 			noteId,
 			title,
-			this.notebookTitle
+			this.notebookTitle,
+			description,
+			tags
 		);
 	}
 
@@ -125,10 +143,18 @@ export class NoteCardsComponent implements OnInit {
 	 * @param id the id of the notebook to be updated
 	 * @param title
 	 * @param description
+	 * @param tags
 	 */
-	editNote(id: string, title: string, description: string) {
+	editNote(id: string, title: string, description: string, tags: string[]) {
 		this.notesService
-			.editNote(this.notebookId, id, title, description)
+			.editNote(
+				this.notebookId,
+				id,
+				title,
+				description,
+				this.creatorId,
+				tags
+			)
 			.subscribe((data) => {
 				if (data) {
 					this.notes = this.notes.map((note: any) => {

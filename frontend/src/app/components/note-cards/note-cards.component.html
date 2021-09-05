@@ -10,11 +10,11 @@
     <button
       mat-icon-button
       class="favorite-icon editNoteBtn"
-      (click)="editNote(note.noteId, note.name, note.description)"
+      (click)="editNote(note.noteId, note.name, note.description, note.tags)"
     >
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
-    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name)">
+    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name, note.description, note.tags)">
       <h3 class="title">{{ note.name }}</h3>
 
       <label class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</label>

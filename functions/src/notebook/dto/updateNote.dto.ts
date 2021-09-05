@@ -5,5 +5,7 @@ export class UpdateNoteDto {
 
 	readonly notebookId: string;
 
-	readonly description: string;
+	readonly description?: string;
+
+	readonly tags?: string[];
 }

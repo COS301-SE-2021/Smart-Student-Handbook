@@ -83,9 +83,9 @@
 						</mat-card>
 					</td>
 				</tr>
-        <tr *ngIf="!private" style="height: 0px">
-          <td style="height: 0px"></td>
-          <td style="height: 0px">
+        <tr *ngIf="!private" style="height: 0">
+          <td style="height: 0"></td>
+          <td style="height: 0">
             <button color="primary" mat-icon-button id="addGroupBtn" *ngIf="collaborators.length !== 1" [disabled]="!opened" (click)="addCollaborator()">
               <mat-icon>group_add</mat-icon>
             </button>
@@ -137,7 +137,7 @@
 									[removable]="true"
 									(removed)="removeTag(tag)"
 								>
-									{{ tag.name }}
+									{{ tag }}
 									<mat-icon matChipRemove>cancel</mat-icon>
 								</mat-chip>
 								<input
@@ -146,6 +146,7 @@
 									[matChipInputSeparatorKeyCodes]="
 										separatorKeysCodes
 									"
+                  autocomplete="off"
 									[matChipInputAddOnBlur]="true"
 									(matChipInputTokenEnd)="addTag($event)"
 								/>
@@ -159,5 +160,5 @@
 
 	<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
-	<div id="editor" #editor class="editor"></div>
+	<div id="editor" class="editor"></div>
 </div>

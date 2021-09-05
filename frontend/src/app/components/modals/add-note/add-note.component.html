@@ -26,11 +26,39 @@
     <mat-hint>Description</mat-hint>
   </mat-form-field>
 
+  <mat-form-field id="noteTags">
+    <mat-label>Tags</mat-label>
+    <mat-chip-list
+      #chipList
+      aria-label="Fruit selection"
+    >
+      <mat-chip
+        *ngFor="let tag of tags"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="removeTag(tag)"
+      >
+        {{ tag }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Add tag..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="
+                      separatorKeysCodes
+                    "
+        autocomplete="off"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addTag($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+
 
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="{data: data, tags: tags}" cdkFocusInitial>Ok</button>
 </div>
 
 <!--</mat-dialog-content>-->

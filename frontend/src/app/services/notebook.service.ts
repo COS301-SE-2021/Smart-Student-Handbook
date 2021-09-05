@@ -74,6 +74,7 @@ export class NotebookService {
 		return this.httpClient.put(
 			`${NOTEBOOK_API}/updateNotebook`,
 			{
+				creatorId: notebookDto.creatorId,
 				title: notebookDto.title,
 				author: notebookDto.author,
 				course: notebookDto.course,
@@ -130,6 +131,7 @@ export class NotebookService {
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
 			description: noteDto.description,
+			tags: noteDto.tags,
 		});
 	}
 
@@ -139,6 +141,7 @@ export class NotebookService {
 	 * notebook id
 	 * note id
 	 * name
+	 * creator id
 	 */
 	updateNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.put(`${NOTEBOOK_API}/updateNote`, {
@@ -146,6 +149,8 @@ export class NotebookService {
 			noteId: noteDto.noteId,
 			name: noteDto.name,
 			description: noteDto.description,
+			creatorId: noteDto.creatorId,
+			tags: noteDto.tags,
 		});
 	}
 
