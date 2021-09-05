@@ -10,8 +10,13 @@ import {
 	NotificationService,
 	MessagingService,
 } from '@app/services';
-import { EditProfileComponent, TreeViewComponent } from '@app/components';
+import {
+	EditProfileComponent,
+	SmartAssistModalComponent,
+	TreeViewComponent,
+} from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
+import { SmartAssistBottomSheetComponent } from '@app/mobile';
 
 @Component({
 	selector: 'app-left-menu',
@@ -89,12 +94,8 @@ export class LeftMenuComponent implements OnInit {
 	 */
 	updateProfile() {
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
@@ -108,7 +109,7 @@ export class LeftMenuComponent implements OnInit {
 			// Open dialog and populate the data attributes of the form fields
 			const dialogRef = this.dialog.open(EditProfileComponent, {
 				width: screenWidth,
-				height: '90vh',
+				// height: '90vh',
 				data: this.user,
 			});
 
