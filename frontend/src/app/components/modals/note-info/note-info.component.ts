@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Collaborators } from '@app/components';
-import { NotebookOperationsService } from '@app/services';
+import { NotebookOperationsService, NotebookService } from '@app/services';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Tag } from '@app/mobile';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -24,7 +24,7 @@ export class NoteInfoComponent implements OnInit {
 
 	date: string = '';
 
-	tags: Tag[] = [];
+	tags: string[] = [];
 
 	notebookId: string = '';
 
@@ -38,7 +38,8 @@ export class NoteInfoComponent implements OnInit {
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private notebookOperations: NotebookOperationsService
+		private notebookOperations: NotebookOperationsService,
+		private notebookService: NotebookService
 	) {}
 
 	ngOnInit(): void {
@@ -62,7 +63,7 @@ export class NoteInfoComponent implements OnInit {
 
 		// Add our fruit
 		if (value) {
-			this.tags.push({ name: value });
+			this.tags.push(value);
 		}
 
 		// Clear the input value
@@ -75,7 +76,7 @@ export class NoteInfoComponent implements OnInit {
 	 * Remove a tag from input and tags array
 	 * @param tag the tag to be removed
 	 */
-	removeTag(tag: Tag): void {
+	removeTag(tag: string): void {
 		const index = this.tags.indexOf(tag);
 
 		if (index >= 0) {
@@ -88,22 +89,19 @@ export class NoteInfoComponent implements OnInit {
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
-			tagList.push(this.tags[i].name);
+			tagList.push(this.tags[i]);
 		}
 
-		this.notebookOperations
-			.updateNotebookTags({
-				title: this.notebook.title,
-				author: this.notebook.author,
-				course: this.notebook.course,
-				description: this.notebook.description,
-				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
-				private: this.notebook.private,
-				tags: tagList,
-				notebookId: this.notebook.notebookId,
-			})
-			.subscribe(() => {});
+		const request = {
+			notebookId: this.notebook.notebookId,
+			noteId: this.noteId,
+			name: this.title,
+			// description: this.noteDescription,
+			creatorId: this.creator.id,
+			tags: tagList,
+		};
+
+		this.notebookService.updateNote(request).subscribe();
 	}
 
 	addCollaborator() {

@@ -10,7 +10,11 @@ import {
 	MAT_BOTTOM_SHEET_DATA,
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
-import { NotebookService, NoteOperationsService } from '@app/services';
+import {
+	AccountService,
+	NotebookService,
+	NoteOperationsService,
+} from '@app/services';
 
 @Component({
 	selector: 'app-explore-notes-bottom-sheet',
@@ -108,7 +112,8 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
 		private bottomSheetRef: MatBottomSheetRef<ExploreNotesEditorBottomSheetComponent>,
 		private notebookService: NotebookService,
-		private noteOperations: NoteOperationsService
+		private noteOperations: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
@@ -124,7 +129,11 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 	 * @param title
 	 */
 	async loadReadonly(noteId: string, title: string) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.noteTitle = title;
 		this.noteId = noteId;

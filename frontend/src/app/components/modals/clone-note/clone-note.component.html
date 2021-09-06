@@ -10,6 +10,7 @@
     New Notebook
   </button>
   <br>
+  <mat-progress-bar mode="indeterminate" id="cloneNotebookProgressBar" *ngIf="!isCompleted"></mat-progress-bar>
 
   <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete" [formGroup]="form">
     <mat-label>Select a notebook</mat-label>

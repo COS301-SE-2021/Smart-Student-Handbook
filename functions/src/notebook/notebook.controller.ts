@@ -1,85 +1,123 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
-import { NotebookDto } from './dto/notebook.dto';
-import { NoteDto } from './dto/note.dto';
+import { Controller, Get, Post, Put, Delete, Body, Param, Headers } from '@nestjs/common';
 import { Notebook } from './interfaces/notebook.interface';
 import { Review } from './interfaces/review.interface';
 import { NotebookService } from './notebook.service';
+import { AuthService } from '../auth/auth.service';
 import { Response } from './interfaces/response.interface';
 import { Note } from './interfaces/note.interface';
-import { ReviewDto } from './dto/review.dto';
-import { AccessDto } from './dto/access.dto';
+import { UpdateNotebookDto } from './dto/updateNotebook.dto';
+import { CreateNotebookDto } from './dto/createNotebook.dto';
+import { CreateNoteDto } from './dto/createNote.dto';
+import { NoteService } from './note/note.service';
+import { ReviewService } from './review/review.service';
+import { UpdateNoteDto } from './dto/updateNote.dto';
+import { AddNotebookReview } from './dto/addNotebookReview';
+import { AccessService } from './access/access.service';
+import { Access } from './interfaces/access.interface';
+import { AddAccessDto } from './dto/addAccess.dto';
 
 @Controller('notebook')
 export class NotebookController {
-	constructor(private readonly notebookService: NotebookService) {}
+	constructor(
+		private readonly notebookService: NotebookService,
+		private readonly authService: AuthService,
+		private readonly noteService: NoteService,
+		private readonly reviewService: ReviewService,
+		private readonly accessService: AccessService,
+	) {}
 
-	@Post('createNotebook')
-	createNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
-		return this.notebookService.createNotebook(notebookDto);
-	}
-
-	@Get('getUserNotebooks/:userId')
-	getUserNotebooks(@Param('userId') userId: string): Promise<Notebook[]> {
+	@Get('getUserNotebooks')
+	async getUserNotebooks(@Headers() header): Promise<Notebook[]> {
+		const userId: string = await this.authService.verifyUser(header.token);
 		return this.notebookService.getUserNotebooks(userId);
 	}
 
-	@Put('updateNotebook')
-	updateNotebook(@Body() notebookDto: NotebookDto): Promise<Response> {
-		return this.notebookService.updateNotebook(notebookDto);
+	@Get('getNotebook/:notebookId')
+	async getNotebook(@Param('notebookId') notebookId: string): Promise<FirebaseFirestore.DocumentData> {
+		return this.notebookService.getNotebook(notebookId);
 	}
 
-	@Delete('deleteNotebook/:notebookId/:userId')
-	deleteNotebook(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
+	@Post('createNotebook')
+	async createNotebook(@Body() notebookDto: CreateNotebookDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.notebookService.createNotebook(notebookDto, userId);
+	}
+
+	@Put('updateNotebook')
+	async updateNotebook(@Body() notebookDto: UpdateNotebookDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.notebookService.updateNotebook(notebookDto, userId);
+	}
+
+	@Delete('deleteNotebook/:notebookId')
+	async deleteNotebook(@Param('notebookId') notebookId, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
 		return this.notebookService.deleteNotebook(notebookId, userId);
 	}
 
 	@Get('getNotes/:noteId')
 	getNotes(@Param('noteId') noteId): Promise<Note[]> {
-		return this.notebookService.getNotes(noteId);
+		return this.noteService.getNotes(noteId);
 	}
 
 	@Post('createNote')
-	createNote(@Body() noteDto: NoteDto): Promise<Response> {
-		return this.notebookService.createNote(noteDto);
+	async createNote(@Body() noteDto: CreateNoteDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.noteService.createNote(noteDto, userId);
 	}
 
 	@Put('updateNote')
-	updateNote(@Body() noteDto: NoteDto): Promise<Response> {
-		return this.notebookService.updateNote(noteDto);
+	async updateNote(@Body() updateNoteDto: UpdateNoteDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.noteService.updateNote(updateNoteDto, userId);
 	}
 
 	@Delete('deleteNote/:notebookId/:noteId')
 	deleteNote(@Param('notebookId') notebookId, @Param('noteId') noteId): Promise<Response> {
-		return this.notebookService.deleteNote({ notebookId, noteId });
+		return this.noteService.deleteNote(notebookId, noteId);
 	}
 
 	@Post('addNotebookReview')
-	addNotebookReview(@Body() reviewDto: ReviewDto): Promise<Response> {
-		return this.notebookService.addNotebookReview(reviewDto);
+	async addNotebookReview(@Body() addNotebookReview: AddNotebookReview, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.addNotebookReview(addNotebookReview, userId);
 	}
 
 	@Get('getNotebookReviews/:notebookId')
 	getNotebookReviews(@Param('notebookId') notebookId): Promise<Review[]> {
-		return this.notebookService.getNotebookReviews(notebookId);
+		return this.reviewService.getNotebookReviews(notebookId);
 	}
 
-	@Delete('deleteNotebookReview/:notebookId/:userId')
-	deleteNotebookReview(@Param('notebookId') notebookId, @Param('userId') userId): Promise<Response> {
-		return this.notebookService.deleteNotebookReview(notebookId, userId);
+	@Get('getAccessList/:notebookId')
+	getAccessList(@Param('notebookId') notebookId): Promise<Access[]> {
+		return this.accessService.getAccessList(notebookId);
+	}
+
+	@Delete('deleteNotebookReview/:notebookId')
+	async deleteNotebookReview(@Param('notebookId') notebookId, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.deleteNotebookReview(notebookId, userId);
 	}
 
 	@Post('addAccess')
-	addAccess(@Body() accessDto: AccessDto): Promise<Response> {
-		return this.notebookService.addAccess(accessDto);
+	async addAccess(@Body() accessDto: AddAccessDto, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.addAccess(accessDto, userId);
 	}
 
 	@Get('checkUserAccess/:userId/:notebookId')
-	checkUserAccess(@Param('userId') userId, @Param('notebookId') notebookId): Promise<boolean> {
-		return this.notebookService.checkUserAccess({ userId, notebookId });
+	async checkUserAccess(@Param('notebookId') notebookId, @Headers() header): Promise<boolean> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.checkUserAccess(notebookId, userId);
 	}
 
-	@Delete('removeUserAccess/:userId/:notebookId')
-	removeUserAccess(@Param('userId') userId, @Param('notebookId') notebookId): Promise<Response> {
-		return this.notebookService.removeUserAccess({ userId, notebookId });
+	@Delete('removeUserAccess/:notebookId/:accessId')
+	async removeUserAccess(
+		@Param('accessId') accessId,
+		@Param('notebookId') notebookId,
+		@Headers() header,
+	): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.accessService.removeUserAccess({ accessId, notebookId }, userId);
 	}
 }

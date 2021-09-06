@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
+import { Title } from '@angular/platform-browser';
 
 const searchClient = algoliasearch(
 	'B1G2GM9NG0',
@@ -12,7 +13,11 @@ const searchClient = algoliasearch(
 	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-	title: string = 'smart-student';
+	title: string = 'Smart Student Handbook';
+
+	constructor(private titleService: Title) {
+		this.titleService.setTitle(this.title);
+	}
 
 	config = {
 		indexName: 'demo_ecommerce',

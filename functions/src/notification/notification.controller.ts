@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { EmailNotificationRequestDto } from './dto/emailNotificationRequest.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -7,13 +7,13 @@ import { SendNotificationToAllRequestDto } from './dto/sendNotificationToAll.dto
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/createNotification.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('notification')
 export class NotificationController {
-	constructor(private readonly notificationService: NotificationService) {}
+	constructor(private readonly notificationService: NotificationService, private readonly authService: AuthService) {}
 
 	@Post()
-	// eslint-disable-next-line max-len
 	async sendEmailNotification(
 		@Body() emailNotificationDto: EmailNotificationRequestDto,
 	): Promise<EmailNotificationResponseDto> {
@@ -53,8 +53,16 @@ export class NotificationController {
 		@Body('userReceiver') userReceiver: string,
 		@Body('notebookID') notebookID: string,
 		@Body('notebookTitle') notebookTitle: string,
+		@Headers() headers,
 	) {
-		return this.notificationService.sendCollaborationRequest(userSender, userReceiver, notebookID, notebookTitle);
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.notificationService.sendCollaborationRequest(
+			userSender,
+			userReceiver,
+			notebookID,
+			notebookTitle,
+			userId,
+		);
 	}
 
 	@Post('sendUserToUserPushNotification')
@@ -63,19 +71,22 @@ export class NotificationController {
 		return this.notificationService.sendUserToUserPushNotification(singleNotificationRequest, receiverUserID);
 	}
 
-	@Get('getUserNotifications/:userId')
-	async getUserNotifications(@Param('userId') userId) {
+	@Get('getUserNotifications')
+	async getUserNotifications(@Headers() headers) {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.notificationService.getUserNotifications(userId);
 	}
 
-	@Get('getUnreadNotifications/:userId')
-	async getUnreadNotifications(@Param('userId') userId) {
+	@Get('getUnreadNotifications')
+	async getUnreadNotifications(@Headers() headers) {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.notificationService.getUnreadNotifications(userId);
 	}
 
 	@Post('createNotification')
-	async createNotification(@Body() createNotificationDto: CreateNotificationDto) {
-		return this.notificationService.createNotification(createNotificationDto);
+	async createNotification(@Body() createNotificationDto: CreateNotificationDto, @Headers() headers) {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.notificationService.createNotification(createNotificationDto, userId);
 	}
 
 	@Post('updateRead')

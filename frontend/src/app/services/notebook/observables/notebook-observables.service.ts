@@ -61,6 +61,8 @@ export class NotebookObservablesService {
 			noteId: '',
 			title: '',
 			notebookTitle: '',
+			description: '',
+			tags: [],
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
@@ -132,18 +134,24 @@ export class NotebookObservablesService {
 	 * @param noteId
 	 * @param title
 	 * @param notebookTitle
+	 * @param description
+	 * @param tags
 	 */
 	setLoadEditor(
 		notebookId: string,
 		noteId: string,
 		title: string,
-		notebookTitle: string
+		notebookTitle: string,
+		description: string,
+		tags: string[]
 	) {
 		this.loadEditor.next({
 			notebookId,
 			noteId,
 			title,
 			notebookTitle,
+			description,
+			tags,
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
