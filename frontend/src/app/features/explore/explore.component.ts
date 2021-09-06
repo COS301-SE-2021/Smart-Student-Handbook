@@ -356,7 +356,8 @@ export class ExploreComponent {
 		aa('convertedObjectIDsAfterSearch', {
 			index: 'userNotebook',
 			eventName: 'Check out',
-			queryID: hit.__queryID,
+      // eslint-disable-next-line no-underscore-dangle
+			queryID: [hit.__queryID],
 			objectIDs: [hit.objectID],
 		});
 
@@ -370,6 +371,7 @@ export class ExploreComponent {
 		aa('convertedObjectIDsAfterSearch', {
 			index: 'userNotebook',
 			eventName: 'Check out',
+      // eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
 		});
