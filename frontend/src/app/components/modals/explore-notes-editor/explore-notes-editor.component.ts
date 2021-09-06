@@ -12,9 +12,6 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-explore-notes',
