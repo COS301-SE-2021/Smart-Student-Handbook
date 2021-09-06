@@ -1,6 +1,43 @@
 .menu-spacer {
   flex: 1 1 auto;
 }
+// card 1
+mat-card{
+  width: 100%;
+  display: block;
+  vertical-align: middle;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+
+  > div {
+    flex: 50%;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  > .outlook {
+    color: black;
+    background: rgba(37, 101, 112, 0.42);
+
+  }
+
+  > .temp {
+    background: lightblue;
+    color: black;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.big-text {
+  font-size: 30px;
+}
+
+
 
 // Curve one
 .custom-shape-divider-top-1630695354 {
