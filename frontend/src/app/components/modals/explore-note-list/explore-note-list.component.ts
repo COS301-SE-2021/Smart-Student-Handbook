@@ -9,9 +9,12 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ExploreNoteListComponent implements OnInit {
 	title: string = '';
 
+	description: string = '';
+
 	constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
 	ngOnInit(): void {
 		this.title = this.data.title;
+		this.description = this.data.description;
 	}
 }

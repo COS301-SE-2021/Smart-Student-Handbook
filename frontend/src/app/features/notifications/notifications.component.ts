@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookService,
 	NotificationService,
@@ -21,19 +22,25 @@ export class NotificationsComponent implements OnInit {
 	constructor(
 		private notificationService: NotificationService,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
 		this.isCompleted = false;
 
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		if (this.user)
 			this.notificationService
-				.getUserNotifications(this.user.uid)
+				.getUserNotifications()
 				.subscribe((notifications) => {
+					// console.log(notifications);
 					this.notifications = notifications;
 
 					this.isCompleted = true;
@@ -45,15 +52,11 @@ export class NotificationsComponent implements OnInit {
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,
-				userId: this.user.uid,
+				userId,
 				profileUrl: this.user.profilePic,
 				notebookId,
 			})
-			.subscribe((res) => {
-				console.log(res);
-			});
-		// this.notificationService.updateRead(id);
-		// this.noteMoreService.addCollaborator(notebookID);
+			.subscribe();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,8 +64,11 @@ export class NotificationsComponent implements OnInit {
 		// this.notificationService.updateRead(id);
 	}
 
-	markAsRead(notificationID: string, index: number) {
-		this.notifications[index].opened = true;
-		// this.notificationService.updateRead(notificationID);
+	markAsRead(index: number, notificationId: string, isRead: boolean) {
+		if (!isRead) {
+			this.notifications[index].opened = true;
+
+			this.notificationService.updateRead(notificationId).subscribe();
+		}
 	}
 }

@@ -58,24 +58,21 @@ export class EditProfileComponent implements OnInit {
 		private dialog: MatDialog,
 		private router: Router
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
-		if (data) {
-			this.imgFilePath = data.profilePic;
-
-			// eslint-disable-next-line no-underscore-dangle
-			// @ts-ignore
-			// eslint-disable-next-line no-underscore-dangle
-			const milliseconds: number = data.dateJoined._seconds * 1000;
-			// eslint-disable-next-line no-underscore-dangle
-			const dateObject = new Date(milliseconds);
-			this.date = dateObject.toLocaleString('en-US', {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			});
-		}
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+				this.imgFilePath = user.profilePic;
+				// eslint-disable-next-line no-underscore-dangle
+				const milliseconds: number = user.dateJoined._seconds * 1000;
+				const dateObject = new Date(milliseconds);
+				this.date = dateObject.toLocaleString('en-US', {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				});
+			}
+		});
 	}
 
 	ngOnInit() {
@@ -107,7 +104,6 @@ export class EditProfileComponent implements OnInit {
 		if (this.data !== undefined && this.user) {
 			this.accountService
 				.updateUser(
-					this.user.uid,
 					this.data.displayName,
 					this.data.institution,
 					this.data.department,
@@ -148,7 +144,7 @@ export class EditProfileComponent implements OnInit {
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true && this.user) {
-				this.accountService.deleteUser(this.user.uid).subscribe(
+				this.accountService.deleteUser().subscribe(
 					(res: any) => {
 						const confirm = this.dialog.open(MessageComponent, {
 							data: {

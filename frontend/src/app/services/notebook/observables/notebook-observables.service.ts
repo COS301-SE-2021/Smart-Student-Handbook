@@ -20,6 +20,11 @@ export class NotebookObservablesService {
 
 	public sharedNotebookState: Observable<any>;
 
+	/** Name and id of the notebook to add to my notebooks tree view when a note is cloned */
+	public clonedNotebook: BehaviorSubject<any>;
+
+	public clonedNotebookState: Observable<any>;
+
 	/** close a note on the editor */
 	public closeEditor: BehaviorSubject<any>;
 
@@ -55,6 +60,9 @@ export class NotebookObservablesService {
 			notebookId: '',
 			noteId: '',
 			title: '',
+			notebookTitle: '',
+			description: '',
+			tags: [],
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
@@ -66,6 +74,14 @@ export class NotebookObservablesService {
 		});
 
 		this.sharedNotebookState = this.sharedNotebook.asObservable();
+
+		/** Name and id of the notebook to add to my notebooks tree view when a note is cloned */
+		this.clonedNotebook = new BehaviorSubject<any>({
+			id: '',
+			name: '',
+		});
+
+		this.clonedNotebookState = this.clonedNotebook.asObservable();
 
 		/** Close the note open on the editor */
 		this.closeEditor = new BehaviorSubject<any>({
@@ -117,19 +133,25 @@ export class NotebookObservablesService {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
-	 * @param readonly
+	 * @param notebookTitle
+	 * @param description
+	 * @param tags
 	 */
 	setLoadEditor(
 		notebookId: string,
 		noteId: string,
 		title: string,
-		readonly: boolean
+		notebookTitle: string,
+		description: string,
+		tags: string[]
 	) {
 		this.loadEditor.next({
 			notebookId,
 			noteId,
 			title,
-			readonly,
+			notebookTitle,
+			description,
+			tags,
 		});
 
 		this.loadEditorState = this.loadEditor.asObservable();
@@ -148,6 +170,20 @@ export class NotebookObservablesService {
 		});
 
 		this.sharedNotebookState = this.sharedNotebook.asObservable();
+	}
+
+	/**
+	 * Set the name and id of the notebook to be added to the my notebooks list
+	 * @param notebookID
+	 * @param notebookTitle
+	 */
+	setClonedNotebook(notebookID: string, notebookTitle: string) {
+		this.clonedNotebook.next({
+			id: notebookID,
+			name: notebookTitle,
+		});
+
+		this.clonedNotebookState = this.clonedNotebook.asObservable();
 	}
 
 	/**

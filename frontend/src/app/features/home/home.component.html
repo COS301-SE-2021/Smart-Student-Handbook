@@ -5,13 +5,13 @@
     </div>
   </div>
 </div>
-<div class="container mt-5">
+<div class="container mt-3">
 <div class="row">
   <div class="col-12">
     <section>
       <div class="container justify-content-center">
         <div class="row">
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+          <!--<div class="col-lg-4 col-md-6 col-xs-12 p-3">
             <mat-card class="homeCard">
               <img mat-card-image src="../../../../assets/logo/SmartStudentHandbook.png" alt="Photo of a Shiba Inu">
               <mat-card-content id="cardContent">
@@ -28,7 +28,7 @@
                 </p>
               </mat-card-content>
             </mat-card>
-          </div>
+          </div>-->
 
           <div class="col-lg-4 col-md-6 col-xs-12 p-3">
             <mat-card class="homeCard">
@@ -60,10 +60,12 @@
           <div class="col-lg-4 col-md-6 col-xs-12 p-3">
             <mat-card class="homeCard">
               <mat-card-header>
-                <span class="h5">Explore</span>
+                <span class="h5">My Notebooks</span>
               </mat-card-header>
               <mat-card-content>
-
+                <br/>
+                <p>All the notebooks you have created</p>
+                <a  [routerLink]="['/notebook']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">book</mat-icon></a>
               </mat-card-content>
             </mat-card>
           </div>
@@ -71,10 +73,12 @@
           <div class="col-lg-4 col-md-6 col-xs-12 p-3">
             <mat-card class="homeCard">
               <mat-card-header>
-                <span class="h5">Recent Notebooks</span>
+                <span class="h5">Explore</span>
               </mat-card-header>
               <mat-card-content>
-
+                <br/>
+                <p>Explore notebooks created by other users</p>
+                <a  [routerLink]="['/explore']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">explore</mat-icon></a>
               </mat-card-content>
             </mat-card>
           </div>
@@ -85,7 +89,9 @@
                 <span class="h5">Shared with me</span>
               </mat-card-header>
               <mat-card-content>
-
+                <br/>
+                <p>Notebooks that have been shared with you</p>
+                <a  [routerLink]="['/sharedWithMe']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">group</mat-icon></a>
               </mat-card-content>
             </mat-card>
           </div>
@@ -96,11 +102,25 @@
                 <span class="h5">Notifications</span>
               </mat-card-header>
               <mat-card-content>
-
+                <br/>
+                <p>Your Notifications</p>
+                <a  [routerLink]="['/notifications']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">notifications</mat-icon></a>
               </mat-card-content>
             </mat-card>
           </div>
 
+          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+            <mat-card class="homeCard">
+              <mat-card-header>
+                <span class="h5">Logout</span>
+              </mat-card-header>
+              <mat-card-content>
+                <br/>
+                <p></p>
+                <div (click)="logout()"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">exit_to_app</mat-icon></div>
+              </mat-card-content>
+            </mat-card>
+          </div>
 
         </div>
       </div>
@@ -108,3 +128,8 @@
   </div>
 </div>
 </div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>

@@ -1,7 +1,7 @@
+<h1 *ngIf="!isLoadComplete">{{displayName}}</h1>
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoadComplete"></mat-progress-bar>
 <mat-dialog-content class="mat-typography" *ngIf="isLoadComplete">
   <h1>{{userProfile.displayName}}</h1>
-
   <div class="container">
     <div class="row">
       <div class="col-3">
@@ -25,7 +25,7 @@
 
   <mat-selection-list #notebooks [multiple]="false" id="notebookList">
     <mat-list-option *ngFor="let notebook of userNotebooks" [value]="notebook.notebookId"
-    (click)="viewNotebook()">
+    (click)="viewNotebook(notebook)">
       <p><mat-icon>book</mat-icon> {{notebook.title}}</p>
     </mat-list-option>
   </mat-selection-list>

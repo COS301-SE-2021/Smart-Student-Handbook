@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -24,9 +25,12 @@ import {
 } from '@app/mobile';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { NoteInfoComponent, SmartAssistModalComponent } from '@app/components';
+import {
+	NoteInfoComponent,
+	SmartAssistModalComponent,
+	ViewProfileComponent,
+} from '@app/components';
 
-import { ViewProfileComponent } from '@app/components';
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
 export interface Tag {
@@ -97,7 +101,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	tags: Tag[] = [];
+	tags: string[] = [];
 
 	collaborators: Collaborators[] = [];
 
@@ -114,6 +118,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	noteId: string = '';
 
 	noteTitle: string = 'Smart Student';
+
+	noteDescription: string = 'Smart Student';
 
 	panelOpenState = false;
 
@@ -149,6 +155,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookObservables
 	 * @param notebookOperations
 	 * @param notificationService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -158,8 +165,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		private profileService: ProfileService,
 		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
-		private notificationService: NotificationService
-	) {}
+		private notificationService: NotificationService,
+		private accountService: AccountService
+	) {
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+	}
 
 	ngAfterContentInit(): void {
 		this.notebookObservables.closeEditor.subscribe((close: any) => {
@@ -181,11 +195,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.noteTitle = noteInfo.title;
 				this.noteId = noteInfo.noteId;
 				this.notebookID = noteInfo.notebookId;
+				this.notebookTitle = noteInfo.notebookTitle;
+				this.noteDescription = noteInfo.description;
 
 				this.loadEditor(
 					noteInfo.notebookId,
 					noteInfo.noteId,
-					noteInfo.title
+					noteInfo.title,
+					noteInfo.notebookTitle,
+					noteInfo.description,
+					noteInfo.tags
 				);
 			}
 		});
@@ -196,18 +215,17 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	getNotebook(notebookId: string): void {
-		// console.log('----------------');
 		this.notebookOperations
 			.getNotebookInfo(notebookId)
 			.subscribe((data) => {
 				this.date = data.date;
 				this.notebook = data.notebook;
-				this.tags = data.tags;
+				// this.tags = data.tags;
 				this.collaborators = data.collaborators;
 				this.creator = data.creator;
 				this.private = data.notebook.private;
 				this.opened = true;
-
+				this.notebookID = notebookId;
 				this.doneLoading = true;
 			});
 	}
@@ -217,13 +235,28 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookId
 	 * @param noteId
 	 * @param title
+	 * @param notebookTitle
+	 * @param description
+	 * @param tags
 	 */
-	async loadEditor(notebookId: string, noteId: string, title: string) {
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string,
+		description: string,
+		tags: string[]
+	) {
+		console.log(tags);
+		this.notebookTitle = notebookTitle;
+
+		this.tags = tags;
+
 		this.noteTitle = title;
 
-		this.doneLoading = false;
+		this.noteDescription = description;
 
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.doneLoading = false;
 
 		this.opened = false;
 
@@ -320,7 +353,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		await this.Editor.isReady;
 
-		let e = document.getElementById('editor') as HTMLElement;
+		const e = document.getElementById('editor') as HTMLElement;
 		e.style.overflowY = 'none';
 		e.style.display = 'block';
 		e.style.backgroundImage = 'none';
@@ -330,8 +363,10 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		editor.clear();
 
+		this.noteId = noteId;
+
 		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
+		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
 
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
@@ -341,7 +376,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notebook/${noteId}`)
+						.ref(`notebook/${this.noteId}`)
 						.set({
 							outputData: {
 								blocks: [
@@ -366,11 +401,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
-
-				e = document.getElementById('editor') as HTMLElement;
-				e.style.overflowY = 'scroll';
-
-				// if (progressbar) progressbar.style.display = 'none';
 			});
 	}
 
@@ -523,7 +553,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		// Add our fruit
 		if (value) {
-			this.tags.push({ name: value });
+			this.tags.push(value);
 		}
 
 		// Clear the input value
@@ -535,29 +565,27 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
-			tagList.push(this.tags[i].name);
+			tagList.push(this.tags[i]);
 		}
 
-		this.notebookOperations
-			.updateNotebookTags({
-				title: this.notebook.title,
-				author: this.notebook.author,
-				course: this.notebook.course,
-				description: this.notebook.description,
-				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
-				private: this.notebook.private,
-				tags: tagList,
-				notebookId: this.notebook.notebookId,
-			})
-			.subscribe(() => {});
+		const request = {
+			notebookId: this.notebook.notebookId,
+			noteId: this.noteId,
+			name: this.noteTitle,
+			// description: this.noteDescription,
+			creatorId: this.creator.id,
+			tags: tagList,
+		};
+
+		// console.log(request);
+		this.notebookService.updateNote(request).subscribe();
 	}
 
 	/**
 	 * Remove a tag from input and tags array
 	 * @param tag the tag to be removed
 	 */
-	removeTag(tag: Tag): void {
+	removeTag(tag: string): void {
 		const index = this.tags.indexOf(tag);
 
 		if (index >= 0) {
@@ -568,17 +596,21 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	addCollaborator() {
-		// this.notificationService.sendCollaborationRequest(this.user.uid, )
 		this.notebookOperations
 			.requestCollaborator(
 				this.user.uid,
-				this.notebookID,
+				this.notebook.notebookId,
 				this.notebookTitle
 			)
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.subscribe(() => {
-				// this.collaborators.push(collaborator);
-			});
+			.subscribe(
+				() => {
+					// console.log(status);
+					this.doneLoading = true;
+				},
+				() => {
+					this.doneLoading = true;
+				}
+			);
 	}
 
 	removeCollaborator(userId: string) {
@@ -637,14 +669,10 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		}
 	}
 
-	viewUserProfile(uid: any) {
+	viewUserProfile(uid: any, displayName: string) {
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
@@ -655,6 +683,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			width: screenWidth,
 			data: {
 				uid,
+				displayName,
 			},
 		});
 	}

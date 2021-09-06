@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotebookObservablesService, NotebookService } from '@app/services';
-import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import {
+	AccountService,
+	NotebookObservablesService,
+	NotebookService,
+} from '@app/services';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
 	selector: 'app-rate-notebook',
@@ -35,10 +39,13 @@ export class RateNotebookComponent implements OnInit {
 
 	array = [];
 
+	@ViewChild('stepper') stepper: MatStepper;
+
 	constructor(
 		private formBuilder: FormBuilder,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService // private bottomSheetRef: MatBottomSheetRef<RateNotebookComponent>
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
@@ -50,9 +57,15 @@ export class RateNotebookComponent implements OnInit {
 			this.notebookId = id.id;
 
 			if (this.notebookId !== '') this.getReviews(this.notebookId);
+
+			if (this.stepper) this.stepper.reset();
 		});
 
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.firstFormGroup = this.formBuilder.group({
 			firstCtrl: ['', Validators.required],
@@ -90,7 +103,7 @@ export class RateNotebookComponent implements OnInit {
 			message: this.review,
 			rating: this.ratingValue,
 			displayName: this.user.displayName,
-			userId: this.user.uid,
+			// userId: this.user.uid,
 			profileUrl: this.user.profilePic,
 		};
 
@@ -104,7 +117,7 @@ export class RateNotebookComponent implements OnInit {
 						rating: review.rating,
 					});
 				},
-				(error) => {
+				() => {
 					// console.log(error);
 				}
 			);

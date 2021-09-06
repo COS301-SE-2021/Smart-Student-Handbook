@@ -4,9 +4,17 @@ import { Component, Inject, OnInit } from '@angular/core';
 import EditorJS from '@editorjs/editorjs';
 import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Collaborators, Tag } from '@app/components';
+import { Tag } from '@app/components';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import {
+	AccountService,
+	NotebookService,
+	NoteOperationsService,
+} from '@app/services';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-explore-notes',
@@ -60,59 +68,40 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 	Editor!: EditorJS;
 
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
 	tags: Tag[] = [];
-
-	collaborators: Collaborators[] = [];
-
-	creator: Collaborators = {
-		name: '',
-		url: '',
-		id: '',
-	};
-
-	date: string = '';
-
-	notebookID: string = '';
 
 	noteId: string = '';
 
 	noteTitle: string = 'Smart Student';
 
-	static staticNotebookID: string = '';
-
-	static staticNoteId: string = '';
-
-	panelOpenState = false;
-
-	showMore: boolean = false;
-
-	notebook: any;
-
 	user: any;
-
-	private: boolean = true;
-
-	opened: boolean = false;
-
-	notebookTitle = '';
 
 	isCompleted: boolean = false;
 
 	constructor(
-		@Inject(MAT_DIALOG_DATA) public data: any // @Inject(MAT_BOTTOM_SHEET_DATA) public bottomData: any
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private notebookService: NotebookService,
+		private noteOperations: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
-		// console.log(this.bottomData);
 		this.isCompleted = false;
 		this.loadReadonly(this.data.noteId, this.data.title);
 		this.user = this.data.user;
 	}
 
+	/**
+	 * Load the editor and render all content
+	 * @param noteId
+	 * @param title
+	 */
 	async loadReadonly(noteId: string, title: string) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.noteTitle = title;
 		this.noteId = noteId;
@@ -121,7 +110,6 @@ export class ExploreNotesEditorComponent implements OnInit {
 			/**
 			 * Create the notebook with all the plugins
 			 */
-			// const editor = new EditorJS({
 			this.Editor = new EditorJS({
 				holder: 'exploreEditor',
 				tools: {
@@ -225,12 +213,33 @@ export class ExploreNotesEditorComponent implements OnInit {
 				 * Render output on Editor
 				 */
 				dbRefObject.once('value', (snap) => {
-					// console.log(snap.val());
 					editor.render(snap.val().outputData);
 				});
 
 				this.isCompleted = true;
 			});
-		// });
+	}
+
+	/**
+	 * Clone a note
+	 */
+	cloneNote() {
+		this.isCompleted = false;
+
+		this.noteOperations.getUserNotebooks().subscribe((options: any) => {
+			// console.log(options);
+
+			this.isCompleted = true;
+
+			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
+				this.Editor.save().then((outputData) => {
+					// console.log(newNoteId);
+					// console.log(outputData);
+					firebase.database().ref(`notebook/${newNoteId}`).set({
+						outputData,
+					});
+				});
+			});
+		});
 	}
 }

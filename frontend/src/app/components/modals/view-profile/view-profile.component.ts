@@ -6,6 +6,8 @@ import {
 } from '@angular/material/dialog';
 import { AccountService, NotebookService, ProfileService } from '@app/services';
 import { Router } from '@angular/router';
+import { ExploreNoteListComponent } from '@app/components';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-view-profile',
@@ -25,6 +27,8 @@ export class ViewProfileComponent {
 
 	errorMessage: string = '';
 
+	displayName: string = '';
+
 	constructor(
 		public dialogRef: MatDialogRef<ViewProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,11 +36,13 @@ export class ViewProfileComponent {
 		private dialog: MatDialog,
 		private router: Router,
 		private profileService: ProfileService,
-		private notebookService: NotebookService
+		private notebookService: NotebookService,
+		private exploreObservables: ExploreObservablesService
 	) {
 		this.isLoadComplete = false;
 		if (data) {
-			this.notebookService.getUserNotebooks(data.uid).subscribe(
+			this.displayName = data.displayName;
+			this.notebookService.getUserNotebooks().subscribe(
 				(userNotebooks) => {
 					this.userNotebooks = userNotebooks;
 					this.profileService.getUserByUid(data.uid).subscribe(
@@ -82,7 +88,32 @@ export class ViewProfileComponent {
 		this.dialogRef.close();
 	}
 
-	viewNotebook(): void {
-		alert('Display Notebooks notes');
+	viewNotebook(notebook: any): void {
+		let screenWidth = '';
+		const screenType = navigator.userAgent;
+		if (
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+				screenType
+			)
+		) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		this.dialog.open(ExploreNoteListComponent, {
+			width: screenWidth,
+			height: '80%',
+			data: {
+				title: notebook.title,
+				description: notebook.description,
+			},
+		});
+
+		this.exploreObservables.setOpenExploreNotebook(
+			notebook.notebookId,
+			notebook.title,
+			true
+		);
 	}
 }

@@ -4,20 +4,9 @@
 
     <span class="example-spacer"></span>
 
-    <button mat-icon-button [matMenuTriggerFor]="cloneMenu">
-      <mat-icon>more_horiz</mat-icon>
+    <button mat-icon-button (click)="cloneNote()">
+      <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
     </button>
-
-    <mat-menu #cloneMenu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>note_add</mat-icon>
-        <span>Clone Note</span>
-      </button>
-      <!--      <button mat-menu-item>-->
-      <!--        <mat-icon>exit_to_app</mat-icon>-->
-      <!--        <span>Logout</span>-->
-      <!--      </button>-->
-    </mat-menu>
 
 
     <button mat-icon-button (click)="closeSheet($event)">

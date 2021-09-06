@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import {
 	MatTreeFlatDataSource,
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -19,7 +20,7 @@ import { ExploreObservablesService } from '@app/services/notebook/observables/ex
 	templateUrl: './tree-view.component.html',
 	styleUrls: ['./tree-view.component.scss'],
 })
-export class TreeViewComponent implements OnInit {
+export class TreeViewComponent implements OnInit, AfterContentInit {
 	user: any;
 
 	childrenSize = 0;
@@ -67,12 +68,17 @@ export class TreeViewComponent implements OnInit {
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
 		private exploreObservables: ExploreObservablesService,
-		private notebookOperations: NotebookOperationsService
+		private notebookOperations: NotebookOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.getUserNotebooks();
 
@@ -93,26 +99,65 @@ export class TreeViewComponent implements OnInit {
 	}
 
 	/**
+	 * Add a new notebook to your notebooks when the user clones a note into a new notebook
+	 */
+	ngAfterContentInit(): void {
+		this.notebookObservables.clonedNotebook.subscribe((val: any) => {
+			if (val.id !== '') {
+				this.openedNotebookId = val.id;
+
+				const child = {
+					name: val.name,
+					id: val.id,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+			}
+		});
+	}
+
+	/**
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
 		if (this.user)
-			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
-					let temp: any[] = [];
-					let index = 0;
+					let temp: string = '';
 					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
-						temp = notebook.access;
+						temp = notebook.creatorId;
 
-						if (temp.length > 0) {
-							index = temp.findIndex(
-								(a: any) => a.userId !== this.user.uid
-							);
-						}
-
-						if (index >= 0 || temp.length === 0) {
+						// If the user is the creator
+						if (temp === this.user.uid) {
 							this.notebooks.push(notebook);
 
 							this.childrenSize += 1;
@@ -125,8 +170,6 @@ export class TreeViewComponent implements OnInit {
 
 							tree.push(child);
 						}
-
-						index = 0;
 					});
 
 					if (this.childrenSize > 0) {
@@ -158,27 +201,30 @@ export class TreeViewComponent implements OnInit {
 				course: notebook[0].course,
 				description: notebook[0].description,
 				institution: notebook[0].institution,
-				creatorId: notebook[0].creatorId,
+				// creatorId: notebook[0].creatorId,
 				private: notebook[0].private,
 				tags: notebook[0].tags,
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
+				console.log(val);
 				this.notebooks = this.notebooks.map((nb: any) => {
-					if (nb.notebookId === notebookId) {
-						nb.title = val.title;
-						nb.course = val.course;
-						nb.description = val.description;
-						nb.private = val.private;
+					const temp = nb;
+					if (temp.notebookId === notebookId) {
+						temp.title = val.title;
+						temp.course = val.course;
+						temp.description = val.description;
+						temp.private = val.private;
 					}
-					return nb;
+					return temp;
 				});
 
 				let tree = this.dataSource.data[0].children;
 				if (tree)
 					tree = tree.map((node) => {
-						if (node.id === notebookId) {
-							node.name = val.title;
+						const temp = node;
+						if (temp.id === notebookId) {
+							temp.name = val.title;
 						}
 						return node;
 					});
@@ -232,53 +278,55 @@ export class TreeViewComponent implements OnInit {
 				course: '',
 				description: '',
 				institution: this.user.institution,
-				creatorId: this.user.uid,
+				// creatorId: this.user.uid,
 				private: false,
 				tags: [],
 			})
 			.subscribe((val: any) => {
-				this.openedNotebookId = val.notebook.notebookId;
+				if (val) {
+					this.openedNotebookId = val.notebook.notebookId;
 
-				this.notebooks.push(val.notebook);
+					this.notebooks.push(val.notebook);
 
-				const child = {
-					name: val.notebook.title,
-					id: val.notebook.notebookId,
-					// children: childArr,
-				};
+					const child = {
+						name: val.notebook.title,
+						id: val.notebook.notebookId,
+						// children: childArr,
+					};
 
-				this.childrenSize += 1;
+					this.childrenSize += 1;
 
-				let tree: any;
-				if (this.dataSource.data[0].children)
-					tree = this.dataSource.data[0].children;
+					let tree: any;
+					if (this.dataSource.data[0].children)
+						tree = this.dataSource.data[0].children;
 
-				if (this.childrenSize === 1) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: [child],
-						},
-					];
-				} else {
-					tree.push(child);
+					if (this.childrenSize === 1) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [child],
+							},
+						];
+					} else {
+						tree.push(child);
 
-					this.dataSource.data = [
-						{
-							name: 'My notebooks',
-							id: '',
-							children: tree,
-						},
-					];
+						this.dataSource.data = [
+							{
+								name: 'My notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+
+					this.treeControl.expandAll();
+
+					this.openNotebookFolder(
+						val.notebook.notebookId,
+						val.notebook.title
+					);
 				}
-
-				this.treeControl.expandAll();
-
-				this.openNotebookFolder(
-					val.notebook.notebookId,
-					val.notebook.title
-				);
 			});
 	}
 
@@ -296,7 +344,7 @@ export class TreeViewComponent implements OnInit {
 				);
 
 				this.notebookService
-					.deleteNotebook(notebookId, this.user.uid)
+					.deleteNotebook(notebookId)
 					.subscribe(() => {
 						this.childrenSize -= 1;
 

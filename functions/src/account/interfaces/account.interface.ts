@@ -15,8 +15,8 @@ export interface Account {
 		bio?: string;
 		profilePicUrl?: string;
 		dateJoined?: admin.firestore.FieldValue;
-		token?: any;
 	};
 	message?: string;
 	error?: string;
+	authToken?: string;
 }

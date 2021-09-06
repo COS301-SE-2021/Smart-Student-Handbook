@@ -80,16 +80,30 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 */
 	ngOnInit() {
 		// get userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	ngAfterViewInit() {
 		this.notePanelComponent.openNotebook = (
 			notebookId: string,
 			noteId: string,
-			title: string
+			title: string,
+			notebookTitle: string,
+			description: string,
+			tags: string[]
 		) => {
-			this.editorComponent.loadEditor(notebookId, noteId, title);
+			this.editorComponent.loadEditor(
+				notebookId,
+				noteId,
+				title,
+				notebookTitle,
+				description,
+				tags
+			);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {
@@ -107,7 +121,21 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		e.style.display = 'none';
 	}
 
-	async loadEditor(notebookId: string, noteId: string, title: string) {
-		await this.editorComponent.loadEditor(notebookId, noteId, title);
+	async loadEditor(
+		notebookId: string,
+		noteId: string,
+		title: string,
+		notebookTitle: string,
+		description: string,
+		tags: string[]
+	) {
+		await this.editorComponent.loadEditor(
+			notebookId,
+			noteId,
+			title,
+			notebookTitle,
+			description,
+			tags
+		);
 	}
 }

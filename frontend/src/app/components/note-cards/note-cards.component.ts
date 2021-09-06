@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
-import { ExploreNotesEditorComponent } from '@app/components';
+import {
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ExploreNotesEditorBottomSheetComponent } from '@app/components/modals/explore-notes-editor-bottom-sheet/explore-notes-editor-bottom-sheet.component';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
@@ -38,6 +41,8 @@ export class NoteCardsComponent implements OnInit {
 		},
 	];
 
+	tags: string[];
+
 	// Variable that holds the logged in user details
 	user: any;
 
@@ -45,9 +50,13 @@ export class NoteCardsComponent implements OnInit {
 
 	notebookId: string = '';
 
+	notebookTitle: string = '';
+
 	readonly: boolean = false;
 
-	isCompleted: boolean = false;
+	isCompleted: boolean = true;
+
+	creatorId: string = '';
 
 	constructor(
 		private router: Router,
@@ -56,35 +65,38 @@ export class NoteCardsComponent implements OnInit {
 		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService
+		private exploreObservables: ExploreObservablesService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
 		this.notes = [];
 
-		this.isCompleted = false;
 		// get userDetails;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
+		// if notes are displayed from the explore page
 		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;
-			this.isCompleted = false;
 
 			if (notebook.notebookId !== '') {
+				this.isCompleted = false;
+
 				this.notebookId = notebook.notebookId;
+				this.notebookTitle = notebook.title;
 				this.getUserNotebooks();
 			}
 		});
 
-		// this.notebookObservables.openNotebookId.subscribe((notebook) => {
-		// 	this.readonly = notebook.readonly;
-		// 	this.isCompleted = false;
-		//
-		// 	if (notebook.notebookId !== '') {
-		// 		this.notebookId = notebook.notebookId;
-		// 		this.getUserNotebooks();
-		// 	}
-		// });
+		this.notebookService
+			.getNotebook(this.notebookId)
+			.subscribe((notebook) => {
+				this.creatorId = notebook.creatorId;
+			});
 	}
 
 	/**
@@ -96,25 +108,39 @@ export class NoteCardsComponent implements OnInit {
 		if (this.notebookId !== null) {
 			this.notebookService
 				.getNotes(this.notebookId) // this.user.uid
-				.subscribe((result) => {
-					this.notes = [];
+				.subscribe(
+					(result) => {
+						this.notes = [];
 
-					for (let i = 0; i < result.length; i += 1) {
-						this.notes.push(result[i]);
+						for (let i = 0; i < result.length; i += 1) {
+							this.notes.push(result[i]);
+						}
+						this.isCompleted = true;
+					},
+					() => {
+						this.isCompleted = true;
 					}
-					this.isCompleted = true;
-				});
+				);
+		} else {
+			this.isCompleted = true;
 		}
 	}
 
-	async openNote(noteId: string, title: string) {
+	async openNote(
+		noteId: string,
+		title: string,
+		description: string,
+		tags: string[]
+	) {
 		await this.router.navigate(['notebook']);
 
 		this.notebookObservables.setLoadEditor(
 			this.notebookId,
 			noteId,
 			title,
-			this.readonly
+			this.notebookTitle,
+			description,
+			tags
 		);
 	}
 
@@ -123,19 +149,28 @@ export class NoteCardsComponent implements OnInit {
 	 * @param id the id of the notebook to be updated
 	 * @param title
 	 * @param description
+	 * @param tags
 	 */
-	editNote(id: string, title: string, description: string) {
+	editNote(id: string, title: string, description: string, tags: string[]) {
 		this.notesService
-			.editNote(this.notebookId, id, title, description)
+			.editNote(
+				this.notebookId,
+				id,
+				title,
+				description,
+				this.creatorId,
+				tags
+			)
 			.subscribe((data) => {
 				if (data) {
 					this.notes = this.notes.map((note: any) => {
-						if (note.noteId === id) {
-							note.description = data.description;
-							note.name = data.title;
+						const temp = note;
+						if (temp.noteId === id) {
+							temp.description = data.description;
+							temp.name = data.title;
 						}
 
-						return note;
+						return temp;
 					});
 				}
 			});
@@ -150,6 +185,7 @@ export class NoteCardsComponent implements OnInit {
 						if (notebook.noteId !== id) {
 							return notebook;
 						}
+						return null;
 					});
 				}
 			});
@@ -175,5 +211,37 @@ export class NoteCardsComponent implements OnInit {
 				},
 			});
 		}
+	}
+
+	/**
+	 * substring the description of a note on a small screen
+	 * @param description
+	 */
+	substringSmallDescription(description: string) {
+		if (description.length >= 50) {
+			return `${description
+				.substring(0, 100)
+				.substring(
+					0,
+					description.substring(0, 50).lastIndexOf(' ')
+				)}...`;
+		}
+		return description;
+	}
+
+	/**
+	 * substring the description of a note on a medium screen
+	 * @param description
+	 */
+	substringMediumDescription(description: string) {
+		if (description.length >= 100) {
+			return `${description
+				.substring(0, 100)
+				.substring(
+					0,
+					description.substring(0, 100).lastIndexOf(' ')
+				)}...`;
+		}
+		return description;
 	}
 }

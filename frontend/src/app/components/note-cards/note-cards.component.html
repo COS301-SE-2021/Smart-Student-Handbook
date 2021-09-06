@@ -1,4 +1,7 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" ></mat-progress-bar>
+
+<label *ngIf="isCompleted && notes.length === 0">No notes could be found</label>
+
 <div
   class="col-6 col-sm-4 noteContainer"
   *ngFor="let note of notes; let i = index"
@@ -7,13 +10,16 @@
     <button
       mat-icon-button
       class="favorite-icon editNoteBtn"
-      (click)="editNote(note.noteId, note.name, note.description)"
+      (click)="editNote(note.noteId, note.name, note.description, note.tags)"
     >
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
-    <div (click)="openNote(note.noteId, note.name)">
+    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name, note.description, note.tags)">
       <h3 class="title">{{ note.name }}</h3>
-      <h4 class="description">{{ note.description }}</h4>
+
+      <label class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</label>
+      <label class="description" fxHide.gt-sm fxHide.lt-sm>{{ substringMediumDescription(note.description) }}</label>
+      <label class="description" fxHide.lt-md>{{ note.description.substring(0, 200).substring(0, note.description.substring(0, 200).lastIndexOf(" ")) + "..." }}</label>
 
       <div
         class="bottomColor"
@@ -23,7 +29,7 @@
 
   </mat-card>
 
-  <mat-card class="note" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
+  <mat-card class="note pointerCursor" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
     <div>
       <h3 class="title">{{ note.name }}</h3>
       <h4 class="description">{{ note.description }}</h4>

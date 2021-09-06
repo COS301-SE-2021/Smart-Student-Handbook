@@ -1,11 +1,7 @@
 export class NoteDto {
-	readonly name?: string;
+	readonly name: string;
 
-	readonly notebookId: string;
+	readonly noteId: string;
 
-	readonly noteId?: string;
-
-	readonly description?: string;
-
-	readonly userId?: string;
+	readonly description: string;
 }
