@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 
-exports.addNotebook = functions.firestore.document('userNotebooks/{notebookId}').onCreate((snapshot) => {
+exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onCreate((snapshot) => {
 	const data = snapshot.data();
 	const objectID = snapshot.id;
 
@@ -28,7 +28,7 @@ exports.addNotebook = functions.firestore.document('userNotebooks/{notebookId}')
 		});
 });
 
-exports.updateNotebook = functions.firestore.document('userNotebooks/{notebookId}').onUpdate((change) => {
+exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').onUpdate((change) => {
 	const data = change.after.data();
 	const objectID = change.after.id;
 
@@ -56,7 +56,7 @@ exports.updateNotebook = functions.firestore.document('userNotebooks/{notebookId
 		});
 });
 
-exports.deleteNotebook = functions.firestore.document('userNotebooks/{notebookId}').onDelete((snapshot) => {
+exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').onDelete((snapshot) => {
 	const data = snapshot.data();
 	const objectID = snapshot.id;
 

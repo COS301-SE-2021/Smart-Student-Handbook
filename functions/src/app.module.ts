@@ -18,7 +18,14 @@ import { ReviewService } from './notebook/review/review.service';
 
 @Module({
 	imports: [],
-	controllers: [AppController, NotificationController, UserController, NotebookController, AccountController, RecommendationsController],
+	controllers: [
+		AppController,
+		NotificationController,
+		UserController,
+		NotebookController,
+		AccountController,
+		RecommendationsController,
+	],
 	providers: [
 		AppService,
 		NotificationService,
