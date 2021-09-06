@@ -109,7 +109,7 @@ def removeData():
     if request.method == 'POST':
         reqData = request.get_json()
 
-        if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
+        if set(['noteId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
             tags = [reqData['tags']]
@@ -144,7 +144,7 @@ def editData():
     if request.method == 'POST':
         reqData = request.get_json()
 
-        if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
+        if set(['noteId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
             tags = [reqData['tags']]

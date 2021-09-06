@@ -1,27 +1,40 @@
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 import fetch from 'node-fetch';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onCreate((snapshot) => {
+exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onCreate(async (snapshot) => {
 	const data = snapshot.data();
 	const objectID = snapshot.id;
 
-	const notebookData = {
+	const notebook = await admin
+		.firestore()
+		.collection('userNotebooks')
+		.where('notebookId', '==', data.notebookId)
+		.limit(1)
+		.get()
+		.then((doc) => doc.docs.pop().data())
+		.catch((error) => {
+			throw new HttpException(`Could not retrieve notebook. ${error}`, HttpStatus.BAD_REQUEST);
+		});
+
+	const noteData = {
 		noteId: objectID,
 		name: data.title,
 		tags: data.tags,
-		author: data.author,
-		institution: data.institution,
-		course: data.course,
+		author: notebook.author,
+		institution: notebook.institution,
+		course: notebook.course,
 	};
 
-	console.log(JSON.stringify(notebookData));
+	console.log(JSON.stringify(noteData));
 
 	fetch('https://smartassist-nii4biypla-uc.a.run.app/addData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(notebookData),
+		body: JSON.stringify(noteData),
 	})
 		.then((response) => {
 			console.log(response);
@@ -31,17 +44,28 @@ exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onC
 		});
 });
 
-exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').onUpdate((change) => {
+exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').onUpdate(async (change) => {
 	const data = change.after.data();
 	const objectID = change.after.id;
 
-	const notebookData = {
+	const notebook = await admin
+		.firestore()
+		.collection('userNotebooks')
+		.where('notebookId', '==', data.notebookId)
+		.limit(1)
+		.get()
+		.then((doc) => doc.docs.pop().data())
+		.catch((error) => {
+			throw new HttpException(`Could not retrieve notebook. ${error}`, HttpStatus.BAD_REQUEST);
+		});
+
+	const noteData = {
 		noteId: objectID,
 		name: data.title,
 		tags: data.tags,
-		author: data.author,
-		institution: data.institution,
-		course: data.course,
+		author: notebook.author,
+		institution: notebook.institution,
+		course: notebook.course,
 	};
 
 	fetch('https://smartassist-nii4biypla-uc.a.run.app/editData', {
@@ -49,7 +73,7 @@ exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(notebookData),
+		body: JSON.stringify(noteData),
 	})
 		.then((response) => {
 			console.log(response);
@@ -59,17 +83,28 @@ exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').
 		});
 });
 
-exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').onDelete((snapshot) => {
+exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').onDelete(async (snapshot) => {
 	const data = snapshot.data();
 	const objectID = snapshot.id;
 
-	const notebookData = {
+	const notebook = await admin
+		.firestore()
+		.collection('userNotebooks')
+		.where('notebookId', '==', data.notebookId)
+		.limit(1)
+		.get()
+		.then((doc) => doc.docs.pop().data())
+		.catch((error) => {
+			throw new HttpException(`Could not retrieve notebook. ${error}`, HttpStatus.BAD_REQUEST);
+		});
+
+	const noteData = {
 		noteId: objectID,
 		name: data.title,
 		tags: data.tags,
-		author: data.author,
-		institution: data.institution,
-		course: data.course,
+		author: notebook.author,
+		institution: notebook.institution,
+		course: notebook.course,
 	};
 
 	fetch('https://smartassist-nii4biypla-uc.a.run.app/removeData', {
@@ -77,7 +112,7 @@ exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(notebookData),
+		body: JSON.stringify(noteData),
 	})
 		.then((response) => {
 			console.log(response);
