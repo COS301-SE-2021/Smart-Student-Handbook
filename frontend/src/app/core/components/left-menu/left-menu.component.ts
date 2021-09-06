@@ -65,7 +65,11 @@ export class LeftMenuComponent implements OnInit {
 	 */
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.notificationService
 			.getUnreadNotifications(this.user.uid)
@@ -89,33 +93,20 @@ export class LeftMenuComponent implements OnInit {
 	 */
 	updateProfile() {
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
 		}
 
-		// Retrieve the current lodged in user from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
 		// check if a user is not null
 		if (this.user) {
 			// Open dialog and populate the data attributes of the form fields
-			const dialogRef = this.dialog.open(EditProfileComponent, {
+			this.dialog.open(EditProfileComponent, {
 				width: screenWidth,
-				height: '90vh',
+				// height: '90vh',
 				data: this.user,
-			});
-
-			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe(() => {
-				// update the user object after the update
-				this.user = JSON.parse(<string>localStorage.getItem('user'));
 			});
 		}
 	}

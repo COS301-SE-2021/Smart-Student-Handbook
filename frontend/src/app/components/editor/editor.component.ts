@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -152,6 +153,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookObservables
 	 * @param notebookOperations
 	 * @param notificationService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -161,8 +163,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		private profileService: ProfileService,
 		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
-		private notificationService: NotificationService
-	) {}
+		private notificationService: NotificationService,
+		private accountService: AccountService
+	) {
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+	}
 
 	ngAfterContentInit(): void {
 		this.notebookObservables.closeEditor.subscribe((close: any) => {
@@ -234,8 +243,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		this.noteTitle = title;
 
 		this.doneLoading = false;
-
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.opened = false;
 
@@ -651,12 +658,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	viewUserProfile(uid: any, displayName: string) {
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';

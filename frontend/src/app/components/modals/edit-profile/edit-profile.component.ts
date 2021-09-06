@@ -58,24 +58,21 @@ export class EditProfileComponent implements OnInit {
 		private dialog: MatDialog,
 		private router: Router
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
-		if (data) {
-			this.imgFilePath = data.profilePic;
-
-			// eslint-disable-next-line no-underscore-dangle
-			// @ts-ignore
-			// eslint-disable-next-line no-underscore-dangle
-			const milliseconds: number = data.dateJoined._seconds * 1000;
-			// eslint-disable-next-line no-underscore-dangle
-			const dateObject = new Date(milliseconds);
-			this.date = dateObject.toLocaleString('en-US', {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			});
-		}
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+				this.imgFilePath = user.profilePic;
+				// eslint-disable-next-line no-underscore-dangle
+				const milliseconds: number = user.dateJoined._seconds * 1000;
+				const dateObject = new Date(milliseconds);
+				this.date = dateObject.toLocaleString('en-US', {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				});
+			}
+		});
 	}
 
 	ngOnInit() {

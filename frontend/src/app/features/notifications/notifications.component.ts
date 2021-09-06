@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookService,
 	NotificationService,
@@ -21,14 +22,19 @@ export class NotificationsComponent implements OnInit {
 	constructor(
 		private notificationService: NotificationService,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
 		this.isCompleted = false;
 
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		if (this.user)
 			this.notificationService

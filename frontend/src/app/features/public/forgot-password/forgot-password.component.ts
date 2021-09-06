@@ -21,7 +21,11 @@ export class ForgotPasswordComponent {
 		private accountService: AccountService,
 		private router: Router
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		// setup the form and validation
 		this.form = this.fb.group({
