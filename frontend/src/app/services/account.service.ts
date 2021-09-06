@@ -67,7 +67,7 @@ export class AccountService {
 		return this.isUserLoggedIn.value;
 	}
 
-	public get userValue(): User {
+	public get getUserValue(): User {
 		return this.userSubject.value;
 	}
 
@@ -128,9 +128,11 @@ export class AccountService {
 						localStorage.setItem('loginState', 'true');
 						localStorage.setItem('user', JSON.stringify(user.user));
 						this.isUserLoggedIn.next(true);
+						this.userSubject.next(user.user);
 					} else {
 						localStorage.setItem('loginState', 'false');
 						localStorage.removeItem('user');
+						localStorage.removeItem('token');
 						this.isUserLoggedIn.next(false);
 					}
 					return user;
@@ -195,6 +197,7 @@ export class AccountService {
 			map((x) => {
 				localStorage.clear();
 				this.isUserLoggedIn.next(false);
+				this.userSubject.next(null);
 				return x;
 			})
 		);
@@ -233,6 +236,7 @@ export class AccountService {
 				map((x) => {
 					localStorage.clear();
 					this.isUserLoggedIn.next(false);
+					this.userSubject.next(null);
 					return x;
 				})
 			);

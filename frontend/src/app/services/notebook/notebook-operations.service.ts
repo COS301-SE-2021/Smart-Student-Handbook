@@ -10,6 +10,7 @@ import {
 	ConfirmDeleteComponent,
 } from '@app/components';
 import { NotebookDto } from '@app/models';
+import { AccountService } from '@app/services';
 
 @Injectable({
 	providedIn: 'root',
@@ -25,14 +26,20 @@ export class NotebookOperationsService {
 	 * @param profileService
 	 * @param dialog
 	 * @param notificationService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
-		private notificationService: NotificationService
+		private notificationService: NotificationService,
+		private accountService: AccountService
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	/**

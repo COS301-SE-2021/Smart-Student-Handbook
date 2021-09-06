@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookService,
 	NoteOperationsService,
@@ -60,7 +61,8 @@ export class NoteCardsComponent implements OnInit {
 		private notesService: NoteOperationsService,
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService
+		private exploreObservables: ExploreObservablesService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
@@ -68,7 +70,11 @@ export class NoteCardsComponent implements OnInit {
 
 		this.isCompleted = false;
 		// get userDetails;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.exploreObservables.openExploreNotebookId.subscribe((notebook) => {
 			this.readonly = notebook.readonly;

@@ -10,13 +10,8 @@ import {
 	NotificationService,
 	MessagingService,
 } from '@app/services';
-import {
-	EditProfileComponent,
-	SmartAssistModalComponent,
-	TreeViewComponent,
-} from '@app/components';
+import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
-import { SmartAssistBottomSheetComponent } from '@app/mobile';
 
 @Component({
 	selector: 'app-left-menu',
@@ -70,7 +65,11 @@ export class LeftMenuComponent implements OnInit {
 	 */
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.notificationService
 			.getUnreadNotifications(this.user.uid)
@@ -101,22 +100,13 @@ export class LeftMenuComponent implements OnInit {
 			screenWidth = '50%';
 		}
 
-		// Retrieve the current lodged in user from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
 		// check if a user is not null
 		if (this.user) {
 			// Open dialog and populate the data attributes of the form fields
-			const dialogRef = this.dialog.open(EditProfileComponent, {
+			this.dialog.open(EditProfileComponent, {
 				width: screenWidth,
 				// height: '90vh',
 				data: this.user,
-			});
-
-			// Get info and create notebook after dialog is closed
-			dialogRef.afterClosed().subscribe(() => {
-				// update the user object after the update
-				this.user = JSON.parse(<string>localStorage.getItem('user'));
 			});
 		}
 	}

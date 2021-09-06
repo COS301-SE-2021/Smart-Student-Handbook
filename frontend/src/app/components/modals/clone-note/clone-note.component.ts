@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 } from '@app/services';
@@ -40,11 +41,16 @@ export class CloneNoteComponent implements OnInit {
 	constructor(
 		private notebookService: NotebookOperationsService,
 		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {}
 
 	async ngOnInit(): Promise<void> {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		// console.log(this.data.options);
 		this.options = this.data.options;

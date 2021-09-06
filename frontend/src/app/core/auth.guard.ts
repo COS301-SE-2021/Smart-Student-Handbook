@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
 	) {}
 
 	canActivate(): boolean {
-		const user = this.accountService.userValue;
+		const user = this.accountService.getUserValue;
 		// TODO check if the token is expired !!
 		if (this.accountService.getLoginState && user) {
 			return true;

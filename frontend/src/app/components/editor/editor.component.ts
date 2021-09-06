@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -152,6 +153,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookObservables
 	 * @param notebookOperations
 	 * @param notificationService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -161,8 +163,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		private profileService: ProfileService,
 		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
-		private notificationService: NotificationService
-	) {}
+		private notificationService: NotificationService,
+		private accountService: AccountService
+	) {
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+	}
 
 	ngAfterContentInit(): void {
 		this.notebookObservables.closeEditor.subscribe((close: any) => {
@@ -234,8 +243,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		this.noteTitle = title;
 
 		this.doneLoading = false;
-
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
 
 		this.opened = false;
 

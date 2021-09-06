@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotebookObservablesService, NotebookService } from '@app/services';
+import {
+	AccountService,
+	NotebookObservablesService,
+	NotebookService,
+} from '@app/services';
 import { MatStepper } from '@angular/material/stepper';
 
 @Component({
@@ -40,7 +44,8 @@ export class RateNotebookComponent implements OnInit {
 	constructor(
 		private formBuilder: FormBuilder,
 		private notebookService: NotebookService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
@@ -56,7 +61,11 @@ export class RateNotebookComponent implements OnInit {
 			if (this.stepper) this.stepper.reset();
 		});
 
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.firstFormGroup = this.formBuilder.group({
 			firstCtrl: ['', Validators.required],

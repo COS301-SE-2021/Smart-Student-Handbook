@@ -19,6 +19,7 @@ export class HomeComponent {
 		private dialog: MatDialog,
 		private accountService: AccountService
 	) {
+		// localStorage.getItem('user')
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
