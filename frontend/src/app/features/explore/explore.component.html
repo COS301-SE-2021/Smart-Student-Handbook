@@ -88,29 +88,6 @@
   </div>
 </div>
 -->
-<script>
-  const aa = require('search-insights');
-
-
-  aa('init', {
-    appId: 'AD2K8AK74A',
-    apiKey: '589f047ba9ac7fa58796f394427d7f35',
-  });
-
-  let userToken = '';
-  window.aa('getUserToken', null, (err, algoliaUserToken) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    userToken = algoliaUserToken;
-  });
-  aa('clickedObjectIDs', {
-    userToken: userToken,
-    // ...
-  });
-</script>
 
 <div class="ais-InstantSearch">
   <h1>Angular InstantSearch e-commerce demo</h1>
