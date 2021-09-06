@@ -9,6 +9,8 @@ import { NotebookController } from './notebook/notebook.controller';
 import { NotebookService } from './notebook/notebook.service';
 import { AccountController } from './account/account.controller';
 import { AccountService } from './account/account.service';
+import { RecommendationsController } from './recommendations/recommendations.controller';
+import { RecommendationsService } from './recommendations/recommendations.service';
 import { AuthService } from './auth/auth.service';
 import { AccessService } from './notebook/access/access.service';
 import { NoteService } from './notebook/note/note.service';
@@ -16,7 +18,14 @@ import { ReviewService } from './notebook/review/review.service';
 
 @Module({
 	imports: [],
-	controllers: [AppController, NotificationController, UserController, NotebookController, AccountController],
+	controllers: [
+		AppController,
+		NotificationController,
+		UserController,
+		NotebookController,
+		AccountController,
+		RecommendationsController,
+	],
 	providers: [
 		AppService,
 		NotificationService,
@@ -27,6 +36,7 @@ import { ReviewService } from './notebook/review/review.service';
 		AccessService,
 		NoteService,
 		ReviewService,
+		RecommendationsService,
 	],
 	exports: [
 		AppService,
@@ -37,6 +47,7 @@ import { ReviewService } from './notebook/review/review.service';
 		AccessService,
 		NoteService,
 		ReviewService,
+		RecommendationsService,
 	],
 })
 export class AppModule {}
