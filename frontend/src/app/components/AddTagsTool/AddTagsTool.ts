@@ -2,7 +2,7 @@ import { API, BlockTool, ToolSettings } from '@editorjs/editorjs';
 
 type AddTagsToolData = {
 	header?: string;
-	tags?: string;
+	text?: string;
 };
 
 type AddTagsToolConstructorParams = {
@@ -16,7 +16,7 @@ export class AddTagsTool implements BlockTool {
 
 	data: AddTagsToolData;
 
-	tags: string[] = ['tag1', 'tag2'];
+	text: string[] = ['tag1', 'tag2'];
 
 	static get toolbox() {
 		return {
@@ -54,14 +54,14 @@ export class AddTagsTool implements BlockTool {
 		this.wrapper.classList.add('addTagsTool');
 
 		if (this.data && this.data.header) {
-			this.createSnippet(this.data.header, this.data.tags);
+			this.createSnippet(this.data.header, this.data.text);
 			return this.wrapper;
 		}
 
 		const input = document.createElement('input');
 
 		input.placeholder = 'Enter your Snippet header here..';
-		input.value = this.data && this.data.tags ? this.data.tags : '';
+		input.value = this.data && this.data.text ? this.data.text : '';
 		this.wrapper.appendChild(input);
 
 		// when url is pasted
@@ -74,15 +74,15 @@ export class AddTagsTool implements BlockTool {
 		return this.wrapper;
 	}
 
-	createSnippet(head: string, tags: string = '') {
+	createSnippet(head: string, text: string = '') {
 		const header = document.createElement('h1');
 		const tagList = document.createElement('input');
 
 		header.innerHTML = head;
 		header.style.color = 'royalblue';
 
-		if (tags !== '') {
-			tagList.value = tags;
+		if (text !== '') {
+			tagList.value = text;
 		} else {
 			tagList.placeholder = 'Tags...';
 		}
@@ -100,7 +100,7 @@ export class AddTagsTool implements BlockTool {
 
 		return {
 			header: header !== null ? header.innerHTML : '',
-			tags: tagList.value,
+			text: tagList.value,
 		};
 	}
 
