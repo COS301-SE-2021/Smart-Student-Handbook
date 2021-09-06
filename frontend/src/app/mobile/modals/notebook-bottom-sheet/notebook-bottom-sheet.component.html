@@ -9,7 +9,7 @@
     <h2>Creator:</h2>
 
     <div align="center" class="collaborators">
-      <div mat-card-avatar class="collaborator-image"></div>
+      <div mat-card-avatar class="collaborator-image" [style]="{'background-image': 'url(' + creator.url + ')'}"></div>
 
       <p class="personName">{{creator.name}}</p>
     </div>
@@ -31,7 +31,7 @@
 		<div align="center" class="collaborators" *ngFor="let collaborator of collaborators">
 
       <ng-template [ngIf]="collaborator.id !== creator.id">
-        <div mat-card-avatar class="collaborator-image"></div>
+        <div mat-card-avatar class="collaborator-image" [style]="{'background-image': 'url(' + collaborator.url + ')'}"></div>
 
         <mat-icon *ngIf="creator.id === user.uid" class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
           remove_circle_outline

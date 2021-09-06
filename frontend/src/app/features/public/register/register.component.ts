@@ -62,12 +62,7 @@ export class RegisterComponent {
 		this.isDisabled = true;
 
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
@@ -143,7 +138,7 @@ export class RegisterComponent {
 																	EditProfileComponent,
 																	{
 																		width: screenWidth,
-																		height: '90vh',
+																		// height: '90vh',
 																		data: user,
 																	}
 																);
