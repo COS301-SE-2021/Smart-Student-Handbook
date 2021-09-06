@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions';
+import fetch from 'node-fetch';
 
 exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onCreate((snapshot) => {
 	const data = snapshot.data();
@@ -12,6 +13,8 @@ exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onC
 		institution: data.institution,
 		course: data.course,
 	};
+
+	console.log(JSON.stringify(notebookData));
 
 	fetch('https://smartassist-nii4biypla-uc.a.run.app/addData', {
 		method: 'POST',
