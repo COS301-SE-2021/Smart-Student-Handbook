@@ -6,7 +6,7 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY /src /app
+COPY ./src /app
 
 ENV PORT=6001
 
