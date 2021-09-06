@@ -38,6 +38,7 @@ export class ExploreComponent {
 		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
+      query: '',
 		},
 	};
 
@@ -49,12 +50,8 @@ export class ExploreComponent {
 		routing: true,
 		searchClient,
 		insightsClient: (window as any).aa,
-		searchParameters: {
-			hitsPerPage: 9,
-		},
 	};
 
-	private query: string = '';
 
 	hide: boolean = true;
 
@@ -70,7 +67,7 @@ export class ExploreComponent {
 		private bottomSheet: MatBottomSheet,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService
+		private exploreObservables: ExploreObservablesService ,
 	) {}
 
 	openNotes(hit: any) {
@@ -477,13 +474,15 @@ export class ExploreComponent {
 		this.notebookObservables.setReviewNotebook(hit.objectID);
 	}
 
-	onQuery($event) {
+	/*onQuery($event) {
 		this.query = $event.target.value;
 	}
 
-	get searchParameters() {
-		return {
-			query: this.query,
-		};
-	}
+  public searchParameters = {
+    query: ""
+  };
+
+  public setQuery({ query }: { query: string }) {
+    this.searchParameters.query = query;
+  }*/
 }
