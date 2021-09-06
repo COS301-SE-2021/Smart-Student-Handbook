@@ -21,7 +21,7 @@ import {
 	HeaderComponent,
 	SecureLayoutComponent,
 	PublicLayoutComponent,
-	InterceptorInterceptor,
+	JwtInterceptor,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -171,7 +171,7 @@ import { AppRoutingModule } from './app-routing.module';
 		MaterialModule,
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: InterceptorInterceptor,
+			useClass: JwtInterceptor,
 			multi: true,
 		},
 	],

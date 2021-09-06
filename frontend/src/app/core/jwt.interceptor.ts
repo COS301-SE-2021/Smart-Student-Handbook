@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { AccountService } from '@app/services';
 
 @Injectable()
-export class InterceptorInterceptor implements HttpInterceptor {
+export class JwtInterceptor implements HttpInterceptor {
 	constructor(private accountService: AccountService) {}
 
 	intercept(
