@@ -41,6 +41,21 @@ export class ExploreComponent {
 		},
 	};
 
+	config2 = {
+		apiKey: '589f047ba9ac7fa58796f394427d7f35',
+		appId: 'AD2K8AK74A',
+		indexName: 'userNotes',
+		clickAnalytics: true,
+		routing: true,
+		searchClient,
+		insightsClient: (window as any).aa,
+		searchParameters: {
+			hitsPerPage: 9,
+		},
+	};
+
+	private query: string = '';
+
 	hide: boolean = true;
 
 	hideNotes: boolean = true;
@@ -85,12 +100,6 @@ export class ExploreComponent {
 			hit.data.title,
 			true
 		);
-
-		// event send when user clicks object
-		const url = new URL(window.location.href);
-		const { searchParams } = url;
-
-		const queryID = searchParams.get('queryID');
 
 		aa('setUserToken', this.user.uid);
 
@@ -191,14 +200,14 @@ export class ExploreComponent {
 			objectIDs: [hit.objectID],
 		});
 		aa('clickedObjectIDs', {
-			index: 'userNotebooks',
+			index: 'userNotes',
 			eventName: 'Click object',
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
 		});
 		aa('viewedObjectIDs', {
-			index: 'userNotebooks',
+			index: 'userNotes',
 			eventName: 'View object',
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
@@ -206,7 +215,7 @@ export class ExploreComponent {
 		});
 
 		aa('convertedObjectIDsAfterSearch', {
-			index: 'userNotebook',
+			index: 'userNotes',
 			eventName: 'Check out',
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
@@ -356,7 +365,7 @@ export class ExploreComponent {
 		aa('convertedObjectIDsAfterSearch', {
 			index: 'userNotebook',
 			eventName: 'Check out',
-      // eslint-disable-next-line no-underscore-dangle
+			// eslint-disable-next-line no-underscore-dangle
 			queryID: [hit.__queryID],
 			objectIDs: [hit.objectID],
 		});
@@ -371,7 +380,76 @@ export class ExploreComponent {
 		aa('convertedObjectIDsAfterSearch', {
 			index: 'userNotebook',
 			eventName: 'Check out',
-      // eslint-disable-next-line no-underscore-dangle
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		// Notes indexing strts here
+
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
 		});
@@ -397,5 +475,15 @@ export class ExploreComponent {
 		}
 
 		this.notebookObservables.setReviewNotebook(hit.objectID);
+	}
+
+	onQuery($event) {
+		this.query = $event.target.value;
+	}
+
+	get searchParameters() {
+		return {
+			query: this.query,
+		};
 	}
 }
