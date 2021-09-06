@@ -7,4 +7,4 @@ export * from './layouts/public-layout/public-layout.component';
 export * from './layouts/secure-layout/secure-layout.component';
 export * from './routing/public.routes';
 export * from './routing/secure.routes';
-export * from './interceptor.interceptor';
+export * from './jwt.interceptor';

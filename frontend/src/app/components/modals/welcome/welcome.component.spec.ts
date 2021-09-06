@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmartAssistModalComponent } from './smart-assist-modal.component';
+import { WelcomeComponent } from './welcome.component';
 
-describe('SmartAssistModalComponent', () => {
-	let component: SmartAssistModalComponent;
-	let fixture: ComponentFixture<SmartAssistModalComponent>;
+describe('WelcomeComponent', () => {
+	let component: WelcomeComponent;
+	let fixture: ComponentFixture<WelcomeComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [SmartAssistModalComponent],
+			declarations: [WelcomeComponent],
 		}).compileComponents();
 	});
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(SmartAssistModalComponent);
+		fixture = TestBed.createComponent(WelcomeComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

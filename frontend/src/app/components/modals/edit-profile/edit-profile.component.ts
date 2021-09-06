@@ -126,8 +126,6 @@ export class EditProfileComponent implements OnInit {
 							if (url) {
 								this.fb = url;
 
-								console.log(url);
-
 								const updatedUser: User = this.user;
 								updatedUser.profilePic = this.fb;
 

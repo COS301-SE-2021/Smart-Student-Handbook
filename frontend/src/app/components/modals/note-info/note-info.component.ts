@@ -3,7 +3,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Collaborators } from '@app/components';
 import { NotebookOperationsService, NotebookService } from '@app/services';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Tag } from '@app/mobile';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

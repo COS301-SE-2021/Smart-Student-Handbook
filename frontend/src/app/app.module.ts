@@ -21,7 +21,7 @@ import {
 	HeaderComponent,
 	SecureLayoutComponent,
 	PublicLayoutComponent,
-	InterceptorInterceptor,
+	JwtInterceptor,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -77,6 +77,7 @@ import {
 	SmartAssistModalComponent,
 	RateNotebookComponent,
 	CloneNoteComponent,
+	WelcomeComponent,
 } from '@app/components';
 
 // Long press
@@ -132,6 +133,7 @@ import { AppRoutingModule } from './app-routing.module';
 		SmartAssistModalComponent,
 		RateNotebookComponent,
 		CloneNoteComponent,
+		WelcomeComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -169,7 +171,7 @@ import { AppRoutingModule } from './app-routing.module';
 		MaterialModule,
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: InterceptorInterceptor,
+			useClass: JwtInterceptor,
 			multi: true,
 		},
 	],
