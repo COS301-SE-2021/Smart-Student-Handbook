@@ -91,6 +91,8 @@ def addData():
             "institution": institution,
             "course": course
         }
+
+        cloud.loadNotebooksData()
         
         data.addData(note)
 
@@ -127,6 +129,8 @@ def removeData():
             "institution": institution,
             "course": course
         }
+
+        cloud.loadNotebooksData()
         
         data.removeData(note)
 
@@ -163,6 +167,8 @@ def editData():
             "course": course
         }
         print(note, flush=True)
+
+        cloud.loadNotebooksData()
         
         data.editData(note)
 
@@ -179,6 +185,8 @@ def listData():
     global data
     global smartmodel
     global cloud
+
+    cloud.loadNotebooksData()
 
     return data.listData()
 

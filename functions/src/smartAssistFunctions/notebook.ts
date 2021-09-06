@@ -20,7 +20,7 @@ exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onC
 
 	const noteData = {
 		noteId: objectID,
-		name: data.title,
+		name: data.name,
 		tags: data.tags,
 		author: notebook.author,
 		institution: notebook.institution,
@@ -29,7 +29,7 @@ exports.addNotebook = functions.firestore.document('userNotes/{notebookId}').onC
 
 	console.log(JSON.stringify(noteData));
 
-	fetch('https://smartassist-nii4biypla-uc.a.run.app/addData', {
+	await fetch('https://smartassist-nii4biypla-uc.a.run.app/addData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -61,14 +61,14 @@ exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').
 
 	const noteData = {
 		noteId: objectID,
-		name: data.title,
+		name: data.name,
 		tags: data.tags,
 		author: notebook.author,
 		institution: notebook.institution,
 		course: notebook.course,
 	};
 
-	fetch('https://smartassist-nii4biypla-uc.a.run.app/editData', {
+	await fetch('https://smartassist-nii4biypla-uc.a.run.app/editData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -100,14 +100,14 @@ exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').
 
 	const noteData = {
 		noteId: objectID,
-		name: data.title,
+		name: data.name,
 		tags: data.tags,
 		author: notebook.author,
 		institution: notebook.institution,
 		course: notebook.course,
 	};
 
-	fetch('https://smartassist-nii4biypla-uc.a.run.app/removeData', {
+	await fetch('https://smartassist-nii4biypla-uc.a.run.app/removeData', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
