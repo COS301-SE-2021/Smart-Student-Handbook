@@ -104,12 +104,10 @@ export class RegisterComponent {
 									(x: any) => {
 										if (x.success) {
 											//--------------------------------------------------------------
-											// Retrieve the current lodged in user from localstorage
-											const user = JSON.parse(
-												<string>(
-													localStorage.getItem('user')
-												)
-											);
+											// Retrieve the current lodged in user from Behavioral subject
+											const user =
+												this.accountService
+													.getUserValue;
 
 											this.messagingService.saveNotificationToken(
 												x.user.uid

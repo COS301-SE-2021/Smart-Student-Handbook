@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';
 import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
-import { ProfileService } from '@app/services';
+import { AccountService, ProfileService } from '@app/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -28,9 +28,15 @@ export class NoteOperationsService {
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private profileService: ProfileService,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private accountService: AccountService
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		// Behavioral subject
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	/**

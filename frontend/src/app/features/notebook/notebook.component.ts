@@ -80,7 +80,11 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 */
 	ngOnInit() {
 		// get userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	ngAfterViewInit() {

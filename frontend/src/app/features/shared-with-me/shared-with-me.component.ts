@@ -5,6 +5,7 @@ import {
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -66,12 +67,17 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private dialog: MatDialog,
 		private notebookOperations: NotebookOperationsService,
 		private exploreObservablesOperations: ExploreObservablesService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
-		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		// Get the user and user profile info from Behavioral subject
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.getUserNotebooks();
 

@@ -6,7 +6,15 @@ import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
 import { Tag } from '@app/components';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { NotebookService, NoteOperationsService } from '@app/services';
+
+import {
+	AccountService,
+	NotebookService,
+	NoteOperationsService,
+} from '@app/services';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-explore-notes',
@@ -73,7 +81,8 @@ export class ExploreNotesEditorComponent implements OnInit {
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private notebookService: NotebookService,
-		private noteOperations: NoteOperationsService
+		private noteOperations: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
@@ -88,7 +97,11 @@ export class ExploreNotesEditorComponent implements OnInit {
 	 * @param title
 	 */
 	async loadReadonly(noteId: string, title: string) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.noteTitle = title;
 		this.noteId = noteId;

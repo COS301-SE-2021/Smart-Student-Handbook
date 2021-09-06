@@ -6,6 +6,7 @@ import {
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
+	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
 	NotebookService,
@@ -67,12 +68,17 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
 		private exploreObservables: ExploreObservablesService,
-		private notebookOperations: NotebookOperationsService
+		private notebookOperations: NotebookOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.getUserNotebooks();
 

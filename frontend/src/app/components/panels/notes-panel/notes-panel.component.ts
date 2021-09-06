@@ -16,6 +16,7 @@ import {
 	NotebookService,
 	NoteOperationsService,
 	NotebookObservablesService,
+	AccountService,
 } from '@app/services';
 
 @Component({
@@ -58,12 +59,14 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param dialog show dialog to update notebook details
 	 * @param notebookObservables
 	 * @param notesService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private notesService: NoteOperationsService
+		private notesService: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngAfterContentInit(): void {
@@ -95,10 +98,14 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
-		// }
 
-		// let userDetails;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		// let userDeatils;
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+
 
 		this.open = false;
 

@@ -14,6 +14,6 @@ export interface User {
 }
 
 interface DateJoined {
-	_seconds?: string;
-	_nanoseconds?: string;
+	_seconds?: any;
+	_nanoseconds?: any;
 }
