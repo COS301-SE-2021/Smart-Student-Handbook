@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Delete, Put, Param, Redirect } from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, Put, Param, Redirect, Headers } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
@@ -9,10 +9,11 @@ import { Response } from './interfaces/response.interface';
 import { Account } from './interfaces/account.interface';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
 import { UpdateDto } from './dto/update.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('account')
 export class AccountController {
-	constructor(private readonly accountService: AccountService) {}
+	constructor(private readonly accountService: AccountService, private readonly authService: AuthService) {}
 
 	@Post('registerUser')
 	registerUser(@Body() registerDto: RegisterDto): Promise<Account> {
@@ -25,8 +26,9 @@ export class AccountController {
 	}
 
 	@Put('updateUser')
-	updateUser(@Body() updateDto: UpdateDto): Promise<Account> {
-		return this.accountService.updateUser(updateDto);
+	async updateUser(@Body() updateDto: UpdateDto, @Headers() headers): Promise<Account> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.updateUser(updateDto, userId);
 	}
 
 	@Post('signOut')
@@ -35,13 +37,15 @@ export class AccountController {
 	}
 
 	@Get('getCurrentUser')
-	getCurrentUser(): Promise<Account> {
-		return this.accountService.getCurrentUser();
+	async getCurrentUser(@Headers() headers): Promise<Account> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.getCurrentUser(userId);
 	}
 
 	@Delete('deleteUser')
-	deleteUser(): Promise<Response> {
-		return this.accountService.deleteUser();
+	async deleteUser(@Headers() headers): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.accountService.deleteUser(userId);
 	}
 
 	@Get('verifyEmail/:email/:local/:code')
@@ -68,7 +72,14 @@ export class AccountController {
 	}
 
 	@Post('setUserNotificationToken')
-	setUserNotificationToken(@Body('userId') userId: string, @Body('notificationToken') notificationToken: string) {
+	async setUserNotificationToken(@Headers() headers, @Body('notificationToken') notificationToken: string) {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.accountService.setUserNotificationToken(userId, notificationToken);
 	}
+
+	// @Post('refreshIdToken/:userId')
+	// async refreshIdToken(@Headers() headers) {
+	// 	const userId: string = await this.authService.verifyUser(headers.token);
+	// 	return this.accountService.refreshIdToken(userId);
+	// }
 }

@@ -72,7 +72,7 @@ export class LeftMenuComponent implements OnInit {
 		});
 
 		this.notificationService
-			.getUnreadNotifications(this.user.uid)
+			.getUnreadNotifications()
 			.subscribe((unreadNotifications) => {
 				// console.log(unreadNotifications.length);
 				this.nrUnreadNotifications = unreadNotifications.length;

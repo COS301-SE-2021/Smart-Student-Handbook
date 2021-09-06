@@ -148,22 +148,16 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 	 */
 	getUserNotebooks() {
 		if (this.user)
-			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
-					let temp: any[] = [];
-					let index = 0;
+					let temp: string = '';
 					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
-						temp = notebook.access;
+						temp = notebook.creatorId;
 
-						if (temp.length > 0) {
-							index = temp.findIndex(
-								(a: any) => a.userId !== this.user.uid
-							);
-						}
-
-						if (index >= 0 || temp.length === 0) {
+						// If the user is the creator
+						if (temp === this.user.uid) {
 							this.notebooks.push(notebook);
 
 							this.childrenSize += 1;
@@ -176,8 +170,6 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 
 							tree.push(child);
 						}
-
-						index = 0;
 					});
 
 					if (this.childrenSize > 0) {
@@ -209,27 +201,30 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				course: notebook[0].course,
 				description: notebook[0].description,
 				institution: notebook[0].institution,
-				creatorId: notebook[0].creatorId,
+				// creatorId: notebook[0].creatorId,
 				private: notebook[0].private,
 				tags: notebook[0].tags,
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
+				console.log(val);
 				this.notebooks = this.notebooks.map((nb: any) => {
-					if (nb.notebookId === notebookId) {
-						nb.title = val.title;
-						nb.course = val.course;
-						nb.description = val.description;
-						nb.private = val.private;
+					const temp = nb;
+					if (temp.notebookId === notebookId) {
+						temp.title = val.title;
+						temp.course = val.course;
+						temp.description = val.description;
+						temp.private = val.private;
 					}
-					return nb;
+					return temp;
 				});
 
 				let tree = this.dataSource.data[0].children;
 				if (tree)
 					tree = tree.map((node) => {
-						if (node.id === notebookId) {
-							node.name = val.title;
+						const temp = node;
+						if (temp.id === notebookId) {
+							temp.name = val.title;
 						}
 						return node;
 					});
@@ -283,53 +278,55 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				course: '',
 				description: '',
 				institution: this.user.institution,
-				creatorId: this.user.uid,
+				// creatorId: this.user.uid,
 				private: false,
 				tags: [],
 			})
 			.subscribe((val: any) => {
-				this.openedNotebookId = val.notebook.notebookId;
+				if (val) {
+					this.openedNotebookId = val.notebook.notebookId;
 
-				this.notebooks.push(val.notebook);
+					this.notebooks.push(val.notebook);
 
-				const child = {
-					name: val.notebook.title,
-					id: val.notebook.notebookId,
-					// children: childArr,
-				};
+					const child = {
+						name: val.notebook.title,
+						id: val.notebook.notebookId,
+						// children: childArr,
+					};
 
-				this.childrenSize += 1;
+					this.childrenSize += 1;
 
-				let tree: any;
-				if (this.dataSource.data[0].children)
-					tree = this.dataSource.data[0].children;
+					let tree: any;
+					if (this.dataSource.data[0].children)
+						tree = this.dataSource.data[0].children;
 
-				if (this.childrenSize === 1) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: [child],
-						},
-					];
-				} else {
-					tree.push(child);
+					if (this.childrenSize === 1) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [child],
+							},
+						];
+					} else {
+						tree.push(child);
 
-					this.dataSource.data = [
-						{
-							name: 'My notebooks',
-							id: '',
-							children: tree,
-						},
-					];
+						this.dataSource.data = [
+							{
+								name: 'My notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+
+					this.treeControl.expandAll();
+
+					this.openNotebookFolder(
+						val.notebook.notebookId,
+						val.notebook.title
+					);
 				}
-
-				this.treeControl.expandAll();
-
-				this.openNotebookFolder(
-					val.notebook.notebookId,
-					val.notebook.title
-				);
 			});
 	}
 
@@ -347,7 +344,7 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				);
 
 				this.notebookService
-					.deleteNotebook(notebookId, this.user.uid)
+					.deleteNotebook(notebookId)
 					.subscribe(() => {
 						this.childrenSize -= 1;
 

@@ -7,5 +7,7 @@ export class NoteDto {
 
 	readonly description?: string;
 
-	readonly userId?: string;
+	readonly creatorId?: string;
+
+	readonly tags?: string[];
 }

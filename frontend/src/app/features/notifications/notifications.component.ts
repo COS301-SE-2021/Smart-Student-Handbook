@@ -38,9 +38,9 @@ export class NotificationsComponent implements OnInit {
 
 		if (this.user)
 			this.notificationService
-				.getUserNotifications(this.user.uid)
+				.getUserNotifications()
 				.subscribe((notifications) => {
-					console.log(notifications);
+					// console.log(notifications);
 					this.notifications = notifications;
 
 					this.isCompleted = true;
@@ -52,7 +52,7 @@ export class NotificationsComponent implements OnInit {
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,
-				userId: this.user.uid,
+				userId,
 				profileUrl: this.user.profilePic,
 				notebookId,
 			})

@@ -42,7 +42,7 @@ export class ViewProfileComponent {
 		this.isLoadComplete = false;
 		if (data) {
 			this.displayName = data.displayName;
-			this.notebookService.getUserNotebooks(data.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(userNotebooks) => {
 					this.userNotebooks = userNotebooks;
 					this.profileService.getUserByUid(data.uid).subscribe(

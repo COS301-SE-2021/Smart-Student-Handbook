@@ -101,7 +101,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	tags: Tag[] = [];
+	tags: string[] = [];
 
 	collaborators: Collaborators[] = [];
 
@@ -118,6 +118,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	noteId: string = '';
 
 	noteTitle: string = 'Smart Student';
+
+	noteDescription: string = 'Smart Student';
 
 	panelOpenState = false;
 
@@ -194,12 +196,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.noteId = noteInfo.noteId;
 				this.notebookID = noteInfo.notebookId;
 				this.notebookTitle = noteInfo.notebookTitle;
+				this.noteDescription = noteInfo.description;
 
 				this.loadEditor(
 					noteInfo.notebookId,
 					noteInfo.noteId,
 					noteInfo.title,
-					noteInfo.notebookTitle
+					noteInfo.notebookTitle,
+					noteInfo.description,
+					noteInfo.tags
 				);
 			}
 		});
@@ -215,7 +220,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			.subscribe((data) => {
 				this.date = data.date;
 				this.notebook = data.notebook;
-				this.tags = data.tags;
+				// this.tags = data.tags;
 				this.collaborators = data.collaborators;
 				this.creator = data.creator;
 				this.private = data.notebook.private;
@@ -231,16 +236,25 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param noteId
 	 * @param title
 	 * @param notebookTitle
+	 * @param description
+	 * @param tags
 	 */
 	async loadEditor(
 		notebookId: string,
 		noteId: string,
 		title: string,
-		notebookTitle: string
+		notebookTitle: string,
+		description: string,
+		tags: string[]
 	) {
+		console.log(tags);
 		this.notebookTitle = notebookTitle;
 
+		this.tags = tags;
+
 		this.noteTitle = title;
+
+		this.noteDescription = description;
 
 		this.doneLoading = false;
 
@@ -351,13 +365,9 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		this.noteId = noteId;
 
-		console.log(noteId);
-
 		// Change the path to the correct notebook's path
 		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
-		// dbRefObject.once('value', (res) => {
-		// 	console.log(res.val());
-		// });
+
 		/**
 		 * Get the values from the realtime database and insert block if notebook is empty
 		 */
@@ -543,7 +553,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		// Add our fruit
 		if (value) {
-			this.tags.push({ name: value });
+			this.tags.push(value);
 		}
 
 		// Clear the input value
@@ -555,29 +565,27 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
-			tagList.push(this.tags[i].name);
+			tagList.push(this.tags[i]);
 		}
 
-		this.notebookOperations
-			.updateNotebookTags({
-				title: this.notebook.title,
-				author: this.notebook.author,
-				course: this.notebook.course,
-				description: this.notebook.description,
-				institution: this.notebook.institution,
-				creatorId: this.notebook.creatorId,
-				private: this.notebook.private,
-				tags: tagList,
-				notebookId: this.notebook.notebookId,
-			})
-			.subscribe(() => {});
+		const request = {
+			notebookId: this.notebook.notebookId,
+			noteId: this.noteId,
+			name: this.noteTitle,
+			// description: this.noteDescription,
+			creatorId: this.creator.id,
+			tags: tagList,
+		};
+
+		// console.log(request);
+		this.notebookService.updateNote(request).subscribe();
 	}
 
 	/**
 	 * Remove a tag from input and tags array
 	 * @param tag the tag to be removed
 	 */
-	removeTag(tag: Tag): void {
+	removeTag(tag: string): void {
 		const index = this.tags.indexOf(tag);
 
 		if (index >= 0) {
@@ -594,10 +602,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebook.notebookId,
 				this.notebookTitle
 			)
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.subscribe(() => {
-				// this.collaborators.push(collaborator);
-			});
+			.subscribe(
+				() => {
+					// console.log(status);
+					this.doneLoading = true;
+				},
+				() => {
+					this.doneLoading = true;
+				}
+			);
 	}
 
 	removeCollaborator(userId: string) {

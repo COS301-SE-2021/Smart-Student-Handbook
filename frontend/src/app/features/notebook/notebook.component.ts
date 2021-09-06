@@ -92,13 +92,17 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 			notebookId: string,
 			noteId: string,
 			title: string,
-			notebookTitle: string
+			notebookTitle: string,
+			description: string,
+			tags: string[]
 		) => {
 			this.editorComponent.loadEditor(
 				notebookId,
 				noteId,
 				title,
-				notebookTitle
+				notebookTitle,
+				description,
+				tags
 			);
 		};
 
@@ -121,13 +125,17 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		notebookId: string,
 		noteId: string,
 		title: string,
-		notebookTitle: string
+		notebookTitle: string,
+		description: string,
+		tags: string[]
 	) {
 		await this.editorComponent.loadEditor(
 			notebookId,
 			noteId,
 			title,
-			notebookTitle
+			notebookTitle,
+			description,
+			tags
 		);
 	}
 }

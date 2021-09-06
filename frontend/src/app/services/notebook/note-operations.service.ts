@@ -62,14 +62,11 @@ export class NoteOperationsService {
 				if (result !== undefined) {
 					// Create request object
 					const request = {
-						userId: this.user.uid,
 						notebookId,
-						name: result.title,
-						description: result.description,
+						name: result.data.title,
+						description: result.data.description,
+						tags: result.tags,
 					};
-
-					// console.log(request);
-					// this.notebookTitle = result.title;
 
 					// Call service and create notebook
 					this.notebookService.createNote(request).subscribe(
@@ -78,6 +75,7 @@ export class NoteOperationsService {
 								userId: this.user.id,
 								name: request.name,
 								description: request.description,
+								tags: request.tags,
 								noteId: data.noteId,
 								notebookTitle,
 							};
@@ -89,7 +87,6 @@ export class NoteOperationsService {
 						},
 						(error) => {
 							console.log(error);
-							// this.LeftMenuComponent.getUserNotebooks();
 						}
 					);
 				}
@@ -103,12 +100,16 @@ export class NoteOperationsService {
 	 * @param noteId
 	 * @param title
 	 * @param description
+	 * @param creatorId
+	 * @param tags
 	 */
 	editNote(
 		notebookId: string,
 		noteId: string,
 		title: string,
-		description: string
+		description: string,
+		creatorId: string,
+		tags: string[]
 	): Observable<any> {
 		const screenWidth = this.getScreenSize();
 
@@ -120,6 +121,7 @@ export class NoteOperationsService {
 					title,
 					message: 'Update Note',
 					description,
+					tags,
 				},
 			});
 
@@ -130,9 +132,10 @@ export class NoteOperationsService {
 					const request = {
 						notebookId,
 						noteId,
-						name: data.title,
-						description: data.description,
-						userId: this.user.uid,
+						name: data.data.title,
+						description: data.data.description,
+						creatorId,
+						tags: data.tags,
 					};
 
 					// Call service and update notebook
@@ -206,9 +209,8 @@ export class NoteOperationsService {
 
 		return new Observable((observer) => {
 			// Get info and create notebook after dialog is closed
-			dialogRef
-				.afterClosed()
-				.subscribe(({ notebookId, title, description }) => {
+			dialogRef.afterClosed().subscribe(
+				({ notebookId, title, description, tags }) => {
 					if (
 						notebookId !== undefined &&
 						title !== undefined &&
@@ -217,15 +219,14 @@ export class NoteOperationsService {
 						// console.log(notebookId, title, description);
 
 						const request = {
-							userId: this.user.uid,
+							tags,
 							notebookId,
 							name: title,
 							description,
 						};
 
-						this.notebookService
-							.createNote(request)
-							.subscribe((newNote) => {
+						this.notebookService.createNote(request).subscribe(
+							(newNote) => {
 								// console.log(newNote);
 
 								if (newNote.noteId) {
@@ -237,10 +238,22 @@ export class NoteOperationsService {
 										}
 									);
 									observer.next(newNote.noteId);
+								} else {
+									observer.next(false);
 								}
-							});
+							},
+							() => {
+								observer.next(false);
+							}
+						);
+					} else {
+						observer.next(false);
 					}
-				});
+				},
+				() => {
+					observer.next(false);
+				}
+			);
 		});
 	}
 
@@ -249,7 +262,7 @@ export class NoteOperationsService {
 		return new Observable((observable) => {
 			const options: any[] = [];
 			this.notebookService
-				.getUserNotebooks(this.user.uid)
+				.getUserNotebooks()
 				.subscribe((notebooks: any[]) => {
 					notebooks.forEach((notebook) => {
 						options.push({

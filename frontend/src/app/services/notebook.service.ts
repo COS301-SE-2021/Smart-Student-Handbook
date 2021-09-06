@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { NotebookDto } from '@app/models';
 import { NoteDto } from '@app/models/notebook/NoteDto.model';
 import { CheckAccessDto } from '@app/models/notebook/CheckAccessDto.model';
-import { map } from 'rxjs/operators';
 import { ReviewDto } from '../../../../functions/src/notebook/dto/review.dto';
 import { AccessDto } from '../../../../functions/src/notebook/dto/access.dto';
 
@@ -51,7 +50,6 @@ export class NotebookService {
 				course: notebookDto.course,
 				description: notebookDto.description,
 				institution: notebookDto.institution,
-				creatorId: notebookDto.creatorId,
 				private: notebookDto.private,
 				tags: notebookDto.tags,
 			},
@@ -76,12 +74,12 @@ export class NotebookService {
 		return this.httpClient.put(
 			`${NOTEBOOK_API}/updateNotebook`,
 			{
+				creatorId: notebookDto.creatorId,
 				title: notebookDto.title,
 				author: notebookDto.author,
 				course: notebookDto.course,
 				description: notebookDto.description,
 				institution: notebookDto.institution,
-				creatorId: notebookDto.creatorId,
 				private: notebookDto.private,
 				tags: notebookDto.tags,
 				notebookId: notebookDto.notebookId,
@@ -93,20 +91,31 @@ export class NotebookService {
 	/**
 	 * Get all the user's notebooks and note id's
 	 */
-	getUserNotebooks(userId: string): Observable<any> {
+	getUserNotebooks(): Observable<any> {
 		return this.httpClient.get(
-			`${NOTEBOOK_API}/getUserNotebooks/${userId}`,
+			`${NOTEBOOK_API}/getUserNotebooks`,
+			httpOptions
+		);
+	}
+
+	/**
+	 * Get the data of a notebook
+	 * @param notebookId
+	 */
+	getNotebook(notebookId: string): Observable<any> {
+		return this.httpClient.get(
+			`${NOTEBOOK_API}/getNotebook/${notebookId}`,
 			httpOptions
 		);
 	}
 
 	/**
 	 * Get all notes inside a notebook
-	 * @param notebookID
+	 * @param noteId
 	 */
-	getNotes(notebookID: string): Observable<any> {
+	getNotes(noteId: string): Observable<any> {
 		return this.httpClient.get(
-			`${NOTEBOOK_API}/getNotes/${notebookID}`,
+			`${NOTEBOOK_API}/getNotes/${noteId}`,
 			httpOptions
 		);
 	}
@@ -119,10 +128,10 @@ export class NotebookService {
 	 */
 	createNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.post(`${NOTEBOOK_API}/createNote`, {
-			userId: noteDto.userId,
 			notebookId: noteDto.notebookId,
 			name: noteDto.name,
 			description: noteDto.description,
+			tags: noteDto.tags,
 		});
 	}
 
@@ -132,6 +141,7 @@ export class NotebookService {
 	 * notebook id
 	 * note id
 	 * name
+	 * creator id
 	 */
 	updateNote(noteDto: NoteDto): Observable<any> {
 		return this.httpClient.put(`${NOTEBOOK_API}/updateNote`, {
@@ -139,18 +149,18 @@ export class NotebookService {
 			noteId: noteDto.noteId,
 			name: noteDto.name,
 			description: noteDto.description,
-			userId: noteDto.userId,
+			creatorId: noteDto.creatorId,
+			tags: noteDto.tags,
 		});
 	}
 
 	/**
 	 * Delete a whole notebook
-	 * @param notebookID
-	 * @param userId
+	 * @param notebookId
 	 */
-	deleteNotebook(notebookID: string, userId: string): Observable<any> {
+	deleteNotebook(notebookId: string): Observable<any> {
 		return this.httpClient.delete(
-			`${NOTEBOOK_API}/deleteNotebook/${notebookID}/${userId}`,
+			`${NOTEBOOK_API}/deleteNotebook/${notebookId}`,
 			httpOptions
 		);
 	}
@@ -184,7 +194,6 @@ export class NotebookService {
 				message: reviewDto.message,
 				rating: reviewDto.rating,
 				displayName: reviewDto.displayName,
-				userId: reviewDto.userId,
 				profileUrl: reviewDto.profileUrl,
 			},
 			httpOptions
@@ -234,6 +243,13 @@ export class NotebookService {
 		);
 	}
 
+	getAccessList(notebookId: string): Observable<any> {
+		return this.httpClient.get(
+			`${NOTEBOOK_API}/getAccessList/${notebookId}`,
+			httpOptions
+		);
+	}
+
 	/**
 	 * Check if a user has access to a notebook
 	 * @param checkAccessDto
@@ -254,7 +270,7 @@ export class NotebookService {
 	 */
 	removeUserAccess(checkAccessDto: CheckAccessDto): Observable<any> {
 		return this.httpClient.delete(
-			`${NOTEBOOK_API}/removeUserAccess/${checkAccessDto.userId}/${checkAccessDto.notebookId}`
+			`${NOTEBOOK_API}/removeUserAccess/${checkAccessDto.notebookId}/${checkAccessDto.userId}`
 		);
 	}
 }

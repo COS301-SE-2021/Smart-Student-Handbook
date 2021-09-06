@@ -126,6 +126,10 @@ export class AccountService {
 				map((user: any) => {
 					if (user.success) {
 						localStorage.setItem('loginState', 'true');
+						localStorage.setItem(
+							'authToken',
+							JSON.stringify(user.authToken)
+						);
 						localStorage.setItem('user', JSON.stringify(user.user));
 						this.isUserLoggedIn.next(true);
 						this.userSubject.next(user.user);
@@ -243,13 +247,13 @@ export class AccountService {
 	}
 
 	setUserNotificationToken(
-		userId: string,
+		// userId: string,
 		notificationToken: string
 	): Observable<any> {
 		return this.http.post(
 			`${ACCOUNT_API}setUserNotificationToken`,
 			{
-				userId,
+				// userId,
 				notificationToken,
 			},
 			httpOptions
