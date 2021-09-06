@@ -5,13 +5,12 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-3">
+      <div class="col-sm-3 col-xs-12">
         <div class="profile-pic">
           <label class="-label" for="file">
             <span><mat-icon>edit</mat-icon></span>
             <span></span>
           </label>
-<!--          <input id="file" type="file" accept="image/*" (change)="imagePreview($event)" />-->
           <input #imageInput
                  id="file"
                  type="file"
@@ -20,7 +19,7 @@
           <img [src]="imgFilePath" alt="User Profile Image"  id="output" width="200" />
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-sm-9 col-xs-12 mt-3">
         <div><span>Username: </span> <span class="h6">{{data.username}}</span></div>
         <div><span>Email: </span> <span class="h6">{{data.email}}</span></div>
         <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
@@ -81,6 +80,11 @@
 
   <button mat-raised-button class="mb-3" (click)="deleteAccount()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
 
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
+    <button mat-button (click)="onSave()" mat-raised-button color="primary" [disabled]="isDisabled">Save</button>
+  </div>
+
 </mat-dialog-content>
 
 <div *ngIf="updatedFailed" class="text-center">
@@ -88,10 +92,5 @@
   <mat-error >
     {{ errorMessage }}
   </mat-error>
-</div>
-
-<div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
-  <button mat-button (click)="onSave()" mat-raised-button color="primary" [disabled]="isDisabled">Save</button>
 </div>
 

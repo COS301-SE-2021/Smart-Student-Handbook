@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { EditProfileComponent } from '@app/components';
+import { EditProfileComponent, WelcomeComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountService } from '@app/services';
 
