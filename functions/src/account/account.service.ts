@@ -177,7 +177,7 @@ export class AccountService {
 			program: updateDto.program,
 			workStatus: updateDto.workStatus,
 			bio: updateDto.bio,
-			profilePic: updateDto.profilePicUrl,
+			profilePicUrl: updateDto.profilePicUrl,
 		};
 
 		const updated = await this.userService.updateUser(userDetails, uid);
