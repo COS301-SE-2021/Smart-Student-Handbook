@@ -38,7 +38,7 @@ export class ExploreComponent {
 		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
-      query: '',
+			query: '',
 		},
 	};
 
