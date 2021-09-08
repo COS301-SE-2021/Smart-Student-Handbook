@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Component({
 	selector: 'app-smart-assist-panel',
@@ -6,10 +7,38 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./smart-assist-panel.component.scss'],
 })
 export class SmartAssistPanelComponent implements OnInit {
-	// constructor() {}
+	notebookId: string;
 
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	noteId: string;
+
+	constructor(
+		private smartAssistObservables: SmartAssistObservablesService
+	) {}
+
+	ngOnInit(): void {
+		this.smartAssistObservables.smartAssistNotebookId.subscribe(
+			({ notebookId }) => {
+				if (
+					notebookId !== undefined &&
+					notebookId !== this.notebookId
+				) {
+					this.notebookId = notebookId;
+
+					console.log(notebookId);
+				}
+			}
+		);
+
+		this.smartAssistObservables.smartAssistNoteId.subscribe(
+			({ noteId }) => {
+				if (noteId !== undefined && noteId !== this.noteId) {
+					this.noteId = noteId;
+
+					console.log(noteId);
+				}
+			}
+		);
+	}
 
 	/**
 	 * Show and hide (open and close) the panel

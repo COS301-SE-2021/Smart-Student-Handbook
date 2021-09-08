@@ -9,6 +9,7 @@ import {
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Component({
 	selector: 'app-notebook',
@@ -66,10 +67,12 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * Include the notebook service
 	 * @param router
 	 * @param accountService
+	 * @param smartAssistObservables
 	 */
 	constructor(
 		private router: Router,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private smartAssistObservables: SmartAssistObservablesService
 	) {}
 
 	/**
@@ -104,6 +107,9 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 				description,
 				tags
 			);
+
+			this.smartAssistObservables.setSmartAssistNotebookId(notebookId);
+			this.smartAssistObservables.setSmartAssistNoteId(noteId);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {

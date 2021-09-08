@@ -247,7 +247,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		description: string,
 		tags: string[]
 	) {
-		console.log(tags);
+		// console.log(tags);
 		this.notebookTitle = notebookTitle;
 
 		this.tags = tags;
