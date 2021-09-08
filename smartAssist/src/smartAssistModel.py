@@ -80,6 +80,13 @@ class SmartAssistModel():
         self.model.compile(optimizer = 'Adam', loss = 'mse', loss_weights=[0.10, 0.20, 0.20, 0.10, 0.20, 0.20])
         self.predict_model.compile(optimizer = 'Adam', loss = 'mse')
 
+        dirname = os.path.dirname(__file__)
+        filenameModel = os.path.join(dirname, 'models/smartAssistModel.h5')
+        filenamePredictModel = os.path.join(dirname, 'models/smartAssistPredictModel.h5')
+
+        self.model.save(filenameModel)
+        self.predict_model.save(filenamePredictModel)
+
         return self.model
 
     
