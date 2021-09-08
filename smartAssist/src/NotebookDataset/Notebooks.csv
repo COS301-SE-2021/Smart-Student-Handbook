@@ -1,0 +1,5 @@
+noteId,name,tags,author,institution,course
+5f779a4d-cc3f-4da3-a3f0-a0555c065ba6,LooneyToons,['bully'],angelahall,The University of South Africa,STZ 151
+7f2d0fb7-04bb-41b9-beb9-6e0b300784c0,AGILE,"['Method', 'Software', 'Engineering', 'Team']",TheoMorkel,Unknown,COS 301
+d242ff80-1615-4114-8013-43a58fb78bb9,R,"['R', 'Data Science', 'Programming']",TheoMorkel,Unknown,COS 333
+c90521b7-c596-4717-90b9-91f26dee43c0,Python,['Programming Languages'],TheoMorkel,Unknown,COS 333
