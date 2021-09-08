@@ -6,7 +6,9 @@ from flask import Flask, request, abort, jsonify, g
 
 from notebookDataLoader import SmartAssistData
 from smartAssistModel import SmartAssistModel
+from loadData import cloudStorage
 
+cloud = cloudStorage()
 data = SmartAssistData()
 smartmodel = SmartAssistModel(data=data)
 
@@ -21,8 +23,12 @@ def testInstance():
 def trainModel():
     global data
     global smartmodel
+    global cloud
+
 
     smartmodel.train()
+
+    cloud.saveAllData()
     
     return jsonify(success = True)
 
@@ -30,6 +36,7 @@ def trainModel():
 def getRecommendation():
     global data
     global smartmodel
+    global cloud
 
     if request.method == 'POST':
         reqData = request.get_json()
@@ -59,6 +66,7 @@ def getRecommendation():
 def addData():
     global data
     global smartmodel
+    global cloud
 
     print(request.get_json(),flush=True)
 
@@ -83,8 +91,12 @@ def addData():
             "institution": institution,
             "course": course
         }
+
+        cloud.loadNotebooksData()
         
         data.addData(note)
+
+        cloud.saveNotebooksData()
 
         return jsonify(success = True)
     else:
@@ -94,11 +106,12 @@ def addData():
 def removeData():
     global data
     global smartmodel
+    global cloud
     
     if request.method == 'POST':
         reqData = request.get_json()
 
-        if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
+        if set(['noteId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
             tags = [reqData['tags']]
@@ -116,8 +129,12 @@ def removeData():
             "institution": institution,
             "course": course
         }
+
+        cloud.loadNotebooksData()
         
         data.removeData(note)
+
+        cloud.saveNotebooksData()
 
         return jsonify(success = True)
 
@@ -126,11 +143,12 @@ def removeData():
 def editData():
     global data
     global smartmodel
+    global cloud
 
     if request.method == 'POST':
         reqData = request.get_json()
 
-        if set(['nodeId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
+        if set(['noteId', 'name', 'tags', 'author', 'institution', 'course']).issubset(set(reqData.keys())):
             id = reqData['noteId']
             name = reqData['name']
             tags = [reqData['tags']]
@@ -149,8 +167,12 @@ def editData():
             "course": course
         }
         print(note, flush=True)
+
+        cloud.loadNotebooksData()
         
         data.editData(note)
+
+        cloud.saveNotebooksData()
 
         return jsonify(success = True)
 
@@ -162,6 +184,9 @@ def editData():
 def listData():
     global data
     global smartmodel
+    global cloud
+
+    cloud.loadNotebooksData()
 
     return data.listData()
 
@@ -169,13 +194,20 @@ def listData():
 def clearAllData():
     global data
     global smartmodel
+    global cloud
 
-    return jsonify(success = data.clearAllData())
+
+    suc = data.clearAllData()
+    
+    cloud.saveNotebooksData()
+
+    return jsonify(success = suc)
 
 
 
 if __name__ == "__main__":
 
+    cloud.loadAllData()
     data.loadData(count=10000)
     smartmodel.loadSmartModel()
 

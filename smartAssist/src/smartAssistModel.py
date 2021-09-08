@@ -111,7 +111,8 @@ class SmartAssistModel():
         }
 
         ytest = self.data.finalSetYTest
-
+        
+        self.buildModel()
         self.loadSmartModel()
         self.trainModel(dataX=xtrain, dataY=ytrain, validationData=(), batch_size = 32, epochs = 8, steps_per_epoch = 8)
         self.evaluteModel(dataX=xtest, dataY=ytest)
