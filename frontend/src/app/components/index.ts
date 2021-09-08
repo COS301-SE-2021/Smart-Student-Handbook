@@ -15,6 +15,7 @@ export * from './modals/explore-notes-editor-bottom-sheet/explore-notes-editor-b
 export * from './modals/smart-assist-modal/smart-assist-modal.component';
 export * from './modals/note-info/note-info.component';
 export * from './modals/clone-note/clone-note.component';
+export * from './modals/welcome/welcome.component';
 export * from './panels/notes-panel/notes-panel.component';
 export * from './panels/smart-assist-panel/smart-assist-panel.component';
 export * from './tree-view/tree-view.component';

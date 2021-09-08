@@ -98,14 +98,12 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
-
 		// let userDeatils;
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
-
 
 		this.open = false;
 

@@ -75,7 +75,8 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"></div>
+								<div mat-card-avatar class="header-image pointerCursor"  [style]="{'background-image': 'url(' + user.profilePic + ')'}"
+                     (click)="viewUserProfile(creator.id,creator.name)"></div>
 								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"
 									>{{creator.name}}</mat-card-title
 								>
@@ -104,7 +105,8 @@
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
               <ng-template [ngIf]="collaborator.id !== creator.id">
                 <mat-card-header>
-                  <div mat-card-avatar class="header-image pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
+                  <div mat-card-avatar class="header-image pointerCursor" [style]="{'background-image': 'url(' + collaborator.url + ')'}"
+                       (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
 
                   <button *ngIf="user.uid === creator.id" class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
                     <mat-icon class="removeCollaboratorIcon">
