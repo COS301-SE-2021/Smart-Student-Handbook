@@ -5,167 +5,180 @@
     </div>
   </div>
 </div>
+
 <div class="container mt-5" style="overflow: auto; margin-top: 30px !important; padding-bottom: 50px;">
   <div class="row">
     <div class="col">
-      <ais-instantsearch [config]="config">
 
-        <ais-configure [searchParameters]="{clickAnalytics: true}"></ais-configure>
-        <main class="search-container">
-          <div class="right-panel">
-            <div id="hits">
-              <!-- Uncomment the following widget to add hits list -->
-              <div id="searchbox">
-                &lt;!&ndash; Uncomment the following widget to add a search bar &ndash;&gt;
-                <ais-search-box placeholder="Search"></ais-search-box>
-              </div>
-              <div id="stats">
-                <!-- Uncomment the following widget to add search stats -->
-                <ais-stats>
-                  <ng-template let-state="state">
-                    <div *ngIf="state.nbHits > 0">
-<!--                      <span role="img" aria-label="emoji">⚡️</span>-->
-                      <strong>{{state.nbHits}}</strong>
-                      results found
-                      <span *ngIf="state.query.trim().length > 0">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Search Notebooks">
+          <ais-instantsearch [config]="config">
+
+            <ais-configure [searchParameters]="{clickAnalytics: true}"></ais-configure>
+            <main class="search-container">
+              <div class="right-panel">
+                <div id="hits">
+                  <!-- Uncomment the following widget to add hits list -->
+                  <div id="searchbox">
+                    &lt;!&ndash; Uncomment the following widget to add a search bar &ndash;&gt;
+                    <ais-search-box placeholder="Search"></ais-search-box>
+                  </div>
+                  <div id="stats">
+                    <!-- Uncomment the following widget to add search stats -->
+                    <ais-stats>
+                      <ng-template let-state="state">
+                        <div *ngIf="state.nbHits > 0">
+                          <!--                      <span role="img" aria-label="emoji">⚡️</span>-->
+                          <strong>{{state.nbHits}}</strong>
+                          results found
+                          <span *ngIf="state.query.trim().length > 0">
                         for
                         <strong>"{{state.query.trim()}}"</strong>
                       </span>
-                      in
-                      <strong>{{state.processingTimeMS}}ms</strong>
-                    </div>
-                  </ng-template>
-                </ais-stats>
-              </div>
-              <ais-hits >
-                <ng-template let-hits="hits" let-results="results">
-                  <div *ngIf="hits.length === 0">
-                    No results found for
-                    <strong>{{results.query}}</strong>.
-                  </div>
-                  <div class="ais-Hits-list">
-                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index"   >
-                      <article>
-                        <div class="post-content">
-                          <div class="post-date">
-                            {{hit.data.course}}
-                            <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
-                              <mat-icon>
-                                chat_bubble_outline
-                              </mat-icon>
-                            </button>
-                          </div>
-                          <div class="post-date" (click)="openNotes(hit)">
-                            {{hit.data.institution}}
-                          </div>
-                          <h2 class="entry-title" (click)="openNotes(hit)">
-                            {{hit.data.title}}
-                          </h2>
-                          <div class="post-excerpt" (click)="openNotes(hit)">
-                            <p>{{hit.data.description}}</p>
-                            <br>
-                            <p>{{hit.data.author}}</p>
-                          </div>
+                          in
+                          <strong>{{state.processingTimeMS}}ms</strong>
                         </div>
-                      </article>
-                    </div>
+                      </ng-template>
+                    </ais-stats>
                   </div>
-                </ng-template>
-              </ais-hits>
-            </div>
-            <div id="pagination">
-              <!-- Uncomment the following widget to add pagination -->
-              <ais-pagination></ais-pagination>
-            </div>
-          </div>
-          <!--<div class="left-panel">
-            <div id="categories">
-               &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
-               <ais-panel header="Categories">
-                <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
-              </ais-panel>
-            </div>
-          </div>-->
-        </main>
-      </ais-instantsearch>
+                  <ais-hits >
+                    <ng-template let-hits="hits" let-results="results">
+                      <div *ngIf="hits.length === 0">
+                        No results found for
+                        <strong>{{results.query}}</strong>.
+                      </div>
+                      <div class="ais-Hits-list">
+                        <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index"   >
+                          <article>
+                            <div class="post-content">
+                              <div class="post-date">
+                                {{hit.data.course}}
+                                <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
+                                  <mat-icon>
+                                    chat_bubble_outline
+                                  </mat-icon>
+                                </button>
+                              </div>
+                              <div class="post-date" (click)="openNotes(hit)">
+                                {{hit.data.institution}}
+                              </div>
+                              <h2 class="entry-title" (click)="openNotes(hit)">
+                                {{hit.data.title}}
+                              </h2>
+                              <div class="post-excerpt" (click)="openNotes(hit)">
+                                <p>{{hit.data.description}}</p>
+                                <br>
+                                <p>{{hit.data.author}}</p>
+                              </div>
+                            </div>
+                          </article>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ais-hits>
+                </div>
+                <div id="pagination">
+                  <!-- Uncomment the following widget to add pagination -->
+                  <ais-pagination></ais-pagination>
+                </div>
+              </div>
+              <!--<div class="left-panel">
+                <div id="categories">
+                   &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
+                   <ais-panel header="Categories">
+                    <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
+                  </ais-panel>
+                </div>
+              </div>-->
+            </main>
+          </ais-instantsearch>
+        </mat-tab>
 
 
-      <ais-instantsearch [config]="config2">
-        <ais-configure [searchParameters]="{ clickAnalytics: true }"></ais-configure>
-        <main class="search-container">
-          <div class="right-panel">
-            <div id="hits2">
-              <!-- Uncomment the following widget to add hits list -->
+        <mat-tab label="Search Note">
+          <ais-instantsearch [config]="config2">
+            <ais-configure [searchParameters]="{ clickAnalytics: true }"></ais-configure>
+            <main class="search-container">
+              <div class="right-panel">
+                <div id="hits2">
+                  <!-- Uncomment the following widget to add hits list -->
 
-              <div id="stats2">
-                <!-- Uncomment the following widget to add search stats -->
-                <ais-stats>
-                  <ng-template let-state="state">
-                    <div *ngIf="state.nbHits > 0">
-                      <!--                      <span role="img" aria-label="emoji">⚡️</span>-->
-                      <strong>{{state.nbHits}}</strong>
-                      results found
-                      <span *ngIf="state.query.trim().length > 0">
+                  <div id="stats2">
+                    <!-- Uncomment the following widget to add search stats -->
+                    <ais-stats>
+                      <ng-template let-state="state">
+                        <div *ngIf="state.nbHits > 0">
+                          <!--                      <span role="img" aria-label="emoji">⚡️</span>-->
+                          <strong>{{state.nbHits}}</strong>
+                          results found
+                          <span *ngIf="state.query.trim().length > 0">
                         for
                         <strong>"{{state.query.trim()}}"</strong>
                       </span>
-                      in
-                      <strong>{{state.processingTimeMS}}ms</strong>
-                    </div>
-                  </ng-template>
-                </ais-stats>
-              </div>
-              <ais-hits >
-                <ng-template let-hits="hits" let-results="results">
-                  <div *ngIf="hits.length === 0">
-                    No results found for
-                    <strong>{{results.query}}</strong>.
-                  </div>
-                  <div class="ais-Hits-list">
-                    <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index"   >
-                      <article>
-                        <div class="post-content">
-                          <div class="post-date">
-                            {{hit.data.course}}
-                            <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
-                              <mat-icon>
-                                chat_bubble_outline
-                              </mat-icon>
-                            </button>
-                          </div>
-                          <div class="post-date" (click)="openNotes(hit)">
-                            {{hit.data.institution}}
-                          </div>
-                          <h2 class="entry-title" (click)="openNotes(hit)">
-                            {{hit.data.title}}
-                          </h2>
-                          <div class="post-excerpt" (click)="openNotes(hit)">
-                            <p>{{hit.data.description}}</p>
-                            <br>
-                            <p>{{hit.data.author}}</p>
-                          </div>
+                          in
+                          <strong>{{state.processingTimeMS}}ms</strong>
                         </div>
-                      </article>
-                    </div>
+                      </ng-template>
+                    </ais-stats>
                   </div>
-                </ng-template>
-              </ais-hits>
-            </div>
-            <div id="pagination2">
-              <!-- Uncomment the following widget to add pagination -->
-              <ais-pagination></ais-pagination>
-            </div>
-          </div>
-          <!--<div class="left-panel">
-            <div id="categories">
-               &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
-               <ais-panel header="Categories">
-                <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
-              </ais-panel>
-            </div>
-          </div>-->
-        </main>
-      </ais-instantsearch>
+                  <ais-hits >
+                    <ng-template let-hits="hits" let-results="results">
+                      <div *ngIf="hits.length === 0">
+                        No results found for
+                        <strong>{{results.query}}</strong>.
+                      </div>
+                      <div class="ais-Hits-list">
+                        <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index"   >
+                          <article>
+                            <div class="post-content">
+                              <div class="post-date">
+                                {{hit.data.course}}
+                                <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
+                                  <mat-icon>
+                                    chat_bubble_outline
+                                  </mat-icon>
+                                </button>
+                              </div>
+                              <div class="post-date" (click)="openNotes(hit)">
+                                {{hit.data.institution}}
+                              </div>
+                              <h2 class="entry-title" (click)="openNotes(hit)">
+                                {{hit.data.title}}
+                              </h2>
+                              <div class="post-excerpt" (click)="openNotes(hit)">
+                                <p>{{hit.data.description}}</p>
+                                <br>
+                                <p>{{hit.data.author}}</p>
+                              </div>
+                            </div>
+                          </article>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ais-hits>
+                </div>
+                <div id="pagination2">
+                  <!-- Uncomment the following widget to add pagination -->
+                  <ais-pagination></ais-pagination>
+                </div>
+              </div>
+              <!--<div class="left-panel">
+                <div id="categories">
+                   &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
+                   <ais-panel header="Categories">
+                    <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
+                  </ais-panel>
+                </div>
+              </div>-->
+            </main>
+          </ais-instantsearch>
+        </mat-tab>
+      </mat-tab-group>
+
+
+
+
+
     </div>
     <div [ngClass]="{'notesDisplayed col-6': !hide, 'col-0 notesHidden' : hide}"  id="notesSideDiv">
       <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
