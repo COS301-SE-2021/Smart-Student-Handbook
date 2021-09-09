@@ -10,6 +10,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
+// algolia events sender
+const aa = require('search-insights');
+
+aa('init', {
+	appId: 'AD2K8AK74A',
+	apiKey: '589f047ba9ac7fa58796f394427d7f35',
+});
+
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
 	'589f047ba9ac7fa58796f394427d7f35'
@@ -24,12 +32,26 @@ export class ExploreComponent {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
 		indexName: 'userNotebooks',
+		clickAnalytics: true,
 		routing: true,
 		searchClient,
+		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
+			query: '',
 		},
 	};
+
+	config2 = {
+		apiKey: '589f047ba9ac7fa58796f394427d7f35',
+		appId: 'AD2K8AK74A',
+		indexName: 'userNotes',
+		clickAnalytics: true,
+		routing: true,
+		searchClient,
+		insightsClient: (window as any).aa,
+	};
+
 
 	hide: boolean = true;
 
@@ -39,11 +61,13 @@ export class ExploreComponent {
 
 	title: string = '';
 
+	user: any = JSON.parse(<string>localStorage.getItem('user'));
+
 	constructor(
 		private bottomSheet: MatBottomSheet,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService
+		private exploreObservables: ExploreObservablesService ,
 	) {}
 
 	openNotes(hit: any) {
@@ -73,6 +97,359 @@ export class ExploreComponent {
 			hit.data.title,
 			true
 		);
+
+		aa('setUserToken', this.user.uid);
+
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: [hit.__queryID],
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotebook',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		// Notes indexing strts here
+
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotes',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+
+		aa('convertedObjectIDsAfterSearch', {
+			index: 'userNotes',
+			eventName: 'Check out',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
 	}
 
 	closeNotes() {
@@ -96,4 +473,16 @@ export class ExploreComponent {
 
 		this.notebookObservables.setReviewNotebook(hit.objectID);
 	}
+
+	/*onQuery($event) {
+		this.query = $event.target.value;
+	}
+
+  public searchParameters = {
+    query: ""
+  };
+
+  public setQuery({ query }: { query: string }) {
+    this.searchParameters.query = query;
+  }*/
 }
