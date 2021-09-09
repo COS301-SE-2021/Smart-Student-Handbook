@@ -8,6 +8,9 @@ ais-instantsearch {
 .searchbox {
   margin-bottom: 2rem;
 }
+.searchbox2 {
+  margin-bottom: 2rem;
+}
 
 em {
   font-style: normal;
@@ -65,6 +68,10 @@ em {
 }
 
 #searchbox, #stats {
+  flex-grow: 0;
+}
+
+#searchbox2, #stats2 {
   flex-grow: 0;
 }
 
@@ -133,6 +140,12 @@ em {
   margin-bottom: 16px;
 }
 
+#stats2 {
+  flex-grow: 0;
+  margin-bottom: 16px;
+}
+
+
 .ais-Stats {
   font-size: 12px;
   color: #697782;
@@ -140,6 +153,11 @@ em {
 }
 
 #hits {
+  flex-grow: 1;
+  order: 1;
+}
+
+#hits2 {
   flex-grow: 1;
   order: 1;
 }

@@ -20,7 +20,6 @@
                 <div id="hits">
                   <!-- Uncomment the following widget to add hits list -->
                   <div id="searchbox">
-                    &lt;!&ndash; Uncomment the following widget to add a search bar &ndash;&gt;
                     <ais-search-box placeholder="Search"></ais-search-box>
                   </div>
                   <div id="stats">
@@ -95,14 +94,16 @@
         </mat-tab>
 
 
-        <mat-tab label="Search Note">
+        <mat-tab label="Search Notes">
           <ais-instantsearch [config]="config2">
             <ais-configure [searchParameters]="{ clickAnalytics: true }"></ais-configure>
             <main class="search-container">
               <div class="right-panel">
                 <div id="hits2">
                   <!-- Uncomment the following widget to add hits list -->
-
+                  <div id="searchbox2">
+                    <ais-search-box placeholder="Search"></ais-search-box>
+                  </div>
                   <div id="stats2">
                     <!-- Uncomment the following widget to add search stats -->
                     <ais-stats>
@@ -132,7 +133,7 @@
                           <article>
                             <div class="post-content">
                               <div class="post-date">
-                                {{hit.data.course}}
+                                {{hit.data.name}}
                                 <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
                                   <mat-icon>
                                     chat_bubble_outline
@@ -140,15 +141,13 @@
                                 </button>
                               </div>
                               <div class="post-date" (click)="openNotes(hit)">
-                                {{hit.data.institution}}
+                                {{hit.data.createdDate}}
                               </div>
                               <h2 class="entry-title" (click)="openNotes(hit)">
                                 {{hit.data.title}}
                               </h2>
                               <div class="post-excerpt" (click)="openNotes(hit)">
                                 <p>{{hit.data.description}}</p>
-                                <br>
-                                <p>{{hit.data.author}}</p>
                               </div>
                             </div>
                           </article>
