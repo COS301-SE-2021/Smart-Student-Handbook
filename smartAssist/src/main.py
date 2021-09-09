@@ -13,6 +13,12 @@ data.loadData(count=10000)
 
 smartmodel = SmartAssistModel(data=data)
 
+print("buildingmodel")
+
+smartmodel.buildModel()
+
+print("training")
+
 # xtrain = {
 #     'data': np.asarray(data.finalSetXTrain[:,0]).astype('float32'), 
 #     'name': np.asarray(data.finalSetXTrain[:,1]).astype('float32'), 
@@ -46,14 +52,14 @@ smartmodel.train()
 # smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
 # smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
-smartmodel.loadSmartModel()
+# smartmodel.loadSmartModel()
 
-itemData = data.getRandomDataItem()
+# itemData = data.getRandomDataItem()
 
-item = data.createSoup(data.index_name[itemData[1]], [data.index_tags[itemData[2]]], data.index_authors[itemData[3]], data.index_institutions[itemData[4]], data.index_course[itemData[5]])
-# print(item)
-print(smartmodel.getRecommendations(item))
-# item = {
+# item = data.createSoup(data.index_name[itemData[1]], [data.index_tags[itemData[2]]], data.index_authors[itemData[3]], data.index_institutions[itemData[4]], data.index_course[itemData[5]])
+# # print(item)
+# print(smartmodel.getRecommendations(item))
+# # item = {
 #     'data': np.array([itemData[0]]), 
 #     'name': np.array([itemData[1]]), 
 #     'tags': np.array([itemData[2]]), 

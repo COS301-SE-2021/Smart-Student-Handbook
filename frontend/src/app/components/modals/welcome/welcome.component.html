@@ -1,0 +1,30 @@
+<span class="display-3 text-center">Welcome {{user.displayName}}</span>
+<mat-dialog-content class="mat-typography">
+  <mat-card class="homeCard">
+    <img src="../../../../assets/logo/SmartStudentHandbook.png" class="text-center" alt="Smart Student Handbook">
+    <mat-card-content id="cardContent">
+      <p>
+        The Smart Student notebook is an advance note taking application that is aimed towards student.
+        The Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students.
+        The Smart Student application will allow users to create notebooks. Notebooks can be stored in different folders.
+        Notebooks consist of different sections and sections can then be split up into pages allowing for organized note taking.
+        Notes are written in markup, thus allowing for multiple customization options for users such as text formatting, adding
+        bullet points, tables, images and much more. Once a notebook is opened, a Smart assist toolbar will popup on the side ,
+        giving notebook recommendations on similar notebooks. The user will then have the ability to merge, copy or clone these
+        notebook to their notebook. Afterwards users will be able to rate either the entire notebook or snippets of the notebook.
+        The application will work on a subscription based service where users will be paid according to amount of other users using their notebook.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    type="submit"
+    color="primary"
+    cdkFocusInitial
+    (click)="Confirm()"
+  >
+    Dismiss
+  </button>
+</mat-dialog-actions>

@@ -80,6 +80,13 @@ class SmartAssistModel():
         self.model.compile(optimizer = 'Adam', loss = 'mse', loss_weights=[0.10, 0.20, 0.20, 0.10, 0.20, 0.20])
         self.predict_model.compile(optimizer = 'Adam', loss = 'mse')
 
+        dirname = os.path.dirname(__file__)
+        filenameModel = os.path.join(dirname, 'models/smartAssistModel.h5')
+        filenamePredictModel = os.path.join(dirname, 'models/smartAssistPredictModel.h5')
+
+        self.model.save(filenameModel)
+        self.predict_model.save(filenamePredictModel)
+
         return self.model
 
     
@@ -111,7 +118,8 @@ class SmartAssistModel():
         }
 
         ytest = self.data.finalSetYTest
-
+        
+        self.buildModel()
         self.loadSmartModel()
         self.trainModel(dataX=xtrain, dataY=ytrain, validationData=(), batch_size = 32, epochs = 8, steps_per_epoch = 8)
         self.evaluteModel(dataX=xtest, dataY=ytest)

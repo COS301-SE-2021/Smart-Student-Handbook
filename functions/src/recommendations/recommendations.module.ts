@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { RecommendationsService } from './recommendations.service';
 
 @Module({
-  providers: [RecommendationsService]
+	providers: [RecommendationsService],
 })
 export class RecommendationsModule {}

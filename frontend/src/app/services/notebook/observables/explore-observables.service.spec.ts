@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { ExploreObservablesService } from './explore-observables.service';
 
 describe('ExploreObservablesService', () => {
-  let service: ExploreObservablesService;
+	let service: ExploreObservablesService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ExploreObservablesService);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(ExploreObservablesService);
+	});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
 });
