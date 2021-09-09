@@ -25,6 +25,7 @@ def trainModel():
     global smartmodel
     global cloud
 
+    cloud.loadAllData()
 
     smartmodel.train()
 
@@ -196,6 +197,7 @@ def clearAllData():
     global smartmodel
     global cloud
 
+    cloud.loadNotebooksData()
 
     suc = data.clearAllData()
     

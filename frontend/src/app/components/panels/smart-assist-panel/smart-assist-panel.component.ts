@@ -24,7 +24,7 @@ export class SmartAssistPanelComponent implements OnInit {
 				) {
 					this.notebookId = notebookId;
 
-					console.log(notebookId);
+					// console.log(notebookId);
 				}
 			}
 		);
@@ -34,7 +34,7 @@ export class SmartAssistPanelComponent implements OnInit {
 				if (noteId !== undefined && noteId !== this.noteId) {
 					this.noteId = noteId;
 
-					console.log(noteId);
+					// console.log(noteId);
 				}
 			}
 		);

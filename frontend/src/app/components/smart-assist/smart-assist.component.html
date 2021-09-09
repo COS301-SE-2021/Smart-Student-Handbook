@@ -84,3 +84,47 @@
     <mat-chip color="primary" selected>SRS</mat-chip>
   </mat-chip-list>
 </mat-card>
+
+
+
+<div *ngFor="let noteItem of notes">
+
+  <mat-card
+    align="start"
+    class="card text-left snippetCard"
+    cdkDrag
+    (mouseleave)="hidePreview(0)"
+  >
+    <mat-card-header class="snippetContentHeader">
+      <mat-card-subtitle class="date">
+      {{noteItem.date}}
+      </mat-card-subtitle>
+
+      <mat-icon class="preview" fxHide.gt-sm >
+        note_add
+      </mat-icon>
+      <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
+        aspect_ratio
+      </mat-icon>
+
+      <mat-card-title class="snippetTitle" data-type="header">
+        {{noteItem.title}}
+      </mat-card-title>
+
+      <div *ngFor="let b of noteItem.blocks">
+        <mat-card-title class="snippetContent" data-type="{{b.type}}">
+        {{b.data.text}}
+        </mat-card-title>
+      </div>
+    </mat-card-header>
+
+    <div class="tags" >
+      <div *ngFor="let t of noteItem.tags">
+        <div class="tag">
+          <mat-chip color="primary" class="item">{{t}}</mat-chip>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
