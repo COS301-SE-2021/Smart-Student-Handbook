@@ -8,7 +8,7 @@
 
 <div class="container mt-5" style="overflow: auto; margin-top: 30px !important; padding-bottom: 50px;">
   <div class="row">
-    <div class="col">
+    <div class="col explore-content">
 
       <mat-tab-group mat-align-tabs="center">
         <mat-tab label="Search Notebooks">
@@ -134,19 +134,19 @@
                             <div class="post-content">
                               <div class="post-date">
                                 {{hit.data.name}}
-                                <button mat-icon-button style="color: #444444" (click)="openReviews(hit)">
+                                <button mat-icon-button style="color: #444444"><!-- (click)="openReviews(hit)" -->
                                   <mat-icon>
                                     chat_bubble_outline
                                   </mat-icon>
                                 </button>
                               </div>
-                              <div class="post-date" (click)="openNotes(hit)">
+                              <div class="post-date"><!-- (click)="openNotes(hit)" -->
                                 {{hit.data.createdDate}}
                               </div>
-                              <h2 class="entry-title" (click)="openNotes(hit)">
+                              <h2 class="entry-title"><!-- (click)="openNotes(hit)" -->
                                 {{hit.data.title}}
                               </h2>
-                              <div class="post-excerpt" (click)="openNotes(hit)">
+                              <div class="post-excerpt"><!-- (click)="openNotes(hit)" -->
                                 <p>{{hit.data.description}}</p>
                               </div>
                             </div>

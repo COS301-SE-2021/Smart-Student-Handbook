@@ -25,12 +25,18 @@ em {
   //width: 960px;
   width: auto;
   min-height: 100%;
-  margin: 0 auto;
+  //margin: 0 auto;
 }
 
 @media (max-width: 1007px) {
   .search-container {
     width: 100%;
+  }
+}
+
+@media (max-width: 468px) {
+  .explore-content {
+    min-width: 90vw;
   }
 }
 
