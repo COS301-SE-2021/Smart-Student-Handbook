@@ -23,11 +23,9 @@
                     <ais-search-box placeholder="Search"></ais-search-box>
                   </div>
                   <div id="stats">
-                    <!-- Uncomment the following widget to add search stats -->
                     <ais-stats>
                       <ng-template let-state="state">
                         <div *ngIf="state.nbHits > 0">
-                          <!--                      <span role="img" aria-label="emoji">⚡️</span>-->
                           <strong>{{state.nbHits}}</strong>
                           results found
                           <span *ngIf="state.query.trim().length > 0">
@@ -77,18 +75,9 @@
                   </ais-hits>
                 </div>
                 <div id="pagination">
-                  <!-- Uncomment the following widget to add pagination -->
                   <ais-pagination></ais-pagination>
                 </div>
               </div>
-              <!--<div class="left-panel">
-                <div id="categories">
-                   &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
-                   <ais-panel header="Categories">
-                    <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
-                  </ais-panel>
-                </div>
-              </div>-->
             </main>
           </ais-instantsearch>
         </mat-tab>
