@@ -89,12 +89,10 @@
             <main class="search-container">
               <div class="right-panel">
                 <div id="hits2">
-                  <!-- Uncomment the following widget to add hits list -->
                   <div id="searchbox2">
                     <ais-search-box placeholder="Search"></ais-search-box>
                   </div>
                   <div id="stats2">
-                    <!-- Uncomment the following widget to add search stats -->
                     <ais-stats>
                       <ng-template let-state="state">
                         <div *ngIf="state.nbHits > 0">
@@ -145,7 +143,6 @@
                   </ais-hits>
                 </div>
                 <div id="pagination2">
-                  <!-- Uncomment the following widget to add pagination -->
                   <ais-pagination></ais-pagination>
                 </div>
               </div>
@@ -153,11 +150,6 @@
           </ais-instantsearch>
         </mat-tab>
       </mat-tab-group>
-
-
-
-
-
     </div>
     <div [ngClass]="{'notesDisplayed col-6': !hide, 'col-0 notesHidden' : hide}"  id="notesSideDiv">
       <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
