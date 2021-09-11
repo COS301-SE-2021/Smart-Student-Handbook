@@ -247,7 +247,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		description: string,
 		tags: string[]
 	) {
-		console.log(tags);
 		this.notebookTitle = notebookTitle;
 
 		this.tags = tags;
@@ -261,147 +260,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		this.opened = false;
 
 		this.getNotebook(notebookId);
-
-		if (this.Editor === undefined || window.outerWidth <= 600) {
-			/**
-			 * Create the notebook with all the plugins
-			 */
-			// const editor = new EditorJS({
-			this.Editor = new EditorJS({
-				holder: 'editor',
-				tools: {
-					snippet: AddTagsTool,
-					header: {
-						class: this.Header,
-						shortcut: 'CTRL+SHIFT+H',
-					},
-					linkTool: {
-						class: this.LinkTool,
-						// config: {
-						//   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
-						// }
-					},
-					raw: this.RawTool,
-					image: this.SimpleImage,
-					checklist: {
-						class: this.Checklist,
-						inlineToolbar: true,
-					},
-					list: {
-						class: this.NestedList,
-						inlineToolbar: true,
-					},
-					embed: this.Embed,
-					quote: this.Quote,
-					underline: this.Underline,
-					table: {
-						class: this.Table,
-					},
-					warning: {
-						class: this.Warning,
-						inlineToolbar: true,
-						shortcut: 'CTRL+SHIFT+W',
-						config: {
-							titlePlaceholder: 'Title',
-							messagePlaceholder: 'Message',
-						},
-					},
-					code: this.CodeTool,
-					paragraph: {
-						class: this.Paragraph,
-						inlineToolbar: true,
-					},
-					textVariant: this.TextVariantTune,
-					attaches: {
-						class: this.AttachesTool,
-						// config: {
-						//   endpoint: 'http://localhost:8008/uploadFile'
-						// }
-					},
-					Marker: {
-						class: this.Marker,
-						shortcut: 'CTRL+SHIFT+M',
-					},
-					inlineCode: {
-						class: this.InlineCode,
-						shortcut: 'CMD+SHIFT+M',
-					},
-					personality: {
-						class: this.Personality,
-						// config: {
-						//   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
-						// }
-					},
-					delimiter: this.Delimiter,
-					alert: this.Alert,
-				},
-				data: {
-					blocks: [],
-				},
-				autofocus: true,
-
-				onChange: () => {
-					this.saveContent();
-				},
-			});
-
-			// this.Editor = editor;
-
-			const e = document.getElementById('editor') as HTMLElement;
-			e.style.display = 'none';
-		}
-
-		await this.Editor.isReady;
-
-		const e = document.getElementById('editor') as HTMLElement;
-		e.style.overflowY = 'none';
-		e.style.display = 'block';
-		e.style.backgroundImage = 'none';
-		// e.style.backgroundColor = 'grey';
-
-		const editor = this.Editor;
-
-		editor.clear();
-
-		this.noteId = noteId;
-
-		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
-
-		/**
-		 * Get the values from the realtime database and insert block if notebook is empty
-		 */
-		dbRefObject
-			.once('value', (snap) => {
-				if (snap.val() === null) {
-					firebase
-						.database()
-						.ref(`notebook/${this.noteId}`)
-						.set({
-							outputData: {
-								blocks: [
-									{
-										id: 'jTFbQOD8j3',
-										type: 'header',
-										data: {
-											text: `${this.noteTitle} 🚀`,
-											level: 2,
-										},
-									},
-								],
-							},
-						});
-				}
-			})
-			.then(() => {
-				/**
-				 * Render output on Editor
-				 */
-				dbRefObject.once('value', (snap) => {
-					// console.log(snap.val());
-					editor.render(snap.val().outputData);
-				});
-			});
 	}
 
 	/**
@@ -453,34 +311,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			.catch(() => {
 				// console.log('Saving failed: ', error);
 			});
-	}
-
-	/**
-	 * Highlight the block where a user is busy editing the note
-	 */
-	editorFocussed() {
-		const index = this.Editor.blocks.getCurrentBlockIndex();
-
-		const blocks = document.getElementById('editor').children[0].children[0]
-			.children as HTMLCollection;
-
-		let block = blocks[index] as HTMLElement;
-
-		let nBlock = null;
-		for (let i = 0; i < blocks.length; i += 1) {
-			nBlock = blocks[i].children[0] as HTMLElement;
-			if (i !== index) {
-				if (nBlock.style.backgroundColor === 'rgba(8, 85, 116, 0.2)') {
-					nBlock.style.backgroundColor = 'transparent';
-				}
-			}
-		}
-
-		if (block) {
-			block = block.children[0] as HTMLElement;
-			block.style.backgroundColor = 'rgba(8,85,116,0.2)';
-			block.style.borderRadius = '5px';
-		}
 	}
 
 	/**
@@ -563,6 +393,9 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		this.updateTags();
 	}
 
+	/**
+	 * Update the tags on the backend
+	 */
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
