@@ -164,7 +164,13 @@ export class NoteEditorComponent implements OnInit {
 						.database()
 						.ref(`notes/${this.noteId}`)
 						.set({
-							changes: `<h2>${this.noteTitle}</h2>`,
+							changes: {
+								ops: [
+									{
+										insert: `${this.noteTitle}`,
+									},
+								],
+							},
 						});
 				}
 			})

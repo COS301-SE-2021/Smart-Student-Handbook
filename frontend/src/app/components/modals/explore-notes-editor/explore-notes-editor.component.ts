@@ -10,6 +10,7 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-explore-notes',
@@ -25,19 +26,26 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 	user: any;
 
-	isCompleted: boolean = false;
+	isCompleted: boolean = true;
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private notebookService: NotebookService,
 		private noteOperations: NoteOperationsService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private exploreObservables: ExploreObservablesService
 	) {}
 
 	ngOnInit(): void {
 		this.isCompleted = false;
 		this.loadReadonly(this.data.noteId, this.data.title);
 		this.user = this.data.user;
+
+		this.exploreObservables.setOpenExploreViewNote(
+			this.data.noteId,
+			this.data.title
+		);
+		this.isCompleted = true;
 	}
 
 	/**

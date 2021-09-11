@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import firebase from 'firebase';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-read-only-editor',
@@ -13,47 +14,67 @@ export class ReadOnlyEditorComponent implements AfterViewInit {
 
 	quill: any;
 
+	isCompleted: boolean = false;
+
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
+	constructor(private exploreObservables: ExploreObservablesService) {}
+
 	async ngAfterViewInit(): Promise<void> {
-		const notebookId = 'test-1';
+		this.exploreObservables.openExploreViewNote.subscribe(
+			async ({ noteId, title }) => {
+				this.noteTitle = title;
 
-		this.quill = new Quill('#editor-container', {
-			modules: {
-				syntax: false,
-				toolbar: '#toolbar-container',
-			},
-			placeholder: 'Loading...',
-			readOnly: true,
-			theme: 'bubble',
-		});
-
-		window.addEventListener('blur', () => {
-			this.quill.blur();
-		});
-
-		// connection to firebase
-		const dbRefObject = firebase.database().ref(`notes/${notebookId}`);
-
-		// render firebase content
-		await dbRefObject
-			.once('value', (snap) => {
-				if (snap.val() === null) {
-					firebase
-						.database()
-						.ref(`notes/${notebookId}`)
-						.set({
-							outputData: `<h2>${this.noteTitle}</h2>`,
-						});
-				}
-			})
-			.then(async () => {
-				/**
-				 * Render output on Editor
-				 */
-				await dbRefObject.once('value', async (snap) => {
-					await this.quill.setContents(snap.val().change);
+				this.quill = new Quill('#editor-container', {
+					modules: {
+						syntax: false,
+						toolbar: '#toolbar-container',
+					},
+					placeholder: 'Loading...',
+					readOnly: true,
+					theme: 'bubble',
 				});
-			});
+
+				window.addEventListener('blur', () => {
+					this.quill.blur();
+				});
+
+				// connection to firebase
+				const dbRefObject = firebase.database().ref(`notes/${noteId}`);
+
+				// render firebase content
+				await dbRefObject
+					.once('value', (snap) => {
+						if (snap.val() === null) {
+							firebase
+								.database()
+								.ref(`notes/${noteId}`)
+								.set({
+									changes: {
+										ops: [
+											{
+												insert: `${this.noteTitle}`,
+											},
+										],
+									},
+								});
+						}
+					})
+					.then(async () => {
+						/**
+						 * Render output on Editor
+						 */
+						await dbRefObject.once('value', async (snap) => {
+							console.log(snap.val().changes);
+							console.log(this.noteTitle);
+							console.log(noteId);
+
+							await this.quill.setContents(snap.val().changes);
+
+							this.isCompleted = true;
+						});
+					});
+			}
+		);
 	}
 }
