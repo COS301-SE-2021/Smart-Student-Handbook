@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AccountService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -15,43 +16,81 @@ import { QuillBinding } from 'y-quill';
 export class NoteEditorComponent implements AfterViewInit {
 	Delta = Quill.import('delta');
 
+	user: any;
+
 	noteTitle = 'note one';
 
 	quill: any;
 
-	colours = ['#173F5F', '#20639B', '#3CAEA3', '#F6D55C', '#ED553B'];
+	colours = [
+		'#FF0202',
+		'#FF8102',
+		'#3CAEA3',
+		'#FFFF02',
+		'#02FF02',
+		'#0E02FF',
+		'#8D02FF',
+		'#FF02F3',
+		'#B302FF',
+		'#02FFB3',
+	];
 
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
+	/**
+	 * Subscribe to account service to get user information
+	 * @param accountService
+	 */
+	constructor(private accountService: AccountService) {
+		accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+	}
+
 	async ngAfterViewInit(): Promise<void> {
-		Quill.register('modules/cursors', QuillCursors);
-		// TODO Notebook Id replace with test-1
-		// TODO username
-		const notebookId = 'test-1';
-		const username = 'user 1';
+		/**
+		 * Set user colour, notebookId and username
+		 */
+		// Replace with real notebook id
+		const notebookId = 'test-1-unique-xyz';
+		const username = this.user.displayName;
 		const colour =
 			this.colours[
 				Math.floor(Math.random() * 10000) % this.colours.length
 			];
 
+		/**
+		 * Register to see other users cursors on quill
+		 */
+		Quill.register('modules/cursors', QuillCursors);
+		// TODO Notebook Id replace with test-1
+
+		/**
+		 * Initialise quill editor
+		 */
 		this.quill = new Quill('#editor-container', {
 			modules: {
 				cursors: true,
 				syntax: false,
 				toolbar: '#toolbar-container',
 			},
-			placeholder: 'Compose an epic...',
+			placeholder: 'Loading...',
 			theme: 'snow',
 		});
 
+		// Detect change on quill
 		const change = new this.Delta();
 
-		const ydoc = new Y.Doc();
-
-		const provider = new WebrtcProvider(notebookId, ydoc);
+		// Initialize doc to sync editor content
+		const doc = new Y.Doc();
 
 		// Define a shared text type on the document
-		const ytext = ydoc.getText('quill');
+		const provider = new WebrtcProvider(notebookId, doc);
+
+		// Define a shared text type on the document
+		const text = doc.getText('quill');
 
 		const { awareness } = provider;
 
@@ -62,26 +101,12 @@ export class NoteEditorComponent implements AfterViewInit {
 
 		// "Bind" the quill editor to a Yjs text type.
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const binding = new QuillBinding(ytext, this.quill, awareness);
-
-		// propagate the username from the input element to all users
-		// observe changes on the input element that contains the username
+		const binding = new QuillBinding(text, this.quill, awareness);
 
 		// Remove the selection when the iframe is blurred
 		window.addEventListener('blur', () => {
 			this.quill.blur();
 		});
-		// this.quill.on('text-change', (delta: any, source: any) => {
-		// 	if (source === 'user') {
-		// 		console.log('user');
-		// 	} else {
-		// 		console.log('not user');
-		// 	}
-		// 	change = change.compose(delta);
-		// 	firebase.database().ref(`notes/${notebookId}`).set({
-		// 		change,
-		// 	});
-		// });
 		this.quill.on('text-change', (delta, oldDelta, source) => {
 			if (source === 'user') {
 				console.log('user');
@@ -118,6 +143,4 @@ export class NoteEditorComponent implements AfterViewInit {
 				});
 			});
 	}
-
-	onSubmit() {}
 }
