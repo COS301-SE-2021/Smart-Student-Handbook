@@ -92,6 +92,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NoteEditorComponent } from './components/note-editor/note-editor.component';
+import { ReadOnlyEditorComponent } from './components/read-only-editor/read-only-editor.component';
 
 @NgModule({
 	declarations: [
@@ -139,6 +140,7 @@ import { NoteEditorComponent } from './components/note-editor/note-editor.compon
 		CloneNoteComponent,
 		WelcomeComponent,
 		NoteEditorComponent,
+		ReadOnlyEditorComponent,
 	],
 	imports: [
 		MaterialModule,
