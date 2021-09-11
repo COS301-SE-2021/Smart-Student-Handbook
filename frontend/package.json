@@ -40,6 +40,7 @@
     "algoliasearch-helper": "^3.5.5",
     "angular-bootstrap-md": "^11.1.0",
     "angular-instantsearch": "^3.0.0-beta.5",
+    "angular-katex": "^0.10.0",
     "bootstrap": "^5.0.1",
     "editorjs-alert": "^1.0.3",
     "editorjs-paragraph-with-alignment": "^3.0.0",
