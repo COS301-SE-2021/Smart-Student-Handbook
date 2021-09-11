@@ -65,7 +65,6 @@ export class NoteEditorComponent implements AfterViewInit {
 		 * Register to see other users cursors on quill
 		 */
 		Quill.register('modules/cursors', QuillCursors);
-		// TODO Notebook Id replace with test-1
 
 		/**
 		 * Initialise quill editor
@@ -109,13 +108,10 @@ export class NoteEditorComponent implements AfterViewInit {
 		});
 		this.quill.on('text-change', (delta, oldDelta, source) => {
 			if (source === 'user') {
-				console.log('user');
 				const changes = change.compose(delta);
 				firebase.database().ref(`notes/${notebookId}`).set({
 					changes,
 				});
-			} else {
-				console.log('not user');
 			}
 		});
 
