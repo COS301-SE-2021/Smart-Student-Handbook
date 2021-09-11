@@ -23,11 +23,9 @@
                     <ais-search-box placeholder="Search"></ais-search-box>
                   </div>
                   <div id="stats">
-                    <!-- Uncomment the following widget to add search stats -->
                     <ais-stats>
                       <ng-template let-state="state">
                         <div *ngIf="state.nbHits > 0">
-                          <!--                      <span role="img" aria-label="emoji">⚡️</span>-->
                           <strong>{{state.nbHits}}</strong>
                           results found
                           <span *ngIf="state.query.trim().length > 0">
@@ -77,18 +75,9 @@
                   </ais-hits>
                 </div>
                 <div id="pagination">
-                  <!-- Uncomment the following widget to add pagination -->
                   <ais-pagination></ais-pagination>
                 </div>
               </div>
-              <!--<div class="left-panel">
-                <div id="categories">
-                   &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
-                   <ais-panel header="Categories">
-                    <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
-                  </ais-panel>
-                </div>
-              </div>-->
             </main>
           </ais-instantsearch>
         </mat-tab>
@@ -100,12 +89,10 @@
             <main class="search-container">
               <div class="right-panel">
                 <div id="hits2">
-                  <!-- Uncomment the following widget to add hits list -->
                   <div id="searchbox2">
                     <ais-search-box placeholder="Search"></ais-search-box>
                   </div>
                   <div id="stats2">
-                    <!-- Uncomment the following widget to add search stats -->
                     <ais-stats>
                       <ng-template let-state="state">
                         <div *ngIf="state.nbHits > 0">
@@ -141,7 +128,6 @@
                                 </button>
                               </div>
                               <div class="post-date"><!-- (click)="openNotes(hit)" -->
-                                {{hit.data.createdDate}}
                               </div>
                               <h2 class="entry-title"><!-- (click)="openNotes(hit)" -->
                                 {{hit.data.title}}
@@ -157,27 +143,13 @@
                   </ais-hits>
                 </div>
                 <div id="pagination2">
-                  <!-- Uncomment the following widget to add pagination -->
                   <ais-pagination></ais-pagination>
                 </div>
               </div>
-              <!--<div class="left-panel">
-                <div id="categories">
-                   &lt;!&ndash;Uncomment the following widget to add categories list&ndash;&gt;
-                   <ais-panel header="Categories">
-                    <ais-refinement-list attribute="categories" autoHideContainer="false"></ais-refinement-list>
-                  </ais-panel>
-                </div>
-              </div>-->
             </main>
           </ais-instantsearch>
         </mat-tab>
       </mat-tab-group>
-
-
-
-
-
     </div>
     <div [ngClass]="{'notesDisplayed col-6': !hide, 'col-0 notesHidden' : hide}"  id="notesSideDiv">
       <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
