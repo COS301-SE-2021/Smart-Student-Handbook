@@ -84,11 +84,14 @@ import {
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
+import { QuillModule } from 'ngx-quill';
+
 import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { NoteEditorComponent } from './components/note-editor/note-editor.component';
 
 @NgModule({
 	declarations: [
@@ -135,6 +138,7 @@ import { AppRoutingModule } from './app-routing.module';
 		RateNotebookComponent,
 		CloneNoteComponent,
 		WelcomeComponent,
+		NoteEditorComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -162,6 +166,7 @@ import { AppRoutingModule } from './app-routing.module';
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
+		QuillModule.forRoot(),
 	],
 	providers: [
 		NotesPanelComponent,
