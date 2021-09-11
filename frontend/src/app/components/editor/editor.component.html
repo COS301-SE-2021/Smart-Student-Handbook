@@ -2,10 +2,9 @@
 	id="editorContainer"
 	cdkDropList
 	cdkDropListConnectedTo="panelContent"
-	(cdkDropListDropped)="drop($event)"
 	#editorContainer
   ngStyle.lt-md="background-color: #f8f8f8;"
->
+><!-- (cdkDropListDropped)="drop($event)" -->
   <mat-toolbar id="smallNoteHeader" fxHide.gt-sm>
     <h2>{{noteTitle}}</h2>
     <span class="spacer"></span>

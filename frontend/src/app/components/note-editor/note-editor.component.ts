@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccountService, NotebookObservablesService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
@@ -13,14 +13,24 @@ import { QuillBinding } from 'y-quill';
 	templateUrl: './note-editor.component.html',
 	styleUrls: ['./note-editor.component.scss'],
 })
-export class NoteEditorComponent implements AfterViewInit, OnInit {
+export class NoteEditorComponent implements OnInit {
 	Delta = Quill.import('delta');
 
 	user: any;
 
-	noteTitle = 'note one';
-
 	quill: any;
+
+	nrOfNotesLoaded = 0;
+
+	notebookId: string = '';
+
+	noteId: string = '';
+
+	noteTitle: string = 'Smart Student';
+
+	noteDescription: string = 'Smart Student';
+
+	notebookTitle: string = 'Smart Student';
 
 	colours = [
 		'#FF0202',
@@ -47,26 +57,40 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 	constructor(
 		private accountService: AccountService,
 		private notebookObservables: NotebookObservablesService
-	) {
-		accountService.getUserSubject.subscribe((user) => {
+	) {}
+
+	ngOnInit(): void {
+		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
-	}
 
-	ngOnInit(): void {
+		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
+			this.nrOfNotesLoaded += 1;
+			if (noteInfo.notebookId !== '') {
+				this.noteTitle = noteInfo.title;
+				this.noteId = noteInfo.noteId;
+				this.notebookId = noteInfo.notebookId;
+				this.notebookTitle = noteInfo.notebookTitle;
+				this.noteDescription = noteInfo.description;
+
+				this.loadQuillEditor();
+			}
+		});
+
 		this.notebookObservables.editorHeight.subscribe(({ height }) => {
 			this.height = height;
 		});
 	}
 
-	async ngAfterViewInit(): Promise<void> {
+	// async ngAfterViewInit(): Promise<void> {
+
+	async loadQuillEditor() {
 		/**
 		 * Set user colour, notebookId and username
 		 */
 		// Replace with real notebook id
-		const notebookId = 'test-1-unique-xyz';
 		const username = this.user.displayName;
 		const colour =
 			this.colours[
@@ -98,7 +122,7 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 		const doc = new Y.Doc();
 
 		// Define a shared text type on the document
-		const provider = new WebrtcProvider(notebookId, doc);
+		const provider = new WebrtcProvider(this.noteId, doc);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
@@ -121,14 +145,16 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 		this.quill.on('text-change', (delta, oldDelta, source) => {
 			if (source === 'user') {
 				const changes = change.compose(delta);
-				firebase.database().ref(`notes/${notebookId}`).set({
+				firebase.database().ref(`notes/${this.noteId}`).set({
 					changes,
 				});
+			} else {
+				// console.log('not user');
 			}
 		});
 
 		// connection to firebase
-		const dbRefObject = firebase.database().ref(`notes/${notebookId}`);
+		const dbRefObject = firebase.database().ref(`notes/${this.noteId}`);
 
 		// render firebase content
 		await dbRefObject
@@ -136,9 +162,9 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 				if (snap.val() === null) {
 					firebase
 						.database()
-						.ref(`notes/${notebookId}`)
+						.ref(`notes/${this.noteId}`)
 						.set({
-							outputData: `<h2>${this.noteTitle}</h2>`,
+							changes: `<h2>${this.noteTitle}</h2>`,
 						});
 				}
 			})
@@ -147,7 +173,7 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 				 * Render output on Editor
 				 */
 				await dbRefObject.once('value', async (snap) => {
-					await this.quill.setContents(snap.val().change);
+					await this.quill.setContents(snap.val().changes);
 				});
 			});
 
@@ -157,7 +183,13 @@ export class NoteEditorComponent implements AfterViewInit, OnInit {
 			awareness.getStates().forEach((state) => {
 				if (state.user) {
 					strings.push(
-						`<div style="color:${state.user.color};">• ${state.user.name}</div>`
+						// `<div style="color:${state.user.color};">• ${state.user.name}</div>`
+						`<div class="text-center" style="border: 2px solid ${
+							state.user.color
+						}; border-radius: 13px; width: 26px; height: 26px; padding-top: 1px;">${state.user.name.substr(
+							0,
+							1
+						)}</div>`
 					);
 				}
 				document.querySelector('#users').innerHTML = strings.join('');

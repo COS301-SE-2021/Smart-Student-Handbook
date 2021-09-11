@@ -1,51 +1,63 @@
 <div id="standalone-container">
   <div id="toolbar-container">
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <select class="ql-font"></select>
       <select class="ql-size"></select>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-bold"></button>
       <button class="ql-italic"></button>
       <button class="ql-underline"></button>
       <button class="ql-strike"></button>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <select class="ql-color"></select>
       <select class="ql-background"></select>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-script" value="sub"></button>
       <button class="ql-script" value="super"></button>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-header" value="1"></button>
       <button class="ql-header" value="2"></button>
-      <button class="ql-blockquote"></button>
+      <button class="ql-inline-blockquote"></button>
       <button class="ql-code-block"></button>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-list" value="ordered"></button>
       <button class="ql-list" value="bullet"></button>
       <button class="ql-indent" value="-1"></button>
       <button class="ql-indent" value="+1"></button>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-direction" value="rtl"></button>
       <select class="ql-align"></select>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-link"></button>
       <button class="ql-image"></button>
       <button class="ql-video"></button>
       <button class="ql-formula"></button>
     </span>
-    <span class="ql-formats">
+    <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
       <button class="ql-clean"></button>
     </span>
 
-    <div id="users"></div>
-    <div id="editor-container" [ngStyle]="{'height': height}"></div>
+
+<!--    <div class="container">-->
+<!--      <div class="d-flex">-->
+<!--        <div class="image_outer_container m-2">-->
+<!--          <div class="image_inner_container">-->
+<!--            <img src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/UserProfilePi
+ctures%2FmxqlRyQv0BUS1qbBbhS3H6krfMg11631349995572?alt=media&token=09cfc431-ac2a-47af-b7c8-b3ca1946f1a7" alt="Avatar">-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div id="users" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}"></div>
+    <div id="editor-container"  [ngStyle]="{'height': height, 'background-image': noteId === '' ? 'url(\'../../../assets/images/notebook-placeholder-background.png\')' : 'none'}"></div>
   </div>
 </div>
 
