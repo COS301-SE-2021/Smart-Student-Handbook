@@ -142,5 +142,18 @@ export class NoteEditorComponent implements AfterViewInit {
 					await this.quill.setContents(snap.val().change);
 				});
 			});
+
+		// Display all users editing the notebook
+		awareness.on('change', () => {
+			const strings = [];
+			awareness.getStates().forEach((state) => {
+				if (state.user) {
+					strings.push(
+						`<div style="color:${state.user.color};">• ${state.user.name}</div>`
+					);
+				}
+				document.querySelector('#users').innerHTML = strings.join('');
+			});
+		});
 	}
 }
