@@ -1,181 +1,257 @@
-<div id="menu" style="height: 100vh;">
-  <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span >
-         <img mat-card-image src="../../../../assets/logo/white_logo_transparent_background.png" alt="Photo of a Shiba Inu"
-              style="width: 170px; padding-top: 10px; padding-bottom: 10px;">
-      </span>
-      <span class="menu-spacer"></span>
-      <div fxShow="true" fxHide.lt-md>
-        <!-- The following menu items will be hidden on both SM and XS screen sizes -->
-        <a href="#" mat-button>ABOUT</a>
-        <a href="#" mat-button>LEARN MORE</a>
-        <a href="#" mat-button>THE TEAM</a>
-        <a href="#" mat-button>DOCUMENTATION</a>
-        <a href="#" mat-button>THE PROJECT</a>
-      </div>
-    </mat-toolbar-row>
-  </mat-toolbar>
+<!--<div id="menu" style="height: 100vh;">-->
+<!--  <mat-toolbar color="primary">-->
+<!--    <mat-toolbar-row>-->
+<!--      <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>-->
+<!--        <mat-icon>menu</mat-icon>-->
+<!--      </button>-->
+<!--      <span >-->
+<!--         <img mat-card-image src="../../../../assets/logo/white_logo_transparent_background.png" alt="Photo of a Shiba Inu"-->
+<!--              style="width: 170px; padding-top: 10px; padding-bottom: 10px;">-->
+<!--      </span>-->
+<!--      <span class="menu-spacer"></span>-->
+<!--      <div fxShow="true" fxHide.lt-md>-->
+<!--        &lt;!&ndash; The following menu items will be hidden on both SM and XS screen sizes &ndash;&gt;-->
+<!--        <a href="#" mat-button>ABOUT</a>-->
+<!--        <a href="#" mat-button>LEARN MORE</a>-->
+<!--        <a href="#" mat-button>THE TEAM</a>-->
+<!--        <a href="#" mat-button>DOCUMENTATION</a>-->
+<!--        <a href="#" mat-button>THE PROJECT</a>-->
+<!--      </div>-->
+<!--    </mat-toolbar-row>-->
+<!--  </mat-toolbar>-->
 
-  <mat-sidenav-container fxFlexFill>
-    <mat-sidenav #sidenav>
-      <mat-nav-list>
-        <a (click)="sidenav.toggle()" href="" mat-list-item>Close</a>
-        <a href="#" mat-list-item>ABOUT</a>
-        <a href="#" mat-list-item>LEARN MORE</a>
-        <a href="#" mat-list-item>THE TEAM</a>
-        <a href="#" mat-list-item>DOCUMENTATION</a>
-        <a href="#" mat-list-item>THE PROJECT</a>
-        <a href="#"mat-list-item>Menu Item 6</a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content fxFlexFill>
-      <!--<section >
-        <div style="background-image: url('../../../../assets/images/blurredBackground.jpg')">
+<!--  <mat-sidenav-container fxFlexFill>-->
+<!--    <mat-sidenav #sidenav>-->
+<!--      <mat-nav-list>-->
+<!--        <a (click)="sidenav.toggle()" href="" mat-list-item>Close</a>-->
+<!--        <a href="#" mat-list-item>ABOUT</a>-->
+<!--        <a href="#" mat-list-item>LEARN MORE</a>-->
+<!--        <a href="#" mat-list-item>THE TEAM</a>-->
+<!--        <a href="#" mat-list-item>DOCUMENTATION</a>-->
+<!--        <a href="#" mat-list-item>THE PROJECT</a>-->
+<!--        <a href="#"mat-list-item>Menu Item 6</a>-->
+<!--      </mat-nav-list>-->
+<!--    </mat-sidenav>-->
+<!--    <mat-sidenav-content fxFlexFill>-->
+<!--      &lt;!&ndash;<section >-->
+<!--        <div style="background-image: url('../../../../assets/images/blurredBackground.jpg')">-->
 
-        </div>
-        <div class="custom-shape-divider-top-1630695354" >
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M0,0V6c0,21.6,291,111.46,741,110.26,445.39,3.6,459-88.3,459-110.26V0Z" class="shape-fill"></path>
-          </svg>
-        </div>
+<!--        </div>-->
+<!--        <div class="custom-shape-divider-top-1630695354" >-->
+<!--          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">-->
+<!--            <path d="M0,0V6c0,21.6,291,111.46,741,110.26,445.39,3.6,459-88.3,459-110.26V0Z" class="shape-fill"></path>-->
+<!--          </svg>-->
+<!--        </div>-->
 
-        <div class="custom-shape-divider-bottom-1630695818">
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M741,116.23C291,117.43,0,27.57,0,6V120H1200V6C1200,27.93,1186.4,119.83,741,116.23Z" class="shape-fill"></path>
-          </svg>
-        </div>
-      </section>-->
-      <mat-card class="mat-elevation-z5">
+<!--        <div class="custom-shape-divider-bottom-1630695818">-->
+<!--          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">-->
+<!--            <path d="M741,116.23C291,117.43,0,27.57,0,6V120H1200V6C1200,27.93,1186.4,119.83,741,116.23Z" class="shape-fill"></path>-->
+<!--          </svg>-->
+<!--        </div>-->
+<!--      </section>&ndash;&gt;-->
+<!--      <mat-card class="mat-elevation-z5">-->
+<!--        <mat-card-header>-->
+<!--          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>-->
+<!--          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>-->
+<!--        </mat-card-header>-->
+<!--        <mat-card-content>-->
+
+<!--          <div class="flex-row">-->
+<!--            <div class ="temp">-->
+<!--              <span>THE FUTURE OF NOTE TAKING</span>-->
+<!--              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>-->
+<!--              <span>12 C</span>-->
+<!--            </div>-->
+<!--            <div class="outlook">-->
+
+<!--              <span>Few Clouds</span>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </mat-card-content>-->
+<!--        <mat-card-actions>-->
+<!--          <button mat-button>SIGNUP</button>-->
+<!--          <button mat-button>ANOTHER BUTTON</button>-->
+<!--        </mat-card-actions>-->
+<!--      </mat-card>-->
+
+<!--      <mat-card class="mat-elevation-z5">-->
+<!--        <mat-card-header>-->
+<!--          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>-->
+<!--          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>-->
+<!--        </mat-card-header>-->
+<!--        <mat-card-content>-->
+
+<!--          <div class="flex-row">-->
+<!--            <div class ="temp">-->
+<!--              <span>THE FUTURE OF NOTE TAKING</span>-->
+<!--              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>-->
+<!--              <span>12 C</span>-->
+<!--            </div>-->
+<!--            <div class="outlook">-->
+
+<!--              <span>Few Clouds</span>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </mat-card-content>-->
+<!--        <mat-card-actions>-->
+<!--          <button mat-button>SIGNUP</button>-->
+<!--          <button mat-button>ANOTHER BUTTON</button>-->
+<!--        </mat-card-actions>-->
+<!--      </mat-card>-->
+
+<!--      <mat-card class="mat-elevation-z5">-->
+<!--        <mat-card-header>-->
+<!--          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>-->
+<!--          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>-->
+<!--        </mat-card-header>-->
+<!--        <mat-card-content>-->
+
+<!--          <div class="flex-row">-->
+<!--            <div class ="temp">-->
+<!--              <span>THE FUTURE OF NOTE TAKING</span>-->
+<!--              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>-->
+<!--              <span>12 C</span>-->
+<!--            </div>-->
+<!--            <div class="outlook">-->
+
+<!--              <span>Few Clouds</span>-->
+<!--            </div>-->
+<!--            <div class="outlook">-->
+
+<!--              <span>Few Clouds</span>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </mat-card-content>-->
+<!--        <mat-card-actions>-->
+<!--          <button mat-button>SIGNUP</button>-->
+<!--          <button mat-button>ANOTHER BUTTON</button>-->
+<!--        </mat-card-actions>-->
+<!--      </mat-card>-->
+
+
+<!--       &lt;!&ndash;<mat-card class="card-one" >-->
+<!--         <mat-card-header>-->
+<!--           ABOUT THE SMART STUDENT NOTEBOOK-->
+<!--         </mat-card-header>-->
+<!--         <mat-card-content>-->
+<!--           <div class="about">-->
+<!--             <p>-->
+<!--               The Smart Student notebook is an advance note taking application that is aimed towards student. The-->
+<!--               Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students.-->
+<!--               The Smart Student application will allow users to create notebooks. Notebooks can be stored in different-->
+<!--               folders. Notebooks consist of different sections and sections can then be split up into pages allowing-->
+<!--               for organized note taking. Notes are written in markup, thus allowing for multiple customization options-->
+<!--               for users such as text formatting, adding bullet points, tables, images and much more. Once a notebook-->
+<!--               is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar-->
+<!--               notebooks. The user will then have the ability to merge, copy or clone these notebook to their notebook.-->
+<!--               Afterwards users will be able to rate either the entire notebook or snippets of the notebook. The application-->
+<!--               will work on a subscription based service where users will be paid according to amount of other users-->
+<!--               using their notebook.-->
+<!--             </p>-->
+<!--           </div>-->
+
+
+<!--         </mat-card-content>-->
+<!--       </mat-card>-->
+
+
+
+
+<!--      <mat-card appMaterialElevation>-->
+<!--        <mat-card-header>-->
+<!--          <mat-card-title>Card Title</mat-card-title>-->
+<!--        </mat-card-header>-->
+<!--        <mat-card-content>-->
+<!--          <p>-->
+<!--            This card changes elevation when you hover over it!-->
+<!--          </p>-->
+<!--        </mat-card-content>-->
+<!--      </mat-card>-->
+
+<!--&ndash;&gt;-->
+
+
+<!--    </mat-sidenav-content>-->
+<!--  </mat-sidenav-container>-->
+<!--&lt;!&ndash;<div class="pt-5">&ndash;&gt;-->
+<!--&lt;!&ndash;  <article>&ndash;&gt;-->
+<!--&lt;!&ndash;    <h1>Landing Page</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <h1><mat-icon id="announcementIcon">announcement</mat-icon>  &emsp; Under Construction</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    <br/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="mailto:algorithmicaces@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>&ndash;&gt;-->
+<!--&lt;!&ndash;      <p>&mdash; The Team @ Smart Student Handbook</p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <a class="btn" [routerLink]="['']">Return Home</a>&ndash;&gt;-->
+<!--&lt;!&ndash;  </article>&ndash;&gt;-->
+<!--</div>-->
+
+
+
+
+
+<div class="container-fluid" id="welcomeBackground">
+  <div class="row">
+    <div class="col">
+      <img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" height="200" alt="Responsive image">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4 offset-1">
+      <mat-card class="slash-content">
         <mat-card-header>
-          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>
-          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>
+          <label>About us</label>
         </mat-card-header>
         <mat-card-content>
-
-          <div class="flex-row">
-            <div class ="temp">
-              <span>THE FUTURE OF NOTE TAKING</span>
-              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>
-              <span>12 C</span>
-            </div>
-            <div class="outlook">
-
-              <span>Few Clouds</span>
-            </div>
-          </div>
-
+          <img class="gif" src="../../../../assets/gifs/gif.gif">
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>SIGNUP</button>
-          <button mat-button>ANOTHER BUTTON</button>
-        </mat-card-actions>
       </mat-card>
+    </div>
+    <div class="col-7">
+    </div>
+  </div>
 
-      <mat-card class="mat-elevation-z5">
+  <div class="row">
+    <div class="col-7">
+    </div>
+    <div class="col-4">
+      <mat-card class="slash-content">
         <mat-card-header>
-          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>
-          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>
+          <label>About us</label>
         </mat-card-header>
-        <mat-card-content>
-
-          <div class="flex-row">
-            <div class ="temp">
-              <span>THE FUTURE OF NOTE TAKING</span>
-              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>
-              <span>12 C</span>
-            </div>
-            <div class="outlook">
-
-              <span>Few Clouds</span>
-            </div>
-          </div>
-
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>SIGNUP</button>
-          <button mat-button>ANOTHER BUTTON</button>
-        </mat-card-actions>
       </mat-card>
+    </div>
+  </div>
 
-      <mat-card class="mat-elevation-z5">
+  <div class="row">
+    <div class="col-4 offset-1">
+      <mat-card class="slash-content">
         <mat-card-header>
-          <mat-card-title> THE FUTURE OF NOTE TAKING</mat-card-title>
-          <mat-card-subtitle>Written in markup , allowing multiple customization options and Smart Assist recommendations </mat-card-subtitle>
+          <label>About us</label>
         </mat-card-header>
-        <mat-card-content>
-
-          <div class="flex-row">
-            <div class ="temp">
-              <span>THE FUTURE OF NOTE TAKING</span>
-              <span>Written in markup , allowing multiple customization options and Smart Assist recommendations  </span>
-              <span>12 C</span>
-            </div>
-            <div class="outlook">
-
-              <span>Few Clouds</span>
-            </div>
-            <div class="outlook">
-
-              <span>Few Clouds</span>
-            </div>
-          </div>
-
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>SIGNUP</button>
-          <button mat-button>ANOTHER BUTTON</button>
-        </mat-card-actions>
       </mat-card>
+    </div>
+    <div class="col-6">
+    </div>
+  </div>
 
-
-       <!--<mat-card class="card-one" >
-         <mat-card-header>
-           ABOUT THE SMART STUDENT NOTEBOOK
-         </mat-card-header>
-         <mat-card-content>
-           <div class="about">
-             <p>
-               The Smart Student notebook is an advance note taking application that is aimed towards student. The
-               Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students.
-               The Smart Student application will allow users to create notebooks. Notebooks can be stored in different
-               folders. Notebooks consist of different sections and sections can then be split up into pages allowing
-               for organized note taking. Notes are written in markup, thus allowing for multiple customization options
-               for users such as text formatting, adding bullet points, tables, images and much more. Once a notebook
-               is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar
-               notebooks. The user will then have the ability to merge, copy or clone these notebook to their notebook.
-               Afterwards users will be able to rate either the entire notebook or snippets of the notebook. The application
-               will work on a subscription based service where users will be paid according to amount of other users
-               using their notebook.
-             </p>
-           </div>
-
-
-         </mat-card-content>
-       </mat-card>
-
-
-
-
-      <mat-card appMaterialElevation>
+  <div class="row">
+    <div class="col-7">
+    </div>
+    <div class="col-4">
+      <mat-card class="slash-content">
         <mat-card-header>
-          <mat-card-title>Card Title</mat-card-title>
+          <label>About us</label>
         </mat-card-header>
-        <mat-card-content>
-          <p>
-            This card changes elevation when you hover over it!
-          </p>
-        </mat-card-content>
       </mat-card>
-
--->
-
-
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    </div>
+  </div>
 </div>
 
 

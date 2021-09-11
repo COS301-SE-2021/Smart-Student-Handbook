@@ -1,86 +1,109 @@
-.menu-spacer {
-  flex: 1 1 auto;
+//.menu-spacer {
+//  flex: 1 1 auto;
+//}
+//// card 1
+//mat-card{
+//  width: 100%;
+//  display: block;
+//  vertical-align: middle;
+//}
+//
+//.flex-row {
+//  display: flex;
+//  flex-direction: row;
+//
+//  > div {
+//    flex: 50%;
+//    border-radius: 10px;
+//    padding: 10px;
+//  }
+//  > .outlook {
+//    color: black;
+//    background: rgba(37, 101, 112, 0.42);
+//
+//  }
+//
+//  > .temp {
+//    background: lightblue;
+//    color: black;
+//    margin-right: 10px;
+//    display: flex;
+//    flex-direction: column;
+//    justify-content: center;
+//    align-items: center;
+//  }
+//}
+//.big-text {
+//  font-size: 30px;
+//}
+//
+//
+//
+//// Curve one
+//.custom-shape-divider-top-1630695354 {
+//  position: absolute;
+//  top: 0;
+//  left: 0;
+//  width: 100%;
+//  overflow: hidden;
+//  line-height: 0;
+//
+//}
+//
+//.custom-shape-divider-top-1630695354 svg {
+//  position: relative;
+//  display: block;
+//  width: calc(100% + 1.3px);
+//  height: 141px;
+//  transform: rotateY(180deg);
+//}
+//
+//.custom-shape-divider-top-1630695354 .shape-fill {
+//  fill: #FFFFFF;
+//
+//}
+//
+////curve 2 bottom
+//.custom-shape-divider-bottom-1630695818 {
+//  position: absolute;
+//  bottom: 0;
+//  left: 0;
+//  width: 100%;
+//  overflow: hidden;
+//  line-height: 0;
+//}
+//
+//.custom-shape-divider-bottom-1630695818 svg {
+//  position: relative;
+//  display: block;
+//  width: calc(100% + 1.3px);
+//  height: 141px;
+//  transform: rotateY(180deg);
+//}
+//
+//.custom-shape-divider-bottom-1630695818 .shape-fill {
+//  fill: #454475;
+//}
+
+
+@import "src/app/styling/pageUnderConstruction";
+
+#welcomeBackground{
+  //width: 99vw;
+  height: 100vh;
+  background-image: url("../../../../assets/images/splashBackground.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0 10px 0 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-// card 1
-mat-card{
-  width: 100%;
-  display: block;
-  vertical-align: middle;
+
+.slash-content{
+  height: 400px;
 }
 
-.flex-row {
-  display: flex;
-  flex-direction: row;
-
-  > div {
-    flex: 50%;
-    border-radius: 10px;
-    padding: 10px;
-  }
-  > .outlook {
-    color: black;
-    background: rgba(37, 101, 112, 0.42);
-
-  }
-
-  > .temp {
-    background: lightblue;
-    color: black;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-}
-.big-text {
-  font-size: 30px;
-}
-
-
-
-// Curve one
-.custom-shape-divider-top-1630695354 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-
-}
-
-.custom-shape-divider-top-1630695354 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 141px;
-  transform: rotateY(180deg);
-}
-
-.custom-shape-divider-top-1630695354 .shape-fill {
-  fill: #FFFFFF;
-
-}
-
-//curve 2 bottom
-.custom-shape-divider-bottom-1630695818 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.custom-shape-divider-bottom-1630695818 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 141px;
-  transform: rotateY(180deg);
-}
-
-.custom-shape-divider-bottom-1630695818 .shape-fill {
-  fill: #454475;
+.gif{
+  width: 70%;
+  margin-left: 15%;
 }
