@@ -69,7 +69,7 @@ export class ExploreComponent {
 		private exploreObservables: ExploreObservablesService
 	) {}
 
-	openNotes(hit: any , index: any) {
+	openNotes(hit: any ) {
 		if (window.innerWidth <= 576) {
 			this.bottomSheet.open(ExploreNoteListBottomsheetComponent, {
 				data: {
