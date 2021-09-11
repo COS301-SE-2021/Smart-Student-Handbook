@@ -87,6 +87,10 @@
 
 
 @import "src/app/styling/pageUnderConstruction";
+@import url('https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&family=Glory&display=swap');
+
+$headingFont: 'Glory', sans-serif;
+$bodyFont: 'Delius Swash Caps', cursive;
 
 #welcomeBackground{
   //width: 99vw;
@@ -104,6 +108,76 @@
 }
 
 .gif{
-  width: 70%;
+  width: 90%;
+  border-radius: 5px;
   margin-left: 15%;
 }
+
+.welcomeHeading{
+  line-height: 32pt;
+  font-family: $headingFont;
+}
+
+.welcomeSubHeading{
+  font-weight: 400;
+  font-family: $bodyFont;
+}
+
+.feature{
+  margin-top: 6%;
+  margin-bottom: 6%;
+}
+
+.featureHeading{
+  font-weight: 400;
+  font-size: xx-large;
+  font-family: $headingFont;
+}
+
+.featureDescription{
+  font-weight: 400;
+  //font-size: larger;
+  color: #393939;
+  font-family: $bodyFont;
+}
+
+.theTeamBanner{
+  box-shadow: 0 0 8px 1px #000000;
+  background: linear-gradient(to bottom, rgba(40, 40, 40, 0.9), rgba(109, 109, 109, 0.9));
+  //background-color: rgba(0, 0, 0, 0.6);
+}
+
+.teamMember{
+  //width: max-content;
+
+  .memberProfilePic {
+    margin: auto;
+    height: 65px;
+    width: 65px;
+    background-size: cover;
+  }
+
+  .teamMemberName{
+    font-weight: 400;
+    margin-bottom: 0;
+    color: #d4d4d4;
+    font-family: $headingFont;
+  }
+
+  .teamMemberIconButton{
+    height: 25px;
+    width: 25px;
+    margin-right: 4px;
+  }
+
+  .teamMemberIcon{
+    width: 25px;
+    border-radius: 3px;
+  }
+}
+
+.documentationContainer{
+  border-left: 2px solid #0092ff;
+  color: #dedede;
+}
+

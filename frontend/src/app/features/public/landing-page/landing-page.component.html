@@ -202,56 +202,105 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-4 offset-1">
-      <mat-card class="slash-content">
-        <mat-card-header>
-          <label>About us</label>
-        </mat-card-header>
-        <mat-card-content>
-          <img class="gif" src="../../../../assets/gifs/gif.gif">
-        </mat-card-content>
-      </mat-card>
+  <div class="row mt-5 pt-5 mb-5">
+    <div class="col-7 offset-1">
+      <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
+      <h2 class="welcomeSubHeading aos-init aos-animate" data-aos="fade-up">
+        We are an award-winning branding agency providing insightful and creative solutions including brand strategy,
+        visual identity, web design, and more. Our experienced and passionate team works with a wide array of
+        mission-driven organizations, including foundations, nonprofits, and higher-ed institutions to help our clients
+        broaden their horizons, build brand equity, and make a greater impact in the world.
+      </h2>
     </div>
-    <div class="col-7">
+    <div class="col-3 offset-1" style="padding-top: 100px;">
+      <button class="mb-2" style="width: 100px" mat-raised-button color="accent">
+        Login
+      </button>
+      <br>
+      <button mat-raised-button color="accent" style="width: 100px">
+        Register
+      </button>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-7">
+
+  <div class="row feature">
+    <div class="col-6 offset-1">
+      <h2 class="featureHeading"
+          data-aos="fade-left"
+          data-aos-anchor="#example-anchor">
+        Feature 1
+      </h2>
+      <h2 class="featureDescription">
+        Some description of the feature to give the client more information
+        regarding how the specific feature works and how it looks on smart student handbook website
+      </h2>
     </div>
     <div class="col-4">
-      <mat-card class="slash-content">
-        <mat-card-header>
-          <label>About us</label>
-        </mat-card-header>
-      </mat-card>
+      <img class="gif" src="../../../../assets/gifs/gif.gif">
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-4 offset-1">
-      <mat-card class="slash-content">
-        <mat-card-header>
-          <label>About us</label>
-        </mat-card-header>
-      </mat-card>
-    </div>
-    <div class="col-6">
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-7">
-    </div>
+  <div class="row feature">
     <div class="col-4">
-      <mat-card class="slash-content">
-        <mat-card-header>
-          <label>About us</label>
-        </mat-card-header>
-      </mat-card>
+      <img class="gif" src="../../../../assets/gifs/gif.gif">
+    </div>
+    <div class="col-6 offset-1">
+      <h2 class="featureHeading aos-init aos-animate"
+          data-aos="fade-up"
+          data-aos-anchor-placement="top-bottom">
+        Feature 1
+      </h2>
+      <h2 class="featureDescription" data-aos="fade-up-right" data-aos-anchor="#example">
+        Some description of the feature to give the client more information
+        regarding how the specific feature works and how it looks on smart student handbook website
+      </h2>
     </div>
   </div>
+
+  <div class="row theTeamBanner mt-5 pt-5 pb-5">
+
+    <div class="col-1 mb-5 pb-5"></div>
+    <div class="col-2 mb-5 pb-5 teamMember text-center" *ngFor="let member of teamMembers">
+      <div mat-card-avatar class="memberProfilePic" [ngStyle]="{'background-image': (member.profile)}"></div>
+      <h2 class="teamMemberName">{{member.name}}</h2>
+      <a href="{{member.linkedIn}}">
+        <button mat-icon-button class="teamMemberIconButton mr-1">
+          <img class="teamMemberIcon" src="../../../../assets/icons/linkedIn.png">
+        </button>
+      </a>
+
+      <a href="{{member.github}}">
+        <button mat-icon-button class="teamMemberIconButton">
+          <img class="teamMemberIcon" src="../../../../assets/icons/github.png">
+        </button>
+      </a>
+    </div>
+    <div class="col-1 mb-5 pb-5"></div>
+
+
+    <div class="col">
+    </div>
+    <div class="offset-1 col-3 pl-2 documentationContainer">
+      <h2 class="welcomeHeading">Documentation 1</h2>
+      <p>uasvfouab fhd</p>
+    </div>
+    <div class="col-3 pl-2 documentationContainer">
+      <h2 class="welcomeHeading">Documentation 2</h2>
+      <p>uasvfouab fhd</p>
+    </div>
+    <div class="col-3 pl-2 documentationContainer">
+      <h2 class="welcomeHeading">Documentation 3</h2>
+      <p>uasvfouab fhd</p>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+
+
+<!--  <div class="row mt-5 mb-5">-->
+<!--    -->
+<!--  </div>-->
+
 </div>
-
 

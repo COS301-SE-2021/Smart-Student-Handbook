@@ -42,9 +42,12 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/instantsearch.css/themes/satellite.css",
               "./node_modules/instantsearch.css/themes/reset.css",
+              "./node_modules/aos/dist/aos.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/aos/dist/aos.js"
+            ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
@@ -114,9 +117,12 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/instantsearch.css/themes/satellite.css",
               "./node_modules/instantsearch.css/themes/reset.css",
+              "./node_modules/aos/dist/aos.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/aos/dist/aos.js"
+            ]
           }
         },
         "deploy": {
