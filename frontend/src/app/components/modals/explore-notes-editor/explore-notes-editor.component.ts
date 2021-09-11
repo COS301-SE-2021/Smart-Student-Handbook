@@ -1,8 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 import { Component, Inject, OnInit } from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
-import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
 import { Tag } from '@app/components';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -19,52 +17,6 @@ import {
 	styleUrls: ['./explore-notes-editor.component.scss'],
 })
 export class ExploreNotesEditorComponent implements OnInit {
-	Header = require('@editorjs/header');
-
-	LinkTool = require('@editorjs/link');
-
-	RawTool = require('@editorjs/raw');
-
-	SimpleImage = require('@editorjs/simple-image');
-
-	Checklist = require('@editorjs/checklist');
-
-	List = require('@editorjs/list');
-
-	Embed = require('@editorjs/embed');
-
-	Quote = require('@editorjs/quote');
-
-	NestedList = require('@editorjs/nested-list');
-
-	Underline = require('@editorjs/underline');
-
-	Table = require('@editorjs/table');
-
-	Warning = require('@editorjs/warning');
-
-	CodeTool = require('@editorjs/code');
-
-	// Paragraph = require('@editorjs/paragraph');
-
-	TextVariantTune = require('@editorjs/text-variant-tune');
-
-	AttachesTool = require('@editorjs/attaches');
-
-	Marker = require('@editorjs/marker');
-
-	InlineCode = require('@editorjs/inline-code');
-
-	Personality = require('@editorjs/personality');
-
-	Delimiter = require('@editorjs/delimiter');
-
-	Alert = require('editorjs-alert');
-
-	Paragraph = require('editorjs-paragraph-with-alignment');
-
-	Editor!: EditorJS;
-
 	tags: Tag[] = [];
 
 	noteId: string = '';
@@ -102,119 +54,6 @@ export class ExploreNotesEditorComponent implements OnInit {
 
 		this.noteTitle = title;
 		this.noteId = noteId;
-
-		if (this.Editor === undefined || window.outerWidth <= 600) {
-			/**
-			 * Create the notebook with all the plugins
-			 */
-			this.Editor = new EditorJS({
-				holder: 'exploreEditor',
-				tools: {
-					snippet: AddTagsTool,
-					header: {
-						class: this.Header,
-						shortcut: 'CTRL+SHIFT+H',
-					},
-					linkTool: {
-						class: this.LinkTool,
-					},
-					raw: this.RawTool,
-					image: this.SimpleImage,
-					checklist: {
-						class: this.Checklist,
-						inlineToolbar: true,
-					},
-					list: {
-						class: this.NestedList,
-						inlineToolbar: true,
-					},
-					embed: this.Embed,
-					quote: this.Quote,
-					underline: this.Underline,
-					table: {
-						class: this.Table,
-					},
-					warning: {
-						class: this.Warning,
-						inlineToolbar: true,
-						shortcut: 'CTRL+SHIFT+W',
-						config: {
-							titlePlaceholder: 'Title',
-							messagePlaceholder: 'Message',
-						},
-					},
-					code: this.CodeTool,
-					paragraph: {
-						class: this.Paragraph,
-						inlineToolbar: true,
-					},
-					textVariant: this.TextVariantTune,
-					attaches: {
-						class: this.AttachesTool,
-					},
-					Marker: {
-						class: this.Marker,
-						shortcut: 'CTRL+SHIFT+M',
-					},
-					inlineCode: {
-						class: this.InlineCode,
-						shortcut: 'CMD+SHIFT+M',
-					},
-					personality: {
-						class: this.Personality,
-					},
-					delimiter: this.Delimiter,
-					alert: this.Alert,
-				},
-				data: {
-					blocks: [],
-				},
-				autofocus: true,
-			});
-		}
-
-		await this.Editor.isReady;
-
-		const editor = this.Editor;
-
-		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${noteId}`);
-
-		/**
-		 * Get the values from the realtime database and insert block if notebook is empty
-		 */
-		dbRefObject
-			.once('value', (snap) => {
-				if (snap.val() === null) {
-					firebase
-						.database()
-						.ref(`notebook/${noteId}`)
-						.set({
-							outputData: {
-								blocks: [
-									{
-										id: 'jTFbQOD8j3',
-										type: 'header',
-										data: {
-											text: `${this.noteTitle} 🚀`,
-											level: 2,
-										},
-									},
-								],
-							},
-						});
-				}
-			})
-			.then(() => {
-				/**
-				 * Render output on Editor
-				 */
-				dbRefObject.once('value', (snap) => {
-					editor.render(snap.val().outputData);
-				});
-
-				this.isCompleted = true;
-			});
 	}
 
 	/**
@@ -229,13 +68,7 @@ export class ExploreNotesEditorComponent implements OnInit {
 			this.isCompleted = true;
 
 			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
-				this.Editor.save().then((outputData) => {
-					// console.log(newNoteId);
-					// console.log(outputData);
-					firebase.database().ref(`notebook/${newNoteId}`).set({
-						outputData,
-					});
-				});
+				// SAVE NOTE INFO TO CLONED NOTE
 			});
 		});
 	}

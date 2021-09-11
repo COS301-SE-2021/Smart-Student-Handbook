@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { AccountService } from '@app/services';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AccountService, NotebookObservablesService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -13,7 +13,7 @@ import { QuillBinding } from 'y-quill';
 	templateUrl: './note-editor.component.html',
 	styleUrls: ['./note-editor.component.scss'],
 })
-export class NoteEditorComponent implements AfterViewInit {
+export class NoteEditorComponent implements AfterViewInit, OnInit {
 	Delta = Quill.import('delta');
 
 	user: any;
@@ -35,17 +35,29 @@ export class NoteEditorComponent implements AfterViewInit {
 		'#02FFB3',
 	];
 
+	height = '100vh';
+
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
 	/**
 	 * Subscribe to account service to get user information
 	 * @param accountService
+	 * @param notebookObservables
 	 */
-	constructor(private accountService: AccountService) {
+	constructor(
+		private accountService: AccountService,
+		private notebookObservables: NotebookObservablesService
+	) {
 		accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
+		});
+	}
+
+	ngOnInit(): void {
+		this.notebookObservables.editorHeight.subscribe(({ height }) => {
+			this.height = height;
 		});
 	}
 

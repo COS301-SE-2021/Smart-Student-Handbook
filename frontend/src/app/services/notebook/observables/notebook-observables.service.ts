@@ -45,6 +45,8 @@ export class NotebookObservablesService {
 
 	public reviewNotebookState: Observable<any>;
 
+	public editorHeight: BehaviorSubject<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -110,6 +112,17 @@ export class NotebookObservablesService {
 		});
 
 		this.reviewNotebookState = this.reviewNotebook.asObservable();
+
+		const vh = window.innerHeight;
+		this.editorHeight = new BehaviorSubject<any>({
+			height: `${vh - 200}px`,
+		});
+	}
+
+	setEditorHeight(height: string) {
+		this.editorHeight.next({
+			height,
+		});
 	}
 
 	/**
