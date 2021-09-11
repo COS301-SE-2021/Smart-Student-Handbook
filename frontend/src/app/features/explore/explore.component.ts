@@ -97,7 +97,7 @@ export class ExploreComponent {
 			true
 		);
 
-		aa('setUserToken', this.user.uid);
+		/*aa('setUserToken', this.user.uid);
 		console.log('Hello');
 		console.log(index);
 		aa('clickedObjectIDs', {
@@ -106,6 +106,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+      positions: [index + 1],
 
 		});
 		aa('viewedObjectIDs', {
@@ -380,7 +381,7 @@ export class ExploreComponent {
 			index: 'userNotebook',
 			eventName: 'Check out',
 			// eslint-disable-next-line no-underscore-dangle
-			queryID: [hit.__queryID],
+			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
 		});
 
@@ -453,7 +454,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
-      positions: [index + 1],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotes',
@@ -469,7 +470,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
-		});
+		});*/
 	}
 
 	closeNotes() {
