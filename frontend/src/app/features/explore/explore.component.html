@@ -56,13 +56,13 @@
                                   </mat-icon>
                                 </button>
                               </div>
-                              <div class="post-date" (click)="openNotes(hit)">
+                              <div class="post-date" (click)="openNotes(hit , index)">
                                 {{hit.data.institution}}
                               </div>
-                              <h2 class="entry-title" (click)="openNotes(hit)">
+                              <h2 class="entry-title" (click)="openNotes(hit , index)">
                                 {{hit.data.title}}
                               </h2>
-                              <div class="post-excerpt" (click)="openNotes(hit)">
+                              <div class="post-excerpt" (click)="openNotes(hit , index)">
                                 <p>{{hit.data.description}}</p>
                                 <br>
                                 <p>{{hit.data.author}}</p>

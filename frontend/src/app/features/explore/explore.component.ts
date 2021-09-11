@@ -52,7 +52,6 @@ export class ExploreComponent {
 		insightsClient: (window as any).aa,
 	};
 
-
 	hide: boolean = true;
 
 	hideNotes: boolean = true;
@@ -67,10 +66,10 @@ export class ExploreComponent {
 		private bottomSheet: MatBottomSheet,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService ,
+		private exploreObservables: ExploreObservablesService
 	) {}
 
-	openNotes(hit: any) {
+	openNotes(hit: any , index: any) {
 		if (window.innerWidth <= 576) {
 			this.bottomSheet.open(ExploreNoteListBottomsheetComponent, {
 				data: {
@@ -99,13 +98,61 @@ export class ExploreComponent {
 		);
 
 		aa('setUserToken', this.user.uid);
+		console.log('Hello');
+		console.log(index);
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
 
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
 		aa('clickedObjectIDs', {
 			index: 'userNotebooks',
 			eventName: 'Click object',
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			// eslint-disable-next-line no-underscore-dangle
+			positions: [hit.__hitIndex + 1],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+			positions: [index + 1],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -131,9 +178,8 @@ export class ExploreComponent {
 		aa('clickedObjectIDs', {
 			index: 'userNotebooks',
 			eventName: 'Click object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -148,46 +194,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
-		});
-		aa('viewedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'View object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-		});
-		aa('clickedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'Click object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-		});
-		aa('viewedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'View object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-		});
-		aa('clickedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'Click object',
-			objectIDs: [hit.objectID],
-		});
-		aa('viewedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'View object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-		});
-		aa('clickedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'Click object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -202,6 +209,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotes',
@@ -246,6 +254,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -260,6 +269,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -274,6 +284,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -288,6 +299,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -302,6 +314,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -314,22 +327,7 @@ export class ExploreComponent {
 			index: 'userNotebooks',
 			eventName: 'Click object',
 			objectIDs: [hit.objectID],
-		});
-		aa('viewedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'View object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-		});
-		aa('clickedObjectIDs', {
-			index: 'userNotebooks',
-			eventName: 'Click object',
-			// eslint-disable-next-line no-underscore-dangle
-			queryID: hit.__queryID,
-			objectIDs: [hit.objectID],
-      positions: [hit.positions]
-
+			positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -344,6 +342,23 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+			// eslint-disable-next-line no-underscore-dangle
+			positions: [index + 1],
+		});
+		aa('viewedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'View object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+		});
+		aa('clickedObjectIDs', {
+			index: 'userNotebooks',
+			eventName: 'Click object',
+			// eslint-disable-next-line no-underscore-dangle
+			queryID: hit.__queryID,
+			objectIDs: [hit.objectID],
+      positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
@@ -392,6 +407,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+      positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotes',
@@ -414,6 +430,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+      positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotes',
@@ -436,6 +453,7 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+      positions: [index + 1],
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotes',
@@ -476,15 +494,4 @@ export class ExploreComponent {
 		this.notebookObservables.setReviewNotebook(hit.objectID);
 	}
 
-	/*onQuery($event) {
-		this.query = $event.target.value;
-	}
-
-  public searchParameters = {
-    query: ""
-  };
-
-  public setQuery({ query }: { query: string }) {
-    this.searchParameters.query = query;
-  }*/
 }
