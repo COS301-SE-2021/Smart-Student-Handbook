@@ -328,6 +328,8 @@ export class ExploreComponent {
 			// eslint-disable-next-line no-underscore-dangle
 			queryID: hit.__queryID,
 			objectIDs: [hit.objectID],
+      positions: [hit.positions]
+
 		});
 		aa('viewedObjectIDs', {
 			index: 'userNotebooks',
