@@ -364,14 +364,12 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	openClosePanel() {
 		this.panelOpenState = !this.panelOpenState;
 
-		const editor = document.getElementById('editor') as HTMLElement;
-
 		const vh = window.innerHeight;
 
 		if (this.panelOpenState) {
-			editor.style.height = `${vh - 402}px`;
+			this.notebookObservables.setEditorHeight(`${vh - 402}px`);
 		} else {
-			editor.style.height = `${vh - 160}px`;
+			this.notebookObservables.setEditorHeight(`${vh - 200}px`);
 		}
 	}
 
