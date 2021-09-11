@@ -111,9 +111,9 @@
         {{noteItem.title}}
       </mat-card-title>
 
-      <div *ngFor="let b of noteItem.blocks">
+      <div *ngFor="let b of noteItem.blocks" class="snippetContent">
         <mat-card-title class="snippetContent" data-type="{{b.type}}">
-        {{b.data.text}}
+          {{b.data.text}}
         </mat-card-title>
       </div>
     </mat-card-header>

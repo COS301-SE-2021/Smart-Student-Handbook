@@ -13,7 +13,7 @@ interface noteType {
 }
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface blockType {
-	data: { text: string };
+	data: { text: string; level?: number };
 	type: string;
 }
 
@@ -176,7 +176,7 @@ export class SmartAssistComponent implements OnInit {
 								.get()
 								.then((docdata) => {
 									temp.title = docdata.data().name;
-									temp.tags = Array.from(docdata.data().tags);
+									temp.tags = docdata.data().tags;
 
 									const unixdate = docdata.data().createdDate;
 									temp.date = new Date(
@@ -184,7 +184,7 @@ export class SmartAssistComponent implements OnInit {
 									).toDateString();
 								});
 
-							temp.blocks = dataSnap.val().outputData;
+							temp.blocks = dataSnap.val().outputData.blocks;
 
 							this.notes.push(temp);
 						});
