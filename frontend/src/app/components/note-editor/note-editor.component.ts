@@ -43,8 +43,8 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		'#FF0202',
 		'#FF8102',
 		'#3CAEA3',
-		'#FFFF02',
-		'#02FF02',
+		'#afaf00',
+		'#00ba36',
 		'#0E02FF',
 		'#8D02FF',
 		'#FF02F3',
@@ -109,9 +109,21 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 
 		this.notebookObservables.dragAndDrop.subscribe(({ content }) => {
-			console.log(content);
 			if (content.length > 0) {
 				this.addContent(content);
+			}
+		});
+
+		this.notebookObservables.removeNote.subscribe((remove) => {
+			if (remove !== '') {
+				this.noteTitle = 'Smart Student';
+				this.noteId = '';
+				this.notebookId = '';
+				this.notebookTitle = '';
+				this.noteDescription = '';
+
+				this.height += this.toolbarHeight - 30;
+				this.heightInPx = `${this.height}px`;
 			}
 		});
 	}

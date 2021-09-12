@@ -35,6 +35,9 @@ export class NotebookObservablesService {
 	/** Contents to be drag and dropped */
 	public dragAndDrop: BehaviorSubject<any>;
 
+	/** Note has been deleted */
+	public removeNote: BehaviorSubject<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -95,6 +98,9 @@ export class NotebookObservablesService {
 		this.dragAndDrop = new BehaviorSubject<any>({
 			content: [],
 		});
+
+		/** Set the content to be inserted into the note */
+		this.removeNote = new BehaviorSubject<any>('');
 	}
 
 	/**
@@ -215,5 +221,10 @@ export class NotebookObservablesService {
 		this.dragAndDrop.next({
 			content,
 		});
+	}
+
+	/** Note has been deleted */
+	setRemoveNote(id: string) {
+		this.removeNote.next(id);
 	}
 }

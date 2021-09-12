@@ -114,6 +114,10 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 				this.notebookObservables.setClosePanel(false);
 			}
 		});
+
+		// this.notebookObservables.removeNote.subscribe((remove) => {
+		// 	if (remove !== '') this.removeNote(remove);
+		// });
 	}
 
 	/**
@@ -268,6 +272,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 			.subscribe((removed: any) => {
 				if (removed) {
 					this.removeNote(noteId);
+					this.notebookObservables.setRemoveNote(this.notebookId);
 				}
 			});
 	}
@@ -278,11 +283,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param id the id of the notebook to be removed
 	 */
 	removeNote(id: string) {
-		// eslint-disable-next-line array-callback-return
-		this.notes = this.notes.filter((notebook: any) => {
-			if (notebook.noteId !== id) {
-				return notebook;
+		this.notes = this.notes.filter((note: any) => {
+			if (note.noteId !== id) {
+				return note;
 			}
+			return null;
 		});
 	}
 }
