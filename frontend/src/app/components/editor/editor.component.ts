@@ -21,12 +21,17 @@ import {
 	NotebookBottomSheetComponent,
 	SmartAssistBottomSheetComponent,
 } from '@app/mobile';
-import { MatExpansionPanel } from '@angular/material/expansion';
+import {
+	MatAccordion,
+	MatExpansionPanel,
+	MatExpansionPanelHeader,
+} from '@angular/material/expansion';
 import {
 	NoteInfoComponent,
 	SmartAssistModalComponent,
 	ViewProfileComponent,
 } from '@app/components';
+import { Platform } from '@angular/cdk/platform';
 
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
@@ -92,6 +97,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	@ViewChild('noteInfoAccordion') noteInfoAccordion!: MatExpansionPanel;
 
+	@ViewChild('accordionHeader') accordionHeader!: HTMLElement;
+
 	/**
 	 * Editor component constructor
 	 * @param notebookService To call methods that apply to the notebooks
@@ -103,6 +110,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookOperations
 	 * @param notificationService
 	 * @param accountService
+	 * @param platform
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -113,7 +121,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
 		private notificationService: NotificationService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		public platform: Platform
 	) {
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
@@ -134,6 +143,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	ngOnInit(): void {
+		this.setEditorHeight();
+
 		this.nrOfNotesLoaded = 0;
 		this.doneLoading = true;
 
@@ -149,6 +160,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebookID = noteInfo.notebookId;
 				this.notebookTitle = noteInfo.notebookTitle;
 				this.noteDescription = noteInfo.description;
+
+				this.setEditorHeight();
 			}
 		});
 	}
@@ -206,6 +219,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			description,
 			tags
 		);
+
+		this.setEditorHeight();
 
 		this.getNotebook(notebookId);
 	}
@@ -310,13 +325,27 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 */
 	openClosePanel() {
 		this.panelOpenState = !this.panelOpenState;
+	}
 
+	setEditorHeight() {
 		const vh = window.innerHeight;
 
-		if (this.panelOpenState) {
-			this.notebookObservables.setEditorHeight(`${vh - 402}px`);
+		if (window.innerWidth >= 960) {
+			const height =
+				document.getElementById('noteInfoAccordion').offsetHeight;
+
+			this.notebookObservables.setEditorHeight(vh - (height + 100));
+		} else if (
+			this.platform.ANDROID === true ||
+			this.platform.IOS === true
+		) {
+			const height =
+				document.getElementById('smallNoteHeader').offsetHeight;
+			this.notebookObservables.setEditorHeight(vh - (height + 50));
 		} else {
-			this.notebookObservables.setEditorHeight(`${vh - 200}px`);
+			const height =
+				document.getElementById('smallNoteHeader').offsetHeight;
+			this.notebookObservables.setEditorHeight(vh - (height + 110));
 		}
 	}
 

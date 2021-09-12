@@ -115,11 +115,11 @@ export class NotebookObservablesService {
 
 		const vh = window.innerHeight;
 		this.editorHeight = new BehaviorSubject<any>({
-			height: `${vh - 200}px`,
+			height: vh - 200,
 		});
 	}
 
-	setEditorHeight(height: string) {
+	setEditorHeight(height: number) {
 		this.editorHeight.next({
 			height,
 		});

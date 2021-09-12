@@ -27,8 +27,8 @@
 		<mat-expansion-panel
 			id="noteInfoAccordion"
 			[expanded]="panelOpenState === true"
-			(opened)="openClosePanel()"
-			(closed)="openClosePanel()"
+      (afterCollapse)="openClosePanel(); setEditorHeight()"
+      (afterExpand)="openClosePanel(); setEditorHeight()"
       [disabled]="!opened"
       #noteInfoAccordion
 		>

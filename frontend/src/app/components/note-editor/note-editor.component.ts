@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	OnDestroy,
+	OnInit,
+	ViewChild,
+} from '@angular/core';
 import { AccountService, NotebookObservablesService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
@@ -7,13 +13,14 @@ import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
 	styleUrls: ['./note-editor.component.scss'],
 })
-export class NoteEditorComponent implements OnInit {
+export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 	Delta = Quill.import('delta');
 
 	user: any;
@@ -45,7 +52,17 @@ export class NoteEditorComponent implements OnInit {
 		'#02FFB3',
 	];
 
-	height = '100vh';
+	height: number = 0;
+
+	toolbarHeight: number = 0;
+
+	heightInPx: string = '100vh';
+
+	provider: any = undefined;
+
+	loaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+	loadedSubscription: any;
 
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
@@ -60,13 +77,17 @@ export class NoteEditorComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		if (this.provider !== undefined) this.provider.destroy();
+
+		this.loaded = new BehaviorSubject(false);
+
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
 
-		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
+		this.notebookObservables.loadEditor.subscribe(async (noteInfo: any) => {
 			this.nrOfNotesLoaded += 1;
 			if (noteInfo.notebookId !== '') {
 				this.noteTitle = noteInfo.title;
@@ -75,18 +96,28 @@ export class NoteEditorComponent implements OnInit {
 				this.notebookTitle = noteInfo.notebookTitle;
 				this.noteDescription = noteInfo.description;
 
-				this.loadQuillEditor();
+				this.loadedSubscription = this.loaded.subscribe((load) => {
+					if (load) {
+						this.editorOperations();
+					}
+				});
 			}
 		});
 
 		this.notebookObservables.editorHeight.subscribe(({ height }) => {
-			this.height = height;
+			console.log(height);
+			this.height = height - this.toolbarHeight;
+			this.heightInPx = `${this.height}px`;
 		});
 	}
 
-	// async ngAfterViewInit(): Promise<void> {
+	async ngAfterViewInit(): Promise<void> {
+		await this.loadQuillEditor();
+	}
 
-	async loadQuillEditor() {
+	async editorOperations() {
+		if (this.provider) this.provider.destroy();
+
 		/**
 		 * Set user colour, notebookId and username
 		 */
@@ -97,24 +128,6 @@ export class NoteEditorComponent implements OnInit {
 				Math.floor(Math.random() * 10000) % this.colours.length
 			];
 
-		/**
-		 * Register to see other users cursors on quill
-		 */
-		Quill.register('modules/cursors', QuillCursors);
-
-		/**
-		 * Initialise quill editor
-		 */
-		this.quill = new Quill('#editor-container', {
-			modules: {
-				cursors: true,
-				syntax: false,
-				toolbar: '#toolbar-container',
-			},
-			placeholder: 'Loading...',
-			theme: 'snow',
-		});
-
 		// Detect change on quill
 		const change = new this.Delta();
 
@@ -122,12 +135,12 @@ export class NoteEditorComponent implements OnInit {
 		const doc = new Y.Doc();
 
 		// Define a shared text type on the document
-		const provider = new WebrtcProvider(this.noteId, doc);
+		this.provider = new WebrtcProvider(this.noteId, doc);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
 
-		const { awareness } = provider;
+		const { awareness } = this.provider;
 
 		awareness.setLocalStateField('user', {
 			name: username,
@@ -201,5 +214,45 @@ export class NoteEditorComponent implements OnInit {
 				document.querySelector('#users').innerHTML = strings.join('');
 			});
 		});
+
+		if (this.toolbarHeight === 0) {
+			this.toolbarHeight =
+				document.getElementById('toolbar').offsetHeight;
+			this.heightInPx = `${this.height - this.toolbarHeight}px`;
+		} else {
+			this.toolbarHeight =
+				document.getElementById('toolbar').offsetHeight;
+		}
+	}
+
+	async loadQuillEditor() {
+		/**
+		 * Register to see other users cursors on quill
+		 */
+		Quill.register('modules/cursors', QuillCursors);
+
+		/**
+		 * Initialise quill editor
+		 */
+		this.quill = new Quill('#editor-container', {
+			modules: {
+				cursors: true,
+				syntax: false,
+				toolbar: '#toolbar-container',
+			},
+			// placeholder: 'Loading...',
+			theme: 'snow',
+		});
+
+		this.loaded.next(true);
+
+		if (window.innerWidth < 960) {
+			this.loaded.complete();
+		}
+	}
+
+	ngOnDestroy(): void {
+		console.log('beye');
+		if (this.provider) this.provider.destroy();
 	}
 }
