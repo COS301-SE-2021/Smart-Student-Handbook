@@ -13,11 +13,18 @@
     box-shadow: none !important;
     min-width: 80vw;
     max-width: 100vw;
+    padding: 5px;
 
     #editor{
       height: calc(100vh - 100px);
       //color: #f8f8f8;
     }
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  #editorContainer {
+    padding: 5px;
   }
 }
 

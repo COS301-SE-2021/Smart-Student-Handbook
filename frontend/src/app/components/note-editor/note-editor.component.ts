@@ -161,6 +161,7 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		awareness.setLocalStateField('user', {
 			name: username,
 			color: colour,
+			profileUrl: this.user.profilePic,
 		});
 
 		// "Bind" the quill editor to a Yjs text type.
@@ -218,13 +219,18 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 			awareness.getStates().forEach((state) => {
 				if (state.user) {
 					strings.push(
-						// `<div style="color:${state.user.color};">• ${state.user.name}</div>`
-						`<div class="text-center" style="border: 2px solid ${
-							state.user.color
-						}; border-radius: 13px; width: 26px; height: 26px; padding-top: 1px;">${state.user.name.substr(
-							0,
-							1
-						)}</div>`
+						`<div class="text-center" style="
+              border-radius: 15px;
+              width: 30px;
+              height: 30px;
+              display: inline-block;
+              margin-right: 7px;
+              background-size: cover;
+              background-position: center;
+              padding: 2px;
+              border: 3px solid ${state.user.color};
+              background-image: url(${state.user.profileUrl});
+            "></div>`
 					);
 				}
 				document.querySelector('#users').innerHTML = strings.join('');
