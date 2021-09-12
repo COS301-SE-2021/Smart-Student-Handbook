@@ -226,36 +226,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
-	 * @param event get the content that is dropped
-	 */
-	// drop(event: any) {
-	// 	const parser = new DOMParser();
-	//
-	// 	const e = event.item.element.nativeElement.innerHTML;
-	//
-	// 	const doc = parser.parseFromString(e, 'text/html');
-	//
-	// 	const content = doc.getElementsByClassName('snippetContent');
-	// 	const title = doc.getElementsByClassName('snippetTitle');
-	//
-	// 	// Add the title
-	// 	this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
-	// 		text: title[0].innerHTML,
-	// 	});
-	//
-	// 	for (let i = 0; i < content.length; i += 1) {
-	// 		// console.log(content[i].innerHTML);
-	// 		// Add content
-	// 		this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
-	// 			text: content[i].innerHTML,
-	// 		});
-	// 	}
-	//
-	// 	this.saveContent();
-	// }
-
-	/**
 	 * Method to call when notebook content should be saved
 	 */
 	saveContent() {

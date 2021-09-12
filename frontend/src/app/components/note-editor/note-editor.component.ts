@@ -88,24 +88,22 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 
 		this.notebookObservables.loadEditor.subscribe(async (noteInfo: any) => {
-			this.nrOfNotesLoaded += 1;
-			if (noteInfo.notebookId !== '') {
-				this.noteTitle = noteInfo.title;
-				this.noteId = noteInfo.noteId;
-				this.notebookId = noteInfo.notebookId;
-				this.notebookTitle = noteInfo.notebookTitle;
-				this.noteDescription = noteInfo.description;
+			this.noteTitle = noteInfo.title;
+			this.noteId = noteInfo.noteId;
+			this.notebookId = noteInfo.notebookId;
+			this.notebookTitle = noteInfo.notebookTitle;
+			this.noteDescription = noteInfo.description;
 
-				this.loadedSubscription = this.loaded.subscribe((load) => {
-					if (load) {
+			this.loadedSubscription = this.loaded.subscribe((load) => {
+				if (load) {
+					if (noteInfo.notebookId !== '') {
 						this.editorOperations();
 					}
-				});
-			}
+				}
+			});
 		});
 
 		this.notebookObservables.editorHeight.subscribe(({ height }) => {
-			console.log(height);
 			this.height = height - this.toolbarHeight;
 			this.heightInPx = `${this.height}px`;
 		});
@@ -117,6 +115,8 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	async editorOperations() {
 		if (this.provider) this.provider.destroy();
+
+		this.quill.readOnly = false;
 
 		/**
 		 * Set user colour, notebookId and username
@@ -239,6 +239,7 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 			},
 			// placeholder: 'Loading...',
 			theme: 'snow',
+			readOnly: false,
 		});
 
 		this.loaded.next(true);
@@ -251,5 +252,42 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		console.log('beye');
 		if (this.provider) this.provider.destroy();
+	}
+
+	/**
+	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
+	 * @param event get the content that is dropped
+	 */
+	drop(event: any) {
+		const parser = new DOMParser();
+
+		const e = event.item.element.nativeElement.innerHTML;
+
+		const doc = parser.parseFromString(e, 'text/html');
+
+		const content = doc.getElementsByClassName('snippetContent');
+		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
+		// console.log(title);
+
+		const changes = this.quill.getContents();
+		changes.ops.push({
+			insert: `${title}\n`,
+		});
+
+		for (let i = 0; i < content.length; i += 1) {
+			// console.log(content[i].innerHTML);
+			// console.log(content[i].getAttribute('data-type'));
+
+			changes.ops.push({
+				insert: `${content[i].innerHTML}\n`,
+			});
+		}
+
+		console.log(changes);
+		this.quill.setContents(changes);
+
+		firebase.database().ref(`notes/${this.noteId}`).set({
+			changes,
+		});
 	}
 }

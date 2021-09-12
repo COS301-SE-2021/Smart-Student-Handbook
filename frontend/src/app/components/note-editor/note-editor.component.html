@@ -1,4 +1,7 @@
-<div id="standalone-container">
+<div id="standalone-container"
+     cdkDropList
+     cdkDropListConnectedTo="panelContent"
+     (cdkDropListDropped)="drop($event)">
   <div id="toolbar-container">
     <div id="toolbar" [ngStyle]="{'padding': noteId !== '' ? '10px' : '0'}">
       <span class="ql-formats" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}">
@@ -47,6 +50,10 @@
 
       <div id="users" [ngStyle]="{'display': noteId !== '' ? 'inline-block' : 'none'}"></div>
     </div>
-    <div id="editor-container"  [ngStyle]="{'height': heightInPx, 'background-image': noteId === '' ? 'url(\'../../../assets/images/notebook-placeholder-background.png\')' : 'none'}"></div>
+    <div id="editor-container" [ngStyle]="{
+    'height': heightInPx,
+    'background-image': noteId === '' ? 'url(\'../../../assets/images/notebook-placeholder-background.png\')' : 'none',
+    'color': noteId === '' ? 'white' : 'black'
+    }"></div>
   </div>
 </div>
