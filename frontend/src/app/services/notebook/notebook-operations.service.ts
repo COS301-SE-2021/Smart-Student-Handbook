@@ -72,6 +72,9 @@ export class NotebookOperationsService {
 				name: '',
 				profileUrl: '',
 				id: '',
+				senderId,
+				notebookID,
+				notebookTitle,
 			},
 		});
 
@@ -79,22 +82,22 @@ export class NotebookOperationsService {
 			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result) {
-					this.notificationService
-						.sendCollaborationRequest(
-							senderId,
-							result.id,
-							notebookID,
-							notebookTitle
-						)
-						.subscribe(
-							() => {
-								// console.log(val);
-								observer.next(true);
-							},
-							() => {
-								observer.next(false);
-							}
-						);
+					// this.notificationService
+					// 	.sendCollaborationRequest(
+					// 		senderId,
+					// 		result.id,
+					// 		notebookID,
+					// 		notebookTitle
+					// 	)
+					// 	.subscribe(
+					// 		() => {
+					// 			// console.log(val);
+					// 			observer.next(true);
+					// 		},
+					// 		() => {
+					// 			observer.next(false);
+					// 		}
+					// 	);
 				}
 			});
 		});

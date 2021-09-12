@@ -1,23 +1,8 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
+
 <h3 mat-dialog-title>Add a collaborator</h3>
 
 <mat-dialog-content class="mat-typography">
-
- <!-- <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete">
-    <mat-label>Enter user name</mat-label>
-    <input type="text"
-           placeholder="Add collaborator"
-           aria-label="collaborator"
-           autocomplete="off"
-           matInput
-           [formControl]="myControl"
-           [matAutocomplete]="auto" #input>
-    <mat-autocomplete #auto="matAutocomplete" >
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name" (onSelectionChange)="select(option)">
-        <div mat-card-avatar class="profile-image"></div>
-        <span>{{option.name}}</span>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>-->
 
   <ais-instantsearch [config]="config">
     <main class="container">
@@ -32,8 +17,8 @@
                 No results found for
                 <strong>{{results.query}}</strong>.
               </div>
-              <div class="ais-Hits-list">
-                <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" (click)="select(hit)">
+              <div class="ais-Hits-list" #collaborators>
+                <div class="ais-Hits-item" *ngFor="let hit of hits; let index = index" (click)="select(hit, collaborators, index)">
                   <article>
                     <div class="post-content">
                       <div class="picture" [ngStyle]="{'background-image': 'url('+hit.data.profilePicUrl+')'}">
@@ -62,5 +47,5 @@
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="selectedUser" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="sendRequest()" cdkFocusInitial>Ok</button>
 </div>
