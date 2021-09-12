@@ -107,6 +107,13 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.height = height - this.toolbarHeight;
 			this.heightInPx = `${this.height}px`;
 		});
+
+		this.notebookObservables.dragAndDrop.subscribe(({ content }) => {
+			console.log(content);
+			if (content.length > 0) {
+				this.addContent(content);
+			}
+		});
 	}
 
 	async ngAfterViewInit(): Promise<void> {
@@ -250,7 +257,6 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		console.log('beye');
 		if (this.provider) this.provider.destroy();
 	}
 
@@ -267,23 +273,30 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		const content = doc.getElementsByClassName('snippetContent');
 		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
-		// console.log(title);
 
-		const changes = this.quill.getContents();
-		changes.ops.push({
+		const changes: any[] = [];
+		changes.push({
 			insert: `${title}\n`,
 		});
 
 		for (let i = 0; i < content.length; i += 1) {
-			// console.log(content[i].innerHTML);
-			// console.log(content[i].getAttribute('data-type'));
-
-			changes.ops.push({
-				insert: `${content[i].innerHTML}\n`,
+			changes.push({
+				insert: `${content[i].innerHTML}`,
 			});
 		}
 
-		console.log(changes);
+		this.addContent(changes);
+	}
+
+	addContent(content: any[]) {
+		const changes = this.quill.getContents();
+
+		for (let i = 0; i < content.length; i += 1) {
+			changes.ops.push({
+				insert: `${content[i].insert}\n`,
+			});
+		}
+
 		this.quill.setContents(changes);
 
 		firebase.database().ref(`notes/${this.noteId}`).set({
