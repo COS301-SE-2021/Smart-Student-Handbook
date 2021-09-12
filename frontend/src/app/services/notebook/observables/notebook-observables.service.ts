@@ -8,44 +8,35 @@ export class NotebookObservablesService {
 	/** id of notebook to be opened if one is selected from tree view */
 	public openNotebookId: BehaviorSubject<any>;
 
-	public openNotebookIdState: Observable<any>;
-
 	/** Load a note on the editor */
 	public loadEditor: BehaviorSubject<any>;
-
-	public loadEditorState: Observable<any>;
 
 	/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
 	public sharedNotebook: BehaviorSubject<any>;
 
-	public sharedNotebookState: Observable<any>;
-
 	/** Name and id of the notebook to add to my notebooks tree view when a note is cloned */
 	public clonedNotebook: BehaviorSubject<any>;
-
-	public clonedNotebookState: Observable<any>;
 
 	/** close a note on the editor */
 	public closeEditor: BehaviorSubject<any>;
 
-	public closeEditorState: Observable<any>;
-
 	/** Change the privacy of a notebook */
 	public notebookPrivacy: BehaviorSubject<any>;
-
-	public notebookPrivacyState: Observable<any>;
 
 	/** close the note panel */
 	public closePanel: BehaviorSubject<any>;
 
-	public closePanelState: Observable<any>;
-
 	/** id of notebook to review */
 	public reviewNotebook: BehaviorSubject<any>;
 
-	public reviewNotebookState: Observable<any>;
-
+	/** Set the height of the editor */
 	public editorHeight: BehaviorSubject<any>;
+
+	/** Contents to be drag and dropped */
+	public dragAndDrop: BehaviorSubject<any>;
+
+	/** Note has been deleted */
+	public removeNote: BehaviorSubject<any>;
 
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
@@ -54,8 +45,6 @@ export class NotebookObservablesService {
 			title: '',
 			readonly: true,
 		});
-
-		this.openNotebookIdState = this.openNotebookId.asObservable();
 
 		/** notebookId, noteId and title of note to be opened in the editor */
 		this.loadEditor = new BehaviorSubject<any>({
@@ -67,15 +56,11 @@ export class NotebookObservablesService {
 			tags: [],
 		});
 
-		this.loadEditorState = this.loadEditor.asObservable();
-
 		/** Name and id of the notebook to add to shared-with-me tree view when collaboration request is accepted */
 		this.sharedNotebook = new BehaviorSubject<any>({
 			id: '',
 			name: '',
 		});
-
-		this.sharedNotebookState = this.sharedNotebook.asObservable();
 
 		/** Name and id of the notebook to add to my notebooks tree view when a note is cloned */
 		this.clonedNotebook = new BehaviorSubject<any>({
@@ -83,46 +68,39 @@ export class NotebookObservablesService {
 			name: '',
 		});
 
-		this.clonedNotebookState = this.clonedNotebook.asObservable();
-
 		/** Close the note open on the editor */
 		this.closeEditor = new BehaviorSubject<any>({
 			close: false,
 		});
-
-		this.closeEditorState = this.closeEditor.asObservable();
 
 		/** Change the privacy of a notebook */
 		this.notebookPrivacy = new BehaviorSubject<any>({
 			private: false,
 		});
 
-		this.notebookPrivacyState = this.notebookPrivacy.asObservable();
-
 		/** Close the notes panel */
 		this.closePanel = new BehaviorSubject<any>({
 			close: false,
 		});
-
-		this.closePanelState = this.closePanel.asObservable();
 
 		/** id of notebook to review */
 		this.reviewNotebook = new BehaviorSubject<any>({
 			id: '',
 		});
 
-		this.reviewNotebookState = this.reviewNotebook.asObservable();
-
+		/** Set the height of the editor */
 		const vh = window.innerHeight;
 		this.editorHeight = new BehaviorSubject<any>({
 			height: vh - 200,
 		});
-	}
 
-	setEditorHeight(height: number) {
-		this.editorHeight.next({
-			height,
+		/** Set the content to be inserted into the note */
+		this.dragAndDrop = new BehaviorSubject<any>({
+			content: [],
 		});
+
+		/** Set the content to be inserted into the note */
+		this.removeNote = new BehaviorSubject<any>('');
 	}
 
 	/**
@@ -137,8 +115,6 @@ export class NotebookObservablesService {
 			title,
 			readonly,
 		});
-
-		this.openNotebookIdState = this.openNotebookId.asObservable();
 	}
 
 	/**
@@ -166,8 +142,6 @@ export class NotebookObservablesService {
 			description,
 			tags,
 		});
-
-		this.loadEditorState = this.loadEditor.asObservable();
 	}
 
 	/**
@@ -181,8 +155,6 @@ export class NotebookObservablesService {
 			id: notebookID,
 			name: notebookTitle,
 		});
-
-		this.sharedNotebookState = this.sharedNotebook.asObservable();
 	}
 
 	/**
@@ -195,8 +167,6 @@ export class NotebookObservablesService {
 			id: notebookID,
 			name: notebookTitle,
 		});
-
-		this.clonedNotebookState = this.clonedNotebook.asObservable();
 	}
 
 	/**
@@ -207,8 +177,6 @@ export class NotebookObservablesService {
 		this.closeEditor.next({
 			close,
 		});
-
-		this.closeEditorState = this.closeEditor.asObservable();
 	}
 
 	/**
@@ -219,8 +187,6 @@ export class NotebookObservablesService {
 		this.notebookPrivacy.next({
 			private: privacy,
 		});
-
-		this.notebookPrivacyState = this.notebookPrivacy.asObservable();
 	}
 
 	/**
@@ -231,8 +197,6 @@ export class NotebookObservablesService {
 		this.closePanel.next({
 			close,
 		});
-
-		this.closePanelState = this.closePanel.asObservable();
 	}
 
 	/**
@@ -243,7 +207,24 @@ export class NotebookObservablesService {
 		this.reviewNotebook.next({
 			id,
 		});
+	}
 
-		this.reviewNotebookState = this.reviewNotebook.asObservable();
+	/** Set the height of the editor */
+	setEditorHeight(height: number) {
+		this.editorHeight.next({
+			height,
+		});
+	}
+
+	/** Set the content to be inserted into the note */
+	setDragAndDrop(content: any[]) {
+		this.dragAndDrop.next({
+			content,
+		});
+	}
+
+	/** Note has been deleted */
+	setRemoveNote(id: string) {
+		this.removeNote.next(id);
 	}
 }

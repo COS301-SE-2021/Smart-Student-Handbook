@@ -21,11 +21,7 @@ import {
 	NotebookBottomSheetComponent,
 	SmartAssistBottomSheetComponent,
 } from '@app/mobile';
-import {
-	MatAccordion,
-	MatExpansionPanel,
-	MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import {
 	NoteInfoComponent,
 	SmartAssistModalComponent,
@@ -134,7 +130,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	ngAfterContentInit(): void {
 		this.notebookObservables.closeEditor.subscribe((close: any) => {
 			if (close.close) {
-				this.showDefaultImage();
 				this.noteInfoAccordion.close();
 				this.opened = false;
 				this.notebookObservables.setCloseEditor(false);
@@ -162,6 +157,13 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.noteDescription = noteInfo.description;
 
 				this.setEditorHeight();
+			}
+		});
+
+		this.notebookObservables.removeNote.subscribe((remove) => {
+			if (remove !== '') {
+				this.noteTitle = 'Smart Student';
+				this.opened = false;
 			}
 		});
 	}
@@ -199,6 +201,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		description: string,
 		tags: string[]
 	) {
+		this.noteId = noteId;
+
 		this.notebookTitle = notebookTitle;
 
 		this.tags = tags;
@@ -226,56 +230,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
-	 * @param event get the content that is dropped
-	 */
-	// drop(event: any) {
-	// 	const parser = new DOMParser();
-	//
-	// 	const e = event.item.element.nativeElement.innerHTML;
-	//
-	// 	const doc = parser.parseFromString(e, 'text/html');
-	//
-	// 	const content = doc.getElementsByClassName('snippetContent');
-	// 	const title = doc.getElementsByClassName('snippetTitle');
-	//
-	// 	// Add the title
-	// 	this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
-	// 		text: title[0].innerHTML,
-	// 	});
-	//
-	// 	for (let i = 0; i < content.length; i += 1) {
-	// 		// console.log(content[i].innerHTML);
-	// 		// Add content
-	// 		this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
-	// 			text: content[i].innerHTML,
-	// 		});
-	// 	}
-	//
-	// 	this.saveContent();
-	// }
-
-	/**
-	 * Method to call when notebook content should be saved
-	 */
-	saveContent() {
-		// this.editorFocussed();
-		// this.Editor.save()
-		// 	.then((outputData) => {
-		// 		// console.log(this.notebookID, outputData);
-		//
-		// 		if (outputData.blocks.length > 0) {
-		// 			firebase.database().ref(`notebook/${this.noteId}`).set({
-		// 				outputData,
-		// 			});
-		// 		}
-		// 	})
-		// 	.catch(() => {
-		// 		// console.log('Saving failed: ', error);
-		// 	});
-	}
-
-	/**
 	 * Delete a notebook
 	 */
 	removeNote() {
@@ -283,34 +237,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			.removeNote(this.notebookID, this.noteId)
 			.subscribe((removed: any) => {
 				if (removed) {
-					// const editor = this.Editor;
-					// editor.clear();
-					//
-					// this.noteTitle = '';
-					//
-					// this.removeNoteCard(this.noteId);
-					//
-					// this.showDefaultImage();
+					this.notebookObservables.setRemoveNote(this.notebookID);
+					this.noteTitle = 'Smart Student';
+					this.opened = false;
+					this.removeNoteCard(this.noteId);
 				}
 			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeNoteCard(_id: string) {}
-
-	/**
-	 * Display a default image and hide the editor when no note is opened
-	 */
-	showDefaultImage() {
-		const e = document.getElementById('editor') as HTMLElement;
-		e.style.backgroundImage =
-			'url(notebook-placeholder-splashBackground.png)';
-
-		// if (this.Editor) this.Editor.destroy();
-		// // @ts-ignore
-		// this.Editor = undefined;
-		this.noteTitle = 'Smart Student';
-	}
 
 	/**
 	 * Show menu when user clicks on ellipsis

@@ -387,7 +387,9 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 							if (this.openedNotebookId === notebookId) {
 								// this.openNotebookPanelService.closePanel();
 								this.notebookObservables.setClosePanel(true);
-								this.notebookObservables.setCloseEditor(true);
+								this.notebookObservables.setRemoveNote(
+									this.openedNotebookId
+								);
 							}
 						}
 					});
