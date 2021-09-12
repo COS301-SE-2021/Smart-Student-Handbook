@@ -220,20 +220,30 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 				if (state.user) {
 					strings.push(
 						`<div class="text-center" style="
-              border-radius: 15px;
-              width: 30px;
-              height: 30px;
+              border-radius: 18px;
+              width: 36px;
+              height: 36px;
               display: inline-block;
               margin-right: 7px;
-              background-size: cover;
-              background-position: center;
-              padding: 2px;
               border: 3px solid ${state.user.color};
-              background-image: url(${state.user.profileUrl});
-            "></div>`
+            ">
+                <div style="
+                  background-image: url(${state.user.profileUrl});
+                  background-size: cover;
+                  background-position: center;
+                  margin: 1px;
+                  width: 28px;
+                  height: 28px;
+                  border-radius: 14px;
+                "></div>
+              </div>`
 					);
 				}
 				document.querySelector('#users').innerHTML = strings.join('');
+
+				this.toolbarHeight =
+					document.getElementById('toolbar').offsetHeight;
+				this.heightInPx = `${this.height - this.toolbarHeight}px`;
 			});
 		});
 

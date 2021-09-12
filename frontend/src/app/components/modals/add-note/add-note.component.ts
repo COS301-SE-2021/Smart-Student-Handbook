@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 
 export interface AddNoteData {
 	message: string;
@@ -18,7 +18,7 @@ export interface AddNoteData {
 export class AddNoteComponent {
 	tags: string[] = [];
 
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	constructor(
 		public dialogRef: MatDialogRef<AddNoteComponent>,

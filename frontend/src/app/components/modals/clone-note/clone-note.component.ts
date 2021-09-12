@@ -8,6 +8,8 @@ import {
 	NotebookOperationsService,
 } from '@app/services';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 interface CloneNotebooks {
 	notebookId: string;
@@ -21,6 +23,10 @@ interface CloneNotebooks {
 	styleUrls: ['./clone-note.component.scss'],
 })
 export class CloneNoteComponent implements OnInit {
+	tags: string[] = [];
+
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
+
 	/** Notebook select */
 	filteredOptions!: Observable<any[]>;
 
@@ -135,5 +141,33 @@ export class CloneNoteComponent implements OnInit {
 					this.isCompleted = true;
 				}
 			);
+	}
+
+	/**
+	 * Remove a tag from input and tags array
+	 * @param tag the tag to be removed
+	 */
+	removeTag(tag: string): void {
+		const index = this.tags.indexOf(tag);
+
+		if (index >= 0) {
+			this.tags.splice(index, 1);
+		}
+	}
+
+	/**
+	 * Insert new tags to the input and tags array
+	 * @param event To get the value from the newly inserted tag
+	 */
+	addTag(event: MatChipInputEvent): void {
+		const value = (event.value || '').trim();
+
+		// Add our fruit
+		if (value) {
+			this.tags.push(value);
+		}
+
+		// Clear the input value
+		event.chipInput!.clear();
 	}
 }
