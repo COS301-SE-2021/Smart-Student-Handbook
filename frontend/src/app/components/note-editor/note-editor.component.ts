@@ -13,14 +13,26 @@ import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import {
+	ActivatedRouteSnapshot,
+	CanDeactivate,
+	RouterStateSnapshot,
+	UrlTree,
+} from '@angular/router';
 
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
 	styleUrls: ['./note-editor.component.scss'],
 })
-export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NoteEditorComponent
+	implements
+		OnInit,
+		AfterViewInit,
+		OnDestroy,
+		CanDeactivate<NoteEditorComponent>
+{
 	Delta = Quill.import('delta');
 
 	user: any;
@@ -40,16 +52,16 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 	notebookTitle: string = 'Smart Student';
 
 	colours = [
-		'#FF0202',
-		'#FF8102',
-		'#3CAEA3',
-		'#afaf00',
-		'#00ba36',
-		'#0E02FF',
-		'#8D02FF',
-		'#FF02F3',
-		'#B302FF',
-		'#02FFB3',
+		'rgba(217,0,0,0.8)',
+		'rgba(250,123,0,0.8)',
+		'rgba(70,220,194,0.8)',
+		'rgba(245,245,0,0.8)',
+		'rgba(0,208,59,0.8)',
+		'rgba(11,0,250,0.8)',
+		'rgba(142,0,255,0.8)',
+		'rgba(194,0,182,0.8)',
+		'rgba(104,0,147,0.8)',
+		'rgba(0,154,110,0.8)',
 	];
 
 	height: number = 0;
@@ -97,6 +109,8 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.loadedSubscription = this.loaded.subscribe((load) => {
 				if (load) {
 					if (noteInfo.notebookId !== '') {
+						if (this.provider !== undefined)
+							this.provider.destroy();
 						this.editorOperations();
 					}
 				}
@@ -231,9 +245,9 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
                   background-image: url(${state.user.profileUrl});
                   background-size: cover;
                   background-position: center;
-                  margin: 1px;
-                  width: 28px;
-                  height: 28px;
+                  margin: 2px;
+                  width: 26px;
+                  height: 26px;
                   border-radius: 14px;
                 "></div>
               </div>`
@@ -330,5 +344,19 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		firebase.database().ref(`notes/${this.noteId}`).set({
 			changes,
 		});
+	}
+
+	canDeactivate(
+		component: NoteEditorComponent,
+		currentRoute: ActivatedRouteSnapshot,
+		currentState: RouterStateSnapshot,
+		nextState?: RouterStateSnapshot
+	):
+		| Observable<boolean | UrlTree>
+		| Promise<boolean | UrlTree>
+		| boolean
+		| UrlTree {
+		if (this.provider) this.provider.destroy();
+		return true;
 	}
 }

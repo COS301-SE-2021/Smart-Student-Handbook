@@ -97,6 +97,7 @@ export class AddCollaboratorComponent implements OnInit {
 			.subscribe(
 				() => {
 					this.doneLoading = true;
+					this.dialogRef.close(true);
 				},
 				() => {
 					// observer.next(false);

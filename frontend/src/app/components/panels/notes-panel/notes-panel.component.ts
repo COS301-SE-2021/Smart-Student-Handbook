@@ -18,6 +18,7 @@ import {
 	NotebookObservablesService,
 	AccountService,
 } from '@app/services';
+import { NewEntryPointFileWriter } from '@angular/compiler-cli/ngcc/src/writing/new_entry_point_file_writer';
 
 @Component({
 	selector: 'app-notes-panel',

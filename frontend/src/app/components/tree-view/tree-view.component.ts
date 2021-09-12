@@ -207,7 +207,7 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
-				console.log(val);
+				// console.log(val);
 				this.notebooks = this.notebooks.map((nb: any) => {
 					const temp = nb;
 					if (temp.notebookId === notebookId) {

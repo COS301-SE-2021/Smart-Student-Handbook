@@ -56,6 +56,7 @@ export class ExploreNotesEditorComponent implements OnInit {
 	 * @param title
 	 */
 	async loadReadonly(noteId: string, title: string) {
+		// console.log(noteId);
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
