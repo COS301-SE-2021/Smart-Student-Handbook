@@ -128,9 +128,6 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 				Math.floor(Math.random() * 10000) % this.colours.length
 			];
 
-		// Detect change on quill
-		const change = new this.Delta();
-
 		// Initialize doc to sync editor content
 		const doc = new Y.Doc();
 
@@ -157,7 +154,7 @@ export class NoteEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 		this.quill.on('text-change', (delta, oldDelta, source) => {
 			if (source === 'user') {
-				const changes = change.compose(delta);
+				const changes = this.quill.getContents();
 				firebase.database().ref(`notes/${this.noteId}`).set({
 					changes,
 				});
