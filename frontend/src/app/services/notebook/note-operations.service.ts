@@ -47,6 +47,7 @@ export class NoteOperationsService {
 		return new Observable((observer: any) => {
 			const screenWidth = this.getScreenSize();
 
+			const tags: string[] = [];
 			// Open dialog
 			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
@@ -58,6 +59,7 @@ export class NoteOperationsService {
 					notebookTitle,
 					userId: this.user.id,
 					method: 'create',
+					tags,
 				},
 			});
 

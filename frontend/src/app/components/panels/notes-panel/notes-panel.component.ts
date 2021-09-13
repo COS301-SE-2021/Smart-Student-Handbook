@@ -140,6 +140,19 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					this.notes.push(result[i]);
 				}
 
+				if (this.notes.length > 0) {
+					// console.log(this.notes[0]);
+					const note = this.notes[0];
+					this.openNotebook(
+						notebookId,
+						note.noteId,
+						note.name,
+						this.notebookTitle,
+						note.description,
+						note.tags
+					);
+				}
+
 				this.doneLoading = true;
 			});
 	}
