@@ -146,6 +146,7 @@ export class NotebookOperationsService {
 						name: notebook.access[k].displayName,
 						url: notebook.access[k].profileUrl,
 						id: notebook.access[k].userId,
+						accessId: notebook.access[k].accessId,
 					});
 				}
 

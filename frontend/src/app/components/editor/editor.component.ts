@@ -39,6 +39,7 @@ export interface Collaborators {
 	name: string;
 	url: string;
 	id: string;
+	accessId: string;
 }
 
 @Component({
@@ -57,6 +58,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';
@@ -357,9 +359,10 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			);
 	}
 
-	removeCollaborator(userId: string) {
+	removeCollaborator(userId: string, accessId: string) {
+		console.log(userId, accessId);
 		this.notebookOperations
-			.removeCollaborator(userId, this.notebookID)
+			.removeCollaborator(accessId, this.notebookID)
 			.subscribe((result: boolean) => {
 				if (result) {
 					this.collaborators = this.collaborators.filter(

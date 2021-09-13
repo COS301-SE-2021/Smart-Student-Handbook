@@ -1,4 +1,4 @@
-<div>
+<div id="cloneNoteModal">
   <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin: -15px 0 10px 0;"></mat-progress-bar>
 
   <button mat-icon-button style="float: right">
@@ -35,64 +35,65 @@
 
   <h3>New Note Information</h3>
 
-  <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
-    <mat-label>Note title</mat-label>
-    <input
-      matInput
-      placeholder="Notebook One"
-      name="title"
-      required
-      autocomplete="off"
-      formControlName="title"
-      [(ngModel)]="title"
-    />
-    <mat-hint>Note title</mat-hint>
-  </mat-form-field>
-
-
-  <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
-    <mat-label>Note Description</mat-label>
-    <textarea
-      matInput
-      placeholder="My first note"
-      name="description"
-      required
-      autocomplete="off"
-      formControlName="description"
-      [(ngModel)]="description"
-    ></textarea>
-
-    <mat-hint>Note Description</mat-hint>
-  </mat-form-field>
-
-  <mat-form-field id="noteTags" appearance="outline">
-    <mat-label>Tags</mat-label>
-    <mat-chip-list
-      #chipList
-      aria-label="Fruit selection"
-    >
-      <mat-chip
-        *ngFor="let tag of tags"
-        [selectable]="true"
-        [removable]="true"
-        (removed)="removeTag(tag)"
-      >
-        {{ tag }}
-        <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
+  <div id="newNoteInfo">
+    <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
+      <mat-label>Note title</mat-label>
       <input
-        placeholder="Add tag..."
-        [matChipInputFor]="chipList"
-        [matChipInputSeparatorKeyCodes]="
-                      separatorKeysCodes
-                    "
+        matInput
+        placeholder="Notebook One"
+        name="title"
+        required
         autocomplete="off"
-        [matChipInputAddOnBlur]="true"
-        (matChipInputTokenEnd)="addTag($event)"
+        formControlName="title"
+        [(ngModel)]="title"
       />
-    </mat-chip-list>
-  </mat-form-field>
+      <mat-hint>Note title</mat-hint>
+    </mat-form-field>
 
+
+    <mat-form-field appearance="outline" class="form-field" [formGroup]="form">
+      <mat-label>Note Description</mat-label>
+      <textarea
+        matInput
+        placeholder="My first note"
+        name="description"
+        required
+        autocomplete="off"
+        formControlName="description"
+        [(ngModel)]="description"
+      ></textarea>
+
+      <mat-hint>Note Description</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field id="noteTags" appearance="outline">
+      <mat-label>Tags</mat-label>
+      <mat-chip-list
+        #chipList
+        aria-label="Fruit selection"
+      >
+        <mat-chip
+          *ngFor="let tag of tags"
+          [selectable]="true"
+          [removable]="true"
+          (removed)="removeTag(tag)"
+        >
+          {{ tag }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Add tag..."
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="
+                        separatorKeysCodes
+                      "
+          autocomplete="off"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
 
 
   <div mat-dialog-actions align="end">

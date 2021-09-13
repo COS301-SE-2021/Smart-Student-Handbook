@@ -26,6 +26,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';

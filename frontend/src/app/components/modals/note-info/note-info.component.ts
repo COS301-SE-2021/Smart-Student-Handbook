@@ -19,6 +19,7 @@ export class NoteInfoComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';

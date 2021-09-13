@@ -1,10 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 import { Component, Inject, OnInit } from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Collaborators, Tag } from '@app/components';
-import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
 import {
 	MAT_BOTTOM_SHEET_DATA,
@@ -33,6 +31,7 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';

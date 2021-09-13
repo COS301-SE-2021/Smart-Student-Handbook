@@ -105,7 +105,7 @@
                   <div mat-card-avatar class="header-image pointerCursor" [style]="{'background-image': 'url(' + collaborator.url + ')'}"
                        (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
 
-                  <button *ngIf="user.uid === creator.id" class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id)">
+                  <button *ngIf="user.uid === creator.id" class="removeCollaboratorBtn pointerCursor" mat-icon-button [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id, collaborator.accessId)">
                     <mat-icon class="removeCollaboratorIcon">
                       remove_circle_outline
                     </mat-icon>
