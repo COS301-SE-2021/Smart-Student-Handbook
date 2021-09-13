@@ -6,6 +6,9 @@ import 'firebase/analytics';
 import { MessageDto } from '@app/models/message.dto';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SmartAssistBottomSheetComponent } from '@app/mobile';
+import { ChatBottomSheetComponent } from '@app/components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
 
 @Component({
 	selector: 'app-notebook-chat',
@@ -29,6 +32,10 @@ export class NotebookChatComponent implements OnInit {
 	};
 
 	ngOnInit(): void {
+		if (window.innerWidth < 960) {
+			this.showChat = false;
+		}
+
 		/**
 		 * Get the 25 most recent message from firebase and
 		 * observe firebase in realtime, adding any new messages to the front of the messages array
@@ -74,10 +81,6 @@ export class NotebookChatComponent implements OnInit {
 				});
 			});
 		});
-	}
-
-	changeChat() {
-		this.showChat = !this.showChat;
 	}
 
 	/**

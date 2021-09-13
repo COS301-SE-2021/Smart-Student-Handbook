@@ -95,6 +95,8 @@ import { NoteEditorComponent } from './components/note-editor/note-editor.compon
 import { ReadOnlyEditorComponent } from './components/read-only-editor/read-only-editor.component';
 import { DeleteNoteComponent } from './components/modals/delete-note/delete-note.component';
 import { NotebookChatComponent } from './components/notebook-chat/notebook-chat.component';
+import { ChatBottomSheetComponent } from './components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
+import { ChatModalComponent } from './components/modals/chat-modal/chat-modal.component';
 
 @NgModule({
 	declarations: [
@@ -145,6 +147,8 @@ import { NotebookChatComponent } from './components/notebook-chat/notebook-chat.
 		ReadOnlyEditorComponent,
     DeleteNoteComponent,
 		NotebookChatComponent,
+  ChatBottomSheetComponent,
+  ChatModalComponent,
 	],
 	imports: [
 		MaterialModule,

@@ -11,4 +11,7 @@
     </div>
   </div>
 </div>
-<app-notebook-chat></app-notebook-chat>
+<!--<app-notebook-chat fxHide.gt-sm></app-notebook-chat>-->
+  <button *ngIf="showChatIcon" type="button" class="open-button btn btn-primary btn-circle btn-xl text-center" (click)="changeChat()">
+    <mat-icon style="font-size: xx-large; margin: 7px 5px 0 0;"> chat</mat-icon>
+  </button>
