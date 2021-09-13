@@ -237,76 +237,84 @@ export class AccountService {
 	 * Login user.
 	 */
 	async loginUser(loginDto: LoginDto): Promise<Account> {
-		// eslint-disable-next-line
+		try {
+			// eslint-disable-next-line
 		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
-		let authToken = '';
+			const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,40}$/;
+			let authToken = '';
 
-		if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+			if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+				return {
+					success: false,
+					user: null,
+					message: 'Login failed, please try again!',
+					error: 'Email or Password does not meet the requirements',
+				};
+			}
+			const userData = await admin
+				.auth()
+				.getUserByEmail(loginDto.email)
+				.then((userRecord) => ({
+					uid: userRecord.uid,
+				}))
+				.catch(() => ({
+					uid: null,
+				}));
+
+			const userRef = admin.firestore().collection('users').doc(userData.uid);
+			const doc = await userRef.get();
+
+			await firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password);
+
+			await firebase
+				.auth()
+				.currentUser.getIdToken(true)
+				.then((idToken) => {
+					if (idToken) {
+						authToken = idToken;
+					}
+				})
+				.catch((error) => {
+					throw new HttpException(`Could not get user token. ${error}`, HttpStatus.BAD_REQUEST);
+				});
+
+			// Login user. If successful return success message else throw Bad Request exception
+			return firebase
+				.auth()
+				.signInWithEmailAndPassword(loginDto.email, loginDto.password)
+				.then((userCredential) => ({
+					success: true,
+					user: {
+						uid: userCredential.user.uid,
+						email: userCredential.user.email,
+						emailVerified: userCredential.user.emailVerified,
+						displayName: userCredential.user.displayName,
+						username: doc.data().username,
+						institution: doc.data().institution,
+						department: doc.data().department,
+						program: doc.data().program,
+						workStatus: doc.data().workStatus,
+						bio: doc.data().bio,
+						profilePic: doc.data().profilePicUrl,
+						dateJoined: doc.data().dateJoined,
+					},
+					message: 'User is successfully logged in!',
+					authToken,
+				}))
+				.catch((error) => ({
+					success: false,
+					user: null,
+					message: 'Login failed, please try again!',
+					error: error.message,
+				}));
+		} catch (error) {
 			return {
 				success: false,
 				user: null,
 				message: 'Login failed, please try again!',
-				error: 'Email or Password does not meet the requirements',
+				error: '',
 			};
 		}
-
-		const userData = await admin
-			.auth()
-			.getUserByEmail(loginDto.email)
-			.then((userRecord) => ({
-				uid: userRecord.uid,
-			}))
-			.catch(() => ({
-				uid: null,
-			}));
-
-		const userRef = admin.firestore().collection('users').doc(userData.uid);
-		const doc = await userRef.get();
-
-		await firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password);
-
-		await firebase
-			.auth()
-			.currentUser.getIdToken(true)
-			.then((idToken) => {
-				if (idToken) {
-					authToken = idToken;
-				}
-			})
-			.catch((error) => {
-				throw new HttpException(`Could not get user token. ${error}`, HttpStatus.BAD_REQUEST);
-			});
-
-		// Login user. If successful return success message else throw Bad Request exception
-		return firebase
-			.auth()
-			.signInWithEmailAndPassword(loginDto.email, loginDto.password)
-			.then((userCredential) => ({
-				success: true,
-				user: {
-					uid: userCredential.user.uid,
-					email: userCredential.user.email,
-					emailVerified: userCredential.user.emailVerified,
-					displayName: userCredential.user.displayName,
-					username: doc.data().username,
-					institution: doc.data().institution,
-					department: doc.data().department,
-					program: doc.data().program,
-					workStatus: doc.data().workStatus,
-					bio: doc.data().bio,
-					profilePic: doc.data().profilePicUrl,
-					dateJoined: doc.data().dateJoined,
-				},
-				message: 'User is successfully logged in!',
-				authToken,
-			}))
-			.catch((error) => ({
-				success: false,
-				user: null,
-				message: 'Login failed, please try again!',
-				error: error.message,
-			}));
 	}
 
 	/**
