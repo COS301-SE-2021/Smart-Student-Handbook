@@ -158,6 +158,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebookTitle = noteInfo.notebookTitle;
 				this.noteDescription = noteInfo.description;
 
+				this.getNotebook(noteInfo.notebookId);
 				this.setEditorHeight();
 			}
 		});
@@ -179,8 +180,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				// this.tags = data.tags;
 				this.collaborators = data.collaborators;
 				this.creator = data.creator;
-				console.log('gggggggggggggggg');
-				console.log(data.creator);
 				this.private = data.notebook.private;
 				this.opened = true;
 				this.notebookID = notebookId;

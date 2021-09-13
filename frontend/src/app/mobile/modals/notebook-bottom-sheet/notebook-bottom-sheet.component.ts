@@ -5,8 +5,9 @@ import {
 	MAT_BOTTOM_SHEET_DATA,
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
-import { Collaborators } from '@app/components';
+import { Collaborators, ViewProfileComponent } from '@app/components';
 import { NotebookOperationsService, NotebookService } from '@app/services';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface Tag {
 	name: string;
@@ -47,7 +48,8 @@ export class NotebookBottomSheetComponent implements OnInit {
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
 		private notebookOperations: NotebookOperationsService,
-		private notebookService: NotebookService
+		private notebookService: NotebookService,
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
@@ -60,8 +62,6 @@ export class NotebookBottomSheetComponent implements OnInit {
 		this.tags = this.data.tags;
 		this.collaborators = this.data.collaborators;
 		this.creator = this.data.creator;
-		console.log('aaaaaaaaaaaaaa');
-		console.log(this.data.creator);
 	}
 
 	/**
@@ -139,5 +139,24 @@ export class NotebookBottomSheetComponent implements OnInit {
 	closeSheet(event: MouseEvent): void {
 		this.bottomSheetRef.dismiss();
 		event.preventDefault();
+	}
+
+	viewUserProfile(uid: any, displayName: string) {
+		let screenWidth = '';
+
+		if (window.innerWidth <= 1000) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		// Open dialog and populate the data attributes of the form fields
+		this.dialog.open(ViewProfileComponent, {
+			width: screenWidth,
+			data: {
+				uid,
+				displayName,
+			},
+		});
 	}
 }
