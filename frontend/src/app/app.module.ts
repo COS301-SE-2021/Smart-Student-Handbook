@@ -94,6 +94,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NoteEditorComponent } from './components/note-editor/note-editor.component';
 import { ReadOnlyEditorComponent } from './components/read-only-editor/read-only-editor.component';
 import { DeleteNoteComponent } from './components/modals/delete-note/delete-note.component';
+import { NotebookChatComponent } from './components/notebook-chat/notebook-chat.component';
 
 @NgModule({
 	declarations: [
@@ -142,7 +143,8 @@ import { DeleteNoteComponent } from './components/modals/delete-note/delete-note
 		WelcomeComponent,
 		NoteEditorComponent,
 		ReadOnlyEditorComponent,
-  DeleteNoteComponent,
+    DeleteNoteComponent,
+		NotebookChatComponent,
 	],
 	imports: [
 		MaterialModule,
