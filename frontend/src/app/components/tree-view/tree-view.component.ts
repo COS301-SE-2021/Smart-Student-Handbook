@@ -389,6 +389,17 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 						this.notebookObservables.setRemoveNote(
 							this.openedNotebookId
 						);
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
+
+						this.notebookObservables.setRemoveNotebook(notebookId);
+						this.notebookObservables.setOpenNotebook('', '', true);
 					}
 				}
 			}

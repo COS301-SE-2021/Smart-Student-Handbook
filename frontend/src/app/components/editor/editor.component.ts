@@ -163,7 +163,14 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		});
 
 		this.notebookObservables.removeNote.subscribe((remove) => {
-			if (remove !== '') {
+			if (remove !== '' && remove === this.noteId) {
+				this.noteTitle = 'Smart Student';
+				this.opened = false;
+			}
+		});
+
+		this.notebookObservables.removeNotebook.subscribe((id) => {
+			if (this.notebookID === id && id !== '') {
 				this.noteTitle = 'Smart Student';
 				this.opened = false;
 			}
@@ -217,14 +224,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		this.opened = false;
 
-		this.notebookObservables.setLoadEditor(
-			notebookId,
-			noteId,
-			title,
-			notebookTitle,
-			description,
-			tags
-		);
+		if (noteId !== '') {
+			this.notebookObservables.setLoadEditor(
+				notebookId,
+				noteId,
+				title,
+				notebookTitle,
+				description,
+				tags
+			);
+		}
 
 		this.setEditorHeight();
 
@@ -239,10 +248,19 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			.removeNote(this.notebookID, this.noteId)
 			.subscribe((removed: any) => {
 				if (removed) {
-					this.notebookObservables.setRemoveNote(this.notebookID);
+					this.notebookObservables.setRemoveNote(this.noteId);
 					this.noteTitle = 'Smart Student';
 					this.opened = false;
 					this.removeNoteCard(this.noteId);
+
+					this.notebookObservables.setLoadEditor(
+						'',
+						'',
+						'',
+						'',
+						'',
+						[]
+					);
 				}
 			});
 	}

@@ -95,7 +95,6 @@ export class NoteEditorComponent
 							this.provider.destroy();
 
 						if (this.noteId !== '') {
-							// console.log(this.noteId);
 							if (this.quill === undefined) {
 								await this.loadQuillEditor();
 								if (this.noteId !== '')
@@ -120,14 +119,16 @@ export class NoteEditorComponent
 
 		this.notebookObservables.removeNote.subscribe((remove) => {
 			if (remove !== '') {
-				this.noteTitle = 'Smart Student';
-				this.noteId = '';
-				this.notebookId = '';
-				this.notebookTitle = '';
-				this.noteDescription = '';
+				if (remove === this.noteId) {
+					this.noteTitle = 'Smart Student';
+					this.noteId = '';
+					this.notebookId = '';
+					this.notebookTitle = '';
+					this.noteDescription = '';
 
-				// this.height += this.toolbarHeight - 30;
-				this.heightInPx = `${this.height}px`;
+					// this.height += this.toolbarHeight - 30;
+					this.heightInPx = `${this.height}px`;
+				}
 			}
 		});
 
@@ -143,7 +144,7 @@ export class NoteEditorComponent
 	}
 
 	async editorOperations() {
-		console.log('LOADING EDITOR DATA');
+		document.querySelector('#users').innerHTML = '';
 
 		if (this.provider) this.provider.destroy();
 
@@ -278,7 +279,6 @@ export class NoteEditorComponent
 	}
 
 	async loadQuillEditor() {
-		console.log('EDITOR CREATED FOR FIRST TIME');
 		/**
 		 * Register to see other users cursors on quill
 		 */
