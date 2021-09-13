@@ -8,6 +8,7 @@ import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
 import { CanDeactivate } from '@angular/router';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Component({
 	selector: 'app-note-editor',
@@ -69,7 +70,8 @@ export class NoteEditorComponent
 	 */
 	constructor(
 		private accountService: AccountService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private smartAssistObservables: SmartAssistObservablesService
 	) {}
 
 	async ngOnInit(): Promise<void> {
@@ -164,6 +166,9 @@ export class NoteEditorComponent
 
 		// Define a shared text type on the document
 		this.provider = new WebrtcProvider(this.noteId, doc);
+
+		this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
+		this.smartAssistObservables.setSmartAssistNoteId(this.noteId);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
@@ -309,7 +314,7 @@ export class NoteEditorComponent
 	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
 	 * @param event get the content that is dropped
 	 */
-	drop(event: any) {
+	async drop(event: any) {
 		const parser = new DOMParser();
 
 		const e = event.item.element.nativeElement.innerHTML;
@@ -319,28 +324,37 @@ export class NoteEditorComponent
 		const content = doc.getElementsByClassName('snippetContent');
 		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
 
-		const changes: any[] = [];
-		changes.push({
-			insert: `${title}\n`,
-		});
+		const recNoteId = doc
+			.getElementsByClassName('snippetContentHeader')[0]
+			.getAttribute('data-noteId');
 
-		for (let i = 0; i < content.length; i += 1) {
-			changes.push({
-				insert: `${content[i].innerHTML}`,
+		console.log(recNoteId);
+
+		let changes = [];
+
+		await firebase
+			.database()
+			.ref(`notes/${recNoteId}`)
+			.get()
+			.then((docdata) => {
+				changes = docdata.val().changes.ops;
 			});
-		}
+
+		console.log(changes);
 
 		this.addContent(changes);
 	}
 
 	addContent(content: any[]) {
-		const changes = this.quill.getContents();
+		let changes = this.quill.getContents();
 
-		for (let i = 0; i < content.length; i += 1) {
-			changes.ops.push({
-				insert: `${content[i].insert}\n`,
-			});
-		}
+		changes = changes.ops.concat(content);
+
+		// for (let i = 0; i < content.length; i += 1) {
+		// 	changes.ops.push({
+		// 		insert: `${content[i].insert}\n`,
+		// 	});
+		// }
 
 		this.quill.setContents(changes);
 
