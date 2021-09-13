@@ -161,7 +161,7 @@ class SmartAssistData:
             
             finalSetX.append(item)
             finalSetY.append(trueItem)
-                
+
             idx +=1
 
 
@@ -201,7 +201,6 @@ class SmartAssistData:
         num = random.randrange(1,len(item)-1)
 
         while item[num] == randitem[num]:
-            num = random.randrange(1,len(item)-1)
             randitem = self.getRandomDataItem().tolist()
         
         item[num] = randitem[num]
