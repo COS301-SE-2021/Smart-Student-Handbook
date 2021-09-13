@@ -4,4 +4,5 @@ export interface Note {
 	description: string;
 	notebookId: string;
 	createDate: any;
+	tags: string[];
 }

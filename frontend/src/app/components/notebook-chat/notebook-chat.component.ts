@@ -5,10 +5,8 @@ import 'firebase/auth';
 import 'firebase/analytics';
 import { MessageDto } from '@app/models/message.dto';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { SmartAssistBottomSheetComponent } from '@app/mobile';
-import { ChatBottomSheetComponent } from '@app/components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
+import { map } from 'rxjs/operators';
+import { AccountService, NotebookObservablesService } from '@app/services';
 
 @Component({
 	selector: 'app-notebook-chat',
@@ -16,71 +14,75 @@ import { ChatBottomSheetComponent } from '@app/components/modals/chat-bottom-she
 	styleUrls: ['./notebook-chat.component.scss'],
 })
 export class NotebookChatComponent implements OnInit {
+	user: any;
+
+	notebookId: string = 'none';
+
 	messages: MessageDto[] = [];
 
 	showChat: boolean = true;
 
-	tutorials: Observable<any[]>;
-
-	constructor(private firestore: AngularFirestore) {}
+	constructor(
+		private firestore: AngularFirestore,
+		private accountService: AccountService,
+		private notebookObservables: NotebookObservablesService
+	) {}
 
 	currentUser = {
-		displayName: 'John',
-		photoURL:
-			'https://lh3.googleusercontent.com/a/AATXAJzU_URnF9rRW233xVX-kncorK4SgNGRh3iwZNH_=s96-c',
-		uid: 'userId1',
+		displayName: '',
+		photoURL: '',
+		uid: '',
 	};
 
 	ngOnInit(): void {
-		if (window.innerWidth < 960) {
-			this.showChat = false;
-		}
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+				this.currentUser = {
+					displayName: user.displayName,
+					photoURL: user.profilePic,
+					uid: user.uid,
+				};
+			}
+		});
 
-		/**
-		 * Get the 25 most recent message from firebase and
-		 * observe firebase in realtime, adding any new messages to the front of the messages array
-		 */
-		// this.firestore
-		// 	.collection<any>('favorites', (ref) =>
-		// 		ref.orderBy('createdAt', 'asc')
-		// 	)
-		// 	.valueChanges((change) => {
-		//
-		//   });
-		// this.firestore
-		// 	.collection('chats')
-		// 	.doc('notebookId')
-		// 	.collection('messages')
-		// 	.get((querySnapshot: any) => {
-		// 		querySnapshot.docChanges().forEach((change) => {
-		// 			this.messages.push({
-		// 				uid: change.doc.data().uid,
-		// 				createAt: change.doc
-		// 					.data()
-		// 					.createdAt.toDate()
-		// 					.toDateString(),
-		// 				displayName: change.doc.data().displayName,
-		// 				photoURL: change.doc.data().photoURL,
-		// 				message: change.doc.data().message,
-		// 			});
-		// 		});
-		// 	});
+		this.notebookObservables.loadEditor.subscribe(async (noteInfo: any) => {
+			this.notebookId = noteInfo.notebookId;
 
-		this.tutorials = this.firestore
-			.collection('chats/notebookId/messages')
-			.valueChanges();
+			if (this.notebookId === '') {
+				this.notebookId = 'global';
+			}
 
-		this.tutorials.forEach((docs) => {
-			docs.forEach((doc) => {
-				this.messages.push({
-					uid: doc.uid,
-					createAt: doc.createdAt.toDate().toDateString(),
-					displayName: doc.displayName,
-					photoURL: doc.photoURL,
-					message: doc.message,
+			const message = this.firestore
+				.collection(`chats/${this.notebookId}/messages`, (ref) =>
+					ref.orderBy('createdAt', 'asc')
+				)
+				.snapshotChanges()
+				.pipe(
+					map((snaps) =>
+						snaps.map((snap) => ({
+							...(snap.payload.doc.data() as {}),
+						}))
+					)
+				);
+
+			message.subscribe((payload: any) => {
+				this.messages = [];
+				payload.forEach((doc) => {
+					this.messages.push({
+						uid: doc.uid,
+						createAt: doc.createdAt,
+						displayName: doc.displayName,
+						photoURL: doc.photoURL,
+						message: doc.message,
+					});
 				});
 			});
 		});
+
+		if (window.innerWidth < 960) {
+			this.showChat = false;
+		}
 	}
 
 	/**
@@ -89,7 +91,7 @@ export class NotebookChatComponent implements OnInit {
 	async sendData(sentText: string): Promise<void> {
 		const messagesRef = this.firestore
 			.collection('chats')
-			.doc('notebookId')
+			.doc(this.notebookId)
 			.collection('messages');
 		await messagesRef.add({
 			createdAt: firebase.firestore.FieldValue.serverTimestamp(),

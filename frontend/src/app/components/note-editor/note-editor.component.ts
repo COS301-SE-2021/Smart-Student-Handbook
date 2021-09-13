@@ -57,7 +57,7 @@ export class NoteEditorComponent
 
 	provider: any = undefined;
 
-	globalUserCounter: any;
+	globalUserCounter: any = 0;
 
 	loadEditorSubscription: any = undefined;
 
@@ -135,11 +135,13 @@ export class NoteEditorComponent
 
 		const counter = await firebase
 			.database()
-			.ref(`/status/${this.notebookId}`)
+			.ref(`/status/${this.noteId}`)
 			.get()
 			.then((doc) => doc.val().count);
 
-		this.globalUserCounter = counter;
+		if (counter !== undefined) {
+			this.globalUserCounter = counter;
+		}
 	}
 
 	async editorOperations() {
@@ -266,7 +268,7 @@ export class NoteEditorComponent
 
 			await firebase
 				.database()
-				.ref(`/status/${this.notebookId}`)
+				.ref(`/status/${this.noteId}`)
 				.set({ count: strings.length });
 		});
 
