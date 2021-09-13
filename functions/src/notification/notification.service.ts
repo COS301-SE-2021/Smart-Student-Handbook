@@ -48,7 +48,17 @@ export class NotificationService {
 			from: functions.config().email.user,
 			to: email.email,
 			subject: email.subject,
-			text: email.body,
+			// eslint-disable-next-line max-len
+			html: `${email.body}<hr><br><img src="https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png"/>`,
+			attachments: [
+				{
+					filename: 'Email_Logo_Header.png',
+					// eslint-disable-next-line max-len
+					path: 'https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png',
+					// eslint-disable-next-line max-len
+					cid: 'https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png',
+				},
+			],
 		};
 
 		return transporter
