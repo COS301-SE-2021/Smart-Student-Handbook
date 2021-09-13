@@ -106,10 +106,10 @@ export class AccountService {
 				uid: resp.user.uid,
 				username: resp.user.displayName,
 				institution: 'Unknown',
-				department: 'Unknown',
-				program: 'Unknown',
-				workStatus: 'Unknown',
-				bio: 'Unknown',
+				department: '',
+				program: '',
+				workStatus: '',
+				bio: '',
 				profilePicUrl:
 					// eslint-disable-next-line max-len
 					'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
