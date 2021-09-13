@@ -10,7 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
+
 // algolia events sender
+
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -32,7 +34,6 @@ export class ExploreComponent {
 		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
-			query: '',
 		},
 	};
 
@@ -45,7 +46,6 @@ export class ExploreComponent {
 		searchClient,
 		insightsClient: (window as any).aa,
 	};
-
 
 	hide: boolean = true;
 
@@ -61,7 +61,7 @@ export class ExploreComponent {
 		private bottomSheet: MatBottomSheet,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private exploreObservables: ExploreObservablesService ,
+		private exploreObservables: ExploreObservablesService
 	) {}
 
 	openNotes(hit: any) {
@@ -114,16 +114,4 @@ export class ExploreComponent {
 
 		this.notebookObservables.setReviewNotebook(hit.objectID);
 	}
-
-	/*onQuery($event) {
-		this.query = $event.target.value;
-	}
-
-  public searchParameters = {
-    query: ""
-  };
-
-  public setQuery({ query }: { query: string }) {
-    this.searchParameters.query = query;
-  }*/
 }
