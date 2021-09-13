@@ -60,6 +60,8 @@ export class NotebookBottomSheetComponent implements OnInit {
 		this.tags = this.data.tags;
 		this.collaborators = this.data.collaborators;
 		this.creator = this.data.creator;
+		console.log('aaaaaaaaaaaaaa');
+		console.log(this.data.creator);
 	}
 
 	/**
