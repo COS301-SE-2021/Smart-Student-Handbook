@@ -51,6 +51,8 @@ def getRecommendation():
         else:
             abort(400)
 
+        cloud.loadAllData()
+
         data.loadData(count=10000)
         smartmodel.loadSmartModel()
             
