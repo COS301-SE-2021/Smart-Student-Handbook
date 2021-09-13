@@ -4,18 +4,19 @@ import { SmartAssistService } from '@app/services/smart-assist.service';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { NotebookObservablesService } from '@app/services';
+import { query } from '@angular/animations';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface noteType {
+	noteId: string;
 	date: string;
 	title: string;
-	blocks: blockType[];
+	blocks: blockType;
 	tags: string[];
 }
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface blockType {
-	data: { text: string; level?: number };
-	type: string;
+	ops: { insert: string[] }[];
 }
 
 @Component({
@@ -161,6 +162,11 @@ export class SmartAssistComponent implements OnInit {
 	}
 
 	loadRecommendations(name, tags, author, institution, course) {
+		if (tags === undefined) {
+			// eslint-disable-next-line no-param-reassign
+			tags = [];
+		}
+
 		const notedata = {
 			name,
 			tags,
@@ -176,46 +182,45 @@ export class SmartAssistComponent implements OnInit {
 		this.smartAssistService
 			.getRecommendations(notedata)
 			.subscribe(async (recs) => {
+				console.log(recs);
 				const ids: string[] = recs.data;
+				console.log(ids);
 
-				// eslint-disable-next-line no-restricted-syntax
-				for (const id of ids) {
-					console.log(id);
-					// eslint-disable-next-line no-await-in-loop
-					await firebase
-						.database()
-						.ref(`notebook/${id}`)
-						.get()
-						.then(async (dataSnap) => {
+				await firebase
+					.firestore()
+					.collection('userNotes')
+					.where('noteId', 'in', ids)
+					.get()
+					.then((queryResult) => {
+						queryResult.forEach(async (doc) => {
+							console.log(doc.id);
+
 							const temp: noteType = {
-								title: '',
-								date: '',
-								tags: [],
-								blocks: [],
+								noteId: doc.id,
+
+								title: doc.data().name,
+
+								date: new Date(
+									doc.data().createdDate
+								).toDateString(),
+
+								tags: doc.data().tags,
+
+								blocks: undefined,
 							};
 
-							console.log(dataSnap.val().outputData);
-
 							await firebase
-								.firestore()
-								.collection('userNotes')
-								.doc(id)
+								.database()
+								.ref(`notes/${doc.id}`)
 								.get()
 								.then((docdata) => {
-									temp.title = docdata.data().name;
-									temp.tags = docdata.data().tags;
-
-									const unixdate = docdata.data().createdDate;
-									temp.date = new Date(
-										unixdate
-									).toDateString();
+									temp.blocks = docdata.val().changes;
 								});
-
-							temp.blocks = dataSnap.val().outputData.blocks;
-
+							console.log(temp);
 							this.notes.push(temp);
 						});
-				}
+					});
+
 				console.log(this.notes);
 			});
 	}

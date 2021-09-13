@@ -108,8 +108,9 @@
     class="card text-left snippetCard"
     cdkDrag
     (mouseleave)="hidePreview(0)"
+    data.noteId='{{noteItem.noteId}}'
   >
-    <mat-card-header class="snippetContentHeader">
+    <mat-card-header class="snippetContentHeader" data.noteId='{{noteItem.noteId}}'>
       <mat-card-subtitle class="date">
       {{noteItem.date}}
       </mat-card-subtitle>
@@ -121,15 +122,15 @@
         aspect_ratio
       </mat-icon>
 
-      <mat-card-title class="snippetTitle" data-type="header">
+      <mat-card-title class="snippetTitle" data-type="header" data-noteId='{{noteItem.noteId}}'>
         {{noteItem.title}}
       </mat-card-title>
 
-      <div *ngFor="let b of noteItem.blocks" class="snippetContent">
-        <mat-card-title class="snippetContent" data-type="{{b.type}}">
-          {{b.data.text}}
-        </mat-card-title>
-      </div>
+
+      <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
+        {{b.insert}}
+      </mat-card-title>
+
     </mat-card-header>
 
     <div class="tags" >

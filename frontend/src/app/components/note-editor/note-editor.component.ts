@@ -8,6 +8,7 @@ import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
 import { CanDeactivate } from '@angular/router';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Component({
 	selector: 'app-note-editor',
@@ -69,7 +70,8 @@ export class NoteEditorComponent
 	 */
 	constructor(
 		private accountService: AccountService,
-		private notebookObservables: NotebookObservablesService
+		private notebookObservables: NotebookObservablesService,
+		private smartAssistObservables: SmartAssistObservablesService
 	) {}
 
 	async ngOnInit(): Promise<void> {
@@ -162,6 +164,9 @@ export class NoteEditorComponent
 
 		// Define a shared text type on the document
 		this.provider = new WebrtcProvider(this.noteId, doc);
+
+		this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
+		this.smartAssistObservables.setSmartAssistNoteId(this.noteId);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
@@ -316,6 +321,12 @@ export class NoteEditorComponent
 
 		const content = doc.getElementsByClassName('snippetContent');
 		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
+
+		const c = doc
+			.getElementsByClassName('snippetContentHeader')[0]
+			.getAttributeNames();
+
+		console.log(c, doc.getElementsByClassName('snippetTitle'));
 
 		const changes: any[] = [];
 		changes.push({
