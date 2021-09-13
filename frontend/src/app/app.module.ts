@@ -84,11 +84,19 @@ import {
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
+import { QuillModule } from 'ngx-quill';
+
 import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { NoteEditorComponent } from './components/note-editor/note-editor.component';
+import { ReadOnlyEditorComponent } from './components/read-only-editor/read-only-editor.component';
+import { DeleteNoteComponent } from './components/modals/delete-note/delete-note.component';
+import { NotebookChatComponent } from './components/notebook-chat/notebook-chat.component';
+import { ChatBottomSheetComponent } from './components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
+import { ChatModalComponent } from './components/modals/chat-modal/chat-modal.component';
 
 @NgModule({
 	declarations: [
@@ -135,6 +143,12 @@ import { AppRoutingModule } from './app-routing.module';
 		RateNotebookComponent,
 		CloneNoteComponent,
 		WelcomeComponent,
+		NoteEditorComponent,
+		ReadOnlyEditorComponent,
+    DeleteNoteComponent,
+		NotebookChatComponent,
+  ChatBottomSheetComponent,
+  ChatModalComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -162,6 +176,7 @@ import { AppRoutingModule } from './app-routing.module';
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
+		QuillModule.forRoot(),
 	],
 	providers: [
 		NotesPanelComponent,

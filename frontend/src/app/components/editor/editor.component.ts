@@ -1,11 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
-import firebase from 'firebase';
 import 'firebase/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -23,13 +21,13 @@ import {
 	NotebookBottomSheetComponent,
 	SmartAssistBottomSheetComponent,
 } from '@app/mobile';
-import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import {
 	NoteInfoComponent,
 	SmartAssistModalComponent,
 	ViewProfileComponent,
 } from '@app/components';
+import { Platform } from '@angular/cdk/platform';
 
 // import { MatProgressBar } from '@angular/material/progress-bar';
 
@@ -41,6 +39,7 @@ export interface Collaborators {
 	name: string;
 	url: string;
 	id: string;
+	accessId: string;
 }
 
 @Component({
@@ -49,57 +48,7 @@ export interface Collaborators {
 	styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, AfterContentInit {
-	/**
-    Get all plugins for notebook
-   */
-
-	Header = require('@editorjs/header');
-
-	LinkTool = require('@editorjs/link');
-
-	RawTool = require('@editorjs/raw');
-
-	SimpleImage = require('@editorjs/simple-image');
-
-	Checklist = require('@editorjs/checklist');
-
-	List = require('@editorjs/list');
-
-	Embed = require('@editorjs/embed');
-
-	Quote = require('@editorjs/quote');
-
-	NestedList = require('@editorjs/nested-list');
-
-	Underline = require('@editorjs/underline');
-
-	Table = require('@editorjs/table');
-
-	Warning = require('@editorjs/warning');
-
-	CodeTool = require('@editorjs/code');
-
-	// Paragraph = require('@editorjs/paragraph');
-
-	TextVariantTune = require('@editorjs/text-variant-tune');
-
-	AttachesTool = require('@editorjs/attaches');
-
-	Marker = require('@editorjs/marker');
-
-	InlineCode = require('@editorjs/inline-code');
-
-	Personality = require('@editorjs/personality');
-
-	Delimiter = require('@editorjs/delimiter');
-
-	Alert = require('editorjs-alert');
-
-	Paragraph = require('editorjs-paragraph-with-alignment');
-
-	Editor!: EditorJS;
-
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	tags: string[] = [];
 
@@ -109,6 +58,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';
@@ -145,6 +95,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 	@ViewChild('noteInfoAccordion') noteInfoAccordion!: MatExpansionPanel;
 
+	@ViewChild('accordionHeader') accordionHeader!: HTMLElement;
+
 	/**
 	 * Editor component constructor
 	 * @param notebookService To call methods that apply to the notebooks
@@ -156,6 +108,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 * @param notebookOperations
 	 * @param notificationService
 	 * @param accountService
+	 * @param platform
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -166,7 +119,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		private notebookObservables: NotebookObservablesService,
 		private notebookOperations: NotebookOperationsService,
 		private notificationService: NotificationService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		public platform: Platform
 	) {
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
@@ -178,7 +132,6 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	ngAfterContentInit(): void {
 		this.notebookObservables.closeEditor.subscribe((close: any) => {
 			if (close.close) {
-				this.showDefaultImage();
 				this.noteInfoAccordion.close();
 				this.opened = false;
 				this.notebookObservables.setCloseEditor(false);
@@ -187,8 +140,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	}
 
 	ngOnInit(): void {
+		this.setEditorHeight();
+
 		this.nrOfNotesLoaded = 0;
 		this.doneLoading = true;
+
+		this.notebookObservables.notebookPrivacy.subscribe((privacy: any) => {
+			this.private = privacy.private;
+		});
+
 		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
 			this.nrOfNotesLoaded += 1;
 			if (noteInfo.notebookId !== '' && this.nrOfNotesLoaded === 1) {
@@ -198,19 +158,15 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebookTitle = noteInfo.notebookTitle;
 				this.noteDescription = noteInfo.description;
 
-				this.loadEditor(
-					noteInfo.notebookId,
-					noteInfo.noteId,
-					noteInfo.title,
-					noteInfo.notebookTitle,
-					noteInfo.description,
-					noteInfo.tags
-				);
+				this.setEditorHeight();
 			}
 		});
 
-		this.notebookObservables.notebookPrivacy.subscribe((privacy: any) => {
-			this.private = privacy.private;
+		this.notebookObservables.removeNote.subscribe((remove) => {
+			if (remove !== '') {
+				this.noteTitle = 'Smart Student';
+				this.opened = false;
+			}
 		});
 	}
 
@@ -247,7 +203,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		description: string,
 		tags: string[]
 	) {
-		// console.log(tags);
+		this.noteId = noteId;
+
 		this.notebookTitle = notebookTitle;
 
 		this.tags = tags;
@@ -260,227 +217,18 @@ export class EditorComponent implements OnInit, AfterContentInit {
 
 		this.opened = false;
 
+		this.notebookObservables.setLoadEditor(
+			notebookId,
+			noteId,
+			title,
+			notebookTitle,
+			description,
+			tags
+		);
+
+		this.setEditorHeight();
+
 		this.getNotebook(notebookId);
-
-		if (this.Editor === undefined || window.outerWidth <= 600) {
-			/**
-			 * Create the notebook with all the plugins
-			 */
-			// const editor = new EditorJS({
-			this.Editor = new EditorJS({
-				holder: 'editor',
-				tools: {
-					snippet: AddTagsTool,
-					header: {
-						class: this.Header,
-						shortcut: 'CTRL+SHIFT+H',
-					},
-					linkTool: {
-						class: this.LinkTool,
-						// config: {
-						//   endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
-						// }
-					},
-					raw: this.RawTool,
-					image: this.SimpleImage,
-					checklist: {
-						class: this.Checklist,
-						inlineToolbar: true,
-					},
-					list: {
-						class: this.NestedList,
-						inlineToolbar: true,
-					},
-					embed: this.Embed,
-					quote: this.Quote,
-					underline: this.Underline,
-					table: {
-						class: this.Table,
-					},
-					warning: {
-						class: this.Warning,
-						inlineToolbar: true,
-						shortcut: 'CTRL+SHIFT+W',
-						config: {
-							titlePlaceholder: 'Title',
-							messagePlaceholder: 'Message',
-						},
-					},
-					code: this.CodeTool,
-					paragraph: {
-						class: this.Paragraph,
-						inlineToolbar: true,
-					},
-					textVariant: this.TextVariantTune,
-					attaches: {
-						class: this.AttachesTool,
-						// config: {
-						//   endpoint: 'http://localhost:8008/uploadFile'
-						// }
-					},
-					Marker: {
-						class: this.Marker,
-						shortcut: 'CTRL+SHIFT+M',
-					},
-					inlineCode: {
-						class: this.InlineCode,
-						shortcut: 'CMD+SHIFT+M',
-					},
-					personality: {
-						class: this.Personality,
-						// config: {
-						//   endpoint: 'http://localhost:8008/uploadFile'  // Your backend file uploader endpoint
-						// }
-					},
-					delimiter: this.Delimiter,
-					alert: this.Alert,
-				},
-				data: {
-					blocks: [],
-				},
-				autofocus: true,
-
-				onChange: () => {
-					this.saveContent();
-				},
-			});
-
-			// this.Editor = editor;
-
-			const e = document.getElementById('editor') as HTMLElement;
-			e.style.display = 'none';
-		}
-
-		await this.Editor.isReady;
-
-		const e = document.getElementById('editor') as HTMLElement;
-		e.style.overflowY = 'none';
-		e.style.display = 'block';
-		e.style.backgroundImage = 'none';
-		// e.style.backgroundColor = 'grey';
-
-		const editor = this.Editor;
-
-		editor.clear();
-
-		this.noteId = noteId;
-
-		// Change the path to the correct notebook's path
-		const dbRefObject = firebase.database().ref(`notebook/${this.noteId}`);
-
-		/**
-		 * Get the values from the realtime database and insert block if notebook is empty
-		 */
-		dbRefObject
-			.once('value', (snap) => {
-				if (snap.val() === null) {
-					firebase
-						.database()
-						.ref(`notebook/${this.noteId}`)
-						.set({
-							outputData: {
-								blocks: [
-									{
-										id: 'jTFbQOD8j3',
-										type: 'header',
-										data: {
-											text: `${this.noteTitle} 🚀`,
-											level: 2,
-										},
-									},
-								],
-							},
-						});
-				}
-			})
-			.then(() => {
-				/**
-				 * Render output on Editor
-				 */
-				dbRefObject.once('value', (snap) => {
-					// console.log(snap.val());
-					editor.render(snap.val().outputData);
-				});
-			});
-	}
-
-	/**
-	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
-	 * @param event get the content that is dropped
-	 */
-	drop(event: any) {
-		const parser = new DOMParser();
-
-		const e = event.item.element.nativeElement.innerHTML;
-
-		const doc = parser.parseFromString(e, 'text/html');
-
-		const content = doc.getElementsByClassName('snippetContent');
-		const title = doc.getElementsByClassName('snippetTitle');
-
-		// Add the title
-		this.Editor.blocks.insert(title[0].getAttribute('data-type')!, {
-			text: title[0].innerHTML,
-		});
-
-		for (let i = 0; i < content.length; i += 1) {
-			// console.log(content[i].innerHTML);
-			// Add content
-			this.Editor.blocks.insert(content[i].getAttribute('data-type')!, {
-				text: content[i].innerHTML,
-			});
-		}
-
-		this.saveContent();
-	}
-
-	/**
-	 * Method to call when notebook content should be saved
-	 */
-	saveContent() {
-		// this.editorFocussed();
-
-		this.Editor.save()
-			.then((outputData) => {
-				// console.log(this.notebookID, outputData);
-
-				if (outputData.blocks.length > 0) {
-					firebase.database().ref(`notebook/${this.noteId}`).set({
-						outputData,
-					});
-				}
-			})
-			.catch(() => {
-				// console.log('Saving failed: ', error);
-			});
-	}
-
-	/**
-	 * Highlight the block where a user is busy editing the note
-	 */
-	editorFocussed() {
-		const index = this.Editor.blocks.getCurrentBlockIndex();
-
-		const blocks = document.getElementById('editor').children[0].children[0]
-			.children as HTMLCollection;
-
-		let block = blocks[index] as HTMLElement;
-
-		let nBlock = null;
-		for (let i = 0; i < blocks.length; i += 1) {
-			nBlock = blocks[i].children[0] as HTMLElement;
-			if (i !== index) {
-				if (nBlock.style.backgroundColor === 'rgba(8, 85, 116, 0.2)') {
-					nBlock.style.backgroundColor = 'transparent';
-				}
-			}
-		}
-
-		if (block) {
-			block = block.children[0] as HTMLElement;
-			block.style.backgroundColor = 'rgba(8,85,116,0.2)';
-			block.style.borderRadius = '5px';
-		}
 	}
 
 	/**
@@ -491,33 +239,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			.removeNote(this.notebookID, this.noteId)
 			.subscribe((removed: any) => {
 				if (removed) {
-					const editor = this.Editor;
-					editor.clear();
-
-					this.noteTitle = '';
-
+					this.notebookObservables.setRemoveNote(this.notebookID);
+					this.noteTitle = 'Smart Student';
+					this.opened = false;
 					this.removeNoteCard(this.noteId);
-
-					this.showDefaultImage();
 				}
 			});
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeNoteCard(_id: string) {}
-
-	/**
-	 * Display a default image and hide the editor when no note is opened
-	 */
-	showDefaultImage() {
-		const e = document.getElementById('editor') as HTMLElement;
-		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
-
-		if (this.Editor) this.Editor.destroy();
-		// @ts-ignore
-		this.Editor = undefined;
-		this.noteTitle = 'Smart Student';
-	}
 
 	/**
 	 * Show menu when user clicks on ellipsis
@@ -532,15 +263,27 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 */
 	openClosePanel() {
 		this.panelOpenState = !this.panelOpenState;
+	}
 
-		const editor = document.getElementById('editor') as HTMLElement;
-
+	setEditorHeight() {
 		const vh = window.innerHeight;
 
-		if (this.panelOpenState) {
-			editor.style.height = `${vh - 402}px`;
+		if (window.innerWidth >= 960) {
+			const height =
+				document.getElementById('noteInfoAccordion').offsetHeight;
+
+			this.notebookObservables.setEditorHeight(vh - (height + 100));
+		} else if (
+			this.platform.ANDROID === true ||
+			this.platform.IOS === true
+		) {
+			const height =
+				document.getElementById('smallNoteHeader').offsetHeight;
+			this.notebookObservables.setEditorHeight(vh - (height + 50));
 		} else {
-			editor.style.height = `${vh - 160}px`;
+			const height =
+				document.getElementById('smallNoteHeader').offsetHeight;
+			this.notebookObservables.setEditorHeight(vh - (height + 110));
 		}
 	}
 
@@ -562,6 +305,9 @@ export class EditorComponent implements OnInit, AfterContentInit {
 		this.updateTags();
 	}
 
+	/**
+	 * Update the tags on the backend
+	 */
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
@@ -613,13 +359,16 @@ export class EditorComponent implements OnInit, AfterContentInit {
 			);
 	}
 
-	removeCollaborator(userId: string) {
+	removeCollaborator(userId: string, accessId: string) {
+		console.log(userId, accessId);
 		this.notebookOperations
-			.removeCollaborator(userId, this.notebookID)
-			.subscribe((id: string) => {
-				this.collaborators = this.collaborators.filter(
-					(collaborator) => collaborator.id !== id
-				);
+			.removeCollaborator(accessId, this.notebookID)
+			.subscribe((result: boolean) => {
+				if (result) {
+					this.collaborators = this.collaborators.filter(
+						(collaborator) => collaborator.id !== userId
+					);
+				}
 			});
 	}
 

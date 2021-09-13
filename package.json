@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "angular-katex": "^0.10.0",
+    "katex": "^0.13.18",
+    "search-client": "^2.2.0"
+  }
+}

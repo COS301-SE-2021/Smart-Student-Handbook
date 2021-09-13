@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { SideNavService } from '@app/services';
 import { onMainContentChange } from '@app/styling/animations';
+import { Platform } from '@angular/cdk/platform';
 
 @Component({
 	selector: 'app-secure-layout',

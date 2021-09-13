@@ -6,8 +6,12 @@ import {
 	AccountService,
 	NotebookObservablesService,
 	NotebookOperationsService,
+	NotebookService,
 } from '@app/services';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface CloneNotebooks {
 	notebookId: string;
@@ -21,6 +25,10 @@ interface CloneNotebooks {
 	styleUrls: ['./clone-note.component.scss'],
 })
 export class CloneNoteComponent implements OnInit {
+	tags: string[] = [];
+
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
+
 	/** Notebook select */
 	filteredOptions!: Observable<any[]>;
 
@@ -41,9 +49,12 @@ export class CloneNoteComponent implements OnInit {
 	isCompleted: boolean = false;
 
 	constructor(
-		private notebookService: NotebookOperationsService,
+		private notebookOperationService: NotebookOperationsService,
+		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
 		private accountService: AccountService,
+		private snackBar: MatSnackBar,
+		private dialogRef: MatDialogRef<CloneNoteComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {}
 
@@ -97,10 +108,10 @@ export class CloneNoteComponent implements OnInit {
 	 * Create and add a new notebook to the user's My Notebooks list
 	 */
 	createNewNotebook() {
-		this.isCompleted = false;
+		// this.isCompleted = false;
 
 		// console.log(this.user);
-		this.notebookService
+		this.notebookOperationService
 			.createNewNotebook({
 				author: this.user.displayName,
 				institution: this.user.institution,
@@ -135,5 +146,65 @@ export class CloneNoteComponent implements OnInit {
 					this.isCompleted = true;
 				}
 			);
+	}
+
+	/**
+	 * Remove a tag from input and tags array
+	 * @param tag the tag to be removed
+	 */
+	removeTag(tag: string): void {
+		const index = this.tags.indexOf(tag);
+
+		if (index >= 0) {
+			this.tags.splice(index, 1);
+		}
+	}
+
+	/**
+	 * Insert new tags to the input and tags array
+	 * @param event To get the value from the newly inserted tag
+	 */
+	addTag(event: MatChipInputEvent): void {
+		const value = (event.value || '').trim();
+
+		// Add our fruit
+		if (value) {
+			this.tags.push(value);
+		}
+
+		// Clear the input value
+		event.chipInput!.clear();
+	}
+
+	cloneNote() {
+		this.isCompleted = false;
+
+		const request = {
+			tags: this.tags,
+			notebookId: this.notebookId,
+			name: this.title,
+			description: this.description,
+		};
+
+		this.notebookService.createNote(request).subscribe(
+			(newNote) => {
+				// console.log(newNote);
+
+				if (newNote.noteId) {
+					this.snackBar.open('Note successfully cloned!', '', {
+						duration: 2000,
+					});
+					this.isCompleted = true;
+					this.dialogRef.close(newNote.noteId);
+				} else {
+					this.isCompleted = true;
+					this.dialogRef.close(false);
+				}
+			},
+			() => {
+				this.isCompleted = true;
+				this.dialogRef.close(false);
+			}
+		);
 	}
 }

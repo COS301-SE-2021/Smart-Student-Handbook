@@ -8,7 +8,7 @@
 
         <mat-list-item *ngFor="let notification of notifications; let i = index" class="notificationListItem"
                        [ngStyle]="{'background-color': (notification.opened===true) ? '#e5e5e5' : '#f6f6f6',
-                       'box-shadow': '0px 0px 8px 2px rgb(216, 216, 216)'}">
+                       'box-shadow': (notification.opened!==true) ? '0px 0px 8px 2px rgb(216, 216, 216)': 'none'}">
 
           <div mat-line class="col-12 col-md-10">
             <div mat-line>{{notification.heading}}</div>

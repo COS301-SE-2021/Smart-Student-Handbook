@@ -9,7 +9,10 @@ import {
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
-import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
+import { ChatBottomSheetComponent } from '@app/components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
+import { ChatModalComponent } from '@app/components/modals/chat-modal/chat-modal.component';
 
 @Component({
 	selector: 'app-notebook',
@@ -53,6 +56,8 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variable that holds the logged in user details
 	user: any;
 
+	showChatIcon = true;
+
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -67,12 +72,14 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * Include the notebook service
 	 * @param router
 	 * @param accountService
-	 * @param smartAssistObservables
+	 * @param bottomSheet
+	 * @param dialog
 	 */
 	constructor(
 		private router: Router,
 		private accountService: AccountService,
-		private smartAssistObservables: SmartAssistObservablesService
+		private bottomSheet: MatBottomSheet,
+		private dialog: MatDialog
 	) {}
 
 	/**
@@ -107,9 +114,6 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 				description,
 				tags
 			);
-
-			this.smartAssistObservables.setSmartAssistNotebookId(notebookId);
-			this.smartAssistObservables.setSmartAssistNoteId(noteId);
 		};
 
 		this.editorComponent.removeNoteCard = (id: string) => {
@@ -143,5 +147,25 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 			description,
 			tags
 		);
+	}
+
+	changeChat() {
+		this.showChatIcon = !this.showChatIcon;
+
+		if (window.innerWidth < 600) {
+			this.bottomSheet
+				.open(ChatBottomSheetComponent)
+				.afterDismissed()
+				.subscribe(() => {
+					this.showChatIcon = !this.showChatIcon;
+				});
+		} else {
+			this.dialog
+				.open(ChatModalComponent)
+				.afterClosed()
+				.subscribe(() => {
+					this.showChatIcon = !this.showChatIcon;
+				});
+		}
 	}
 }

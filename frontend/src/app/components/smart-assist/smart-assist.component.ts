@@ -3,6 +3,7 @@ import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-a
 import { SmartAssistService } from '@app/services/smart-assist.service';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { NotebookObservablesService } from '@app/services';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface noteType {
@@ -17,37 +18,42 @@ interface blockType {
 	type: string;
 }
 
+
 @Component({
 	selector: 'app-smart-assist',
 	templateUrl: './smart-assist.component.html',
 	styleUrls: ['./smart-assist.component.scss'],
 })
 export class SmartAssistComponent implements OnInit {
+	draggable: boolean = true;
+	
 	notebookId: string = '';
-
+	
 	noteId: string = '';
-
+	
 	name: string = '';
-
+	
 	tags: string[] = [];
-
+	
 	author: string = '';
-
+	
 	institution: string = '';
-
+	
 	course: string = '';
-
+	
 	notes: noteType[] = [];
-
+	
 	date: string = '';
 
-	constructor(
-		private smartAssistObservables: SmartAssistObservablesService,
-		private smartAssistService: SmartAssistService
-	) {}
+	constructor(private notebookObservables: NotebookObservablesService, private smartAssistObservables: SmartAssistObservablesService,
+	            private smartAssistService: SmartAssistService) {}
 
-	// eslint-disable-next-line @angular-eslint/contextual-lifecycle
 	ngOnInit(): void {
+		this.draggable = true;
+		if (window.innerWidth < 960) {
+			this.draggable = false;
+		}
+		
 		this.smartAssistObservables.smartAssistNotebookId.subscribe(
 			({ notebookId }) => {
 				if (
@@ -56,7 +62,7 @@ export class SmartAssistComponent implements OnInit {
 					notebookId !== ''
 				) {
 					this.notebookId = notebookId;
-
+					
 					firebase
 						.firestore()
 						.collection('userNotebooks')
@@ -67,17 +73,17 @@ export class SmartAssistComponent implements OnInit {
 							this.institution = docdata.data().institution;
 							this.course = docdata.data().course;
 						});
-
+					
 					console.log(notebookId);
 				}
 			}
 		);
-
+		
 		this.smartAssistObservables.smartAssistNoteId.subscribe(
 			async ({ noteId }) => {
 				if (noteId !== undefined && noteId !== this.noteId) {
 					this.noteId = noteId;
-
+					
 					await firebase
 						.firestore()
 						.collection('userNotes')
@@ -86,13 +92,13 @@ export class SmartAssistComponent implements OnInit {
 						.then((docdata) => {
 							this.name = docdata.data().name;
 							this.tags = docdata.data().tags;
-
+							
 							const unixdate = docdata.data().createdDate;
 							this.date = new Date(
 								unixdate * 1000
 							).toDateString();
 						});
-
+					
 					this.loadRecommendations(
 						this.name,
 						this.tags,
@@ -132,6 +138,24 @@ export class SmartAssistComponent implements OnInit {
 
 		snippet.style.maxHeight = '200px';
 		snippet.style.overflow = 'hidden';
+	}
+
+	addToNote() {
+		const content = [
+			{
+				insert: 'Functional Requirements',
+			},
+			{
+				insert: ' R1:The system should allow users to manage their Profile and Account.',
+			},
+			{
+				insert: 'R2:The system should allow users to create notes and add content to it then add appropriate tags to their content.',
+			},
+		];
+
+		this.notebookObservables.setDragAndDrop(content);
+
+		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 	}
 
 	loadRecommendations(name, tags, author, institution, course) {
