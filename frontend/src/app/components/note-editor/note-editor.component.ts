@@ -322,11 +322,11 @@ export class NoteEditorComponent
 		const content = doc.getElementsByClassName('snippetContent');
 		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
 
-		const c = doc
+		const recNoteId = doc
 			.getElementsByClassName('snippetContentHeader')[0]
-			.getAttributeNames();
+			.getAttribute('data-noteId');
 
-		console.log(c, doc.getElementsByClassName('snippetTitle'));
+		console.log(recNoteId);
 
 		const changes: any[] = [];
 		changes.push({

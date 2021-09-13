@@ -110,7 +110,7 @@
     (mouseleave)="hidePreview(0)"
     data.noteId='{{noteItem.noteId}}'
   >
-    <mat-card-header class="snippetContentHeader" data.noteId='{{noteItem.noteId}}'>
+    <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
       <mat-card-subtitle class="date">
       {{noteItem.date}}
       </mat-card-subtitle>
@@ -122,7 +122,7 @@
         aspect_ratio
       </mat-icon>
 
-      <mat-card-title class="snippetTitle" data-type="header" data-noteId='{{noteItem.noteId}}'>
+      <mat-card-title class="snippetTitle" data-type="header" >
         {{noteItem.title}}
       </mat-card-title>
 
