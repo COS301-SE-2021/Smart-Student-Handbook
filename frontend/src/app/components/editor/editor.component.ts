@@ -158,6 +158,7 @@ export class EditorComponent implements OnInit, AfterContentInit {
 				this.notebookTitle = noteInfo.notebookTitle;
 				this.noteDescription = noteInfo.description;
 
+				this.getNotebook(noteInfo.notebookId);
 				this.setEditorHeight();
 			}
 		});
