@@ -15,6 +15,7 @@ import { AddNotebookReview } from './dto/addNotebookReview';
 import { AccessService } from './access/access.service';
 import { Access } from './interfaces/access.interface';
 import { AddAccessDto } from './dto/addAccess.dto';
+import { AddNoteReview } from './dto/AddNoteReview';
 
 @Controller('notebook')
 export class NotebookController {
@@ -88,15 +89,32 @@ export class NotebookController {
 		return this.reviewService.getNotebookReviews(notebookId);
 	}
 
+	@Delete('deleteNotebookReview/:reviewId')
+	async deleteNotebookReview(@Param('reviewId') reviewId, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.deleteNotebookReview(reviewId, userId);
+	}
+
+	@Post('addNoteReview')
+	async addNoteReview(@Body() addNoteReview: AddNoteReview, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.addNoteReview(addNoteReview, userId);
+	}
+
+	@Get('getNoteReviews/:noteId')
+	getNoteReviews(@Param('noteId') noteId): Promise<Review[]> {
+		return this.reviewService.getNoteReviews(noteId);
+	}
+
+	@Delete('deleteNoteReview/:reviewId')
+	async deleteNoteReview(@Param('reviewId') reviewId, @Headers() header): Promise<Response> {
+		const userId: string = await this.authService.verifyUser(header.token);
+		return this.reviewService.deleteNoteReview(reviewId, userId);
+	}
+
 	@Get('getAccessList/:notebookId')
 	getAccessList(@Param('notebookId') notebookId): Promise<Access[]> {
 		return this.accessService.getAccessList(notebookId);
-	}
-
-	@Delete('deleteNotebookReview/:notebookId')
-	async deleteNotebookReview(@Param('notebookId') notebookId, @Headers() header): Promise<Response> {
-		const userId: string = await this.authService.verifyUser(header.token);
-		return this.reviewService.deleteNotebookReview(notebookId, userId);
 	}
 
 	@Post('addAccess')

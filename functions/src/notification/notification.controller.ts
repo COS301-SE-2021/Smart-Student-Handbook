@@ -13,7 +13,7 @@ import { AuthService } from '../auth/auth.service';
 export class NotificationController {
 	constructor(private readonly notificationService: NotificationService, private readonly authService: AuthService) {}
 
-	@Post()
+	@Post('sendEmailNotification')
 	async sendEmailNotification(
 		@Body() emailNotificationDto: EmailNotificationRequestDto,
 	): Promise<EmailNotificationResponseDto> {

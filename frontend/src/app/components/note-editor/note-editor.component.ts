@@ -1,10 +1,4 @@
-import {
-	AfterViewInit,
-	Component,
-	OnDestroy,
-	OnInit,
-	ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AccountService, NotebookObservablesService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
@@ -13,13 +7,7 @@ import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {
-	ActivatedRouteSnapshot,
-	CanDeactivate,
-	RouterStateSnapshot,
-	UrlTree,
-} from '@angular/router';
+import { CanDeactivate } from '@angular/router';
 
 @Component({
 	selector: 'app-note-editor',
@@ -27,17 +15,13 @@ import {
 	styleUrls: ['./note-editor.component.scss'],
 })
 export class NoteEditorComponent
-	implements
-		OnInit,
-		AfterViewInit,
-		OnDestroy,
-		CanDeactivate<NoteEditorComponent>
+	implements OnInit, OnDestroy, CanDeactivate<NoteEditorComponent>
 {
 	Delta = Quill.import('delta');
 
 	user: any;
 
-	quill: any;
+	quill: any = undefined;
 
 	nrOfNotesLoaded = 0;
 
@@ -74,9 +58,7 @@ export class NoteEditorComponent
 
 	globalUserCounter: any;
 
-	loaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-	loadedSubscription: any;
+	loadEditorSubscription: any = undefined;
 
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
@@ -93,35 +75,41 @@ export class NoteEditorComponent
 	async ngOnInit(): Promise<void> {
 		if (this.provider !== undefined) this.provider.destroy();
 
-		this.loaded = new BehaviorSubject(false);
-
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
 
-		this.notebookObservables.loadEditor.subscribe(async (noteInfo: any) => {
-			this.noteTitle = noteInfo.title;
-			this.noteId = noteInfo.noteId;
-			this.notebookId = noteInfo.notebookId;
-			this.notebookTitle = noteInfo.notebookTitle;
-			this.noteDescription = noteInfo.description;
+		this.loadEditorSubscription =
+			this.notebookObservables.loadEditor.subscribe(
+				async (noteInfo: any) => {
+					if (this.noteId !== noteInfo.noteId) {
+						this.noteTitle = noteInfo.title;
+						this.noteId = noteInfo.noteId;
+						this.notebookId = noteInfo.notebookId;
+						this.notebookTitle = noteInfo.notebookTitle;
+						this.noteDescription = noteInfo.description;
 
-			this.loadedSubscription = this.loaded.subscribe((load) => {
-				if (load) {
-					if (noteInfo.notebookId !== '') {
 						if (this.provider !== undefined)
 							this.provider.destroy();
-						this.editorOperations();
+
+						if (this.noteId !== '') {
+							// console.log(this.noteId);
+							if (this.quill === undefined) {
+								await this.loadQuillEditor();
+								if (this.noteId !== '')
+									await this.editorOperations();
+							} else if (this.noteId !== '')
+								await this.editorOperations();
+						}
 					}
 				}
-			});
-		});
+			);
 
 		this.notebookObservables.editorHeight.subscribe(({ height }) => {
-			this.height = height - this.toolbarHeight;
-			this.heightInPx = `${this.height}px`;
+			this.height = height;
+			this.heightInPx = `${this.height - this.toolbarHeight}px`;
 		});
 
 		this.notebookObservables.dragAndDrop.subscribe(({ content }) => {
@@ -138,7 +126,7 @@ export class NoteEditorComponent
 				this.notebookTitle = '';
 				this.noteDescription = '';
 
-				this.height += this.toolbarHeight - 30;
+				// this.height += this.toolbarHeight - 30;
 				this.heightInPx = `${this.height}px`;
 			}
 		});
@@ -152,11 +140,9 @@ export class NoteEditorComponent
 		this.globalUserCounter = counter;
 	}
 
-	async ngAfterViewInit(): Promise<void> {
-		await this.loadQuillEditor();
-	}
-
 	async editorOperations() {
+		console.log('LOADING EDITOR DATA');
+
 		if (this.provider) this.provider.destroy();
 
 		this.quill.readOnly = false;
@@ -234,6 +220,7 @@ export class NoteEditorComponent
 				 */
 				if (this.globalUserCounter === 0) {
 					await dbRefObject.once('value', async (snap) => {
+						// console.log(snap.val().changes);
 						await this.quill.setContents(snap.val().changes);
 					});
 				}
@@ -289,6 +276,7 @@ export class NoteEditorComponent
 	}
 
 	async loadQuillEditor() {
+		console.log('EDITOR CREATED FOR FIRST TIME');
 		/**
 		 * Register to see other users cursors on quill
 		 */
@@ -307,16 +295,12 @@ export class NoteEditorComponent
 			theme: 'snow',
 			readOnly: false,
 		});
-
-		this.loaded.next(true);
-
-		if (window.innerWidth < 960) {
-			this.loaded.complete();
-		}
 	}
 
 	async ngOnDestroy(): Promise<void> {
 		if (this.provider) this.provider.destroy();
+		if (this.loadEditorSubscription)
+			this.loadEditorSubscription.unsubscribe();
 	}
 
 	/**
@@ -363,21 +347,10 @@ export class NoteEditorComponent
 		});
 	}
 
-	canDeactivate(
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		component: NoteEditorComponent,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		currentRoute: ActivatedRouteSnapshot,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		currentState: RouterStateSnapshot,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		nextState?: RouterStateSnapshot
-	):
-		| Observable<boolean | UrlTree>
-		| Promise<boolean | UrlTree>
-		| boolean
-		| UrlTree {
+	canDeactivate() {
 		if (this.provider) this.provider.destroy();
+		if (this.loadEditorSubscription)
+			this.loadEditorSubscription.unsubscribe();
 		return true;
 	}
 }

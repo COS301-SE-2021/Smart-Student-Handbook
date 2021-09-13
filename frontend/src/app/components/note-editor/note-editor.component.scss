@@ -11,6 +11,7 @@
 #toolbar-container{
   background-color: #fafafa;
   border: none;
+  padding: 8px 0 8px 0;
 }
 
 #toolbar{
@@ -57,4 +58,8 @@
   margin-right: 7px;
   background-size: cover;
   background-position: center;
+}
+
+::ng-deep.ql-toolbar ::ng-deep.ql-snow{
+  padding: 8px 0 8px 0 !important;
 }
