@@ -88,6 +88,7 @@ export class NotebookObservablesService {
 		/** id of notebook to review */
 		this.reviewNotebook = new BehaviorSubject<any>({
 			id: '',
+			type: '',
 		});
 
 		/** Set the height of the editor */
@@ -207,9 +208,10 @@ export class NotebookObservablesService {
 	 * id of notebook to review
 	 * @param id
 	 */
-	setReviewNotebook(id: string) {
+	setReviewNotebook(id: string, type) {
 		this.reviewNotebook.next({
 			id,
+			type,
 		});
 	}
 

@@ -21,6 +21,8 @@ export class RateNotebookComponent implements OnInit {
 
 	review: string = '';
 
+	type: string = '';
+
 	user: any;
 
 	notebookId: string = '';
@@ -53,8 +55,9 @@ export class RateNotebookComponent implements OnInit {
 
 		this.doneLoading = true;
 
-		this.notebookObservables.reviewNotebook.subscribe((id: any) => {
-			this.notebookId = id.id;
+		this.notebookObservables.reviewNotebook.subscribe(({ id, type }) => {
+			this.notebookId = id;
+			this.type = type;
 
 			if (this.notebookId !== '') this.getReviews(this.notebookId);
 
@@ -78,23 +81,35 @@ export class RateNotebookComponent implements OnInit {
 	getReviews(id: string) {
 		this.doneLoading = false;
 
-		this.notebookService
-			.getNotebookReviews(id)
-			.subscribe((reviews: any[]) => {
-				// console.log(reviews);
-				for (let i = 0; i < this.reviews.length; i += 1) {
-					this.reviews.pop();
-				}
-				reviews.forEach((review: any) => {
-					this.reviews.push({
-						review: review.message,
-						reviewer: review.displayName,
-						rating: review.rating,
-					});
+		if (this.type === 'notebook') {
+			this.notebookService
+				.getNotebookReviews(id)
+				.subscribe((reviews: any[]) => {
+					this.calculateReviews(reviews);
 				});
+		} else {
+			this.notebookService
+				.getNoteReviews(id)
+				.subscribe((reviews: any) => {
+					this.calculateReviews(reviews);
+				});
+		}
+	}
 
-				this.doneLoading = true;
+	calculateReviews(reviews: any[]) {
+		// console.log(reviews);
+		for (let i = 0; i < this.reviews.length; i += 1) {
+			this.reviews.pop();
+		}
+		reviews.forEach((review: any) => {
+			this.reviews.push({
+				review: review.message,
+				reviewer: review.displayName,
+				rating: review.rating,
 			});
+		});
+
+		this.doneLoading = true;
 	}
 
 	submitReview() {
@@ -108,19 +123,35 @@ export class RateNotebookComponent implements OnInit {
 		};
 
 		if (this.secondFormGroup.valid) {
-			this.notebookService.addNotebookReview(review).subscribe(
-				() => {
-					// console.log(res);
-					this.reviews.push({
-						review: review.message,
-						reviewer: review.displayName,
-						rating: review.rating,
-					});
-				},
-				() => {
-					// console.log(error);
-				}
-			);
+			if (this.type === 'notebook') {
+				this.notebookService.addNotebookReview(review).subscribe(
+					() => {
+						// console.log(res);
+						this.reviews.push({
+							review: review.message,
+							reviewer: review.displayName,
+							rating: review.rating,
+						});
+					},
+					() => {
+						// console.log(error);
+					}
+				);
+			} else {
+				this.notebookService.addNoteReview(review).subscribe(
+					() => {
+						// console.log(res);
+						this.reviews.push({
+							review: review.message,
+							reviewer: review.displayName,
+							rating: review.rating,
+						});
+					},
+					() => {
+						// console.log(error);
+					}
+				);
+			}
 		}
 	}
 
