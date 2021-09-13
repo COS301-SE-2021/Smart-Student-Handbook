@@ -16,22 +16,31 @@
 					<mat-icon>keyboard_arrow_right</mat-icon>
 				</button>
 
-				<h2>Smart Assist</h2>
+
 				<!-- </mat-card-header> -->
 			</div>
 
+      <mat-tab-group style="margin-top: 30px">
+        <mat-tab label="Smart Assist">
 			<app-smart-assist></app-smart-assist>
+        </mat-tab>
+        <mat-tab label="Chat">
+          <app-notebook-chat></app-notebook-chat>
+        </mat-tab>
+      </mat-tab-group>
 		</div>
 	</mat-sidenav>
 
 	<mat-sidenav-content class="content">
-		<!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
-		<button
-			mat-icon-button
-			id="openPanelBtn"
-			(click)="sidenav.toggle(); openedCloseToggle()"
-		>
-			<mat-icon>keyboard_arrow_left</mat-icon>
-		</button>
+
+        <!-- <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p> -->
+        <button
+          mat-icon-button
+          id="openPanelBtn"
+          (click)="sidenav.toggle(); openedCloseToggle()"
+        >
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+
 	</mat-sidenav-content>
 </mat-sidenav-container>
