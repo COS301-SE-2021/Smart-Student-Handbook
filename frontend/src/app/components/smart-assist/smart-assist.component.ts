@@ -1,11 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NotebookObservablesService } from '@app/services';
 
 @Component({
 	selector: 'app-smart-assist',
 	templateUrl: './smart-assist.component.html',
 	styleUrls: ['./smart-assist.component.scss'],
 })
-export class SmartAssistComponent {
+export class SmartAssistComponent implements OnInit {
+	draggable: boolean = true;
+
+	constructor(private notebookObservables: NotebookObservablesService) {}
+
+	ngOnInit(): void {
+		this.draggable = true;
+		if (window.innerWidth < 960) {
+			this.draggable = false;
+		}
+	}
+
 	/**
 	 * Enlarge the recommendation card and make it scrollable
 	 * @param index the index of the card to enlarge
@@ -32,5 +44,23 @@ export class SmartAssistComponent {
 
 		snippet.style.maxHeight = '200px';
 		snippet.style.overflow = 'hidden';
+	}
+
+	addToNote() {
+		const content = [
+			{
+				insert: 'Functional Requirements',
+			},
+			{
+				insert: ' R1:The system should allow users to manage their Profile and Account.',
+			},
+			{
+				insert: 'R2:The system should allow users to create notes and add content to it then add appropriate tags to their content.',
+			},
+		];
+
+		this.notebookObservables.setDragAndDrop(content);
+
+		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 	}
 }

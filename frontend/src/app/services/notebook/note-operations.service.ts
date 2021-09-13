@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { AddNoteComponent } from '@app/components/modals/add-note/add-note.component';
 import { AccountService, ProfileService } from '@app/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
 
 @Injectable({
 	providedIn: 'root',
@@ -43,7 +44,7 @@ export class NoteOperationsService {
 	 * Create a new notebook
 	 */
 	createNewNote(notebookId: string, notebookTitle: string): Observable<any> {
-		return Observable.create((observer: any) => {
+		return new Observable((observer: any) => {
 			const screenWidth = this.getScreenSize();
 
 			// Open dialog
@@ -53,6 +54,10 @@ export class NoteOperationsService {
 					title: this.title,
 					message: 'Create New Note',
 					description: this.description,
+					notebookId,
+					notebookTitle,
+					userId: this.user.id,
+					method: 'create',
 				},
 			});
 
@@ -60,35 +65,7 @@ export class NoteOperationsService {
 			dialogRef.afterClosed().subscribe((result) => {
 				// If the user filled out the form
 				if (result !== undefined) {
-					// Create request object
-					const request = {
-						notebookId,
-						name: result.data.title,
-						description: result.data.description,
-						tags: result.tags,
-					};
-
-					// Call service and create notebook
-					this.notebookService.createNote(request).subscribe(
-						(data) => {
-							const newNotebook = {
-								userId: this.user.id,
-								name: request.name,
-								description: request.description,
-								tags: request.tags,
-								noteId: data.noteId,
-								notebookTitle,
-							};
-
-							observer.next({
-								notebook: newNotebook,
-								id: data.noteId,
-							});
-						},
-						(error) => {
-							console.log(error);
-						}
-					);
+					observer.next(result);
 				}
 			});
 		});
@@ -113,7 +90,7 @@ export class NoteOperationsService {
 	): Observable<any> {
 		const screenWidth = this.getScreenSize();
 
-		return Observable.create((observer: any) => {
+		return new Observable((observer: any) => {
 			// Open dialog
 			const dialogRef = this.dialog.open(AddNoteComponent, {
 				width: screenWidth,
@@ -122,6 +99,11 @@ export class NoteOperationsService {
 					message: 'Update Note',
 					description,
 					tags,
+					noteId,
+					notebookId,
+					notebookTitle: '',
+					userId: creatorId,
+					method: 'update',
 				},
 			});
 
@@ -129,27 +111,7 @@ export class NoteOperationsService {
 			dialogRef.afterClosed().subscribe((data) => {
 				// If the user filled out the form
 				if (data !== undefined) {
-					const request = {
-						notebookId,
-						noteId,
-						name: data.data.title,
-						description: data.data.description,
-						creatorId,
-						tags: data.tags,
-					};
-
-					// Call service and update notebook
-					this.notebookService.updateNote(request).subscribe(
-						() => {
-							observer.next({
-								description: request.description,
-								title: request.name,
-							});
-						},
-						(error) => {
-							console.log(error);
-						}
-					);
+					observer.next(data);
 				}
 			});
 		});
@@ -158,33 +120,20 @@ export class NoteOperationsService {
 	/**
 	 * Delete a notebook
 	 */
-	removeNote(notebookID: string, noteId: string): Observable<any> {
+	removeNote(notebookId: string, noteId: string): Observable<any> {
 		return Observable.create((observer: any) => {
-			const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+			const dialogRef = this.dialog.open(DeleteNoteComponent, {
 				data: {
-					message: 'Are you sure you want to delete this notebook?',
+					message: 'Are you sure you want to delete this note?',
+					notebookId,
+					noteId,
+					type: 'note',
 				},
 			});
 
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe((result) => {
-				if (result === true) {
-					if (notebookID !== '') {
-						this.notebookService
-							.deleteNote(notebookID, noteId)
-							.subscribe(
-								() => {
-									observer.next(true);
-								},
-								() => {
-									observer.next(false);
-									// console.log(error);
-								}
-							);
-					}
-				} else {
-					observer.next(false);
-				}
+				observer.next(result);
 			});
 		});
 	}
@@ -210,45 +159,8 @@ export class NoteOperationsService {
 		return new Observable((observer) => {
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe(
-				({ notebookId, title, description, tags }) => {
-					if (
-						notebookId !== undefined &&
-						title !== undefined &&
-						description !== undefined
-					) {
-						// console.log(notebookId, title, description);
-
-						const request = {
-							tags,
-							notebookId,
-							name: title,
-							description,
-						};
-
-						this.notebookService.createNote(request).subscribe(
-							(newNote) => {
-								// console.log(newNote);
-
-								if (newNote.noteId) {
-									this.snackBar.open(
-										'Note successfully cloned!',
-										'',
-										{
-											duration: 2000,
-										}
-									);
-									observer.next(newNote.noteId);
-								} else {
-									observer.next(false);
-								}
-							},
-							() => {
-								observer.next(false);
-							}
-						);
-					} else {
-						observer.next(false);
-					}
+				(result) => {
+					observer.next(result);
 				},
 				() => {
 					observer.next(false);

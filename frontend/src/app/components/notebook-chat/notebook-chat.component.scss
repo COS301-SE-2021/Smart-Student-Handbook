@@ -1,0 +1,68 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.topChat {
+  padding-top: 100px;
+}
+
+.bottomChat {
+  padding-bottom: 80px;
+}
+
+.chatBox {
+  max-width: 800px;
+  height: 60vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.chatWrapper {
+  min-height: 60vh;
+  width: 100%;
+}
+
+.message-user-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.chat-width {
+  width: 400px;
+}
+
+
+.card-text {
+  max-width: 250px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+/*
+POPUP
+*/
+
+.open-button {
+  cursor: pointer;
+  position: fixed;
+  bottom: 50px;
+  right: 100px;
+}
+
+.btn-circle.btn-xl {
+  width: 100px;
+  height: 100px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 50px;
+}
+
+.chat-popup {
+  bottom: 100px;
+  right: 100px;
+}
+
+
+
+

@@ -11,6 +11,7 @@ import {
 } from '@app/components';
 import { NotebookDto } from '@app/models';
 import { AccountService } from '@app/services';
+import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
 
 @Injectable({
 	providedIn: 'root',
@@ -72,29 +73,17 @@ export class NotebookOperationsService {
 				name: '',
 				profileUrl: '',
 				id: '',
+				senderId,
+				notebookID,
+				notebookTitle,
 			},
 		});
 
-		return Observable.create((observer) => {
+		return new Observable((observer) => {
 			// observer: any
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result) {
-					this.notificationService
-						.sendCollaborationRequest(
-							senderId,
-							result.id,
-							notebookID,
-							notebookTitle
-						)
-						.subscribe(
-							() => {
-								// console.log(val);
-								observer.next(true);
-							},
-							() => {
-								observer.next(false);
-							}
-						);
+					observer.next(true);
 				}
 			});
 		});
@@ -103,33 +92,22 @@ export class NotebookOperationsService {
 	/**
 	 * Remove a user from collaborating on a notebook
 	 * @param userId
-	 * @param notebookID
+	 * @param notebookId
 	 */
-	removeCollaborator(userId: string, notebookID: string): Observable<any> {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+	removeCollaborator(userId: string, notebookId: string): Observable<any> {
+		const dialogRef = this.dialog.open(DeleteNoteComponent, {
 			data: {
 				message: 'Are you sure you want to remove this user?',
+				notebookId,
+				userId,
+				type: 'collaborator',
 			},
 		});
 
 		return Observable.create((observer: any) => {
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe((result) => {
-				if (result === true) {
-					this.notebookService
-						.removeUserAccess({
-							userId,
-							notebookId: notebookID,
-						})
-						.subscribe(
-							() => {
-								observer.next(userId);
-							},
-							() => {
-								observer.next(false);
-							}
-						);
-				}
+				observer.next(result);
 			});
 		});
 	}
@@ -168,6 +146,7 @@ export class NotebookOperationsService {
 						name: notebook.access[k].displayName,
 						url: notebook.access[k].profileUrl,
 						id: notebook.access[k].userId,
+						accessId: notebook.access[k].accessId,
 					});
 				}
 
@@ -220,29 +199,20 @@ export class NotebookOperationsService {
 			width: screenWidth,
 			data: {
 				title: '',
+				author: notebookDto.author,
+				course: '',
 				description: '',
+				institution: notebookDto.institution,
 				private: '',
+				tags: [],
 				header: 'Create New Notebook',
 			},
 		});
 
-		return Observable.create((observer: any) => {
+		return new Observable((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result) {
-					this.notebookService
-						.createNotebook({
-							title: result.data.title,
-							author: notebookDto.author,
-							course: result.data.course,
-							description: result.data.description,
-							institution: notebookDto.institution,
-							private: result.data.private,
-							tags: result.tags,
-						})
-						.subscribe((data: any) => {
-							// console.log(data);
-							observer.next(data);
-						});
+					observer.next(result);
 				} else {
 					observer.next(false);
 				}
@@ -298,35 +268,23 @@ export class NotebookOperationsService {
 			width: screenWidth,
 			data: {
 				title: notebookDto.title,
+				author: notebookDto.author,
 				course: notebookDto.course,
 				description: notebookDto.description,
+				institution: notebookDto.institution,
 				private: notebookDto.private,
 				header: 'Update Notebook',
 				tags: notebookDto.tags,
+				notebookId: notebookDto.notebookId,
 			},
 		});
 
-		return Observable.create((observer: any) => {
+		return new Observable((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
 				if (result) {
-					const dto: NotebookDto = {
-						title: result.data.title,
-						author: notebookDto.author,
-						course: notebookDto.course,
-						description: result.data.description,
-						institution: notebookDto.institution,
-						private: result.data.private,
-						tags: result.tags,
-						notebookId: notebookDto.notebookId,
-					};
-
-					if (result) {
-						this.updateNotebookTags(dto).subscribe(
-							(notebookResult) => {
-								observer.next(notebookResult);
-							}
-						);
-					}
+					observer.next(result);
+				} else {
+					observer.next(false);
 				}
 			});
 		});

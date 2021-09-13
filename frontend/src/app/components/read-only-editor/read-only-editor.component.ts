@@ -25,19 +25,18 @@ export class ReadOnlyEditorComponent implements AfterViewInit {
 			async ({ noteId, title }) => {
 				this.noteTitle = title;
 
-				this.quill = new Quill('#editor-container', {
+				this.quill = new Quill('#readonlyEditor', {
 					modules: {
 						syntax: false,
-						toolbar: '#toolbar-container',
 					},
 					placeholder: 'Loading...',
 					readOnly: true,
 					theme: 'bubble',
 				});
 
-				window.addEventListener('blur', () => {
-					this.quill.blur();
-				});
+				// window.addEventListener('blur', () => {
+				// 	this.quill.blur();
+				// });
 
 				// connection to firebase
 				const dbRefObject = firebase.database().ref(`notes/${noteId}`);
@@ -66,9 +65,6 @@ export class ReadOnlyEditorComponent implements AfterViewInit {
 						 */
 						await dbRefObject.once('value', async (snap) => {
 							console.log(snap.val().changes);
-							console.log(this.noteTitle);
-							console.log(noteId);
-
 							await this.quill.setContents(snap.val().changes);
 
 							this.isCompleted = true;

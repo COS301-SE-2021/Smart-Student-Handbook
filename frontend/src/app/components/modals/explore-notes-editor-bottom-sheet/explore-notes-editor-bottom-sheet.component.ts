@@ -1,10 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 import { Component, Inject, OnInit } from '@angular/core';
-import EditorJS from '@editorjs/editorjs';
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Collaborators, Tag } from '@app/components';
-import { AddTagsTool } from '@app/components/AddTagsTool/AddTagsTool';
 import firebase from 'firebase';
 import {
 	MAT_BOTTOM_SHEET_DATA,
@@ -15,6 +13,7 @@ import {
 	NotebookService,
 	NoteOperationsService,
 } from '@app/services';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
 @Component({
 	selector: 'app-explore-notes-bottom-sheet',
@@ -32,6 +31,7 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';
@@ -67,7 +67,8 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		private bottomSheetRef: MatBottomSheetRef<ExploreNotesEditorBottomSheetComponent>,
 		private notebookService: NotebookService,
 		private noteOperations: NoteOperationsService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private exploreObservables: ExploreObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -75,6 +76,12 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 		this.isCompleted = false;
 		this.loadReadonly(this.data.noteId, this.data.title);
 		this.user = this.data.user;
+
+		this.exploreObservables.setOpenExploreViewNote(
+			this.data.noteId,
+			this.data.title
+		);
+		this.isCompleted = true;
 	}
 
 	/**
@@ -106,15 +113,26 @@ export class ExploreNotesEditorBottomSheetComponent implements OnInit {
 	 * Clone a note
 	 */
 	cloneNote() {
-		this.isCompleted = false;
-
 		this.noteOperations.getUserNotebooks().subscribe((options: any) => {
 			// console.log(options);
 
-			this.isCompleted = true;
-
 			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
-				// SAVE NOTE INFO TO CLONED NOTE
+				this.isCompleted = false;
+
+				const dbRefObject = firebase
+					.database()
+					.ref(`notes/${this.noteId}`);
+
+				dbRefObject.once('value', async (snap) => {
+					const changes = snap.val();
+
+					await firebase
+						.database()
+						.ref(`notes/${newNoteId}`)
+						.set(changes);
+
+					this.isCompleted = true;
+				});
 			});
 		});
 	}

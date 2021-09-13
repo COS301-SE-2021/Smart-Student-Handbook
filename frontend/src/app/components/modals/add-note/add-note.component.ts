@@ -1,13 +1,19 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
+import { NotebookService } from '@app/services';
 
 export interface AddNoteData {
 	message: string;
 	title: string;
 	description: string;
 	tags: string[];
+	notebookId: string;
+	notebookTitle: string;
+	userId: string;
+	method: string;
+	noteId: string;
 }
 
 @Component({
@@ -16,13 +22,16 @@ export interface AddNoteData {
 	styleUrls: ['./add-note.component.scss'],
 })
 export class AddNoteComponent {
+	doneLoading: boolean = true;
+
 	tags: string[] = [];
 
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	constructor(
 		public dialogRef: MatDialogRef<AddNoteComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: AddNoteData
+		@Inject(MAT_DIALOG_DATA) public data: AddNoteData,
+		private notebookService: NotebookService
 	) {
 		if (this.data.tags) this.tags = this.data.tags;
 	}
@@ -57,5 +66,66 @@ export class AddNoteComponent {
 
 		// Clear the input value
 		event.chipInput!.clear();
+	}
+
+	createNote() {
+		this.doneLoading = false;
+
+		if (this.data.method === 'create') {
+			const request = {
+				notebookId: this.data.notebookId,
+				name: this.data.title,
+				description: this.data.description,
+				tags: this.data.tags,
+			};
+
+			// Call service and create notebook
+			this.notebookService.createNote(request).subscribe(
+				(data) => {
+					const newNotebook = {
+						userId: this.data.userId,
+						name: request.name,
+						description: request.description,
+						tags: request.tags,
+						noteId: data.noteId,
+						notebookTitle: this.data.notebookTitle,
+					};
+
+					this.doneLoading = true;
+
+					this.dialogRef.close({
+						notebook: newNotebook,
+						id: data.noteId,
+					});
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		} else {
+			const request = {
+				notebookId: this.data.notebookId,
+				noteId: this.data.noteId,
+				name: this.data.title,
+				description: this.data.description,
+				creatorId: this.data.userId,
+				tags: this.data.tags,
+			};
+
+			// Call service and update notebook
+			this.notebookService.updateNote(request).subscribe(
+				() => {
+					this.doneLoading = true;
+
+					this.dialogRef.close({
+						description: request.description,
+						title: request.name,
+					});
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		}
 	}
 }

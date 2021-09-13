@@ -1,3 +1,5 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading" style="margin: -15px 0 10px 0;"></mat-progress-bar>
+
 <h3 mat-dialog-title>{{data.header}}</h3>
 
 <mat-dialog-content class="mat-typography">
@@ -77,5 +79,5 @@
 
 <div mat-dialog-actions align="end">
 	<button mat-button (click)="onNoClick()">Cancel</button>
-	<button mat-button [mat-dialog-close]="{data: data, tags: tags}" cdkFocusInitial>Ok</button>
+	<button mat-button (click)="addNotebook()" cdkFocusInitial>Ok</button>
 </div>

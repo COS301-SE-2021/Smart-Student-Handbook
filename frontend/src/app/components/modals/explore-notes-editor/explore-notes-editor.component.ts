@@ -39,6 +39,8 @@ export class ExploreNotesEditorComponent implements OnInit {
 	ngOnInit(): void {
 		this.isCompleted = false;
 		this.loadReadonly(this.data.noteId, this.data.title);
+
+		this.noteId = this.data.noteId;
 		this.user = this.data.user;
 
 		this.exploreObservables.setOpenExploreViewNote(
@@ -54,6 +56,7 @@ export class ExploreNotesEditorComponent implements OnInit {
 	 * @param title
 	 */
 	async loadReadonly(noteId: string, title: string) {
+		// console.log(noteId);
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
@@ -76,7 +79,18 @@ export class ExploreNotesEditorComponent implements OnInit {
 			this.isCompleted = true;
 
 			this.noteOperations.cloneNote(options).subscribe((newNoteId) => {
-				// SAVE NOTE INFO TO CLONED NOTE
+				const dbRefObject = firebase
+					.database()
+					.ref(`notes/${this.noteId}`);
+
+				dbRefObject.once('value', async (snap) => {
+					const changes = snap.val();
+
+					await firebase
+						.database()
+						.ref(`notes/${newNoteId}`)
+						.set(changes);
+				});
 			});
 		});
 	}

@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	OnDestroy,
+	OnInit,
+	ViewChild,
+} from '@angular/core';
 import { AccountService, NotebookObservablesService } from '@app/services';
 import firebase from 'firebase';
 import Quill from 'quill';
@@ -7,13 +13,26 @@ import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import QuillCursors from 'quill-cursors';
 import { QuillBinding } from 'y-quill';
+import { BehaviorSubject, Observable } from 'rxjs';
+import {
+	ActivatedRouteSnapshot,
+	CanDeactivate,
+	RouterStateSnapshot,
+	UrlTree,
+} from '@angular/router';
 
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
 	styleUrls: ['./note-editor.component.scss'],
 })
-export class NoteEditorComponent implements OnInit {
+export class NoteEditorComponent
+	implements
+		OnInit,
+		AfterViewInit,
+		OnDestroy,
+		CanDeactivate<NoteEditorComponent>
+{
 	Delta = Quill.import('delta');
 
 	user: any;
@@ -33,19 +52,29 @@ export class NoteEditorComponent implements OnInit {
 	notebookTitle: string = 'Smart Student';
 
 	colours = [
-		'#FF0202',
-		'#FF8102',
-		'#3CAEA3',
-		'#FFFF02',
-		'#02FF02',
-		'#0E02FF',
-		'#8D02FF',
-		'#FF02F3',
-		'#B302FF',
-		'#02FFB3',
+		'rgba(217,0,0,0.8)',
+		'rgba(250,123,0,0.8)',
+		'rgba(70,220,194,0.8)',
+		'rgba(245,245,0,0.8)',
+		'rgba(0,208,59,0.8)',
+		'rgba(11,0,250,0.8)',
+		'rgba(142,0,255,0.8)',
+		'rgba(194,0,182,0.8)',
+		'rgba(104,0,147,0.8)',
+		'rgba(0,154,110,0.8)',
 	];
 
-	height = '100vh';
+	height: number = 0;
+
+	toolbarHeight: number = 0;
+
+	heightInPx: string = '100vh';
+
+	provider: any = undefined;
+
+	loaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+	loadedSubscription: any;
 
 	@ViewChild('editor') editor?: QuillEditorComponent;
 
@@ -60,33 +89,68 @@ export class NoteEditorComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		if (this.provider !== undefined) this.provider.destroy();
+
+		this.loaded = new BehaviorSubject(false);
+
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
 
-		this.notebookObservables.loadEditor.subscribe((noteInfo: any) => {
-			this.nrOfNotesLoaded += 1;
-			if (noteInfo.notebookId !== '') {
-				this.noteTitle = noteInfo.title;
-				this.noteId = noteInfo.noteId;
-				this.notebookId = noteInfo.notebookId;
-				this.notebookTitle = noteInfo.notebookTitle;
-				this.noteDescription = noteInfo.description;
+		this.notebookObservables.loadEditor.subscribe(async (noteInfo: any) => {
+			this.noteTitle = noteInfo.title;
+			this.noteId = noteInfo.noteId;
+			this.notebookId = noteInfo.notebookId;
+			this.notebookTitle = noteInfo.notebookTitle;
+			this.noteDescription = noteInfo.description;
 
-				this.loadQuillEditor();
-			}
+			this.loadedSubscription = this.loaded.subscribe((load) => {
+				if (load) {
+					if (noteInfo.notebookId !== '') {
+						if (this.provider !== undefined)
+							this.provider.destroy();
+						this.editorOperations();
+					}
+				}
+			});
 		});
 
 		this.notebookObservables.editorHeight.subscribe(({ height }) => {
-			this.height = height;
+			this.height = height - this.toolbarHeight;
+			this.heightInPx = `${this.height}px`;
+		});
+
+		this.notebookObservables.dragAndDrop.subscribe(({ content }) => {
+			if (content.length > 0) {
+				this.addContent(content);
+			}
+		});
+
+		this.notebookObservables.removeNote.subscribe((remove) => {
+			if (remove !== '') {
+				this.noteTitle = 'Smart Student';
+				this.noteId = '';
+				this.notebookId = '';
+				this.notebookTitle = '';
+				this.noteDescription = '';
+
+				this.height += this.toolbarHeight - 30;
+				this.heightInPx = `${this.height}px`;
+			}
 		});
 	}
 
-	// async ngAfterViewInit(): Promise<void> {
+	async ngAfterViewInit(): Promise<void> {
+		await this.loadQuillEditor();
+	}
 
-	async loadQuillEditor() {
+	async editorOperations() {
+		if (this.provider) this.provider.destroy();
+
+		this.quill.readOnly = false;
+
 		/**
 		 * Set user colour, notebookId and username
 		 */
@@ -97,41 +161,21 @@ export class NoteEditorComponent implements OnInit {
 				Math.floor(Math.random() * 10000) % this.colours.length
 			];
 
-		/**
-		 * Register to see other users cursors on quill
-		 */
-		Quill.register('modules/cursors', QuillCursors);
-
-		/**
-		 * Initialise quill editor
-		 */
-		this.quill = new Quill('#editor-container', {
-			modules: {
-				cursors: true,
-				syntax: false,
-				toolbar: '#toolbar-container',
-			},
-			placeholder: 'Loading...',
-			theme: 'snow',
-		});
-
-		// Detect change on quill
-		const change = new this.Delta();
-
 		// Initialize doc to sync editor content
 		const doc = new Y.Doc();
 
 		// Define a shared text type on the document
-		const provider = new WebrtcProvider(this.noteId, doc);
+		this.provider = new WebrtcProvider(this.noteId, doc);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
 
-		const { awareness } = provider;
+		const { awareness } = this.provider;
 
 		awareness.setLocalStateField('user', {
 			name: username,
 			color: colour,
+			profileUrl: this.user.profilePic,
 		});
 
 		// "Bind" the quill editor to a Yjs text type.
@@ -144,7 +188,7 @@ export class NoteEditorComponent implements OnInit {
 		});
 		this.quill.on('text-change', (delta, oldDelta, source) => {
 			if (source === 'user') {
-				const changes = change.compose(delta);
+				const changes = this.quill.getContents();
 				firebase.database().ref(`notes/${this.noteId}`).set({
 					changes,
 				});
@@ -189,17 +233,130 @@ export class NoteEditorComponent implements OnInit {
 			awareness.getStates().forEach((state) => {
 				if (state.user) {
 					strings.push(
-						// `<div style="color:${state.user.color};">• ${state.user.name}</div>`
-						`<div class="text-center" style="border: 2px solid ${
-							state.user.color
-						}; border-radius: 13px; width: 26px; height: 26px; padding-top: 1px;">${state.user.name.substr(
-							0,
-							1
-						)}</div>`
+						`<div class="text-center" style="
+              border-radius: 18px;
+              width: 36px;
+              height: 36px;
+              display: inline-block;
+              margin-right: 7px;
+              border: 3px solid ${state.user.color};
+            ">
+                <div style="
+                  background-image: url(${state.user.profileUrl});
+                  background-size: cover;
+                  background-position: center;
+                  margin: 2px;
+                  width: 26px;
+                  height: 26px;
+                  border-radius: 14px;
+                "></div>
+              </div>`
 					);
 				}
 				document.querySelector('#users').innerHTML = strings.join('');
+
+				this.toolbarHeight =
+					document.getElementById('toolbar').offsetHeight;
+				this.heightInPx = `${this.height - this.toolbarHeight}px`;
 			});
 		});
+
+		if (this.toolbarHeight === 0) {
+			this.toolbarHeight =
+				document.getElementById('toolbar').offsetHeight;
+			this.heightInPx = `${this.height - this.toolbarHeight}px`;
+		} else {
+			this.toolbarHeight =
+				document.getElementById('toolbar').offsetHeight;
+		}
+	}
+
+	async loadQuillEditor() {
+		/**
+		 * Register to see other users cursors on quill
+		 */
+		Quill.register('modules/cursors', QuillCursors);
+
+		/**
+		 * Initialise quill editor
+		 */
+		this.quill = new Quill('#editor-container', {
+			modules: {
+				cursors: true,
+				syntax: false,
+				toolbar: '#toolbar-container',
+			},
+			// placeholder: 'Loading...',
+			theme: 'snow',
+			readOnly: false,
+		});
+
+		this.loaded.next(true);
+
+		if (window.innerWidth < 960) {
+			this.loaded.complete();
+		}
+	}
+
+	ngOnDestroy(): void {
+		if (this.provider) this.provider.destroy();
+	}
+
+	/**
+	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
+	 * @param event get the content that is dropped
+	 */
+	drop(event: any) {
+		const parser = new DOMParser();
+
+		const e = event.item.element.nativeElement.innerHTML;
+
+		const doc = parser.parseFromString(e, 'text/html');
+
+		const content = doc.getElementsByClassName('snippetContent');
+		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
+
+		const changes: any[] = [];
+		changes.push({
+			insert: `${title}\n`,
+		});
+
+		for (let i = 0; i < content.length; i += 1) {
+			changes.push({
+				insert: `${content[i].innerHTML}`,
+			});
+		}
+
+		this.addContent(changes);
+	}
+
+	addContent(content: any[]) {
+		const changes = this.quill.getContents();
+
+		for (let i = 0; i < content.length; i += 1) {
+			changes.ops.push({
+				insert: `${content[i].insert}\n`,
+			});
+		}
+
+		this.quill.setContents(changes);
+
+		firebase.database().ref(`notes/${this.noteId}`).set({
+			changes,
+		});
+	}
+
+	canDeactivate(
+		component: NoteEditorComponent,
+		currentRoute: ActivatedRouteSnapshot,
+		currentState: RouterStateSnapshot,
+		nextState?: RouterStateSnapshot
+	):
+		| Observable<boolean | UrlTree>
+		| Promise<boolean | UrlTree>
+		| boolean
+		| UrlTree {
+		if (this.provider) this.provider.destroy();
+		return true;
 	}
 }
