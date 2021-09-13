@@ -72,6 +72,8 @@ export class NoteEditorComponent
 
 	provider: any = undefined;
 
+	globalUserCounter: any;
+
 	loaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
 	loadedSubscription: any;
@@ -88,7 +90,7 @@ export class NoteEditorComponent
 		private notebookObservables: NotebookObservablesService
 	) {}
 
-	ngOnInit(): void {
+	async ngOnInit(): Promise<void> {
 		if (this.provider !== undefined) this.provider.destroy();
 
 		this.loaded = new BehaviorSubject(false);
@@ -140,6 +142,14 @@ export class NoteEditorComponent
 				this.heightInPx = `${this.height}px`;
 			}
 		});
+
+		const counter = await firebase
+			.database()
+			.ref(`/status/${this.notebookId}`)
+			.get()
+			.then((doc) => doc.val().count);
+
+		this.globalUserCounter = counter;
 	}
 
 	async ngAfterViewInit(): Promise<void> {
@@ -222,13 +232,15 @@ export class NoteEditorComponent
 				/**
 				 * Render output on Editor
 				 */
-				await dbRefObject.once('value', async (snap) => {
-					await this.quill.setContents(snap.val().changes);
-				});
+				if (this.globalUserCounter === 0) {
+					await dbRefObject.once('value', async (snap) => {
+						await this.quill.setContents(snap.val().changes);
+					});
+				}
 			});
 
 		// Display all users editing the notebook
-		awareness.on('change', () => {
+		awareness.on('change', async () => {
 			const strings = [];
 			awareness.getStates().forEach((state) => {
 				if (state.user) {
@@ -259,6 +271,11 @@ export class NoteEditorComponent
 					document.getElementById('toolbar').offsetHeight;
 				this.heightInPx = `${this.height - this.toolbarHeight}px`;
 			});
+
+			await firebase
+				.database()
+				.ref(`/status/${this.notebookId}`)
+				.set({ count: strings.length });
 		});
 
 		if (this.toolbarHeight === 0) {
@@ -298,7 +315,7 @@ export class NoteEditorComponent
 		}
 	}
 
-	ngOnDestroy(): void {
+	async ngOnDestroy(): Promise<void> {
 		if (this.provider) this.provider.destroy();
 	}
 
@@ -347,9 +364,13 @@ export class NoteEditorComponent
 	}
 
 	canDeactivate(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		component: NoteEditorComponent,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentRoute: ActivatedRouteSnapshot,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentState: RouterStateSnapshot,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		nextState?: RouterStateSnapshot
 	):
 		| Observable<boolean | UrlTree>
