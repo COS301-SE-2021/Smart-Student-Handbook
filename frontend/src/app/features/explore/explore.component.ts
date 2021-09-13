@@ -10,6 +10,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 
+
+// algolia events sender
+
+
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
 	'589f047ba9ac7fa58796f394427d7f35'

@@ -1,22 +1,25 @@
-<mat-toolbar>
-  <mat-toolbar-row>
-    <h2>{{noteTitle}}</h2>
+<div id="exploreBottomSheetEditor">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <h2>{{noteTitle}}</h2>
 
-    <span class="example-spacer"></span>
+      <span class="example-spacer"></span>
 
-    <button mat-icon-button (click)="cloneNote()">
-      <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
-    </button>
-
-
-    <button mat-icon-button (click)="closeSheet($event)">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar-row>
-
-</mat-toolbar>
-
-<mat-progress-bar mode="indeterminate" id="exploreNoteLoader" *ngIf="!isCompleted"></mat-progress-bar>
+      <button mat-icon-button (click)="cloneNote()">
+        <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
+      </button>
 
 
-<div id="exploreBottomSheetEditor" class="editor"></div>
+      <button mat-icon-button (click)="closeSheet($event)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+
+  <mat-progress-bar mode="indeterminate" id="exploreNoteLoader" *ngIf="!isCompleted"></mat-progress-bar>
+
+
+  <!--<div id="exploreBottomSheetEditor" class="editor"></div>-->
+  <app-read-only-editor></app-read-only-editor>
+</div>
