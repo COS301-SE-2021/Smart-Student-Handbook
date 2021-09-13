@@ -314,7 +314,7 @@ export class NoteEditorComponent
 	 * Handler for when content from the smart assist panel is drag & dropped into the notebook
 	 * @param event get the content that is dropped
 	 */
-	drop(event: any) {
+	async drop(event: any) {
 		const parser = new DOMParser();
 
 		const e = event.item.element.nativeElement.innerHTML;
@@ -330,28 +330,31 @@ export class NoteEditorComponent
 
 		console.log(recNoteId);
 
-		const changes: any[] = [];
-		changes.push({
-			insert: `${title}\n`,
-		});
+		let changes = [];
 
-		for (let i = 0; i < content.length; i += 1) {
-			changes.push({
-				insert: `${content[i].innerHTML}`,
+		await firebase
+			.database()
+			.ref(`notes/${recNoteId}`)
+			.get()
+			.then((docdata) => {
+				changes = docdata.val().changes.ops;
 			});
-		}
+
+		console.log(changes);
 
 		this.addContent(changes);
 	}
 
 	addContent(content: any[]) {
-		const changes = this.quill.getContents();
+		let changes = this.quill.getContents();
 
-		for (let i = 0; i < content.length; i += 1) {
-			changes.ops.push({
-				insert: `${content[i].insert}\n`,
-			});
-		}
+		changes = changes.ops.concat(content);
+
+		// for (let i = 0; i < content.length; i += 1) {
+		// 	changes.ops.push({
+		// 		insert: `${content[i].insert}\n`,
+		// 	});
+		// }
 
 		this.quill.setContents(changes);
 

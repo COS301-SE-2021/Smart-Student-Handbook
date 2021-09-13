@@ -143,18 +143,16 @@ export class SmartAssistComponent implements OnInit {
 		snippet.style.overflow = 'hidden';
 	}
 
-	addToNote() {
-		const content = [
-			{
-				insert: 'Functional Requirements',
-			},
-			{
-				insert: ' R1:The system should allow users to manage their Profile and Account.',
-			},
-			{
-				insert: 'R2:The system should allow users to create notes and add content to it then add appropriate tags to their content.',
-			},
-		];
+	async addToNote(recNoteId: string) {
+		let content = [];
+
+		await firebase
+			.database()
+			.ref(`notes/${recNoteId}`)
+			.get()
+			.then((docdata) => {
+				content = docdata.val().changes.ops;
+			});
 
 		this.notebookObservables.setDragAndDrop(content);
 
