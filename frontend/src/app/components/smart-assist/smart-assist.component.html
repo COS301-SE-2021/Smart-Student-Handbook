@@ -1,100 +1,145 @@
-<mat-card
-  *ngIf="draggable"
-  align="start"
-  class="card text-left snippetCard"
-  cdkDrag
-  (mouseleave)="hidePreview(0)"
->
-  <mat-card-header class="snippetContentHeader">
-    <mat-card-subtitle class="date">
-      JUNE 3 2021
-    </mat-card-subtitle>
+<!--<mat-card-->
+<!--  *ngIf="draggable"-->
+<!--  align="start"-->
+<!--  class="card text-left snippetCard"-->
+<!--  cdkDrag-->
+<!--  (mouseleave)="hidePreview(0)"-->
+<!--&gt;-->
+<!--  <mat-card-header class="snippetContentHeader">-->
+<!--    <mat-card-subtitle class="date">-->
+<!--      JUNE 3 2021-->
+<!--    </mat-card-subtitle>-->
 
-    <mat-icon class="preview" fxHide.gt-sm>
-      note_add
-    </mat-icon>
-    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
-      aspect_ratio
-    </mat-icon>
+<!--    <mat-icon class="preview" fxHide.gt-sm>-->
+<!--      note_add-->
+<!--    </mat-icon>-->
+<!--    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>-->
+<!--      aspect_ratio-->
+<!--    </mat-icon>-->
 
-    <mat-card-title class="snippetTitle" data-type="header">
-      Functional Requirements
-    </mat-card-title>
+<!--    <mat-card-title class="snippetTitle" data-type="header">-->
+<!--      Functional Requirements-->
+<!--    </mat-card-title>-->
 
-    <mat-card-title class="snippetContent" data-type="paragraph">
-      R1:The system should allow users to manage their
-      Profile and Account.
-    </mat-card-title>
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R1:The system should allow users to manage their-->
+<!--      Profile and Account.-->
+<!--    </mat-card-title>-->
 
-    <mat-card-title class="snippetContent" data-type="paragraph">
-      R2:The system should allow users to create notes and
-      add content to it then add appropriate tags to their
-      content.
-    </mat-card-title>
-  </mat-card-header>
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R2:The system should allow users to create notes and-->
+<!--      add content to it then add appropriate tags to their-->
+<!--      content.-->
+<!--    </mat-card-title>-->
+<!--  </mat-card-header>-->
 
-  <div class="tags">
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
+<!--  <div class="tags">-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</mat-card>-->
+
+<!--<mat-card-->
+<!--  *ngIf="!draggable"-->
+<!--  align="start"-->
+<!--  class="card text-left snippetCard"-->
+<!--  (mouseleave)="hidePreview(0)"-->
+<!--&gt;-->
+<!--  <mat-card-header class="snippetContentHeader">-->
+<!--    <mat-card-subtitle class="date">-->
+<!--      JUNE 3 2021-->
+<!--    </mat-card-subtitle>-->
+
+<!--    <mat-icon class="preview" fxHide.gt-sm (click)="addToNote('')">-->
+<!--      note_add-->
+<!--    </mat-icon>-->
+<!--    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>-->
+<!--      aspect_ratio-->
+<!--    </mat-icon>-->
+
+<!--    <mat-card-title class="snippetTitle" data-type="header">-->
+<!--      Functional Requirements-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R1:The system should allow users to manage their-->
+<!--      Profile and Account.-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R2:The system should allow users to create notes and-->
+<!--      add content to it then add appropriate tags to their-->
+<!--      content.-->
+<!--    </mat-card-title>-->
+<!--  </mat-card-header>-->
+
+<!--  <div class="tags">-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</mat-card>-->
+
+
+
+<div *ngFor="let noteItem of notes">
+
+  <mat-card
+    align="start"
+    class="card text-left snippetCard"
+    cdkDrag
+    (mouseleave)="hidePreview(0)"
+    data.noteId='{{noteItem.noteId}}'
+  >
+    <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
+      <mat-card-subtitle class="date">
+      {{noteItem.date}}
+      </mat-card-subtitle>
+
+      <mat-icon class="preview" fxHide.gt-sm (click)='addToNote(noteItem.noteId)'>
+        note_add
+      </mat-icon>
+      <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
+        aspect_ratio
+      </mat-icon>
+
+      <mat-card-title class="snippetTitle" data-type="header" >
+        {{noteItem.title}}
+      </mat-card-title>
+
+
+      <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
+        {{b.insert}}
+      </mat-card-title>
+
+    </mat-card-header>
+
+    <div class="tags" >
+      <div *ngFor="let t of noteItem.tags">
+        <div class="tag">
+          <mat-chip color="primary" class="item">{{t}}</mat-chip>
+        </div>
+      </div>
     </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-  </div>
-</mat-card>
+  </mat-card>
+</div>
 
-<mat-card
-  *ngIf="!draggable"
-  align="start"
-  class="card text-left snippetCard"
-  (mouseleave)="hidePreview(0)"
->
-  <mat-card-header class="snippetContentHeader">
-    <mat-card-subtitle class="date">
-      JUNE 3 2021
-    </mat-card-subtitle>
-
-    <mat-icon class="preview" fxHide.gt-sm (click)="addToNote()">
-      note_add
-    </mat-icon>
-    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
-      aspect_ratio
-    </mat-icon>
-
-    <mat-card-title class="snippetTitle" data-type="header">
-      Functional Requirements
-    </mat-card-title>
-
-    <mat-card-title class="snippetContent" data-type="paragraph">
-      R1:The system should allow users to manage their
-      Profile and Account.
-    </mat-card-title>
-
-    <mat-card-title class="snippetContent" data-type="paragraph">
-      R2:The system should allow users to create notes and
-      add content to it then add appropriate tags to their
-      content.
-    </mat-card-title>
-  </mat-card-header>
-
-  <div class="tags">
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-    <div class="tag">
-      <mat-chip color="primary" class="item">Test</mat-chip>
-    </div>
-  </div>
-</mat-card>

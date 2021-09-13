@@ -7,10 +7,10 @@ services:
         ports: 
             - "6001:6001"
         volumes:
-            - models:/app/models
-            - NotebookDataset:/app/NotebookDataset
-
-
+                - models:/app/models
+                - NotebookDataset:/app/NotebookDataset
+    
+    
 volumes: 
     models:
 
