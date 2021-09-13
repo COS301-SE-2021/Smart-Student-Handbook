@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
@@ -24,7 +24,7 @@ export interface AddNoteData {
 export class AddNoteComponent {
 	doneLoading: boolean = true;
 
-	tags: string[] = [];
+	// tags: string[] = [];
 
 	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
@@ -33,7 +33,7 @@ export class AddNoteComponent {
 		@Inject(MAT_DIALOG_DATA) public data: AddNoteData,
 		private notebookService: NotebookService
 	) {
-		if (this.data.tags) this.tags = this.data.tags;
+		// if (this.data.tags) this.tags = this.data.tags;
 	}
 
 	onNoClick(): void {
@@ -45,10 +45,10 @@ export class AddNoteComponent {
 	 * @param tag the tag to be removed
 	 */
 	removeTag(tag: string): void {
-		const index = this.tags.indexOf(tag);
+		const index = this.data.tags.indexOf(tag);
 
 		if (index >= 0) {
-			this.tags.splice(index, 1);
+			this.data.tags.splice(index, 1);
 		}
 	}
 
@@ -61,7 +61,7 @@ export class AddNoteComponent {
 
 		// Add our fruit
 		if (value) {
-			this.tags.push(value);
+			this.data.tags.push(value);
 		}
 
 		// Clear the input value
