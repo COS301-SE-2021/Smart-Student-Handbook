@@ -511,7 +511,8 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	 */
 	showDefaultImage() {
 		const e = document.getElementById('editor') as HTMLElement;
-		e.style.backgroundImage = 'url(notebook-placeholder-background.png)';
+		e.style.backgroundImage =
+			'url(notebook-placeholder-splashBackground.png)';
 
 		if (this.Editor) this.Editor.destroy();
 		// @ts-ignore

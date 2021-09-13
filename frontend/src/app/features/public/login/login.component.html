@@ -1,51 +1,44 @@
-<mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+<div id="background">
 
-<img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" height="200" alt="Responsive image">
+  <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
 
-<mat-card class="transparent">
-	<mat-card-content>
-		<form [formGroup]="form" (ngSubmit)="onSubmit()">
-			<h2>Log In</h2>
-			<mat-error *ngIf="loginFailed">
-				{{ errorMessage }}
-			</mat-error>
+  <img src="../../../../assets/logo/SmartStudentHandbook.png" class="rounded mx-auto d-block" height="200" alt="Responsive image">
 
-			<mat-form-field class="full-width-input">
-				<input autocomplete="off" matInput placeholder="Email" formControlName="email" required
-               pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+"/>
-				<mat-error> Please provide a valid email address </mat-error>
-			</mat-form-field>
+  <mat-card id="loginCard">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h2>Log In</h2>
+        <mat-error *ngIf="loginFailed">
+          {{ errorMessage }}
+        </mat-error>
 
-      <br/>
+        <mat-form-field class="full-width-input">
+          <input autocomplete="off" matInput placeholder="Email" formControlName="email" required
+                 pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+"/>
+          <mat-error> Please provide a valid email address </mat-error>
+        </mat-form-field>
 
-			<mat-form-field class="full-width-input">
-				<input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required
-               pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,40}"/>
-				<mat-error> Please provide a valid password </mat-error>
-			</mat-form-field>
+        <br/>
 
-      <br/>
+        <mat-form-field class="full-width-input">
+          <input autocomplete="off" matInput type="Password" placeholder="Password" formControlName="password" required
+                 pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,40}"/>
+          <mat-error> Please provide a valid password </mat-error>
+        </mat-form-field>
 
-			<button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Login</button>
-		</form>
-	</mat-card-content>
+        <br/>
 
-  <p class="text-center">
-    <a [routerLink]="['/account/forgotPassword']">Forgot Password?</a>
+        <button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Login</button>
+      </form>
+    </mat-card-content>
+
+    <p class="text-center">
+      <a [routerLink]="['/account/forgotPassword']">Forgot Password?</a>
+    </p>
+  </mat-card>
+
+  <p class="text-center text-light">
+    New to Smart Student Handbook? <a style="text-decoration: none; color: #004f6d" [routerLink]="['/account/register']">Sign up</a>
   </p>
-</mat-card>
 
-<p class="text-center">
-  New to Smart Student Handbook? <a [routerLink]="['/account/register']">Sign up</a>
-</p>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+</div>
