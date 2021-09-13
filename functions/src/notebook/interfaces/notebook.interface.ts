@@ -1,4 +1,3 @@
-import { Note } from './note.interface';
 import { Access } from './access.interface';
 
 export interface Notebook {
@@ -11,6 +10,6 @@ export interface Notebook {
 	private: boolean;
 	notebookId: string;
 	tags?: string[];
-	notes?: Note[];
+	notes?: any[];
 	access?: Access[];
 }

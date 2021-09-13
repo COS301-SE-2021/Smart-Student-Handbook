@@ -24,11 +24,23 @@ export class ExploreComponent {
 		apiKey: '589f047ba9ac7fa58796f394427d7f35',
 		appId: 'AD2K8AK74A',
 		indexName: 'userNotebooks',
+		clickAnalytics: true,
 		routing: true,
 		searchClient,
+		insightsClient: (window as any).aa,
 		searchParameters: {
 			hitsPerPage: 9,
 		},
+	};
+
+	config2 = {
+		apiKey: '589f047ba9ac7fa58796f394427d7f35',
+		appId: 'AD2K8AK74A',
+		indexName: 'userNotes',
+		clickAnalytics: true,
+		routing: true,
+		searchClient,
+		insightsClient: (window as any).aa,
 	};
 
 	hide: boolean = true;
@@ -38,6 +50,8 @@ export class ExploreComponent {
 	hideReviews: boolean = true;
 
 	title: string = '';
+
+	user: any = JSON.parse(<string>localStorage.getItem('user'));
 
 	constructor(
 		private bottomSheet: MatBottomSheet,

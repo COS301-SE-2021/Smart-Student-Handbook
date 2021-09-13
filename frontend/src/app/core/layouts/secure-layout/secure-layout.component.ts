@@ -12,7 +12,7 @@ import { onMainContentChange } from '@app/styling/animations';
 export class SecureLayoutComponent {
 	@ViewChild('sidenav') sidenav: MatSidenav | undefined;
 
-	title = 'smart-student';
+	title: string = 'Smart Student Handbook';
 
 	message: any;
 

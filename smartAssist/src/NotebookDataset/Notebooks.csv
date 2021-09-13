@@ -1,44 +1,5 @@
 noteId,name,tags,author,institution,course
-8a83e9ac-994d-43e6-9abb-94b15b327be2,Margaret's Museum,"['mining', 'dancelesson', 'coalmining']",chenjeff,Stellenbosch University,RRP 044
-f85a498e-fc27-43bf-ba67-442c24a0087f,Graveyard Shift,['maneatenbymonster'],keith17,The University of South Africa,NFU 070
-47fc00a6-a950-40ee-823e-b1c7ebf2f822,Angel Baby,"['schizophrenia', 'baby', 'therapist']",meltonmichelle,University of the Witwatersrand,ZXY 904
-99c8e750-63dd-43c7-9a0f-7ad49fb7c3bb,Chain Reaction,"['fbi', 'hydrogenbomb', 'secretlab']",kevin05,University of the Witwatersrand,ZXY 904
-4ce1095f-cca6-4e89-ab08-b3bd958fca49,Toy Story,"['jealousy', 'toy', 'boy']",hhudson,North West University,HIH 482
-9f0ddc2d-0cfc-4818-904e-d886807370fa,Moonraker,"['venice', 'massmurder', 'spacemarine']",colemandawn,University of the Witwatersrand,ZXY 904
-f9d30e4f-a5ed-4868-95e7-8823c5279bca,National Lampoon's Christmas Vacation,"['holiday', 'boss', 'cigar']",colemandawn,Stellenbosch University,RAQ 069
-2f7ee79f-ff60-49cf-b3ef-cbc91176b78e,The Day the Earth Stood Still,"['spacecraft', 'flyingsaucer', 'peace']",nicole91,University of Pretoria,JOE 016
-b1b027e0-06e7-40b5-8b20-73c3d4856db6,A Streetcar Named Desire,"['southernusa', 'rape', 'sistersisterrelationship']",cgiles,Stellenbosch University,MLX 086
-77a2b437-ac7f-4659-b2e1-b3d1673895d5,2001: A Space Odyssey,"['moon', 'jupiter', 'artificialintelligence']",fmitchell,University of Pretoria,JRP 729
-b619e346-8101-4bec-9772-b7fa29d57d97,Satisfaction,['femalebonding'],jeremylewis,University of the Witwatersrand,IUH 668
-b3151a6c-de33-47ff-937a-f342605166c8,Life as a House,"['fathersonrelationship', 'house', 'cancer']",jeremylewis,University of the Witwatersrand,SPE 230
-bea2aea0-3d4b-4881-ac98-c578a7fcf6d2,Timerider: The Adventure of Lyle Swann,"['timetravel', 'roadmovie']",sextonmatthew,University of Pretoria,KUW 789
-8f9e4e7d-d3aa-4dd4-8136-745c4eb34478,Slaughterhouse,"['psychopathickiller', 'slaughterhouse', 'teenager']",imiller,Stellenbosch University,SPE 230
-2d72fc96-e5f1-44ac-bcb1-6bf9b66f0295,Logan's Run,"['femalenudity', 'killerrobot', 'nudity']",wardthomas,University of the Witwatersrand,OOJ 823
-3cfd74f0-462a-4a97-ac57-584d85f7f3c7,Only Angels Have Wings,"['pilot', 'southamerica', 'oldflame']",brianparks,The University of South Africa,PDX 947
-df5d802f-cc3f-4da3-a3f0-a0555c065ba6,Vanya on 42nd Street,"['independentfilm', 'chekhov']",asnyder,The University of South Africa,PDX 947
-30a91735-baba-41d4-96fd-28749200b24f,"To Sir, with Love","['londonengland', 'education', 'teacher']",wharris,University of the Witwatersrand,PDT 770
-23137756-7219-4f6f-95fa-14cc8ff6834c,Back to School,"['college', 'whirlpool', 'clothingstore']",ebecker,University of the Witwatersrand,UKH 610
-ddf4212e-f8c9-494c-8ba8-412257712799,Gang Related,"['detective', 'surgeon', 'stripper']",brittanyhernandez,Stellenbosch University,STZ 151
-8ffdc02a-2500-4413-af1b-e2d35d14d48a,The Barefoot Contessa,"['dancer', 'count', 'millionaire']",robertperez,University of Pretoria,GJZ 830
-60c8fd6a-91eb-48ba-9737-70234741eeda,The Associate,"['career', 'sexism', 'autonomy']",ronaldsmith,The University of South Africa,TSB 297
-badafc77-d72f-4815-a2b8-d678426cdf69,Graveyard Shift,['maneatenbymonster'],loliver,North West University,JTD 784
-79571aa5-c439-4d0e-8407-4c9d1aa45617,McHale's Navy,"['terror', 'exoticisland', 'terrorist']",jcole,Stellenbosch University,TSB 297
-dacccbec-0903-49c4-b464-3e25fd2553f2,The Sound of Music,"['resistance', 'austria', 'worldwarii']",deborahedwards,The University of South Africa,TSB 297
-c34c5279-5985-42dd-ac63-2c9cc102974a,La Cage aux folles II,"['dragqueen', 'revue', 'murder']",baileybonnie,University of the Witwatersrand,CFA 603
-4207ad61-d585-458f-a801-b1b1b6aff401,Orlando,"['londonengland', 'queen', 'queenelizabethi']",baileybonnie,University of Pretoria,OZO 646
-9cc23df9-1cbc-4916-ad67-73aa69157da7,Heavenly Creatures,"['mother', 'sex', 'secret']",inavarro,The University of South Africa,GJZ 830
-5d45db02-dcf9-47ab-b58c-c6daed007912,I Dreamed of Africa,['africa'],loliver,The University of South Africa,GJZ 830
-ba72ef4e-9057-4ec2-b5ad-dd5d013cc774,Storytelling,"['sex', 'exploitation', 'highschool']",michael46,The University of South Africa,KJS 625
-925e0593-bf9d-40f1-b7af-3961ad5b0556,Rawhead Rex,"['monster', 'ireland']",michael46,University of the Witwatersrand,USZ 833
-727dc25c-0637-4fe6-9709-56d8bbb72d1a,The Object of My Affection,"['blinddate', 'love', 'fallinginlove']",jcole,University of the Witwatersrand,ZIW 691
-ffe1dcfd-0446-4e69-af03-bdff6ccb679a,Highlander: The Final Dimension,"['japan', 'newyork', 'scotland']",jcole,The University of South Africa,OZO 646
-8df78dae-a4b7-4a7c-91f4-7de1d617e402,Santa Claus: The Movie,"['holiday', 'christmas']",angelahall,University of Pretoria,UFA 360
-bad8c7f2-2ab8-4c1a-b03b-ee5352d46870,Titanica,"['shipwreck', 'titanic', 'underwater']",kaylakeller,Stellenbosch University,STZ 151
-1257ffe6-f8bb-41d1-bfd5-d4b76dfb5288,"I Love You, Don't Touch Me!",['womandirector'],robertperez,The University of South Africa,USZ 833
-07782574-bf70-446c-867c-a08ad107bdbf,Hotel de Love,['independentfilm'],deborahedwards,University of Pretoria,ZIW 691
-18b02dae-e163-486f-9a0f-97f1ffa1a56d,Brief Encounter,"['adultery', 'infidelity', 'passion']",jcole,North West University,JTD 784
-37f674a7-951a-422c-a494-91557230ad69,Ringmaster,"['talkshow', 'raunchy']",baileybonnie,The University of South Africa,KJS 625
-5f779a4d-e5fc-4bac-b352-eb1aeb46f5c8,Kramer vs. Kramer,"['wifehusbandrelationship', 'custodybattle', 'marriage']",dennisschmidt,North West University,STZ 151
-506c31a8-45f0-4905-8b32-0af440dabbbd,Playing by Heart,"['sex', 'adultery', 'hotel']",jcole,North West University,STZ 151
-6af50cac-1db9-4346-a5f4-09363e3b0531,A Bug's Life,"['winter', 'fight', 'ant']",kaylakeller,North West University,ZIW 691
-33c4fb76-2574-48d3-8898-d31409a816d4,Big Bully,['bully'],angelahall,The University of South Africa,STZ 151
+5f779a4d-cc3f-4da3-a3f0-a0555c065ba6,LooneyToons,['bully'],angelahall,The University of South Africa,STZ 151
+7f2d0fb7-04bb-41b9-beb9-6e0b300784c0,AGILE,"['Method', 'Software', 'Engineering', 'Team']",TheoMorkel,Unknown,COS 301
+d242ff80-1615-4114-8013-43a58fb78bb9,R,"['R', 'Data Science', 'Programming']",TheoMorkel,Unknown,COS 333
+c90521b7-c596-4717-90b9-91f26dee43c0,Python,['Programming Languages'],TheoMorkel,Unknown,COS 333

@@ -7,51 +7,59 @@ data = SmartAssistData()
 
 data.loadData(count=10000)
 
-data.generateFinalData(n_positive=5000)
+# data.generateFinalData(n_positive=5000)
 
-data.generateTrainTestData()
+# data.generateTrainTestData()
 
 smartmodel = SmartAssistModel(data=data)
 
-xtrain = {
-    'data': np.asarray(data.finalSetXTrain[:,0]).astype('float32'), 
-    'name': np.asarray(data.finalSetXTrain[:,1]).astype('float32'), 
-    'tags': np.asarray(data.finalSetXTrain[:,2]).astype('float32'), 
-    'author': np.asarray(data.finalSetXTrain[:,3]).astype('float32'), 
-    'institution': np.asarray(data.finalSetXTrain[:,4]).astype('float32'),
-    'course': np.asarray(data.finalSetXTrain[:,5]).astype('float32'),
-    'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
-    }
+print("buildingmodel")
 
-ytrain = data.finalSetYTrain
+smartmodel.buildModel()
 
-xtest = {
-    'data': np.asarray(data.finalSetXTest[:,0]).astype('float32'), 
-    'name': np.asarray(data.finalSetXTest[:,1]).astype('float32'), 
-    'tags': np.asarray(data.finalSetXTest[:,2]).astype('float32'), 
-    'author': np.asarray(data.finalSetXTest[:,3]).astype('float32'), 
-    'institution': np.asarray(data.finalSetXTest[:,4]).astype('float32'),
-    'course': np.asarray(data.finalSetXTest[:,5]).astype('float32'),
-    'soup': np.asarray(data.finalSetXTest[:,6].tolist()).astype('float32')
-    }
+print("training")
 
-ytest = data.finalSetYTest
+# xtrain = {
+#     'data': np.asarray(data.finalSetXTrain[:,0]).astype('float32'), 
+#     'name': np.asarray(data.finalSetXTrain[:,1]).astype('float32'), 
+#     'tags': np.asarray(data.finalSetXTrain[:,2]).astype('float32'), 
+#     'author': np.asarray(data.finalSetXTrain[:,3]).astype('float32'), 
+#     'institution': np.asarray(data.finalSetXTrain[:,4]).astype('float32'),
+#     'course': np.asarray(data.finalSetXTrain[:,5]).astype('float32'),
+#     'soup': np.asarray(data.finalSetXTrain[:,6].tolist()).astype('float32')
+#     }
+
+# ytrain = data.finalSetYTrain
+
+# xtest = {
+#     'data': np.asarray(data.finalSetXTest[:,0]).astype('float32'), 
+#     'name': np.asarray(data.finalSetXTest[:,1]).astype('float32'), 
+#     'tags': np.asarray(data.finalSetXTest[:,2]).astype('float32'), 
+#     'author': np.asarray(data.finalSetXTest[:,3]).astype('float32'), 
+#     'institution': np.asarray(data.finalSetXTest[:,4]).astype('float32'),
+#     'course': np.asarray(data.finalSetXTest[:,5]).astype('float32'),
+#     'soup': np.asarray(data.finalSetXTest[:,6].tolist()).astype('float32')
+#     }
+
+# ytest = data.finalSetYTest
+
+smartmodel.train()
 
 # smartmodel.buildModel()
 
-# smartmodel.loadSmartModel()
+# # smartmodel.loadSmartModel()
 
 # smartmodel.trainModel(dataX= xtrain, dataY= ytrain, validationData= ())
 # smartmodel.evaluteModel(dataX= xtest, dataY= ytest)
 
-smartmodel.loadSmartModel()
+# smartmodel.loadSmartModel()
 
-itemData = data.getRandomDataItem()
+# itemData = data.getRandomDataItem()
 
-item = data.createSoup(data.index_name[itemData[1]], [data.index_tags[itemData[2]]], data.index_authors[itemData[3]], data.index_institutions[itemData[4]], data.index_course[itemData[5]])
-# print(item)
-print(smartmodel.getRecommendations(item))
-# item = {
+# item = data.createSoup(data.index_name[itemData[1]], [data.index_tags[itemData[2]]], data.index_authors[itemData[3]], data.index_institutions[itemData[4]], data.index_course[itemData[5]])
+# # print(item)
+# print(smartmodel.getRecommendations(item))
+# # item = {
 #     'data': np.array([itemData[0]]), 
 #     'name': np.array([itemData[1]]), 
 #     'tags': np.array([itemData[2]]), 

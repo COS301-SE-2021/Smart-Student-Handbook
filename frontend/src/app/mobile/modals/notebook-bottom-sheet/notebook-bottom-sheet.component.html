@@ -9,7 +9,7 @@
     <h2>Creator:</h2>
 
     <div align="center" class="collaborators">
-      <div mat-card-avatar class="collaborator-image"></div>
+      <div mat-card-avatar class="collaborator-image" [style]="{'background-image': 'url(' + creator.url + ')'}"></div>
 
       <p class="personName">{{creator.name}}</p>
     </div>
@@ -18,31 +18,30 @@
   <mat-divider></mat-divider>
 
 	<div>
-		<button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+		<button color="primary" *ngIf="collaborators.length !== 1" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
 			<mat-icon>group_add</mat-icon>
 		</button>
 
 		<h2>Collaborators:</h2>
 
+    <button mat-stroked-button *ngIf="collaborators.length === 1" (click)="addCollaborator()">
+      Add Collaborator
+    </button>
+
 		<div align="center" class="collaborators" *ngFor="let collaborator of collaborators">
-			<div mat-card-avatar class="collaborator-image"></div>
 
-			<mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
-        remove_circle_outline
-      </mat-icon>
+      <ng-template [ngIf]="collaborator.id !== creator.id">
+        <div mat-card-avatar class="collaborator-image" [style]="{'background-image': 'url(' + collaborator.url + ')'}"></div>
 
-			<p class="personName">{{collaborator.name}}</p>
+        <mat-icon *ngIf="creator.id === user.uid" class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+          remove_circle_outline
+        </mat-icon>
+
+        <p class="personName">{{collaborator.name}}</p>
+      </ng-template>
+
 		</div>
 
-<!--		<div align="center" class="collaborators">-->
-<!--			<div mat-card-avatar class="collaborator-image"></div>-->
-
-<!--			<mat-icon class="removeCollaboratorIcon"-->
-<!--				>remove_circle_outline</mat-icon-->
-<!--			>-->
-
-<!--			<p class="personName">Douglas van Reeuwyk</p>-->
-<!--		</div>-->
 	</div>
 
 	<mat-divider></mat-divider>
@@ -59,7 +58,7 @@
 					[removable]="true"
 					(removed)="removeTag(tag)"
 				>
-					{{ tag.name }}
+					{{ tag }}
 					<mat-icon matChipRemove>cancel</mat-icon>
 				</mat-chip>
 				<input

@@ -22,7 +22,7 @@
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
                 <mat-button-toggle class="collaborationBtn accept"
                                    (click)="$event.preventDefault();
-                                   accept(notification.userID, notification.notebookID, notification.notebookTitle);
+                                   accept(notification.creatorId, notification.notebookID, notification.notebookTitle);
                                    markAsRead(i, notification.notificationId, notification.opened)">
                   Accept</mat-button-toggle>
                 <mat-button-toggle class="collaborationBtn decline"
@@ -41,7 +41,7 @@
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
                 <mat-button-toggle class="collaborationBtn accept"
                                    (click)="$event.preventDefault();
-                                    accept(notification.userID, notification.notebookID, notification.notebookTitle);
+                                    accept(notification.creatorId, notification.notebookID, notification.notebookTitle);
                                     markAsRead(i, notification.notificationId, notification.opened)">
                   Accept</mat-button-toggle>
                 <mat-button-toggle class="collaborationBtn decline"

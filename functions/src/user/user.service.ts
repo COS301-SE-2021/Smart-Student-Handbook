@@ -97,13 +97,10 @@ export class UserService {
 	 * care of the rest and update or create a new record
 	 * @param user
 	 * @param update
+	 * @param userId
 	 */
-	async createAndUpdateUser(
-		user: UserRequestDto,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		update = false,
-	): Promise<UserResponseDto> {
-		const resp = await admin.firestore().collection('users').doc(user.uid).set(user);
+	async createAndUpdateUser(user: UserRequestDto, userId: string): Promise<UserResponseDto> {
+		const resp = await admin.firestore().collection('users').doc(userId).set(user);
 
 		if (resp) {
 			return { success: true, message: 'User was successfully added' };
@@ -116,8 +113,9 @@ export class UserService {
 	 * once found the userProfile is deleted and a success message is returned
 	 * if the user is not found an error message is thrown
 	 * @param user
+	 * @param userId
 	 */
-	async createUser(user: UserRequestDto): Promise<UserResponseDto> {
+	async createUser(user: UserRequestDto, userId: string): Promise<UserResponseDto> {
 		const exist = await this.doesUsernameExist(user.username);
 		// eslint-disable-next-line eqeqeq
 		if (exist == true) {
@@ -130,7 +128,7 @@ export class UserService {
 		return admin
 			.firestore()
 			.collection('users')
-			.doc(user.uid)
+			.doc(userId)
 			.set(user)
 			.then(() => ({
 				success: true,
@@ -142,7 +140,7 @@ export class UserService {
 			}));
 	}
 
-	async updateUser(user: UserRequestDto): Promise<UserResponseDto> {
+	async updateUser(user: UserRequestDto, userId: string): Promise<UserResponseDto> {
 		const updates: { [key: string]: string } = {};
 
 		if (user.username != null) {
@@ -176,7 +174,7 @@ export class UserService {
 		return admin
 			.firestore()
 			.collection('users')
-			.doc(user.uid)
+			.doc(userId)
 			.update(updates)
 			.then(() => ({
 				success: true,
@@ -188,7 +186,7 @@ export class UserService {
 			}));
 	}
 
-	async deleteUserProfile(userId): Promise<UserResponseDto> {
+	async deleteUserProfile(userId: string): Promise<UserResponseDto> {
 		return admin
 			.firestore()
 			.collection('users')

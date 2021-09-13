@@ -5,7 +5,12 @@ ais-instantsearch {
   flex-direction: column;
   flex-grow: 1;
 }
-
+.searchbox {
+  margin-bottom: 2rem;
+}
+.searchbox2 {
+  margin-bottom: 2rem;
+}
 
 em {
   font-style: normal;
@@ -20,12 +25,18 @@ em {
   //width: 960px;
   width: auto;
   min-height: 100%;
-  margin: 0 auto;
+  //margin: 0 auto;
 }
 
 @media (max-width: 1007px) {
   .search-container {
     width: 100%;
+  }
+}
+
+@media (max-width: 468px) {
+  .explore-content {
+    min-width: 90vw;
   }
 }
 
@@ -63,6 +74,10 @@ em {
 }
 
 #searchbox, #stats {
+  flex-grow: 0;
+}
+
+#searchbox2, #stats2 {
   flex-grow: 0;
 }
 
@@ -131,6 +146,12 @@ em {
   margin-bottom: 16px;
 }
 
+#stats2 {
+  flex-grow: 0;
+  margin-bottom: 16px;
+}
+
+
 .ais-Stats {
   font-size: 12px;
   color: #697782;
@@ -138,6 +159,11 @@ em {
 }
 
 #hits {
+  flex-grow: 1;
+  order: 1;
+}
+
+#hits2 {
   flex-grow: 1;
   order: 1;
 }

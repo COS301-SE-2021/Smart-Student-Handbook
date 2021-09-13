@@ -1,17 +1,25 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 <h1>Update Profile</h1>
 
-<div class="container">
-  <div class="row">
-    <div class="col-3">
-      <div class="profile-pic">
-        <label class="-label" for="file">
-          <span><mat-icon>edit</mat-icon></span>
-          <span></span>
-        </label>
-        <input id="file" type="file" accept="image/*" (change)="imagePreview($event)" />
-        <img [src]="imgFilePath" alt="User Profile Image" id="output" width="200" />
+<mat-dialog-content class="mat-typography">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3 col-xs-12">
+        <div class="profile-pic">
+          <label class="-label" for="file">
+            <span><mat-icon>edit</mat-icon></span>
+            <span></span>
+          </label>
+          <input #imageInput
+                 id="file"
+                 type="file"
+                 accept="image/*"
+                 (change)="imagePreview(imageInput)">
+          <img [src]="imgFilePath" alt="User Profile Image"  id="output" width="200" />
+        </div>
       </div>
-      <div class="col-9">
+      <div class="col-sm-9 col-xs-12 mt-3">
         <div><span>Username: </span> <span class="h6">{{data.username}}</span></div>
         <div><span>Email: </span> <span class="h6">{{data.email}}</span></div>
         <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
@@ -21,7 +29,6 @@
   </div>
   <br/>
 
-<!--<mat-dialog-content class="mat-typography">-->
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Display Name</mat-label>
     <input matInput placeholder="Display Name" [(ngModel)]="data.displayName" cdkFocusInitial autocomplete="off" required/>
@@ -70,11 +77,15 @@
     <input matInput placeholder="Student" [(ngModel)]="data.workStatus" autocomplete="off" required/>
     <mat-hint>Are you a student, Teacher, working , etc ...</mat-hint>
   </mat-form-field>
-<!--</mat-dialog-content>-->
 
-  <button mat-raised-button (click)="deleteAccount()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
+  <button mat-raised-button class="mb-3" (click)="deleteAccount()" align="start" [disabled]="isDisabled"><mat-icon [ngStyle]="{'color':'red'}">delete_forever</mat-icon> Delete Account</button>
 
-<!-- </mat-dialog-content> -->
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
+    <button mat-button (click)="onSave()" mat-raised-button color="primary" [disabled]="isDisabled">Save</button>
+  </div>
+
+</mat-dialog-content>
 
 <div *ngIf="updatedFailed" class="text-center">
   <br/>
@@ -83,10 +94,3 @@
   </mat-error>
 </div>
 
-<div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()" [disabled]="isDisabled">Cancel</button>
-  <button mat-button (click)="onSave()" mat-raised-button color="primary" [disabled]="isDisabled">Save</button>
-</div>
-
-
-<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading" style="margin-top: 10px;"></mat-progress-bar>

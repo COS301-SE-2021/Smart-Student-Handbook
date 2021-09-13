@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'app-smart-assist',
 	templateUrl: './smart-assist.component.html',
 	styleUrls: ['./smart-assist.component.scss'],
 })
-export class SmartAssistComponent implements OnInit {
-	constructor() {}
-
-	ngOnInit(): void {}
-
+export class SmartAssistComponent {
 	/**
 	 * Enlarge the recommendation card and make it scrollable
 	 * @param index the index of the card to enlarge

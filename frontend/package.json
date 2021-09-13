@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "~12.0.2",
     "@angular/router": "~12.0.2",
     "@angular/service-worker": "~12.0.2",
+    "@auth0/angular-jwt": "^5.0.2",
     "@briebug/jest-schematic": "^2.1.1",
     "@editorjs/editorjs": "^2.22.0",
     "@editorjs/list": "^1.6.2",
@@ -51,6 +52,7 @@
     "jquery": "^3.6.0",
     "ngx-long-press2": "^1.0.0",
     "rxjs": "~6.6.0",
+    "search-insights": "^2.0.2",
     "stream-http": "^3.2.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"

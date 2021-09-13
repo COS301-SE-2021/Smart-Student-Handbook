@@ -1,11 +1,31 @@
 @import '/src/app/styling/global';
 
+#background {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../../../assets/images/splashBackground.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0 10px 0 10px;
+}
+
+#loginCard {
+  box-shadow: 0 0 8px 1px rgb(140, 161, 175);
+}
+
+img {
+  max-width: 400px;
+  min-width: 300px;
+  width: 100%;
+  height: auto;
+  //width: auto\9; /* ie8 */
+}
+
 mat-card {
   max-width: 400px;
   margin: 2em auto;
   text-align: center;
   background-color: rgba(255,255,255,0.8);
-
 }
 
 mat-form-field {

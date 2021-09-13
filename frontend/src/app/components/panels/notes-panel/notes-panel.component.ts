@@ -16,6 +16,7 @@ import {
 	NotebookService,
 	NoteOperationsService,
 	NotebookObservablesService,
+	AccountService,
 } from '@app/services';
 
 @Component({
@@ -50,18 +51,22 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	doneLoading: boolean = true;
 
+	creatorId: string = '';
+
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
 	 * @param notebookObservables
 	 * @param notesService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
 		private notebookObservables: NotebookObservablesService,
-		private notesService: NoteOperationsService
+		private notesService: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngAfterContentInit(): void {
@@ -78,6 +83,12 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					'openNotesPanelBtn'
 				) as HTMLButtonElement;
 				if (button) button.click();
+
+				this.notebookService
+					.getNotebook(val.notebookId)
+					.subscribe((notebook) => {
+						this.creatorId = notebook.creatorId;
+					});
 			}
 		});
 	}
@@ -87,10 +98,12 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
-		// }
-
 		// let userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.open = false;
 
@@ -172,6 +185,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param _noteId
 	 * @param _title
 	 * @param _notebookTitle
+	 * @param _description
+	 * @param _tags
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	openNotebook(
@@ -182,7 +197,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		_title: string,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		_notebookTitle: string
+		_notebookTitle: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_description: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_tags: string[]
 	) {}
 
 	/**
@@ -190,10 +209,23 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param id the id of the notebook to be updated
 	 * @param title
 	 * @param description
+	 * @param tags
 	 */
-	editNotebook(id: string, title: string, description: string) {
+	editNotebook(
+		id: string,
+		title: string,
+		description: string,
+		tags: string[]
+	) {
 		this.notesService
-			.editNote(this.notebookId, id, title, description)
+			.editNote(
+				this.notebookId,
+				id,
+				title,
+				description,
+				this.creatorId,
+				tags
+			)
 			.subscribe((newNote: { description: any; title: any }) => {
 				this.notes = this.notes.map((notebook: any) => {
 					if (notebook.noteId === id) {
@@ -219,8 +251,24 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					this.notebookId,
 					newNote.id,
 					newNote.notebook.name,
-					this.notebookTitle
+					this.notebookTitle,
+					newNote.notebook.description,
+					newNote.notebook.tags
 				);
+			});
+	}
+
+	/**
+	 * Delete a note
+	 * @param noteId
+	 */
+	deleteNote(noteId: string) {
+		this.notesService
+			.removeNote(this.notebookId, noteId)
+			.subscribe((removed: any) => {
+				if (removed) {
+					this.removeNote(noteId);
+				}
 			});
 	}
 

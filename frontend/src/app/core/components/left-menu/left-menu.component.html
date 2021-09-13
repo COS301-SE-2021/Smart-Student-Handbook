@@ -1,5 +1,5 @@
 <div class="sidenav_container"  [@onSideNavChange]="sideNavState ? 'open' : 'close'">
-  <div fxLayout="column" fxLayoutGap="10px" style="height: calc(100vh - 140px); overflow-y: auto; overflow-x: hidden;">
+  <div fxLayout="column" fxLayoutGap="10px">
 
     <div>
       <div fxLayout="row" fxLayoutAlign="end center" style="padding: 0px 10px;">
@@ -18,7 +18,7 @@
 
     <mat-divider></mat-divider>
 
-    <div>
+    <div style="height: calc(100vh - 270px); overflow-y: auto; overflow-x: hidden;">
       <mat-nav-list>
         <a mat-list-item [routerLink]="['/home']">
           <mat-icon class="menuIcon" matTooltip="Home" matTooltipPosition="right">home</mat-icon>

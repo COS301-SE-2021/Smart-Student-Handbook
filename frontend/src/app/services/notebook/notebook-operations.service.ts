@@ -10,6 +10,7 @@ import {
 	ConfirmDeleteComponent,
 } from '@app/components';
 import { NotebookDto } from '@app/models';
+import { AccountService } from '@app/services';
 
 @Injectable({
 	providedIn: 'root',
@@ -25,14 +26,20 @@ export class NotebookOperationsService {
 	 * @param profileService
 	 * @param dialog
 	 * @param notificationService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private profileService: ProfileService,
 		private dialog: MatDialog,
-		private notificationService: NotificationService
+		private notificationService: NotificationService,
+		private accountService: AccountService
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	/**
@@ -137,57 +144,57 @@ export class NotebookOperationsService {
 			const date = 'July 18, 2021 at 14:44';
 			let notebook: any;
 
-			this.notebookService
-				.getUserNotebooks(this.user.uid)
-				.subscribe((notebooks) => {
-					// console.log(notebooks);
-					for (let i = 0; i < notebooks.length; i += 1) {
-						if (notebooks[i].notebookId === notebookId) {
-							notebook = notebooks[i];
-							// console.log(notebooks);
-						}
+			this.notebookService.getUserNotebooks().subscribe((notebooks) => {
+				// console.log(notebooks);
+				for (let i = 0; i < notebooks.length; i += 1) {
+					if (notebooks[i].notebookId === notebookId) {
+						notebook = notebooks[i];
+						// console.log(notebooks);
 					}
+				}
 
-					// Push tags
-					const tags: any = [];
+				// Push tags
+				const tags: any = [];
+				if (notebook.tags) {
 					for (let i = 0; i < notebook.tags.length; i += 1) {
 						tags.push({ name: notebook.tags[i] });
 					}
+				}
 
-					// Get collaborator info
-					const collaborators: any = [];
-					for (let k = 0; k < notebook.access.length; k += 1) {
-						collaborators.push({
-							name: notebook.access[k].displayName,
-							url: notebook.access[k].profileUrl,
-							id: notebook.access[k].userId,
+				// Get collaborator info
+				const collaborators: any = [];
+				for (let k = 0; k < notebook.access.length; k += 1) {
+					collaborators.push({
+						name: notebook.access[k].displayName,
+						url: notebook.access[k].profileUrl,
+						id: notebook.access[k].userId,
+					});
+				}
+
+				let creator = {
+					name: '',
+					url: '',
+					id: '',
+				};
+				// Get creator info
+				this.profileService
+					.getUserByUid(notebook.creatorId)
+					.subscribe((res) => {
+						creator = {
+							name: res.user.username,
+							url: '',
+							id: res.user.uid,
+						};
+
+						observer.next({
+							date,
+							notebook,
+							tags,
+							collaborators,
+							creator,
 						});
-					}
-
-					let creator = {
-						name: '',
-						url: '',
-						id: '',
-					};
-					// Get creator info
-					this.profileService
-						.getUserByUid(notebook.creatorId)
-						.subscribe((res) => {
-							creator = {
-								name: res.user.username,
-								url: '',
-								id: res.user.uid,
-							};
-
-							observer.next({
-								date,
-								notebook,
-								tags,
-								collaborators,
-								creator,
-							});
-						});
-				});
+					});
+			});
 		});
 	}
 
@@ -224,19 +231,20 @@ export class NotebookOperationsService {
 				if (result) {
 					this.notebookService
 						.createNotebook({
-							title: result.title,
+							title: result.data.title,
 							author: notebookDto.author,
-							course: result.course,
-							description: result.description,
+							course: result.data.course,
+							description: result.data.description,
 							institution: notebookDto.institution,
-							creatorId: notebookDto.creatorId,
-							private: result.private,
-							tags: notebookDto.tags,
+							private: result.data.private,
+							tags: result.tags,
 						})
 						.subscribe((data: any) => {
 							// console.log(data);
 							observer.next(data);
 						});
+				} else {
+					observer.next(false);
 				}
 			});
 		});
@@ -248,12 +256,12 @@ export class NotebookOperationsService {
 	 */
 	updateNotebookTags(notebookDto: NotebookDto) {
 		const dto: NotebookDto = {
+			creatorId: notebookDto.creatorId,
 			title: notebookDto.title,
 			author: notebookDto.author,
 			course: notebookDto.course,
 			description: notebookDto.description,
 			institution: notebookDto.institution,
-			creatorId: notebookDto.creatorId,
 			private: notebookDto.private,
 			tags: notebookDto.tags,
 			notebookId: notebookDto.notebookId,
@@ -294,27 +302,31 @@ export class NotebookOperationsService {
 				description: notebookDto.description,
 				private: notebookDto.private,
 				header: 'Update Notebook',
+				tags: notebookDto.tags,
 			},
 		});
 
 		return Observable.create((observer: any) => {
 			dialogRef.afterClosed().subscribe((result) => {
-				const dto: NotebookDto = {
-					title: result.title,
-					author: notebookDto.author,
-					course: notebookDto.course,
-					description: result.description,
-					institution: notebookDto.institution,
-					creatorId: notebookDto.creatorId,
-					private: result.private,
-					tags: notebookDto.tags,
-					notebookId: notebookDto.notebookId,
-				};
-
 				if (result) {
-					this.updateNotebookTags(dto).subscribe((notebookResult) => {
-						observer.next(notebookResult);
-					});
+					const dto: NotebookDto = {
+						title: result.data.title,
+						author: notebookDto.author,
+						course: notebookDto.course,
+						description: result.data.description,
+						institution: notebookDto.institution,
+						private: result.data.private,
+						tags: result.tags,
+						notebookId: notebookDto.notebookId,
+					};
+
+					if (result) {
+						this.updateNotebookTags(dto).subscribe(
+							(notebookResult) => {
+								observer.next(notebookResult);
+							}
+						);
+					}
 				}
 			});
 		});
