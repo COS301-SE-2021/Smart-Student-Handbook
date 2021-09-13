@@ -124,10 +124,12 @@ export class NotebookBottomSheetComponent implements OnInit {
 	removeCollaborator(userId: string) {
 		this.notebookOperations
 			.removeCollaborator(userId, this.notebookId)
-			.subscribe((id: string) => {
-				this.collaborators = this.collaborators.filter(
-					(collaborator) => collaborator.id !== id
-				);
+			.subscribe((removed: boolean) => {
+				if (removed) {
+					this.collaborators = this.collaborators.filter(
+						(collaborator) => collaborator.id !== userId
+					);
+				}
 			});
 	}
 

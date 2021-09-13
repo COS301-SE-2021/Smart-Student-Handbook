@@ -1,4 +1,6 @@
 <div>
+  <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin: -15px 0 10px 0;"></mat-progress-bar>
+
   <button mat-icon-button style="float: right">
     <mat-icon [mat-dialog-close]="true">close</mat-icon>
   </button>
@@ -10,7 +12,6 @@
     New Notebook
   </button>
   <br>
-  <mat-progress-bar mode="indeterminate" id="cloneNotebookProgressBar" *ngIf="!isCompleted"></mat-progress-bar>
 
   <mat-form-field appearance="outline" class="form-field" id="collabAutocomplete" [formGroup]="form">
     <mat-label>Select a notebook</mat-label>
@@ -97,6 +98,7 @@
   <div mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close]="true">Cancel</button><!-- (click)="onNoClick()" -->
     <button mat-button *ngIf="!form.valid || notebookId === ''">Ok</button>
-    <button mat-button *ngIf="form.valid && notebookId !== ''" [mat-dialog-close]="{notebookId: notebookId, title: title, description: description, tags: tags}">Ok</button>
+    <button mat-button *ngIf="form.valid && notebookId !== ''" (click)="cloneNote()">Ok</button>
   </div>
 </div>
+<!--[mat-dialog-close]="{notebookId: notebookId, title: title, description: description, tags: tags}"-->

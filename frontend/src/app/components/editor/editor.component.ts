@@ -360,10 +360,12 @@ export class EditorComponent implements OnInit, AfterContentInit {
 	removeCollaborator(userId: string) {
 		this.notebookOperations
 			.removeCollaborator(userId, this.notebookID)
-			.subscribe((id: string) => {
-				this.collaborators = this.collaborators.filter(
-					(collaborator) => collaborator.id !== id
-				);
+			.subscribe((result: boolean) => {
+				if (result) {
+					this.collaborators = this.collaborators.filter(
+						(collaborator) => collaborator.id !== userId
+					);
+				}
 			});
 	}
 

@@ -14,6 +14,7 @@ import {
 import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
+import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
 
 @Component({
 	selector: 'app-tree-view',
@@ -207,38 +208,39 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
-				// console.log(val);
-				this.notebooks = this.notebooks.map((nb: any) => {
-					const temp = nb;
-					if (temp.notebookId === notebookId) {
-						temp.title = val.title;
-						temp.course = val.course;
-						temp.description = val.description;
-						temp.private = val.private;
-					}
-					return temp;
-				});
-
-				let tree = this.dataSource.data[0].children;
-				if (tree)
-					tree = tree.map((node) => {
-						const temp = node;
-						if (temp.id === notebookId) {
-							temp.name = val.title;
+				if (val) {
+					this.notebooks = this.notebooks.map((nb: any) => {
+						const temp = nb;
+						if (temp.notebookId === notebookId) {
+							temp.title = val.title;
+							temp.course = val.course;
+							temp.description = val.description;
+							temp.private = val.private;
 						}
-						return node;
+						return temp;
 					});
 
-				this.dataSource.data = [
-					{
-						name: 'My Notebooks',
-						id: '',
-						children: tree,
-					},
-				];
-				this.treeControl.expandAll();
-				// this.notebookEventEmitterService.ChangePrivacy(val.private);
-				this.notebookObservables.setNotebookPrivacy(val.private);
+					let tree = this.dataSource.data[0].children;
+					if (tree)
+						tree = tree.map((node) => {
+							const temp = node;
+							if (temp.id === notebookId) {
+								temp.name = val.title;
+							}
+							return node;
+						});
+
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+					this.treeControl.expandAll();
+					// this.notebookEventEmitterService.ChangePrivacy(val.private);
+					this.notebookObservables.setNotebookPrivacy(val.private);
+				}
 			});
 	}
 
@@ -331,9 +333,11 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 	}
 
 	deleteNotebook(notebookId: string) {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+		const dialogRef = this.dialog.open(DeleteNoteComponent, {
 			data: {
 				message: 'Are you sure you want to delete this notebook?',
+				notebookId,
+				type: 'notebook',
 			},
 		});
 
@@ -343,56 +347,50 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 					(notebook) => notebook.notebookId !== notebookId
 				);
 
-				this.notebookService
-					.deleteNotebook(notebookId)
-					.subscribe(() => {
-						this.childrenSize -= 1;
+				this.childrenSize -= 1;
 
-						let tree: any[];
-						if (this.dataSource.data[0].children) {
-							tree = this.dataSource.data[0].children;
-							tree = this.dataSource.data[0].children;
+				let tree: any[];
+				if (this.dataSource.data[0].children) {
+					tree = this.dataSource.data[0].children;
+					tree = this.dataSource.data[0].children;
 
-							tree = tree.filter(
-								(node: any) => node.id !== notebookId
-							);
+					tree = tree.filter((node: any) => node.id !== notebookId);
 
-							if (this.childrenSize > 0) {
-								this.dataSource.data = [
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+
+						this.treeControl.expandAll();
+					} else {
+						this.treeControl.collapseAll();
+
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [
 									{
-										name: 'My Notebooks',
+										name: '',
 										id: '',
-										children: tree,
 									},
-								];
+								],
+							},
+						];
+					}
 
-								this.treeControl.expandAll();
-							} else {
-								this.treeControl.collapseAll();
-
-								this.dataSource.data = [
-									{
-										name: 'My Notebooks',
-										id: '',
-										children: [
-											{
-												name: '',
-												id: '',
-											},
-										],
-									},
-								];
-							}
-
-							if (this.openedNotebookId === notebookId) {
-								// this.openNotebookPanelService.closePanel();
-								this.notebookObservables.setClosePanel(true);
-								this.notebookObservables.setRemoveNote(
-									this.openedNotebookId
-								);
-							}
-						}
-					});
+					if (this.openedNotebookId === notebookId) {
+						// this.openNotebookPanelService.closePanel();
+						this.notebookObservables.setClosePanel(true);
+						this.notebookObservables.setRemoveNote(
+							this.openedNotebookId
+						);
+					}
+				}
 			}
 		});
 	}

@@ -64,7 +64,7 @@ export class ReadOnlyEditorComponent implements AfterViewInit {
 						 * Render output on Editor
 						 */
 						await dbRefObject.once('value', async (snap) => {
-							console.log(snap.val());
+							console.log(snap.val().changes);
 							await this.quill.setContents(snap.val().changes);
 
 							this.isCompleted = true;

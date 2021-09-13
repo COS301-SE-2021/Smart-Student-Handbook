@@ -11,6 +11,7 @@ import {
 } from '@app/components';
 import { NotebookDto } from '@app/models';
 import { AccountService } from '@app/services';
+import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
 
 @Injectable({
 	providedIn: 'root',
@@ -91,33 +92,22 @@ export class NotebookOperationsService {
 	/**
 	 * Remove a user from collaborating on a notebook
 	 * @param userId
-	 * @param notebookID
+	 * @param notebookId
 	 */
-	removeCollaborator(userId: string, notebookID: string): Observable<any> {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+	removeCollaborator(userId: string, notebookId: string): Observable<any> {
+		const dialogRef = this.dialog.open(DeleteNoteComponent, {
 			data: {
 				message: 'Are you sure you want to remove this user?',
+				notebookId,
+				userId,
+				type: 'collaborator',
 			},
 		});
 
 		return Observable.create((observer: any) => {
 			// Get info and create notebook after dialog is closed
 			dialogRef.afterClosed().subscribe((result) => {
-				if (result === true) {
-					this.notebookService
-						.removeUserAccess({
-							userId,
-							notebookId: notebookID,
-						})
-						.subscribe(
-							() => {
-								observer.next(userId);
-							},
-							() => {
-								observer.next(false);
-							}
-						);
-				}
+				observer.next(result);
 			});
 		});
 	}
