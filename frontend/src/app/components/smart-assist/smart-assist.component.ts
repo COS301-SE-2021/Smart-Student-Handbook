@@ -18,7 +18,6 @@ interface blockType {
 	type: string;
 }
 
-
 @Component({
 	selector: 'app-smart-assist',
 	templateUrl: './smart-assist.component.html',
@@ -26,34 +25,37 @@ interface blockType {
 })
 export class SmartAssistComponent implements OnInit {
 	draggable: boolean = true;
-	
+
 	notebookId: string = '';
-	
+
 	noteId: string = '';
-	
+
 	name: string = '';
-	
+
 	tags: string[] = [];
-	
+
 	author: string = '';
-	
+
 	institution: string = '';
-	
+
 	course: string = '';
-	
+
 	notes: noteType[] = [];
-	
+
 	date: string = '';
 
-	constructor(private notebookObservables: NotebookObservablesService, private smartAssistObservables: SmartAssistObservablesService,
-	            private smartAssistService: SmartAssistService) {}
+	constructor(
+		private notebookObservables: NotebookObservablesService,
+		private smartAssistObservables: SmartAssistObservablesService,
+		private smartAssistService: SmartAssistService
+	) {}
 
 	ngOnInit(): void {
 		this.draggable = true;
 		if (window.innerWidth < 960) {
 			this.draggable = false;
 		}
-		
+
 		this.smartAssistObservables.smartAssistNotebookId.subscribe(
 			({ notebookId }) => {
 				if (
@@ -62,7 +64,7 @@ export class SmartAssistComponent implements OnInit {
 					notebookId !== ''
 				) {
 					this.notebookId = notebookId;
-					
+
 					firebase
 						.firestore()
 						.collection('userNotebooks')
@@ -73,17 +75,17 @@ export class SmartAssistComponent implements OnInit {
 							this.institution = docdata.data().institution;
 							this.course = docdata.data().course;
 						});
-					
+
 					console.log(notebookId);
 				}
 			}
 		);
-		
+
 		this.smartAssistObservables.smartAssistNoteId.subscribe(
 			async ({ noteId }) => {
 				if (noteId !== undefined && noteId !== this.noteId) {
 					this.noteId = noteId;
-					
+
 					await firebase
 						.firestore()
 						.collection('userNotes')
@@ -92,13 +94,13 @@ export class SmartAssistComponent implements OnInit {
 						.then((docdata) => {
 							this.name = docdata.data().name;
 							this.tags = docdata.data().tags;
-							
+
 							const unixdate = docdata.data().createdDate;
 							this.date = new Date(
 								unixdate * 1000
 							).toDateString();
 						});
-					
+
 					this.loadRecommendations(
 						this.name,
 						this.tags,
@@ -179,6 +181,7 @@ export class SmartAssistComponent implements OnInit {
 				// eslint-disable-next-line no-restricted-syntax
 				for (const id of ids) {
 					console.log(id);
+					// eslint-disable-next-line no-await-in-loop
 					await firebase
 						.database()
 						.ref(`notebook/${id}`)
