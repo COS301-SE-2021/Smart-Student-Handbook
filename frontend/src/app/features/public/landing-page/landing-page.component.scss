@@ -60,9 +60,9 @@ $bodyFont: 'Delius Swash Caps', cursive;
 }
 
 .theTeamBanner{
-  box-shadow: 0 0 8px 1px #000000;
-  background: linear-gradient(to bottom, rgba(40, 40, 40, 0.9), rgba(109, 109, 109, 0.9));
-  //background-color: rgba(0, 0, 0, 0.6);
+  //box-shadow: 0 0 8px 1px #000000;
+  //background: linear-gradient(to bottom, rgba(40, 40, 40, 0.9), rgba(109, 109, 109, 0.9));
+  background-color: #272d2f;
 }
 
 .teamMember{
@@ -120,6 +120,14 @@ $bodyFont: 'Delius Swash Caps', cursive;
   margin: 0 0 0 -10px;
   width: 110vw;
   height: 330px;
+}
+
+#footer{
+  background-image: url("../../../../assets/svg/footerWave.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 180px;
+  background-color: #115571;
 }
 
 
