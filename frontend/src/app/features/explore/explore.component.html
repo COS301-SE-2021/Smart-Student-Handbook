@@ -50,10 +50,12 @@
                             <div class="post-content">
                               <div class="post-date">
                                 {{hit.data.course}}
-                                <button mat-icon-button style="color: #444444" (click)="openReviews(hit, 'notebook')">
-                                  <mat-icon>
-                                    chat_bubble_outline
-                                  </mat-icon>
+                                <button mat-button style="color: #444444" (click)="openReviews(hit, 'notebook')">
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
                                 </button>
                               </div>
                               <div class="post-date" (click)="openNotes(hit)">
@@ -121,10 +123,12 @@
                             <div class="post-content">
                               <div class="post-date">
                                 {{hit.data.name}}
-                                <button mat-icon-button style="color: #444444" (click)="openReviews(hit, 'note')">
-                                  <mat-icon>
-                                    chat_bubble_outline
-                                  </mat-icon>
+                                <button mat-button style="color: #444444;" (click)="openReviews(hit, 'note')">
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
+                                  <mat-icon class="rateStars">star_border</mat-icon>
                                 </button>
                               </div>
                               <div class="post-date" (click)="openNoteEditor(hit.data)"><!-- (click)="openNotes(hit)" -->

@@ -123,7 +123,7 @@ export class ExploreComponent {
 					title: data.name,
 				},
 			});
-		} else if (window.innerWidth <= 991) {
+		} else {
 			this.dialog.open(ExploreNotesEditorComponent, {
 				width: '100%',
 				minHeight: '50vh',

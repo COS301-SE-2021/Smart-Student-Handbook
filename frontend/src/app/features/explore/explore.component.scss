@@ -346,7 +346,7 @@ footer {
   position: fixed;
   bottom: 8px;
   width: 45%;
-  height: calc(100vh - 118px - 60px);
+  height: calc(100vh - 73px);
   overflow: auto;
   padding: 15px 5px 15px 5px;
   background-color: #fdfdfd;
@@ -389,4 +389,8 @@ footer {
 #exploreHeader{
   padding-bottom: 10px;
   border-bottom: 1px solid #d9d9d9;
+}
+
+.rateStars{
+  font-size: large; margin: 0 -4px 0 -4px;
 }
