@@ -123,7 +123,7 @@ export class NotebookService {
 			.where('userId', '==', userId)
 			.get()
 			.catch((error) => {
-				throw new HttpException(`Could not create new notebook. ${error}`, HttpStatus.BAD_REQUEST);
+				throw new HttpException(`Could not get user notebooks. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
 		notebookIdSnapshot.forEach((doc) => {
