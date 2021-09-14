@@ -187,6 +187,14 @@ export class NoteCardsComponent implements OnInit {
 						}
 						return null;
 					});
+					this.notebookObservables.setLoadEditor(
+						'',
+						'',
+						'',
+						'',
+						'',
+						[]
+					);
 				}
 			});
 	}

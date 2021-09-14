@@ -38,6 +38,8 @@ export class NotebookObservablesService {
 	/** Note has been deleted */
 	public removeNote: BehaviorSubject<any>;
 
+	public removeNotebook: BehaviorSubject<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
@@ -86,6 +88,7 @@ export class NotebookObservablesService {
 		/** id of notebook to review */
 		this.reviewNotebook = new BehaviorSubject<any>({
 			id: '',
+			type: '',
 		});
 
 		/** Set the height of the editor */
@@ -101,6 +104,8 @@ export class NotebookObservablesService {
 
 		/** Set the content to be inserted into the note */
 		this.removeNote = new BehaviorSubject<any>('');
+
+		this.removeNotebook = new BehaviorSubject<any>('');
 	}
 
 	/**
@@ -203,9 +208,10 @@ export class NotebookObservablesService {
 	 * id of notebook to review
 	 * @param id
 	 */
-	setReviewNotebook(id: string) {
+	setReviewNotebook(id: string, type) {
 		this.reviewNotebook.next({
 			id,
+			type,
 		});
 	}
 
@@ -226,5 +232,10 @@ export class NotebookObservablesService {
 	/** Note has been deleted */
 	setRemoveNote(id: string) {
 		this.removeNote.next(id);
+	}
+
+	/** Note has been deleted */
+	setRemoveNotebook(id: string) {
+		this.removeNotebook.next(id);
 	}
 }
