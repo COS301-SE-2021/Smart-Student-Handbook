@@ -180,46 +180,47 @@ export class SmartAssistComponent implements OnInit {
 		this.smartAssistService
 			.getRecommendations(notedata)
 			.subscribe(async (recs) => {
-				console.log(recs);
-				const ids: string[] = recs.data;
-				console.log(ids);
+				if (recs) {
+					const ids: string[] = recs.data;
+					console.log(ids);
 
-				await firebase
-					.firestore()
-					.collection('userNotes')
-					.where('noteId', 'in', ids)
-					.get()
-					.then((queryResult) => {
-						queryResult.forEach(async (doc) => {
-							console.log(doc.id);
+					await firebase
+						.firestore()
+						.collection('userNotes')
+						.where('noteId', 'in', ids)
+						.get()
+						.then((queryResult) => {
+							queryResult.forEach(async (doc) => {
+								console.log(doc.id);
 
-							const temp: noteType = {
-								noteId: doc.id,
+								const temp: noteType = {
+									noteId: doc.id,
 
-								title: doc.data().name,
+									title: doc.data().name,
 
-								date: new Date(
-									doc.data().createdDate
-								).toDateString(),
+									date: new Date(
+										doc.data().createdDate
+									).toDateString(),
 
-								tags: doc.data().tags,
+									tags: doc.data().tags,
 
-								blocks: undefined,
-							};
+									blocks: undefined,
+								};
 
-							await firebase
-								.database()
-								.ref(`notes/${doc.id}`)
-								.get()
-								.then((docdata) => {
-									temp.blocks = docdata.val().changes;
-								});
-							console.log(temp);
-							this.notes.push(temp);
+								await firebase
+									.database()
+									.ref(`notes/${doc.id}`)
+									.get()
+									.then((docdata) => {
+										temp.blocks = docdata.val().changes;
+									});
+								console.log(temp);
+								this.notes.push(temp);
+							});
 						});
-					});
 
-				console.log(this.notes);
+					console.log(this.notes);
+				}
 			});
 	}
 }
