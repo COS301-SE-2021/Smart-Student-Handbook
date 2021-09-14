@@ -9,7 +9,7 @@ import {
 import { P404Component } from '@app/core';
 
 export const PUBLIC_ROUTES: Routes = [
-	{ path: '', redirectTo: 'account/login', pathMatch: 'full' },
+	{ path: '', redirectTo: 'welcome', pathMatch: 'full' },
 	{ path: 'account/login', component: LoginComponent },
 	{ path: 'account/register', component: RegisterComponent },
 	{ path: 'account/forgotPassword', component: ForgotPasswordComponent },
