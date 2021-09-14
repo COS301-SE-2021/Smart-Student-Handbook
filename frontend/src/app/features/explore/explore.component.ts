@@ -4,11 +4,15 @@ import { NotebookObservablesService } from '@app/services';
 import {
 	ExploreNoteListBottomsheetComponent,
 	ExploreNoteListComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNotesEditorComponent,
 	RateNotebookComponent,
 } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
+
+// algolia events sender
 
 const searchClient = algoliasearch(
 	'AD2K8AK74A',
@@ -95,7 +99,7 @@ export class ExploreComponent {
 		this.hideReviews = true;
 	}
 
-	openReviews(hit: any) {
+	openReviews(hit: any, type: string) {
 		if (window.innerWidth <= 576) {
 			this.bottomSheet.open(RateNotebookComponent);
 		} else if (window.innerWidth <= 991) {
@@ -108,6 +112,27 @@ export class ExploreComponent {
 			this.hideReviews = false;
 		}
 
-		this.notebookObservables.setReviewNotebook(hit.objectID);
+		this.notebookObservables.setReviewNotebook(hit.objectID, type);
+	}
+
+	openNoteEditor(data: any) {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(ExploreNotesEditorBottomSheetComponent, {
+				data: {
+					noteId: data.noteId,
+					title: data.name,
+				},
+			});
+		} else {
+			this.dialog.open(ExploreNotesEditorComponent, {
+				width: '100%',
+				minHeight: '50vh',
+				maxHeight: '80vh',
+				data: {
+					noteId: data.noteId,
+					title: data.name,
+				},
+			});
+		}
 	}
 }

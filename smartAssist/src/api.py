@@ -25,6 +25,7 @@ def trainModel():
     global smartmodel
     global cloud
 
+    cloud.loadAllData()
 
     smartmodel.train()
 
@@ -49,6 +50,8 @@ def getRecommendation():
             course = reqData['course']
         else:
             abort(400)
+
+        cloud.loadAllData()
 
         data.loadData(count=10000)
         smartmodel.loadSmartModel()
@@ -196,6 +199,7 @@ def clearAllData():
     global smartmodel
     global cloud
 
+    cloud.loadNotebooksData()
 
     suc = data.clearAllData()
     

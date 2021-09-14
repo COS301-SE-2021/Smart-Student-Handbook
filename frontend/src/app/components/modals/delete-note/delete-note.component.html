@@ -1,0 +1,17 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading" style="margin: -15px 0 10px 0;"></mat-progress-bar>
+<h2 mat-dialog-title>Confirm</h2>
+<mat-dialog-content class="mat-typography">
+  <p>{{data.message}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="Cancel()">Cancel</button>
+  <button
+    mat-raised-button
+    type="submit"
+    color="primary"
+    cdkFocusInitial
+    (click)="Confirm()"
+  >
+    Delete
+  </button>
+</mat-dialog-actions>

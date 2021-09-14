@@ -42,6 +42,9 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/instantsearch.css/themes/satellite.css",
               "./node_modules/instantsearch.css/themes/reset.css",
+              "./node_modules/quill/dist/quill.core.css",
+              "./node_modules/quill/dist/quill.bubble.css",
+              "./node_modules/quill/dist/quill.snow.css",
               "src/styles.scss"
             ],
             "scripts": [],
