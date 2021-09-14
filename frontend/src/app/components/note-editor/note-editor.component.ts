@@ -262,7 +262,7 @@ export class NoteEditorComponent
 				this.heightInPx = `${this.height - this.toolbarHeight}px`;
 			});
 
-			if (this.noteId) {
+			if (this.noteId !== '') {
 				await firebase
 					.database()
 					.ref(`/status/${this.noteId}`)
