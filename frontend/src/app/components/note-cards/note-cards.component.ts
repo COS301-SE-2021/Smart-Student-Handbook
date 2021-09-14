@@ -13,6 +13,8 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
+import { not } from 'rxjs/internal-compatibility';
 
 @Component({
 	selector: 'app-note-cards',
@@ -66,7 +68,8 @@ export class NoteCardsComponent implements OnInit {
 		private notebookService: NotebookService,
 		private notebookObservables: NotebookObservablesService,
 		private exploreObservables: ExploreObservablesService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		private smartAssistObservables: SmartAssistObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -142,6 +145,8 @@ export class NoteCardsComponent implements OnInit {
 			description,
 			tags
 		);
+		this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
+		this.smartAssistObservables.setSmartAssistNoteId(noteId);
 	}
 
 	/**
