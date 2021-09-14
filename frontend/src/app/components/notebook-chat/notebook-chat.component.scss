@@ -40,6 +40,17 @@ html {
   }
 }
 
+@media only screen and (min-width: 960px) {
+  .chat-width{
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .col-12{
+    padding-right: 12px !important;
+  }
+}
+
 .message-user-icon {
   height: 40px;
   width: 40px;

@@ -13,6 +13,7 @@ import {
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
+import { TreeViewObservablesService } from '@app/services/treeViews/tree-view-observables.service';
 
 @Component({
 	selector: 'app-shared-with-me',
@@ -68,10 +69,17 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 		private notebookOperations: NotebookOperationsService,
 		private exploreObservablesOperations: ExploreObservablesService,
 		private notebookObservables: NotebookObservablesService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		public treeViewObservables: TreeViewObservablesService
 	) {}
 
 	ngOnInit(): void {
+		this.treeViewObservables.openSharedWithMe.subscribe((open) => {
+			if (open) {
+				this.treeControl.expandAll();
+			}
+		});
+
 		// Get the user and user profile info from Behavioral subject
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {

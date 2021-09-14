@@ -34,13 +34,13 @@
         <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Notes</span>
         <br/>
 
-        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
+        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'" (click)="onSinenavToggle(); treeViewObservables.setOpenMyNotes()">
           <mat-icon class="menuIcon" matTooltip="Notebooks" matTooltipPosition="right">book</mat-icon>
         </a>
 
         <app-tree-view #treeViewComponent id="treeViewComponent" [@animateText]="linkText ? 'show' : 'hide'"></app-tree-view>
 
-        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'">
+        <a mat-list-item  [routerLink]="['/notebook']" [@animateText]="linkText ? 'hide' : 'show'" (click)="onSinenavToggle(); treeViewObservables.setSharedWithMe()">
           <mat-icon class="menuIcon" matTooltip="Shared With Me" matTooltipPosition="right">group</mat-icon>
 <!--          <span [@animateText]="linkText ? 'show' : 'hide'" class="menuLabel">Shared With Me</span>-->
         </a>

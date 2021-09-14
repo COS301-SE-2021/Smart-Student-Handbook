@@ -72,7 +72,7 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image pointerCursor"  [style]="{'background-image': 'url(' + user.profilePic + ')'}"
+								<div mat-card-avatar class="header-image pointerCursor"  [style]="{'background-image': 'url(' + creator.url + ')'}"
                      (click)="viewUserProfile(creator.id,creator.name)"></div>
 								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"
 									>{{creator.name}}</mat-card-title

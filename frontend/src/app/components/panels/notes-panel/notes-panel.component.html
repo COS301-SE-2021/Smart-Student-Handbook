@@ -50,7 +50,8 @@
             </button>
           </mat-menu>
 
-          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name, notebookTitle, note.description, note.tags)">
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name, notebookTitle, note.description, note.tags);
+                                          setLoadedNote(note.noteId)">
             <mat-card-header>
               <mat-card-subtitle id="date">
                 {{note.createdDate | date}}

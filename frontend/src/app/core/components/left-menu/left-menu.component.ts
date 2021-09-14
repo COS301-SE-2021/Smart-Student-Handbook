@@ -12,6 +12,7 @@ import {
 } from '@app/services';
 import { EditProfileComponent, TreeViewComponent } from '@app/components';
 import { animateText, onSideNavChange } from '@app/styling/animations';
+import { TreeViewObservablesService } from '@app/services/treeViews/tree-view-observables.service';
 
 @Component({
 	selector: 'app-left-menu',
@@ -47,6 +48,7 @@ export class LeftMenuComponent implements OnInit {
 	 * @param router
 	 * @param sidenavService
 	 * @param messagingService
+	 * @param treeViewObservables
 	 */
 	constructor(
 		private notebookService: NotebookService,
@@ -56,7 +58,8 @@ export class LeftMenuComponent implements OnInit {
 		private notificationService: NotificationService,
 		private router: Router,
 		private sidenavService: SideNavService,
-		private messagingService: MessagingService
+		private messagingService: MessagingService,
+		public treeViewObservables: TreeViewObservablesService
 	) {}
 
 	/**

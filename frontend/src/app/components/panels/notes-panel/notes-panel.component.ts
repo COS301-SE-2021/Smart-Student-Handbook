@@ -18,7 +18,6 @@ import {
 	NotebookObservablesService,
 	AccountService,
 } from '@app/services';
-import { NewEntryPointFileWriter } from '@angular/compiler-cli/ngcc/src/writing/new_entry_point_file_writer';
 
 @Component({
 	selector: 'app-notes-panel',
@@ -53,6 +52,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	doneLoading: boolean = true;
 
 	creatorId: string = '';
+
+	openedNoteId: string = '';
 
 	/**
 	 * Notes panel constructor
@@ -151,6 +152,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 						note.description,
 						note.tags
 					);
+					this.openedNoteId = note.noteId;
 				}
 
 				this.doneLoading = true;
@@ -222,6 +224,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		_tags: string[]
 	) {}
 
+	setLoadedNote(noteId: string) {
+		this.openedNoteId = noteId;
+		console.log(this.openedNoteId);
+	}
+
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
@@ -273,6 +280,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					newNote.notebook.description,
 					newNote.notebook.tags
 				);
+
+				this.openedNoteId = newNote.id;
 			});
 	}
 
@@ -286,7 +295,19 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 			.subscribe((removed: any) => {
 				if (removed) {
 					this.removeNote(noteId);
-					this.notebookObservables.setRemoveNote(this.notebookId);
+					this.notebookObservables.setRemoveNote(noteId);
+					// console.log(noteId);
+					// console.log(this.openedNoteId);
+					if (this.openedNoteId === noteId) {
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
+					}
 				}
 			});
 	}
