@@ -79,6 +79,12 @@ import {
 	RateNotebookComponent,
 	CloneNoteComponent,
 	WelcomeComponent,
+	NoteEditorComponent,
+	ReadOnlyEditorComponent,
+	DeleteNoteComponent,
+	NotebookChatComponent,
+	ChatBottomSheetComponent,
+	ChatModalComponent,
 } from '@app/components';
 
 // Long press
@@ -91,12 +97,6 @@ import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NoteEditorComponent } from './components/note-editor/note-editor.component';
-import { ReadOnlyEditorComponent } from './components/read-only-editor/read-only-editor.component';
-import { DeleteNoteComponent } from './components/modals/delete-note/delete-note.component';
-import { NotebookChatComponent } from './components/notebook-chat/notebook-chat.component';
-import { ChatBottomSheetComponent } from './components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
-import { ChatModalComponent } from './components/modals/chat-modal/chat-modal.component';
 
 @NgModule({
 	declarations: [
@@ -145,10 +145,10 @@ import { ChatModalComponent } from './components/modals/chat-modal/chat-modal.co
 		WelcomeComponent,
 		NoteEditorComponent,
 		ReadOnlyEditorComponent,
-    DeleteNoteComponent,
+		DeleteNoteComponent,
 		NotebookChatComponent,
-  ChatBottomSheetComponent,
-  ChatModalComponent,
+		ChatBottomSheetComponent,
+		ChatModalComponent,
 	],
 	imports: [
 		MaterialModule,

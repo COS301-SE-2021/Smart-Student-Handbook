@@ -1,7 +1,9 @@
 <div class="container">
   <div class="row">
+    <div class="col-12 text-center mt-3 pb-3" style="border-bottom: 1px solid #aaaaaa">
+      <span class="display-5 pt-2">Notifications</span>
+    </div>
     <div class="col pt-3">
-      <h2>Notifications</h2>
       <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin-top: 20px;"></mat-progress-bar>
 
       <mat-list role="list" id="list">
@@ -55,6 +57,9 @@
 
         </mat-list-item>
       </mat-list>
+
+      <h4 *ngIf="notifications.length === 0">You don't have any notifications yet</h4>
+      <img *ngIf="notifications.length === 0" class="pt-3 w-100 mx-auto" style="max-width: 500px;" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image">
     </div>
   </div>
 </div>
