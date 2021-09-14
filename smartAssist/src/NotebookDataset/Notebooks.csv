@@ -1,46 +1,5 @@
 noteId,name,tags,author,institution,course
-d6df3cd7-ff92-40d7-b385-c84cdeb8b7a8,Vectors ,"['Physics', 'Vectors']",u18002112,University of Pretoria,PHY131
-cdd02de5-69c8-4a42-9387-170c77c7ffe6,Organic Chemistry,['chemistry'],u18002112,University of Pretoria,CHY151
-9cfaf4bf-6884-4b17-b33e-45d9e8eedb37,Atoms and Molecules,['Molecules'],u18002112,University of Pretoria,Bok121
-93d33c8c-2cc7-4378-b5d0-3f33639e54b3,Introduction to C++,"['Overview of c++', 'C++', 'Beginner', 'Coding']",LucaPrenzler1,University of Pretoria,COS110
-1e734c7c-9cb0-475a-b332-8c3161b620cd,Chapter 1,['COS122'],LucaPrenzler1,University of Pretoria,COS122
-89b7bdbe-a10f-4fd6-b3c5-e8eac38ed2f9,Chapter1,"['Computer Science', 'COS151']",LucaPrenzler1,University of Pretoria,COS151
-35dc5d0c-ff2e-4e4c-8332-28c2c46ca44f,Introduction,[],John,Unknown,COS132
-5b1f77e6-9765-4d40-935a-dafb85d1a0e0,Introduction,['intro'],John,University of Pretoria,COS132
-874b21a9-bea6-48a7-95f2-9a1fba7ba22d,Introduction,[],Johnny,University of Pretoria,COS301
-e745e27c-45d6-4344-840f-b38fec28f46d,Introduction to Software Engineering,"['Software Engineering', 'COS301', 'Introduction']",LucaPrenzler1,University of Pretoria,COS301
-51178248-037b-452a-9ade-f994388b62b3,Waterfall Methodology ,"['waterfall', 'methodology', 'software engineering']",LucaPrenzler1,University of Pretoria,COS301
-a09a7363-c53b-4dd7-8761-ea0342f4303d,Basic Concepts of C++,"['C++', 'Programming', 'COS132']",LucaPrenzler1,University of Pretoria,COS132
-9debd52e-a9e1-443d-b256-eba731e4d67c,Template Method,"['COS214', 'Template Method', 'Behavioral']",LucaPrenzler1,University of Pretoria,COS26
-ea7f824f-b424-4d65-8568-ede5ff882a71,Memento Pattern,"['Memento', 'Pattern', 'COS214']",LucaPrenzler1,University of Pretoria,COS26
-b110dae4-09c3-4d84-b0d5-34c76ecd088d,Introduction,[],louw,University of Pretoria,COS 301
-0afabb76-0c76-4f9d-a391-d36e07442af3,Introduction,[],Arno,University of Pretoria,asd
-7ce46782-e5f5-460f-ac1e-f38ffd060b82,Introduction,['tag1'],Arno,University of Pretoria,setstst
-ec6962fe-81eb-4036-a62f-a62c8ecd8503,Introduction,[],Arno,University of Pretoria,qwe
-15289bde-8baf-431f-b335-ce8adf8db79d,Introduction,[],Arno,University of Pretoria,123
-e1de4990-975a-4913-af94-088547ab05e0,123456789,['qwertyuiop'],Arno,University of Pretoria,123
-1980a310-3849-4d19-8330-bf4d6784c752,Introduction,[],Arno,University of Pretoria,test
-4d3353d1-3106-4c7a-b52d-c5a154333525,Introduction,[],Arno,University of Pretoria,123
-f54f4573-6259-4b5b-a20d-c7bc58348748,Introduction,[],Arno,University of Pretoria,123
-2b1b47ae-1786-4801-8e5e-66b554417026,aewrbgv,['dfb'],Arno,University of Pretoria,asd
-4c3d81d2-d1b8-46b1-b485-96e0dcff9a00,Introduction,['123'],Arno,University of Pretoria,asd
-be8fcea4-09bb-4541-9cd2-f8a6f58e6412,Introduction,[],DouglasAce,University of Pretoria,test
-ded601f9-3831-4233-ba34-4f591ca7bc5a,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-c60a8fd0-3833-4685-ae41-d3d3169879e0,Semester test 1,"['Test', 'WTW114', 'Deferential']",LucaPrenzler,University of Pretoria,WTW114
-76921bbe-bb94-4639-8449-9789dae15203,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-2c159449-a448-46d2-8672-cde6510850ab,September Semester Test,"['WTW114', 'Test']",LucaPrenzler,University of Pretoria,WTW114
-cf219579-e562-46cd-aad7-146eb8d0df81,12.1: Finding Limits,"['Calculus', 'Limits']",louw,University of Pretoria,WTW114
-ef87d557-7318-4cdf-9437-7c62a5f9e207,zxc,"['zxc', '123']",Arno,University of Pretoria,asd
-bac95b3e-9bd7-43fe-a5d8-7613df5d6dcf,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-63d45ae8-37aa-4649-ab3a-fb328efd2976,September Semester test,"['WTW114', 'Test']",LucaPrenzler,University of Pretoria,WTW114
-8a6884b4-5dc3-45b5-82f4-71308766797c,123,['123'],Arno,University of Pretoria,123
-d04cda8a-5820-4cab-a97f-6d174dd831cf,asd,['asd'],Arno,University of Pretoria,123
-5df07eba-2af8-4c1b-abce-528ed37f796c,Introduction,[],Arno,University of Pretoria,123
-e1ab18a2-52bf-4b2d-90cb-a1fc925360b8,Introduction,[],Arno,University of Pretoria,qwe
-5b977da7-8806-4cc6-a7c3-c8cc1de22484,Introduction,[],Arno,University of Pretoria,qwe
-5e48d552-cfe3-41df-a0a6-a11066406e5b,Introduction,[],Arno,University of Pretoria,123
-83a80ccf-2df5-41b5-922a-4c15b5cc4b05,Introduction,[],Arno,University of Pretoria,ads
-c2ca1069-fde0-47c3-951a-a0c16c565996,Introduction,[],Arno,University of Pretoria,qwe
-57107f50-6e0e-47f5-83bb-0efbbece9fbb,Introduction,[],Arno,University of Pretoria,sdf
-c4ba02dc-088a-45aa-81f9-454107119ead,Introduction,[],Arno,University of Pretoria,sdf
-84f5c52f-8ad1-45be-8675-614254290399,qwe,['qwe'],Arno,University of Pretoria,sdf
+5f779a4d-cc3f-4da3-a3f0-a0555c065ba6,LooneyToons,['bully'],angelahall,The University of South Africa,STZ 151
+7f2d0fb7-04bb-41b9-beb9-6e0b300784c0,AGILE,"['Method', 'Software', 'Engineering', 'Team']",TheoMorkel,Unknown,COS 301
+d242ff80-1615-4114-8013-43a58fb78bb9,R,"['R', 'Data Science', 'Programming']",TheoMorkel,Unknown,COS 333
+c90521b7-c596-4717-90b9-91f26dee43c0,Python,['Programming Languages'],TheoMorkel,Unknown,COS 333
