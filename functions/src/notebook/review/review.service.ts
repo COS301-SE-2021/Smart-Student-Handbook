@@ -156,17 +156,4 @@ export class ReviewService {
 				throw new HttpException(`Was unable to delete user's note review. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 	}
-
-	async checkReviewCreator(notebookId: string, userId: string): Promise<boolean> {
-		let creatorStatus = false;
-		const reviewList: Review[] = await this.getNotebookReviews(notebookId);
-
-		reviewList.forEach((review) => {
-			if (review.userId === userId) {
-				creatorStatus = true;
-			}
-		});
-
-		return creatorStatus;
-	}
 }
