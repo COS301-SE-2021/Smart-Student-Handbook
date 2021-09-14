@@ -1,16 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { Response } from '../interfaces/response.interface';
 import { Review } from '../interfaces/review.interface';
-import { AddNotebookReview } from '../dto/addNotebookReview';
-import { AddNoteReview } from '../dto/AddNoteReview';
+import { AddNotebookReviewDto } from '../dto/addNotebookReview.dto';
+import { AddNoteReviewDto } from '../dto/AddNoteReview.dto';
 
 @Injectable()
 export class ReviewService {
-	async addNotebookReview(addNotebookReview: AddNotebookReview, userId: string): Promise<Response> {
-		const reviewId = randomStringGenerator();
+	async addNotebookReview(addNotebookReview: AddNotebookReviewDto, userId: string): Promise<Response> {
 		const timestamp = Date.now();
+
+		/**
+		 * Combined userId and notebookId to ensure there are no duplicate review for the same user on a notebook
+		 */
+		const notebookId = addNotebookReview.notebookId.substr(0, 18);
+		const reviewId = [notebookId.slice(0, 14), userId.substr(0, 14), notebookId.slice(14)].join('');
 
 		return admin
 			.firestore()
@@ -33,23 +37,20 @@ export class ReviewService {
 	async getNotebookReviews(notebookId: string): Promise<Review[]> {
 		const reviews = [];
 
-		try {
-			const snapshot = await admin
-				.firestore()
-				.collection('notebookReviews')
-				.where('notebookId', '==', notebookId)
-				.get();
+		const snapshot = await admin
+			.firestore()
+			.collection('notebookReviews')
+			.where('notebookId', '==', notebookId)
+			.orderBy('timestamp')
+			.get();
 
-			snapshot.forEach((review) => {
-				reviews.push({
-					...review.data(),
-				});
+		snapshot.forEach((review) => {
+			reviews.push({
+				...review.data(),
 			});
+		});
 
-			return reviews;
-		} catch (error) {
-			throw new HttpException(`Could not retrieve notebook reviews${error}`, HttpStatus.BAD_REQUEST);
-		}
+		return reviews;
 	}
 
 	async deleteNotebookReview(reviewId, userId: string): Promise<Response> {
@@ -80,9 +81,14 @@ export class ReviewService {
 			});
 	}
 
-	async addNoteReview(addNotebookReview: AddNoteReview, userId: string): Promise<Response> {
-		const reviewId = randomStringGenerator();
+	async addNoteReview(addNotebookReview: AddNoteReviewDto, userId: string): Promise<Response> {
 		const timestamp = Date.now();
+
+		/**
+		 * Combined userId and notebookId to ensure there are no duplicate review for the same user on a notebook
+		 */
+		const noteId = addNotebookReview.noteId.substr(0, 18);
+		const reviewId = [noteId.slice(0, 14), userId.substr(0, 14), noteId.slice(14)].join('');
 
 		return admin
 			.firestore()
