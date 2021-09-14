@@ -77,7 +77,7 @@ export class SmartAssistComponent implements OnInit {
 							this.course = docdata.data().course;
 						});
 
-					console.log(notebookId);
+					// console.log(notebookId);
 				}
 			}
 		);
@@ -109,7 +109,7 @@ export class SmartAssistComponent implements OnInit {
 						this.institution,
 						this.course
 					);
-					console.log(noteId);
+					// console.log(noteId);
 				}
 			}
 		);
@@ -156,7 +156,7 @@ export class SmartAssistComponent implements OnInit {
 
 		this.notebookObservables.setDragAndDrop(content);
 
-		console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+		// console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 	}
 
 	loadRecommendations(name, tags, author, institution, course) {
@@ -173,7 +173,7 @@ export class SmartAssistComponent implements OnInit {
 			course,
 		};
 
-		console.log(notedata);
+		// console.log(notedata);
 
 		this.notes = [];
 
@@ -182,7 +182,7 @@ export class SmartAssistComponent implements OnInit {
 			.subscribe(async (recs) => {
 				if (recs) {
 					const ids: string[] = recs.data;
-					console.log(ids);
+					// console.log(ids);
 
 					await firebase
 						.firestore()
@@ -191,7 +191,7 @@ export class SmartAssistComponent implements OnInit {
 						.get()
 						.then((queryResult) => {
 							queryResult.forEach(async (doc) => {
-								console.log(doc.id);
+								// console.log(doc.id);
 
 								const temp: noteType = {
 									noteId: doc.id,
@@ -212,14 +212,16 @@ export class SmartAssistComponent implements OnInit {
 									.ref(`notes/${doc.id}`)
 									.get()
 									.then((docdata) => {
-										temp.blocks = docdata.val().changes;
+										if (docdata.val()) {
+											temp.blocks = docdata.val().changes;
+										}
 									});
-								console.log(temp);
+								// console.log(temp);
 								this.notes.push(temp);
 							});
 						});
 
-					console.log(this.notes);
+					// console.log(this.notes);
 				}
 			});
 	}
