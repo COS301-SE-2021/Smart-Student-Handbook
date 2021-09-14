@@ -1,14 +1,16 @@
 <div class="container">
   <div class="row">
+    <div class="col-12 text-center mt-3 pb-3" style="border-bottom: 1px solid #aaaaaa">
+      <span class="display-5 pt-2">Notifications</span>
+    </div>
     <div class="col pt-3">
-      <h2>Notifications</h2>
       <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin-top: 20px;"></mat-progress-bar>
 
       <mat-list role="list" id="list">
 
         <mat-list-item *ngFor="let notification of notifications; let i = index" class="notificationListItem"
                        [ngStyle]="{'background-color': (notification.opened===true) ? '#e5e5e5' : '#f6f6f6',
-                       'box-shadow': '0px 0px 8px 2px rgb(216, 216, 216)'}">
+                       'box-shadow': (notification.opened!==true) ? '0px 0px 8px 2px rgb(216, 216, 216)': 'none'}">
 
           <div mat-line class="col-12 col-md-10">
             <div mat-line>{{notification.heading}}</div>
@@ -55,6 +57,9 @@
 
         </mat-list-item>
       </mat-list>
+
+      <h4 *ngIf="notifications.length === 0">You don't have any notifications yet</h4>
+      <img *ngIf="notifications.length === 0" class="pt-3 w-100 mx-auto" style="max-width: 500px;" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image">
     </div>
   </div>
 </div>

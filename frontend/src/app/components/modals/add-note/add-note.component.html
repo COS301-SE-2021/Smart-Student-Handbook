@@ -1,4 +1,5 @@
-<!--<mat-dialog-content>-->
+<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading" style="margin: -15px 0 10px 0;"></mat-progress-bar>
+
   <h3 mat-dialog-title>{{data.message}}</h3>
 
   <mat-form-field appearance="outline" class="form-field">
@@ -10,7 +11,7 @@
       [(ngModel)]="data.title"
       autocomplete="off"
     />
-    <mat-hint>Notebook title</mat-hint>
+    <mat-hint>Title</mat-hint>
   </mat-form-field>
 
 
@@ -33,7 +34,7 @@
       aria-label="Fruit selection"
     >
       <mat-chip
-        *ngFor="let tag of tags"
+        *ngFor="let tag of data.tags"
         [selectable]="true"
         [removable]="true"
         (removed)="removeTag(tag)"
@@ -58,7 +59,7 @@
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="{data: data, tags: tags}" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="createNote()" cdkFocusInitial>Ok</button><!--  [mat-dialog-close]="{data: data, tags: tags}" -->
 </div>
 
 <!--</mat-dialog-content>-->

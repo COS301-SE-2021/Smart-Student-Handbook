@@ -121,3 +121,14 @@ exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').
 			console.error(err);
 		});
 });
+
+exports.train = functions.pubsub.schedule('every 30 mins').onRun(async () => {
+	const url = 'https://smartassist-nii4biypla-uc.a.run.app/trainModel';
+
+	const options = { method: 'GET' };
+
+	await fetch(url, options)
+		.then((res) => res.json())
+		.then((json) => console.log(json))
+		.catch((err) => console.error(`error:${err}`));
+});

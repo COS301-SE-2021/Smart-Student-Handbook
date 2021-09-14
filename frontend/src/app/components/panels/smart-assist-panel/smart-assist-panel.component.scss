@@ -9,6 +9,7 @@
   margin: 0;
 }
 
+
 ::ng-deep .mat-drawer-inner-container{
   max-width: fit-content;
 }
@@ -47,7 +48,7 @@
 #panelContent{
   // border: 2px solid black;
   // height: 99vh;
-  width: 100%;
+  width: 30vw;
   padding: 0px 7px 0px 7px;
   // margin-left: 39px;
   // margin-top: 5vh;
@@ -77,4 +78,18 @@ mat-sidenav{
 
 ::ng-deep mat-sidenav{
   width: 100% !important;
+}
+
+::ng-deep.mat-tab-labels{
+  max-width: 100%;
+}
+
+::ng-deep .mat-tab-header-pagination-controls-enabled ::ng-deep .mat-tab-header-pagination{
+  display: none !important;
+}
+
+::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active{
+  min-width: 0!important;
+  padding: 3px!important;
+  margin: auto!important;
 }

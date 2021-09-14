@@ -1,5 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
@@ -79,10 +79,18 @@ import {
 	RateNotebookComponent,
 	CloneNoteComponent,
 	WelcomeComponent,
+	NoteEditorComponent,
+	ReadOnlyEditorComponent,
+	DeleteNoteComponent,
+	NotebookChatComponent,
+	ChatBottomSheetComponent,
+	ChatModalComponent,
 } from '@app/components';
 
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
+
+import { QuillModule } from 'ngx-quill';
 
 import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
@@ -135,6 +143,12 @@ import { AppRoutingModule } from './app-routing.module';
 		RateNotebookComponent,
 		CloneNoteComponent,
 		WelcomeComponent,
+		NoteEditorComponent,
+		ReadOnlyEditorComponent,
+		DeleteNoteComponent,
+		NotebookChatComponent,
+		ChatBottomSheetComponent,
+		ChatModalComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -162,6 +176,7 @@ import { AppRoutingModule } from './app-routing.module';
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
+		QuillModule.forRoot(),
 	],
 	providers: [
 		NotesPanelComponent,
@@ -177,5 +192,6 @@ import { AppRoutingModule } from './app-routing.module';
 		},
 	],
 	bootstrap: [AppComponent],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
