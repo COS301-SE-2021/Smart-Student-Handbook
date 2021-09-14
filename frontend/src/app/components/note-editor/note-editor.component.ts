@@ -262,10 +262,12 @@ export class NoteEditorComponent
 				this.heightInPx = `${this.height - this.toolbarHeight}px`;
 			});
 
-			await firebase
-				.database()
-				.ref(`/status/${this.noteId}`)
-				.set({ count: strings.length });
+			if (this.noteId) {
+				await firebase
+					.database()
+					.ref(`/status/${this.noteId}`)
+					.set({ count: strings.length });
+			}
 		});
 
 		if (this.toolbarHeight === 0) {
