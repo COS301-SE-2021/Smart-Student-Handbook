@@ -134,4 +134,21 @@ $bodyFont: 'Delius Swash Caps', cursive;
   width: 100vw;
 }
 
+@media only screen and (max-width: 991px) {
+  .gif{
+    width: 50%;
+    //border-radius: 5px;
+    //margin-left: 15%;
+    //transition: 0.5s all;
+  }
+
+  .gif:hover{
+    width: 60%;
+  }
+
+  .oddGif:hover{
+    //margin-left: 0;
+  }
+}
+
 
