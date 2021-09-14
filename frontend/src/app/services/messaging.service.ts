@@ -32,6 +32,7 @@ export class MessagingService {
 		this.messaging = firebase.messaging();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	saveNotificationToken(userId: string) {
 		this.messaging
 			.getToken({

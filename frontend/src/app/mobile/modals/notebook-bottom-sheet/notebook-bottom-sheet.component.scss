@@ -1,3 +1,9 @@
+@import "../../../styling/scrollbar";
+
+.pointerCursor{
+  cursor: pointer;
+}
+
 .lastUpdated{
   display: inline-block;
   margin-right: 10px;
@@ -61,29 +67,4 @@ h2{
 
 mat-divider {
   margin: 7px 0px 17px 0px;
-}
-
-/********* Scrollbar *********/
-
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }

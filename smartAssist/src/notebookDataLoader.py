@@ -161,7 +161,7 @@ class SmartAssistData:
             
             finalSetX.append(item)
             finalSetY.append(trueItem)
-
+                
             idx +=1
 
 
@@ -201,6 +201,7 @@ class SmartAssistData:
         num = random.randrange(1,len(item)-1)
 
         while item[num] == randitem[num]:
+            num = random.randrange(1,len(item)-1)
             randitem = self.getRandomDataItem().tolist()
         
         item[num] = randitem[num]
@@ -234,7 +235,12 @@ class SmartAssistData:
         dataRaw = pd.read_csv(filename, low_memory=True)
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
-        combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
+        newData = pd.DataFrame.from_dict(dataFrame)
+
+        combined = pd.concat([dataRaw, newData])
+
+        combined = combined.drop_duplicates(subset=["noteId"])
+
         combined.to_csv(filename, index=False)
 
 
@@ -264,6 +270,28 @@ class SmartAssistData:
         combined = pd.concat([dataRaw, pd.DataFrame.from_dict(dataFrame)])
         combined.to_csv(filename, index=False)
         
+    def listData(self):
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
+        dataRaw['tags'] = dataRaw['tags'].apply(eval)
+
+        return dataRaw.to_dict('index')
+
+    def clearAllData(self):
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "NotebookDataset/Notebooks.csv")
+
+        dataRaw = pd.read_csv(filename, low_memory=True)
+        dataRaw['tags'] = dataRaw['tags'].apply(eval)
+        
+        dataRaw.drop(index=dataRaw.index,inplace=True)
+        dataRaw.to_csv(filename, index=False)
+        
+        return dataRaw.shape == (0,6)
+
+
 
     def createSoup(self, name, tags, author, institution, course):
         soupArr = [name, author, institution, course.replace(" ", "")]
@@ -304,6 +332,7 @@ class SmartAssistData:
             courseN = len(self.index_course)
    
         return np.array([data, nameN, tagsN, authorsN, institutionN, courseN, np.array(soupPadded)])
+
 
 
 

@@ -1,135 +1,119 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12 text-center mt-3">
-      <span class="display-3">Welcome {{user.displayName}}</span>
+<div id="minWidth">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mt-3">
+        <span class="display-5 pt-2">Welcome {{user.displayName}}</span>
+      </div>
     </div>
   </div>
-</div>
-<div class="container mt-3">
-<div class="row">
-  <div class="col-12">
-    <section>
-      <div class="container justify-content-center">
-        <div class="row">
-          <!--<div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <img mat-card-image src="../../../../assets/logo/SmartStudentHandbook.png" alt="Photo of a Shiba Inu">
-              <mat-card-content id="cardContent">
-                <p>
-                  The Smart Student notebook is an advance note taking application that is aimed towards student.
-                  The Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students.
-                  The Smart Student application will allow users to create notebooks. Notebooks can be stored in different folders.
-                  Notebooks consist of different sections and sections can then be split up into pages allowing for organized note taking.
-                  Notes are written in markup, thus allowing for multiple customization options for users such as text formatting, adding
-                  bullet points, tables, images and much more. Once a notebook is opened, a Smart assist toolbar will popup on the side ,
-                  giving notebook recommendations on similar notebooks. The user will then have the ability to merge, copy or clone these
-                  notebook to their notebook. Afterwards users will be able to rate either the entire notebook or snippets of the notebook.
-                  The application will work on a subscription based service where users will be paid according to amount of other users using their notebook.
-                </p>
-              </mat-card-content>
-            </mat-card>
-          </div>-->
-
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-12">
+        <section>
+          <div class="container justify-content-center">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
               <span>
                 <span class="h5">Your Profile</span>
                 <button mat-button class="editBtn" (click)="updateProfile()">
                   <mat-icon>edit</mat-icon>
                 </button>
               </span>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="text-center"><img [src]="user.profilePic" alt="Avatar" class="avatar"></div>
-                <hr/>
-                <div><span>Username: </span> <span class="h6">{{user.username}}</span></div>
-                <div><span>Email: </span> <span class="h6">{{user.email}}</span></div>
-                <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
-                <hr/>
-                <div><span>Display Name: </span> <span class="h6">{{user.displayName}}</span></div>
-                <div><span>Department: </span> <span class="h6">{{user.department}}</span></div>
-                <div><span>Institution: </span> <span class="h6">{{user.institution}}</span></div>
-                <div><span>Program: </span> <span class="h6">{{user.program}}</span></div>
-                <div><span>Work Status: </span> <span class="h6">{{user.workStatus}}</span></div>
-                <hr/>
-              </mat-card-content>
-            </mat-card>
-          </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="text-center"><img [src]="user.profilePic" alt="Avatar" class="avatar"></div>
+                    <hr/>
+                    <div><span>Username: </span> <span class="h6">{{user.username}}</span></div>
+                    <div><span>Email: </span> <span class="h6">{{user.email}}</span></div>
+                    <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
+                    <hr/>
+                    <div><span>Display Name: </span> <span class="h6">{{user.displayName}}</span></div>
+                    <div><span>Department: </span> <span class="h6">{{user.department}}</span></div>
+                    <div><span>Institution: </span> <span class="h6">{{user.institution}}</span></div>
+                    <div><span>Program: </span> <span class="h6">{{user.program}}</span></div>
+                    <div><span>Work Status: </span> <span class="h6">{{user.workStatus}}</span></div>
+                    <hr/>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
-                <span class="h5">My Notebooks</span>
-              </mat-card-header>
-              <mat-card-content>
-                <br/>
-                <p>All the notebooks you have created</p>
-                <a  [routerLink]="['/notebook']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">book</mat-icon></a>
-              </mat-card-content>
-            </mat-card>
-          </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
+                    <span class="h5">My Notebooks</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <br/>
+                    <p>All the notebooks you have created</p>
+                    <a  [routerLink]="['/notebook']"><img class="pt-3 w-100" src="./assets/illustrations/undraw_Personal_notebook.svg" alt="image"></a>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
-                <span class="h5">Explore</span>
-              </mat-card-header>
-              <mat-card-content>
-                <br/>
-                <p>Explore notebooks created by other users</p>
-                <a  [routerLink]="['/explore']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">explore</mat-icon></a>
-              </mat-card-content>
-            </mat-card>
-          </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
+                    <span class="h5">Explore</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <br/>
+                    <p>Explore notebooks created by other users</p>
+                    <a  [routerLink]="['/explore']"><img class="pt-3 w-100" src="./assets/illustrations/undraw_Explore.svg" alt="image"></a>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
-                <span class="h5">Shared with me</span>
-              </mat-card-header>
-              <mat-card-content>
-                <br/>
-                <p>Notebooks that have been shared with you</p>
-                <a  [routerLink]="['/sharedWithMe']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">group</mat-icon></a>
-              </mat-card-content>
-            </mat-card>
-          </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
+                    <span class="h5">Shared with me</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <br/>
+                    <p>Notebooks that have been shared with you</p>
+                    <a  [routerLink]="['/sharedWithMe']"><img class="pt-3 w-100" src="./assets/illustrations/undraw_Online_collaboration.svg" alt="image" style="width:100%"></a>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
-                <span class="h5">Notifications</span>
-              </mat-card-header>
-              <mat-card-content>
-                <br/>
-                <p>Your Notifications</p>
-                <a  [routerLink]="['/notifications']"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">notifications</mat-icon></a>
-              </mat-card-content>
-            </mat-card>
-          </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
+                    <span class="h5">Notifications</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <br/>
+                    <p>Your Notifications</p>
+                    <a  [routerLink]="['/notifications']"><img class="pt-3 w-100" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image"></a>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-          <div class="col-lg-4 col-md-6 col-xs-12 p-3">
-            <mat-card class="homeCard">
-              <mat-card-header>
-                <span class="h5">Logout</span>
-              </mat-card-header>
-              <mat-card-content>
-                <br/>
-                <p></p>
-                <div (click)="logout()"><mat-icon matTooltipPosition="centre" class="shortcutIcon m-4">exit_to_app</mat-icon></div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+              <div class="col-lg-4 col-md-6 col-xs-12 p-3">
+                <mat-card class="homeCard">
+                  <mat-card-header>
+                    <span class="h5">Logout</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <br/>
+                    <p>Logout of the application</p>
+                    <p></p>
+                    <div (click)="logout()" class="pointerCursor"><img class="pt-3 w-100" src="./assets/illustrations/undraw_Login.svg" alt="image"></div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
 
-        </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </div>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
 </div>
-</div>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>

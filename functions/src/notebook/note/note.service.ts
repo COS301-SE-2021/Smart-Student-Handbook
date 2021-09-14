@@ -130,7 +130,7 @@ export class NoteService {
 		 */
 		await admin
 			.database()
-			.ref(`notebook/${noteId}`)
+			.ref(`notes/${noteId}`)
 			.remove()
 			.catch((error) => {
 				throw new HttpException(`Could not remove note content in database. ${error}`, HttpStatus.BAD_REQUEST);

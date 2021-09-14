@@ -3,7 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AccountService, MessagingService } from '@app/services';
-import { EditProfileComponent, MessageComponent } from '@app/components';
+import {
+	EditProfileComponent,
+	MessageComponent,
+	WelcomeComponent,
+} from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { MustMatch } from './must-match.validator';
 
@@ -62,12 +66,7 @@ export class RegisterComponent {
 		this.isDisabled = true;
 
 		let screenWidth = '';
-		const screenType = navigator.userAgent;
-		if (
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-				screenType
-			)
-		) {
+		if (window.innerWidth <= 1000) {
 			screenWidth = '100%';
 		} else {
 			screenWidth = '50%';
@@ -117,44 +116,55 @@ export class RegisterComponent {
 
 											// check if a user is not null
 											if (user) {
-												// Welcome user and prompt to update their profile
-												const confirm =
+												// Welcome message
+												const welcome =
 													this.dialog.open(
-														MessageComponent,
-														{
-															data: {
-																title: 'Welcome',
-																message1:
-																	'Welcome to the Smart Student Handbook',
-																message2:
-																	'Please kindly update your profile to help Smart Assist recommend relevant content and notes',
-															},
-														}
+														WelcomeComponent,
+														{ width: screenWidth }
 													);
 
-												// Open the Update profile modal after user confirms to update profile
-												confirm
+												welcome
 													.afterClosed()
-													.subscribe((r) => {
-														if (r) {
-															// Open dialog and populate the data attributes of the form fields
-															const dialogRef =
-																this.dialog.open(
-																	EditProfileComponent,
-																	{
-																		width: screenWidth,
-																		height: '90vh',
-																		data: user,
-																	}
-																);
+													.subscribe(() => {
+														// Welcome user and prompt to update their profile
+														const confirm =
+															this.dialog.open(
+																MessageComponent,
+																{
+																	data: {
+																		title: 'Welcome',
+																		message1:
+																			'Welcome to the Smart Student Handbook',
+																		message2:
+																			'Please kindly update your profile to help Smart Assist recommend relevant content and notes',
+																	},
+																}
+															);
 
-															// after the user closes the update profile form
-															dialogRef
-																.afterClosed()
-																.subscribe(
-																	() => {}
-																);
-														}
+														// Open the Update profile modal after user confirms to update profile
+														confirm
+															.afterClosed()
+															.subscribe((r) => {
+																if (r) {
+																	// Open dialog and populate the data attributes of the form fields
+																	const dialogRef =
+																		this.dialog.open(
+																			EditProfileComponent,
+																			{
+																				width: screenWidth,
+																				// height: '90vh',
+																				data: user,
+																			}
+																		);
+
+																	// after the user closes the update profile form
+																	dialogRef
+																		.afterClosed()
+																		.subscribe(
+																			() => {}
+																		);
+																}
+															});
 													});
 											}
 											//--------------------------------------------------------------

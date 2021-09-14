@@ -53,6 +53,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	creatorId: string = '';
 
+	openedNoteId: string = '';
+
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
@@ -98,14 +100,12 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
-
 		// let userDeatils;
 		this.accountService.getUserSubject.subscribe((user) => {
 			if (user) {
 				this.user = user;
 			}
 		});
-
 
 		this.open = false;
 
@@ -116,6 +116,10 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 				this.notebookObservables.setClosePanel(false);
 			}
 		});
+
+		// this.notebookObservables.removeNote.subscribe((remove) => {
+		// 	if (remove !== '') this.removeNote(remove);
+		// });
 	}
 
 	/**
@@ -135,6 +139,20 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 				for (let i = 0; i < result.length; i += 1) {
 					this.notes.push(result[i]);
+				}
+
+				if (this.notes.length > 0) {
+					// console.log(this.notes[0]);
+					const note = this.notes[0];
+					this.openNotebook(
+						notebookId,
+						note.noteId,
+						note.name,
+						this.notebookTitle,
+						note.description,
+						note.tags
+					);
+					this.openedNoteId = note.noteId;
 				}
 
 				this.doneLoading = true;
@@ -206,6 +224,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		_tags: string[]
 	) {}
 
+	setLoadedNote(noteId: string) {
+		this.openedNoteId = noteId;
+		console.log(this.openedNoteId);
+	}
+
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
@@ -257,6 +280,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					newNote.notebook.description,
 					newNote.notebook.tags
 				);
+
+				this.openedNoteId = newNote.id;
 			});
 	}
 
@@ -270,6 +295,19 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 			.subscribe((removed: any) => {
 				if (removed) {
 					this.removeNote(noteId);
+					this.notebookObservables.setRemoveNote(noteId);
+					// console.log(noteId);
+					// console.log(this.openedNoteId);
+					if (this.openedNoteId === noteId) {
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
+					}
 				}
 			});
 	}
@@ -280,11 +318,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param id the id of the notebook to be removed
 	 */
 	removeNote(id: string) {
-		// eslint-disable-next-line array-callback-return
-		this.notes = this.notes.filter((notebook: any) => {
-			if (notebook.noteId !== id) {
-				return notebook;
+		this.notes = this.notes.filter((note: any) => {
+			if (note.noteId !== id) {
+				return note;
 			}
+			return null;
 		});
 	}
 }

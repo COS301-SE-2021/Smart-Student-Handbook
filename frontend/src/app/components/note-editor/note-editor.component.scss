@@ -1,0 +1,65 @@
+#editor-container{
+  //background-image: url("../../../assets/images/notebook-placeholder-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-clip: border-box;
+  background-color: #ffffff;
+  border-top: none !important;
+}
+
+#toolbar-container{
+  background-color: #fafafa;
+  border: none;
+  padding: 8px 0 8px 0;
+}
+
+#toolbar{
+  background-color: #ececec;
+  border: 1px solid #d0d0d0;
+  border-bottom: none;
+}
+
+.ql-tooltip {
+  left: 10px !important;
+}
+
+.container{
+  height: 100%;
+  align-content: center;
+}
+
+.image_outer_container{
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 50%;
+  position: relative;
+}
+
+.image_inner_container{
+  border-radius: 50%;
+  padding: 5px;
+  background: #4cd137
+}
+
+.image_inner_container img{
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  border: 5px solid white;
+}
+
+.awareness{
+  border-radius: 13px;
+  width: 26px;
+  height: 26px;
+  padding-top: 1px;
+  display: inline-block;
+  margin-right: 7px;
+  background-size: cover;
+  background-position: center;
+}
+
+::ng-deep.ql-toolbar ::ng-deep.ql-snow{
+  padding: 8px 0 8px 0 !important;
+}

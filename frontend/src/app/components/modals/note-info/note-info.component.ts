@@ -3,7 +3,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Collaborators } from '@app/components';
 import { NotebookOperationsService, NotebookService } from '@app/services';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Tag } from '@app/mobile';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -20,6 +19,7 @@ export class NoteInfoComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';
@@ -117,10 +117,12 @@ export class NoteInfoComponent implements OnInit {
 	removeCollaborator(userId: string) {
 		this.notebookOperations
 			.removeCollaborator(userId, this.notebookId)
-			.subscribe((id: string) => {
-				this.collaborators = this.collaborators.filter(
-					(collaborator) => collaborator.id !== id
-				);
+			.subscribe((removed: boolean) => {
+				if (removed) {
+					this.collaborators = this.collaborators.filter(
+						(collaborator) => collaborator.id !== userId
+					);
+				}
 			});
 	}
 }

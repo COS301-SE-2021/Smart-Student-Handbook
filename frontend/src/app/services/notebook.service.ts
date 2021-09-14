@@ -200,6 +200,20 @@ export class NotebookService {
 		);
 	}
 
+	addNoteReview(reviewDto: ReviewDto): Observable<any> {
+		return this.httpClient.post(
+			`${NOTEBOOK_API}/addNoteReview`,
+			{
+				noteId: reviewDto.notebookId,
+				message: reviewDto.message,
+				rating: reviewDto.rating,
+				displayName: reviewDto.displayName,
+				profileUrl: reviewDto.profileUrl,
+			},
+			httpOptions
+		);
+	}
+
 	/**
 	 * Retrieve the reviews of a notebook
 	 * @param notebookId
@@ -207,6 +221,13 @@ export class NotebookService {
 	getNotebookReviews(notebookId: string): Observable<any> {
 		return this.httpClient.get(
 			`${NOTEBOOK_API}/getNotebookReviews/${notebookId}`,
+			httpOptions
+		);
+	}
+
+	getNoteReviews(noteId: string): Observable<any> {
+		return this.httpClient.get(
+			`${NOTEBOOK_API}/getNoteReviews/${noteId}`,
 			httpOptions
 		);
 	}

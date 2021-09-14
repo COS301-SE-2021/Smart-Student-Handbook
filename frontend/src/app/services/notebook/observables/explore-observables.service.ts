@@ -10,6 +10,9 @@ export class ExploreObservablesService {
 
 	public openExploreNotebookIdState: Observable<any>;
 
+	/** Open read only note */
+	public openExploreViewNote: BehaviorSubject<any>;
+
 	constructor() {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openExploreNotebookId = new BehaviorSubject<any>({
@@ -20,6 +23,12 @@ export class ExploreObservablesService {
 
 		this.openExploreNotebookIdState =
 			this.openExploreNotebookId.asObservable();
+
+		/** Open read only note */
+		this.openExploreViewNote = new BehaviorSubject<any>({
+			noteId: '',
+			title: '',
+		});
 	}
 
 	/**
@@ -41,5 +50,13 @@ export class ExploreObservablesService {
 
 		this.openExploreNotebookIdState =
 			this.openExploreNotebookId.asObservable();
+	}
+
+	/** Open read only note */
+	setOpenExploreViewNote(noteId: string, title: string) {
+		this.openExploreViewNote = new BehaviorSubject<any>({
+			noteId,
+			title,
+		});
 	}
 }
