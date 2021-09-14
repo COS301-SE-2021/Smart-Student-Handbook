@@ -122,7 +122,7 @@ export class ReviewService {
 
 			return reviews;
 		} catch (error) {
-			throw new HttpException(`Could not retrieve notebook reviews${error}`, HttpStatus.BAD_REQUEST);
+			throw new HttpException(`Could not retrieve note reviews${error}`, HttpStatus.BAD_REQUEST);
 		}
 	}
 
