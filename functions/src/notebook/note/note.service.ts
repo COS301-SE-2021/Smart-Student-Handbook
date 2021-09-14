@@ -39,9 +39,6 @@ export class NoteService {
 				...createNoteDto,
 				createdDate: Date.now(),
 				noteId,
-			})
-			.catch((error) => {
-				throw new HttpException(`Could not create note. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
 		await this.updateNotebookNotes(createNoteDto.notebookId);
@@ -77,9 +74,6 @@ export class NoteService {
 			.doc(updateNoteDto.noteId)
 			.update({
 				...updateNoteDto,
-			})
-			.catch((error) => {
-				throw new HttpException(`Could not create note. ${error}`, HttpStatus.BAD_REQUEST);
 			});
 
 		await this.updateNotebookNotes(updateNoteDto.notebookId);
@@ -128,25 +122,12 @@ export class NoteService {
 		/**
 		 * Delete note instance in the real time data base if it exists
 		 */
-		await admin
-			.database()
-			.ref(`notes/${noteId}`)
-			.remove()
-			.catch((error) => {
-				throw new HttpException(`Could not remove note content in database. ${error}`, HttpStatus.BAD_REQUEST);
-			});
+		await admin.database().ref(`notes/${noteId}`).remove();
 
 		/**
 		 * Delete note in firestore
 		 */
-		await admin
-			.firestore()
-			.collection('userNotes')
-			.doc(noteId)
-			.delete()
-			.catch((error) => {
-				throw new HttpException(`Could not retrieve notebook notes. ${error}`, HttpStatus.BAD_REQUEST);
-			});
+		await admin.firestore().collection('userNotes').doc(noteId).delete();
 
 		await this.updateNotebookNotes(notebookId);
 
