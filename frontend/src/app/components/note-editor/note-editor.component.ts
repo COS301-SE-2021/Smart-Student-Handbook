@@ -128,6 +128,11 @@ export class NoteEditorComponent
 
 					// this.height += this.toolbarHeight - 30;
 					this.heightInPx = `${this.height}px`;
+
+					const changes = {
+						ops: [],
+					};
+					this.quill.setContents(changes);
 				}
 			}
 		});
