@@ -160,6 +160,8 @@ class SmartAssistModel():
 
 
     def getRecommendations(self, itemData):
+        self.saveEmbeddingWeights()
+
         item = {
             'data': np.array([itemData[0]]), 
             'name': np.array([itemData[1]]), 

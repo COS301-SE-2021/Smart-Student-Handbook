@@ -104,7 +104,7 @@ class SmartAssistData:
         self.data_soup =  {data[0]: data[6] for idx, data in enumerate(self.dataList)}
              
             
-        self.vocabSize = len(vocab)+5
+        self.vocabSize = len(vocab)+15
 
         
         print(len(self.dataList), len(self.names), len(self.authors), len(self.tags), len(self.institutions), len(self.course), len(self.soup))
@@ -118,7 +118,7 @@ class SmartAssistData:
             soupOH.append(one_hot(data[6], self.vocabSize))
 
         soupPadded = pad_sequences(soupOH, padding='post',value=0.0)
-        soupPadded = pad_sequences(soupPadded, maxlen=soupPadded.shape[1]+5, padding='post',value=0.0, dtype='float32')
+        soupPadded = pad_sequences(soupPadded, maxlen=soupPadded.shape[1]+15, padding='post',value=0.0, dtype='float32')
         self.maxLen = soupPadded.shape[1]
 
         self.dataSet = []
