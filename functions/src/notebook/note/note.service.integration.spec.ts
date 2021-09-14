@@ -33,7 +33,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-describe('Access Service Integration Tests', () => {
+describe('Note Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let noteService: NoteService;
 	const userId = 'sYTwoaCyHQO0cNAqJcxBnO70yne2';
@@ -88,7 +88,7 @@ describe('Access Service Integration Tests', () => {
 		});
 	});
 
-	describe('Setup Notebook for testing', () => {
+	describe('Note Service Tests ', () => {
 		it('Get notes for the created notebook', async () => {
 			const result = await noteService.getNotes(notebookId);
 
