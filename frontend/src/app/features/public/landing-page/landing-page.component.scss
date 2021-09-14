@@ -1,91 +1,3 @@
-//.menu-spacer {
-//  flex: 1 1 auto;
-//}
-//// card 1
-//mat-card{
-//  width: 100%;
-//  display: block;
-//  vertical-align: middle;
-//}
-//
-//.flex-row {
-//  display: flex;
-//  flex-direction: row;
-//
-//  > div {
-//    flex: 50%;
-//    border-radius: 10px;
-//    padding: 10px;
-//  }
-//  > .outlook {
-//    color: black;
-//    background: rgba(37, 101, 112, 0.42);
-//
-//  }
-//
-//  > .temp {
-//    background: lightblue;
-//    color: black;
-//    margin-right: 10px;
-//    display: flex;
-//    flex-direction: column;
-//    justify-content: center;
-//    align-items: center;
-//  }
-//}
-//.big-text {
-//  font-size: 30px;
-//}
-//
-//
-//
-//// Curve one
-//.custom-shape-divider-top-1630695354 {
-//  position: absolute;
-//  top: 0;
-//  left: 0;
-//  width: 100%;
-//  overflow: hidden;
-//  line-height: 0;
-//
-//}
-//
-//.custom-shape-divider-top-1630695354 svg {
-//  position: relative;
-//  display: block;
-//  width: calc(100% + 1.3px);
-//  height: 141px;
-//  transform: rotateY(180deg);
-//}
-//
-//.custom-shape-divider-top-1630695354 .shape-fill {
-//  fill: #FFFFFF;
-//
-//}
-//
-////curve 2 bottom
-//.custom-shape-divider-bottom-1630695818 {
-//  position: absolute;
-//  bottom: 0;
-//  left: 0;
-//  width: 100%;
-//  overflow: hidden;
-//  line-height: 0;
-//}
-//
-//.custom-shape-divider-bottom-1630695818 svg {
-//  position: relative;
-//  display: block;
-//  width: calc(100% + 1.3px);
-//  height: 141px;
-//  transform: rotateY(180deg);
-//}
-//
-//.custom-shape-divider-bottom-1630695818 .shape-fill {
-//  fill: #454475;
-//}
-
-
 @import "src/app/styling/pageUnderConstruction";
 @import url('https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&family=Glory&display=swap');
 
@@ -95,9 +7,6 @@ $bodyFont: 'Delius Swash Caps', cursive;
 #welcomeBackground{
   //width: 99vw;
   height: 100vh;
-  background-image: url("../../../../assets/images/splashBackground.png");
-  background-repeat: no-repeat;
-  background-size: cover;
   padding: 0 10px 0 10px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -111,6 +20,15 @@ $bodyFont: 'Delius Swash Caps', cursive;
   width: 90%;
   border-radius: 5px;
   margin-left: 15%;
+  transition: 0.5s all;
+}
+
+.gif:hover{
+  width: 115%;
+}
+
+.oddGif:hover{
+  margin-left: 0;
 }
 
 .welcomeHeading{
@@ -137,7 +55,7 @@ $bodyFont: 'Delius Swash Caps', cursive;
 .featureDescription{
   font-weight: 400;
   //font-size: larger;
-  color: #393939;
+  color: #dedede;
   font-family: $bodyFont;
 }
 
@@ -180,4 +98,38 @@ $bodyFont: 'Delius Swash Caps', cursive;
   border-left: 2px solid #0092ff;
   color: #dedede;
 }
+
+.topWave{
+  background-image: url("../../../../assets/svg/topWave.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 170px;
+  padding-bottom: 7%;
+  color: white;
+  margin: 0 0 0 -10px;
+  width: 110vw;
+}
+
+.bottomWave{
+  background-image: url("../../../../assets/svg/bottomWave.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 170px;
+  padding-bottom: 7%;
+  color: white;
+  margin: 0 0 0 -10px;
+  width: 110vw;
+}
+
+.featureHeading{
+  color: white;
+}
+
+.featureBackground{
+  background-color: #115571;
+  margin: 0 0 0 -10px;
+  padding: 7% 0 7% 0;
+  width: 100vw;
+}
+
 
