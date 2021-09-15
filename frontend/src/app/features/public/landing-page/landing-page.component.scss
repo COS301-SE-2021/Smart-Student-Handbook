@@ -17,19 +17,19 @@ $bodyFont: 'Delius Swash Caps', cursive;
 }
 
 .gif{
-  width: 90%;
-  border-radius: 5px;
-  margin-left: 15%;
-  transition: 0.5s all;
+  width: 100%;
+  margin-left: 10%;
+  border-radius: 20px;
+  border: 2px solid rgba(39, 45, 47, 0.62);
 }
 
-.gif:hover{
+/*.gif:hover{
   width: 115%;
 }
 
 .oddGif:hover{
   margin-left: 0;
-}
+}*/
 
 .welcomeHeading{
   line-height: 32pt;
@@ -142,21 +142,21 @@ $bodyFont: 'Delius Swash Caps', cursive;
   width: 100vw;
 }
 
-@media only screen and (max-width: 991px) {
+/*@media only screen and (max-width: 991px) {
   .gif{
-    width: 50%;
+    width: 100%;
     //border-radius: 5px;
     //margin-left: 15%;
     //transition: 0.5s all;
   }
 
   .gif:hover{
-    width: 60%;
+    width: 1000%;
   }
 
   .oddGif:hover{
     //margin-left: 0;
   }
-}
+}*/
 
 

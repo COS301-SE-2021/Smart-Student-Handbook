@@ -5,6 +5,12 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col">
+      <img src="../../../../assets/logo/pwa.png" class="rounded mx-auto d-block" height="500" alt="Responsive image">
+    </div>
+  </div>
+
   <div class="row mt-3 pt-5 mb-3 align-items-center">
     <div class="col-lg-7 offset-lg-1">
       <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
@@ -16,11 +22,11 @@
       </h2>
     </div>
     <div class="col-lg-3 text-center">
-      <button class="mb-2" style="width: 100px" mat-raised-button color="accent">
+      <button class="mb-2" style="width: 100px" mat-raised-button color="accent" [routerLink]="['/account/login']">
         Login
       </button>
       <br>
-      <button mat-raised-button color="accent" style="width: 100px">
+      <button mat-raised-button color="accent" style="width: 100px" [routerLink]="['/account/register']">
         Register
       </button>
     </div>
@@ -47,10 +53,10 @@
 
 <!--  Smart assist -->
   <div class="row feature featureBackground">
-    <div class="col-lg-4 order-last order-lg-first">
+    <div class="col-lg-6 order-last order-lg-first">
       <img class="gif" src="../../../../assets/gifs/SmartAssist.gif">
     </div>
-    <div class="col-lg-6 offset-lg-1 order-first order-lg-last">
+    <div class="col-lg-4 offset-lg-1 order-first order-lg-last">
       <h2 class="featureHeading">
         Feature 1
       </h2>
