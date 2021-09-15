@@ -1,38 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as admin from 'firebase-admin';
-import {
-	mockCollection,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	mockDelete,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	mockDoc,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	mockGet,
-	mockSet,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	mockWhere,
-} from 'firestore-jest-mock/mocks/firestore';
+
+import { exposeMockFirebaseAdminApp } from 'mock-firebase-ts';
 import { HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 
-admin.initializeApp();
-const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
 const userDTo = require('./dto/userRequest.dto');
 
-mockGoogleCloudFirestore({
-	database: {
-		users: [
-			{
-				bio: 'TestBio',
-				dateJoined: 'test date here',
-				department: 'Test department',
-				institution: 'test institution',
-				username: 'test Name',
-				program: 'Test program',
-				uid: 'UserIdTest',
-				workStatus: 'test status',
-			},
-		],
+const mocked = exposeMockFirebaseAdminApp(admin.initializeApp());
+mocked.firestore().mocker.loadCollection('users', {
+	userOne: {
+		dateJoined: 'date 1',
+		department: 'Test department1',
+		institution: 'test institution1',
+		username: 'test Name1',
+		program: 'Test program1',
+		uid: 'UserIdTest1',
+		workStatus: 'test status1',
+	},
+	userTwo: {
+		dateJoined: 'test date here1',
+		department: 'Test department2',
+		institution: 'test institution2',
+		username: 'test Name2',
+		program: 'Test program2',
+		uid: 'UserIdTest2',
+		workStatus: 'test status2',
 	},
 });
 
@@ -45,29 +38,37 @@ describe('UserService', () => {
 		}).compile();
 
 		service = module.get<UserService>(UserService);
+		mocked.firestore().mocker.loadCollection('users', {
+			userOne: {
+				dateJoined: 'date 1',
+				department: 'Test department1',
+				institution: 'test institution1',
+				username: 'test Name1',
+				program: 'Test program1',
+				uid: 'UserIdTest1',
+				workStatus: 'test status1',
+			},
+			userTwo: {
+				dateJoined: 'test date here1',
+				department: 'Test department2',
+				institution: 'test institution2',
+				username: 'test Name2',
+				program: 'Test program2',
+				uid: 'UserIdTest2',
+				workStatus: 'test status2',
+			},
+		});
+	});
+
+	afterEach(() => {
+		mocked.firestore().mocker.reset();
 	});
 
 	it('should be defined', () => {
 		expect(service).toBeDefined();
 	});
 
-	describe('getUserDetails', () => {
-		describe('This should retrieve the user details with the current uid', () => {
-			it('if uid is valid return user details', async () => {
-				// await service.getUserDetails("UserIdTest");
-				// expect(mockCollection).toHaveBeenCalledWith('users');
-				// expect(mockWhere).toHaveBeenCalledWith("uid", "==", "UserIdTest");
-			});
-		});
-		describe('This should  not retrieve the user details with the current uid', () => {
-			it('if uid is not valid return error message', () =>
-				// eslint-disable-next-line
- 				expect(service.getUserByUid('wrong ud ')).rejects.toThrow(HttpException));
-		});
-	});
-
 	describe('CreateAndUpdateUser', () => {
-		console.log(mockGoogleCloudFirestore.name);
 		describe('Creates and updates a user', () => {
 			it('Genreate a new user and create the user', async () => {
 				userDTo.UserRequestDto1 = {
@@ -81,37 +82,23 @@ describe('UserService', () => {
 					workStatus: 'test status',
 				};
 
-				const result = await service.createAndUpdateUser(userDTo.UserRequestDto1, 'fakeusertestid');
-				expect(result.message).toBe('User was successfully added');
-				expect(mockCollection).toHaveBeenCalledWith('users');
-				expect(mockSet).toHaveBeenCalled();
+				// const result = await service.createAndUpdateUser(userDTo.UserRequestDto1, 'user3');
+				// expect(result.message).toBe('User was successfully added');
 			});
 		});
 	});
 
 	describe('doesUsernameExist', () => {
-		mockGoogleCloudFirestore({
-			database: {
-				users: [
-					{
-						bio: 'TestBio',
-						dateJoined: 'test date here',
-						department: 'Test department',
-						institution: 'test institution',
-						username: 'test Name',
-						program: 'Test program',
-						uid: 'UserIdTest',
-						workStatus: 'test status',
-					},
-				],
-			},
-		});
 		describe('checks if a user has already registered with that name', () => {
 			it('Compare a name in the database', async () => {
-				 await service.doesUsernameExist('test Name');
-				expect(mockCollection).toHaveBeenCalledWith('users');
+				const response = await service.doesUsernameExist('test Name1');
+				expect(response).toBe(true);
 			});
 
+			it('Compare a name that does not exist', async () => {
+				const response = await service.doesUsernameExist('test Name');
+				expect(response).toBe(false);
+			});
 		});
 	});
 
@@ -129,10 +116,66 @@ describe('UserService', () => {
 					workStatus: 'test status',
 				},
 			]);
-			// const result = await service.createUser(userDTo.UserRequestDto, 'fakeusertestid');
-			// expect(result.message).toBe('User was successfully added');
-			// expect(mockCollection).toHaveBeenCalledWith('users');
-			// expect(mockSet).toHaveBeenCalled();
+			const result = await service.createUser(userDTo.UserRequestDto, 'fakeusertestid');
+			expect(result.message).toBe('User successfully created');
+		});
+
+		it('Test should not  register a user ', async () => {
+			userDTo.UserRequestDto2 = {
+				bio: 'TestBio',
+				dateJoined: 'test date here',
+				department: 'Test department',
+				institution: 'test institution',
+				username: 'test Name1',
+				program: 'Test program',
+				uid: 'UserIdTest',
+				workStatus: 'test status',
+			};
+
+			const result = await service.createUser(userDTo.UserRequestDto2, 'fakeusertestid');
+			expect(result.message).toBe('User unsuccessfully updated');
+		});
+	});
+
+	describe('updateUser', () => {
+		it('Test should update a user successfully', async () => {
+			userDTo.UserRequestDto = jest.fn(() => [
+				{
+					bio: 'TestBio',
+					dateJoined: 'test date here',
+					department: 'Test department',
+					institution: 'test institution',
+					name: 'test New Name',
+					program: 'Test program',
+					uid: 'UserIdTest',
+					workStatus: 'test status',
+				},
+			]);
+			const result = await service.updateUser(userDTo.UserRequestDto, 'userOne');
+			expect(result.message).toBe('User successfully updated');
+		});
+
+		it('Test should not  update a user ', async () => {
+			userDTo.UserRequestDto2 = {
+				bio: 'TestBio',
+				dateJoined: 'test date here',
+				department: 'Test department',
+				institution: 'test institution',
+				username: null,
+				program: 'Test program',
+				uid: 'UserIdTest',
+				workStatus: 'test status',
+			};
+
+			const result = await service.updateUser(userDTo.UserRequestDto2, 'userOne1');
+			expect(result.message).toBe('User unsuccessfully updated');
+		});
+	});
+
+	describe('deleteUserProfile', () => {
+		it('Test should delete the user profile', async () => {
+			const result = await service.deleteUserProfile('userOne');
+			expect(result.message).toBe('User profile was successfully deleted');
 		});
 	});
 });
