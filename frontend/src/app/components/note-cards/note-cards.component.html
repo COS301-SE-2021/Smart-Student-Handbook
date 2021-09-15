@@ -15,11 +15,11 @@
       <mat-icon class="editNotebookIcon">edit</mat-icon>
     </button>
     <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name, note.description, note.tags)">
-      <h3 class="title">{{ note.name }}</h3>
+      <h3 class="title">{{ substringMediumDescription(note.name) }}</h3>
 
       <label class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</label>
       <label class="description" fxHide.gt-sm fxHide.lt-sm>{{ substringMediumDescription(note.description) }}</label>
-      <label class="description" fxHide.lt-md>{{ note.description.substring(0, 200).substring(0, note.description.substring(0, 200).lastIndexOf(" ")) + "..." }}</label>
+      <label class="description" fxHide.lt-md>{{ substringLargeDescription(note.description) }}</label>
 
       <div
         class="bottomColor"
@@ -31,8 +31,12 @@
 
   <mat-card class="note pointerCursor" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
     <div>
-      <h3 class="title">{{ note.name }}</h3>
-      <h4 class="description">{{ note.description }}</h4>
+      <h3 class="title">{{ substringSmallDescription(note.name) }}</h3>
+<!--      <h4 class="description">{{ note.description }}</h4>-->
+
+      <h4 class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</h4>
+      <h4 class="description" fxHide.gt-sm fxHide.lt-sm>{{ substringMediumDescription(note.description) }}</h4>
+      <h4 class="description" fxHide.lt-md>{{ substringLargeDescription(note.description) }}</h4>
 
       <div
         class="bottomColor"

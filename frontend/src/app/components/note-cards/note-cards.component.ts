@@ -145,8 +145,8 @@ export class NoteCardsComponent implements OnInit {
 			description,
 			tags
 		);
-		this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
-		this.smartAssistObservables.setSmartAssistNoteId(noteId);
+		// this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
+		// this.smartAssistObservables.setSmartAssistNoteId(noteId);
 	}
 
 	/**
@@ -253,6 +253,18 @@ export class NoteCardsComponent implements OnInit {
 				.substring(
 					0,
 					description.substring(0, 100).lastIndexOf(' ')
+				)}...`;
+		}
+		return description;
+	}
+
+	substringLargeDescription(description: string) {
+		if (description.length >= 140) {
+			return `${description
+				.substring(0, 140)
+				.substring(
+					0,
+					description.substring(0, 140).lastIndexOf(' ')
 				)}...`;
 		}
 		return description;

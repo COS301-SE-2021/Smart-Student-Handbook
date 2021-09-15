@@ -48,8 +48,9 @@
 #panelContent{
   // border: 2px solid black;
   // height: 99vh;
-  width: 30vw;
-  padding: 0px 7px 0px 7px;
+  //width: 30vw;
+  padding: 0 7px 0 7px;
+  max-height: 80vh;
   // margin-left: 39px;
   // margin-top: 5vh;
 
@@ -92,4 +93,8 @@ mat-sidenav{
   min-width: 0!important;
   padding: 3px!important;
   margin: auto!important;
+}
+
+::ng-deep .mat-drawer-inner-container{
+  min-width: 100%;
 }

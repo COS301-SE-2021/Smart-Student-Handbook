@@ -99,15 +99,15 @@
 <!--  </div>-->
 <!--</mat-card>-->
 
+<mat-progress-bar mode="indeterminate" class="mt-2" *ngIf="loading"></mat-progress-bar>
 
-
-<div *ngFor="let noteItem of notes">
+<div *ngFor="let noteItem of notes; let i = index">
 
   <mat-card
     align="start"
     class="card text-left snippetCard"
     cdkDrag
-    (mouseleave)="hidePreview(0)"
+    (mouseleave)="hidePreview(i)"
     data.noteId='{{noteItem.noteId}}'
   >
     <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
@@ -115,10 +115,10 @@
       {{noteItem.date}}
       </mat-card-subtitle>
 
-      <mat-icon class="preview" fxHide.gt-sm (click)='addToNote(noteItem.noteId)'>
+      <mat-icon class="preview" fxHide.gt-sm (click)='addToNote(noteItem.noteId)' matTooltip="Add snippet">
         note_add
       </mat-icon>
-      <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>
+      <mat-icon class="preview" (click)="showPreview(i)" fxHide.lt-md>
         aspect_ratio
       </mat-icon>
 
@@ -134,8 +134,8 @@
     </mat-card-header>
 
     <div class="tags" >
-      <div *ngFor="let t of noteItem.tags">
-        <div class="tag">
+      <div>
+        <div class="tag" *ngFor="let t of noteItem.tags">
           <mat-chip color="primary" class="item">{{t}}</mat-chip>
         </div>
       </div>
@@ -143,7 +143,7 @@
   </mat-card>
 </div>
 
-<h3 class="mt-5 ml-3 text-center" *ngIf="notes.length === 0">
+<h3 class="mt-5 ml-3 text-center w-100" *ngIf="notes.length === 0 && !loading">
   Nothing similar found
 </h3>
 
