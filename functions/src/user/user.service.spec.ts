@@ -27,7 +27,7 @@ mockGoogleCloudFirestore({
 				dateJoined: 'test date here',
 				department: 'Test department',
 				institution: 'test institution',
-				name: 'test Name',
+				username: 'test Name',
 				program: 'Test program',
 				uid: 'UserIdTest',
 				workStatus: 'test status',
@@ -67,22 +67,21 @@ describe('UserService', () => {
 	});
 
 	describe('CreateAndUpdateUser', () => {
+		console.log(mockGoogleCloudFirestore.name);
 		describe('Creates and updates a user', () => {
 			it('Genreate a new user and create the user', async () => {
-				userDTo.UserRequestDto = jest.fn(() => [
-					{
-						bio: 'TestBio',
-						dateJoined: 'test date here',
-						department: 'Test department',
-						institution: 'test institution',
-						name: 'test Name',
-						program: 'Test program',
-						uid: 'UserIdTest',
-						workStatus: 'test status',
-					},
-				]);
+				userDTo.UserRequestDto1 = {
+					bio: 'TestBio',
+					dateJoined: 'test date here',
+					department: 'Test department',
+					institution: 'test institution',
+					userName: 'test',
+					program: 'Test program',
+					uid: 'UserIdTest',
+					workStatus: 'test status',
+				};
 
-				const result = await service.createAndUpdateUser(userDTo.UserRequestDto, 'fakeusertestid');
+				const result = await service.createAndUpdateUser(userDTo.UserRequestDto1, 'fakeusertestid');
 				expect(result.message).toBe('User was successfully added');
 				expect(mockCollection).toHaveBeenCalledWith('users');
 				expect(mockSet).toHaveBeenCalled();
@@ -90,10 +89,50 @@ describe('UserService', () => {
 		});
 	});
 
-	describe('createUser', () => {
-		it('Test should register a user successfully', async () => {
+	describe('doesUsernameExist', () => {
+		mockGoogleCloudFirestore({
+			database: {
+				users: [
+					{
+						bio: 'TestBio',
+						dateJoined: 'test date here',
+						department: 'Test department',
+						institution: 'test institution',
+						username: 'test Name',
+						program: 'Test program',
+						uid: 'UserIdTest',
+						workStatus: 'test status',
+					},
+				],
+			},
+		});
+		describe('checks if a user has already registered with that name', () => {
+			it('Compare a name in the database', async () => {
+				 await service.doesUsernameExist('test Name');
+				expect(mockCollection).toHaveBeenCalledWith('users');
+			});
 
 		});
 	});
-});
 
+	describe('CreateUser', () => {
+		it('Test should register a user successfully', async () => {
+			userDTo.UserRequestDto = jest.fn(() => [
+				{
+					bio: 'TestBio',
+					dateJoined: 'test date here',
+					department: 'Test department',
+					institution: 'test institution',
+					name: 'test New Name',
+					program: 'Test program',
+					uid: 'UserIdTest',
+					workStatus: 'test status',
+				},
+			]);
+			// const result = await service.createUser(userDTo.UserRequestDto, 'fakeusertestid');
+			// expect(result.message).toBe('User was successfully added');
+			// expect(mockCollection).toHaveBeenCalledWith('users');
+			// expect(mockSet).toHaveBeenCalled();
+		});
+	});
+});

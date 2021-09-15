@@ -210,7 +210,6 @@ export class UserService {
 			// eslint-disable-next-line eqeqeq
 			.then((querySnapshot) => querySnapshot.size)
 			.catch(() => -1);
-
 		// eslint-disable-next-line eqeqeq
 		return count != 0;
 	}
