@@ -1,13 +1,13 @@
 <div class="container-fluid" id="welcomeBackground">
   <div class="row">
     <div class="col">
-      <img src="../../../../assets/logo/SmartStudentHandbookWelcome.png" class="rounded mx-auto d-block" height="200" alt="Responsive image">
+      <img src="../../../../assets/logo/SmartStudentHandbookWelcome.png" class="rounded mx-auto d-block logoPic"  alt="Responsive image">
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <img src="../../../../assets/logo/pwa.png" class="rounded mx-auto d-block" height="500" alt="Responsive image">
+      <img src="../../../../assets/logo/pwa.png" class="rounded mx-auto d-block pwaPic"  alt="Responsive image">
     </div>
   </div>
 
@@ -15,18 +15,23 @@
     <div class="col-lg-7 offset-lg-1">
       <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
       <h2 class="welcomeSubHeading">
-        We are an award-winning branding agency providing insightful and creative solutions including brand strategy,
-        visual identity, web design, and more. Our experienced and passionate team works with a wide array of
-        mission-driven organizations, including foundations, nonprofits, and higher-ed institutions to help our clients
-        broaden their horizons, build brand equity, and make a greater impact in the world.
+        The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook
+        attempts to improve, speeds up, and encourage collaboration between students. The Smart Student application will allow users
+        to create notebooks. Notebooks can be stored in different folders. Notebooks consist of different sections and sections can
+        then be split up into pages allowing for organized note taking. Notes are written in markup, thus allowing for multiple
+        customization options for users such as text formatting, adding bullet points, tables, images and much more. Once a notebook
+        is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar notebooks. The user will
+        then have the ability to merge, copy or clone these notebook to their notebook. Afterwards users will be able to rate either
+        the entire notebook or snippets of the notebook. The application will work on a subscription based service where users will be
+        paid according to amount of other users using their notebook.
       </h2>
     </div>
-    <div class="col-lg-3 text-center">
-      <button class="mb-2" style="width: 100px" mat-raised-button color="accent" [routerLink]="['/account/login']">
+    <div class="col-lg-4  col-12 text-center">
+      <button class="mb-3 actionBtn"  mat-raised-button  [routerLink]="['/account/login']">
         Login
       </button>
       <br>
-      <button mat-raised-button color="accent" style="width: 100px" [routerLink]="['/account/register']">
+      <button class="actionBtn" mat-raised-button [routerLink]="['/account/register']">
         Register
       </button>
     </div>
@@ -36,65 +41,63 @@
 <!--Collaborate-->
   <div class="row feature topWave">
   </div>
-  <div class="row feature featureBackground" style="padding-top: 0;">
-    <div class="col-lg-6 offset-lg-1 ">
+  <div class="row feature featureBackground" style="padding-top: 20px;">
+    <div class="col-lg-4 offset-lg-1 ">
       <h2 class="featureHeading">
-        Feature 1
+        Real-time Collaborate
       </h2>
       <h2 class="featureDescription">
-        Some description of the feature to give the client more information
-        regarding how the specific feature works and how it looks on smart student handbook website
+        The Smart Student Handbook allows users to collaborate in real-time with one other and share , merge and/or clone
+        notebooks.
       </h2>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-6">
       <img class="gif oddGif" src="../../../../assets/gifs/Collaborate.gif">
     </div>
   </div>
 
 <!--  Smart assist -->
   <div class="row feature featureBackground">
-    <div class="col-lg-6 order-last order-lg-first">
+    <div class="col-lg-6 offset-lg-1 order-last order-lg-first">
       <img class="gif" src="../../../../assets/gifs/SmartAssist.gif">
     </div>
-    <div class="col-lg-4 offset-lg-1 order-first order-lg-last">
+    <div class="col-lg-4 mx-lg-5  order-first order-lg-last">
       <h2 class="featureHeading">
-        Feature 1
+        Smart Assist
       </h2>
       <h2 class="featureDescription">
-        Some description of the feature to give the client more information
-        regarding how the specific feature works and how it looks on smart student handbook website
+        The Smart Student Handbook recommends relevant notes and note snippets that users can then
+        add to their notes.
       </h2>
     </div>
   </div>
 
 <!--  Chat -->
   <div class="row feature featureBackground">
-    <div class="col-lg-6 offset-lg-1">
+    <div class="col-lg-4 offset-lg-1">
       <h2 class="featureHeading">
-        Feature 1
+        Chat rooms
       </h2>
       <h2 class="featureDescription">
-        Some description of the feature to give the client more information
-        regarding how the specific feature works and how it looks on smart student handbook website
+        ...
       </h2>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-6">
       <img class="gif oddGif" src="../../../../assets/gifs/Chat.gif">
     </div>
   </div>
 
 <!--  Clone -->
-  <div class="row feature featureBackground pb-5" style="padding-bottom: 0;">
-    <div class="col-lg-4 order-last order-lg-first">
+  <div class="row feature featureBackground pb-5">
+    <div class="col-lg-6 offset-lg-1 order-last order-lg-first">
       <img class="gif" src="../../../../assets/gifs/Clone.gif">
     </div>
-    <div class="col-lg-6 offset-lg-1 order-first order-lg-last">
+      <div class="col-lg-4 mx-lg-5 order-first order-lg-last">
       <h2 class="featureHeading">
-        Feature 1
+        Clone
       </h2>
       <h2 class="featureDescription">
-        Some description of the feature to give the client more information
-        regarding how the specific feature works and how it looks on smart student handbook website
+        ...
       </h2>
     </div>
   </div>

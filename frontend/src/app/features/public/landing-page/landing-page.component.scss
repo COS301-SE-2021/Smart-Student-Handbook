@@ -4,6 +4,15 @@
 $headingFont: 'Glory', sans-serif;
 $bodyFont: 'Delius Swash Caps', cursive;
 
+.actionBtn{
+  width: 100%;
+  max-width: 400px;
+  background-color: #004f6d;
+  color: white;
+  padding: 10px;
+  font-size: larger;
+}
+
 #welcomeBackground{
   //width: 99vw;
   height: 100vh;
@@ -12,13 +21,26 @@ $bodyFont: 'Delius Swash Caps', cursive;
   overflow-x: hidden;
 }
 
+.logoPic{
+  max-width: 500px;
+  min-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.pwaPic{
+  max-width: 800px;
+  min-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
 .slash-content{
   height: 400px;
 }
 
 .gif{
   width: 100%;
-  margin-left: 10%;
   border-radius: 20px;
   border: 2px solid rgba(39, 45, 47, 0.62);
 }
@@ -32,28 +54,32 @@ $bodyFont: 'Delius Swash Caps', cursive;
 }*/
 
 .welcomeHeading{
+  font-size: xx-large;
   line-height: 32pt;
   font-family: $headingFont;
 }
 
 .welcomeSubHeading{
+  font-size: medium;
+  //padding: 10px;
   font-weight: 400;
   font-family: $bodyFont;
 }
 
-.feature{
-  margin-top: 6%;
-  margin-bottom: 6%;
-}
+//.feature{
+//  margin-top: 6%;
+//  margin-bottom: 6%;
+//}
 
 .featureHeading{
-  font-weight: 400;
+  //font-weight: 400;
   font-size: xx-large;
   font-family: $headingFont;
 }
 
 .featureDescription{
-  font-weight: 400;
+  font-size: large;
+  //font-weight: 400;
   //font-size: larger;
   color: #dedede;
   font-family: $bodyFont;
@@ -104,9 +130,9 @@ $bodyFont: 'Delius Swash Caps', cursive;
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 170px;
-  padding-bottom: 7%;
+  padding-bottom: 12%;
   color: white;
-  margin: 0 0 0 -10px;
+  //margin: 0 0 0 -10px;
   width: 110vw;
 }
 
@@ -137,8 +163,9 @@ $bodyFont: 'Delius Swash Caps', cursive;
 
 .featureBackground{
   background-color: #115571;
-  margin: 0 0 0 -10px;
-  padding: 7% 0 7% 0;
+  //margin: 0 0 0 -10px;
+  //padding: 7% 0 7% 0;
+  padding-top: 100px;
   width: 100vw;
 }
 
