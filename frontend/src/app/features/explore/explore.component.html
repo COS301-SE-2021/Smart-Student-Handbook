@@ -156,7 +156,7 @@
       </mat-tab-group>
     </div>
     <div [ngClass]="{'notesDisplayed col-6': !hide, 'col-0 notesHidden' : hide}"  id="notesSideDiv">
-      <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide}">
+      <div id="notebookNotesContainer" [ngClass]="{'boxShadow': !hide, 'hidden' : hide}">
         <button mat-icon-button [ngClass]="{'hidden' : hide}" (click)="closeNotes()" id="closeNotesPanelBtn">
           <mat-icon>close</mat-icon>
         </button>

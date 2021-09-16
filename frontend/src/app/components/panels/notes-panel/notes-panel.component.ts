@@ -226,7 +226,7 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	setLoadedNote(noteId: string) {
 		this.openedNoteId = noteId;
-		console.log(this.openedNoteId);
+		// console.log(this.openedNoteId);
 	}
 
 	/**

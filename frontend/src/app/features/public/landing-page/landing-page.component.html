@@ -1,14 +1,201 @@
-<div class="pt-5">
-  <article>
-    <h1>Landing Page</h1>
-    <br/>
-    <h1><mat-icon id="announcementIcon">announcement</mat-icon>  &emsp; Under Construction</h1>
-    <br/>
-    <div>
-      <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always
-        <a href="mailto:algorithmicaces@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
-      <p>&mdash; The Team @ Smart Student Handbook</p>
+<div class="container-fluid" id="welcomeBackground">
+  <div class="row">
+    <div class="col">
+      <img src="../../../../assets/logo/SmartStudentHandbookWelcome.png" class="rounded mx-auto d-block logoPic"  alt="Responsive image">
     </div>
-    <a class="btn" [routerLink]="['']">Return Home</a>
-  </article>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <img src="../../../../assets/logo/pwa.png" class="rounded mx-auto d-block pwaPic"  alt="Responsive image">
+    </div>
+  </div>
+
+  <div class="row mt-3 pt-5 mb-3 align-items-center">
+    <div class="col-lg-7 offset-lg-1 order-last order-lg-first">
+      <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
+      <h2 class="welcomeSubHeading">
+        The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook
+        attempts to improve, speeds up, and encourage collaboration between students. The Smart Student application will allow users
+        to create notebooks. Notebooks can be stored in different folders. Notebooks consist of different sections and sections can
+        then be split up into pages allowing for organized note taking. Notes are written in markup, thus allowing for multiple
+        customization options for users such as text formatting, adding bullet points, tables, images and much more. Once a notebook
+        is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar notebooks. The user will
+        then have the ability to merge, copy or clone these notebook to their notebook. Afterwards users will be able to rate either
+        the entire notebook or snippets of the notebook. The application will work on a subscription based service where users will be
+        paid according to amount of other users using their notebook.
+      </h2>
+    </div>
+    <div class="col-lg-4  col-12 text-center order-first order-lg-last mb-5">
+      <button class="mb-3 actionBtn"  mat-raised-button  [routerLink]="['/account/login']">
+        Login
+      </button>
+      <br>
+      <button class="actionBtn" mat-raised-button [routerLink]="['/account/register']">
+        Register
+      </button>
+      <a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook" class="btn btn-dark text-white githubAction mt-3">
+        <em class="fa fa-github-square fa-2x"></em> Find us on Github
+      </a>
+    </div>
+  </div>
+
+
+<!--Collaborate-->
+  <div class="row feature topWave"></div>
+
+  <div class="row feature featureBackground" style="padding-top: 20px;">
+    <div class="col-12 col-lg-4 offset-lg-1 ">
+      <h1 class="display-6 text-white welcomeHeading">Features</h1>
+    </div>
+  </div>
+
+  <div class="row feature featureBackground">
+    <div class="col-lg-4 offset-lg-1 ">
+      <h2 class="featureHeading">
+        Real-time Collaborate
+      </h2>
+      <h2 class="featureDescription">
+        The Smart Student Handbook allows users to collaborate in real-time with one other by adding their friends as a
+        collaborator on their notes which will then share the note with their friends and allow them to work
+        on the notebook at the same time.
+      </h2>
+    </div>
+    <div class="col-lg-6 middleRows">
+      <img class="gif oddGif" src="../../../../assets/gifs/Collaborate.gif" alt="gif">
+    </div>
+  </div>
+
+<!--  Smart assist -->
+  <div class="row feature featureBackground">
+    <div class="col-lg-6 offset-lg-1 order-last order-lg-first middleRows">
+      <img class="gif" src="../../../../assets/gifs/SmartAssist.gif" alt="gif">
+    </div>
+    <div class="col-lg-4 mx-lg-3  order-first order-lg-last">
+      <h2 class="featureHeading">
+        Smart Assist
+      </h2>
+      <h2 class="featureDescription">
+        The Smart Student Handbook recommends relevant notes and note snippets that users can then
+        add to their notes based off the notebook and note that the user us currently working on.
+      </h2>
+    </div>
+  </div>
+
+<!--  Chat -->
+  <div class="row feature featureBackground">
+    <div class="col-lg-4 offset-lg-1">
+      <h2 class="featureHeading">
+        Chat rooms
+      </h2>
+      <h2 class="featureDescription">
+        The Smart Student Handbook has a dedicated chat room created for every notebook so that
+        users can easily communicate and collaborate seamlessly within the same application.
+      </h2>
+    </div>
+    <div class="col-lg-6 middleRows">
+      <img class="gif oddGif" src="../../../../assets/gifs/Chat.gif" alt="gif">
+    </div>
+  </div>
+
+<!--  Clone -->
+  <div class="row feature featureBackground">
+    <div class="col-lg-6 offset-lg-1 order-last order-lg-first">
+      <img class="gif" src="../../../../assets/gifs/Clone.gif" alt="gif">
+    </div>
+      <div class="col-lg-4 mx-lg-3 order-first order-lg-last">
+      <h2 class="featureHeading">
+        Clone
+      </h2>
+      <h2 class="featureDescription">
+        The Smart Student Handbook allows users to search and explore notebooks and notes created by other users
+        to help them get started to create their own notes by cloning an existing notebook and then having the
+        ability to add their own content to that note.
+      </h2>
+    </div>
+  </div>
+
+<!--  <div class="row feature bottomWave">-->
+<!--  </div>-->
+
+<div class="row theTeamBanner">
+
+  <div class="col-12" id="footer"></div>
+
+<!--    <div class="col-12 offset-lg-1 mb-5 pb-5 pb-xl-0"><h1 class="welcomeHeading text-white">Meet the Team</h1></div>-->
+
+        <div class="row feature" style="padding-top: 20px;">
+          <div class="col-12 col-lg-4 offset-lg-1 pb-5 mb-3">
+            <h1 class="display-6 text-white welcomeHeading">Meet the Team</h1>
+          </div>
+        </div>
+
+          <div class="col-12 col-md-4 col-sm-6 col- mb-5 pb-5 mx-auto teamMember text-center" *ngFor="let member of teamMembers">
+            <img class="memberProfilePic" [src]="member.profile" alt="profilePic"/>
+            <h2 class="teamMemberName my-2">{{member.name}}</h2>
+              <span>
+                <a href="{{member.linkedIn}}" class="btn btn-dark text-white m-2">
+                  <em class="fa fa-linkedin-square fa-2x"></em> Linkedin
+                </a>
+
+                <a href="{{member.github}}" class=" btn btn-dark text-white">
+                    <em class="fa fa-github-square fa-2x"></em> Github
+                </a>
+              </span>
+          </div>
+
+      <div class="col-12 mb-5 pb-5"></div>
+  </div>
+
+  <div class="row theTeamBanner">
+      <div class="row feature" style="padding-top: 20px;">
+        <div class="col-12 col-lg-4 offset-lg-1 pb-5 mb-3">
+          <h1 class="display-6 text-white">Documentation</h1>
+        </div>
+      </div>
+
+    <div class="row p-2">
+      <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
+        <iframe title="SRS Document" src="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
+        <iframe title="Technical Installation Manual" src="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
+        <iframe title="Coding Standards" src="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
+        <iframe title="User Manual" src="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row theTeamBanner">
+    <div class="row feature" style="padding-top: 60px;">
+      <div class="col-12 col-lg-4 offset-lg-1 pb-5 mb-3">
+        <h1 class="display-6 text-white">Stakeholders</h1>
+      </div>
+    </div>
+    <div class="col-12 col-md-3  mx-auto p-3">
+      <a href="https://www.cs.up.ac.za/"><img
+        src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FUP_CS.jpg?alt=media&token=91a202be-f2e3-4b3e-8f03-021ecc0bb87b"
+        alt="stakeholder"
+        class="stakeholderPic">
+      </a>
+    </div>
+    <div class="col-12 col-md-5 mx-auto p-3">
+      <a href="https://www.advance.io/"><img
+        src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FAdvance.jpg?alt=media&token=30f8a267-381d-4842-9d1e-bd4ab70fdaf3"
+        alt="stakeholder"
+        class="stakeholderPic">
+      </a>
+    </div>
+  </div>
+
+
+
 </div>
+
+
+

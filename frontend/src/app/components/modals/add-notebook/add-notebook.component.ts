@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { NotebookService } from '@app/services';
 import { NotebookDto } from '@app/models';
@@ -30,7 +30,7 @@ export class AddNotebookComponent {
 
 	doneLoading: boolean = true;
 
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	constructor(
 		public dialogRef: MatDialogRef<AddNotebookComponent>,

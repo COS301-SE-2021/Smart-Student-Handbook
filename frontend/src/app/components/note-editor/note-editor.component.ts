@@ -173,8 +173,8 @@ export class NoteEditorComponent
 		// Define a shared text type on the document
 		this.provider = new WebrtcProvider(this.noteId, doc);
 
-		this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
-		this.smartAssistObservables.setSmartAssistNoteId(this.noteId);
+		// this.smartAssistObservables.setSmartAssistNotebookId(this.notebookId);
+		// this.smartAssistObservables.setSmartAssistNoteId(this.noteId);
 
 		// Define a shared text type on the document
 		const text = doc.getText('quill');
