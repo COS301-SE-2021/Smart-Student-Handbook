@@ -50,7 +50,7 @@
 
       <div id="users" [ngStyle]="{'display': noteId !== '' ? 'block' : 'none'}"></div>
     </div>
-    <div id="editor-container" [ngStyle]="{
+    <div id="editor-container" class="px-md-5" [ngStyle]="{
     'height': heightInPx,
     'background-image': noteId === '' ? 'url(\'../../../assets/images/notebook-placeholder-background.png\')' : 'none',
     'color': noteId === '' ? 'white' : 'black'
