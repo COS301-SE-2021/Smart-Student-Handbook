@@ -65,3 +65,12 @@ class cloudStorage:
 
         blobNotebooks.upload_from_filename(filenameNotebooks)
 
+    def saveEmbeddingData(self):
+        dirname = os.path.dirname(__file__)
+
+        filenameEmbeddingWeights = os.path.join(dirname, "models/embeddingWeights.npy")
+
+        blobEmbeddingWeights = self.bucket.blob("smartAssistData/models/embeddingWeights.npy")
+
+        blobEmbeddingWeights.upload_from_filename(filenameEmbeddingWeights)
+
