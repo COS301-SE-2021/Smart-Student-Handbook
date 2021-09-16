@@ -1,5 +1,5 @@
-import { mockFirebase } from 'mock-firebase-ts';
-
-const firebase = mockFirebase();
-
-export = firebase;
+// import { mockFirebase } from 'mock-firebase-ts';
+//
+// const firebase = mockFirebase();
+//
+// export = firebase;
