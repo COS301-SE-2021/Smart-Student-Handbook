@@ -1,1 +1,257 @@
 @import "src/app/styling/pageUnderConstruction";
+@import url('https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&family=Glory&display=swap');
+
+$headingFont: 'Glory', sans-serif;
+$bodyFont: 'Delius Swash Caps', cursive;
+
+.actionBtn{
+  width: 100%;
+  max-width: 400px;
+  background-color: #004f6d;
+  color: white;
+  padding: 10px;
+  font-size: larger;
+}
+
+.githubAction{
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: larger;
+}
+
+#welcomeBackground{
+  //width: 99vw;
+  height: 100vh;
+  padding: 0 10px 0 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.logoPic{
+  max-width: 500px;
+  min-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.stakeholderPic{
+  width: 100%;
+}
+
+.pwaPic{
+  max-width: 800px;
+  min-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.slash-content{
+  height: 400px;
+}
+
+.gif{
+  width: 100%;
+  border-radius: 20px;
+  border: 2px solid rgba(39, 45, 47, 0.62);
+}
+
+/*.gif:hover{
+  width: 115%;
+}
+
+.oddGif:hover{
+  margin-left: 0;
+}*/
+
+.welcomeHeading{
+  //font-size: xx-large;
+  line-height: 34pt;
+  font-family: $headingFont;
+}
+
+.welcomeSubHeading{
+  font-size: medium;
+  //padding: 10px;
+  font-weight: 400;
+  font-family: $bodyFont;
+}
+
+//.feature{
+//  margin-top: 6%;
+//  margin-bottom: 6%;
+//}
+
+.featureHeading{
+  //font-weight: 400;
+  font-size: xx-large;
+  font-family: $headingFont;
+}
+
+.featureDescription{
+  font-size: large;
+  //font-weight: 400;
+  //font-size: larger;
+  color: #dedede;
+  font-family: $bodyFont;
+}
+
+.theTeamBanner{
+  //box-shadow: 0 0 8px 1px #000000;
+  //background: linear-gradient(to bottom, rgba(40, 40, 40, 0.9), rgba(109, 109, 109, 0.9));
+  background-color: #252C2E;
+}
+
+.teamMember{
+  //width: max-content;
+
+  .memberProfilePic {
+    margin: auto;
+    height: auto;
+    max-height: 300px;
+    //min-height: 100px;
+    border-radius: 50px;
+    background-size: cover;
+  }
+
+  .iframeDocumentation{
+    //margin: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    //width: 480px;
+    //height: 640px;
+    //padding: 20px;
+    //background-size: cover;
+    margin: 20px;
+  }
+
+  //img {
+  //  max-width: 400px;
+  //  min-width: 300px;
+  //  width: 100%;
+  //  height: auto;
+  //  //width: auto\9; /* ie8 */
+  //}
+
+  .teamMemberName{
+    font-weight: 400;
+    margin-bottom: 0;
+    color: #d4d4d4;
+    font-family: $headingFont;
+  }
+
+  .teamMemberIconButton{
+    height: 25px;
+    width: 25px;
+    margin-right: 4px;
+  }
+
+  .teamMemberIcon{
+    width: 25px;
+    border-radius: 3px;
+  }
+}
+
+.documentationContainer{
+  border-left: 2px solid #0092ff;
+  color: #dedede;
+}
+
+.featureHeading{
+  color: white;
+}
+
+.featureBackground{
+  background-color: #115571;
+  //margin: 0 0 0 -10px;
+  //padding: 7% 0 7% 0;
+  padding-top: 100px;
+  width: 100vw;
+}
+
+.topWave{
+  background-image: url("../../../../assets/svg/topWave.svg");
+  background-repeat: no-repeat;
+  color: white;
+  width: 110vw;
+}
+
+#footer{
+  background-image: url("../../../../assets/svg/footerWave.svg");
+  background-repeat: no-repeat;
+  background-color: #115571;
+}
+
+@media only screen and (min-width: 1255px) {
+  .topWave{
+    background-size: cover !important;
+    padding-top: 200px !important;
+    padding-bottom: 12% !important;
+  }
+
+  #footer {
+    background-size: cover;
+    padding-top: 140px;
+  }
+}
+
+@media only screen and (min-width: 991px) and (max-width: 1254px) {
+  .topWave{
+    background-size: cover !important;
+    padding-top: 170px !important;
+    padding-bottom: 12% !important;
+  }
+
+  #footer {
+    background-size: cover;
+    padding-top: 100px;
+  }
+}
+
+@media only screen and (min-width: 540px) and (max-width: 990px) {
+  .topWave{
+    background-size: cover !important;
+    padding-top: 70px !important;
+    padding-bottom: 12% !important;
+  }
+
+  #footer {
+    background-size: cover;
+    padding-top: 80px;
+  }
+
+  .gif {
+    max-width: 500px;
+  }
+}
+
+@media only screen and (max-width: 539px) {
+  .topWave{
+    background-size: cover !important;
+    padding-top: 50px !important;
+    padding-bottom: 12% !important;
+  }
+
+  #footer {
+    background-size: cover;
+    padding-top: 80px;
+  }
+
+  .gif {
+    width: 96%;
+  }
+}
+
+.row{
+  width: 101vw !important;
+  //margin-bottom: -1px !important;
+}
+
+.col{
+  margin-bottom: -1px !important;
+}
+
+.middleRows{
+  margin-bottom: -1px !important;
+}

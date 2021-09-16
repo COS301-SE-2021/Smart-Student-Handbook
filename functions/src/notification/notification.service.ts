@@ -436,16 +436,18 @@ export class NotificationService {
 			userId,
 		);
 
-		await this.sendUserToUserPushNotification(
-			{
-				token: notificationID,
-				title: 'Collaboration Request',
-				body: `You have received a collaboration request 
+		if (notificationID) {
+			await this.sendUserToUserPushNotification(
+				{
+					token: notificationID,
+					title: 'Collaboration Request',
+					body: `You have received a collaboration request 
 						from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
-				userId: userSender,
-			},
-			userReceiver,
-		);
+					userId: userSender,
+				},
+				userReceiver,
+			);
+		}
 
 		return {
 			success: true,

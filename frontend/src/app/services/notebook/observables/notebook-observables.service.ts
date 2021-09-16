@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -40,7 +41,7 @@ export class NotebookObservablesService {
 
 	public removeNotebook: BehaviorSubject<any>;
 
-	constructor() {
+	constructor(private smartAssistObservables: SmartAssistObservablesService) {
 		/** id of notebook to be opened if one is selected from tree view */
 		this.openNotebookId = new BehaviorSubject<any>({
 			notebookId: '',
@@ -120,6 +121,8 @@ export class NotebookObservablesService {
 			title,
 			readonly,
 		});
+
+		this.smartAssistObservables.setSmartAssistNotebookId(notebookID);
 	}
 
 	/**
@@ -147,6 +150,9 @@ export class NotebookObservablesService {
 			description,
 			tags,
 		});
+
+		this.smartAssistObservables.setSmartAssistNotebookId(notebookId);
+		this.smartAssistObservables.setSmartAssistNoteId(noteId);
 	}
 
 	/**

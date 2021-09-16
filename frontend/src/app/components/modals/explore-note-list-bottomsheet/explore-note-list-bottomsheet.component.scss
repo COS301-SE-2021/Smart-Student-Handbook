@@ -7,3 +7,15 @@
 #notebookNotesContainer{
   margin-top: 12px;
 }
+
+#notesBottomSheetHeader{
+  font-weight: 400;
+  white-space: break-spaces;
+  line-height: normal;
+  font-size: medium;
+}
+
+mat-toolbar-row{
+  height: max-content;
+  margin: auto;
+}
