@@ -12,7 +12,7 @@
   </div>
 
   <div class="row mt-3 pt-5 mb-3 align-items-center">
-    <div class="col-lg-7 offset-lg-1">
+    <div class="col-lg-7 offset-lg-1 order-last order-lg-first">
       <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
       <h2 class="welcomeSubHeading">
         The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook
@@ -26,7 +26,7 @@
         paid according to amount of other users using their notebook.
       </h2>
     </div>
-    <div class="col-lg-4  col-12 text-center">
+    <div class="col-lg-4  col-12 text-center order-first order-lg-last mb-5">
       <button class="mb-3 actionBtn"  mat-raised-button  [routerLink]="['/account/login']">
         Login
       </button>
@@ -51,17 +51,17 @@
         notebooks.
       </h2>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 middleRows">
       <img class="gif oddGif" src="../../../../assets/gifs/Collaborate.gif">
     </div>
   </div>
 
 <!--  Smart assist -->
   <div class="row feature featureBackground">
-    <div class="col-lg-6 offset-lg-1 order-last order-lg-first">
+    <div class="col-lg-6 offset-lg-1 order-last order-lg-first middleRows">
       <img class="gif" src="../../../../assets/gifs/SmartAssist.gif">
     </div>
-    <div class="col-lg-4 mx-lg-5  order-first order-lg-last">
+    <div class="col-lg-4 mx-lg-3  order-first order-lg-last">
       <h2 class="featureHeading">
         Smart Assist
       </h2>
@@ -82,7 +82,7 @@
         ...
       </h2>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 middleRows">
       <img class="gif oddGif" src="../../../../assets/gifs/Chat.gif">
     </div>
   </div>
@@ -92,7 +92,7 @@
     <div class="col-lg-6 offset-lg-1 order-last order-lg-first">
       <img class="gif" src="../../../../assets/gifs/Clone.gif">
     </div>
-      <div class="col-lg-4 mx-lg-5 order-first order-lg-last">
+      <div class="col-lg-4 mx-lg-3 order-first order-lg-last">
       <h2 class="featureHeading">
         Clone
       </h2>
@@ -105,9 +105,11 @@
 <!--  <div class="row feature bottomWave">-->
 <!--  </div>-->
 
-<div class="row" id="footer">
+<div class="row theTeamBanner">
 
-    <div class="col-12 offset-lg-1 mb-5 pb-5"><h1 class="welcomeHeading text-white">Meet the Team</h1></div>
+  <div class="col-12" id="footer"></div>
+
+    <div class="col-12 offset-lg-1 mb-5 pb-5 pb-xl-0"><h1 class="welcomeHeading text-white">Meet the Team</h1></div>
 
 
         <div class="col-12 col-md-4 col-sm-6 col- mb-5 pb-5 mx-auto teamMember text-center" *ngFor="let member of teamMembers">
