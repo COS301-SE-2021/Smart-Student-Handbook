@@ -236,6 +236,10 @@ export class NoteEditorComponent
 						// console.log(snap.val().changes);
 						await this.quill.setContents(snap.val().changes);
 					});
+					await firebase
+						.database()
+						.ref(`/status/${this.noteId}`)
+						.set({ count: 1 });
 				}
 			});
 
@@ -315,6 +319,19 @@ export class NoteEditorComponent
 		if (this.provider) this.provider.destroy();
 		if (this.loadEditorSubscription)
 			this.loadEditorSubscription.unsubscribe();
+
+		const counter = await firebase
+			.database()
+			.ref(`/status/${this.noteId}`)
+			.get()
+			.then((doc) => doc.val().count);
+
+		if (counter >= 1) {
+			await firebase
+				.database()
+				.ref(`/status/${this.noteId}`)
+				.set({ count: counter - 1 });
+		}
 	}
 
 	/**
