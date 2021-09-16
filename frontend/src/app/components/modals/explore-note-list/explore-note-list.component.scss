@@ -9,7 +9,14 @@
 }
 
 #notesTitle{
-  font-weight: 500;
-  font-size: large;
+  //font-weight: 400;
+  //font-size: large;
+  margin: auto;
+  white-space: break-spaces;
+  line-height: normal;
+}
+
+mat-toolbar-row{
+  height: max-content;
   margin: auto;
 }

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import {
 	MAT_BOTTOM_SHEET_DATA,
 	MatBottomSheetRef,
@@ -19,7 +19,7 @@ export interface Tag {
 	styleUrls: ['./notebook-bottom-sheet.component.scss'],
 })
 export class NotebookBottomSheetComponent implements OnInit {
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	collaborators: Collaborators[] = [];
 
