@@ -67,6 +67,7 @@ export class NoteEditorComponent
 	 * Subscribe to account service to get user information
 	 * @param accountService
 	 * @param notebookObservables
+	 * @param smartAssistObservables
 	 */
 	constructor(
 		private accountService: AccountService,
@@ -86,7 +87,10 @@ export class NoteEditorComponent
 		this.loadEditorSubscription =
 			this.notebookObservables.loadEditor.subscribe(
 				async (noteInfo: any) => {
-					if (this.noteId !== noteInfo.noteId) {
+					if (
+						this.noteId !== noteInfo.noteId &&
+						noteInfo.noteId !== ''
+					) {
 						this.noteTitle = noteInfo.title;
 						this.noteId = noteInfo.noteId;
 						this.notebookId = noteInfo.notebookId;
@@ -104,6 +108,8 @@ export class NoteEditorComponent
 							} else if (this.noteId !== '')
 								await this.editorOperations();
 						}
+					} else if (noteInfo.noteId === '') {
+						this.removeNote();
 					}
 				}
 			);
@@ -122,19 +128,7 @@ export class NoteEditorComponent
 		this.notebookObservables.removeNote.subscribe((remove) => {
 			if (remove !== '') {
 				if (remove === this.noteId) {
-					this.noteTitle = 'Smart Student';
-					this.noteId = '';
-					this.notebookId = '';
-					this.notebookTitle = '';
-					this.noteDescription = '';
-
-					// this.height += this.toolbarHeight - 30;
-					this.heightInPx = `${this.height}px`;
-
-					const changes = {
-						ops: [],
-					};
-					this.quill.setContents(changes);
+					this.removeNote();
 				}
 			}
 		});
@@ -148,6 +142,27 @@ export class NoteEditorComponent
 		if (counter !== undefined) {
 			this.globalUserCounter = counter;
 		}
+	}
+
+	removeNote() {
+		this.noteTitle = 'Smart Student';
+		this.noteId = '';
+		this.notebookId = '';
+		this.notebookTitle = '';
+		this.noteDescription = '';
+
+		// this.height += this.toolbarHeight - 30;
+		this.heightInPx = `${this.height}px`;
+
+		const changes = {
+			ops: [
+				{
+					insert: '\n',
+				},
+			],
+		};
+
+		if (this.quill) this.quill.setContents(changes);
 	}
 
 	async editorOperations() {

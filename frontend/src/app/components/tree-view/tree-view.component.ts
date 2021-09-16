@@ -84,7 +84,7 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 		});
 
 		this.treeViewObservables.openMyNotes.subscribe((open) => {
-			if (open) this.treeControl.expandAll();
+			if (open && this.notebooks.length > 0) this.treeControl.expandAll();
 		});
 
 		this.getUserNotebooks();
