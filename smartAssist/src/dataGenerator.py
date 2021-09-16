@@ -103,9 +103,9 @@ def createNotebookData(num):
     return notes
 
 # createUsersLive()
-# nd = createNotebookData(30)
-# [print(i) for i in nd]
+nd = createNotebookData(5000)
+[print(i) for i in nd]
 
-# data = SmartAssistData()  
-# data.addData(nd)
+data = SmartAssistData()  
+data.addData(nd)
 

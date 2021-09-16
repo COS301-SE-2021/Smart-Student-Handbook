@@ -123,7 +123,7 @@ exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').
 });
 
 exports.train = functions.pubsub.schedule('every 30 mins').onRun(async () => {
-	const url = 'https://smartassist-nii4biypla-uc.a.run.app/trainModel';
+	const url = 'https://smartassist-nii4biypla-uc.a.run.app/calculateEmbeddings';
 
 	const options = { method: 'GET' };
 

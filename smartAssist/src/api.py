@@ -33,6 +33,20 @@ def trainModel():
     
     return jsonify(success = True)
 
+@app.route("/calculateEmbeddings")
+def calculateEmbeddings():
+    global data
+    global smartmodel
+    global cloud
+
+    cloud.loadAllData()
+
+    smartmodel.saveEmbeddingWeights()
+
+    cloud.saveEmbeddingData()
+    
+    return jsonify(success = True)
+
 @app.route("/getReccommendation", methods=['GET', 'POST'])
 def getRecommendation():
     global data
@@ -57,7 +71,7 @@ def getRecommendation():
         smartmodel.loadSmartModel()
             
         
-        item = data.createSoup(name, tags, author, institution, course)
+        item = data.createDataSet(name, tags, author, institution, course)
 
         recs = smartmodel.getRecommendations(item)
 
@@ -99,7 +113,11 @@ def addData():
         
         data.addData(note)
 
+        data.loadData(count=10000)
+        smartmodel.saveEmbeddingWeights()
+
         cloud.saveNotebooksData()
+        cloud.saveEmbeddingData()
 
         return jsonify(success = True)
     else:
@@ -137,7 +155,11 @@ def removeData():
         
         data.removeData(note)
 
+        data.loadData(count=10000)
+        smartmodel.saveEmbeddingWeights()
+
         cloud.saveNotebooksData()
+        cloud.saveEmbeddingData()
 
         return jsonify(success = True)
 
@@ -175,7 +197,11 @@ def editData():
         
         data.editData(note)
 
+        data.loadData(count=10000)
+        smartmodel.saveEmbeddingWeights()
+
         cloud.saveNotebooksData()
+        cloud.saveEmbeddingData()
 
         return jsonify(success = True)
 
