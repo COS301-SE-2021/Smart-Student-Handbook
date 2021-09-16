@@ -105,25 +105,25 @@
 <!--  <div class="row feature bottomWave">-->
 <!--  </div>-->
 
-  <div class="row" id="footer">
+<div class="row" id="footer">
 
-    <div class="col-1 mb-5 pb-5"></div>
-    <div class="col-2 mb-5 pb-5 teamMember text-center" *ngFor="let member of teamMembers">
-      <div mat-card-avatar class="memberProfilePic" [ngStyle]="{'background-image': (member.profile)}"></div>
-      <h2 class="teamMemberName">{{member.name}}</h2>
-      <a href="{{member.linkedIn}}">
-        <button mat-icon-button class="teamMemberIconButton mr-1">
-          <img class="teamMemberIcon" src="../../../../assets/icons/linkedIn.png">
-        </button>
-      </a>
+    <div class="col-12 offset-lg-1 mb-5 pb-5"><h1 class="welcomeHeading text-white">Meet the Team</h1></div>
 
-      <a href="{{member.github}}">
-        <button mat-icon-button class="teamMemberIconButton">
-          <img class="teamMemberIcon" src="../../../../assets/icons/github.png">
-        </button>
-      </a>
-    </div>
-    <div class="col-1 mb-5 pb-5"></div>
+
+        <div class="col-12 col-md-4 col-sm-6 col- mb-5 pb-5 mx-auto teamMember text-center" *ngFor="let member of teamMembers">
+          <img class="memberProfilePic" [src]="member.profile"/>
+          <h2 class="teamMemberName my-2">{{member.name}}</h2>
+            <span>
+              <a href="{{member.linkedIn}}" class="btn btn-dark text-white m-2">
+                <i class="fa fa-linkedin-square fa-2x"></i> Linkedin
+              </a>
+
+              <a href="{{member.github}}" class=" btn btn-dark text-white">
+                  <i class="fa fa-github-square fa-2x"></i> Github
+              </a>
+            </span>
+        </div>
+    <div class="col-12 mb-5 pb-5"></div>
 </div>
 
 <div class="row theTeamBanner">

@@ -96,10 +96,20 @@ $bodyFont: 'Delius Swash Caps', cursive;
 
   .memberProfilePic {
     margin: auto;
-    height: 65px;
-    width: 65px;
+    height: auto;
+    max-height: 300px;
+    //min-height: 100px;
+    border-radius: 50px;
     background-size: cover;
   }
+
+  //img {
+  //  max-width: 400px;
+  //  min-width: 300px;
+  //  width: 100%;
+  //  height: auto;
+  //  //width: auto\9; /* ie8 */
+  //}
 
   .teamMemberName{
     font-weight: 400;
@@ -152,7 +162,7 @@ $bodyFont: 'Delius Swash Caps', cursive;
   background-image: url("../../../../assets/svg/footerWave.svg");
   background-repeat: no-repeat;
   background-size: cover;
-  padding-top: 180px;
+  padding-top: 300px;
   background-color: #115571;
 }
 
