@@ -34,7 +34,7 @@ def trainModel():
     return jsonify(success = True)
 
 @app.route("/calculateEmbeddings")
-def trainModel():
+def calculateEmbeddings():
     global data
     global smartmodel
     global cloud
