@@ -13,6 +13,13 @@ $bodyFont: 'Delius Swash Caps', cursive;
   font-size: larger;
 }
 
+.githubAction{
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: larger;
+}
+
 #welcomeBackground{
   //width: 99vw;
   height: 100vh;
@@ -26,6 +33,10 @@ $bodyFont: 'Delius Swash Caps', cursive;
   min-width: 300px;
   width: 100%;
   height: auto;
+}
+
+.stakeholderPic{
+  width: 100%;
 }
 
 .pwaPic{
