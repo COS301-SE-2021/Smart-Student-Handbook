@@ -1,4 +1,4 @@
-export class AddNoteReview {
+export class AddNoteReviewDto {
 	readonly noteId: string;
 
 	readonly message: string;

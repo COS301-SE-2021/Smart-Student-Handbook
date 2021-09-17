@@ -4,4 +4,7 @@ export interface Review {
 	displayName: string;
 	userId: string;
 	profileUrl: string;
+	notebookId?: string;
+	noteId?: string;
+	reviewId: string;
 }

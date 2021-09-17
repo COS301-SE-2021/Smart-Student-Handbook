@@ -11,11 +11,11 @@ import { CreateNoteDto } from './dto/createNote.dto';
 import { NoteService } from './note/note.service';
 import { ReviewService } from './review/review.service';
 import { UpdateNoteDto } from './dto/updateNote.dto';
-import { AddNotebookReview } from './dto/addNotebookReview';
+import { AddNotebookReviewDto } from './dto/addNotebookReview.dto';
 import { AccessService } from './access/access.service';
 import { Access } from './interfaces/access.interface';
 import { AddAccessDto } from './dto/addAccess.dto';
-import { AddNoteReview } from './dto/AddNoteReview';
+import { AddNoteReviewDto } from './dto/AddNoteReview.dto';
 
 @Controller('notebook')
 export class NotebookController {
@@ -79,7 +79,7 @@ export class NotebookController {
 	}
 
 	@Post('addNotebookReview')
-	async addNotebookReview(@Body() addNotebookReview: AddNotebookReview, @Headers() header): Promise<Response> {
+	async addNotebookReview(@Body() addNotebookReview: AddNotebookReviewDto, @Headers() header): Promise<Response> {
 		const userId: string = await this.authService.verifyUser(header.token);
 		return this.reviewService.addNotebookReview(addNotebookReview, userId);
 	}
@@ -96,7 +96,7 @@ export class NotebookController {
 	}
 
 	@Post('addNoteReview')
-	async addNoteReview(@Body() addNoteReview: AddNoteReview, @Headers() header): Promise<Response> {
+	async addNoteReview(@Body() addNoteReview: AddNoteReviewDto, @Headers() header): Promise<Response> {
 		const userId: string = await this.authService.verifyUser(header.token);
 		return this.reviewService.addNoteReview(addNoteReview, userId);
 	}
