@@ -1,46 +1,91 @@
 noteId,name,tags,author,institution,course
-d6df3cd7-ff92-40d7-b385-c84cdeb8b7a8,Vectors ,"['Physics', 'Vectors']",u18002112,University of Pretoria,PHY131
-cdd02de5-69c8-4a42-9387-170c77c7ffe6,Organic Chemistry,['chemistry'],u18002112,University of Pretoria,CHY151
-9cfaf4bf-6884-4b17-b33e-45d9e8eedb37,Atoms and Molecules,['Molecules'],u18002112,University of Pretoria,Bok121
-93d33c8c-2cc7-4378-b5d0-3f33639e54b3,Introduction to C++,"['Overview of c++', 'C++', 'Beginner', 'Coding']",LucaPrenzler1,University of Pretoria,COS110
-1e734c7c-9cb0-475a-b332-8c3161b620cd,Chapter 1,['COS122'],LucaPrenzler1,University of Pretoria,COS122
-89b7bdbe-a10f-4fd6-b3c5-e8eac38ed2f9,Chapter1,"['Computer Science', 'COS151']",LucaPrenzler1,University of Pretoria,COS151
-35dc5d0c-ff2e-4e4c-8332-28c2c46ca44f,Introduction,[],John,Unknown,COS132
-5b1f77e6-9765-4d40-935a-dafb85d1a0e0,Introduction,['intro'],John,University of Pretoria,COS132
-874b21a9-bea6-48a7-95f2-9a1fba7ba22d,Introduction,[],Johnny,University of Pretoria,COS301
-e745e27c-45d6-4344-840f-b38fec28f46d,Introduction to Software Engineering,"['Software Engineering', 'COS301', 'Introduction']",LucaPrenzler1,University of Pretoria,COS301
-51178248-037b-452a-9ade-f994388b62b3,Waterfall Methodology ,"['waterfall', 'methodology', 'software engineering']",LucaPrenzler1,University of Pretoria,COS301
-a09a7363-c53b-4dd7-8761-ea0342f4303d,Basic Concepts of C++,"['C++', 'Programming', 'COS132']",LucaPrenzler1,University of Pretoria,COS132
-9debd52e-a9e1-443d-b256-eba731e4d67c,Template Method,"['COS214', 'Template Method', 'Behavioral']",LucaPrenzler1,University of Pretoria,COS26
-ea7f824f-b424-4d65-8568-ede5ff882a71,Memento Pattern,"['Memento', 'Pattern', 'COS214']",LucaPrenzler1,University of Pretoria,COS26
-b110dae4-09c3-4d84-b0d5-34c76ecd088d,Introduction,[],louw,University of Pretoria,COS 301
-0afabb76-0c76-4f9d-a391-d36e07442af3,Introduction,[],Arno,University of Pretoria,asd
-7ce46782-e5f5-460f-ac1e-f38ffd060b82,Introduction,['tag1'],Arno,University of Pretoria,setstst
-ec6962fe-81eb-4036-a62f-a62c8ecd8503,Introduction,[],Arno,University of Pretoria,qwe
-15289bde-8baf-431f-b335-ce8adf8db79d,Introduction,[],Arno,University of Pretoria,123
-e1de4990-975a-4913-af94-088547ab05e0,123456789,['qwertyuiop'],Arno,University of Pretoria,123
-1980a310-3849-4d19-8330-bf4d6784c752,Introduction,[],Arno,University of Pretoria,test
-4d3353d1-3106-4c7a-b52d-c5a154333525,Introduction,[],Arno,University of Pretoria,123
-f54f4573-6259-4b5b-a20d-c7bc58348748,Introduction,[],Arno,University of Pretoria,123
-2b1b47ae-1786-4801-8e5e-66b554417026,aewrbgv,['dfb'],Arno,University of Pretoria,asd
-4c3d81d2-d1b8-46b1-b485-96e0dcff9a00,Introduction,['123'],Arno,University of Pretoria,asd
-be8fcea4-09bb-4541-9cd2-f8a6f58e6412,Introduction,[],DouglasAce,University of Pretoria,test
-ded601f9-3831-4233-ba34-4f591ca7bc5a,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-c60a8fd0-3833-4685-ae41-d3d3169879e0,Semester test 1,"['Test', 'WTW114', 'Deferential']",LucaPrenzler,University of Pretoria,WTW114
-76921bbe-bb94-4639-8449-9789dae15203,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-2c159449-a448-46d2-8672-cde6510850ab,September Semester Test,"['WTW114', 'Test']",LucaPrenzler,University of Pretoria,WTW114
-cf219579-e562-46cd-aad7-146eb8d0df81,12.1: Finding Limits,"['Calculus', 'Limits']",louw,University of Pretoria,WTW114
-ef87d557-7318-4cdf-9437-7c62a5f9e207,zxc,"['zxc', '123']",Arno,University of Pretoria,asd
-bac95b3e-9bd7-43fe-a5d8-7613df5d6dcf,Introduction,[],LucaPrenzler,University of Pretoria,WTW114
-63d45ae8-37aa-4649-ab3a-fb328efd2976,September Semester test,"['WTW114', 'Test']",LucaPrenzler,University of Pretoria,WTW114
-8a6884b4-5dc3-45b5-82f4-71308766797c,123,['123'],Arno,University of Pretoria,123
-d04cda8a-5820-4cab-a97f-6d174dd831cf,asd,['asd'],Arno,University of Pretoria,123
-5df07eba-2af8-4c1b-abce-528ed37f796c,Introduction,[],Arno,University of Pretoria,123
-e1ab18a2-52bf-4b2d-90cb-a1fc925360b8,Introduction,[],Arno,University of Pretoria,qwe
-5b977da7-8806-4cc6-a7c3-c8cc1de22484,Introduction,[],Arno,University of Pretoria,qwe
-5e48d552-cfe3-41df-a0a6-a11066406e5b,Introduction,[],Arno,University of Pretoria,123
-83a80ccf-2df5-41b5-922a-4c15b5cc4b05,Introduction,[],Arno,University of Pretoria,ads
-c2ca1069-fde0-47c3-951a-a0c16c565996,Introduction,[],Arno,University of Pretoria,qwe
-57107f50-6e0e-47f5-83bb-0efbbece9fbb,Introduction,[],Arno,University of Pretoria,sdf
-c4ba02dc-088a-45aa-81f9-454107119ead,Introduction,[],Arno,University of Pretoria,sdf
-84f5c52f-8ad1-45be-8675-614254290399,qwe,['qwe'],Arno,University of Pretoria,sdf
+1cfd0f72-929b-49f9-81a4-cebdc4a25c8c,Algebra,"['algebra', 'math', 'functions', 'graphs']",John Doe,University of Pretoria,WTW 134
+fdd57d93-54fc-4507-b6ca-b848a44f2744,Introduction,['Coding'],TheoMorkel,University of Pretoria,COS 301
+f72dd114-cfdd-4763-9434-cc9023ba28e8,Algebraic functions,"['algebra', 'functions', 'maths']",John Doe,University of Pretoria,WTW 134
+6741280c-584c-4c95-980e-61e2b07a7ddd,Introduction,[],Johnny,University of Pretoria,COS332
+fea3f270-4f52-4a0f-a969-fa106423a753,Introduction,[],Test author,Test institution,Test course
+d9451c94-e664-4a8b-bfe1-e6fda3a1b1c2,Introduction,[],Test author,Test institution,Test course
+98164faf-a156-45d8-883d-1629899d8445,Mathematics clone,"['math', 'wtw']",Arno,South African Universities Outlook,WTW 115
+edf4689d-f009-4fa1-b48f-9e04635617f4,Introduction,[],Test author,Test institution,Test course
+b8a00063-2662-4922-8d7c-3c600603b5d9,Introduction,[],Test author,Test institution,Test course
+bd397bb2-d806-45b8-81fe-99720cf89b0e,Introduction,[],Test author,Test institution,Test course
+e20ba54f-8cda-420b-b1e3-c0029f9545bf,Introduction,[],Test author,Test institution,Test course
+bc0eb3ef-c395-449e-a870-cce0669baf56,Introduction,[],Test author,Test institution,Test course
+d6040a82-ac1c-4070-b92e-7568d48e81ba,Introduction,[],Test author,Test institution,Test course
+f8a40558-de4f-4874-87c1-0cf22e12fbf1,Introduction,[],Test author,Test institution,Test course
+36cee424-1d1c-4546-acf9-c44fb24c3a64,Introduction,[],Test author,Test institution,Test course
+b4d45288-558a-4bdf-af5a-140b1677d576,Introduction,[],Updated author,Updated institution,Updated course
+8ea70790-1185-4fec-a55c-0b1c45746a38,Introduction,[],Test author,Test institution,Test course
+af3555b0-7e91-4ca9-840f-c59e51e7796d,Introduction,[],Test author,Test institution,Test course
+3f0236a3-2494-4733-ad64-114195c4c700,Introduction,[],Test author,Test institution,Test course
+62163f8f-934c-41de-8241-d33589fcb308,Introduction,[],Test author,Test institution,Test course
+4a54f323-9710-4a7f-8ebd-6c7b7163152c,Introduction,[],Updated author,Updated institution,Updated course
+d8986487-b89b-4697-900d-38c5b8eaee9f,Introduction,[],Updated author,Updated institution,Updated course
+178ac41e-cc7c-49ba-801d-c753adf1cf20,Introduction,[],Test Access author,Test Access institution,Test Access course
+94f5dc3f-bc12-4f34-bb40-6bb456128225,Introduction,[],Test Access author,Test Access institution,Test Access course
+b8bc9c09-3715-4c44-948c-18075483e50e,Introduction,[],Test Access author,Test Access institution,Test Access course
+8f3df6a8-f0d8-4bf5-ad7c-4b464e9d8ff0,Introduction,[],Test Access author,Test Access institution,Test Access course
+c18d68e6-e20f-412a-85d2-02f35e33672e,Introduction,[],Test Access author,Test Access institution,Test Access course
+f71a1827-d298-49e3-a16a-d9871c3b9aff,Introduction,[],Test Access author,Test Access institution,Test Access course
+5d21930f-d2c0-4d26-964b-b56b22675292,Introduction,[],Test Access author,Test Access institution,Test Access course
+eba7ab0d-b156-464f-b958-52c09c5b7c0e,Introduction,[],Test Access author,Test Access institution,Test Access course
+daa4bccf-d24d-4f16-bcb6-af463f57117e,Introduction,[],Test Access author,Test Access institution,Test Access course
+878bf8a4-242e-43c9-ab2e-2745644b8e8c,Introduction,[],Test Access author,Test Access institution,Test Access course
+8bea2758-8410-431a-b456-cbdeb4ad8317,Introduction,[],Test Access author,Test Access institution,Test Access course
+0ac6fde2-d001-41b3-b436-bd9a4fc0a4e4,Introduction,[],Test Access author,Test Access institution,Test Access course
+2338d39a-bf16-4d1d-a94a-e46bd2c4eba8,Introduction,[],Test Access author,Test Access institution,Test Access course
+4026150a-28bd-45a5-889a-a6f6bf458cfe,Introduction,[],Test author,Test institution,Test course
+3822d188-c3d8-4139-a86d-3a8e523ceef3,Introduction,[],Test Note author,Test Note institution,Test Note course
+96a9a0eb-6f64-48cc-aa9a-ff51f16c934e,Introduction,[],Test Note author,Test Note institution,Test Note course
+1a74a35b-549a-40b0-913b-812c3ca501c2,Introduction,[],Test Note author,Test Note institution,Test Note course
+b43b0a03-c1a7-43f0-9c68-fab2a4392f4e,Introduction,[],Test Note author,Test Note institution,Test Note course
+dea8fc47-4de4-416b-9582-3c984cbc9786,Test Note Name,"['Test tag 1', 'Test tag 2']",Test Note author,Test Note institution,Test Note course
+a50e4f9f-6b0b-4450-a06c-9a92e3458e64,Introduction,[],Test Note author,Test Note institution,Test Note course
+25547084-4d23-41f9-809b-80ad5550fe4d,Introduction,[],Test Note author,Test Note institution,Test Note course
+685f0188-1304-42f7-90cb-401d19a31cc3,Introduction,[],Test Note author,Test Note institution,Test Note course
+122df6a1-9697-452a-86de-9548f84f089e,Introduction,[],Test Note author,Test Note institution,Test Note course
+636ca396-ec70-448e-a7fe-65d75daf9ea9,Introduction,[],Test Access author,Test Access institution,Test Access course
+1a8ae97e-38ba-4632-b5a4-0b16aae11c80,Introduction,[],Test author,Test institution,Test course
+65726e38-b1d9-4943-8208-b6157f5e163a,Introduction,[],Test Access author,Test Access institution,Test Access course
+bc1cc13c-b6c3-46ee-b807-f53ce82c9d0c,Introduction,[],Test Note author,Test Note institution,Test Note course
+0fe9647c-16ea-4875-b2da-b41048a3b29f,Introduction,[],Test author,Test institution,Test course
+8871e5c1-8511-4782-bf99-b47a3a748aed,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+d289e1cc-f3f8-4018-a191-5fb5d22b4b48,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+6f6181ed-e04b-4461-a0c4-125f2bf78361,Introduction,[],Test Access author,Test Access institution,Test Access course
+3c118a45-1c4c-4568-8958-17219f2298de,Introduction,[],Test Note author,Test Note institution,Test Note course
+6021c7b9-fd35-4385-841d-81c93e9ff1d7,Introduction,[],Test Access author,Test Access institution,Test Access course
+404158e0-e769-4b1f-95c1-9f391a873e3f,Introduction,"['Tag', 'Tag']",John Doe,University of Pretoria,teste
+6aaffab4-4992-49b0-8a08-78b1231831cb,Introduction,[],Test Note author,Test Note institution,Test Note course
+cefdab9e-e18b-4870-bb89-5ecbb7643098,Introduction,[],Test Note author,Test Note institution,Test Note course
+1ce25aa8-243d-410b-8d0a-dfbe74e037d6,Introduction,[],Test Note author,Test Note institution,Test Note course
+d90a0ff9-c4a8-443d-b306-dc87510dbbcf,Introduction,[],Test Note author,Test Note institution,Test Note course
+80140b7a-3686-401f-98eb-e599b30372f5,Introduction,[],Test Note author,Test Note institution,Test Note course
+3520eef1-e445-4350-982d-d613706fa264,Introduction,[],Test Note author,Test Note institution,Test Note course
+efbf7d32-a50a-40ef-b1b8-41789b511f0b,Introduction,[],Test Access author,Test Access institution,Test Access course
+011dc474-ed12-4633-9195-7f4c372aa24b,Introduction,[],Test Note author,Test Note institution,Test Note course
+7f45d10e-b4b7-4953-84b3-86ed27729fac,Introduction,[],Test Note author,Test Note institution,Test Note course
+c31ef223-4c6a-4cf4-9e34-e27ba8963f97,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+7d51928e-6e28-42a0-9d30-3660bfe922c4,Introduction,[],Updated author,Updated institution,Updated course
+4b2ba5b2-1eb4-47d3-b475-2af9513db73b,Introduction,[],Updated author,Updated institution,Updated course
+af510f2f-5f6a-4e66-816a-29f5f7f97c9b,Introduction,[],Updated author,Updated institution,Updated course
+ed97fc3a-2ecc-4154-92a0-d9d2e302c0a3,Introduction,[],Test Note author,Test Note institution,Test Note course
+287a161e-922e-46e3-ae5b-9cbd79d0e8b1,Introduction,[],Test Note author,Test Note institution,Test Note course
+c53a2b76-95a7-49e3-88a6-367a037628b9,Introduction,[],Test Access author,Test Access institution,Test Access course
+ba882f7c-8d72-441d-b9f8-c8f07f79758d,Introduction,[],Johnny,University of Pretoria,WTW114
+94933b8a-54f1-4c86-a5ee-76d71060d404,September Semester test,"['WTW114', 'test']",Johnny,University of Pretoria,WTW114
+ed74b358-f8ff-4b1c-9009-5c13383cb7ca,Factory Method,"['Factory', 'COS214']",Johnny,University of Pretoria,COS332
+2d9730e5-8832-4e18-bb46-62131fe45f62,Introduction,[],Updated author,Updated institution,Updated course
+8922cda9-5ed3-4d70-be4e-14d269b19e8d,Introduction,[],John Doe,University of Pretoria,A test notebook with an extremely long title to test styling
+5af1de8d-48e0-46bd-bf0c-f12939612fed,Introduction,[],John Doe,University of Pretoria,test
+d93360e7-1d3f-4e9e-8cc3-5f5beaacfe92,A test notebook with elaborately long title to test the styling on the header tags on the application with some extra text to test it even more,"['test', 'test']",John Doe,University of Pretoria,test
+08e4e095-28ee-4d4a-9206-f5c49e850b78,Introduction,[],Test Note author,Test Note institution,Test Note course
+e4bec707-4e5f-43e4-a28d-41594fb5e138,Introduction,[],Updated author,Updated institution,Updated course
+cda57722-1b87-460a-a6f3-a311ce4ec424,Introduction,[],Test Note author,Test Note institution,Test Note course
+7954e25c-4584-4b73-bc25-fb5182d06c0e,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+ce3ecb14-f64f-4540-9fdc-32da210144d2,Introduction,[],Test Access author,Test Access institution,Test Access course
+5b8f92cc-51f2-4e03-bfc1-6ffa631b1da0,Chapter 1,"['Into', 'Design', 'Patterns', 'Cos214']",lucaprenzler,University of Pretoria,COS214
+5a7b84a6-4d27-400e-93c5-0e738737066a,Lexical Analysis,"['Lexical', 'Analysis', 'Lexer', 'COS341']",lucaprenzler,University of Pretoria,COS341
+251fda70-3db4-47e0-99a8-ff70d79051ff,Methodologies,"['Software', 'Engineering', 'COS301', 'Waterfall', 'Agile', 'Scrum']",lucaprenzler,University of Pretoria,COS301
+74b3fb80-4f73-420e-9e27-116fe79ecd1d,Introduction,[],AJ,University of Pretoria,COS 301
+8a5b09d1-1777-4c4c-b29a-1ec1d4033e29,Introduction to Calculus,"['Into', 'Maths', 'WTW114', 'Calculas', 'Explained']",lucaprenzler,University of Pretoria,WTW114
+89fcf480-8e03-4215-b239-af366eeb0a07,Limits,"['Limit', 'Calculus', 'WTW114']",LizaConver,University of Pretoria,WTW114

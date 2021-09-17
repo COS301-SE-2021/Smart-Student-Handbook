@@ -40,26 +40,8 @@ class SmartAssistData:
 
         dataRaw['tags'] = dataRaw['tags'].apply(eval)
 
-        dataRaw["soup"] = ""
 
-        self.dataList = dataRaw[['noteId', 'name', 'tags', 'author', 'institution', 'course', 'soup']][:count].to_numpy()
-
-        vocab = np.array([])
-        self.maxLen = -1
-
-        for data in self.dataList:
-            soupArr = [data[1], data[3], data[4], data[5].replace(" ", "")]
-            for i in data[2]:
-                soupArr.append(i)
-
-            sep = " "
-            soup = sep.join(soupArr)
-            data[6] = soup
-
-            if len(soup.split()) > self.maxLen:
-                self.maxLen = len(soup.split())
-            
-            vocab = np.unique(np.append(vocab, np.array(soup.split())))
+        self.dataList = dataRaw[['noteId', 'name', 'tags', 'author', 'institution', 'course']][:count].to_numpy()
 
         self.data_index = {data[0]: idx for idx, data in enumerate(self.dataList)}
         self.index_data = {idx: data for data, idx in self.data_index.items()}
@@ -92,40 +74,18 @@ class SmartAssistData:
         course_counts = count_items(unique_course)
         self.course = [t[0] for t in course_counts.items()]
         self.course_index = {course: idx for idx, course in enumerate(self.course)}
-        self.index_course = {idx: course for course, idx in self.course_index.items()}
-
-        unique_soup = {data[6]: idx for idx, data in enumerate(self.dataList)}
-        soup_counts = count_items(unique_soup)
-        self.soup = [t[0] for t in soup_counts.items()]
-        self.soup_index = {soup: idx for idx, soup in enumerate(self.soup)}
-        self.index_soup = {idx: soup for soup, idx in self.soup_index.items()}
-
-        self.soup_data =  {data[6]: data[0] for idx, data in enumerate(self.dataList)}
-        self.data_soup =  {data[0]: data[6] for idx, data in enumerate(self.dataList)}
-             
-            
-        self.vocabSize = len(vocab)+5
+        self.index_course = {idx: course for course, idx in self.course_index.items()}            
 
         
-        print(len(self.dataList), len(self.names), len(self.authors), len(self.tags), len(self.institutions), len(self.course), len(self.soup))
-        print(len(self.data_index), len(self.name_index), len(self.authors_index), len(self.tags_index), len(self.institutions_index), len(self.course_index), len(self.soup_index), len(self.data_soup))
+        print(len(self.dataList), len(self.names), len(self.authors), len(self.tags), len(self.institutions), len(self.course))
+        print(len(self.data_index), len(self.name_index), len(self.authors_index), len(self.tags_index), len(self.institutions_index), len(self.course_index))
 
         
-        soupTemp = np.array(self.dataList).T[6]
-        soupOH = []
-
-        for i,data in enumerate(self.dataList):
-            soupOH.append(one_hot(data[6], self.vocabSize))
-
-        soupPadded = pad_sequences(soupOH, padding='post',value=0.0)
-        soupPadded = pad_sequences(soupPadded, maxlen=soupPadded.shape[1]+5, padding='post',value=0.0, dtype='float32')
-        self.maxLen = soupPadded.shape[1]
-
         self.dataSet = []
         for i,data in enumerate(self.dataList):
 
             for j in data[2]:
-                self.dataSet.append(np.array([self.data_index[data[0]], self.name_index[data[1]], self.tags_index[j], self.authors_index[data[3]], self.institutions_index[data[4]], self.course_index[data[5]], np.array(soupPadded[i])]))
+                self.dataSet.append(np.array([self.data_index[data[0]], self.name_index[data[1]], self.tags_index[j], self.authors_index[data[3]], self.institutions_index[data[4]], self.course_index[data[5]]]))
 
 
         self.dataSet_index = {data[0]: idx for idx, data in enumerate(self.dataSet)}
@@ -151,7 +111,7 @@ class SmartAssistData:
 
         for i in range(n_positive):
             finalSetX.append(self.dataSet[random.randrange(len(self.dataSet))].tolist())
-            finalSetY.append([1 for i in range(6)])
+            finalSetY.append([1 for i in range(5)])
         
 
 
@@ -170,6 +130,8 @@ class SmartAssistData:
         np.random.shuffle(self.finalSet)
         self.finalSetX = [i[0] for i in self.finalSet]
         self.finalSetY = [i[1] for i in self.finalSet]
+
+        print(self.finalSet[:5])
         
 
         return self.finalSet, self.finalSetX, self.finalSetY
@@ -219,13 +181,13 @@ class SmartAssistData:
         institution = random.randrange(len(self.index_institutions))
         course =  random.randrange(len(self.course))
 
-        sep = " "
-        soup = sep.join([self.index_name[name], self.index_tags[tags], self.index_authors[author], self.index_institutions[institution], self.index_course[course].replace(" ", "")])
+        # sep = " "
+        # soup = sep.join([self.index_name[name], self.index_tags[tags], self.index_authors[author], self.index_institutions[institution], self.index_course[course].replace(" ", "")])
 
-        soupOH = [one_hot(soup, self.vocabSize)]
-        soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
+        # soupOH = [one_hot(soup, self.vocabSize)]
+        # soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
    
-        return np.array([data, name, tags, author, institution, course, soupPadded[0]])
+        return np.array([data, name, tags, author, institution, course])
 
 
     def addData(self, dataFrame):
@@ -293,16 +255,10 @@ class SmartAssistData:
 
 
 
-    def createSoup(self, name, tags, author, institution, course):
+    def createDataSet(self, name, tags, author, institution, course):
         soupArr = [name, author, institution, course.replace(" ", "")]
         for t in tags:
             soupArr.append(t)
-
-        sep = " "
-        soup = sep.join(soupArr)
-
-        soupOH = [one_hot(soup, self.vocabSize)]
-        soupPadded = pad_sequences(soupOH, maxlen=self.maxLen, padding='post',value=0.0, dtype='float32')
 
         data = len(self.index_data)
 
@@ -331,26 +287,7 @@ class SmartAssistData:
         except:
             courseN = len(self.index_course)
    
-        return np.array([data, nameN, tagsN, authorsN, institutionN, courseN, np.array(soupPadded)])
-
-
-
-
-
-# data = SmartAssistData()  
-
-# data.loadData()
-
-
-
-# item = data.getRandomDataItem()
-
-# print(item, len(data.index_data))
-
-
-# data.generateFinalData(n_positive=150)
-
-# data.generateTrainTestData()
+        return np.array([data, nameN, tagsN, authorsN, institutionN, courseN])
 
 
 

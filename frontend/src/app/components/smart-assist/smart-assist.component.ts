@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 import { SmartAssistService } from '@app/services/smart-assist.service';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { NotebookObservablesService } from '@app/services';
-import { query } from '@angular/animations';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface noteType {
@@ -24,7 +24,7 @@ interface blockType {
 	templateUrl: './smart-assist.component.html',
 	styleUrls: ['./smart-assist.component.scss'],
 })
-export class SmartAssistComponent implements OnInit {
+export class SmartAssistComponent implements OnInit, OnDestroy {
 	draggable: boolean = true;
 
 	notebookId: string = '';
@@ -45,74 +45,91 @@ export class SmartAssistComponent implements OnInit {
 
 	date: string = '';
 
+	loading: boolean = false;
+
+	smartAssistNoteSubscription: any;
+
+	smartAssistNotebookSubscription: any;
+
 	constructor(
 		private notebookObservables: NotebookObservablesService,
 		private smartAssistObservables: SmartAssistObservablesService,
-		private smartAssistService: SmartAssistService
+		private smartAssistService: SmartAssistService,
+		private snackBar: MatSnackBar
 	) {}
 
+	ngOnDestroy(): void {
+		if (this.smartAssistNoteSubscription)
+			this.smartAssistNoteSubscription.unsubscribe();
+		if (this.smartAssistNotebookSubscription)
+			this.smartAssistNotebookSubscription.unsubscribe();
+	}
+
 	ngOnInit(): void {
-		this.draggable = true;
-		if (window.innerWidth < 960) {
-			this.draggable = false;
-		}
+		this.draggable = window.innerWidth >= 960;
 
-		this.smartAssistObservables.smartAssistNotebookId.subscribe(
-			({ notebookId }) => {
-				if (
-					notebookId !== undefined &&
-					notebookId !== this.notebookId &&
-					notebookId !== ''
-				) {
-					this.notebookId = notebookId;
+		this.smartAssistNotebookSubscription =
+			this.smartAssistObservables.smartAssistNotebookId.subscribe(
+				({ notebookId }) => {
+					if (
+						notebookId !== undefined &&
+						notebookId !== this.notebookId &&
+						notebookId !== ''
+					) {
+						this.notebookId = notebookId;
 
-					firebase
-						.firestore()
-						.collection('userNotebooks')
-						.doc(notebookId)
-						.get()
-						.then((docdata) => {
-							this.author = docdata.data().author;
-							this.institution = docdata.data().institution;
-							this.course = docdata.data().course;
-						});
+						firebase
+							.firestore()
+							.collection('userNotebooks')
+							.doc(notebookId)
+							.get()
+							.then((docdata) => {
+								this.author = docdata.data().author;
+								this.institution = docdata.data().institution;
+								this.course = docdata.data().course;
+							});
 
-					// console.log(notebookId);
+						// console.log(notebookId);
+					}
 				}
-			}
-		);
+			);
 
-		this.smartAssistObservables.smartAssistNoteId.subscribe(
-			async ({ noteId }) => {
-				if (noteId !== undefined && noteId !== this.noteId) {
-					this.noteId = noteId;
+		this.smartAssistNoteSubscription =
+			this.smartAssistObservables.smartAssistNoteId.subscribe(
+				async ({ noteId }) => {
+					if (
+						noteId !== undefined &&
+						noteId !== this.noteId &&
+						noteId !== ''
+					) {
+						this.noteId = noteId;
 
-					await firebase
-						.firestore()
-						.collection('userNotes')
-						.doc(noteId)
-						.get()
-						.then((docdata) => {
-							this.name = docdata.data().name;
-							this.tags = docdata.data().tags;
+						await firebase
+							.firestore()
+							.collection('userNotes')
+							.doc(noteId)
+							.get()
+							.then((docdata) => {
+								this.name = docdata.data().name;
+								this.tags = docdata.data().tags;
 
-							const unixdate = docdata.data().createdDate;
-							this.date = new Date(
-								unixdate * 1000
-							).toDateString();
-						});
+								const unixdate = docdata.data().createdDate;
+								this.date = new Date(
+									unixdate * 1000
+								).toDateString();
+							});
 
-					this.loadRecommendations(
-						this.name,
-						this.tags,
-						this.author,
-						this.institution,
-						this.course
-					);
-					// console.log(noteId);
+						this.loadRecommendations(
+							this.name,
+							this.tags,
+							this.author,
+							this.institution,
+							this.course
+						);
+						// console.log(noteId);
+					}
 				}
-			}
-		);
+			);
 	}
 
 	/**
@@ -156,7 +173,9 @@ export class SmartAssistComponent implements OnInit {
 
 		this.notebookObservables.setDragAndDrop(content);
 
-		// console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+		this.snackBar.open('Snippet successfully added', '', {
+			duration: 2000,
+		});
 	}
 
 	loadRecommendations(name, tags, author, institution, course) {
@@ -177,12 +196,13 @@ export class SmartAssistComponent implements OnInit {
 
 		this.notes = [];
 
-		this.smartAssistService
-			.getRecommendations(notedata)
-			.subscribe(async (recs) => {
+		this.loading = true;
+
+		this.smartAssistService.getRecommendations(notedata).subscribe(
+			async (recs) => {
 				if (recs) {
 					const ids: string[] = recs.data;
-					// console.log(ids);
+					// console.log(recs);
 
 					await firebase
 						.firestore()
@@ -191,8 +211,6 @@ export class SmartAssistComponent implements OnInit {
 						.get()
 						.then((queryResult) => {
 							queryResult.forEach(async (doc) => {
-								// console.log(doc.id);
-
 								const temp: noteType = {
 									noteId: doc.id,
 
@@ -216,13 +234,23 @@ export class SmartAssistComponent implements OnInit {
 											temp.blocks = docdata.val().changes;
 										}
 									});
-								// console.log(temp);
-								this.notes.push(temp);
+
+								if (temp.blocks) this.notes.push(temp);
+
+								this.loading = false;
 							});
+
+							// console.log('DONE LOADING SMART ASSIST');
 						});
 
 					// console.log(this.notes);
+				} else {
+					this.loading = false;
 				}
-			});
+			},
+			() => {
+				this.loading = false;
+			}
+		);
 	}
 }

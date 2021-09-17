@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Collaborators } from '@app/components';
 import { NotebookOperationsService, NotebookService } from '@app/services';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 	styleUrls: ['./note-info.component.scss'],
 })
 export class NoteInfoComponent implements OnInit {
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	collaborators: Collaborators[] = [];
 

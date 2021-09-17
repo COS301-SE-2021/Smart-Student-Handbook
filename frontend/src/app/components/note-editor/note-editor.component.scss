@@ -8,6 +8,10 @@
   border-top: none !important;
 }
 
+::ng-deep .ql-editor{
+  padding: 5px 10%;
+}
+
 #toolbar-container{
   background-color: #fafafa;
   border: none;
