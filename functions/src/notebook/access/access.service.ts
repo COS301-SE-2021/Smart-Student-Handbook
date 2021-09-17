@@ -22,6 +22,7 @@ export class AccessService {
 			.firestore()
 			.collection('notebookAccess')
 			.where('notebookId', '==', notebookId)
+			.orderBy('displayName')
 			.get();
 
 		/**
@@ -44,7 +45,7 @@ export class AccessService {
 		/**
 		 * Check to see if user is the creator of the notebook
 		 */
-		if (!(await this.checkCreator(addAccessDto.notebookId, addAccessDto.userId))) {
+		if (!(await this.checkCreator(addAccessDto.notebookId, userId))) {
 			throw new HttpException('User is not authorized to add user access to notebook.', HttpStatus.UNAUTHORIZED);
 		}
 		/**
@@ -54,10 +55,7 @@ export class AccessService {
 			.firestore()
 			.collection('notebookAccess')
 			.doc(accessId)
-			.set({ ...addAccessDto, userId, accessId })
-			.catch((error) => {
-				throw new HttpException(error, HttpStatus.BAD_REQUEST);
-			});
+			.set({ ...addAccessDto, accessId });
 
 		await this.updateNotebookAccess(addAccessDto.notebookId);
 
@@ -90,9 +88,9 @@ export class AccessService {
 			.collection('notebookAccess')
 			.doc(removeUserAccessDto.accessId)
 			.delete()
-			.catch((error) => {
+			.catch(() => {
 				throw new HttpException(
-					`Was unable to revoked the specified user's access to the current notebook. ${error}`,
+					"Was unable to revoked the specified user's access to the current notebook.",
 					HttpStatus.BAD_REQUEST,
 				);
 			});

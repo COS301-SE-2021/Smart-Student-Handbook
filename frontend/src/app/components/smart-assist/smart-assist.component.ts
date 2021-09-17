@@ -97,7 +97,11 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 		this.smartAssistNoteSubscription =
 			this.smartAssistObservables.smartAssistNoteId.subscribe(
 				async ({ noteId }) => {
-					if (noteId !== undefined && noteId !== this.noteId) {
+					if (
+						noteId !== undefined &&
+						noteId !== this.noteId &&
+						noteId !== ''
+					) {
 						this.noteId = noteId;
 
 						await firebase
@@ -198,6 +202,7 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 			async (recs) => {
 				if (recs) {
 					const ids: string[] = recs.data;
+					// console.log(recs);
 
 					await firebase
 						.firestore()
@@ -206,8 +211,6 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 						.get()
 						.then((queryResult) => {
 							queryResult.forEach(async (doc) => {
-								// console.log(doc.id);
-
 								const temp: noteType = {
 									noteId: doc.id,
 
@@ -231,8 +234,8 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 											temp.blocks = docdata.val().changes;
 										}
 									});
-								// console.log(temp);
-								this.notes.push(temp);
+
+								if (temp.blocks) this.notes.push(temp);
 
 								this.loading = false;
 							});
