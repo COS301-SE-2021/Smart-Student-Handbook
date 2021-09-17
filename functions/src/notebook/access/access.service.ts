@@ -45,7 +45,7 @@ export class AccessService {
 		/**
 		 * Check to see if user is the creator of the notebook
 		 */
-		if (!(await this.checkCreator(addAccessDto.notebookId, userId))) {
+		if (!(await this.checkCreator(addAccessDto.notebookId, addAccessDto.userId))) {
 			throw new HttpException('User is not authorized to add user access to notebook.', HttpStatus.UNAUTHORIZED);
 		}
 		/**
@@ -55,7 +55,7 @@ export class AccessService {
 			.firestore()
 			.collection('notebookAccess')
 			.doc(accessId)
-			.set({ ...addAccessDto, accessId });
+			.set({ ...addAccessDto, userId, accessId });
 
 		await this.updateNotebookAccess(addAccessDto.notebookId);
 
