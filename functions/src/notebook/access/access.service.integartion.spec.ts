@@ -95,19 +95,18 @@ describe('Access Service Integration Tests', () => {
 			expect(result.length).toBe(1);
 			expect(result[0].notebookId).toBe(notebookId);
 			expect(result[0].userId).toBe(userId);
-			expect(result[0].profileUrl).toBe('UserTestNameAccount');
 			expect(result[0].displayName).toBe('UserTestNameAccount');
 		});
 
 		it('Add User to Access List', async () => {
 			const addAccessDto: AddAccessDto = {
 				displayName: 'Access DisplayName',
-				userId: 'Access UserId',
+				userId,
 				profileUrl: 'Access ProfileUrl',
 				notebookId,
 			};
 
-			const result = await accessService.addAccess(addAccessDto, userId);
+			const result = await accessService.addAccess(addAccessDto, 'Access UserId');
 
 			expect(result.message).toBe('Successfully added notebook to user account');
 		});
@@ -116,13 +115,13 @@ describe('Access Service Integration Tests', () => {
 			let error: HttpException;
 			const addAccessDto: AddAccessDto = {
 				displayName: 'Access DisplayName',
-				userId: 'Access UserId',
+				userId: 'UnauthorizedUser',
 				profileUrl: 'Access ProfileUrl',
 				notebookId,
 			};
 
 			try {
-				await accessService.addAccess(addAccessDto, 'UnauthorizedUser');
+				await accessService.addAccess(addAccessDto, 'Access UserId');
 			} catch (e) {
 				error = e;
 			}
@@ -138,7 +137,6 @@ describe('Access Service Integration Tests', () => {
 			expect(result.length).toBe(2);
 			expect(result[0].notebookId).toBe(notebookId);
 			expect(result[0].userId).toBe('Access UserId');
-			expect(result[0].profileUrl).toBe('Access ProfileUrl');
 			expect(result[0].displayName).toBe('Access DisplayName');
 		});
 

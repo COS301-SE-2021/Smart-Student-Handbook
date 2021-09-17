@@ -27,5 +27,7 @@ exports.deleteNotebookIndex = functions.firestore.document('userNotebooks/{noteb
 	functions.logger.log('Notebook Object ID: ', id);
 	functions.logger.log('Notebook Object: ', snapshot);
 
-	index.deleteObject(id);
+	index.deleteObject(id).then((result) => {
+		functions.logger.log('Notebook Delete Response: ', result);
+	});
 });
