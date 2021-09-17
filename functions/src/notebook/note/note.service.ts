@@ -122,7 +122,7 @@ export class NoteService {
 		/**
 		 * Delete note instance in the real time data base if it exists
 		 */
-		await admin.database().ref(`notes/${noteId}`).remove();
+		// await admin.database().ref(`notes/${noteId}`).remove();
 
 		/**
 		 * Delete note in firestore
