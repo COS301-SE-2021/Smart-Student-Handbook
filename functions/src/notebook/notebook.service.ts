@@ -68,7 +68,7 @@ export class NotebookService {
 			{
 				displayName: user.user.displayName,
 				userId,
-				profileUrl: user.user.displayName,
+				profileUrl: user.user.profilePicUrl,
 				notebookId,
 			},
 			userId,

@@ -48,7 +48,7 @@
               "./node_modules/font-awesome/css/font-awesome.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": ["./node_modules/quill/dist/quill.min.js"],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },

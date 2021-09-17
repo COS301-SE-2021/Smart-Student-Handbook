@@ -10,6 +10,10 @@ import { QuillBinding } from 'y-quill';
 import { CanDeactivate } from '@angular/router';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
+
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
@@ -323,6 +327,7 @@ export class NoteEditorComponent
 				cursors: true,
 				syntax: false,
 				toolbar: '#toolbar-container',
+				imageResize: true,
 			},
 			// placeholder: 'Loading...',
 			theme: 'snow',
