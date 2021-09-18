@@ -36,7 +36,7 @@ firebase.initializeApp(firebaseConfig);
 describe('Access Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let accessService: AccessService;
-	const userId = 'sYTwoaCyHQO0cNAqJcxBnO70yne2';
+	const userId = 'rmWFtv9GdHQMVnfJ8nUVx5UfLN43';
 	let notebookId = '';
 	let accessId = '';
 
@@ -95,7 +95,7 @@ describe('Access Service Integration Tests', () => {
 			expect(result.length).toBe(1);
 			expect(result[0].notebookId).toBe(notebookId);
 			expect(result[0].userId).toBe(userId);
-			expect(result[0].displayName).toBe('UserTestNameAccount');
+			expect(result[0].displayName).toBe('test-user-access');
 		});
 
 		it('Add User to Access List', async () => {

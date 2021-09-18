@@ -1,3 +1,7 @@
+describe('AccountService', () => {
+	it('Do Tests', async () => {});
+});
+
 // import { Test, TestingModule } from '@nestjs/testing';
 // import MockDate from 'mockdate';
 // import * as admin from 'firebase-admin';
