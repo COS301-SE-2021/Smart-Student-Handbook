@@ -115,8 +115,8 @@ describe('Notebook Service Integration Tests', () => {
 			expect(result.notebook.description).toBe('Test description');
 			expect(result.notebook.institution).toBe('Test institution');
 			expect(result.notebook.notes.length).toBe(1);
-			expect(result.notebook.notes[0].description).toBe('My first note');
-			expect(result.notebook.notes[0].name).toBe('Introduction');
+			expect(result.notebook.notes[0].description).toBe('My first note for Test title');
+			expect(result.notebook.notes[0].name).toBe('Introduction for Test title');
 			expect(result.notebook.notes[0].notebookId).toBe(notebookId);
 			expect(result.notebook.notes[0].tags).toStrictEqual([]);
 			expect(result.notebook.private).toBe(false);
@@ -140,8 +140,8 @@ describe('Notebook Service Integration Tests', () => {
 			expect(result[0].description).toBe('Test description');
 			expect(result[0].institution).toBe('Test institution');
 			expect(result[0].notes.length).toBe(1);
-			expect(result[0].notes[0].description).toBe('My first note');
-			expect(result[0].notes[0].name).toBe('Introduction');
+			expect(result[0].notes[0].description).toBe('My first note for Test title');
+			expect(result[0].notes[0].name).toBe('Introduction for Test title');
 			expect(result[0].notes[0].notebookId).toBe(notebookId);
 			expect(result[0].notes[0].tags).toStrictEqual([]);
 			expect(result[0].private).toBe(false);
@@ -196,8 +196,8 @@ describe('Notebook Service Integration Tests', () => {
 			expect(result.description).toBe('Updated description');
 			expect(result.institution).toBe('Updated institution');
 			expect(result.notes.length).toBe(1);
-			expect(result.notes[0].description).toBe('My first note');
-			expect(result.notes[0].name).toBe('Introduction');
+			expect(result.notes[0].description).toBe('My first note for Test title');
+			expect(result.notes[0].name).toBe('Introduction for Test title');
 			expect(result.notes[0].notebookId).toBe(notebookId);
 			expect(result.notes[0].tags).toStrictEqual([]);
 			expect(result.private).toBe(false);
