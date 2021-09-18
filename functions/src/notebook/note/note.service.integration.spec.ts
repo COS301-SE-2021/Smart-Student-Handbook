@@ -95,8 +95,8 @@ describe('Note Service Integration Tests', () => {
 			expect(result.length).toBe(1);
 			expect(result[0].tags).toStrictEqual([]);
 			expect(result[0].notebookId).toBe(notebookId);
-			expect(result[0].name).toBe('Introduction');
-			expect(result[0].description).toBe('My first note');
+			expect(result[0].name).toBe('Introduction for Test Note title');
+			expect(result[0].description).toBe('My first note for Test Note title');
 		});
 
 		it('Get notes for notebooks that does not exist, should return empty list', async () => {
@@ -202,7 +202,7 @@ describe('Note Service Integration Tests', () => {
 			const result = await noteService.getNotes(notebookId);
 
 			expect(result.length).toBe(1);
-			expect(result[0].name).toBe('Introduction');
+			expect(result[0].name).toBe('Introduction for Test Note title');
 		});
 	});
 
