@@ -14,7 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
-import { not } from 'rxjs/internal-compatibility';
 
 @Component({
 	selector: 'app-note-cards',
