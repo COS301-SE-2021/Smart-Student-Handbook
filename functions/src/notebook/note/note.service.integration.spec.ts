@@ -36,7 +36,7 @@ firebase.initializeApp(firebaseConfig);
 describe('Note Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let noteService: NoteService;
-	const userId = 'sYTwoaCyHQO0cNAqJcxBnO70yne2';
+	const userId = 'OLazjOwi0RTnQbBeV0Z2ylHCgoy2';
 	let notebookId = '';
 	let noteId = '';
 

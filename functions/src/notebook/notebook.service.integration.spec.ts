@@ -37,7 +37,7 @@ describe('Notebook Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let accountService: AccountService;
 	let notebookId = '';
-	let userId = '';
+	const userId = 'WYm8OpLjSdcQh5lVYInFNE0E6wk1';
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -70,20 +70,20 @@ describe('Notebook Service Integration Tests', () => {
 		});
 	});
 
-	describe('Login user to be used', () => {
-		it('Should login a user successfully', async () => {
-			const user = {
-				email: 'TestUserAccount@gmail.com',
-				password: 'TestPassword!0',
-			};
-
-			const result = await accountService.loginUser(user);
-
-			userId = result.user.uid;
-
-			expect(result.message).toBe('User is successfully logged in!');
-		});
-	});
+	// describe('Login user to be used', () => {
+	// 	it('Should login a user successfully', async () => {
+	// 		const user = {
+	// 			email: 'TestUserAccount@gmail.com',
+	// 			password: 'TestPassword!0',
+	// 		};
+	//
+	// 		const result = await accountService.loginUser(user);
+	//
+	// 		userId = result.user.uid;
+	//
+	// 		expect(result.message).toBe('User is successfully logged in!');
+	// 	});
+	// });
 
 	describe('Notebooks tests', () => {
 		it('Get notebooks for user with no notebooks', async () => {
@@ -107,11 +107,11 @@ describe('Notebook Service Integration Tests', () => {
 
 			expect(result.message).toStrictEqual('Successfully create new notebook');
 			expect(result.notebook.access.length).toBe(1);
-			expect(result.notebook.access[0].displayName).toBe('UserTestNameAccount');
-			expect(result.notebook.access[0].userId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.notebook.access[0].displayName).toBe('test-user-notebook');
+			expect(result.notebook.access[0].userId).toBe(userId);
 			expect(result.notebook.author).toBe('Test author');
 			expect(result.notebook.course).toBe('Test course');
-			expect(result.notebook.creatorId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.notebook.creatorId).toBe(userId);
 			expect(result.notebook.description).toBe('Test description');
 			expect(result.notebook.institution).toBe('Test institution');
 			expect(result.notebook.notes.length).toBe(1);
@@ -131,12 +131,12 @@ describe('Notebook Service Integration Tests', () => {
 
 			expect(result.length).toBe(1);
 			expect(result[0].access.length).toBe(1);
-			expect(result[0].access[0].displayName).toBe('UserTestNameAccount');
+			expect(result[0].access[0].displayName).toBe('test-user-notebook');
 			expect(result[0].access[0].notebookId).toBe(notebookId);
-			expect(result[0].access[0].userId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result[0].access[0].userId).toBe(userId);
 			expect(result[0].author).toBe('Test author');
 			expect(result[0].course).toBe('Test course');
-			expect(result[0].creatorId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result[0].creatorId).toBe(userId);
 			expect(result[0].description).toBe('Test description');
 			expect(result[0].institution).toBe('Test institution');
 			expect(result[0].notes.length).toBe(1);
@@ -155,11 +155,11 @@ describe('Notebook Service Integration Tests', () => {
 			const result = await notebookService.getNotebook(notebookId);
 
 			expect(result.access.length).toBe(1);
-			expect(result.access[0].displayName).toBe('UserTestNameAccount');
-			expect(result.access[0].userId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.access[0].displayName).toBe('test-user-notebook');
+			expect(result.access[0].userId).toBe(userId);
 			expect(result.author).toBe('Test author');
 			expect(result.course).toBe('Test course');
-			expect(result.creatorId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.creatorId).toBe(userId);
 			expect(result.description).toBe('Test description');
 			expect(result.institution).toBe('Test institution');
 			expect(result.title).toBe('Test title');
@@ -188,11 +188,11 @@ describe('Notebook Service Integration Tests', () => {
 			const result = await notebookService.getNotebook(notebookId);
 
 			expect(result.access.length).toBe(1);
-			expect(result.access[0].displayName).toBe('UserTestNameAccount');
-			expect(result.access[0].userId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.access[0].displayName).toBe('test-user-notebook');
+			expect(result.access[0].userId).toBe(userId);
 			expect(result.author).toBe('Updated author');
 			expect(result.course).toBe('Updated course');
-			expect(result.creatorId).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result.creatorId).toBe(userId);
 			expect(result.description).toBe('Updated description');
 			expect(result.institution).toBe('Updated institution');
 			expect(result.notes.length).toBe(1);

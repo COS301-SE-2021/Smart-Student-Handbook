@@ -84,27 +84,15 @@ exports.updateNotebook = functions.firestore.document('userNotes/{notebookId}').
 });
 
 exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').onDelete(async (snapshot) => {
-	const data = snapshot.data();
 	const objectID = snapshot.id;
-
-	const notebook = await admin
-		.firestore()
-		.collection('userNotebooks')
-		.where('notebookId', '==', data.notebookId)
-		.limit(1)
-		.get()
-		.then((doc) => doc.docs.pop().data())
-		.catch((error) => {
-			throw new HttpException(`Could not retrieve notebook. ${error}`, HttpStatus.BAD_REQUEST);
-		});
 
 	const noteData = {
 		noteId: objectID,
-		name: data.name,
-		tags: data.tags,
-		author: notebook.author,
-		institution: notebook.institution,
-		course: notebook.course,
+		name: '',
+		tags: [],
+		author: '',
+		institution: '',
+		course: '',
 	};
 
 	await fetch('https://smartassist-nii4biypla-uc.a.run.app/removeData', {
@@ -123,7 +111,7 @@ exports.deleteNotebook = functions.firestore.document('userNotes/{notebookId}').
 });
 
 exports.train = functions.pubsub.schedule('every 30 mins').onRun(async () => {
-	const url = 'https://smartassist-nii4biypla-uc.a.run.app/trainModel';
+	const url = 'https://smartassist-nii4biypla-uc.a.run.app/calculateEmbeddings';
 
 	const options = { method: 'GET' };
 

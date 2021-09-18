@@ -36,7 +36,7 @@ firebase.initializeApp(firebaseConfig);
 describe('Review Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let reviewService: ReviewService;
-	const userId = 'sYTwoaCyHQO0cNAqJcxBnO70yne2';
+	const userId = 'DQB92UiTitZ5QopjAYe0wTEdgJp1';
 	let notebookId = '';
 	let noteId = '';
 	let reviewId = '';

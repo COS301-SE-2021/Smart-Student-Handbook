@@ -75,7 +75,7 @@ export class SharedWithMeComponent implements OnInit, AfterContentInit {
 
 	ngOnInit(): void {
 		this.treeViewObservables.openSharedWithMe.subscribe((open) => {
-			if (open) {
+			if (open && this.notebooks.length > 0) {
 				this.treeControl.expandAll();
 			}
 		});

@@ -1,3 +1,7 @@
+describe('AccountService', () => {
+	it('Do Tests', async () => {});
+});
+
 // // import { Test, TestingModule } from '@nestjs/testing';
 // import { AccountController } from './account.controller';
 // import { AccountService } from './account.service';

@@ -10,6 +10,10 @@ import { QuillBinding } from 'y-quill';
 import { CanDeactivate } from '@angular/router';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
+
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
@@ -67,6 +71,7 @@ export class NoteEditorComponent
 	 * Subscribe to account service to get user information
 	 * @param accountService
 	 * @param notebookObservables
+	 * @param smartAssistObservables
 	 */
 	constructor(
 		private accountService: AccountService,
@@ -86,7 +91,10 @@ export class NoteEditorComponent
 		this.loadEditorSubscription =
 			this.notebookObservables.loadEditor.subscribe(
 				async (noteInfo: any) => {
-					if (this.noteId !== noteInfo.noteId) {
+					if (
+						this.noteId !== noteInfo.noteId &&
+						noteInfo.noteId !== ''
+					) {
 						this.noteTitle = noteInfo.title;
 						this.noteId = noteInfo.noteId;
 						this.notebookId = noteInfo.notebookId;
@@ -104,6 +112,8 @@ export class NoteEditorComponent
 							} else if (this.noteId !== '')
 								await this.editorOperations();
 						}
+					} else if (noteInfo.noteId === '') {
+						this.removeNote();
 					}
 				}
 			);
@@ -122,19 +132,7 @@ export class NoteEditorComponent
 		this.notebookObservables.removeNote.subscribe((remove) => {
 			if (remove !== '') {
 				if (remove === this.noteId) {
-					this.noteTitle = 'Smart Student';
-					this.noteId = '';
-					this.notebookId = '';
-					this.notebookTitle = '';
-					this.noteDescription = '';
-
-					// this.height += this.toolbarHeight - 30;
-					this.heightInPx = `${this.height}px`;
-
-					const changes = {
-						ops: [],
-					};
-					this.quill.setContents(changes);
+					this.removeNote();
 				}
 			}
 		});
@@ -148,6 +146,27 @@ export class NoteEditorComponent
 		if (counter !== undefined) {
 			this.globalUserCounter = counter;
 		}
+	}
+
+	removeNote() {
+		this.noteTitle = 'Smart Student';
+		this.noteId = '';
+		this.notebookId = '';
+		this.notebookTitle = '';
+		this.noteDescription = '';
+
+		// this.height += this.toolbarHeight - 30;
+		this.heightInPx = `${this.height}px`;
+
+		const changes = {
+			ops: [
+				{
+					insert: '\n',
+				},
+			],
+		};
+
+		if (this.quill) this.quill.setContents(changes);
 	}
 
 	async editorOperations() {
@@ -308,6 +327,7 @@ export class NoteEditorComponent
 				cursors: true,
 				syntax: false,
 				toolbar: '#toolbar-container',
+				imageResize: true,
 			},
 			// placeholder: 'Loading...',
 			theme: 'snow',
@@ -345,8 +365,8 @@ export class NoteEditorComponent
 
 		const doc = parser.parseFromString(e, 'text/html');
 
-		const content = doc.getElementsByClassName('snippetContent');
-		const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
+		// const content = doc.getElementsByClassName('snippetContent');
+		// const title = doc.getElementsByClassName('snippetTitle')[0].innerHTML;
 
 		const recNoteId = doc
 			.getElementsByClassName('snippetContentHeader')[0]

@@ -42,7 +42,6 @@ export class AccessService {
 	 */
 	async addAccess(addAccessDto: AddAccessDto, userId: string): Promise<Response> {
 		const accessId: string = randomStringGenerator();
-
 		/**
 		 * Check to see if user is the creator of the notebook
 		 */
@@ -56,10 +55,7 @@ export class AccessService {
 			.firestore()
 			.collection('notebookAccess')
 			.doc(accessId)
-			.set({ ...addAccessDto, userId, accessId })
-			.catch((error) => {
-				throw new HttpException(error, HttpStatus.BAD_REQUEST);
-			});
+			.set({ ...addAccessDto, userId, accessId });
 
 		await this.updateNotebookAccess(addAccessDto.notebookId);
 
