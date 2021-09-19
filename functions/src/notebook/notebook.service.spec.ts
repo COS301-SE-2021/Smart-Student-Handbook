@@ -3,7 +3,7 @@ describe('AccountService', () => {
 });
 // import { Test, TestingModule } from '@nestjs/testing';
 // import firebase from 'firebase';
-// import * as admin from 'firebase-admin';
+// import * as admin from 'firebase.admin.ts';
 // import { NotebookService } from './notebook.service';
 // import { AccountService } from '../account/account.service';
 // import { NotebookController } from './notebook.controller';
