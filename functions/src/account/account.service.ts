@@ -20,8 +20,7 @@ require('firebase/auth');
 export class AccountService {
 	constructor(
 		private notificationService: NotificationService,
-		private userService: UserService,
-		private authService: AuthService,
+		private userService: UserService, // private authService: AuthService,
 	) {}
 
 	/**
