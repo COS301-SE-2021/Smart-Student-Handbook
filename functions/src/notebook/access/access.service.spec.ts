@@ -39,7 +39,7 @@ describe('AccessService', () => {
 				displayName: 'TestName',
 				notebookID: 'testNotebook',
 				profileUrl: 'url1',
-				userId: 'testUserID',
+				userId: 'UserID',
 			},
 			userTwo: {
 				accessID: 'number 2',
@@ -72,7 +72,7 @@ describe('AccessService', () => {
 	describe('checkUserAccess', () => {
 		it('This function should check if a user has access to the notebook', async () => {
 			const result = await service.checkUserAccess('testNotebook', 'UserID');
-			expect(result).toStrictEqual(false);
+			expect(result).toStrictEqual(true);
 		});
 	});
 });
