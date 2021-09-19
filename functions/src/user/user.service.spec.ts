@@ -5,10 +5,6 @@ import { HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserByUsernameDto } from './dto/userByUsername.dto';
 
-describe('AccountService', () => {
-	it('Do Tests', async () => {});
-});
-
 admin.initializeApp();
 const { mockGoogleCloudFirestore } = require('firestore-jest-mock');
 const userDTo = require('./dto/userRequest.dto');
