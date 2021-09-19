@@ -13,7 +13,7 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/COS301-SE-2021/Smart-Student-Handbook)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/COS301-SE-2021/Smart-Student-Handbook)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=alert_status)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
+[comment]: <> ([![Quality Gate Status]&#40;https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=alert_status&#41;]&#40;https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook&#41;)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
@@ -74,13 +74,13 @@ well as manage their account information.
 * <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing" target="_blank">Software Requirements Specification - V1</a>
 * <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing" target="_blank">Software Requirements Specification - V2</a>
 * <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing" target="_blank">Software Requirements Specification - V3</a>
-* <a href="#" target="_blank">Software Requirements Specification - V4</a>
+* <a href="https://drive.google.com/file/d/12vdOLsl0S-9n7SiGL_8LXcMXnOmd3O_t/view?usp=sharing" target="_blank">Software Requirements Specification - V4</a>
 * <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing" target="_blank">Technical Installation Guide - V1</a>
-* <a href="#" target="_blank">Technical Installation Guide - V2</a>
+* <a href="https://drive.google.com/file/d/1V9yUY20u2d1kO5mGtIhBYZkuje1HBYSD/view?usp=sharing" target="_blank">Technical Installation Guide - V2</a>
 * <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing" target="_blank">User Manual - V1</a>
-* <a href="#" target="_blank">User Manual - V2</a>
+* <a href="https://drive.google.com/file/d/1gqYrWPOdH-D_oPKJ_BaRfblHbcMUQmfc/view?usp=sharing" target="_blank">User Manual - V2</a>
 * <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing" target="_blank">Coding Standards</a>
-* <a href="#" target="_blank">Testing Policy</a>
+* <a href="https://drive.google.com/file/d/17uH99wAU_f1SNQbeAT2R9le_dP5I9XDP/view?usp=sharing" target="_blank">Testing Policy</a>
 
 </div>
 
@@ -122,7 +122,7 @@ well as manage their account information.
 * <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing" target="_blank"> Demo 1 </a>
 * <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing" target="_blank"> Demo 2 </a>
 * <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing" target="_blank"> Demo 3 </a>
-* <a href="#" target="_blank"> Demo 4 </a>
+* <a href="https://drive.google.com/file/d/165C0hCG0CO7W3EPH7VZvTIDQlaqbl2hC/view?usp=sharing" target="_blank"> Demo 4 </a>
 
 </div>
 
