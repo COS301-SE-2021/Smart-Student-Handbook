@@ -736,17 +736,4 @@ export class AccountService {
 			);
 		}
 	}
-
-	// async refreshIdToken(userId: string): Promise<string> {
-	// 	try {
-	// 		const notificationId = await admin.firestore().collection('users').doc(userId).get();
-	//
-	// 		return notificationId.data().notificationID.value;
-	// 	} catch (error) {
-	// 		throw new HttpException(
-	// 			`Something went wrong. Operation could not be executed.${error}`,
-	// 			HttpStatus.INTERNAL_SERVER_ERROR,
-	// 		);
-	// 	}
-	// }
 }

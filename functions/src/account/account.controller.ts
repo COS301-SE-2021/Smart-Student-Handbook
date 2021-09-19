@@ -76,10 +76,4 @@ export class AccountController {
 		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.accountService.setUserNotificationToken(userId, notificationToken);
 	}
-
-	// @Post('refreshIdToken/:userId')
-	// async refreshIdToken(@Headers() headers) {
-	// 	const userId: string = await this.authService.verifyUser(headers.token);
-	// 	return this.accountService.refreshIdToken(userId);
-	// }
 }
