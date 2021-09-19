@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CloneNoteComponent, ConfirmDeleteComponent } from '@app/components';
+import { CloneNoteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { NotebookService } from '@app/services/notebook.service';
 import { Observable } from 'rxjs';

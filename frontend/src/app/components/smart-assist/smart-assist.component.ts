@@ -5,6 +5,9 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import { NotebookObservablesService } from '@app/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RateNotebookComponent } from '@app/components';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 interface noteType {
@@ -55,7 +58,9 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 		private notebookObservables: NotebookObservablesService,
 		private smartAssistObservables: SmartAssistObservablesService,
 		private smartAssistService: SmartAssistService,
-		private snackBar: MatSnackBar
+		private snackBar: MatSnackBar,
+		private bottomSheet: MatBottomSheet,
+		private dialog: MatDialog
 	) {}
 
 	ngOnDestroy(): void {
@@ -225,6 +230,8 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 									blocks: undefined,
 								};
 
+								// console.log(temp);
+
 								await firebase
 									.database()
 									.ref(`notes/${doc.id}`)
@@ -252,5 +259,14 @@ export class SmartAssistComponent implements OnInit, OnDestroy {
 				this.loading = false;
 			}
 		);
+	}
+
+	openReviews(noteId: string) {
+		if (window.innerWidth <= 576) {
+			this.bottomSheet.open(RateNotebookComponent);
+		} else {
+			this.dialog.open(RateNotebookComponent);
+		}
+		this.notebookObservables.setReviewNotebook(noteId, 'note');
 	}
 }

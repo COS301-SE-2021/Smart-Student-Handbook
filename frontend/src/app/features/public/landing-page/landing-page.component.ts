@@ -1,11 +1,4 @@
-import {
-	AfterContentChecked,
-	AfterContentInit,
-	AfterViewChecked,
-	AfterViewInit,
-	Component,
-	OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@app/services';
 import * as AOS from 'aos';
@@ -15,14 +8,7 @@ import * as AOS from 'aos';
 	templateUrl: './landing-page.component.html',
 	styleUrls: ['./landing-page.component.scss'],
 })
-export class LandingPageComponent
-	implements
-		OnInit,
-		AfterViewInit,
-		AfterContentInit,
-		AfterViewChecked,
-		AfterContentChecked
-{
+export class LandingPageComponent implements OnInit {
 	teamMembers: any[] = [
 		{
 			name: 'Arno Möller',
@@ -79,21 +65,5 @@ export class LandingPageComponent
 		});
 
 		window.addEventListener('load', AOS.refresh);
-	}
-
-	ngAfterViewInit(): void {
-		// AOS.refresh();
-	}
-
-	ngAfterContentInit(): void {
-		// AOS.refresh();
-	}
-
-	ngAfterViewChecked(): void {
-		// AOS.refresh();
-	}
-
-	ngAfterContentChecked(): void {
-		// AOS.refresh();
 	}
 }
