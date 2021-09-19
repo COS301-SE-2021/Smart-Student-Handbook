@@ -18,18 +18,18 @@ const serviceAccount = require('../../service_account.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
 });
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-	projectId: 'smartstudentnotebook',
-	storageBucket: 'smartstudentnotebook.appspot.com',
-	messagingSenderId: '254968215542',
-	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-	measurementId: 'G-YDRCWDT5QJ',
+	apiKey: 'AIzaSyCsXWdPjNUqLsDCp05RpY3-J8Mtb9P11JM',
+	authDomain: 'smartstudenthandboook-dev.firebaseapp.com',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
+	projectId: 'smartstudenthandboook-dev',
+	storageBucket: 'smartstudenthandboook-dev.appspot.com',
+	messagingSenderId: '953003868912',
+	appId: '1:953003868912:web:5c91964eb8289263253835',
+	measurementId: 'G-V286FE7KN8',
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -37,7 +37,7 @@ describe('Notebook Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let accountService: AccountService;
 	let notebookId = '';
-	const userId = 'WYm8OpLjSdcQh5lVYInFNE0E6wk1';
+	const userId = '5EvWG6T2JdQ3ttR4JhgPYFufT4t1';
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -69,21 +69,6 @@ describe('Notebook Service Integration Tests', () => {
 			expect(accountService).toBeDefined();
 		});
 	});
-
-	// describe('Login user to be used', () => {
-	// 	it('Should login a user successfully', async () => {
-	// 		const user = {
-	// 			email: 'TestUserAccount@gmail.com',
-	// 			password: 'TestPassword!0',
-	// 		};
-	//
-	// 		const result = await accountService.loginUser(user);
-	//
-	// 		userId = result.user.uid;
-	//
-	// 		expect(result.message).toBe('User is successfully logged in!');
-	// 	});
-	// });
 
 	describe('Notebooks tests', () => {
 		it('Get notebooks for user with no notebooks', async () => {

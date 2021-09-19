@@ -18,25 +18,25 @@ const serviceAccount = require('../../../service_account.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
 });
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-	projectId: 'smartstudentnotebook',
-	storageBucket: 'smartstudentnotebook.appspot.com',
-	messagingSenderId: '254968215542',
-	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-	measurementId: 'G-YDRCWDT5QJ',
+	apiKey: 'AIzaSyCsXWdPjNUqLsDCp05RpY3-J8Mtb9P11JM',
+	authDomain: 'smartstudenthandboook-dev.firebaseapp.com',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
+	projectId: 'smartstudenthandboook-dev',
+	storageBucket: 'smartstudenthandboook-dev.appspot.com',
+	messagingSenderId: '953003868912',
+	appId: '1:953003868912:web:5c91964eb8289263253835',
+	measurementId: 'G-V286FE7KN8',
 };
 firebase.initializeApp(firebaseConfig);
 
 describe('Note Service Integration Tests', () => {
 	let notebookService: NotebookService;
 	let noteService: NoteService;
-	const userId = 'OLazjOwi0RTnQbBeV0Z2ylHCgoy2';
+	const userId = 'JezmYb2hBkf80chHVXHi2ekDI052';
 	let notebookId = '';
 	let noteId = '';
 

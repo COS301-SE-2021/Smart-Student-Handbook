@@ -96,7 +96,6 @@ export class UserService {
 	 * This function acts as both a update and create, firestore will take
 	 * care of the rest and update or create a new record
 	 * @param user
-	 * @param update
 	 * @param userId
 	 */
 	async createAndUpdateUser(user: UserRequestDto, userId: string): Promise<UserResponseDto> {
