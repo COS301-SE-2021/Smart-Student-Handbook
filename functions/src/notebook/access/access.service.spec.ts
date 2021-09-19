@@ -105,4 +105,11 @@ describe('AccessService', () => {
 			expect(result).toBeUndefined();
 		});
 	});
+
+	describe('getUserAccessId', () => {
+		it('This function should check if you can update a access list', async () => {
+			const result = await service.getUserAccessId('testNotebook', 'UserID');
+			expect(result).toBe('');
+		});
+	});
 });
