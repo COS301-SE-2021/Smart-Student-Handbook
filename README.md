@@ -53,7 +53,7 @@ well as manage their account information.
 
 </div>
 
-🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za/ </a>
+🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za </a>
 
 # Git Structure
 
@@ -76,7 +76,7 @@ well as manage their account information.
 * <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing" target="_blank">Software Requirements Specification - V3</a>
 * <a href="#" target="_blank">Software Requirements Specification - V4</a>
 * <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing" target="_blank">Technical Installation Guide - V1</a>
-* <a href="#" target="_blank">Technical Installation Guide V2</a>
+* <a href="#" target="_blank">Technical Installation Guide - V2</a>
 * <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing" target="_blank">User Manual - V1</a>
 * <a href="#" target="_blank">User Manual - V2</a>
 * <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing" target="_blank">Coding Standards</a>
