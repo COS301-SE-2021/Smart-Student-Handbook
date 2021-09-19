@@ -58,8 +58,8 @@
         </mat-list-item>
       </mat-list>
 
-      <h4 *ngIf="notifications.length === 0">You don't have any notifications yet</h4>
-      <img *ngIf="notifications.length === 0" class="pt-3 w-100 mx-auto" style="max-width: 500px;" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image">
+      <h4 *ngIf="isCompleted && notifications.length === 0">You don't have any notifications yet</h4>
+      <img *ngIf="isCompleted && notifications.length === 0" class="pt-3 w-100 mx-auto" style="max-width: 500px;" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image">
     </div>
   </div>
 </div>
