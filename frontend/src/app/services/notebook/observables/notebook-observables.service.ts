@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Injectable({

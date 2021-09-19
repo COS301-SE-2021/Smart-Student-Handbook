@@ -372,7 +372,7 @@ export class NoteEditorComponent
 			.getElementsByClassName('snippetContentHeader')[0]
 			.getAttribute('data-noteId');
 
-		console.log(recNoteId);
+		// console.log(recNoteId);
 
 		let changes = [];
 
@@ -384,7 +384,7 @@ export class NoteEditorComponent
 				changes = docdata.val().changes.ops;
 			});
 
-		console.log(changes);
+		// console.log(changes);
 
 		this.addContent(changes);
 	}
