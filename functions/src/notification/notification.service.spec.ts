@@ -170,26 +170,4 @@ describe('NotificationService', () => {
 
 		await service.subscribeToNotificationTopic(pushNotification);
 	});
-
-	/* it('createNotificationo a topic', async () => {
-		const pushNotification = {
-			userID: 'userID',
-			type: 'type',
-			heading: 'heading',
-			body: 'body',
-			opened: false,
-			notebookID: 'notebookId',
-			notebookTitle: 'notebookTitle',
-		};
-
-		await service.createNotification(pushNotification, 'userID');
-	});
-
-	it('getUserNotifications', async () => {
-		await service.getUserNotifications('userId');
-	});
-
-	it('getUnreadNotifications', async () => {
-		await service.getUnreadNotifications('userId');
-	}); */
 });
