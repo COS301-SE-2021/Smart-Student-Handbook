@@ -14,10 +14,10 @@ import { MatSidenav } from '@angular/material/sidenav';
 
 import {
 	NotebookService,
-	OpenNotebookPanelService,
-	NotesService,
+	NoteOperationsService,
+	NotebookObservablesService,
+	AccountService,
 } from '@app/services';
-import { NotebookDataService } from '@app/services/notebookData.service';
 
 @Component({
 	selector: 'app-notes-panel',
@@ -37,10 +37,6 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	notebookId = '';
 
-	// institution = '';
-
-	// private = false;
-
 	// Variable that holds the logged in user details
 	user: any;
 
@@ -53,24 +49,32 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 
 	notebookTitle = 'Notes';
 
+	doneLoading: boolean = true;
+
+	creatorId: string = '';
+
+	openedNoteId: string = '';
+
 	/**
 	 * Notes panel constructor
 	 * @param notebookService call notebook related requests to backend
 	 * @param dialog show dialog to update notebook details
-	 * @param notebookData
-	 * @param openNotebookPanelService
+	 * @param notebookObservables
 	 * @param notesService
+	 * @param accountService
 	 */
 	constructor(
 		private notebookService: NotebookService,
 		private dialog: MatDialog,
-		private notebookData: NotebookDataService,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notesService: NotesService
+		private notebookObservables: NotebookObservablesService,
+		private notesService: NoteOperationsService,
+		private accountService: AccountService
 	) {}
 
 	ngAfterContentInit(): void {
-		this.notebookData.ids.subscribe((val: any) => {
+		this.doneLoading = true;
+
+		this.notebookObservables.openNotebookId.subscribe((val: any) => {
 			if (val.title !== '') {
 				this.notebookTitle = val.title;
 				this.notes = [];
@@ -81,6 +85,12 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					'openNotesPanelBtn'
 				) as HTMLButtonElement;
 				if (button) button.click();
+
+				this.notebookService
+					.getNotebook(val.notebookId)
+					.subscribe((notebook) => {
+						this.creatorId = notebook.creatorId;
+					});
 			}
 		});
 	}
@@ -90,37 +100,37 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * User information from localstorage
 	 */
 	ngOnInit(): void {
-		// }
-
 		// let userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-		// this.profile = JSON.parse(<string>localStorage.getItem('userProfile'));
-		// this.profile = this.profile.userInfo;
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		this.open = false;
 
-		// Toggle the notePanelComponent when in desktop view and notebook is selected
-		if (this.openNotebookPanelService.toggleSubscribe === undefined) {
-			this.openNotebookPanelService.closePanelEmitter.subscribe(() => {
+		this.notebookObservables.closePanel.subscribe((close) => {
+			if (close.close) {
 				this.closePanel();
 				this.notes = [];
-			});
-		}
+				this.notebookObservables.setClosePanel(false);
+			}
+		});
+
+		// this.notebookObservables.removeNote.subscribe((remove) => {
+		// 	if (remove !== '') this.removeNote(remove);
+		// });
 	}
 
 	/**
 	 * Retrieve the logged in user's notebooks
 	 */
 	getUserNotebooks(notebookId: string) {
+		this.doneLoading = false;
+
 		this.notebookId = notebookId;
 
 		this.notes = [];
-
-		const progressbar = document.getElementById(
-			'notesProgressbar'
-		) as HTMLElement;
-
-		if (progressbar) progressbar.style.display = 'block';
 
 		this.notebookService
 			.getNotes(notebookId) // this.user.uid
@@ -131,7 +141,21 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					this.notes.push(result[i]);
 				}
 
-				if (progressbar) progressbar.style.display = 'none';
+				if (this.notes.length > 0) {
+					// console.log(this.notes[0]);
+					const note = this.notes[0];
+					this.openNotebook(
+						notebookId,
+						note.noteId,
+						note.name,
+						this.notebookTitle,
+						note.description,
+						note.tags
+					);
+					this.openedNoteId = note.noteId;
+				}
+
+				this.doneLoading = true;
 			});
 	}
 
@@ -181,6 +205,8 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param _noteId
 	 * @param _title
 	 * @param _notebookTitle
+	 * @param _description
+	 * @param _tags
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	openNotebook(
@@ -191,18 +217,40 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		_title: string,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		_notebookTitle: string
+		_notebookTitle: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_description: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		_tags: string[]
 	) {}
+
+	setLoadedNote(noteId: string) {
+		this.openedNoteId = noteId;
+		// console.log(this.openedNoteId);
+	}
 
 	/**
 	 * Edit the details of a notebook
 	 * @param id the id of the notebook to be updated
 	 * @param title
 	 * @param description
+	 * @param tags
 	 */
-	editNotebook(id: string, title: string, description: string) {
+	editNotebook(
+		id: string,
+		title: string,
+		description: string,
+		tags: string[]
+	) {
 		this.notesService
-			.editNote(this.notebookId, id, title, description)
+			.editNote(
+				this.notebookId,
+				id,
+				title,
+				description,
+				this.creatorId,
+				tags
+			)
 			.subscribe((newNote: { description: any; title: any }) => {
 				this.notes = this.notes.map((notebook: any) => {
 					if (notebook.noteId === id) {
@@ -216,11 +264,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	}
 
 	/**
-	 * Create a new notebook
+	 * Create a new note
 	 */
 	createNewNote() {
 		this.notesService
-			.createNewNote(this.notebookId)
+			.createNewNote(this.notebookId, this.notebookTitle)
 			.subscribe((newNote) => {
 				this.notes.push(newNote.notebook);
 
@@ -228,8 +276,39 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 					this.notebookId,
 					newNote.id,
 					newNote.notebook.name,
-					this.notebookTitle
+					this.notebookTitle,
+					newNote.notebook.description,
+					newNote.notebook.tags
 				);
+
+				this.openedNoteId = newNote.id;
+			});
+	}
+
+	/**
+	 * Delete a note
+	 * @param noteId
+	 */
+	deleteNote(noteId: string) {
+		this.notesService
+			.removeNote(this.notebookId, noteId)
+			.subscribe((removed: any) => {
+				if (removed) {
+					this.removeNote(noteId);
+					this.notebookObservables.setRemoveNote(noteId);
+					// console.log(noteId);
+					// console.log(this.openedNoteId);
+					if (this.openedNoteId === noteId) {
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
+					}
+				}
 			});
 	}
 
@@ -239,11 +318,11 @@ export class NotesPanelComponent implements OnInit, AfterContentInit {
 	 * @param id the id of the notebook to be removed
 	 */
 	removeNote(id: string) {
-		// eslint-disable-next-line array-callback-return
-		this.notes = this.notes.filter((notebook: any) => {
-			if (notebook.noteId !== id) {
-				return notebook;
+		this.notes = this.notes.filter((note: any) => {
+			if (note.noteId !== id) {
+				return note;
 			}
+			return null;
 		});
 	}
 }

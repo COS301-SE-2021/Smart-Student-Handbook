@@ -1,3 +1,5 @@
+@import "../../../styling/scrollbar";
+
 .sidenav_container {
   min-width: 60px;
   //height: calc(100vh - 200px);
@@ -33,7 +35,7 @@
 #openPanelBtn{
   position: absolute;
   top: 12px;
-  right: 0px;
+  right: 0;
   transition: all .1s linear;
   z-index: 3;
   font-size: larger;
@@ -42,7 +44,7 @@
 #closePanelBtn{
   position: absolute;
   top: 12px;
-  right: 0px;
+  right: 0;
 }
 
 #panel{
@@ -108,7 +110,11 @@
   bottom: 60px;
   border: 1px solid #dedede;
 }
-
+@media only screen and (max-width: 447px) {
+  .profileCard {
+    bottom: 76px;
+  }
+}
 .margin{
   margin-left: 0 !important;
 }
@@ -148,29 +154,4 @@
 #profileCardHeader{
   height:45px;
   margin-bottom: 5px;
-}
-
-
-/********* Scrollbar *********/
-
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
 @Component({
 	selector: 'app-smart-assist-panel',
@@ -6,37 +7,37 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./smart-assist-panel.component.scss'],
 })
 export class SmartAssistPanelComponent implements OnInit {
-	// constructor() {}
+	notebookId: string;
 
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
+	noteId: string;
 
-	/**
-	 * Enlarge the recommendation card and make it scrollable
-	 * @param index the index of the card to enlarge
-	 */
-	showPreview(index: number) {
-		const snippet = document.getElementsByClassName('snippetCard')[index]
-			.children[0] as HTMLElement;
+	constructor(
+		private smartAssistObservables: SmartAssistObservablesService
+	) {}
 
-		if (snippet.style.maxHeight === '400px') {
-			this.hidePreview(index);
-		} else {
-			snippet.style.maxHeight = '400px';
-			snippet.style.overflowY = 'scroll';
-		}
-	}
+	ngOnInit(): void {
+		this.smartAssistObservables.smartAssistNotebookId.subscribe(
+			({ notebookId }) => {
+				if (
+					notebookId !== undefined &&
+					notebookId !== this.notebookId
+				) {
+					this.notebookId = notebookId;
 
-	/**
-	 * Hide the preview of the recommendation card
-	 * @param index the index of the card to hide
-	 */
-	hidePreview(index: number) {
-		const snippet = document.getElementsByClassName('snippetCard')[index]
-			.children[0] as HTMLElement;
+					// console.log(notebookId);
+				}
+			}
+		);
 
-		snippet.style.maxHeight = '200px';
-		snippet.style.overflow = 'hidden';
+		this.smartAssistObservables.smartAssistNoteId.subscribe(
+			({ noteId }) => {
+				if (noteId !== undefined && noteId !== this.noteId) {
+					this.noteId = noteId;
+
+					// console.log(noteId);
+				}
+			}
+		);
 	}
 
 	/**

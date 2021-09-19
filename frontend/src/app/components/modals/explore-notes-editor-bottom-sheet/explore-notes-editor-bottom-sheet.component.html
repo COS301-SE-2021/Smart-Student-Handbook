@@ -1,0 +1,25 @@
+<div id="exploreBottomSheetEditor">
+  <mat-toolbar class="text-justify">
+    <mat-toolbar-row >
+      <h5 id="viewNoteBottomSheetHeader">{{noteTitle}}</h5>
+
+      <span class="example-spacer"></span>
+
+      <button mat-icon-button (click)="cloneNote()">
+        <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
+      </button>
+
+
+      <button mat-icon-button (click)="closeSheet($event)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+
+  <mat-progress-bar mode="indeterminate" id="exploreNoteLoader" *ngIf="!isCompleted"></mat-progress-bar>
+
+
+  <!--<div id="exploreBottomSheetEditor" class="editor"></div>-->
+  <app-read-only-editor></app-read-only-editor>
+</div>

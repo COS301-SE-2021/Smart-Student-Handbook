@@ -1,0 +1,105 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.chat-popup{
+  width: 100%;
+  background-color: transparent;
+}
+
+.topChat {
+  padding-top: 100px;
+}
+
+.bottomChat {
+  padding-bottom: 80px;
+}
+
+.chatBox {
+  //max-width: 800px;
+  height: 55vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-right: -18px !important;
+  background-color: #efefef !important;
+  padding: 10px;
+}
+
+.chatWrapper {
+  min-height: 55vh;
+  width: 100%;
+}
+
+@media only screen and (max-width: 960px) {
+  .chatWrapper {
+    min-height: 55vh;
+  }
+
+  .chatBox {
+    height: 55vh;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .chat-width{
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .col-12{
+    padding-right: 12px !important;
+  }
+}
+
+.message-user-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.chat-width {
+  //width: 400px;
+}
+
+//@media only screen and (max-width: 600px) {
+//  .chat-width {
+//    width: 300px;
+//    min-width: 70vw;
+//    max-width: 80vw;
+//  }
+//}
+
+
+.card-text {
+  //max-width: 250px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+/*
+POPUP
+*/
+
+//.open-button {
+//  cursor: pointer;
+//  position: fixed;
+//  bottom: 4%;
+//  right: 4%;
+//}
+
+//.btn-circle.btn-xl {
+//  width: 60px;
+//  height: 60px;
+//  //padding: 10px 16px;
+//  //font-size: 24px;
+//  //line-height: 1.33;
+//  border-radius: 30px;
+//}
+
+//.chat-popup {
+//  bottom: 9%;
+//  right: 4%;
+//}
+
+
+
+

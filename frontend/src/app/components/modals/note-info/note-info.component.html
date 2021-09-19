@@ -1,0 +1,79 @@
+<div>
+  <mat-toolbar>
+    <span>{{title}}</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button aria-label="Close note info" [mat-dialog-close]="true">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <h2>Creator:</h2>
+
+    <div align="center" class="collaborators">
+      <div mat-card-avatar class="collaborator-image"></div>
+
+      <p class="personName">{{creator.name}}</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <button color="primary" *ngIf="collaborators.length !== 1" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+      <mat-icon>group_add</mat-icon>
+    </button>
+
+    <h2>Collaborators:</h2>
+
+    <button mat-stroked-button *ngIf="collaborators.length === 1" (click)="addCollaborator()">
+      Add Collaborator
+    </button>
+
+
+    <div align="center" class="collaborators" *ngFor="let collaborator of collaborators">
+
+      <ng-template [ngIf]="collaborator.id !== creator.id">
+        <div mat-card-avatar class="collaborator-image"></div>
+
+        <mat-icon *ngIf="user.uid === creator.id" class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
+          remove_circle_outline
+        </mat-icon>
+
+        <p class="personName">{{collaborator.name}}</p>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <h2>Tags:</h2>
+
+    <mat-form-field id="tags">
+      <mat-label></mat-label>
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip
+          *ngFor="let tag of tags"
+          [selectable]="true"
+          [removable]="true"
+          (removed)="removeTag(tag)"
+        >
+          {{ tag }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Add tag..."
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
+</div>

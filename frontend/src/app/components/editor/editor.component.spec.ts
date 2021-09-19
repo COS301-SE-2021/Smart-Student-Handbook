@@ -10,7 +10,7 @@ import {
 	NotebookEventEmitterService,
 	NotebookService,
 	NoteMoreService,
-	NotesService,
+	NoteOperationsService,
 	NotificationService,
 	ProfileService,
 } from '@app/services';
@@ -36,7 +36,7 @@ describe('EditorComponent', () => {
 			declarations: [EditorComponent, ConfirmDeleteComponent],
 			providers: [
 				NotebookService,
-				NotesService,
+				NoteOperationsService,
 				ProfileService,
 				NoteMoreService,
 				NotificationService,

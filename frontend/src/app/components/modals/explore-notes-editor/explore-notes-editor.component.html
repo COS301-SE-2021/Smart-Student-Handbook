@@ -1,0 +1,24 @@
+<mat-toolbar>
+  <mat-toolbar-row class="text-justify">
+    <h5 id="viewNoteHeader">{{noteTitle}}</h5>
+
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button (click)="cloneNote()">
+      <mat-icon class="pointer" matTooltip="Clone Note" matTooltipPosition="below">note_add</mat-icon>
+    </button>
+
+
+
+    <button mat-icon-button [mat-dialog-close] matTooltip="Close" matTooltipPosition="below">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" id="exploreNoteLoader" *ngIf="!isCompleted"></mat-progress-bar>
+
+
+<!--<div id="exploreEditor" class="editor"></div>-->
+<app-read-only-editor></app-read-only-editor>

@@ -1,0 +1,84 @@
+<div class="chat-popup">
+  <div class="container chat-width rounded shadow-lg">
+    <div class="row">
+      <div class="col-12" style="padding: 7px;">
+        <div class="chatWrapper">
+          <div class="m-auto pt-2 pb-2">
+            <h2 class="mt-1">
+              Chat room
+
+              <span>
+<!--                <button mat-icon-button (click)="showChat = !showChat" style="float: right; margin-top: -5px;">-->
+<!--                  <mat-icon>close</mat-icon>-->
+<!--                </button>-->
+            </span>
+            </h2>
+          </div>
+          <div class="chatBox m-auto bg-light pt-2">
+            <div *ngFor='let message of messages'>
+              <div *ngIf="message.uid === currentUser.uid; then myMessages else otherMessages"></div>
+              <ng-template #myMessages>
+                <div class="justify-content-end m-1">
+                  <div class="row flex-row-reverse">
+                    <div class="col-auto">
+                      <img src="{{ message.photoURL }}" class="rounded-lg m-1 message-user-icon" alt="{{ message.displayName }}">
+                    </div>
+                    <div class="col-auto">
+                      <div>
+                        <p class="card-text bg-primary text-light rounded-lg text-left shadow p-2 mt-1 rounded">
+                          {{ message.message }}
+                        </p>
+                      </div>
+                      <div class="text-right">
+                        <p class="blockquote-footer mr-2 mt-2">{{ message.displayName }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template #otherMessages>
+                <div class="justify-content-start m-1">
+                  <div class="row">
+                    <div class="col-auto">
+                      <img src="{{ message.photoURL }}" width="35"
+                           height="35" class="rounded-lg m-1 message-user-icon" alt="{{ message.displayName }}">
+                    </div>
+                    <div class="col-auto" >
+                      <div>
+                        <p class="card-text bg-light rounded-lg text-left shadow p-2 rounded">
+                          {{ message.message }}
+                        </p>
+                      </div>
+                      <div class="text-left">
+                        <p class="blockquote-footer ml-2 mt-2">{{ message.displayName }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+            <div id="last-message"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12" style="padding-right: 0;">
+        <div class="input-group pt-2 pb-4">
+          <input type="text" #messageData class="form-control" placeholder="Enter Message"
+                 aria-label="Enter Message" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit" (click)="sendData(messageData.value)">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<ng-template #showChatFalse>-->
+<!--  <button type="button" class="open-button btn btn-primary btn-circle btn-xl text-center" (click)="changeChat()">-->
+<!--    <mat-icon style="font-size: xx-large; margin: 7px 5px 0 0;"> chat</mat-icon>-->
+<!--  </button>-->
+<!--</ng-template>-->
+
+

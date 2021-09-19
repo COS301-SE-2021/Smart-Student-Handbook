@@ -9,11 +9,11 @@ export interface User {
 	program?: string;
 	workStatus?: string;
 	bio?: string;
-	profilePicUrl?: string;
+	profilePic?: string;
 	dateJoined: DateJoined;
 }
 
 interface DateJoined {
-	_seconds?: string;
-	_nanoseconds?: string;
+	_seconds?: any;
+	_nanoseconds?: any;
 }

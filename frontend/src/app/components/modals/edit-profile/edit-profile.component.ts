@@ -10,7 +10,8 @@ import { ConfirmDeleteComponent, MessageComponent } from '@app/components';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, finalize } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { institutions } from './InstitutionsList';
 
 /**
@@ -49,32 +50,42 @@ export class EditProfileComponent implements OnInit {
 
 	user: any;
 
+	doneLoading: boolean = true;
+
+	fb;
+
+	downloadURL: Observable<string>;
+
+	event: any = null;
+
 	constructor(
 		public dialogRef: MatDialogRef<EditProfileComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: User,
 		private accountService: AccountService,
 		private dialog: MatDialog,
-		private router: Router
+		private router: Router,
+		private storage: AngularFireStorage
 	) {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
-		if (data.dateJoined) {
-			// eslint-disable-next-line no-underscore-dangle
-			// @ts-ignore
-			// eslint-disable-next-line no-underscore-dangle
-			const milliseconds: number = data.dateJoined._seconds * 1000;
-			// eslint-disable-next-line no-underscore-dangle
-			const dateObject = new Date(milliseconds);
-			this.date = dateObject.toLocaleString('en-US', {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			});
-		}
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+				this.imgFilePath = user.profilePic;
+				// eslint-disable-next-line no-underscore-dangle
+				const milliseconds: number = user.dateJoined._seconds * 1000;
+				const dateObject = new Date(milliseconds);
+				this.date = dateObject.toLocaleString('en-US', {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				});
+			}
+		});
 	}
 
 	ngOnInit() {
+		this.doneLoading = true;
+
 		this.filteredOptions = this.myControl.valueChanges.pipe(
 			startWith(''),
 			map((value) => this.filter(value))
@@ -94,24 +105,82 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	onSave(): void {
-		const progressbar = document.getElementById(
-			'progressbar'
-		) as HTMLElement;
-		if (progressbar) progressbar.style.display = 'block';
+		this.doneLoading = false;
 		this.isDisabled = true;
 		this.updatedFailed = false;
 
-		if (this.data !== undefined && this.user) {
+		if (this.event) {
+			const file = this.event.files[0];
+			const filePath = `UserProfilePictures/${this.user.uid}`;
+			const fileRef = this.storage.ref(filePath);
+			const task = this.storage.upload(
+				`UserProfilePictures/${this.user.uid}`,
+				file
+			);
+			task.snapshotChanges()
+				.pipe(
+					finalize(() => {
+						this.downloadURL = fileRef.getDownloadURL();
+						this.downloadURL.subscribe((url) => {
+							if (url) {
+								this.fb = url;
+
+								const updatedUser: User = this.user;
+								updatedUser.profilePic = this.fb;
+
+								if (this.data !== undefined && this.user) {
+									this.accountService
+										.updateUser(
+											this.data.displayName,
+											this.data.institution,
+											this.data.department,
+											this.data.program,
+											this.data.workStatus,
+											this.data.bio,
+											updatedUser.profilePic
+										)
+										.subscribe(
+											(res: any) => {
+												if (res.success) {
+													this.dialogRef.close();
+													this.accountService.userSubject.next(
+														updatedUser
+													);
+												} else {
+													this.errorMessage =
+														res.message;
+													this.updatedFailed = true;
+												}
+												this.doneLoading = true;
+												this.isDisabled = false;
+											},
+											(err) => {
+												this.doneLoading = true;
+												console.log(
+													`Error: ${err.error.message}`
+												);
+											}
+										);
+								}
+							}
+						});
+					})
+				)
+				.subscribe((url) => {
+					if (url) {
+						// console.log(url);
+					}
+				});
+		} else if (this.data !== undefined && this.user) {
 			this.accountService
 				.updateUser(
-					this.user.uid,
 					this.data.displayName,
 					this.data.institution,
 					this.data.department,
 					this.data.program,
 					this.data.workStatus,
 					this.data.bio,
-					this.data.profilePicUrl
+					this.data.profilePic
 				)
 				.subscribe(
 					(res: any) => {
@@ -121,10 +190,11 @@ export class EditProfileComponent implements OnInit {
 							this.errorMessage = res.message;
 							this.updatedFailed = true;
 						}
-						if (progressbar) progressbar.style.display = 'none';
+						this.doneLoading = true;
 						this.isDisabled = false;
 					},
 					(err) => {
+						this.doneLoading = true;
 						console.log(`Error: ${err.error.message}`);
 					}
 				);
@@ -132,6 +202,8 @@ export class EditProfileComponent implements OnInit {
 	}
 
 	deleteAccount(): void {
+		this.doneLoading = false;
+
 		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
 			data: {
 				message:
@@ -142,7 +214,7 @@ export class EditProfileComponent implements OnInit {
 		// Get info and create notebook after dialog is closed
 		dialogRef.afterClosed().subscribe((result) => {
 			if (result === true && this.user) {
-				this.accountService.deleteUser(this.user.uid).subscribe(
+				this.accountService.deleteUser().subscribe(
 					(res: any) => {
 						const confirm = this.dialog.open(MessageComponent, {
 							data: {
@@ -152,76 +224,31 @@ export class EditProfileComponent implements OnInit {
 							},
 						});
 						confirm.afterClosed().subscribe(() => {
+							this.doneLoading = true;
 							this.dialogRef.close();
 							this.router.navigate(['account/login']);
 						});
+						this.doneLoading = true;
 					},
 					(error) => {
+						this.doneLoading = true;
 						this.errorMessage = error.message;
 						this.updatedFailed = true;
 					}
 				);
-			}
+			} else this.doneLoading = true;
 		});
 	}
 
-	imagePreview(e: any) {
-		// @ts-ignore
-		const file = (e.target as HTMLInputElement).files[0];
-
+	imagePreview(imageInput: any) {
+		this.event = imageInput;
+		const file: File = imageInput.files[0];
 		const reader = new FileReader();
-		reader.onload = () => {
+
+		reader.addEventListener('load', () => {
 			this.imgFilePath = reader.result as string;
-		};
+		});
+
 		reader.readAsDataURL(file);
 	}
-
-	//---------------------------------------------------------
-
-	// public imagePath: any;
-	//
-	// imgURL: any;
-	//
-	// public message: string;
-	//
-	// preview(files) {
-	// 	if (files.length === 0) return;
-	//
-	// 	const mimeType = files[0].type;
-	// 	if (mimeType.match(/image\/*/) == null) {
-	// 		this.message = 'Only images are supported.';
-	// 		return;
-	// 	}
-	//
-	// 	const reader = new FileReader();
-	// 	this.imagePath = files;
-	// 	reader.readAsDataURL(files[0]);
-	// 	reader.onload = (_event) => {
-	// 		this.imgURL = reader.result;
-	// 	};
-	// }
-
-	//---------------------------------------------------------
-
-	// fileChangeEvent(event: any) {
-	// if (event.target.files && event.target.files[0]) {
-	// 	const reader = new FileReader();
-	// 	reader.onload = (e: any) => {
-	// 		this.localUrl = e.target.result;
-	// 	};
-	// 	reader.readAsDataURL(event.target.files[0]);
-	// 	console.log(this.localUrl);
-	// }
-	// console.log(event);
-	// const element = event.currentTarget as HTMLInputElement;
-	// const fileList: FileList | null = element.files;
-	// if (fileList) {
-	// 	console.log('FileUpload -> files', fileList);
-	// 	// eslint-disable-next-line prefer-destructuring
-	// 	this.fileName = fileList[0];
-	// 	this.fileType = this.fileName.type;
-	// 	this.image = document.getElementById('some_id') as HTMLImageElement;
-	// 	this.image.src = URL.createObjectURL(this.fileName);
-	// }
-	// }
 }

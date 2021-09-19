@@ -1,26 +1,27 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import {
 	MatTreeFlatDataSource,
 	MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
-	NotebookEventEmitterService,
+	AccountService,
+	NotebookObservablesService,
+	NotebookOperationsService,
 	NotebookService,
-	NoteMoreService,
-	OpenNotebookPanelService,
 } from '@app/services';
-import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
+import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
+import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
+import { TreeViewObservablesService } from '@app/services/treeViews/tree-view-observables.service';
 
 @Component({
 	selector: 'app-tree-view',
 	templateUrl: './tree-view.component.html',
 	styleUrls: ['./tree-view.component.scss'],
 })
-export class TreeViewComponent implements OnInit {
+export class TreeViewComponent implements OnInit, AfterContentInit {
 	user: any;
 
 	childrenSize = 0;
@@ -66,15 +67,24 @@ export class TreeViewComponent implements OnInit {
 		private notebookService: NotebookService,
 		private router: Router,
 		private dialog: MatDialog,
-		private notebookData: NotebookDataService,
-		private noteMore: NoteMoreService,
-		private openNotebookPanelService: OpenNotebookPanelService,
-		private notebookEventEmitterService: NotebookEventEmitterService
+		private notebookObservables: NotebookObservablesService,
+		private exploreObservables: ExploreObservablesService,
+		private notebookOperations: NotebookOperationsService,
+		private accountService: AccountService,
+		public treeViewObservables: TreeViewObservablesService
 	) {}
 
 	ngOnInit(): void {
 		// Get the user and user profile info from localstorage
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
+
+		this.treeViewObservables.openMyNotes.subscribe((open) => {
+			if (open && this.notebooks.length > 0) this.treeControl.expandAll();
+		});
 
 		this.getUserNotebooks();
 
@@ -95,26 +105,65 @@ export class TreeViewComponent implements OnInit {
 	}
 
 	/**
+	 * Add a new notebook to your notebooks when the user clones a note into a new notebook
+	 */
+	ngAfterContentInit(): void {
+		this.notebookObservables.clonedNotebook.subscribe((val: any) => {
+			if (val.id !== '') {
+				this.openedNotebookId = val.id;
+
+				const child = {
+					name: val.name,
+					id: val.id,
+					// children: childArr,
+				};
+
+				this.childrenSize += 1;
+
+				let tree: any;
+				if (this.dataSource.data[0].children)
+					tree = this.dataSource.data[0].children;
+
+				if (this.childrenSize === 1) {
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: [child],
+						},
+					];
+				} else {
+					tree.push(child);
+
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+				}
+
+				this.treeControl.expandAll();
+			}
+		});
+	}
+
+	/**
 	 * Get the logged in user's notebooks to add to the treeview
 	 */
 	getUserNotebooks() {
 		if (this.user)
-			this.notebookService.getUserNotebooks(this.user.uid).subscribe(
+			this.notebookService.getUserNotebooks().subscribe(
 				(notebooks: any[]) => {
-					let temp: any[] = [];
-					let index = 0;
+					let temp: string = '';
 					const tree: { name: any; id: any }[] = [];
 
 					notebooks.forEach((notebook: any) => {
-						temp = notebook.access;
+						temp = notebook.creatorId;
 
-						if (temp.length > 0) {
-							index = temp.findIndex(
-								(a: any) => a.userId !== this.user.uid
-							);
-						}
-
-						if (index >= 0 || temp.length === 0) {
+						// If the user is the creator
+						if (temp === this.user.uid) {
 							this.notebooks.push(notebook);
 
 							this.childrenSize += 1;
@@ -127,24 +176,7 @@ export class TreeViewComponent implements OnInit {
 
 							tree.push(child);
 						}
-
-						index = 0;
 					});
-					// console.log(notebooks);
-					// this.notebooks = notebooks;
-
-					// const tree = [];
-					// for (let i = 0; i < notebooks.length; i += 1) {
-					// 	this.childrenSize += 1;
-					//
-					// 	const child = {
-					// 		name: notebooks[i].title,
-					// 		id: notebooks[i].notebookId,
-					// 		// children: childArr,
-					// 	};
-					//
-					// 	tree.push(child);
-					// }
 
 					if (this.childrenSize > 0) {
 						this.dataSource.data = [
@@ -168,47 +200,52 @@ export class TreeViewComponent implements OnInit {
 			(noteb) => noteb.notebookId === notebookId
 		);
 
-		this.noteMore
+		this.notebookOperations
 			.updateNotebook({
 				title: notebook[0].title,
 				author: notebook[0].author,
 				course: notebook[0].course,
 				description: notebook[0].description,
 				institution: notebook[0].institution,
-				creatorId: notebook[0].creatorId,
+				// creatorId: notebook[0].creatorId,
 				private: notebook[0].private,
 				tags: notebook[0].tags,
 				notebookId: notebook[0].notebookId,
 			})
 			.subscribe((val) => {
-				this.notebooks = this.notebooks.map((nb: any) => {
-					if (nb.notebookId === notebookId) {
-						nb.title = val.title;
-						nb.course = val.course;
-						nb.description = val.description;
-						nb.private = val.private;
-					}
-					return nb;
-				});
-
-				let tree = this.dataSource.data[0].children;
-				if (tree)
-					tree = tree.map((node) => {
-						if (node.id === notebookId) {
-							node.name = val.title;
+				if (val) {
+					this.notebooks = this.notebooks.map((nb: any) => {
+						const temp = nb;
+						if (temp.notebookId === notebookId) {
+							temp.title = val.title;
+							temp.course = val.course;
+							temp.description = val.description;
+							temp.private = val.private;
 						}
-						return node;
+						return temp;
 					});
 
-				this.dataSource.data = [
-					{
-						name: 'My Notebooks',
-						id: '',
-						children: tree,
-					},
-				];
-				this.treeControl.expandAll();
-				this.notebookEventEmitterService.ChangePrivacy(val.private);
+					let tree = this.dataSource.data[0].children;
+					if (tree)
+						tree = tree.map((node) => {
+							const temp = node;
+							if (temp.id === notebookId) {
+								temp.name = val.title;
+							}
+							return node;
+						});
+
+					this.dataSource.data = [
+						{
+							name: 'My Notebooks',
+							id: '',
+							children: tree,
+						},
+					];
+					this.treeControl.expandAll();
+					// this.notebookEventEmitterService.ChangePrivacy(val.private);
+					this.notebookObservables.setNotebookPrivacy(val.private);
+				}
 			});
 	}
 
@@ -220,88 +257,92 @@ export class TreeViewComponent implements OnInit {
 		this.router.navigate(['notebook']).then(() => {
 			this.openedNotebookId = notebookId;
 
-			const screenType = navigator.userAgent;
-			if (
-				/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-					screenType
-				)
-			) {
+			if (window.innerWidth <= 960) {
 				localStorage.setItem('notebookId', notebookId);
 
-				this.router.navigate(['notes']);
+				this.router.navigate(['notes']).then(() => {
+					this.exploreObservables.setOpenExploreNotebook(
+						notebookId,
+						notebookTitle,
+						false
+					);
+				});
 			} else {
-				this.openNotebookPanelService.toggleNotePanel(
+				this.notebookObservables.setOpenNotebook(
 					notebookId,
-					notebookTitle
+					notebookTitle,
+					false
 				);
 			}
-
-			this.notebookData.setID(notebookId, notebookTitle);
 		});
 	}
 
 	createNewNotebook() {
-		this.noteMore
+		this.notebookOperations
 			.createNewNotebook({
 				title: '',
 				author: this.user.username,
 				course: '',
 				description: '',
 				institution: this.user.institution,
-				creatorId: this.user.uid,
+				// creatorId: this.user.uid,
 				private: false,
 				tags: [],
 			})
 			.subscribe((val: any) => {
-				this.openedNotebookId = val.notebook.notebookId;
+				if (val) {
+					this.openedNotebookId = val.notebook.notebookId;
 
-				this.notebooks.push(val.notebook);
+					this.notebooks.push(val.notebook);
 
-				const child = {
-					name: val.notebook.title,
-					id: val.notebook.notebookId,
-					// children: childArr,
-				};
+					const child = {
+						name: val.notebook.title,
+						id: val.notebook.notebookId,
+						// children: childArr,
+					};
 
-				this.childrenSize += 1;
+					this.childrenSize += 1;
 
-				let tree: any;
-				if (this.dataSource.data[0].children)
-					tree = this.dataSource.data[0].children;
+					let tree: any;
+					if (this.dataSource.data[0].children)
+						tree = this.dataSource.data[0].children;
 
-				if (this.childrenSize === 1) {
-					this.dataSource.data = [
-						{
-							name: 'My Notebooks',
-							id: '',
-							children: [child],
-						},
-					];
-				} else {
-					tree.push(child);
+					if (this.childrenSize === 1) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [child],
+							},
+						];
+					} else {
+						tree.push(child);
 
-					this.dataSource.data = [
-						{
-							name: 'My notebooks',
-							id: '',
-							children: tree,
-						},
-					];
+						this.dataSource.data = [
+							{
+								name: 'My notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+					}
+
+					this.treeControl.expandAll();
+
+					this.openNotebookFolder(
+						val.notebook.notebookId,
+						val.notebook.title
+					);
 				}
-
-				this.treeControl.expandAll();
-
-				this.openNotebookFolder(
-					val.notebook.notebookId,
-					val.notebook.title
-				);
 			});
 	}
 
 	deleteNotebook(notebookId: string) {
-		const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+		const dialogRef = this.dialog.open(DeleteNoteComponent, {
 			data: {
 				message: 'Are you sure you want to delete this notebook?',
+				notebookId,
+				type: 'notebook',
 			},
 		});
 
@@ -311,53 +352,61 @@ export class TreeViewComponent implements OnInit {
 					(notebook) => notebook.notebookId !== notebookId
 				);
 
-				this.notebookService
-					.deleteNotebook(notebookId, this.user.uid)
-					.subscribe(() => {
-						this.childrenSize -= 1;
+				this.childrenSize -= 1;
 
-						let tree: any[];
-						if (this.dataSource.data[0].children) {
-							tree = this.dataSource.data[0].children;
-							tree = this.dataSource.data[0].children;
+				let tree: any[];
+				if (this.dataSource.data[0].children) {
+					tree = this.dataSource.data[0].children;
+					tree = this.dataSource.data[0].children;
 
-							tree = tree.filter(
-								(node: any) => node.id !== notebookId
-							);
+					tree = tree.filter((node: any) => node.id !== notebookId);
 
-							if (this.childrenSize > 0) {
-								this.dataSource.data = [
+					if (this.childrenSize > 0) {
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: tree,
+							},
+						];
+
+						this.treeControl.expandAll();
+					} else {
+						this.treeControl.collapseAll();
+
+						this.dataSource.data = [
+							{
+								name: 'My Notebooks',
+								id: '',
+								children: [
 									{
-										name: 'My Notebooks',
+										name: '',
 										id: '',
-										children: tree,
 									},
-								];
+								],
+							},
+						];
+					}
 
-								this.treeControl.expandAll();
-							} else {
-								this.treeControl.collapseAll();
+					if (this.openedNotebookId === notebookId) {
+						// this.openNotebookPanelService.closePanel();
+						this.notebookObservables.setClosePanel(true);
+						this.notebookObservables.setRemoveNote(
+							this.openedNotebookId
+						);
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
 
-								this.dataSource.data = [
-									{
-										name: 'My Notebooks',
-										id: '',
-										children: [
-											{
-												name: '',
-												id: '',
-											},
-										],
-									},
-								];
-							}
-
-							if (this.openedNotebookId === notebookId) {
-								this.openNotebookPanelService.closePanel();
-								this.notebookEventEmitterService.CloseNote();
-							}
-						}
-					});
+						this.notebookObservables.setRemoveNotebook(notebookId);
+						this.notebookObservables.setOpenNotebook('', '', true);
+					}
+				}
 			}
 		});
 	}

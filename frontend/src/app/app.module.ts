@@ -1,5 +1,5 @@
 // Angular
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
@@ -9,9 +9,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { AsyncPipe } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 // Core
 import {
@@ -21,6 +22,7 @@ import {
 	HeaderComponent,
 	SecureLayoutComponent,
 	PublicLayoutComponent,
+	JwtInterceptor,
 } from '@app/core';
 import { environment } from '@environments/environment';
 
@@ -31,7 +33,6 @@ import {
 	NotebookComponent,
 	HomeComponent,
 	ExploreComponent,
-	RecentNotesComponent,
 	SharedWithMeComponent,
 	NotificationsComponent,
 } from '@app/features';
@@ -46,7 +47,11 @@ import {
 } from '@app/features/public';
 
 // Mobile
-import { NotebookBottomSheetComponent, NotesComponent } from '@app/mobile';
+import {
+	NotebookBottomSheetComponent,
+	NotesComponent,
+	SmartAssistBottomSheetComponent,
+} from '@app/mobile';
 
 // Components
 import {
@@ -62,12 +67,32 @@ import {
 	AddCollaboratorComponent,
 	MessageComponent,
 	AddNoteComponent,
+	ViewProfileComponent,
+	NoteCardsComponent,
+	ExploreNotesEditorComponent,
+	ExploreNoteListComponent,
+	ExploreNotesEditorBottomSheetComponent,
+	ExploreNoteListBottomsheetComponent,
+	NoteInfoComponent,
+	SmartAssistComponent,
+	SmartAssistModalComponent,
+	RateNotebookComponent,
+	CloneNoteComponent,
+	WelcomeComponent,
+	NoteEditorComponent,
+	ReadOnlyEditorComponent,
+	DeleteNoteComponent,
+	NotebookChatComponent,
+	ChatBottomSheetComponent,
+	ChatModalComponent,
 } from '@app/components';
 
 // Long press
 import { NgxLongPress2Module } from 'ngx-long-press2';
 
-import { MessagingService, NotebookEventEmitterService } from '@app/services';
+import { QuillModule } from 'ngx-quill';
+
+import { MessagingService } from '@app/services';
 import { NgAisModule } from 'angular-instantsearch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -92,7 +117,6 @@ import { AppRoutingModule } from './app-routing.module';
 		HomeComponent,
 		ExploreComponent,
 		P404Component,
-		RecentNotesComponent,
 		SharedWithMeComponent,
 		NotificationsComponent,
 		HeaderComponent,
@@ -106,6 +130,25 @@ import { AppRoutingModule } from './app-routing.module';
 		AddCollaboratorComponent,
 		AddNoteComponent,
 		MessageComponent,
+		ViewProfileComponent,
+		NoteCardsComponent,
+		ExploreNotesEditorComponent,
+		ExploreNoteListComponent,
+		ExploreNotesEditorBottomSheetComponent,
+		ExploreNoteListBottomsheetComponent,
+		NoteInfoComponent,
+		SmartAssistComponent,
+		SmartAssistBottomSheetComponent,
+		SmartAssistModalComponent,
+		RateNotebookComponent,
+		CloneNoteComponent,
+		WelcomeComponent,
+		NoteEditorComponent,
+		ReadOnlyEditorComponent,
+		DeleteNoteComponent,
+		NotebookChatComponent,
+		ChatBottomSheetComponent,
+		ChatModalComponent,
 	],
 	imports: [
 		MaterialModule,
@@ -123,7 +166,6 @@ import { AppRoutingModule } from './app-routing.module';
 		AngularFireDatabaseModule,
 		AngularFireAuthModule,
 		AngularFireMessagingModule,
-		// AngularFireStorageModule,
 		AngularFirestoreModule,
 		FlexLayoutModule,
 		NgxLongPress2Module,
@@ -134,6 +176,7 @@ import { AppRoutingModule } from './app-routing.module';
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
+		QuillModule.forRoot(),
 	],
 	providers: [
 		NotesPanelComponent,
@@ -141,8 +184,14 @@ import { AppRoutingModule } from './app-routing.module';
 		AsyncPipe,
 		LeftMenuComponent,
 		MaterialModule,
-		NotebookEventEmitterService,
+		AngularFireStorage,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: JwtInterceptor,
+			multi: true,
+		},
 	],
 	bootstrap: [AppComponent],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

@@ -1,13 +1,16 @@
 <div class="container">
   <div class="row">
-    <div class="col">
-      <mat-list role="list" id="list">
+    <div class="col-12 text-center mt-3 pb-3" style="border-bottom: 1px solid #aaaaaa">
+      <span class="display-5 pt-2">Notifications</span>
+    </div>
+    <div class="col pt-3">
+      <mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" style="margin-top: 20px;"></mat-progress-bar>
 
+      <mat-list role="list" id="list">
 
         <mat-list-item *ngFor="let notification of notifications; let i = index" class="notificationListItem"
                        [ngStyle]="{'background-color': (notification.opened===true) ? '#e5e5e5' : '#f6f6f6',
-                       'box-shadow': '0px 0px 8px 2px rgb(216, 216, 216)'}"
-                       (click)="markAsRead(notification.userID, i)">
+                       'box-shadow': (notification.opened!==true) ? '0px 0px 8px 2px rgb(216, 216, 216)': 'none'}">
 
           <div mat-line class="col-12 col-md-10">
             <div mat-line>{{notification.heading}}</div>
@@ -19,10 +22,16 @@
             <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
               <mat-button-toggle-group class="collaborationBtnGroup float-left" name="fontStyle" aria-label="Font Style"
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
-                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault();
-                accept(notification.userID, notification.notebookID, notification.notebookTitle)">Accept</mat-button-toggle>
-                <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault();
-                decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn accept"
+                                   (click)="$event.preventDefault();
+                                   accept(notification.creatorId, notification.notebookID, notification.notebookTitle);
+                                   markAsRead(i, notification.notificationId, notification.opened)">
+                  Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn decline"
+                                   (click)="$event.preventDefault();
+                                   decline(notification.userID, notification.notebookID);
+                                   markAsRead(i, notification.notificationId, notification.opened)"
+                >Decline</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
           </div>
@@ -32,16 +41,25 @@
             <div *ngIf="notification.type === 'Request'" mat-line class="buttonLine">
               <mat-button-toggle-group class="collaborationBtnGroup" name="fontStyle" aria-label="Font Style"
                                        [ngStyle]="{'display': (notification.opened===true) ? 'none' : 'flex'}">
-                <mat-button-toggle class="collaborationBtn accept" (click)="$event.preventDefault();
-                accept(notification.userID, notification.notebookID, notification.notebookTitle)">Accept</mat-button-toggle>
-                <mat-button-toggle class="collaborationBtn decline" (click)="$event.preventDefault();
-                decline(notification.userID, notification.notebookID)">Decline</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn accept"
+                                   (click)="$event.preventDefault();
+                                    accept(notification.creatorId, notification.notebookID, notification.notebookTitle);
+                                    markAsRead(i, notification.notificationId, notification.opened)">
+                  Accept</mat-button-toggle>
+                <mat-button-toggle class="collaborationBtn decline"
+                                   (click)="$event.preventDefault();
+                                    decline(notification.userID, notification.notebookID);
+                                    markAsRead(i, notification.notificationId, notification.opened)">
+                  Decline</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
           </div>
 
         </mat-list-item>
       </mat-list>
+
+      <h4 *ngIf="isCompleted && notifications.length === 0">You don't have any notifications yet</h4>
+      <img *ngIf="isCompleted && notifications.length === 0" class="pt-3 w-100 mx-auto" style="max-width: 500px;" src="./assets/illustrations/undraw_Push_notifications.svg" alt="image">
     </div>
   </div>
 </div>

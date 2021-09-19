@@ -1,6 +1,16 @@
 //@import "src/app/styling/pageUnderConstruction";
 
 //-------------------------------------------------------------------------
+
+.pointerCursor{
+  cursor: pointer;
+}
+
+#minWidth
+{
+  min-width: 350px;
+}
+
 .homeCard {
   max-width: 400px;
   height: 400px;
@@ -30,5 +40,13 @@ mat-card-header{
   display: contents;
 }
 
+.shortcutIcon{
+  font-size: 25vh;
+  cursor: pointer;
+}
+
+a{
+  color: #1a1e21;
+}
 
 

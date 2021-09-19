@@ -1,17 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import {
 	MAT_BOTTOM_SHEET_DATA,
 	MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
-import { Collaborators } from '@app/components';
-import {
-	NotebookService,
-	ProfileService,
-	NotesService,
-	NoteMoreService,
-} from '@app/services';
+import { Collaborators, ViewProfileComponent } from '@app/components';
+import { NotebookOperationsService, NotebookService } from '@app/services';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface Tag {
 	name: string;
@@ -23,7 +19,7 @@ export interface Tag {
 	styleUrls: ['./notebook-bottom-sheet.component.scss'],
 })
 export class NotebookBottomSheetComponent implements OnInit {
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
 
 	collaborators: Collaborators[] = [];
 
@@ -31,11 +27,12 @@ export class NotebookBottomSheetComponent implements OnInit {
 		name: '',
 		url: '',
 		id: '',
+		accessId: '',
 	};
 
 	date: string = '';
 
-	tags: Tag[] = [];
+	tags: string[] = [];
 
 	notebookId: string = '';
 
@@ -50,26 +47,21 @@ export class NotebookBottomSheetComponent implements OnInit {
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<NotebookBottomSheetComponent>,
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-		private noteMore: NoteMoreService,
-		private notesService: NotesService,
+		private notebookOperations: NotebookOperationsService,
 		private notebookService: NotebookService,
-		private profileService: ProfileService
+		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
-
+		this.user = this.data.user;
 		this.notebookId = this.data.notebookID;
 		this.noteId = this.data.noteId;
 		this.title = this.data.notebookTitle;
-
-		this.noteMore.getNotebookInfo(this.notebookId).subscribe((data) => {
-			this.date = data.date;
-			this.notebook = data.notebook;
-			this.tags = data.tags;
-			this.collaborators = data.collaborators;
-			this.creator = data.creator;
-		});
+		this.date = this.data.date;
+		this.notebook = this.data.notebook;
+		this.tags = this.data.tags;
+		this.collaborators = this.data.collaborators;
+		this.creator = this.data.creator;
 	}
 
 	/**
@@ -81,7 +73,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 
 		// Add our fruit
 		if (value) {
-			this.tags.push({ name: value });
+			this.tags.push(value);
 		}
 
 		// Clear the input value
@@ -94,7 +86,7 @@ export class NotebookBottomSheetComponent implements OnInit {
 	 * Remove a tag from input and tags array
 	 * @param tag the tag to be removed
 	 */
-	removeTag(tag: Tag): void {
+	removeTag(tag: string): void {
 		const index = this.tags.indexOf(tag);
 
 		if (index >= 0) {
@@ -107,43 +99,64 @@ export class NotebookBottomSheetComponent implements OnInit {
 	updateTags() {
 		const tagList: string[] = [];
 		for (let i = 0; i < this.tags.length; i += 1) {
-			tagList.push(this.tags[i].name);
+			tagList.push(this.tags[i]);
 		}
 
-		this.noteMore.updateNotebook({
-			title: this.notebook.title,
-			author: this.notebook.author,
-			course: this.notebook.course,
-			description: this.notebook.description,
-			institution: this.notebook.institution,
-			creatorId: this.notebook.creatorId,
-			private: this.notebook.private,
-			tags: tagList,
+		const request = {
 			notebookId: this.notebook.notebookId,
-		});
+			noteId: this.noteId,
+			name: this.title,
+			// description: this.noteDescription,
+			creatorId: this.creator.id,
+			tags: tagList,
+		};
+
+		this.notebookService.updateNote(request).subscribe();
 	}
 
 	addCollaborator() {
-		this.noteMore
-			.requestCollaborator(this.user.uid, this.notebookId, '')
-			.subscribe(() => {
-				// collaborator: any
-				// this.collaborators.push(collaborator);
-			});
+		this.notebookOperations
+			.requestCollaborator(
+				this.user.uid,
+				this.notebookId,
+				this.notebook.title
+			)
+			.subscribe();
 	}
 
 	removeCollaborator(userId: string) {
-		this.noteMore
+		this.notebookOperations
 			.removeCollaborator(userId, this.notebookId)
-			.subscribe((id: string) => {
-				this.collaborators = this.collaborators.filter(
-					(collaborator) => collaborator.id !== id
-				);
+			.subscribe((removed: boolean) => {
+				if (removed) {
+					this.collaborators = this.collaborators.filter(
+						(collaborator) => collaborator.id !== userId
+					);
+				}
 			});
 	}
 
 	closeSheet(event: MouseEvent): void {
 		this.bottomSheetRef.dismiss();
 		event.preventDefault();
+	}
+
+	viewUserProfile(uid: any, displayName: string) {
+		let screenWidth = '';
+
+		if (window.innerWidth <= 1000) {
+			screenWidth = '100%';
+		} else {
+			screenWidth = '50%';
+		}
+
+		// Open dialog and populate the data attributes of the form fields
+		this.dialog.open(ViewProfileComponent, {
+			width: screenWidth,
+			data: {
+				uid,
+				displayName,
+			},
+		});
 	}
 }

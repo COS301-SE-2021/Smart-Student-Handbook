@@ -21,7 +21,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
 	NotebookService,
 	NoteMoreService,
-	NotesService,
+	NoteOperationsService,
 	ProfileService,
 } from '@app/services';
 
@@ -54,7 +54,7 @@ describe('NotebookBottomSheetComponent', () => {
 				{ provide: MAT_BOTTOM_SHEET_DATA, useValue: {} },
 				ProfileService,
 				NotebookService,
-				NotesService,
+				NoteOperationsService,
 				NoteMoreService,
 			], // Some stubs used here
 			schemas: [CUSTOM_ELEMENTS_SCHEMA],

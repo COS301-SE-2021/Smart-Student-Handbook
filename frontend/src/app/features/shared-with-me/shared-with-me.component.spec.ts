@@ -12,7 +12,7 @@ import {
 	OpenNotebookPanelService,
 } from '@app/services';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NotebookDataService } from '@app/services/notebookData.service';
+import { NotebookDataService } from '@app/services/notebook/notebookData.service';
 
 describe('SharedWithMeComponent', () => {
 	let component: SharedWithMeComponent;

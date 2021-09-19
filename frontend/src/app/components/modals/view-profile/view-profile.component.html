@@ -1,0 +1,48 @@
+<h1 *ngIf="!isLoadComplete">{{displayName}}</h1>
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoadComplete"></mat-progress-bar>
+<mat-dialog-content class="mat-typography" *ngIf="isLoadComplete">
+  <h1>{{userProfile.displayName}}</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <div class="profile-pic">
+          <img [src]="userProfile.profilePicUrl" alt="User Profile Image" id="output" width="200" />
+        </div>
+      </div>
+      <div class="col-9">
+        <div><span>Username: </span> <span class="h6">{{userProfile.username}}</span></div>
+        <div><span>Date Joined: </span> <span class="h6">{{date}}</span></div>
+        <div *ngIf="userProfile.institution"><span>Institution: </span> <span class="h6">{{userProfile.institution}}</span></div>
+        <div *ngIf="userProfile.program"><span>Program: </span> <span class="h6">{{userProfile.program}}</span></div>
+        <div *ngIf="userProfile.workStatus"><span>Work Status: </span> <span class="h6">{{userProfile.workStatus}}</span></div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <hr/>
+
+  <h3><strong>{{userProfile.displayName}}'s Notebooks</strong></h3>
+
+  <mat-selection-list #notebooks [multiple]="false" id="notebookList">
+    <mat-list-option *ngFor="let notebook of userNotebooks" [value]="notebook.notebookId"
+    (click)="viewNotebook(notebook)">
+      <p><mat-icon>book</mat-icon> {{notebook.title}}</p>
+    </mat-list-option>
+  </mat-selection-list>
+
+
+</mat-dialog-content>
+
+<div *ngIf="viewProfileFailed" class="text-center">
+  <br/>
+  <mat-error >
+    {{ errorMessage }}
+  </mat-error>
+</div>
+
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="dismiss()">Dismiss</button>
+</div>
+
+

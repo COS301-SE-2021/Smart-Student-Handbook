@@ -1,3 +1,9 @@
+@import "../../styling/scrollbar";
+
+.pointerCursor{
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 600px) {
 
   #noteInfoAccordion{
@@ -7,23 +13,31 @@
   #editorContainer{
     height: calc(100vh - 58px) !important;
     box-shadow: none !important;
+    min-width: 80vw;
+    max-width: 100vw;
+    padding: 5px;
 
     #editor{
       height: calc(100vh - 100px);
+      //color: #f8f8f8;
     }
   }
 }
 
-
-#progressbar{
-  //position: absolute;
-  //margin-top: -10px;
-  display: none;
+@media only screen and (max-width: 960px) {
+  #editorContainer {
+    padding: 5px;
+  }
 }
+
+.spacer{
+  flex: 1 1 auto;
+}
+
 
 #mobileMoreOptions{
   position: absolute;
-  top: 10px;
+  top: 22px;
   right: 20px;
   z-index: 3;
 
@@ -39,7 +53,8 @@
   text-align: left;
   //height: calc(100vh - 70px);
   height: 100vh;
-  overflow: hidden;
+  width: auto;
+  overflow-y: auto;
 }
 
 #editor{
@@ -90,6 +105,7 @@
 }
 
 .personName{
+  width: max-content;
   padding-top: 2px;
   padding-left: 5px;
   color: rgb(99, 99, 99);
@@ -117,10 +133,18 @@
     min-width: max-content;
   }
 }
-.removeCollaboratorIcon{
+.removeCollaboratorBtn{
   position: absolute;
   font-size: large;
   left: 35px;
+}
+
+.removeCollaboratorIcon{
+  position: absolute;
+  top: -10px;
+  left: 0;
+  font-size: larger;
+  //color: transparent;
 }
 
 #addGroupBtn{
@@ -141,6 +165,7 @@
 
 #noteInfoAccordion{
   border: 10px black;
+  height: min-content;
 }
 
 #tags{
@@ -159,43 +184,12 @@ mat-expansion-panel{
   background-color: rgb(104, 104, 104) !important;
 }
 
-/************ Snippet Tool **************/
-::ng-deep .addTagsTool {
-  padding: 20px 0;
-}
-
-::ng-deep .addTagsTool input {
-  width: 100%;
+#smallNoteHeader{
+  background-color: white;
   padding: 10px;
-  border: 1px solid #e4e4e4;
-  border-radius: 3px;
-  outline: none;
-  font-size: 14px;
-}
-/************ Snippet Tool **************/
-
-
-/********* Scrollbar *********/
-
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  height: max-content;
+  border-radius: 5px;
+  overflow: hidden;
+  white-space: normal;
+  box-shadow: 0px 0px 8px 0.5px rgb(229, 229, 229);
 }

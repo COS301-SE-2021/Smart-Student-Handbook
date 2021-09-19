@@ -1,52 +1,44 @@
-import {
-	Controller,
-	Get,
-	Post,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	Put,
-	Delete,
-	Body,
-	Param,
-} from '@nestjs/common';
-// import { User } from './models/user.interface';
+import { Controller, Get, Post, Delete, Body, Headers, Param } from '@nestjs/common';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
 import { UserService } from './user.service';
 import { UserByUsernameDto } from './dto/userByUsername.dto';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService) {}
+	constructor(private userService: UserService, private readonly authService: AuthService) {}
 
-	/**
-	 * Calls the user service to get a users details based on an ID passed in
-	 * @param userId
-	 */
 	@Get('getUserByUid/:userId')
-	async getUserByUid(@Param('userId') userId): Promise<UserResponseDto> {
+	async getUserByUid(@Param('userId') userId: string): Promise<UserResponseDto> {
 		return this.userService.getUserByUid(userId);
 	}
 
 	/**
 	 * Calls the user service to create a new user profile
 	 * @param user - user object is sent through with all the information to create a user
+	 * @param headers
 	 */
 	@Post('createUser')
-	async createUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.createUser(user);
+	async createUser(@Body() user: UserRequestDto, @Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.userService.createUser(user, userId);
 	}
 
 	/**
 	 * Calls the user service to update a user profile
 	 * @param user - user object is sent through with all the information to update a user
+	 * @param headers
 	 */
 	@Post('updateUser')
-	async updateUser(@Body() user: UserRequestDto): Promise<UserResponseDto> {
-		return this.userService.updateUser(user);
+	async updateUser(@Body() user: UserRequestDto, @Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
+		return this.userService.updateUser(user, userId);
 	}
 
-	@Delete('deleteUserProfile/:userId')
-	async deleteUserProfile(@Param('userId') userId): Promise<UserResponseDto> {
+	@Delete('deleteUserProfile')
+	async deleteUserProfile(@Headers() headers): Promise<UserResponseDto> {
+		const userId: string = await this.authService.verifyUser(headers.token);
 		return this.userService.deleteUserProfile(userId);
 	}
 

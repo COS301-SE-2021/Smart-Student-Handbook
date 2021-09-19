@@ -1,0 +1,66 @@
+<button mat-icon-button *ngIf="smallScreen" [mat-dialog-close]="true" (click)="close()">
+  <mat-icon>
+    close
+  </mat-icon>
+</button>
+
+<hr style="width: 90%; margin: 15px auto 15px auto;" *ngIf="smallScreen">
+
+<h2 style="margin-top: 10px; margin-left: 5px;">Add a review</h2>
+<mat-stepper [linear]="true" #stepper style="background-color: #fdfdfd">
+  <mat-step [stepControl]="firstFormGroup" [editable]="false">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Rate</ng-template>
+      <label class="example-value-label">Rating: <strong>{{ratingValue}}</strong></label><br>
+      <mat-slider
+        thumbLabel
+        [(ngModel)]="ratingValue"
+        formControlName="firstCtrl"
+        tickInterval="1000"
+        step="1"
+        min="0"
+        max="5"
+        aria-label="units"
+        style="width: 100%"></mat-slider>
+      <div>
+        <button mat-raised-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Review" [editable]="false">
+    <form [formGroup]="secondFormGroup">
+      <mat-form-field appearance="outline" id="reviewInput">
+        <mat-label>Notebook Review</mat-label>
+        <textarea [(ngModel)]="review" matInput placeholder="Enter your review" maxlength="100" formControlName="secondCtrl" required></textarea>
+        <mat-hint>Place your review here of a maximum of 100 characters</mat-hint>
+      </mat-form-field>
+      <div>
+<!--        <button mat-button matStepperPrevious>Back</button>-->
+        <button mat-raised-button matStepperNext (click)="submitReview()" style="margin-top: 7px;">Add Review</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Reviewed!</ng-template>
+    <p>Your review has been added</p>
+  </mat-step>
+</mat-stepper>
+
+<div id="reviews">
+  <hr style="width: 90%; margin: auto auto 15px auto;">
+  <h2>Reviews</h2>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
+
+  <h3 *ngIf="reviews.length <= 0 && doneLoading">This notebook does not have any reviews yet</h3>
+
+  <ng-template [ngIf]="doneLoading">
+    <div class="reviewContainer" *ngFor="let review of reviews">
+      <h4>{{review.review}}</h4>
+
+      <label>Rating: <strong>{{review.rating}}</strong></label><br>
+      <label class="reviewUser">- {{review.reviewer}}</label>
+    </div>
+  </ng-template>
+
+</div>

@@ -1,0 +1,28 @@
+<span class="display-3 text-center">Welcome {{user.displayName}}</span>
+<mat-dialog-content class="mat-typography">
+  <mat-card class="homeCard">
+    <img src="../../../../assets/logo/SmartStudentHandbook.png" class="text-center" alt="Smart Student Handbook">
+    <mat-card-content id="cardContent">
+      <p>
+        The Smart Student Handbook is an advanced note taking application that is aimed towards students to help aid in their
+        note taking experience by making it a collaborative and smart experience. It does this by recommending similar notes
+        and content based off the title, description and tags of the note that the user has opened through the Smart Assist tool.
+        The Smart Student Handbook also allows students to add collaborators to their notebooks so that multiple students can
+        collaborate in real-time on the same notebook. Each notebook contains it's own chat room so that students who are
+        collaborating can communicate while collaborating. Students are also able to explore, clone and rate notebooks as
+        well as manage their account information.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    type="submit"
+    color="primary"
+    cdkFocusInitial
+    (click)="Confirm()"
+  >
+    Dismiss
+  </button>
+</mat-dialog-actions>

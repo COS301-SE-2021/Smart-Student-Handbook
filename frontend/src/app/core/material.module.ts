@@ -53,8 +53,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 // import { MatLabel } from '@angular/material/form-field';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatStepperModule } from '@angular/material/stepper';
 
 /**
  * NgModule that includes all Material modules. This helps you avoid importing core modules every time you
@@ -98,7 +98,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 		// MatListModule,
 		// MatGridListModule,
 		MatCardModule,
-		// MatStepperModule,
+		MatStepperModule,
 		MatTabsModule,
 		MatExpansionModule,
 		MatButtonToggleModule,

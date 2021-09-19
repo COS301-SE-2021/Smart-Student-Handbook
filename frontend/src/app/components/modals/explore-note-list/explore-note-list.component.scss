@@ -1,0 +1,22 @@
+@import "src/app/mobile/modals/notebook-bottom-sheet/notebook-bottom-sheet.component";
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+#notebookNotesContainer{
+  margin-top: 12px;
+}
+
+#notesTitle{
+  //font-weight: 400;
+  //font-size: large;
+  margin: auto;
+  white-space: break-spaces;
+  line-height: normal;
+}
+
+mat-toolbar-row{
+  height: max-content;
+  margin: auto;
+}

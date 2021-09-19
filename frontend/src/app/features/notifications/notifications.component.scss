@@ -1,5 +1,9 @@
 @import '/src/app/styling/global';
 
+.mat-list-base .mat-list-item .mat-line{
+  white-space: normal !important;
+}
+
 #list{
   padding-bottom: 50px;
   margin-bottom: 20px;
@@ -7,9 +11,10 @@
 
 .notificationListItem{
   border-bottom: 1px solid #eaeaea;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   height: fit-content !important;
   padding: 15px 0 15px 0;
+  min-width: 200px;
 }
 
 .buttonLine{

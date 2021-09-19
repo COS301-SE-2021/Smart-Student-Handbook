@@ -1,0 +1,48 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!isCompleted" ></mat-progress-bar>
+
+<label *ngIf="isCompleted && notes.length === 0">No notes could be found</label>
+
+<div
+  class="col-6 col-sm-4 noteContainer"
+  *ngFor="let note of notes; let i = index"
+>
+  <mat-card class="note" ngxLongPress2 (onLongPress)="deleteNote(note.noteId)" *ngIf="!readonly">
+    <button
+      mat-icon-button
+      class="favorite-icon editNoteBtn"
+      (click)="editNote(note.noteId, note.name, note.description, note.tags)"
+    >
+      <mat-icon class="editNotebookIcon">edit</mat-icon>
+    </button>
+    <div style="height: 110%;" class="pointerCursor" (click)="openNote(note.noteId, note.name, note.description, note.tags)">
+      <h3 class="title">{{ substringMediumDescription(note.name) }}</h3>
+
+      <label class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</label>
+      <label class="description" fxHide.gt-sm fxHide.lt-sm>{{ substringMediumDescription(note.description) }}</label>
+      <label class="description" fxHide.lt-md>{{ substringLargeDescription(note.description) }}</label>
+
+      <div
+        class="bottomColor"
+        [style.background-image]="colours[i % 6].colour"
+      ></div>
+    </div>
+
+  </mat-card>
+
+  <mat-card class="note pointerCursor" *ngIf="readonly" (click)="openNoteModal(note.noteId, note.name)">
+    <div>
+      <h3 class="title">{{ substringSmallDescription(note.name) }}</h3>
+<!--      <h4 class="description">{{ note.description }}</h4>-->
+
+      <h4 class="description" fxHide.gt-xs>{{ substringSmallDescription(note.description) }}</h4>
+      <h4 class="description" fxHide.gt-sm fxHide.lt-sm>{{ substringMediumDescription(note.description) }}</h4>
+      <h4 class="description" fxHide.lt-md>{{ substringLargeDescription(note.description) }}</h4>
+
+      <div
+        class="bottomColor"
+        [style.background-image]="colours[i % 6].colour"
+      ></div>
+    </div>
+
+  </mat-card>
+</div>

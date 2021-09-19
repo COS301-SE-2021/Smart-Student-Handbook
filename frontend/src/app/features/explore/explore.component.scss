@@ -5,7 +5,12 @@ ais-instantsearch {
   flex-direction: column;
   flex-grow: 1;
 }
-
+.searchbox {
+  margin-bottom: 2rem;
+}
+.searchbox2 {
+  margin-bottom: 2rem;
+}
 
 em {
   font-style: normal;
@@ -17,14 +22,21 @@ em {
   flex-grow: 1;
   display: flex;
   flex-direction: row-reverse;
-  width: 960px;
+  //width: 960px;
+  width: auto;
   min-height: 100%;
-  margin: 0 auto;
+  //margin: 0 auto;
 }
 
 @media (max-width: 1007px) {
   .search-container {
     width: 100%;
+  }
+}
+
+@media (max-width: 468px) {
+  .explore-content {
+    min-width: 90vw;
   }
 }
 
@@ -62,6 +74,10 @@ em {
 }
 
 #searchbox, #stats {
+  flex-grow: 0;
+}
+
+#searchbox2, #stats2 {
   flex-grow: 0;
 }
 
@@ -130,6 +146,12 @@ em {
   margin-bottom: 16px;
 }
 
+#stats2 {
+  flex-grow: 0;
+  margin-bottom: 16px;
+}
+
+
 .ais-Stats {
   font-size: 12px;
   color: #697782;
@@ -141,8 +163,15 @@ em {
   order: 1;
 }
 
+#hits2 {
+  flex-grow: 1;
+  order: 1;
+}
+
 .ais-Hits-item {
   margin-bottom: 24px;
+  cursor: pointer;
+  overflow: auto;
 }
 
 .ais-Hits-item article {
@@ -300,6 +329,11 @@ em {
   line-height: 32px;
 }
 
+//.ais-Hits-list{
+//  height: 50vh;
+//  overflow: auto;
+//}
+
 footer {
   flex-grow: 0;
   text-align: center;
@@ -307,9 +341,56 @@ footer {
   color: #999;
 }
 
+//----------------------------------
+#notebookNotesContainer{
+  position: fixed;
+  bottom: 8px;
+  width: 45%;
+  height: calc(100vh - 73px);
+  overflow: auto;
+  padding: 15px 5px 15px 5px;
+  background-color: #fdfdfd;
+  //padding: 50px;
+  //font-size: 20px;
+}
 
+#notesHeading{
+  display: inline-block;
+  margin: 10px 0 0 0;
+  width: 80%;
+}
 
+.notesDisplayed{
+  padding: 10px;
+  height: inherit;
+}
 
+.notesHidden{
+  width: 0;
+  padding: 0;
+  box-shadow: none;
+}
 
+#notesSideDiv{
+  transition: all .1s linear;
+  overflow: hidden;
+}
 
+.boxShadow{
+  box-shadow: 0px 0px 8px 2px #d8d8d8;
+  background-color: white;
+}
 
+.hidden{
+  //visibility: hidden;
+  display: none !important;
+}
+
+#exploreHeader{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.rateStars{
+  font-size: large; margin: 0 -4px 0 -4px;
+}

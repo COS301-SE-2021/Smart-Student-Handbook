@@ -9,6 +9,7 @@
   margin: 0;
 }
 
+
 ::ng-deep .mat-drawer-inner-container{
   max-width: fit-content;
 }
@@ -47,8 +48,9 @@
 #panelContent{
   // border: 2px solid black;
   // height: 99vh;
-  width: 100%;
-  padding: 0px 7px 0px 7px;
+  //width: 30vw;
+  padding: 0 7px 0 7px;
+  max-height: 80vh;
   // margin-left: 39px;
   // margin-top: 5vh;
 
@@ -60,52 +62,12 @@ mat-sidenav{
   border-radius: 3px;
 }
 
-.header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
-}
+//.header-image {
+//  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+//  background-size: cover;
+//}
 
-.card{
-  width: 100%;
-  padding-bottom: 5px;
-  // box-shadow: none !important;
-  transition: all .2s linear;
-  margin-bottom: 5px;
-  cursor: move;
-  // margin: 0px 10px 5px 0px;
-}
 
-#smartAssistHeader{
-  box-shadow: none !important;
-  border: none;
-  cursor: auto;
-  text-align: center;
-  font-size: medium;
-  padding-top: 8px;
-}
-
-.date{
-  font-size: small;
-}
-
-.snippetTitle{
-  font-size: medium;
-}
-
-.snippetContentHeader{
-  max-height: 200px;
-  // white-space: nowrap;
-  overflow: hidden;
-  //text-overflow: clip;
-  //text-overflow: ellipsis ellipsis;
-  text-overflow: ellipsis " [..]";
-  margin-bottom: 10px;
-}
-
-.snippetContent{
-  font-weight: 400;
-  font-size: small;
-}
 
 .content{
   width: 40px !important;
@@ -118,52 +80,21 @@ mat-sidenav{
 ::ng-deep mat-sidenav{
   width: 100% !important;
 }
-// .treeNode{
-//   padding-left: 0px !important;
-// }
 
-
-.preview{
-  cursor: pointer;
+::ng-deep.mat-tab-labels{
+  max-width: 100%;
 }
 
-
-.tags {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding-bottom: 7px;
-
-  .tag {
-    display: inline-block;
-  }
+::ng-deep .mat-tab-header-pagination-controls-enabled ::ng-deep .mat-tab-header-pagination{
+  display: none !important;
 }
 
-// .item{
-//   display: inline;
-// }
-
-/********* Scrollbar *********/
-
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active{
+  min-width: 0!important;
+  padding: 3px!important;
+  margin: auto!important;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+::ng-deep .mat-drawer-inner-container{
+  min-width: 100%;
 }

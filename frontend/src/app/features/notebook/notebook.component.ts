@@ -3,16 +3,16 @@ import { ThemePalette } from '@angular/material/core';
 import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import {
-	NotebookEventEmitterService,
-	AccountService,
-	OpenNotebookPanelService,
-} from '@app/services';
+import { AccountService } from '@app/services';
 import {
 	NotesPanelComponent,
 	EditorComponent,
 	TreeViewComponent,
 } from '@app/components';
+import { ChatBottomSheetComponent } from '@app/components/modals/chat-bottom-sheet/chat-bottom-sheet.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
+import { ChatModalComponent } from '@app/components/modals/chat-modal/chat-modal.component';
 
 @Component({
 	selector: 'app-notebook',
@@ -56,6 +56,8 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	// Variable that holds the logged in user details
 	user: any;
 
+	showChatIcon = true;
+
 	@ViewChild('notePanelComponent') notePanelComponent!: NotesPanelComponent;
 
 	@ViewChild('editorComponent') editorComponent!: EditorComponent;
@@ -70,14 +72,14 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 * Include the notebook service
 	 * @param router
 	 * @param accountService
-	 * @param notebookEventEmitterService
-	 * @param openNotebookPanelService
+	 * @param bottomSheet
+	 * @param dialog
 	 */
 	constructor(
 		private router: Router,
 		private accountService: AccountService,
-		private notebookEventEmitterService: NotebookEventEmitterService,
-		private openNotebookPanelService: OpenNotebookPanelService
+		private bottomSheet: MatBottomSheet,
+		private dialog: MatDialog
 	) {}
 
 	/**
@@ -88,7 +90,11 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 	 */
 	ngOnInit() {
 		// get userDeatils;
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 	}
 
 	ngAfterViewInit() {
@@ -96,13 +102,17 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 			notebookId: string,
 			noteId: string,
 			title: string,
-			notebookTitle: string
+			notebookTitle: string,
+			description: string,
+			tags: string[]
 		) => {
 			this.editorComponent.loadEditor(
 				notebookId,
 				noteId,
 				title,
-				notebookTitle
+				notebookTitle,
+				description,
+				tags
 			);
 		};
 
@@ -125,13 +135,37 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 		notebookId: string,
 		noteId: string,
 		title: string,
-		notebookTitle: string
+		notebookTitle: string,
+		description: string,
+		tags: string[]
 	) {
 		await this.editorComponent.loadEditor(
 			notebookId,
 			noteId,
 			title,
-			notebookTitle
+			notebookTitle,
+			description,
+			tags
 		);
+	}
+
+	changeChat() {
+		this.showChatIcon = !this.showChatIcon;
+
+		if (window.innerWidth < 600) {
+			this.bottomSheet
+				.open(ChatBottomSheetComponent)
+				.afterDismissed()
+				.subscribe(() => {
+					this.showChatIcon = !this.showChatIcon;
+				});
+		} else {
+			this.dialog
+				.open(ChatModalComponent)
+				.afterClosed()
+				.subscribe(() => {
+					this.showChatIcon = !this.showChatIcon;
+				});
+		}
 	}
 }

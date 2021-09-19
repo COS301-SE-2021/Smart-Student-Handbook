@@ -1,32 +1,38 @@
 <div
 	id="editorContainer"
-	cdkDropList
-	cdkDropListConnectedTo="panelContent"
-	(cdkDropListDropped)="drop($event)"
 	#editorContainer
+  ngStyle.lt-md="background-color: #f8f8f8;"
 >
-	<div id="mobileMoreOptions" align="right" fxHide.gt-sm>
-		<button
-			mat-icon-button
-			class="favorite-icon"
-			(click)="openBottomSheet()"
-		>
-			<mat-icon id="mobileMoreIcon">more_vert</mat-icon>
-		</button>
-	</div>
+  <mat-toolbar id="smallNoteHeader" fxHide.gt-sm>
+    <h2>{{noteTitle}}</h2>
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      (click)="openSmartAssist()"
+      [disabled]="!doneLoading || noteTitle === 'Smart Student'">
+      <mat-icon>bubble_chart</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      (click)="openBottomSheet()"
+      [disabled]="!doneLoading || noteTitle === 'Smart Student'">
+      <mat-icon id="mobileMoreIcon">more_vert</mat-icon><!-- bubble_chart -->
+    </button>
+  </mat-toolbar>
+
 
 	<mat-accordion fxHide.lt-md>
 		<mat-expansion-panel
 			id="noteInfoAccordion"
 			[expanded]="panelOpenState === true"
-			(opened)="openClosePanel()"
-			(closed)="openClosePanel()"
+      (afterCollapse)="openClosePanel(); setEditorHeight()"
+      (afterExpand)="openClosePanel(); setEditorHeight()"
       [disabled]="!opened"
       #noteInfoAccordion
 		>
 			<mat-expansion-panel-header>
 				<mat-panel-title id="noteTitle">
-					{{ notebookTitle }}
+					{{ noteTitle }}
 				</mat-panel-title>
 				<mat-panel-description>
 					<button
@@ -38,7 +44,7 @@
 						<mat-icon>more_horiz</mat-icon>
 					</button>
 					<mat-menu #menu="matMenu">
-						<button mat-menu-item>
+						<button mat-menu-item (click)="addCollaborator()">
 							<mat-icon>share</mat-icon>
 							<span>Share</span>
 						</button>
@@ -66,18 +72,19 @@
 					<td headers="tableContent">
 						<mat-card class="card">
 							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
-								<mat-card-title class="personName"
+								<div mat-card-avatar class="header-image pointerCursor"  [style]="{'background-image': 'url(' + creator.url + ')'}"
+                     (click)="viewUserProfile(creator.id,creator.name)"></div>
+								<mat-card-title class="personName pointerCursor" (click)="viewUserProfile(creator.id,creator.name)"
 									>{{creator.name}}</mat-card-title
 								>
 							</mat-card-header>
 						</mat-card>
 					</td>
 				</tr>
-        <tr *ngIf="!private" style="height: 0px">
-          <td style="height: 0px"></td>
-          <td style="height: 0px">
-            <button color="primary" mat-icon-button id="addGroupBtn" (click)="addCollaborator()">
+        <tr *ngIf="!private" style="height: 0">
+          <td style="height: 0"></td>
+          <td style="height: 0">
+            <button color="primary" mat-icon-button id="addGroupBtn" *ngIf="collaborators.length !== 1" [disabled]="!opened" (click)="addCollaborator()">
               <mat-icon>group_add</mat-icon>
             </button>
           </td>
@@ -88,27 +95,31 @@
 					</td>
 					<td headers="tableContent">
 
+            <button mat-stroked-button *ngIf="collaborators.length === 1" (click)="addCollaborator()">
+              Add Collaborator
+            </button>
+
 						<mat-card class="card" *ngFor="let collaborator of collaborators">
-							<mat-card-header>
-								<div mat-card-avatar class="header-image"></div>
+              <ng-template [ngIf]="collaborator.id !== creator.id">
+                <mat-card-header>
+                  <div mat-card-avatar class="header-image pointerCursor" [style]="{'background-image': 'url(' + collaborator.url + ')'}"
+                       (click)="viewUserProfile(collaborator.id,collaborator.name)"></div>
 
-                <mat-icon class="removeCollaboratorIcon" (click)="removeCollaborator(collaborator.id)">
-                  remove_circle_outline
-                </mat-icon>
+                  <button *ngIf="user.uid === creator.id" class="removeCollaboratorBtn pointerCursor" mat-icon-button
+                          [disabled]="!doneLoading" (click)="removeCollaborator(collaborator.id, collaborator.accessId)">
+                    <mat-icon class="removeCollaboratorIcon">
+                      remove_circle_outline
+                    </mat-icon>
+                  </button>
 
-								<mat-card-title class="personName"
-									>{{collaborator.name}}</mat-card-title
-								>
-							</mat-card-header>
+
+                  <mat-card-title class="personName pointerCursor" (click)="viewUserProfile(collaborator.id,collaborator.name)"
+                  >{{collaborator.name}}</mat-card-title
+                  >
+                </mat-card-header>
+              </ng-template>
+
 						</mat-card>
-					</td>
-				</tr>
-				<tr *ngIf="date !== ''">
-					<td class="noteInfo" headers="tableTitles">
-						<p>Last Updated:</p>
-					</td>
-					<td headers="tableContent">
-						<p>July 18, 2021 at 14:44</p>
 					</td>
 				</tr>
 				<tr *ngIf="opened">
@@ -126,7 +137,7 @@
 									[removable]="true"
 									(removed)="removeTag(tag)"
 								>
-									{{ tag.name }}
+									{{ tag }}
 									<mat-icon matChipRemove>cancel</mat-icon>
 								</mat-chip>
 								<input
@@ -135,6 +146,7 @@
 									[matChipInputSeparatorKeyCodes]="
 										separatorKeysCodes
 									"
+                  autocomplete="off"
 									[matChipInputAddOnBlur]="true"
 									(matChipInputTokenEnd)="addTag($event)"
 								/>
@@ -146,7 +158,8 @@
 		</mat-expansion-panel>
 	</mat-accordion>
 
-	<mat-progress-bar mode="indeterminate" id="progressbar"></mat-progress-bar>
+	<mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
-	<div id="editor" #editor class="editor"></div>
+  <!--	<div id="editor" class="editor"></div>-->
+  <app-note-editor></app-note-editor>
 </div>

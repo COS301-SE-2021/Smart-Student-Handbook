@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	AccountService,
+	NotebookObservablesService,
 	NotebookService,
-	NoteMoreService,
 	NotificationService,
 } from '@app/services';
 // import { Observable } from 'rxjs';
-import { SharedWithMeService } from '@app/services/shared-with-me.service';
 
 @Component({
 	selector: 'app-notifications',
@@ -17,42 +17,46 @@ export class NotificationsComponent implements OnInit {
 
 	user: any;
 
+	isCompleted: boolean = true;
+
 	constructor(
 		private notificationService: NotificationService,
-		private noteMoreService: NoteMoreService,
 		private notebookService: NotebookService,
-		private sharedWithMeService: SharedWithMeService
+		private notebookObservables: NotebookObservablesService,
+		private accountService: AccountService
 	) {}
-
-	/* notificationList: Observable<any[]> =
-		this.notificationService.getUserNotifications(); */
 
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngOnInit(): void {
-		this.user = JSON.parse(<string>localStorage.getItem('user'));
+		this.isCompleted = false;
+
+		this.accountService.getUserSubject.subscribe((user) => {
+			if (user) {
+				this.user = user;
+			}
+		});
 
 		if (this.user)
 			this.notificationService
-				.getUserNotifications(this.user.uid)
+				.getUserNotifications()
 				.subscribe((notifications) => {
+					// console.log(notifications);
 					this.notifications = notifications;
+
+					this.isCompleted = true;
 				});
 	}
 
 	accept(userId: string, notebookId: string, notebookTitle: string) {
-		this.sharedWithMeService.setNotebook(notebookId, notebookTitle);
+		this.notebookObservables.setNotebook(notebookId, notebookTitle);
 		this.notebookService
 			.addAccess({
 				displayName: this.user.displayName,
-				userId: this.user.uid,
+				userId,
 				profileUrl: this.user.profilePic,
 				notebookId,
 			})
-			.subscribe((res) => {
-				console.log(res);
-			});
-		// this.notificationService.updateRead(id);
-		// this.noteMoreService.addCollaborator(notebookID);
+			.subscribe();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,8 +64,11 @@ export class NotificationsComponent implements OnInit {
 		// this.notificationService.updateRead(id);
 	}
 
-	markAsRead(notificationID: string, index: number) {
-		this.notifications[index].opened = true;
-		// this.notificationService.updateRead(notificationID);
+	markAsRead(index: number, notificationId: string, isRead: boolean) {
+		if (!isRead) {
+			this.notifications[index].opened = true;
+
+			this.notificationService.updateRead(notificationId).subscribe();
+		}
 	}
 }

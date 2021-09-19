@@ -1,0 +1,204 @@
+<!--<mat-card-->
+<!--  *ngIf="draggable"-->
+<!--  align="start"-->
+<!--  class="card text-left snippetCard"-->
+<!--  cdkDrag-->
+<!--  (mouseleave)="hidePreview(0)"-->
+<!--&gt;-->
+<!--  <mat-card-header class="snippetContentHeader">-->
+<!--    <mat-card-subtitle class="date">-->
+<!--      JUNE 3 2021-->
+<!--    </mat-card-subtitle>-->
+
+<!--    <mat-icon class="preview" fxHide.gt-sm>-->
+<!--      note_add-->
+<!--    </mat-icon>-->
+<!--    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>-->
+<!--      aspect_ratio-->
+<!--    </mat-icon>-->
+
+<!--    <mat-card-title class="snippetTitle" data-type="header">-->
+<!--      Functional Requirements-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R1:The system should allow users to manage their-->
+<!--      Profile and Account.-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R2:The system should allow users to create notes and-->
+<!--      add content to it then add appropriate tags to their-->
+<!--      content.-->
+<!--    </mat-card-title>-->
+<!--  </mat-card-header>-->
+
+<!--  <div class="tags">-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</mat-card>-->
+
+<!--<mat-card-->
+<!--  *ngIf="!draggable"-->
+<!--  align="start"-->
+<!--  class="card text-left snippetCard"-->
+<!--  (mouseleave)="hidePreview(0)"-->
+<!--&gt;-->
+<!--  <mat-card-header class="snippetContentHeader">-->
+<!--    <mat-card-subtitle class="date">-->
+<!--      JUNE 3 2021-->
+<!--    </mat-card-subtitle>-->
+
+<!--    <mat-icon class="preview" fxHide.gt-sm (click)="addToNote('')">-->
+<!--      note_add-->
+<!--    </mat-icon>-->
+<!--    <mat-icon class="preview" (click)="showPreview(0)" fxHide.lt-md>-->
+<!--      aspect_ratio-->
+<!--    </mat-icon>-->
+
+<!--    <mat-card-title class="snippetTitle" data-type="header">-->
+<!--      Functional Requirements-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R1:The system should allow users to manage their-->
+<!--      Profile and Account.-->
+<!--    </mat-card-title>-->
+
+<!--    <mat-card-title class="snippetContent" data-type="paragraph">-->
+<!--      R2:The system should allow users to create notes and-->
+<!--      add content to it then add appropriate tags to their-->
+<!--      content.-->
+<!--    </mat-card-title>-->
+<!--  </mat-card-header>-->
+
+<!--  <div class="tags">-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--    <div class="tag">-->
+<!--      <mat-chip color="primary" class="item">Test</mat-chip>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</mat-card>-->
+
+<mat-progress-bar mode="indeterminate" class="mt-2" *ngIf="loading"></mat-progress-bar>
+
+<div *ngFor="let noteItem of notes; let i = index">
+
+  <mat-card
+    align="start"
+    class="card text-left snippetCard"
+    cdkDrag
+    fxHide.lt-md
+    (mouseleave)="hidePreview(i)"
+    data.noteId='{{noteItem.noteId}}'
+  >
+    <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
+      <mat-card-subtitle class="date">
+      {{noteItem.date}}
+      </mat-card-subtitle>
+
+      <mat-icon class="preview" (click)="showPreview(i)" fxHide.lt-md>
+        aspect_ratio
+      </mat-icon>
+
+      <mat-card-title class="snippetTitle" data-type="header" >
+        {{noteItem.title}}
+      </mat-card-title>
+
+      <mat-card-title matTooltip="Ratings and Reviews">
+        <button mat-button style="color: #444444; padding-left: 0; margin-left: -5px;" (click)="openReviews(noteItem.noteId)">
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+        </button>
+      </mat-card-title>
+
+      <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
+        {{b.insert}}
+      </mat-card-title>
+
+    </mat-card-header>
+
+    <div class="tags" >
+      <div>
+        <div class="tag" *ngFor="let t of noteItem.tags">
+          <mat-chip color="primary" class="item">{{t}}</mat-chip>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div *ngFor="let noteItem of notes; let i = index">
+
+  <mat-card
+    align="start"
+    class="card text-left snippetCard"
+    fxHide.gt-sm
+    (mouseleave)="hidePreview(i)"
+    data.noteId='{{noteItem.noteId}}'
+  >
+    <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
+      <mat-card-subtitle class="date">
+        {{noteItem.date}}
+      </mat-card-subtitle>
+
+      <mat-icon class="preview"  (click)='addToNote(noteItem.noteId)' matTooltip="Add snippet">
+        note_add
+      </mat-icon>
+
+      <mat-card-title class="snippetTitle" data-type="header" >
+        {{noteItem.title}}
+      </mat-card-title>
+
+      <mat-card-title matTooltip="Ratings and Reviews">
+        <button mat-button style="color: #444444; padding-left: 0; margin-left: -5px;" (click)="openReviews(noteItem.noteId)">
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+        </button>
+      </mat-card-title>
+
+      <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
+        {{b.insert}}
+      </mat-card-title>
+
+    </mat-card-header>
+
+    <div class="tags" >
+      <div>
+        <div class="tag" *ngFor="let t of noteItem.tags">
+          <mat-chip color="primary" class="item">{{t}}</mat-chip>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<h3 class="mt-5 ml-3 text-center w-100" *ngIf="notes.length === 0 && !loading">
+  Nothing similar found
+</h3>
+

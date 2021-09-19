@@ -22,25 +22,39 @@
 				</button>
 			</div>
 
-      <mat-progress-bar mode="indeterminate" id="notesProgressbar"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="!doneLoading"></mat-progress-bar>
 
       <div id="noteHolderDiv">
         <mat-card
           class="card text-left"
           *ngFor="let note of notes"
         >
+
           <button
             mat-icon-button
             class="favorite-icon editNotebookBtn"
-            (click)="editNotebook(note.noteId, note.name, note.description)"
+            [matMenuTriggerFor]="menu"
           >
-            <mat-icon class="editNotebookIcon">edit</mat-icon>
+            <mat-icon>more_vert</mat-icon>
           </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item
+              (click)="editNotebook(note.noteId, note.name, note.description, note.tags)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
 
-          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name, notebookTitle)">
+            <button mat-menu-item (click)="deleteNote(note.noteId)">
+              <mat-icon>clear</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+
+          <div class="text-left" (click)="openNotebook(notebookId, note.noteId, note.name, notebookTitle, note.description, note.tags);
+                                          setLoadedNote(note.noteId)">
             <mat-card-header>
               <mat-card-subtitle id="date">
-                JUNE 17 2021
+                {{note.createdDate | date}}
               </mat-card-subtitle>
 
               <mat-card-title id="noteCardTitle">

@@ -12,12 +12,17 @@ import { NotificationService } from '../notification/notification.service';
 import { UserService } from '../user/user.service';
 import { VerifyEmailDto } from './dto/verifyEmail.dto';
 import { UpdateDto } from './dto/update.dto';
+import { AuthService } from '../auth/auth.service';
 
 require('firebase/auth');
 
 @Injectable()
 export class AccountService {
-	constructor(private notificationService: NotificationService, private userService: UserService) {}
+	constructor(
+		private notificationService: NotificationService,
+		private userService: UserService,
+		private authService: AuthService,
+	) {}
 
 	/**
 	 * Register a new user
@@ -25,7 +30,7 @@ export class AccountService {
 	 */
 	async registerUser(registerDto: RegisterDto): Promise<Account> {
 		// Check if user password and confirm passwords match before creating user
-		if (registerDto.password !== registerDto.passwordConfirm) {
+		if (!(registerDto.password === registerDto.passwordConfirm)) {
 			return {
 				success: false,
 				user: null,
@@ -96,19 +101,22 @@ export class AccountService {
 			return resp;
 		}
 
-		const userCreated = await this.userService.createUser({
-			uid: resp.user.uid,
-			username: resp.user.displayName,
-			institution: 'Unknown',
-			department: 'Unknown',
-			program: 'Unknown',
-			workStatus: 'Unknown',
-			bio: 'Unknown',
-			profilePicUrl:
-				// eslint-disable-next-line max-len
-				'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
-			dateJoined: admin.firestore.FieldValue.serverTimestamp(),
-		});
+		const userCreated = await this.userService.createUser(
+			{
+				uid: resp.user.uid,
+				username: resp.user.displayName,
+				institution: 'Unknown',
+				department: '',
+				program: '',
+				workStatus: '',
+				bio: '',
+				profilePicUrl:
+					// eslint-disable-next-line max-len
+					'https://storage.googleapis.com/smartstudentnotebook.appspot.com/UserProfilePictures/default.jpg',
+				dateJoined: admin.firestore.FieldValue.serverTimestamp(),
+			},
+			resp.user.uid,
+		);
 
 		// eslint-disable-next-line eqeqeq
 		if (userCreated.success == false) {
@@ -149,20 +157,18 @@ export class AccountService {
 	 * Update user.
 	 * If successful return success message else throw Bad Request exception
 	 */
-	async updateUser(updateDto: UpdateDto): Promise<Account> {
-		let uid = '';
-
+	async updateUser(updateDto: UpdateDto, uid: string): Promise<Account> {
 		// Check if user is logged in
-		try {
-			uid = firebase.auth().currentUser.uid;
-		} catch (error) {
-			return {
-				success: false,
-				user: null,
-				message: 'User does not exist',
-				error: error.message,
-			};
-		}
+		// try {
+		// 	uid = firebase.auth().currentUser.uid;
+		// } catch (error) {
+		// 	return {
+		// 		success: false,
+		// 		user: null,
+		// 		message: 'User does not exist',
+		// 		error: error.message,
+		// 	};
+		// }
 
 		const userDetails = {
 			uid,
@@ -171,10 +177,10 @@ export class AccountService {
 			program: updateDto.program,
 			workStatus: updateDto.workStatus,
 			bio: updateDto.bio,
-			profilePic: updateDto.profilePicUrl,
+			profilePicUrl: updateDto.profilePicUrl,
 		};
 
-		const updated = await this.userService.updateUser(userDetails);
+		const updated = await this.userService.updateUser(userDetails, uid);
 
 		// eslint-disable-next-line eqeqeq
 		if (updated.success == false) {
@@ -231,80 +237,84 @@ export class AccountService {
 	 * Login user.
 	 */
 	async loginUser(loginDto: LoginDto): Promise<Account> {
-		// eslint-disable-next-line
+		try {
+			// eslint-disable-next-line
 		const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+			const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,40}$/;
+			let authToken = '';
 
-		if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+			if (!emailRegex.test(loginDto.email) || !passwordRegex.test(loginDto.password)) {
+				return {
+					success: false,
+					user: null,
+					message: 'Login failed, please try again!',
+					error: 'Email or Password does not meet the requirements',
+				};
+			}
+			const userData = await admin
+				.auth()
+				.getUserByEmail(loginDto.email)
+				.then((userRecord) => ({
+					uid: userRecord.uid,
+				}))
+				.catch(() => ({
+					uid: null,
+				}));
+
+			const userRef = admin.firestore().collection('users').doc(userData.uid);
+			const doc = await userRef.get();
+
+			await firebase.auth().signInWithEmailAndPassword(loginDto.email, loginDto.password);
+
+			await firebase
+				.auth()
+				.currentUser.getIdToken(true)
+				.then((idToken) => {
+					if (idToken) {
+						authToken = idToken;
+					}
+				})
+				.catch((error) => {
+					throw new HttpException(`Could not get user token. ${error}`, HttpStatus.BAD_REQUEST);
+				});
+
+			// Login user. If successful return success message else throw Bad Request exception
+			return firebase
+				.auth()
+				.signInWithEmailAndPassword(loginDto.email, loginDto.password)
+				.then((userCredential) => ({
+					success: true,
+					user: {
+						uid: userCredential.user.uid,
+						email: userCredential.user.email,
+						emailVerified: userCredential.user.emailVerified,
+						displayName: userCredential.user.displayName,
+						username: doc.data().username,
+						institution: doc.data().institution,
+						department: doc.data().department,
+						program: doc.data().program,
+						workStatus: doc.data().workStatus,
+						bio: doc.data().bio,
+						profilePic: doc.data().profilePicUrl,
+						dateJoined: doc.data().dateJoined,
+					},
+					message: 'User is successfully logged in!',
+					authToken,
+				}))
+				.catch((error) => ({
+					success: false,
+					user: null,
+					message: 'Login failed, please try again!',
+					error: error.message,
+				}));
+		} catch (error) {
 			return {
 				success: false,
 				user: null,
 				message: 'Login failed, please try again!',
-				error: 'Email or Password does not meet the requirements',
+				error: '',
 			};
 		}
-
-		const userData = await admin
-			.auth()
-			.getUserByEmail(loginDto.email)
-			.then((userRecord) => ({
-				uid: userRecord.uid,
-			}))
-			.catch(() => ({
-				uid: null,
-			}));
-
-		if (userData.uid == null) {
-			return {
-				success: false,
-				user: null,
-				message: 'Login failed, please try again!',
-				error: 'User does not exist',
-			};
-		}
-
-		const userRef = admin.firestore().collection('users').doc(userData.uid);
-		const doc = await userRef.get();
-
-		const token = await admin
-			.auth()
-			.createCustomToken(userData.uid)
-			.then((customToken) => ({
-				customToken,
-			}))
-			.catch((error) => {
-				console.log('Error creating custom token:', error);
-			});
-
-		// Login user. If successful return success message else throw Bad Request exception
-		return firebase
-			.auth()
-			.signInWithEmailAndPassword(loginDto.email, loginDto.password)
-			.then((userCredential) => ({
-				success: true,
-				user: {
-					uid: userCredential.user.uid,
-					email: userCredential.user.email,
-					emailVerified: userCredential.user.emailVerified,
-					displayName: userCredential.user.displayName,
-					username: doc.data().username,
-					institution: doc.data().institution,
-					department: doc.data().department,
-					program: doc.data().program,
-					workStatus: doc.data().workStatus,
-					bio: doc.data().bio,
-					profilePic: doc.data().profilePicUrl,
-					dateJoined: doc.data().dateJoined,
-					token,
-				},
-				message: 'User is successfully logged in!',
-			}))
-			.catch((error) => ({
-				success: false,
-				user: null,
-				message: 'Login failed, please try again!',
-				error: error.message,
-			}));
 	}
 
 	/**
@@ -312,23 +322,27 @@ export class AccountService {
 	 */
 	async signOut(): Promise<Response> {
 		// SignOut user. If successful return success message else throw Bad Request exception
-		return firebase
-			.auth()
-			.signOut()
-			.then(() => ({
-				message: 'Successfully signed out.',
-			}))
-			.catch((error) => ({
-				message: `${error.message}`,
-			}));
+
+		// return firebase
+		// 	.auth()
+		// 	.signOut()
+		// 	.then(() => ({
+		// 		message: 'Successfully signed out.',
+		// 	}))
+		// 	.catch((error) => ({
+		// 		message: `${error.message}`,
+		// 	}));
+		return {
+			message: 'Successfully signed out.',
+		};
 	}
 
 	/**
 	 * GetCurrent user.
 	 */
-	async getCurrentUser(): Promise<Account> {
+	async getCurrentUser(userId: string): Promise<Account> {
 		try {
-			const user = firebase.auth().currentUser;
+			const user = await admin.auth().getUser(userId);
 
 			const userRef = admin.firestore().collection('users').doc(user.uid);
 			const doc = await userRef.get();
@@ -364,13 +378,9 @@ export class AccountService {
 	/**
 	 * DeleteUser user.
 	 */
-	async deleteUser(): Promise<Response> {
-		let uid = '';
-
+	async deleteUser(uid: string): Promise<Response> {
 		// Check if there is a current user else throw an exception
 		try {
-			uid = firebase.auth().currentUser.uid;
-
 			await this.userService.deleteUserProfile(uid);
 			// TODO delete all the users notebooks !!
 
@@ -702,9 +712,6 @@ export class AccountService {
 	}
 
 	async setUserNotificationToken(userId: string, notificationID: string): Promise<Response> {
-		// const userId: string = firebase.auth().currentUser.uid;
-
-		console.log('userId: ', userId, 'notificationID: ', notificationID);
 		return admin
 			.firestore()
 			.collection('users')
@@ -717,19 +724,11 @@ export class AccountService {
 			}));
 	}
 
-	async getUserId(): Promise<string> {
-		try {
-			return firebase.auth().currentUser.uid;
-		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-		}
-	}
-
 	async getUserNotificationID(userId: string): Promise<string> {
 		try {
-			const userID = await admin.firestore().collection('users').doc(userId).get();
+			const notificationId = await admin.firestore().collection('users').doc(userId).get();
 
-			return userID.data().notificationID.value;
+			return notificationId.data().notificationID.value;
 		} catch (error) {
 			throw new HttpException(
 				`Something went wrong. Operation could not be executed.${error}`,
@@ -737,4 +736,17 @@ export class AccountService {
 			);
 		}
 	}
+
+	// async refreshIdToken(userId: string): Promise<string> {
+	// 	try {
+	// 		const notificationId = await admin.firestore().collection('users').doc(userId).get();
+	//
+	// 		return notificationId.data().notificationID.value;
+	// 	} catch (error) {
+	// 		throw new HttpException(
+	// 			`Something went wrong. Operation could not be executed.${error}`,
+	// 			HttpStatus.INTERNAL_SERVER_ERROR,
+	// 		);
+	// 	}
+	// }
 }

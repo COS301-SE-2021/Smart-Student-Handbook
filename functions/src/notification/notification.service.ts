@@ -3,7 +3,6 @@ import * as admin from 'firebase-admin';
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import * as functions from 'firebase-functions';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
-import firebase from 'firebase';
 import { EmailInterface } from './interfaces/email.interface';
 import { EmailNotificationResponseDto } from './dto/emailNotificationResponse.dto';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
@@ -49,7 +48,17 @@ export class NotificationService {
 			from: functions.config().email.user,
 			to: email.email,
 			subject: email.subject,
-			text: email.body,
+			// eslint-disable-next-line max-len
+			html: `${email.body}<hr><br><img src="https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png"/>`,
+			attachments: [
+				{
+					filename: 'Email_Logo_Header.png',
+					// eslint-disable-next-line max-len
+					path: 'https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png',
+					// eslint-disable-next-line max-len
+					cid: 'https://storage.googleapis.com/smartstudentnotebook.appspot.com/FCMImages/Email_Logo_Header.png',
+				},
+			],
 		};
 
 		return transporter
@@ -93,6 +102,7 @@ export class NotificationService {
 				.messaging()
 				.send(message)
 				.then((response) => {
+					// eslint-disable-next-line no-console
 					console.log('Successfully sent individual message:', response);
 
 					return {
@@ -101,6 +111,7 @@ export class NotificationService {
 				})
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				.catch((error) => {
+					// eslint-disable-next-line no-console
 					console.log('Error sending individual message:', error);
 
 					return {
@@ -132,21 +143,13 @@ export class NotificationService {
 			admin
 				.messaging()
 				.send(message)
-				.then((response) => {
-					console.log('Successfully sent notification to group:', response);
-
-					return {
-						status: 'successful',
-					};
-				})
+				.then(() => ({
+					status: 'successful',
+				}))
 				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending notification to group:', error);
-
-					return {
-						status: 'unsuccessful',
-					};
-				})
+				.catch(() => ({
+					status: 'unsuccessful',
+				}))
 		);
 	}
 
@@ -163,8 +166,6 @@ export class NotificationService {
 				.messaging()
 				.subscribeToTopic(subscribeToTopicRequest.token, subscribeToTopicRequest.topic)
 				.then((response) => {
-					console.log('Successfully subscribed:', response);
-
 					if (response.successCount === 1) {
 						return {
 							status: 'successful',
@@ -181,17 +182,14 @@ export class NotificationService {
 					};
 				})
 				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending message:', error);
-
-					return {
-						status: 'unsuccessful',
-					};
-				})
+				.catch(() => ({
+					status: 'unsuccessful',
+				}))
 		);
 	}
 
-	async createNotification(createNotificationDto: CreateNotificationDto): Promise<{ message: string } | void> {
+	// eslint-disable-next-line max-len
+	async createNotification(createNotificationDto: CreateNotificationDto, userId): Promise<{ message: string } | void> {
 		const notificationId: string = randomStringGenerator();
 
 		try {
@@ -207,7 +205,9 @@ export class NotificationService {
 						heading: createNotificationDto.heading,
 						notebookID: createNotificationDto.notebookID,
 						notebookTitle: createNotificationDto.notebookTitle,
+						creatorId: userId,
 						opened: false,
+						notificationId,
 					})
 					.then(() => ({
 						message: 'Successfully created notification',
@@ -222,12 +222,13 @@ export class NotificationService {
 				.collection('notifications')
 				.doc(notificationId)
 				.set({
-					userID: createNotificationDto.userID,
+					userID: userId,
 					type: createNotificationDto.type,
 					body: createNotificationDto.body,
 					heading: createNotificationDto.heading,
 					notebookTitle: createNotificationDto.notebookTitle,
 					opened: false,
+					notificationId,
 				})
 				.then(() => ({
 					message: 'Successfully created notification',
@@ -244,35 +245,14 @@ export class NotificationService {
 		}
 	}
 
-	async getUserId(): Promise<string> {
-		try {
-			return firebase.auth().currentUser.uid;
-			// eslint-disable-next-line @typescript-eslint/no-shadow
-		} catch (error) {
-			throw new HttpException('Unable to complete request. User might not be signed in.', HttpStatus.BAD_REQUEST);
-		}
-	}
-
 	async getUserNotifications(userId: string): Promise<Notification[]> {
-		const userID: string = userId; // await this.getUserId();
-		const notificationIds: string[] = [];
 		const notifications = [];
 
 		try {
-			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
-			// eslint-disable-next-line @typescript-eslint/no-shadow
-			notificationsIdSnapshot.forEach((doc) => {
-				if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
-			});
-
-			if (notificationIds.length === 0) {
-				return notifications;
-			}
-
 			const notificationsSnapshot = await admin
 				.firestore()
 				.collection('notifications')
-				.where('userID', 'in', notificationIds)
+				.where('userID', '==', userId)
 				.get();
 
 			// const i = 0;
@@ -280,7 +260,7 @@ export class NotificationService {
 			notificationsSnapshot.forEach((doc) => {
 				if (doc.data().notebookID) {
 					notifications.push({
-						userID: doc.data().userID,
+						userID: userId,
 						userNotificationID: doc.data().userNotificationID,
 						type: doc.data().type,
 						body: doc.data().body,
@@ -288,16 +268,20 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notebookID: doc.data().notebookID,
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
+						creatorId: doc.data().creatorId,
 					});
 				} else {
 					notifications.push({
-						userID: doc.data().userID,
+						userID: userId,
 						userNotificationID: doc.data().userNotificationID,
 						type: doc.data().type,
 						body: doc.data().body,
 						heading: doc.data().heading,
 						opened: doc.data().opened,
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
+						creatorId: doc.data().creatorId,
 					});
 				}
 			});
@@ -309,14 +293,12 @@ export class NotificationService {
 	}
 
 	async getUnreadNotifications(userId: string): Promise<Notification[]> {
-		const userID: string = userId; // await this.getUserId();
 		const notificationIds: string[] = [];
 		const notifications = [];
 		try {
 			const notificationsIdSnapshot = await admin.firestore().collection('notifications').get();
-			// eslint-disable-next-line @typescript-eslint/no-shadow
 			notificationsIdSnapshot.forEach((doc) => {
-				if (doc.get('userID') === userID) notificationIds.push(doc.get('userID'));
+				if (doc.get('userID') === userId) notificationIds.push(doc.get('userID'));
 			});
 
 			if (notificationIds.length === 0) {
@@ -331,11 +313,10 @@ export class NotificationService {
 				.get();
 
 			let i = 0;
-			// eslint-disable-next-line @typescript-eslint/no-shadow
 			unreadSnapshot.forEach((doc) => {
 				if (doc.data().notebookID) {
 					notifications.push({
-						userID: doc.data().userID,
+						userID: userId,
 						userNotificationID: doc.data().userNotificationID,
 						type: doc.data().type,
 						body: doc.data().body,
@@ -344,10 +325,11 @@ export class NotificationService {
 						notebookID: doc.data().notebookID,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				} else {
 					notifications.push({
-						userID: doc.data().userID,
+						userID: userId,
 						userNotificationID: doc.data().userNotificationID,
 						type: doc.data().type,
 						body: doc.data().body,
@@ -355,6 +337,7 @@ export class NotificationService {
 						opened: doc.data().opened,
 						notificationID: notifications[(i += 1)],
 						notebookTitle: doc.data().notebookTitle,
+						notificationId: doc.data().notificationId,
 					});
 				}
 			});
@@ -365,12 +348,12 @@ export class NotificationService {
 		}
 	}
 
-	async updateRead(notificationId: string): Promise<Response> {
+	async updateRead(notificationId: any): Promise<Response> {
 		try {
 			return await admin
 				.firestore()
 				.collection('notifications')
-				.doc(notificationId)
+				.doc(notificationId.notificationId)
 				.update({
 					opened: true,
 				})
@@ -425,6 +408,7 @@ export class NotificationService {
 		userReceiver: string,
 		notebookID: string,
 		notebookTitle: string,
+		userId: string,
 	): Promise<{ success: boolean; message: string }> {
 		const receiverEmail = await this.getUserEmail(userReceiver);
 		const notificationID = await this.getUserNotificationID(userReceiver);
@@ -438,51 +422,43 @@ export class NotificationService {
 			body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
 		});
 
-		await this.createNotification({
-			userID: userReceiver,
-			body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
-			heading: 'Collaboration Request',
-			type: 'Request',
-			notebookID,
-			opened: false,
-			notebookTitle,
-		});
-
-		await this.sendUserToUserPushNotification(
+		await this.createNotification(
 			{
-				token: notificationID,
-				title: 'Collaboration Request',
-				body: `You have received a collaboration request from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
-				userId: userSender,
+				userID: userReceiver,
+				body: `You have received a collaboration request from ${senderEmail} to 
+						collaborate on notebook ${notebookTitle}`,
+				heading: 'Collaboration Request',
+				type: 'Request',
+				notebookID,
+				opened: false,
+				notebookTitle,
 			},
-			userReceiver,
+			userId,
 		);
+
+		if (notificationID) {
+			await this.sendUserToUserPushNotification(
+				{
+					token: notificationID,
+					title: 'Collaboration Request',
+					body: `You have received a collaboration request 
+						from ${senderEmail} to collaborate on notebook ${notebookTitle}`,
+					userId: userSender,
+				},
+				userReceiver,
+			);
+		}
 
 		return {
 			success: true,
 			message: 'Successfully sent collaboration request',
 		};
-
-		// return transporter
-		// 	.sendMail(mailOptions)
-		// 	.then(
-		// 		(info: SMTPTransport.SentMessageInfo): EmailNotificationResponseDto => ({
-		// 			success: true,
-		// 			message: info.messageId,
-		// 		}),
-		// 	)
-		// 	.catch(() => ({
-		// 		success: false,
-		// 		message: 'Something went wrong!',
-		// 	}));
 	}
 
 	async sendUserToUserPushNotification(
 		singleNotificationRequest: SingleNotificationRequestDto,
 		receiverUserID: string,
 	) {
-		// Send notification to single user
-		// const receiverToken = await this.getUserNotificationID(receiverUserID);
 		const message = {
 			token: singleNotificationRequest.token,
 			notification: {
@@ -494,26 +470,15 @@ export class NotificationService {
 			},
 		};
 
-		return (
-			admin
-				.messaging()
-				.send(message)
-				.then((response) => {
-					console.log('Successfully sent individual message:', response);
-
-					return {
-						status: 'successful',
-					};
-				})
-				// eslint-disable-next-line @typescript-eslint/no-shadow
-				.catch((error) => {
-					console.log('Error sending individual message:', error);
-
-					return {
-						status: 'unsuccessful',
-						error: error.errorInfo,
-					};
-				})
-		);
+		return admin
+			.messaging()
+			.send(message)
+			.then(() => ({
+				status: 'successful',
+			}))
+			.catch((error) => ({
+				status: 'unsuccessful',
+				error: error.errorInfo,
+			}));
 	}
 }

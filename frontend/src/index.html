@@ -2,9 +2,24 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>SmartStudent</title>
+		<!--<title>SmartStudent</title>-->
 		<base href="/" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1976d2" />
+
+    <title>Smart Student Handbook</title>
+    <meta property="og:title" content="Smart Student Handbook" />
+    <meta property="og:description" content="Advance note taking application by giving notebook recommendations based off similar notebooks" />
+
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FSmartStudentHandbookLogoLinkPreview.png?alt=media&token=915b5bd9-6619-42ec-a221-0808b5d90f85" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="884" />
+    <meta property="og:image:height" content="888" />
+    <meta property="og:image:alt" content="Smart Student Handbook"/>
+
+    <meta property="og:url" content="https://smartstudenthandbook.co.za/" />
+
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" />
 		<link
@@ -15,86 +30,29 @@
 			href="https://fonts.googleapis.com/icon?family=Material+Icons"
 			rel="stylesheet"
 		/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.css"
+          integrity="sha384-8QOKbPtTFvh/lMY0qPVbXj9hDh+v8US0pD//FcoYFst2lCIf0BmT58+Heqj0IGyx" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.js"
+            integrity="sha384-GR8SEkOO1rBN/jnOcQDFcFmwXAevSLx7/Io9Ps1rkxWp983ZIuUGfxivlF/5f5eJ" crossorigin="anonymous">
+    </script>
 
-		<link
+    <link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
 			rel="stylesheet"
 			integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
 			crossorigin="anonymous"
 		/>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-			crossorigin="anonymous"
-		></script>
 
 		<link rel="manifest" href="./manifest.json" />
-
-		<!-- <script defer src="/__/firebase/8.6.6/firebase-app.js"></script> -->
-		<!-- include only the Firebase features as you need -->
-		<!-- <script defer src="/__/firebase/8.6.6/firebase-auth.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-database.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-firestore.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-functions.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-messaging.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-storage.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-analytics.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-remote-config.js"></script>
-  <script defer src="/__/firebase/8.6.6/firebase-performance.js"></script> -->
-		<!--
-	initialize the SDK after all desired features are loaded, set useEmulator to false
-	to avoid connecting the SDK to running emulators.
-  -->
-		<!-- <script defer src="/__/firebase/init.js?useEmulator=true"></script> -->
-
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="manifest" href="manifest.webmanifest" />
-		<meta name="theme-color" content="#1976d2" />
 	</head>
 	<body class="mat-typography">
 		<app-root></app-root>
 
-		<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const loadEl = document.querySelector('#load');
-      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-      // // The Firebase SDK is initialized and available here!
-      //
-      // firebase.auth().onAuthStateChanged(user => { });
-      // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-      // firebase.firestore().doc('/foo/bar').get().then(() => { });
-      // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-      // firebase.messaging().requestPermission().then(() => { });
-      // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-      // firebase.analytics(); // call to activate
-      // firebase.analytics().logEvent('tutorial_completed');
-      // firebase.performance(); // call to activate
-      //
-      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-      try {
-        let app = firebase.app();
-        let features = [
-          'auth',
-          'database',
-          'firestore',
-          'functions',
-          'messaging',
-          'storage',
-          'analytics',
-          'remoteConfig',
-          'performance',
-        ].filter(feature => typeof app[feature] === 'function');
-        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-      } catch (e) {
-        console.error(e);
-        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-      }
-    });
-  </script> -->
-		<noscript
-			>Please enable JavaScript to continue using this
-			application.</noscript
-		>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
 	</body>
 </html>

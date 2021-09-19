@@ -1,44 +1,91 @@
 noteId,name,tags,author,institution,course
-8a83e9ac-994d-43e6-9abb-94b15b327be2,Margaret's Museum,"['mining', 'dancelesson', 'coalmining']",chenjeff,Stellenbosch University,RRP 044
-f85a498e-fc27-43bf-ba67-442c24a0087f,Graveyard Shift,['maneatenbymonster'],keith17,The University of South Africa,NFU 070
-47fc00a6-a950-40ee-823e-b1c7ebf2f822,Angel Baby,"['schizophrenia', 'baby', 'therapist']",meltonmichelle,University of the Witwatersrand,ZXY 904
-99c8e750-63dd-43c7-9a0f-7ad49fb7c3bb,Chain Reaction,"['fbi', 'hydrogenbomb', 'secretlab']",kevin05,University of the Witwatersrand,ZXY 904
-4ce1095f-cca6-4e89-ab08-b3bd958fca49,Toy Story,"['jealousy', 'toy', 'boy']",hhudson,North West University,HIH 482
-9f0ddc2d-0cfc-4818-904e-d886807370fa,Moonraker,"['venice', 'massmurder', 'spacemarine']",colemandawn,University of the Witwatersrand,ZXY 904
-f9d30e4f-a5ed-4868-95e7-8823c5279bca,National Lampoon's Christmas Vacation,"['holiday', 'boss', 'cigar']",colemandawn,Stellenbosch University,RAQ 069
-2f7ee79f-ff60-49cf-b3ef-cbc91176b78e,The Day the Earth Stood Still,"['spacecraft', 'flyingsaucer', 'peace']",nicole91,University of Pretoria,JOE 016
-b1b027e0-06e7-40b5-8b20-73c3d4856db6,A Streetcar Named Desire,"['southernusa', 'rape', 'sistersisterrelationship']",cgiles,Stellenbosch University,MLX 086
-77a2b437-ac7f-4659-b2e1-b3d1673895d5,2001: A Space Odyssey,"['moon', 'jupiter', 'artificialintelligence']",fmitchell,University of Pretoria,JRP 729
-b619e346-8101-4bec-9772-b7fa29d57d97,Satisfaction,['femalebonding'],jeremylewis,University of the Witwatersrand,IUH 668
-b3151a6c-de33-47ff-937a-f342605166c8,Life as a House,"['fathersonrelationship', 'house', 'cancer']",jeremylewis,University of the Witwatersrand,SPE 230
-bea2aea0-3d4b-4881-ac98-c578a7fcf6d2,Timerider: The Adventure of Lyle Swann,"['timetravel', 'roadmovie']",sextonmatthew,University of Pretoria,KUW 789
-8f9e4e7d-d3aa-4dd4-8136-745c4eb34478,Slaughterhouse,"['psychopathickiller', 'slaughterhouse', 'teenager']",imiller,Stellenbosch University,SPE 230
-2d72fc96-e5f1-44ac-bcb1-6bf9b66f0295,Logan's Run,"['femalenudity', 'killerrobot', 'nudity']",wardthomas,University of the Witwatersrand,OOJ 823
-3cfd74f0-462a-4a97-ac57-584d85f7f3c7,Only Angels Have Wings,"['pilot', 'southamerica', 'oldflame']",brianparks,The University of South Africa,PDX 947
-df5d802f-cc3f-4da3-a3f0-a0555c065ba6,Vanya on 42nd Street,"['independentfilm', 'chekhov']",asnyder,The University of South Africa,PDX 947
-30a91735-baba-41d4-96fd-28749200b24f,"To Sir, with Love","['londonengland', 'education', 'teacher']",wharris,University of the Witwatersrand,PDT 770
-23137756-7219-4f6f-95fa-14cc8ff6834c,Back to School,"['college', 'whirlpool', 'clothingstore']",ebecker,University of the Witwatersrand,UKH 610
-ddf4212e-f8c9-494c-8ba8-412257712799,Gang Related,"['detective', 'surgeon', 'stripper']",brittanyhernandez,Stellenbosch University,STZ 151
-8ffdc02a-2500-4413-af1b-e2d35d14d48a,The Barefoot Contessa,"['dancer', 'count', 'millionaire']",robertperez,University of Pretoria,GJZ 830
-60c8fd6a-91eb-48ba-9737-70234741eeda,The Associate,"['career', 'sexism', 'autonomy']",ronaldsmith,The University of South Africa,TSB 297
-badafc77-d72f-4815-a2b8-d678426cdf69,Graveyard Shift,['maneatenbymonster'],loliver,North West University,JTD 784
-79571aa5-c439-4d0e-8407-4c9d1aa45617,McHale's Navy,"['terror', 'exoticisland', 'terrorist']",jcole,Stellenbosch University,TSB 297
-dacccbec-0903-49c4-b464-3e25fd2553f2,The Sound of Music,"['resistance', 'austria', 'worldwarii']",deborahedwards,The University of South Africa,TSB 297
-c34c5279-5985-42dd-ac63-2c9cc102974a,La Cage aux folles II,"['dragqueen', 'revue', 'murder']",baileybonnie,University of the Witwatersrand,CFA 603
-4207ad61-d585-458f-a801-b1b1b6aff401,Orlando,"['londonengland', 'queen', 'queenelizabethi']",baileybonnie,University of Pretoria,OZO 646
-9cc23df9-1cbc-4916-ad67-73aa69157da7,Heavenly Creatures,"['mother', 'sex', 'secret']",inavarro,The University of South Africa,GJZ 830
-5d45db02-dcf9-47ab-b58c-c6daed007912,I Dreamed of Africa,['africa'],loliver,The University of South Africa,GJZ 830
-ba72ef4e-9057-4ec2-b5ad-dd5d013cc774,Storytelling,"['sex', 'exploitation', 'highschool']",michael46,The University of South Africa,KJS 625
-925e0593-bf9d-40f1-b7af-3961ad5b0556,Rawhead Rex,"['monster', 'ireland']",michael46,University of the Witwatersrand,USZ 833
-727dc25c-0637-4fe6-9709-56d8bbb72d1a,The Object of My Affection,"['blinddate', 'love', 'fallinginlove']",jcole,University of the Witwatersrand,ZIW 691
-ffe1dcfd-0446-4e69-af03-bdff6ccb679a,Highlander: The Final Dimension,"['japan', 'newyork', 'scotland']",jcole,The University of South Africa,OZO 646
-8df78dae-a4b7-4a7c-91f4-7de1d617e402,Santa Claus: The Movie,"['holiday', 'christmas']",angelahall,University of Pretoria,UFA 360
-bad8c7f2-2ab8-4c1a-b03b-ee5352d46870,Titanica,"['shipwreck', 'titanic', 'underwater']",kaylakeller,Stellenbosch University,STZ 151
-1257ffe6-f8bb-41d1-bfd5-d4b76dfb5288,"I Love You, Don't Touch Me!",['womandirector'],robertperez,The University of South Africa,USZ 833
-07782574-bf70-446c-867c-a08ad107bdbf,Hotel de Love,['independentfilm'],deborahedwards,University of Pretoria,ZIW 691
-18b02dae-e163-486f-9a0f-97f1ffa1a56d,Brief Encounter,"['adultery', 'infidelity', 'passion']",jcole,North West University,JTD 784
-37f674a7-951a-422c-a494-91557230ad69,Ringmaster,"['talkshow', 'raunchy']",baileybonnie,The University of South Africa,KJS 625
-5f779a4d-e5fc-4bac-b352-eb1aeb46f5c8,Kramer vs. Kramer,"['wifehusbandrelationship', 'custodybattle', 'marriage']",dennisschmidt,North West University,STZ 151
-506c31a8-45f0-4905-8b32-0af440dabbbd,Playing by Heart,"['sex', 'adultery', 'hotel']",jcole,North West University,STZ 151
-6af50cac-1db9-4346-a5f4-09363e3b0531,A Bug's Life,"['winter', 'fight', 'ant']",kaylakeller,North West University,ZIW 691
-33c4fb76-2574-48d3-8898-d31409a816d4,Big Bully,['bully'],angelahall,The University of South Africa,STZ 151
+1cfd0f72-929b-49f9-81a4-cebdc4a25c8c,Algebra,"['algebra', 'math', 'functions', 'graphs']",John Doe,University of Pretoria,WTW 134
+fdd57d93-54fc-4507-b6ca-b848a44f2744,Introduction,['Coding'],TheoMorkel,University of Pretoria,COS 301
+f72dd114-cfdd-4763-9434-cc9023ba28e8,Algebraic functions,"['algebra', 'functions', 'maths']",John Doe,University of Pretoria,WTW 134
+6741280c-584c-4c95-980e-61e2b07a7ddd,Introduction,[],Johnny,University of Pretoria,COS332
+fea3f270-4f52-4a0f-a969-fa106423a753,Introduction,[],Test author,Test institution,Test course
+d9451c94-e664-4a8b-bfe1-e6fda3a1b1c2,Introduction,[],Test author,Test institution,Test course
+98164faf-a156-45d8-883d-1629899d8445,Mathematics clone,"['math', 'wtw']",Arno,South African Universities Outlook,WTW 115
+edf4689d-f009-4fa1-b48f-9e04635617f4,Introduction,[],Test author,Test institution,Test course
+b8a00063-2662-4922-8d7c-3c600603b5d9,Introduction,[],Test author,Test institution,Test course
+bd397bb2-d806-45b8-81fe-99720cf89b0e,Introduction,[],Test author,Test institution,Test course
+e20ba54f-8cda-420b-b1e3-c0029f9545bf,Introduction,[],Test author,Test institution,Test course
+bc0eb3ef-c395-449e-a870-cce0669baf56,Introduction,[],Test author,Test institution,Test course
+d6040a82-ac1c-4070-b92e-7568d48e81ba,Introduction,[],Test author,Test institution,Test course
+f8a40558-de4f-4874-87c1-0cf22e12fbf1,Introduction,[],Test author,Test institution,Test course
+36cee424-1d1c-4546-acf9-c44fb24c3a64,Introduction,[],Test author,Test institution,Test course
+b4d45288-558a-4bdf-af5a-140b1677d576,Introduction,[],Updated author,Updated institution,Updated course
+8ea70790-1185-4fec-a55c-0b1c45746a38,Introduction,[],Test author,Test institution,Test course
+af3555b0-7e91-4ca9-840f-c59e51e7796d,Introduction,[],Test author,Test institution,Test course
+3f0236a3-2494-4733-ad64-114195c4c700,Introduction,[],Test author,Test institution,Test course
+62163f8f-934c-41de-8241-d33589fcb308,Introduction,[],Test author,Test institution,Test course
+4a54f323-9710-4a7f-8ebd-6c7b7163152c,Introduction,[],Updated author,Updated institution,Updated course
+d8986487-b89b-4697-900d-38c5b8eaee9f,Introduction,[],Updated author,Updated institution,Updated course
+178ac41e-cc7c-49ba-801d-c753adf1cf20,Introduction,[],Test Access author,Test Access institution,Test Access course
+94f5dc3f-bc12-4f34-bb40-6bb456128225,Introduction,[],Test Access author,Test Access institution,Test Access course
+b8bc9c09-3715-4c44-948c-18075483e50e,Introduction,[],Test Access author,Test Access institution,Test Access course
+8f3df6a8-f0d8-4bf5-ad7c-4b464e9d8ff0,Introduction,[],Test Access author,Test Access institution,Test Access course
+c18d68e6-e20f-412a-85d2-02f35e33672e,Introduction,[],Test Access author,Test Access institution,Test Access course
+f71a1827-d298-49e3-a16a-d9871c3b9aff,Introduction,[],Test Access author,Test Access institution,Test Access course
+5d21930f-d2c0-4d26-964b-b56b22675292,Introduction,[],Test Access author,Test Access institution,Test Access course
+eba7ab0d-b156-464f-b958-52c09c5b7c0e,Introduction,[],Test Access author,Test Access institution,Test Access course
+daa4bccf-d24d-4f16-bcb6-af463f57117e,Introduction,[],Test Access author,Test Access institution,Test Access course
+878bf8a4-242e-43c9-ab2e-2745644b8e8c,Introduction,[],Test Access author,Test Access institution,Test Access course
+8bea2758-8410-431a-b456-cbdeb4ad8317,Introduction,[],Test Access author,Test Access institution,Test Access course
+0ac6fde2-d001-41b3-b436-bd9a4fc0a4e4,Introduction,[],Test Access author,Test Access institution,Test Access course
+2338d39a-bf16-4d1d-a94a-e46bd2c4eba8,Introduction,[],Test Access author,Test Access institution,Test Access course
+4026150a-28bd-45a5-889a-a6f6bf458cfe,Introduction,[],Test author,Test institution,Test course
+3822d188-c3d8-4139-a86d-3a8e523ceef3,Introduction,[],Test Note author,Test Note institution,Test Note course
+96a9a0eb-6f64-48cc-aa9a-ff51f16c934e,Introduction,[],Test Note author,Test Note institution,Test Note course
+1a74a35b-549a-40b0-913b-812c3ca501c2,Introduction,[],Test Note author,Test Note institution,Test Note course
+b43b0a03-c1a7-43f0-9c68-fab2a4392f4e,Introduction,[],Test Note author,Test Note institution,Test Note course
+dea8fc47-4de4-416b-9582-3c984cbc9786,Test Note Name,"['Test tag 1', 'Test tag 2']",Test Note author,Test Note institution,Test Note course
+a50e4f9f-6b0b-4450-a06c-9a92e3458e64,Introduction,[],Test Note author,Test Note institution,Test Note course
+25547084-4d23-41f9-809b-80ad5550fe4d,Introduction,[],Test Note author,Test Note institution,Test Note course
+685f0188-1304-42f7-90cb-401d19a31cc3,Introduction,[],Test Note author,Test Note institution,Test Note course
+122df6a1-9697-452a-86de-9548f84f089e,Introduction,[],Test Note author,Test Note institution,Test Note course
+636ca396-ec70-448e-a7fe-65d75daf9ea9,Introduction,[],Test Access author,Test Access institution,Test Access course
+1a8ae97e-38ba-4632-b5a4-0b16aae11c80,Introduction,[],Test author,Test institution,Test course
+65726e38-b1d9-4943-8208-b6157f5e163a,Introduction,[],Test Access author,Test Access institution,Test Access course
+bc1cc13c-b6c3-46ee-b807-f53ce82c9d0c,Introduction,[],Test Note author,Test Note institution,Test Note course
+0fe9647c-16ea-4875-b2da-b41048a3b29f,Introduction,[],Test author,Test institution,Test course
+8871e5c1-8511-4782-bf99-b47a3a748aed,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+d289e1cc-f3f8-4018-a191-5fb5d22b4b48,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+6f6181ed-e04b-4461-a0c4-125f2bf78361,Introduction,[],Test Access author,Test Access institution,Test Access course
+3c118a45-1c4c-4568-8958-17219f2298de,Introduction,[],Test Note author,Test Note institution,Test Note course
+6021c7b9-fd35-4385-841d-81c93e9ff1d7,Introduction,[],Test Access author,Test Access institution,Test Access course
+404158e0-e769-4b1f-95c1-9f391a873e3f,Introduction,"['Tag', 'Tag']",John Doe,University of Pretoria,teste
+6aaffab4-4992-49b0-8a08-78b1231831cb,Introduction,[],Test Note author,Test Note institution,Test Note course
+cefdab9e-e18b-4870-bb89-5ecbb7643098,Introduction,[],Test Note author,Test Note institution,Test Note course
+1ce25aa8-243d-410b-8d0a-dfbe74e037d6,Introduction,[],Test Note author,Test Note institution,Test Note course
+d90a0ff9-c4a8-443d-b306-dc87510dbbcf,Introduction,[],Test Note author,Test Note institution,Test Note course
+80140b7a-3686-401f-98eb-e599b30372f5,Introduction,[],Test Note author,Test Note institution,Test Note course
+3520eef1-e445-4350-982d-d613706fa264,Introduction,[],Test Note author,Test Note institution,Test Note course
+efbf7d32-a50a-40ef-b1b8-41789b511f0b,Introduction,[],Test Access author,Test Access institution,Test Access course
+011dc474-ed12-4633-9195-7f4c372aa24b,Introduction,[],Test Note author,Test Note institution,Test Note course
+7f45d10e-b4b7-4953-84b3-86ed27729fac,Introduction,[],Test Note author,Test Note institution,Test Note course
+c31ef223-4c6a-4cf4-9e34-e27ba8963f97,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+7d51928e-6e28-42a0-9d30-3660bfe922c4,Introduction,[],Updated author,Updated institution,Updated course
+4b2ba5b2-1eb4-47d3-b475-2af9513db73b,Introduction,[],Updated author,Updated institution,Updated course
+af510f2f-5f6a-4e66-816a-29f5f7f97c9b,Introduction,[],Updated author,Updated institution,Updated course
+ed97fc3a-2ecc-4154-92a0-d9d2e302c0a3,Introduction,[],Test Note author,Test Note institution,Test Note course
+287a161e-922e-46e3-ae5b-9cbd79d0e8b1,Introduction,[],Test Note author,Test Note institution,Test Note course
+c53a2b76-95a7-49e3-88a6-367a037628b9,Introduction,[],Test Access author,Test Access institution,Test Access course
+ba882f7c-8d72-441d-b9f8-c8f07f79758d,Introduction,[],Johnny,University of Pretoria,WTW114
+94933b8a-54f1-4c86-a5ee-76d71060d404,September Semester test,"['WTW114', 'test']",Johnny,University of Pretoria,WTW114
+ed74b358-f8ff-4b1c-9009-5c13383cb7ca,Factory Method,"['Factory', 'COS214']",Johnny,University of Pretoria,COS332
+2d9730e5-8832-4e18-bb46-62131fe45f62,Introduction,[],Updated author,Updated institution,Updated course
+8922cda9-5ed3-4d70-be4e-14d269b19e8d,Introduction,[],John Doe,University of Pretoria,A test notebook with an extremely long title to test styling
+5af1de8d-48e0-46bd-bf0c-f12939612fed,Introduction,[],John Doe,University of Pretoria,test
+d93360e7-1d3f-4e9e-8cc3-5f5beaacfe92,A test notebook with elaborately long title to test the styling on the header tags on the application with some extra text to test it even more,"['test', 'test']",John Doe,University of Pretoria,test
+08e4e095-28ee-4d4a-9206-f5c49e850b78,Introduction,[],Test Note author,Test Note institution,Test Note course
+e4bec707-4e5f-43e4-a28d-41594fb5e138,Introduction,[],Updated author,Updated institution,Updated course
+cda57722-1b87-460a-a6f3-a311ce4ec424,Introduction,[],Test Note author,Test Note institution,Test Note course
+7954e25c-4584-4b73-bc25-fb5182d06c0e,Update Note Name,"['Update tag 1', 'Update tag 2']",Test Note author,Test Note institution,Test Note course
+ce3ecb14-f64f-4540-9fdc-32da210144d2,Introduction,[],Test Access author,Test Access institution,Test Access course
+5b8f92cc-51f2-4e03-bfc1-6ffa631b1da0,Chapter 1,"['Into', 'Design', 'Patterns', 'Cos214']",lucaprenzler,University of Pretoria,COS214
+5a7b84a6-4d27-400e-93c5-0e738737066a,Lexical Analysis,"['Lexical', 'Analysis', 'Lexer', 'COS341']",lucaprenzler,University of Pretoria,COS341
+251fda70-3db4-47e0-99a8-ff70d79051ff,Methodologies,"['Software', 'Engineering', 'COS301', 'Waterfall', 'Agile', 'Scrum']",lucaprenzler,University of Pretoria,COS301
+74b3fb80-4f73-420e-9e27-116fe79ecd1d,Introduction,[],AJ,University of Pretoria,COS 301
+8a5b09d1-1777-4c4c-b29a-1ec1d4033e29,Introduction to Calculus,"['Into', 'Maths', 'WTW114', 'Calculas', 'Explained']",lucaprenzler,University of Pretoria,WTW114
+89fcf480-8e03-4215-b239-af366eeb0a07,Limits,"['Limit', 'Calculus', 'WTW114']",LizaConver,University of Pretoria,WTW114
