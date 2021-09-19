@@ -34,8 +34,8 @@ jobs:
       run: npm run build --if-present
     - name: Create Firebase Service Account file
       run: |
-        echo "$SERVICE_ACCOUNT" > service_account.json.b64
-        base64 -d -i service_account.json.b64 > service_account.json
+        echo "$SERVICE_ACCOUNT" > service_account.json
+#        base64 -d -i service_account.json.b64 > service_account.json
       env:
         SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
     - name: Run Tests
