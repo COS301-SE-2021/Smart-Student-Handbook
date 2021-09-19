@@ -11,18 +11,18 @@ const serviceAccount = require('../../service_account.json');
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
 });
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyAFpQOCQy42NzigYd5aPH3OSpbjvADJ0o0',
-	authDomain: 'smartstudentnotebook.firebaseapp.com',
-	databaseURL: 'https://smartstudentnotebook-default-rtdb.europe-west1.firebasedatabase.app',
-	projectId: 'smartstudentnotebook',
-	storageBucket: 'smartstudentnotebook.appspot.com',
-	messagingSenderId: '254968215542',
-	appId: '1:254968215542:web:be0931c257ad1d8a60b9d7',
-	measurementId: 'G-YDRCWDT5QJ',
+	apiKey: 'AIzaSyCsXWdPjNUqLsDCp05RpY3-J8Mtb9P11JM',
+	authDomain: 'smartstudenthandboook-dev.firebaseapp.com',
+	databaseURL: 'https://smartstudenthandboook-dev-default-rtdb.firebaseio.com',
+	projectId: 'smartstudenthandboook-dev',
+	storageBucket: 'smartstudenthandboook-dev.appspot.com',
+	messagingSenderId: '953003868912',
+	appId: '1:953003868912:web:5c91964eb8289263253835',
+	measurementId: 'G-V286FE7KN8',
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -42,18 +42,28 @@ describe('Auth Service Tests', () => {
 		jest.setTimeout(30000);
 	});
 
+	describe('Check services are defined', () => {
+		it('Account Service should be defined', () => {
+			expect(accountService).toBeDefined();
+		});
+
+		it('Auth Service should be defined', () => {
+			expect(authService).toBeDefined();
+		});
+	});
+
 	describe('Login user to be used', () => {
 		it('Should login a user successfully', async () => {
 			const user = {
-				email: 'TestUserAccount@gmail.com',
-				password: 'TestPassword!0',
+				email: 'test-user-review@smartstudenthandbook.co.za',
+				password: 'TestPassword01!',
 			};
 
 			const userData = await accountService.loginUser(user);
 
 			const result = await authService.verifyUser(userData.authToken);
 
-			expect(result).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result).toBe('BvzwT1hKTETNLvXeCMgxinOm0GH3');
 		});
 
 		it('Throw Exception: Invalid JWT token', async () => {
