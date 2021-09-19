@@ -110,12 +110,11 @@ export class EditProfileComponent implements OnInit {
 		this.updatedFailed = false;
 
 		if (this.event) {
-			const n = Date.now();
 			const file = this.event.files[0];
-			const filePath = `UserProfilePictures/${this.user.uid}${n}`;
+			const filePath = `UserProfilePictures/${this.user.uid}`;
 			const fileRef = this.storage.ref(filePath);
 			const task = this.storage.upload(
-				`UserProfilePictures/${this.user.uid}${n}`,
+				`UserProfilePictures/${this.user.uid}`,
 				file
 			);
 			task.snapshotChanges()

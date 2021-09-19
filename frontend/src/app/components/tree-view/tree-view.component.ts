@@ -15,6 +15,7 @@ import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
+import { TreeViewObservablesService } from '@app/services/treeViews/tree-view-observables.service';
 
 @Component({
 	selector: 'app-tree-view',
@@ -70,7 +71,8 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 		private notebookObservables: NotebookObservablesService,
 		private exploreObservables: ExploreObservablesService,
 		private notebookOperations: NotebookOperationsService,
-		private accountService: AccountService
+		private accountService: AccountService,
+		public treeViewObservables: TreeViewObservablesService
 	) {}
 
 	ngOnInit(): void {
@@ -79,6 +81,10 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 			if (user) {
 				this.user = user;
 			}
+		});
+
+		this.treeViewObservables.openMyNotes.subscribe((open) => {
+			if (open) this.treeControl.expandAll();
 		});
 
 		this.getUserNotebooks();
@@ -389,6 +395,17 @@ export class TreeViewComponent implements OnInit, AfterContentInit {
 						this.notebookObservables.setRemoveNote(
 							this.openedNotebookId
 						);
+						this.notebookObservables.setLoadEditor(
+							'',
+							'',
+							'',
+							'',
+							'',
+							[]
+						);
+
+						this.notebookObservables.setRemoveNotebook(notebookId);
+						this.notebookObservables.setOpenNotebook('', '', true);
 					}
 				}
 			}

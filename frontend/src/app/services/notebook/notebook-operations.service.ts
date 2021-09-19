@@ -161,7 +161,7 @@ export class NotebookOperationsService {
 					.subscribe((res) => {
 						creator = {
 							name: res.user.username,
-							url: '',
+							url: res.user.profilePicUrl,
 							id: res.user.uid,
 						};
 
