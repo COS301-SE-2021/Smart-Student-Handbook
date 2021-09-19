@@ -2,7 +2,7 @@
 
     <!-- notes -->
     <mat-tree-node class="treeNode" *matTreeNodeDef="let node" matTreeNodePadding >
-      <button mat-button class="notebookNode" (click)="openNotebookFolder(node.id, node.name)" >{{ node.name }}</button>
+      <button mat-button class="notebookNode" matTooltip="{{ node.name }}" matTooltipPosition="right" (click)="openNotebookFolder(node.id, node.name)" >{{ node.name }}</button>
 
       <button mat-icon-button aria-label="Delete notebook" [matMenuTriggerFor]="notebookMenu">
         <mat-icon >more_vert</mat-icon>

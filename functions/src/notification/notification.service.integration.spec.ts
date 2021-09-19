@@ -1,15 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
-import { HttpException } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 // import { EmailInterface } from './interfaces/email.interface';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
 import { SendNotificationToGroupRequestDto } from './dto/sendNotificationToGroup.dto';
 import { SubscribeToTopicRequestDto } from './dto/subscribeToTopicRequest.dto';
+import { EmailInterface } from './interfaces/email.interface';
 import { CreateNotificationDto } from './dto/createNotification.dto';
 
 const serviceAccount = require('../../service_account.json');
+
+// eslint-disable-next-line import/order
+const test = require('firebase-functions-test')();
+
+test.mockConfig({
+	email: {
+		user: 'smartstudent.handbook@gmail.com',
+		pass: 'SmartStudent01!',
+	},
+});
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -51,18 +61,18 @@ describe('Notifications Service Integration Tests', () => {
 		});
 	});
 
-	// describe('Email Notification Testing', () => {
-	// 	it('Send Email Notification', async () => {
-	// 		const emailInterface: EmailInterface = {
-	// 			email: 'louw707@gmail.com',
-	// 			subject: 'Notifications test subject',
-	// 			body: 'Notifications test body',
-	// 		};
-	// 		const result = await notificationService.sendEmailNotification(emailInterface);
-	//
-	// 		expect(result.success).toBe(true);
-	// 	});
-	// });
+	describe('Email Notification Testing', () => {
+		it('Send Email Notification', async () => {
+			const emailInterface: EmailInterface = {
+				email: 'louw707@gmail.com',
+				subject: 'Notifications test subject',
+				body: 'Notifications test body',
+			};
+			const result = await notificationService.sendEmailNotification(emailInterface);
+
+			expect(result.success).toBe(true);
+		});
+	});
 
 	describe('PushNotification Testing', () => {
 		it('Test Send Notification To Group', async () => {

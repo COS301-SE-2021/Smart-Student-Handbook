@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 @Component({
@@ -6,12 +6,10 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 	templateUrl: './chat-bottom-sheet.component.html',
 	styleUrls: ['./chat-bottom-sheet.component.scss'],
 })
-export class ChatBottomSheetComponent implements OnInit {
+export class ChatBottomSheetComponent {
 	constructor(
 		private bottomSheetRef: MatBottomSheetRef<ChatBottomSheetComponent>
 	) {}
-
-	ngOnInit(): void {}
 
 	/**
 	 * Close this bottom sheet

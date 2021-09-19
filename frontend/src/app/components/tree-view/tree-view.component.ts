@@ -11,7 +11,6 @@ import {
 	NotebookOperationsService,
 	NotebookService,
 } from '@app/services';
-import { ConfirmDeleteComponent } from '@app/components';
 import { MatDialog } from '@angular/material/dialog';
 import { ExploreObservablesService } from '@app/services/notebook/observables/explore-observables.service';
 import { DeleteNoteComponent } from '@app/components/modals/delete-note/delete-note.component';
