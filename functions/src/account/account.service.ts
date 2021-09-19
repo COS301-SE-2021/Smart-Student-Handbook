@@ -317,20 +317,10 @@ export class AccountService {
 	}
 
 	/**
-	 * SignOut user.
+	 * SignOut user
+	 * done on the frontend with JWT tokens.
 	 */
 	async signOut(): Promise<Response> {
-		// SignOut user. If successful return success message else throw Bad Request exception
-
-		// return firebase
-		// 	.auth()
-		// 	.signOut()
-		// 	.then(() => ({
-		// 		message: 'Successfully signed out.',
-		// 	}))
-		// 	.catch((error) => ({
-		// 		message: `${error.message}`,
-		// 	}));
 		return {
 			message: 'Successfully signed out.',
 		};
