@@ -2,6 +2,48 @@ describe('AccountService', () => {
 	it('Do Tests', async () => {});
 });
 
+// describe('Register User', () => {
+// 	it('Register User', async () => {
+// 		const account = {
+// 			email: 'test-user@smartstudenthandbook.co.za',
+// 			username: 'test-user',
+// 			password: 'TestPassword01!',
+// 			passwordConfirm: 'TestPassword01!',
+// 			isLocalhost: false,
+// 		};
+//
+// 		const result = await accountService.registerUser(account);
+//
+// 		const user: UserRequestDto = {
+// 			uid: result.user.uid,
+// 			username: 'test-user-username',
+// 			institution: 'test-user-institution',
+// 			department: 'test-user-department',
+// 			program: 'test-user-program',
+// 			workStatus: 'test-user-workStatus',
+// 			bio: 'test-user-bio',
+// 			profilePicUrl: 'test-user-profilePicUrl',
+// 		};
+//
+// 		await userService.createUser(user, result.user.uid);
+// 	});
+// });
+//
+// describe('Login user to be used', () => {
+// 	it('Should login a user successfully', async () => {
+// 		const user = {
+// 			email: 'TestUserAccount@gmail.com',
+// 			password: 'TestPassword!0',
+// 		};
+//
+// 		const result = await accountService.loginUser(user);
+//
+// 		userId = result.user.uid;
+//
+// 		expect(result.message).toBe('User is successfully logged in!');
+// 	});
+// });
+
 // import { Test, TestingModule } from '@nestjs/testing';
 // import MockDate from 'mockdate';
 // import * as admin from 'firebase-admin';
