@@ -240,54 +240,6 @@ describe('NotebookTests', () => {
 		});
 	});
 
-	describe('Notebook Reviews', () => {
-		it('Add Reviews to a notebook', async () => {
-			const review = {
-				notebookId,
-				message: 'Test review message',
-				rating: 8,
-				displayName: `TestAccount${randomNumber}`,
-				userId,
-				profileUrl: 'Test Profile Url',
-			};
-			const result = await notebookService.addNotebookReview(review, userId);
-
-			expect(result.message).toBe('Successfully added a review!');
-		});
-
-		it('Get Notebook Reviews', async () => {
-			const result = await notebookService.getNotebookReviews(notebookId);
-
-			expect(result.length).toBe(1);
-			expect(result[0].message).toBe('Test review message');
-			expect(result[0].rating).toBe(8);
-			expect(result[0].displayName).toBe(`TestAccount${randomNumber}`);
-			expect(result[0].profileUrl).toBe('Test Profile Url');
-		});
-
-		it('Try to Access Invalid Notebook', async () => {
-			let result;
-			try {
-				result = await notebookService.getNotebookReviews('ImpossibleIdNumber');
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result).toStrictEqual([]);
-		});
-
-		it('Add Reviews to a notebook', async () => {
-			let result;
-			try {
-				result = await notebookService.deleteNotebookReview(notebookId, userId);
-			} catch (e) {
-				result = e;
-			}
-
-			expect(result.message).toBe('Deleted review successfully!');
-		});
-	});
-
 	/*	describe('Check Creator', () => {
 		it('Creator Check True', async () => {
 			const result = await notebookService.checkCreator(notebookId, userId);
