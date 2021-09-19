@@ -38,6 +38,10 @@ jobs:
 #        base64 -d -i service_account.json.b64 > service_account.json
 #      env:
 #        SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-#    - name: Run Tests
-#      run: npm test
+    - name: Provide Firebase Service Account
+      env:
+        SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+      run: echo $SERVICE_ACCOUNT > ./functions/service_account.json
+    - name: Run Tests
+      run: npm test
 
