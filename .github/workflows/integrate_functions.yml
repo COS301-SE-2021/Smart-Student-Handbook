@@ -41,7 +41,7 @@ jobs:
     - name: Provide Firebase Service Account
       env:
         SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-      run: echo $SERVICE_ACCOUNT > ./functions/service_account.json
+      run: echo $SERVICE_ACCOUNT > service_account.json
     - name: Run Tests
       run: npm test
 
