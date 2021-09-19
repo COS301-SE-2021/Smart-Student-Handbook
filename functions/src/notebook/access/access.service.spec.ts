@@ -69,10 +69,10 @@ describe('AccessService', () => {
 		});
 	});
 
-	describe('checkUserAccess', () => {
-		it('This function should check if a user has access to the notebook', async () => {
-			const result = await service.checkUserAccess('testNotebook', 'UserID');
-			expect(result).toStrictEqual(true);
+	describe('checkCreator', () => {
+		it('This function should check if a user has created the notebook', async () => {
+			const result = await service.checkCreator('testNotebook', 'UserID');
+			expect(result).toStrictEqual(false);
 		});
 	});
 });
