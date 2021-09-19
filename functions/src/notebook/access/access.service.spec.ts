@@ -49,6 +49,29 @@ describe('AccessService', () => {
 				userId: 'testUserID2',
 			},
 		});
+
+		mocked.firestore().mocker.loadCollection('userNotebooks', {
+			testNotebook: {
+				title: 'Test Title',
+				author: 'testUserID',
+				course: 'Test Course',
+				description: 'Test Description',
+				institution: 'Test Institution',
+				creatorId: 'testUserID',
+				private: true,
+				tags: ['tag1', 'tag2'],
+				userId: 'UserID',
+				notebookId: 'testNotebook',
+				access: [],
+			},
+			testNotebook2: {
+				accessID: 'number 2',
+				displayName: 'TestName2',
+				notebookID: 'testNotebook2',
+				profileUrl: 'url2',
+				userId: 'testUserID2',
+			},
+		});
 	});
 
 	it('should be defined', () => {
@@ -73,6 +96,13 @@ describe('AccessService', () => {
 		it('This function should check if a user has created the notebook', async () => {
 			const result = await service.checkCreator('testNotebook', 'UserID');
 			expect(result).toStrictEqual(false);
+		});
+	});
+
+	describe('updateNotebookAccess', () => {
+		it('This function should check if you can update a access list', async () => {
+			const result = await service.updateNotebookAccess('testNotebook');
+			expect(result).toBeUndefined();
 		});
 	});
 });
