@@ -35,10 +35,10 @@ jobs:
     - name: Create Firebase Service Account file
       env:
         SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+        RUNTIME_CONFIG: ${{ secrets.RUNTIME_CONFIG }}
       run:
         echo "$env:SERVICE_ACCOUNT" > service_account.json |
-        firebase functions:config:get | sc .runtimeconfig.json
-      #        base64 -d -i service_account.json.b64 > service_account.json
+        echo "$env:RUNTIME_CONFIG" > .runtimeconfig.json
     - name: Run Tests
       run: npm test
 
