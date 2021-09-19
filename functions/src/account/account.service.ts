@@ -157,18 +157,6 @@ export class AccountService {
 	 * If successful return success message else throw Bad Request exception
 	 */
 	async updateUser(updateDto: UpdateDto, uid: string): Promise<Account> {
-		// Check if user is logged in
-		// try {
-		// 	uid = firebase.auth().currentUser.uid;
-		// } catch (error) {
-		// 	return {
-		// 		success: false,
-		// 		user: null,
-		// 		message: 'User does not exist',
-		// 		error: error.message,
-		// 	};
-		// }
-
 		const userDetails = {
 			uid,
 			institution: updateDto.institution,
@@ -725,17 +713,4 @@ export class AccountService {
 			);
 		}
 	}
-
-	// async refreshIdToken(userId: string): Promise<string> {
-	// 	try {
-	// 		const notificationId = await admin.firestore().collection('users').doc(userId).get();
-	//
-	// 		return notificationId.data().notificationID.value;
-	// 	} catch (error) {
-	// 		throw new HttpException(
-	// 			`Something went wrong. Operation could not be executed.${error}`,
-	// 			HttpStatus.INTERNAL_SERVER_ERROR,
-	// 		);
-	// 	}
-	// }
 }

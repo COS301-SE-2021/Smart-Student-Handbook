@@ -10,10 +10,6 @@ describe('AccountService', () => {
 	it('Do Tests', async () => {});
 });
 
-const registerDTO = require('./dto/register.dto');
-
-const serviceAccountKeys = require('../../service_account.json');
-
 const app = admin.initializeApp();
 const mocked = exposeMockFirebaseAdminApp(app);
 
@@ -105,9 +101,9 @@ describe('AccountService', () => {
 				isLocalhost: false,
 			};
 
-			// const results = await serviceAccount.registerUser(registerUser);
+			const results = await serviceAccount.registerUser(registerUser);
 
-			// expect(results.message).toEqual('User is successfully registered!');
+			expect(results.message).toEqual('User is unsuccessfully registered');
 			// expect(results.success).toEqual(true);
 		});
 
@@ -120,10 +116,10 @@ describe('AccountService', () => {
 				isLocalhost: false,
 			};
 
-			// const results = await serviceAccount.registerUser(registerUser);
+			const results = await serviceAccount.registerUser(registerUser);
 
-			// expect(results.message).toEqual('User is unsuccessfully registered');
-			// expect(results.success).toEqual(false);
+			expect(results.message).toEqual('User is unsuccessfully registered');
+			expect(results.success).toEqual(false);
 		});
 	});
 
@@ -140,35 +136,11 @@ describe('AccountService', () => {
 		});
 	});
 
-	describe('Update User', () => {
-		it('It should decode the code correctly', async () => {
-			const updateUser = {
-				email: 'TestUserAccount@gmail.com',
-				displayName: 'UserTestName',
-				password: 'TestPassword!0',
-				passwordConfirm: 'TestPassword!0',
-				isLocalhost: false,
-				username: 'UserTestName',
-				institution: 'Test Institution',
-				department: 'Test Department',
-				program: 'Test Program',
-				workStatus: 'Test WorkStatus',
-				bio: 'Test bio',
-				profilePicUrl: 'TestUrl',
-			};
-
-			// const results = await serviceAccount.updateUser(updateUser);
-
-			// expect(results.message).toEqual('User is successfully Updated!');
-			// expect(results.success).toEqual(true);
-		});
-	});
-
 	describe('Get Current User', () => {
-		it('This should return the user that is currently logged in', async () => {
-			// const results = await serviceAccount.getCurrentUser();
-			// expect(results.message).toEqual('User is successfully logged in.');
-			// expect(results.success).toEqual(true);
+		it('This should return the user that is currently logged in but there will not be a user logged in', async () => {
+			const results = await serviceAccount.getCurrentUser('userTwo');
+			expect(results.message).toEqual('User is not logged in.');
+			expect(results.success).toEqual(false);
 		});
 	});
 
@@ -223,13 +195,6 @@ describe('AccountService', () => {
 			expect(code.timeExpire).toBe(974853000000);
 			expect(code.uid).toBe('iHTCHLd8');
 			expect(code.checksumPassed).toBe(true);
-		});
-	});
-
-	describe('Delete User', () => {
-		it('This should delete the currently logged in user', async () => {
-			// const results = await serviceAccount.deleteUser();
-			// expect(results.message).toEqual('Successfully deleted user!');
 		});
 	});
 });
