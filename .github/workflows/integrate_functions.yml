@@ -32,13 +32,16 @@ jobs:
       run: npm ci
     - name: Building
       run: npm run build --if-present
+    - name: Create RunTimeConfig
+      env:
+        RUNTIME_CONFIG: ${{ secrets.RUNTIME_CONFIG }}
+        run:
+          echo "$env:RUNTIME_CONFIG" > .runtimeconfig.json
     - name: Create Firebase Service Account file
       env:
         SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-        RUNTIME_CONFIG: ${{ secrets.RUNTIME_CONFIG }}
       run:
-        echo "$env:SERVICE_ACCOUNT" > service_account.json |
-        echo "$env:RUNTIME_CONFIG" > .runtimeconfig.json
+        echo "$env:SERVICE_ACCOUNT" > service_account.json
     - name: Run Tests
       run: npm test
 
