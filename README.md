@@ -56,11 +56,9 @@ to amount of other users using their notebook.
 
 <p>Deployed Smart Student Handbook: <a href="https://smartstudenthandbook.co.za/">https://smartstudenthandbook.co.za/ </a></p>
 
-
-
 # Git Structure
 
-## Monorepo and Git Flow
+* Monorepo and Git Flow
 
 ### Branching Strategy
 
@@ -141,7 +139,7 @@ to amount of other users using their notebook.
 
 </div> 
 
-#Contributions
+# Contributions
 
 ## Louw Claassens   | u18000402 
 
