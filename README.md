@@ -1,8 +1,8 @@
 <h1 align="center" style="font-size: 300%;" > Smart Student Handbook </h1>
 
-<a href="https://smartstudenthandbook.co.za/">
+<a href="https://smartstudenthandbook.co.za/" target="_blank">
     <p align="center">
-        <img  src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FpwaLogo1WhiteBackground.png?alt=media&token=e750295d-a4a4-45a7-bea8-72e781b5dcdf" alt="Smart Student Handbook Logo">
+        <img  src=".github/images/pwaLogo1WhiteBackground.png" alt="Smart Student Handbook Logo">
     </p>
 </a>
 
@@ -43,18 +43,17 @@
 
 <div style="margin-left: 4%">
 
-The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook attempts to improve, speeds up, and encourage collaboration between students. The Smart Student application will allow users to create notebooks.
-Notebooks can be stored in different folders. Notebooks consist of different sections and sections can then be split up into pages allowing for organized note taking. Notes are written in
-markup, thus allowing for multiple customization options for users such as text formatting,
-adding bullet points, tables, images and much more. Once a notebook is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar notebooks.
-The user will then have the ability to merge, copy or clone these notebook to their notebook.
-Afterwards users will be able to rate either the entire notebook or snippets of the notebook.
-The application will work on a subscription based service where users will be paid according
-to amount of other users using their notebook.
+The Smart Student Handbook is an advanced note taking application that is aimed towards students to help aid in their
+note taking experience by making it a collaborative and smart experience. It does this by recommending similar notes 
+and content based off the title, description and tags of the note that the user has opened through the Smart Assist tool. 
+The Smart Student Handbook also allows students to add collaborators to their notebooks so that multiple students can 
+collaborate in real-time on the same notebook. Each notebook contains it's own chat room so that students who are 
+collaborating can communicate while collaborating. Students are also able to explore, clone and rate notebooks as 
+well as manage their account information.
 
 </div>
 
-<p>Deployed Smart Student Handbook: <a href="https://smartstudenthandbook.co.za/">https://smartstudenthandbook.co.za/ </a></p>
+🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za/ </a>
 
 # Git Structure
 
@@ -72,16 +71,16 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing">Software Requirements Specification - V1</a>
-* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing">Software Requirements Specification - V2</a>
-* <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing">Software Requirements Specification - V3</a>
-* <a href="#">Software Requirements Specification - V4</a>
-* <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing">Technical Installation Guide - V1</a>
-* <a href="#">Technical Installation Guide V2</a>
-* <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing">User Manual - V1</a>
-* <a href="#">User Manual - V2</a>
-* <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing">Coding Standards</a>
-* <a href="#">Testing Policy</a>
+* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing" target="_blank">Software Requirements Specification - V1</a>
+* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing" target="_blank">Software Requirements Specification - V2</a>
+* <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing" target="_blank">Software Requirements Specification - V3</a>
+* <a href="#" target="_blank">Software Requirements Specification - V4</a>
+* <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing" target="_blank">Technical Installation Guide - V1</a>
+* <a href="#" target="_blank">Technical Installation Guide V2</a>
+* <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing" target="_blank">User Manual - V1</a>
+* <a href="#" target="_blank">User Manual - V2</a>
+* <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing" target="_blank">Coding Standards</a>
+* <a href="#" target="_blank">Testing Policy</a>
 
 </div>
 
@@ -105,12 +104,12 @@ to amount of other users using their notebook.
 
 <div style="margin-left: 4%">
 
-* <p><a href="https://github.com/orgs/COS301-SE-2021/teams/algorithmic-aces">GitHub Discussions</a>: Meeting Notes </p>
-* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/issues">GitHub Issues</a>: Progress tracking and issue tracking</P>
-* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/projects">GitHub Projects</a>: Kanban boards to track progress of tickets/ issues</p>
-* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/actions">Github Actions</a> Continuous integration and automated testing</p>
-* <p><a href="https://discord.com/">Discord</a>: Main platform used for team communication and collaboration</p>
-* <p><a href="https://www.kumospace.com/cos301-se-2021">Kumospace</a> & <a href="https://discord.com/">Discord</a> & <a href="https://www.blackboard.com/en-mea/teaching-learning/collaboration-web-conferencing/blackboard-collaborate">Blackboard Collaborate</a>: Platforms used to communicate and collaborate with Stakeholders</p>
+* <p><a href="https://github.com/orgs/COS301-SE-2021/teams/algorithmic-aces" target="_blank">GitHub Discussions</a>: Meeting Notes </p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/issues" target="_blank">GitHub Issues</a>: Progress tracking and issue tracking</P>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/projects" target="_blank">GitHub Projects</a>: Kanban boards to track progress of tickets/ issues</p>
+* <p><a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook/actions" target="_blank">Github Actions</a> Continuous integration and automated testing</p>
+* <p><a href="https://discord.com/" target="_blank">Discord</a>: Main platform used for team communication and collaboration</p>
+* <p><a href="https://www.kumospace.com/cos301-se-2021" target="_blank">Kumospace</a> & <a href="https://discord.com/" target="_blank">Discord</a> & <a href="https://www.blackboard.com/en-mea/teaching-learning/collaboration-web-conferencing/blackboard-collaborate" target="_blank">Blackboard Collaborate</a>: Platforms used to communicate and collaborate with Stakeholders</p>
 
 </div>
 
@@ -120,11 +119,10 @@ to amount of other users using their notebook.
 
 <!-- Descriptions goes here -->
 
-* <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing"> Demo 1 </a>
-* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing"> Demo 2 </a>
-* <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing"> Demo 3 </a>
-* <a href="#"> Demo 4 </a>
-<!-- * <a href="#"> Demo 4 </a> -->
+* <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing" target="_blank"> Demo 1 </a>
+* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing" target="_blank"> Demo 2 </a>
+* <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing" target="_blank"> Demo 3 </a>
+* <a href="#" target="_blank"> Demo 4 </a>
 
 </div>
 
@@ -161,9 +159,10 @@ to amount of other users using their notebook.
 </details>
 <details><summary> What I did for Demo 4</summary>
 
-- a
-- b
-- c
+- Integration Testing
+- Realtime chat backend
+- Realtime collaboration backend
+- NotebookService backend Refactor
 </details>
   
 <hr/>
@@ -188,9 +187,10 @@ to amount of other users using their notebook.
 </details>
 <details><summary> What I did for Demo 4</summary>
 
-- a
-- b
-- c
+- Unit Testing
+- User Manual
+- Explore Notes
+- Algolia Integration
 </details>
 
 <hr/>
@@ -218,9 +218,11 @@ to amount of other users using their notebook.
 </details>
 <details><summary> What I did for Demo 4</summary>
 
-- a
-- b
-- c
+- Front end notebooks
+- Real time collaborate
+- Helped to integrate chat function into frontend
+- Helped to integrate smart assist into frontend
+- Swapped Editor.js with Quill.js
 </details>
 
 <hr/>
@@ -248,9 +250,11 @@ to amount of other users using their notebook.
 </details>
 <details><summary> What I did for Demo 4</summary>
 
-- a
-- b
-- c
+- Front-End Authentication
+- Improved User Experience and Interface
+- Welcome page
+- Branding
+- SRS update
 </details>
 
   <hr/>
@@ -278,9 +282,9 @@ I am currently a Computer Science Student at The University of Pretoria
 </details>
 <details><summary> What I did for Demo 4</summary>
 
-- a
-- b
-- c
+- Smart Assist Backend
+- Smart Assist Frontend
+- Add User Profile Photo 
 </details>
 
 <hr/>
@@ -292,16 +296,16 @@ I am currently a Computer Science Student at The University of Pretoria
 
 # Stakeholders
 
-<a href="https://www.cs.up.ac.za/">
+<a href="https://www.cs.up.ac.za/" target="_blank">
     <p align="center">
-        <img  src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FUP_CS.jpg?alt=media&token=91a202be-f2e3-4b3e-8f03-021ecc0bb87b" alt="Computer Science Department">
+        <img  src="./.github/images/UP_CS.jpg" alt="Computer Science Department">
     </p>
 </a>
 
 
-<a href="https://www.advance.io/">
+<a href="https://www.advance.io/" target="_blank">
     <p align="center">
-        <img  src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FAdvance.jpg?alt=media&token=30f8a267-381d-4842-9d1e-bd4ab70fdaf3" alt="Advance Logo">
+        <img  src=".github/images/advance-twitter-1.jpg" alt="Advance Logo">
     </p>
 </a>
 
