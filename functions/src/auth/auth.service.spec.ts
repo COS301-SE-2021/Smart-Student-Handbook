@@ -45,15 +45,15 @@ describe('Auth Service Tests', () => {
 	describe('Login user to be used', () => {
 		it('Should login a user successfully', async () => {
 			const user = {
-				email: 'TestUserAccount@gmail.com',
-				password: 'TestPassword!0',
+				email: 'test-user-review@smartstudenthandbook.co.za',
+				password: 'TestPassword01!',
 			};
 
 			const userData = await accountService.loginUser(user);
 
 			const result = await authService.verifyUser(userData.authToken);
 
-			expect(result).toBe('sYTwoaCyHQO0cNAqJcxBnO70yne2');
+			expect(result).toBe('BvzwT1hKTETNLvXeCMgxinOm0GH3');
 		});
 
 		it('Throw Exception: Invalid JWT token', async () => {
