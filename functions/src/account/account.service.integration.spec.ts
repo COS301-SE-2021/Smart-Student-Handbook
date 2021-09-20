@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
+import { reset } from 'mockdate';
 import { NotebookService } from '../notebook/notebook.service';
 import { AccountService } from './account.service';
 import { NotebookController } from '../notebook/notebook.controller';
@@ -138,6 +139,99 @@ describe('Account Service Integration Testing', () => {
 			expect(result.success).toBe(true);
 			expect(result.user.uid).toBe(id);
 			expect(result.user.email).toBe(user.user.email);
+		});
+	});
+
+	describe('Delete User Integration Testing', () => {
+		it('Register User Successfully', async () => {
+			const num = Math.floor(Math.random() * 100000 + 1);
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
+
+			const userresult = await accountService.registerUser(registerDto);
+			const user = userresult.user.uid;
+
+			const result = await accountService.deleteUser(user);
+
+			expect(result.message).toBe('Successfully deleted user!');
+		});
+	});
+
+	describe('Verify User Email Integration Testing', () => {
+		it('Verify User Email Unsuccessfully', async () => {
+			const num = Math.floor(Math.random() * 100000 + 1);
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
+
+			const user = await accountService.registerUser(registerDto);
+
+			const verifyEmil = {
+				email: `testuser${num}@gmail.com`,
+				local: 'true',
+				code: 'wrongcode',
+			};
+
+			const result = await accountService.verifyEmail(verifyEmil);
+
+			expect(result.url).toBe('localhost:5000');
+		});
+	});
+
+	describe('Reset Password Integration Testing', () => {
+		it('Request Reset Password', async () => {
+			const num = Math.floor(Math.random() * 100000 + 1);
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
+
+			const user = await accountService.registerUser(registerDto);
+
+			const requestResetPassword = {
+				email: `testuser${num}@gmail.com`,
+				isLocalhost: true,
+			};
+
+			const result = await accountService.requestResetPassword(requestResetPassword);
+
+			expect(result.message).toBeDefined();
+		});
+
+		it('Finalize Reset Password', async () => {
+			const num = Math.floor(Math.random() * 100000 + 1);
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
+
+			const user = await accountService.registerUser(registerDto);
+
+			const requestResetPassword = {
+				email: `testuser${num}@gmail.com`,
+				isLocahost: true,
+				newPassword: 'newPassword',
+				code: 'wrongCode',
+			};
+
+			const result = await accountService.finalizeResetPassword(requestResetPassword);
+
+			expect(result.success).toBe(false);
 		});
 	});
 });
