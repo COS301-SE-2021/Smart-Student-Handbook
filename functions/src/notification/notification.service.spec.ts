@@ -9,6 +9,15 @@ import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dt
 
 const { mock } = require('nodemailer');
 
+const test = require('firebase-functions-test')();
+
+test.mockConfig({
+	email: {
+		user: 'smartstudent.handbook@gmail.com',
+		pass: 'SmartStudent01!',
+	},
+});
+
 admin.initializeApp();
 
 describe('NotificationService', () => {
