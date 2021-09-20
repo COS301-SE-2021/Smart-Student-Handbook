@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
-import { reset } from 'mockdate';
 import { NotebookService } from '../notebook/notebook.service';
 import { AccountService } from './account.service';
 import { NotebookController } from '../notebook/notebook.controller';
@@ -43,7 +42,7 @@ firebase.initializeApp(firebaseConfig);
 
 describe('Account Service Integration Testing', () => {
 	let accountService: AccountService;
-	let notificationService: NotificationService;
+	// let notificationService: NotificationService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -60,7 +59,7 @@ describe('Account Service Integration Testing', () => {
 			],
 		}).compile();
 		//
-		notificationService = module.get<NotificationService>(NotificationService);
+		// notificationService = module.get<NotificationService>(NotificationService);
 		accountService = module.get<AccountService>(AccountService);
 
 		jest.setTimeout(30000);
@@ -167,15 +166,15 @@ describe('Account Service Integration Testing', () => {
 	describe('Verify User Email Integration Testing', () => {
 		it('Verify User Email Unsuccessfully', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);
-			const registerDto = {
-				email: `testuser${num}@gmail.com`,
-				username: `testuser${num}`,
-				password: 'TestPassword101*',
-				passwordConfirm: 'TestPassword101*',
-				isLocalhost: true,
-			};
+			// const registerDto = {
+			// 	email: `testuser${num}@gmail.com`,
+			// 	username: `testuser${num}`,
+			// 	password: 'TestPassword101*',
+			// 	passwordConfirm: 'TestPassword101*',
+			// 	isLocalhost: true,
+			// };
 
-			const user = await accountService.registerUser(registerDto);
+			// const user = await accountService.registerUser(registerDto);
 
 			const verifyEmil = {
 				email: `testuser${num}@gmail.com`,
@@ -192,15 +191,15 @@ describe('Account Service Integration Testing', () => {
 	describe('Reset Password Integration Testing', () => {
 		it('Request Reset Password', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);
-			const registerDto = {
-				email: `testuser${num}@gmail.com`,
-				username: `testuser${num}`,
-				password: 'TestPassword101*',
-				passwordConfirm: 'TestPassword101*',
-				isLocalhost: true,
-			};
+			// const registerDto = {
+			// 	email: `testuser${num}@gmail.com`,
+			// 	username: `testuser${num}`,
+			// 	password: 'TestPassword101*',
+			// 	passwordConfirm: 'TestPassword101*',
+			// 	isLocalhost: true,
+			// };
 
-			const user = await accountService.registerUser(registerDto);
+			// const user = await accountService.registerUser(registerDto);
 
 			const requestResetPassword = {
 				email: `testuser${num}@gmail.com`,
@@ -214,15 +213,15 @@ describe('Account Service Integration Testing', () => {
 
 		it('Finalize Reset Password', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);
-			const registerDto = {
-				email: `testuser${num}@gmail.com`,
-				username: `testuser${num}`,
-				password: 'TestPassword101*',
-				passwordConfirm: 'TestPassword101*',
-				isLocalhost: true,
-			};
+			// const registerDto = {
+			// 	email: `testuser${num}@gmail.com`,
+			// 	username: `testuser${num}`,
+			// 	password: 'TestPassword101*',
+			// 	passwordConfirm: 'TestPassword101*',
+			// 	isLocalhost: true,
+			// };
 
-			const user = await accountService.registerUser(registerDto);
+			// const user = await accountService.registerUser(registerDto);
 
 			const requestResetPassword = {
 				email: `testuser${num}@gmail.com`,
