@@ -44,11 +44,15 @@
         <br/>
 
         <button mat-raised-button type="submit" [disabled]="isDisabled || form.invalid">Register</button>
-      </form>
+      </form>    
     </mat-card-content>
 
     <p class="text-center">
       I already have an Account? <a [routerLink]="['/account/login']">Login</a>
     </p>
+
+    <div class="alert alert-warning" role="alert">
+      Warning: <em class="fa fa-safari"></em> Safari Web browser not supported
+    </div>
   </mat-card>
 </div>
