@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
+import { HttpException } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 // import { EmailInterface } from './interfaces/email.interface';
 import { SingleNotificationRequestDto } from './dto/singleNotificationRequest.dto';
