@@ -43,6 +43,7 @@ firebase.initializeApp(firebaseConfig);
 
 describe('Account Service Integration Testing', () => {
 	let accountService: AccountService;
+	let notificationService: NotificationService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -59,6 +60,7 @@ describe('Account Service Integration Testing', () => {
 			],
 		}).compile();
 		//
+		notificationService = module.get<NotificationService>(NotificationService);
 		accountService = module.get<AccountService>(AccountService);
 
 		jest.setTimeout(30000);
