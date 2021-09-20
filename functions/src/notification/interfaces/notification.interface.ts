@@ -10,4 +10,6 @@ export interface Notification {
 	readonly body: string;
 
 	readonly opened: boolean;
+
+	readonly notificationId?: string;
 }
