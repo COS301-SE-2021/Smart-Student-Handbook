@@ -65,13 +65,7 @@ export class ResetPasswordComponent {
 				code = params.code;
 
 				this.resetPasswordService
-					.finalizeResetPassword(
-						this.user.id,
-						email,
-						isLocalHost,
-						password,
-						code
-					)
+					.finalizeResetPassword(email, isLocalHost, password, code)
 					.subscribe(() => {
 						this.snackBar
 							.open('Password successfully reset', 'Login')
