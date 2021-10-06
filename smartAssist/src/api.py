@@ -1,6 +1,7 @@
 from functools import cache
 import os
 import json
+from typing import final
 import numpy as np
 from flask import Flask, request, abort, jsonify, g
 
@@ -69,11 +70,34 @@ def getRecommendation():
 
         data.loadData(count=10000)
         smartmodel.loadSmartModel()
-            
-        
-        item = data.createDataSet(name, tags, author, institution, course)
 
+        item = data.createDataSet(name, tags, author, institution, course)
         recs = smartmodel.getRecommendations(item)
+
+        # items = []
+
+        # if len(tags) == 0:
+        #     item = data.createDataSet(name, tags, author, institution, course)
+        #     items.append(item)
+
+        # for t in tags:        
+        #     item = data.createDataSet(name, t, author, institution, course)
+        #     items.append(item)
+
+        # allRecs = []
+
+        # for i in items:
+        #     recs = smartmodel.getRecommendations(item)
+        #     allRecs.append(recs)
+
+        # finalRecs = []
+
+        # for recTag in allRecs:
+        #     for recT in recTag:
+        #         if recT not in finalRecs:
+        #             finalRecs.append(recT)
+
+
 
         return jsonify(success = True, data = recs)
     else:
