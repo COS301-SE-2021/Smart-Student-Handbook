@@ -155,7 +155,9 @@ well as manage their account information.
   
   - Backend Note, Note, Access, Review services
   - Integration Testing
-  - Technical Installation Manual, updated SRS, Architecture Design
+  - Technical Installation Manual 
+  - Updated SRS
+  - Architecture Design
 </details>
 <details><summary> What I did for Demo 4</summary>
 
