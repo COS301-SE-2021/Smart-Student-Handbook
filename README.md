@@ -53,7 +53,7 @@ well as manage their account information.
 
 </div>
 
-🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za </a>
+🖥️  <a href="https://smartstudenthandbook.co.za/welcome" target="_blank">https://smartstudenthandbook.co.za </a>
 
 # Git Structure
 
