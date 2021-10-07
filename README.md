@@ -20,6 +20,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=ncloc)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Smart-Student-Handbook&metric=security_rating)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Smart-Student-Handbook)
+
 ![Evita CI](https://github.com/COS301-SE-2021/Smart-Student-Handbook/actions/workflows/integrate_functions.yml/badge.svg)
 
 <h1> Table of Contents</h1>
@@ -53,7 +54,13 @@ well as manage their account information.
 
 </div>
 
-🖥️  <a href="https://smartstudenthandbook.co.za/welcome" target="_blank">https://smartstudenthandbook.co.za </a>
+🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za </a>
+
+🎥 <a href="https://www.youtube.com/watch?v=Y33a26MP6_w" target="_blank">Final Demo Video</a>
+
+<p align="center">
+    <img  src=".github/images/DesktopFeaturesDemo.gif" alt="Desktop Gif" height="350"><img  src=".github/images/MobileFeaturesDemo.gif" alt="Mobile Gif" height="350">
+</p>
 
 # Git Structure
 
@@ -71,14 +78,14 @@ well as manage their account information.
 
 <div style="margin-left: 4%">
 
-* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing" target="_blank">Software Requirements Specification - V1</a>
-* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing" target="_blank">Software Requirements Specification - V2</a>
-* <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing" target="_blank">Software Requirements Specification - V3</a>
-* <a href="https://drive.google.com/file/d/12vdOLsl0S-9n7SiGL_8LXcMXnOmd3O_t/view?usp=sharing" target="_blank">Software Requirements Specification - V4</a>
-* <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing" target="_blank">Technical Installation Guide - V1</a>
-* <a href="https://drive.google.com/file/d/1V9yUY20u2d1kO5mGtIhBYZkuje1HBYSD/view?usp=sharing" target="_blank">Technical Installation Guide - V2</a>
-* <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing" target="_blank">User Manual - V1</a>
-* <a href="https://drive.google.com/file/d/1gqYrWPOdH-D_oPKJ_BaRfblHbcMUQmfc/view?usp=sharing" target="_blank">User Manual - V2</a>
+* <a href="https://drive.google.com/file/d/1S0fhNsPTteRIBvU27XxEIV8cAg5D1bf9/view?usp=sharing" target="_blank">Software Requirements Specification - Version 1</a>
+* <a href="https://drive.google.com/file/d/1xufeD4pJSimiqJfEPHtb3o5F2NhKUaM9/view?usp=sharing" target="_blank">Software Requirements Specification - Version 2</a>
+* <a href="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/view?usp=sharing" target="_blank">Software Requirements Specification - Version 3</a>
+* <a href="https://drive.google.com/file/d/12vdOLsl0S-9n7SiGL_8LXcMXnOmd3O_t/view?usp=sharing" target="_blank">Software Requirements Specification - Version 4</a>
+* <a href="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/view?usp=sharing" target="_blank">Technical Installation Guide - Version 1</a>
+* <a href="https://drive.google.com/file/d/1V9yUY20u2d1kO5mGtIhBYZkuje1HBYSD/view?usp=sharing" target="_blank">Technical Installation Guide - Version 2</a>
+* <a href="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/view?usp=sharing" target="_blank">User Manual - Version 1</a>
+* <a href="https://drive.google.com/file/d/1gqYrWPOdH-D_oPKJ_BaRfblHbcMUQmfc/view?usp=sharing" target="_blank">User Manual - Version 2</a>
 * <a href="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/view?usp=sharing" target="_blank">Coding Standards</a>
 * <a href="https://drive.google.com/file/d/17uH99wAU_f1SNQbeAT2R9le_dP5I9XDP/view?usp=sharing" target="_blank">Testing Policy</a>
 
@@ -100,6 +107,11 @@ well as manage their account information.
 ### Other
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+## Technologies overview
+<p align="center">
+  <img  src=".github/images/deploymentModel.png" alt="Deployment Model">
+</p>
+
 # Project Management
 
 <div style="margin-left: 4%">
@@ -119,10 +131,10 @@ well as manage their account information.
 
 <!-- Descriptions goes here -->
 
-* <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing" target="_blank"> Demo 1 </a>
-* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing" target="_blank"> Demo 2 </a>
-* <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing" target="_blank"> Demo 3 </a>
-* <a href="https://drive.google.com/file/d/165C0hCG0CO7W3EPH7VZvTIDQlaqbl2hC/view?usp=sharing" target="_blank"> Demo 4 </a>
+* <a href="https://drive.google.com/file/d/1EUA4RgpMf73CrgyvdYkSgxb2taklpjjw/view?usp=sharing" target="_blank"> Demo 1 Video</a>
+* <a href="https://drive.google.com/file/d/1RU9e2QoeM7xnySLoLpEt9vp7Y4OvDy9l/view?usp=sharing" target="_blank"> Demo 2 Video</a>
+* <a href="https://drive.google.com/file/d/13BxPY-6_oiHY_n0MLtV54MVBbIJxUrWN/view?usp=sharing" target="_blank"> Demo 3 Video</a>
+* <a href="https://drive.google.com/file/d/165C0hCG0CO7W3EPH7VZvTIDQlaqbl2hC/view?usp=sharing" target="_blank"> Demo 4 Video</a>
 
 </div>
 
