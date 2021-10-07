@@ -53,7 +53,7 @@ well as manage their account information.
 
 </div>
 
-🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za </a>
+🖥️  <a href="https://smartstudenthandbook.co.za/welcome" target="_blank">https://smartstudenthandbook.co.za </a>
 
 # Git Structure
 
@@ -155,7 +155,9 @@ well as manage their account information.
   
   - Backend Note, Note, Access, Review services
   - Integration Testing
-  - Technical Installation Manual, updated SRS, Architecture Design
+  - Technical Installation Manual 
+  - Updated SRS
+  - Architecture Design
 </details>
 <details><summary> What I did for Demo 4</summary>
 
