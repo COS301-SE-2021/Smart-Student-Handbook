@@ -6,10 +6,6 @@
     </p>
 </a>
 
-<p align="center">
-    <img  src=".github/images/DesktopFeaturesDemo.gif" alt="Desktop Gif" height="300"><img  src=".github/images/MobileFeaturesDemo.gif" alt="Mobile Gif" height="300">
-</p>
-
 ![Uptime status](https://img.shields.io/website?down_color=red&down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fsmartstudenthandbook.co.za%2F)
 
 ![GitHub contributors](https://img.shields.io/github/contributors/COS301-SE-2021/Smart-Student-Handbook?color=green&style=plastic)
@@ -61,6 +57,10 @@ well as manage their account information.
 🖥️  <a href="https://smartstudenthandbook.co.za/" target="_blank">https://smartstudenthandbook.co.za </a>
 
 🎥 <a href="https://www.youtube.com/watch?v=Y33a26MP6_w" target="_blank">Final Demo Video</a>
+
+<p align="center">
+    <img  src=".github/images/DesktopFeaturesDemo.gif" alt="Desktop Gif" height="300"><img  src=".github/images/MobileFeaturesDemo.gif" alt="Mobile Gif" height="300">
+</p>
 
 # Git Structure
 
