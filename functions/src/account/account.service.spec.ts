@@ -158,12 +158,12 @@ describe('AccountService', () => {
 				const code = serviceAccount.encodeSecureCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
 				const decodedCode = Buffer.from(code, 'base64').toString();
 
-				const codeSplit = decodedCode.split('.');
+				const codeSplit = decodedCode.split('...');
 
-				expect(codeSplit.length).toBe(5);
+				expect(codeSplit.length).toBe(4);
 				expect(codeSplit[0]).toBe('974853000000');
 				expect(codeSplit[1]).toBe('iHTCHLd8');
-				expect(`${codeSplit[2]}.${codeSplit[3]}`).toBe('test@gmail.com');
+				expect(`${codeSplit[2]}`).toBe('test@gmail.com');
 			});
 
 			it('The check code should be calculated correctly', () => {
@@ -171,24 +171,26 @@ describe('AccountService', () => {
 
 				const code = serviceAccount.encodeSecureCode('iHTCHLd8kLMBfOXtuMHZbYXSq4v2', 'test@gmail.com');
 				const decodedCode = Buffer.from(code, 'base64').toString();
-				const codeSplit = decodedCode.split('.');
+				const codeSplit = decodedCode.split('...');
 
 				let checkSum = 0;
 				// eslint-disable-next-line no-plusplus
 				for (let i = 0; i < 7; i++) {
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
-					checkSum += Number(codeSplit[4].charAt(i));
+					checkSum += Number(codeSplit[3].charAt(i));
 				}
 				const checkNum = checkSum.toString().charAt(checkSum.toString().length - 1);
 
-				expect(codeSplit[4].charAt(7)).toBe(checkNum);
+				expect(codeSplit[3].charAt(7)).toBe(checkNum);
 			});
 		});
 
 		describe('Reset Password Decode Code', () => {
 			it('It should decode the code correctly', () => {
 				// eslint-disable-next-line max-len
-				const code = serviceAccount.decodeSecureCode('OTc0ODUzMDAwMDAwLmlIVENITGQ4LnRlc3RAZ21haWwuY29tLjg1MzE3NTMy');
+				const code = serviceAccount.decodeSecureCode(
+					'OTc0ODUzMDAwMDAwLi4uaUhUQ0hMZDguLi50ZXN0QGdtYWlsLmNvbS4uLjMwNzQ2NzQx',
+				);
 
 				expect(code.email).toBe('test@gmail.com');
 				expect(code.timeExpire).toBe(974853000000);

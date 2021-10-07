@@ -29,20 +29,15 @@ export class ResetPasswordService {
 	 * @param email
 	 * @param isLocalhost
 	 */
-	requestResetPassword(
-		userId: string,
-		email: string,
-		isLocalhost: boolean
-	): Observable<any> {
+	requestResetPassword(email: string, isLocalhost: boolean): Observable<any> {
 		return this.http.post(
 			`${RESETPASSWORD_API}/requestResetPassword`,
-			{ email, isLocalhost, userId },
+			{ email, isLocalhost },
 			httpOptions
 		);
 	}
 
 	finalizeResetPassword(
-		userId: string,
 		email: string,
 		isLocalhost: boolean,
 		newPassword: string,
@@ -50,7 +45,7 @@ export class ResetPasswordService {
 	): Observable<any> {
 		return this.http.post(
 			`${RESETPASSWORD_API}/finalizeResetPassword`,
-			{ email, isLocalhost, newPassword, code, userId },
+			{ email, isLocalhost, newPassword, code },
 			httpOptions
 		);
 	}
