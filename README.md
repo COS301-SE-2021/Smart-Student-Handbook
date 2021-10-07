@@ -59,7 +59,7 @@ well as manage their account information.
 🎥 <a href="https://www.youtube.com/watch?v=Y33a26MP6_w" target="_blank">Final Demo Video</a>
 
 <p align="center">
-    <img  src=".github/images/DesktopFeaturesDemo.gif" alt="Desktop Gif" height="300"><img  src=".github/images/MobileFeaturesDemo.gif" alt="Mobile Gif" height="300">
+    <img  src=".github/images/DesktopFeaturesDemo.gif" alt="Desktop Gif" height="350"><img  src=".github/images/MobileFeaturesDemo.gif" alt="Mobile Gif" height="350">
 </p>
 
 # Git Structure
