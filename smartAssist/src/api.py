@@ -71,35 +71,35 @@ def getRecommendation():
         data.loadData(count=10000)
         smartmodel.loadSmartModel()
 
-        item = data.createDataSet(name, tags, author, institution, course)
-        recs = smartmodel.getRecommendations(item)
+        # item = data.createDataSet(name, tags, author, institution, course)
+        # recs, recsprob = smartmodel.getRecommendations(item)
 
-        # items = []
+        items = []
 
-        # if len(tags) == 0:
-        #     item = data.createDataSet(name, tags, author, institution, course)
-        #     items.append(item)
+        if len(tags) == 0:
+            item = data.createDataSet(name, tags, author, institution, course)
+            items.append(item)
 
-        # for t in tags:        
-        #     item = data.createDataSet(name, t, author, institution, course)
-        #     items.append(item)
+        for tag in tags:        
+            item = data.createDataSet(name, [tag], author, institution, course)
+            items.append(item)
 
-        # allRecs = []
+        allRecs = []
 
-        # for i in items:
-        #     recs = smartmodel.getRecommendations(item)
-        #     allRecs.append(recs)
-
-        # finalRecs = []
-
-        # for recTag in allRecs:
-        #     for recT in recTag:
-        #         if recT not in finalRecs:
-        #             finalRecs.append(recT)
+        for item in items:
+            recs, recsprob = smartmodel.getRecommendations(item)
+            allRecs.extend(recsprob)
 
 
+        allRecsSorted = sorted(allRecs, key=lambda k: k[1], reverse=True)
 
-        return jsonify(success = True, data = recs)
+        finalRecs = [recID[0] for recID in allRecsSorted]
+        
+
+        print(finalRecs[:10], flush=True)
+        print(finalRecs, flush=True)
+
+        return jsonify(success = True, data = finalRecs[:10])
     else:
         abort(400)
 

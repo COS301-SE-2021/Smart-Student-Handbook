@@ -184,23 +184,29 @@ class SmartAssistModel():
         dists = np.dot(self.weights, predictweight)
 
         sorted_dists = np.argsort(dists.reshape(-1))
-            
-        closest = sorted_dists[-2*num:]
 
+        dists_combined = []
+
+        for i, s in enumerate(reversed(sorted_dists)):
+            dists_combined.append((s, dists.reshape(-1)[s]))
 
         ret = list(())
+        retprob = list(())
 
-        for idx, c in enumerate(reversed(closest)):
+        for i, s in dists_combined[:2*num]:
             try:
-                if self.data.index_data[self.data.index_dataSet[c]] not in ret:
-                    ret.append(self.data.index_data[self.data.index_dataSet[c]])
+                if self.data.index_data[self.data.index_dataSet[i]] not in ret:
+                    # print(i,s, self.data.index_data[self.data.index_dataSet[i]], flush=True)
+
+                    retprob.append((self.data.index_data[self.data.index_dataSet[i]], s))
+                    ret.append(self.data.index_data[self.data.index_dataSet[i]])
             except:
                 pass
 
             if len(ret) == num:
                 break
 
-        return ret
+        return ret, retprob
 
 
     def saveEmbeddingWeights(self):

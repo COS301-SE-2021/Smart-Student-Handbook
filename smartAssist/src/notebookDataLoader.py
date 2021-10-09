@@ -256,10 +256,8 @@ class SmartAssistData:
 
 
     def createDataSet(self, name, tags, author, institution, course):
-        soupArr = [name, author, institution, course.replace(" ", "")]
-        for t in tags:
-            soupArr.append(t)
-
+        
+        # print(tags, flush=True)
         data = len(self.index_data)
 
         try:
