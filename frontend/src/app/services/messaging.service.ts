@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { AccountService } from '@app/services/account.service';
+import 'firebase/performance';
 
 let addr;
 if (window.location.host.includes('localhost')) {
@@ -27,7 +28,7 @@ export class MessagingService {
 		private accountService: AccountService
 	) {
 		firebase.initializeApp(environment.firebase);
-
+		firebase.performance();
 		// if (firebase.messaging.isSupported())
 		this.messaging = firebase.messaging();
 	}

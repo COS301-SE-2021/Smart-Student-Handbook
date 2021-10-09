@@ -10,6 +10,10 @@ import { QuillBinding } from 'y-quill';
 import { CanDeactivate } from '@angular/router';
 import { SmartAssistObservablesService } from '@app/services/smartAssist/smart-assist-observables.service';
 
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
+
 @Component({
 	selector: 'app-note-editor',
 	templateUrl: './note-editor.component.html',
@@ -323,6 +327,7 @@ export class NoteEditorComponent
 				cursors: true,
 				syntax: false,
 				toolbar: '#toolbar-container',
+				imageResize: true,
 			},
 			// placeholder: 'Loading...',
 			theme: 'snow',
@@ -367,7 +372,7 @@ export class NoteEditorComponent
 			.getElementsByClassName('snippetContentHeader')[0]
 			.getAttribute('data-noteId');
 
-		console.log(recNoteId);
+		// console.log(recNoteId);
 
 		let changes = [];
 
@@ -379,7 +384,7 @@ export class NoteEditorComponent
 				changes = docdata.val().changes.ops;
 			});
 
-		console.log(changes);
+		// console.log(changes);
 
 		this.addContent(changes);
 	}

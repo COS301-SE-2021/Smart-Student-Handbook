@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import EditorJS from '@editorjs/editorjs';
+// import EditorJS from '@editorjs/editorjs';
 import { Router } from '@angular/router';
 import { MatDrawerMode } from '@angular/material/sidenav';
 import { AccountService } from '@app/services';
@@ -51,7 +51,7 @@ export class NotebookComponent implements OnInit, AfterViewInit {
 
 	notebookID: string = '';
 
-	_editor!: EditorJS;
+	// _editor!: EditorJS;
 
 	// Variable that holds the logged in user details
 	user: any;

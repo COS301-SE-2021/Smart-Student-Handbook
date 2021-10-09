@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 import {
 	AddCollaboratorComponent,
 	AddNotebookComponent,
-	ConfirmDeleteComponent,
 } from '@app/components';
 import { NotebookDto } from '@app/models';
 import { AccountService } from '@app/services';

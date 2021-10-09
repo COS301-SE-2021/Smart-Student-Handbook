@@ -68,7 +68,7 @@ export class NotebookService {
 			{
 				displayName: user.user.displayName,
 				userId,
-				profileUrl: user.user.displayName,
+				profileUrl: user.user.profilePicUrl,
 				notebookId,
 			},
 			userId,
@@ -79,8 +79,8 @@ export class NotebookService {
 		 */
 		await this.noteService.createNote(
 			{
-				name: 'Introduction',
-				description: 'My first note',
+				name: `Introduction for ${notebook.title}`,
+				description: `My first note for ${notebook.title}`,
 				notebookId,
 				tags: [],
 			},

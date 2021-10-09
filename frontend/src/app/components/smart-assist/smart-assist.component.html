@@ -107,6 +107,7 @@
     align="start"
     class="card text-left snippetCard"
     cdkDrag
+    fxHide.lt-md
     (mouseleave)="hidePreview(i)"
     data.noteId='{{noteItem.noteId}}'
   >
@@ -115,9 +116,6 @@
       {{noteItem.date}}
       </mat-card-subtitle>
 
-      <mat-icon class="preview" fxHide.gt-sm (click)='addToNote(noteItem.noteId)' matTooltip="Add snippet">
-        note_add
-      </mat-icon>
       <mat-icon class="preview" (click)="showPreview(i)" fxHide.lt-md>
         aspect_ratio
       </mat-icon>
@@ -126,6 +124,63 @@
         {{noteItem.title}}
       </mat-card-title>
 
+      <mat-card-title matTooltip="Ratings and Reviews">
+        <button mat-button style="color: #444444; padding-left: 0; margin-left: -5px;" (click)="openReviews(noteItem.noteId)">
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+        </button>
+      </mat-card-title>
+
+      <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
+        {{b.insert}}
+      </mat-card-title>
+
+    </mat-card-header>
+
+    <div class="tags" >
+      <div>
+        <div class="tag" *ngFor="let t of noteItem.tags">
+          <mat-chip color="primary" class="item">{{t}}</mat-chip>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div *ngFor="let noteItem of notes; let i = index">
+
+  <mat-card
+    align="start"
+    class="card text-left snippetCard"
+    fxHide.gt-sm
+    (mouseleave)="hidePreview(i)"
+    data.noteId='{{noteItem.noteId}}'
+  >
+    <mat-card-header class="snippetContentHeader" [attr.data-noteId]="noteItem.noteId">
+      <mat-card-subtitle class="date">
+        {{noteItem.date}}
+      </mat-card-subtitle>
+
+      <mat-icon class="preview"  (click)='addToNote(noteItem.noteId)' matTooltip="Add snippet">
+        note_add
+      </mat-icon>
+
+      <mat-card-title class="snippetTitle" data-type="header" >
+        {{noteItem.title}}
+      </mat-card-title>
+
+      <mat-card-title matTooltip="Ratings and Reviews">
+        <button mat-button style="color: #444444; padding-left: 0; margin-left: -5px;" (click)="openReviews(noteItem.noteId)">
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+          <mat-icon class="rateStars">star_border</mat-icon>
+        </button>
+      </mat-card-title>
 
       <mat-card-title *ngFor="let b of noteItem.blocks.ops" class="snippetContent" data-type="paragraph">
         {{b.insert}}

@@ -15,36 +15,39 @@
     <div class="col-lg-7 offset-lg-1 order-last order-lg-first">
       <h1 class="welcomeHeading">What is Smart Student Handbook About?</h1>
       <h2 class="welcomeSubHeading">
-        The Smart Student notebook is an advance note taking application that is aimed towards student. The Smart Student notebook
-        attempts to improve, speeds up, and encourage collaboration between students. The Smart Student application will allow users
-        to create notebooks. Notebooks can be stored in different folders. Notebooks consist of different sections and sections can
-        then be split up into pages allowing for organized note taking. Notes are written in markup, thus allowing for multiple
-        customization options for users such as text formatting, adding bullet points, tables, images and much more. Once a notebook
-        is opened, a Smart assist toolbar will popup on the side , giving notebook recommendations on similar notebooks. The user will
-        then have the ability to merge, copy or clone these notebook to their notebook. Afterwards users will be able to rate either
-        the entire notebook or snippets of the notebook. The application will work on a subscription based service where users will be
-        paid according to amount of other users using their notebook.
+        The Smart Student Handbook is an advanced note taking application that is aimed towards students to help aid in their
+        note taking experience by making it a collaborative and smart experience. It does this by recommending similar notes
+        and content based off the title, description and tags of the note that the user has opened through the Smart Assist tool.
+        The Smart Student Handbook also allows students to add collaborators to their notebooks so that multiple students can
+        collaborate in real-time on the same notebook. Each notebook contains it's own chat room so that students who are
+        collaborating can communicate while collaborating. Students are also able to explore, clone and rate notebooks as
+        well as manage their account information.
       </h2>
     </div>
-    <div class="col-lg-4  col-12 text-center order-first order-lg-last mb-5">
-      <button class="mb-3 actionBtn"  mat-raised-button  [routerLink]="['/account/login']">
+    <div class="col-lg-4  col-md-12 text-center order-first order-lg-last mb-5">
+      <button class="mb-3 m-md-3 actionBtn"  mat-raised-button  [routerLink]="['/account/login']">
         Login
       </button>
-      <br>
-      <button class="actionBtn" mat-raised-button [routerLink]="['/account/register']">
+      <button class="mb-3 m-md-3 actionBtn" mat-raised-button [routerLink]="['/account/register']">
         Register
       </button>
-      <a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook" class="btn btn-dark text-white githubAction mt-3">
-        <em class="fa fa-github-square fa-2x"></em> Find us on Github
+      <a href="https://github.com/COS301-SE-2021/Smart-Student-Handbook" class="mb-3 m-md-3 btn btn-dark text-white githubAction" target="_blank">
+        <em class="fa fa-github-square fa-2x"></em> Find us on GitHub
       </a>
     </div>
   </div>
-
+  <div class="row mt-3">
+    <div class="col-12 text-center text-lg-start offset-lg-1">
+      <iframe frameborder="2" allowfullscreen title="Smart Student Handbook Final Demo"
+              src="https://www.youtube.com/embed/Y33a26MP6_w">
+      </iframe>
+    </div>
+  </div>
 
 <!--Collaborate-->
   <div class="row feature topWave"></div>
 
-  <div class="row feature featureBackground" style="padding-top: 20px;">
+  <div class="row feature featureBackground" style="padding-top: 0px;">
     <div class="col-12 col-lg-4 offset-lg-1 ">
       <h1 class="display-6 text-white welcomeHeading">Features</h1>
     </div>
@@ -134,12 +137,12 @@
             <img class="memberProfilePic" [src]="member.profile" alt="profilePic"/>
             <h2 class="teamMemberName my-2">{{member.name}}</h2>
               <span>
-                <a href="{{member.linkedIn}}" class="btn btn-dark text-white m-2">
+                <a href="{{member.linkedIn}}" class="btn btn-dark text-white m-2" target="_blank">
                   <em class="fa fa-linkedin-square fa-2x"></em> Linkedin
                 </a>
 
-                <a href="{{member.github}}" class=" btn btn-dark text-white">
-                    <em class="fa fa-github-square fa-2x"></em> Github
+                <a href="{{member.github}}" class=" btn btn-dark text-white" target="_blank">
+                    <em class="fa fa-github-square fa-2x"></em> GitHub
                 </a>
               </span>
           </div>
@@ -156,16 +159,19 @@
 
     <div class="row p-2">
       <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
-        <iframe title="SRS Document" src="https://drive.google.com/file/d/1JGLh4Fhxi3l_heZJIcW5p5gBFfuE28xx/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+        <iframe title="SRS Document" src="https://drive.google.com/file/d/12vdOLsl0S-9n7SiGL_8LXcMXnOmd3O_t/preview" class="iframeDocumentation" allow="autoplay"></iframe>
       </div>
       <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
-        <iframe title="Technical Installation Manual" src="https://drive.google.com/file/d/1Dp69_xrzX0M-2cHfKx3CMSZaZj-Qkj73/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+        <iframe title="Technical Installation Manual" src="https://drive.google.com/file/d/1V9yUY20u2d1kO5mGtIhBYZkuje1HBYSD/preview" class="iframeDocumentation" allow="autoplay"></iframe>
       </div>
       <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
         <iframe title="Coding Standards" src="https://drive.google.com/file/d/1_y9xKgyiPChnL2VylGVnsXAIeDFPnWpb/preview" class="iframeDocumentation" allow="autoplay"></iframe>
       </div>
       <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
-        <iframe title="User Manual" src="https://drive.google.com/file/d/1je_vMYp1CMJHpwtnX4jK9WFdSrBEtP_G/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+        <iframe title="User Manual" src="https://drive.google.com/file/d/1gqYrWPOdH-D_oPKJ_BaRfblHbcMUQmfc/preview" class="iframeDocumentation" allow="autoplay"></iframe>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3 col-sm-6 mx-auto p-3 teamMember text-center">
+        <iframe title="Testing Policy" src="https://drive.google.com/file/d/17uH99wAU_f1SNQbeAT2R9le_dP5I9XDP/preview" class="iframeDocumentation" allow="autoplay"></iframe>
       </div>
     </div>
 
@@ -178,22 +184,20 @@
       </div>
     </div>
     <div class="col-12 col-md-3  mx-auto p-3">
-      <a href="https://www.cs.up.ac.za/"><img
+      <a href="https://www.cs.up.ac.za/" target="_blank"><img
         src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FUP_CS.jpg?alt=media&token=91a202be-f2e3-4b3e-8f03-021ecc0bb87b"
         alt="stakeholder"
         class="stakeholderPic">
       </a>
     </div>
     <div class="col-12 col-md-5 mx-auto p-3">
-      <a href="https://www.advance.io/"><img
+      <a href="https://www.advance.io/" target="_blank"><img
         src="https://firebasestorage.googleapis.com/v0/b/smartstudentnotebook.appspot.com/o/profile%2FAdvance.jpg?alt=media&token=30f8a267-381d-4842-9d1e-bd4ab70fdaf3"
         alt="stakeholder"
         class="stakeholderPic">
       </a>
     </div>
   </div>
-
-
 
 </div>
 

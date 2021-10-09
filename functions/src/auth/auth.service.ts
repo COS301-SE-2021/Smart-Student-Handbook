@@ -7,14 +7,9 @@ export class AuthService {
 		return admin
 			.auth()
 			.verifyIdToken(authToken)
-			.then((decodedToken) => {
-				if (decodedToken) {
-					return decodedToken.uid;
-				}
-				return '';
-			})
-			.catch((error) => {
-				throw new HttpException(`Was unable to authenticate user. ${error}`, HttpStatus.BAD_REQUEST);
+			.then((decodedToken) => decodedToken.uid)
+			.catch(() => {
+				throw new HttpException('Was unable to authenticate user. Invalid token!', HttpStatus.BAD_REQUEST);
 			});
 	}
 }
