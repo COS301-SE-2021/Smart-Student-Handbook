@@ -49,7 +49,7 @@ export class ForgotPasswordComponent {
 			}
 
 			this.resetPasswordService
-				.requestResetPassword(this.user.uid, email, isLocalHost)
+				.requestResetPassword(email, isLocalHost)
 				.subscribe(() => {
 					const resetPassword = document.getElementById(
 						'resetPassword'
