@@ -128,11 +128,25 @@ export class AccountService {
 			};
 		}
 
+		let host;
+		// eslint-disable-next-line eqeqeq
+		if (registerDto.isLocalhost == undefined || registerDto.isLocalhost == true) {
+			host = 'localhost:5001/smartstudentnotebook/us-central1';
+		} else {
+			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
+		}
+
+		const path = '/app/account/verifyEmail';
+		const encodedCode = this.encodeSecureCode(resp.user.uid, resp.user.email);
+		let link = 'http://';
+		// eslint-disable-next-line max-len
+		link = link.concat(host, path, '/', resp.user.email, '/', String(registerDto.isLocalhost), '/', encodedCode);
+
 		await this.notificationService.sendEmailNotification({
 			email: registerDto.email,
 			subject: 'Welcome to Smart Student Handbook',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${registerDto.username}. \nWe are very exited to see all your amazing notebooks!!!`,
+			body: `Good day, ${registerDto.username}. \nWe are very exited to see all your amazing notebooks!!! \nPlease Verify your Email with this link: ${link}`,
 		});
 
 		// send welcome email to new user
@@ -468,19 +482,23 @@ export class AccountService {
 		let host;
 		// eslint-disable-next-line eqeqeq
 		if (resetPasswordDto.isLocalhost == true) {
-			host = 'localhost:5000';
+			host = 'localhost:5001/smartstudentnotebook/us-central1';
 		} else {
-			host = 'smartstudenthandbook.co.za';
+			host = 'us-central1-smartstudentnotebook.cloudfunctions.net';
 		}
 
+		const path = '/app/account/checkResetPassword';
 		const { email } = userData;
 		const encodedCode = this.encodeSecureCode(userData.uid, userData.email);
+		let link = 'http://';
+		// eslint-disable-next-line max-len
+		link = link.concat(host, path, '/', email, '/', String(resetPasswordDto.isLocalhost), '/', encodedCode);
 
 		await this.notificationService.sendEmailNotification({
 			email: resetPasswordDto.email,
 			subject: 'Smart Student Handbook Password Reset',
 			// eslint-disable-next-line max-len
-			body: `Good day, ${userData.displayName}. You requested to change your password. \nPlease do so with this link: \n http://${host}/account/resetPassword/${email}/${encodedCode}`,
+			body: `Good day, ${userData.displayName}. You requested to change your password. \nPlease do so with this link: \n${link}`,
 		});
 
 		return { message: `Request Send to ${resetPasswordDto.email}` };
@@ -561,7 +579,7 @@ export class AccountService {
 			return {
 				success: false,
 				user: null,
-				message: 'Password is not updated! Invalid Code',
+				message: 'Password is not updated!',
 				error: 'Bad Request',
 			};
 		}
@@ -644,11 +662,11 @@ export class AccountService {
 
 		let code: string = timeExpire.toString();
 		code = code.concat(
-			'...',
+			'.',
 			uid.substr(0, 8),
-			'...',
+			'.',
 			email,
-			'...',
+			'.',
 			randNum,
 			checkNum.toString().charAt(checkNum.toString().length - 1),
 		);
@@ -659,9 +677,9 @@ export class AccountService {
 	decodeSecureCode(code: string) {
 		const decodedCode = Buffer.from(code, 'base64').toString();
 
-		const codeSplit = decodedCode.split('...');
+		const codeSplit = decodedCode.split('.');
 		// eslint-disable-next-line eqeqeq
-		if (codeSplit.length != 4) {
+		if (codeSplit.length != 5) {
 			return {
 				timeExpire: 0,
 				uid: '',
@@ -675,20 +693,20 @@ export class AccountService {
 		// eslint-disable-next-line no-plusplus
 		for (let i = 0; i < 7; i++) {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			checkSum += Number(codeSplit[3].charAt(i));
+			checkSum += Number(codeSplit[4].charAt(i));
 		}
 		const checkNum = checkSum.toString().charAt(checkSum.toString().length - 1);
 		let checkPassed = false;
 		// eslint-disable-next-line eqeqeq
-		if (checkNum == codeSplit[3].charAt(7)) {
+		if (checkNum == codeSplit[4].charAt(7)) {
 			checkPassed = true;
 		}
 
 		return {
 			timeExpire: Number(codeSplit[0]),
 			uid: codeSplit[1],
-			email: `${codeSplit[2]}`,
-			checksum: Number(codeSplit[3]),
+			email: `${codeSplit[2]}.${codeSplit[3]}`,
+			checksum: Number(codeSplit[4]),
 			checksumPassed: checkPassed,
 		};
 	}

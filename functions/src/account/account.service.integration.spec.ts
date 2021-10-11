@@ -225,7 +225,7 @@ describe('Account Service Integration Testing', () => {
 
 			const requestResetPassword = {
 				email: `testuser${num}@gmail.com`,
-				isLocalhost: true,
+				isLocahost: true,
 				newPassword: 'newPassword',
 				code: 'wrongCode',
 			};

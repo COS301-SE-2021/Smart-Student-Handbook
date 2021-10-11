@@ -49,7 +49,7 @@ export class AccountController {
 	}
 
 	@Get('verifyEmail/:email/:local/:code')
-	@Redirect('https://smartstudenthandbook.co.za', 301)
+	@Redirect('https://smartstudenthandbook.co.za', 308)
 	verifyEmail(@Param() verifyEmailDto: VerifyEmailDto) {
 		return this.accountService.verifyEmail(verifyEmailDto);
 	}
@@ -60,7 +60,7 @@ export class AccountController {
 	}
 
 	@Get('checkResetPassword/:email/:local/:code')
-	@Redirect('https://smartstudenthandbook.co.za', 301)
+	@Redirect('https://smartstudenthandbook.co.za', 308)
 	async checkResetPassword(@Param() resetPasswordCodeDto: ResetPasswordCodeDto) {
 		const url = await this.accountService.checkResetPassword(resetPasswordCodeDto);
 		return url;

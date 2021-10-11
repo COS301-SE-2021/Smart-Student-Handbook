@@ -1,7 +1,7 @@
 export class ResetPasswordFinalizeDto {
 	readonly email: string;
 
-	readonly isLocalhost: boolean;
+	readonly isLocahost: boolean;
 
 	readonly newPassword: string;
 
