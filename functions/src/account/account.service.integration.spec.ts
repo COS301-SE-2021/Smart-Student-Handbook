@@ -166,15 +166,15 @@ describe('Account Service Integration Testing', () => {
 	describe('Reset Password Integration Testing', () => {
 		it('Request Reset Password', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);
-			// const registerDto = {
-			// 	email: `testuser${num}@gmail.com`,
-			// 	username: `testuser${num}`,
-			// 	password: 'TestPassword101*',
-			// 	passwordConfirm: 'TestPassword101*',
-			// 	isLocalhost: true,
-			// };
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
 
-			// const user = await accountService.registerUser(registerDto);
+			await accountService.registerUser(registerDto);
 
 			const requestResetPassword = {
 				email: `testuser${num}@gmail.com`,
@@ -188,15 +188,15 @@ describe('Account Service Integration Testing', () => {
 
 		it('Finalize Reset Password', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);
-			// const registerDto = {
-			// 	email: `testuser${num}@gmail.com`,
-			// 	username: `testuser${num}`,
-			// 	password: 'TestPassword101*',
-			// 	passwordConfirm: 'TestPassword101*',
-			// 	isLocalhost: true,
-			// };
+			const registerDto = {
+				email: `testuser${num}@gmail.com`,
+				username: `testuser${num}`,
+				password: 'TestPassword101*',
+				passwordConfirm: 'TestPassword101*',
+				isLocalhost: true,
+			};
 
-			// const user = await accountService.registerUser(registerDto);
+			await accountService.registerUser(registerDto);
 
 			const requestResetPassword = {
 				email: `testuser${num}@gmail.com`,
