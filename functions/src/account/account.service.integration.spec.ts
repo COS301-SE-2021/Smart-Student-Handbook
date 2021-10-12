@@ -163,31 +163,6 @@ describe('Account Service Integration Testing', () => {
 		});
 	});
 
-	describe('Verify User Email Integration Testing', () => {
-		it('Verify User Email Unsuccessfully', async () => {
-			const num = Math.floor(Math.random() * 100000 + 1);
-			// const registerDto = {
-			// 	email: `testuser${num}@gmail.com`,
-			// 	username: `testuser${num}`,
-			// 	password: 'TestPassword101*',
-			// 	passwordConfirm: 'TestPassword101*',
-			// 	isLocalhost: true,
-			// };
-
-			// const user = await accountService.registerUser(registerDto);
-
-			const verifyEmil = {
-				email: `testuser${num}@gmail.com`,
-				local: 'true',
-				code: 'wrongcode',
-			};
-
-			const result = await accountService.verifyEmail(verifyEmil);
-
-			expect(result.url).toBe('localhost:5000');
-		});
-	});
-
 	describe('Reset Password Integration Testing', () => {
 		it('Request Reset Password', async () => {
 			const num = Math.floor(Math.random() * 100000 + 1);

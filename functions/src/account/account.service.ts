@@ -390,67 +390,6 @@ export class AccountService {
 		}
 	}
 
-	async verifyEmail(verifyEmailDto: VerifyEmailDto) {
-		const userData = await admin
-			.auth()
-			.getUserByEmail(verifyEmailDto.email)
-			.then((userRecord) => ({
-				email: userRecord.email,
-				uid: userRecord.uid,
-			}))
-			.catch(() => ({
-				email: null,
-				uid: null,
-			}));
-
-		if (userData.uid == null) {
-			return {
-				success: false,
-				user: null,
-				message: 'User is unsuccessfully logged in.',
-				error: 'User does not exist',
-			};
-		}
-
-		let host;
-		// eslint-disable-next-line eqeqeq
-		if (verifyEmailDto.local == 'true') {
-			host = 'localhost:5000';
-		} else {
-			host = 'smartstudenthandbook.co.za';
-		}
-
-		const codeInterface = this.decodeSecureCode(verifyEmailDto.code);
-
-		// eslint-disable-next-line eqeqeq
-		if (codeInterface.timeExpire == 0 || codeInterface.uid == '' || codeInterface.email == '') {
-			return { url: `${host}` };
-		}
-
-		const uid = userData.uid.substr(0, 8);
-
-		// eslint-disable-next-line eqeqeq,max-len
-		if (codeInterface.checksumPassed == false || codeInterface.email != userData.email || codeInterface.uid != uid) {
-			return { url: `${host}` };
-		}
-
-		if (codeInterface.timeExpire < Date.now()) {
-			return { url: `${host}` };
-		}
-
-		return admin
-			.auth()
-			.updateUser(userData.uid, {
-				emailVerified: true,
-			})
-			.then(() => ({
-				url: `${host}`,
-			}))
-			.catch(() => ({
-				url: `${host}`,
-			}));
-	}
-
 	async requestResetPassword(resetPasswordDto: ResetPasswordDto): Promise<Response> {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
 		const userData = await admin
