@@ -2,7 +2,7 @@
 
 <a href="https://smartstudenthandbook.co.za/" target="_blank">
     <p align="center">
-        <img  src=".github/images/pwaLogo1WhiteBackground.png" alt="Smart Student Handbook Logo">
+        <img  src=".github/images/pwaLogo1WhiteBackground.png" alt="Smart Student Handbook pwa Logo">
     </p>
 </a>
 
